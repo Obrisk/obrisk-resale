@@ -2,7 +2,7 @@ import graphene
 
 from graphene_django.types import DjangoObjectType
 
-from bootcamp.messager.models import Message
+from obrisk.messager.models import Message
 
 
 class MessageType(DjangoObjectType):

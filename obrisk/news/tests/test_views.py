@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from test_plus.test import TestCase
 
-from bootcamp.news.models import News
+from obrisk.news.models import News
 
 
 class NewsViewsTest(TestCase):

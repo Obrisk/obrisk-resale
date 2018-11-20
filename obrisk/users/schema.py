@@ -1,7 +1,7 @@
 import graphene
 from graphene_django.types import DjangoObjectType
 
-from bootcamp.users.models import User
+from obrisk.users.models import User
 
 
 class UserType(DjangoObjectType):

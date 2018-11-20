@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from bootcamp.articles.views import (ArticlesListView, DraftsListView,
+from obrisk.articles.views import (ArticlesListView, DraftsListView,
                                      CreateArticleView, EditArticleView,
                                      DetailArticleView)
 app_name = 'articles'

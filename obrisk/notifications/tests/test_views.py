@@ -3,7 +3,7 @@ from django.urls import reverse
 
 from test_plus.test import TestCase
 
-from bootcamp.notifications.models import Notification
+from obrisk.notifications.models import Notification
 
 
 class NewsViewsTest(TestCase):

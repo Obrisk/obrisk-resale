@@ -4,7 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from bootcamp.notifications.models import Notification, notification_handler
+from obrisk.notifications.models import Notification, notification_handler
 
 
 class User(AbstractUser):

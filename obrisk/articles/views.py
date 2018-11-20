@@ -4,9 +4,9 @@ from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from bootcamp.helpers import AuthorRequiredMixin
-from bootcamp.articles.models import Article
-from bootcamp.articles.forms import ArticleForm
+from obrisk.helpers import AuthorRequiredMixin
+from obrisk.articles.models import Article
+from obrisk.articles.forms import ArticleForm
 
 
 class ArticlesListView(LoginRequiredMixin, ListView):

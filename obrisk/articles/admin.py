@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bootcamp.articles.models import Article
+from obrisk.articles.models import Article
 
 
 @admin.register(Article)

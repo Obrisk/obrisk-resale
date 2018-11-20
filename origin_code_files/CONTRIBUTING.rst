@@ -39,7 +39,7 @@ If you find a bug, try your best to provide the necessary information to replica
 * Any details about your local setup that might be helpful in troubleshooting.
 * Detailed steps to reproduce the bug.
 
-.. _`this project`: https://github.com/vitorfs/bootcamp/issues
+.. _`this project`: https://github.com/vitorfs/obrisk/issues
 
 ===================
 Fix Bugs
@@ -57,7 +57,7 @@ Look through the GitHub issues for features. Anything tagged with "feature" is o
 Write Documentation
 ===================
 
-Bootcamp could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, articles, and such.
+obrisk could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, articles, and such.
 
 ===================
 Submit Feedback
@@ -71,7 +71,7 @@ If you are proposing a feature:
 * Keep the scope as narrow as possible, to make it easier to implement.
 * Remember that this is a volunteer-driven project, and that contributions are welcome :)
 
-.. _`this project`: https://github.com/vitorfs/bootcamp/issues
+.. _`this project`: https://github.com/vitorfs/obrisk/issues
 
 ===================
 Issues and support

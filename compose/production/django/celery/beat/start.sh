@@ -5,4 +5,4 @@ set -o pipefail
 set -o nounset
 
 
-celery -A bootcamp.taskapp beat -l INFO
+celery -A obrisk.taskapp beat -l INFO

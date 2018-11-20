@@ -7,4 +7,4 @@ set -o xtrace
 
 
 rm -f './celerybeat.pid'
-celery -A bootcamp.taskapp beat -l INFO
+celery -A obrisk.taskapp beat -l INFO

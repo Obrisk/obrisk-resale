@@ -15,7 +15,7 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
     # User management
-    url(r'^users/', include('bootcamp.users.urls', namespace='users')),
+    url(r'^users/', include('obrisk.users.urls', namespace='users')),
     url(r'^accounts/', include('allauth.urls')),
     # Third party apps here
     url(r'^comments/', include('django_comments.urls')),
@@ -23,14 +23,14 @@ urlpatterns = [
     url(r'^markdownx/', include('markdownx.urls')),
     # Local apps here
     url(r'^notifications/',
-        include('bootcamp.notifications.urls', namespace='notifications')),
+        include('obrisk.notifications.urls', namespace='notifications')),
     url(r'^articles/',
-        include('bootcamp.articles.urls', namespace='articles')),
-    url(r'^news/', include('bootcamp.news.urls', namespace='news')),
+        include('obrisk.articles.urls', namespace='articles')),
+    url(r'^news/', include('obrisk.news.urls', namespace='news')),
     url(r'^messages/',
-        include('bootcamp.messager.urls', namespace='messager')),
-    url(r'^qa/', include('bootcamp.qa.urls', namespace='qa')),
-    url(r'^search/', include('bootcamp.search.urls', namespace='search')),
+        include('obrisk.messager.urls', namespace='messager')),
+    url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
+    url(r'^search/', include('obrisk.search.urls', namespace='search')),
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

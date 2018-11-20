@@ -1,18 +1,18 @@
-Bootcamp
+obrisk
 ========
 
 An enterprise oriented social network
 
-.. image:: https://travis-ci.org/vitorfs/bootcamp.svg?branch=master
-    :target: https://travis-ci.org/vitorfs/bootcamp
+.. image:: https://travis-ci.org/vitorfs/obrisk.svg?branch=master
+    :target: https://travis-ci.org/vitorfs/obrisk
     :alt: TravisCI Status
 
-.. image:: https://coveralls.io/repos/github/vitorfs/bootcamp/badge.svg?branch=master
-    :target: https://coveralls.io/github/vitorfs/bootcamp?branch=master
+.. image:: https://coveralls.io/repos/github/vitorfs/obrisk/badge.svg?branch=master
+    :target: https://coveralls.io/github/vitorfs/obrisk?branch=master
     :alt: Coverage
 
-.. image:: https://requires.io/github/vitorfs/bootcamp/requirements.svg?branch=master
-    :target: https://requires.io/github/vitorfs/bootcamp/requirements/?branch=master
+.. image:: https://requires.io/github/vitorfs/obrisk/requirements.svg?branch=master
+    :target: https://requires.io/github/vitorfs/obrisk/requirements/?branch=master
     :alt: Requirements
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
@@ -21,7 +21,7 @@ An enterprise oriented social network
 
 :License: MIT
 
-Bootcamp is an open source **enterprise social network** of open purpose, on which you can build for your own ends.
+obrisk is an open source **enterprise social network** of open purpose, on which you can build for your own ends.
 
 The project has four basic apps:
 

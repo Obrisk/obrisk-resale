@@ -1,7 +1,7 @@
 from test_plus.test import TestCase
 
-from bootcamp.news.models import News
-from bootcamp.notifications.models import Notification, notification_handler
+from obrisk.news.models import News
+from obrisk.notifications.models import Notification, notification_handler
 
 
 class NotificationsModelsTest(TestCase):

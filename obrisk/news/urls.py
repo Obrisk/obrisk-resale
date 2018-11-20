@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from bootcamp.news import views
+from obrisk.news import views
 
 app_name = 'news'
 urlpatterns = [

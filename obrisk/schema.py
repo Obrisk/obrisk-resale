@@ -1,7 +1,7 @@
 import graphene
 
-from bootcamp.news.schema import NewsQuery
-from bootcamp.users.schema import UserQuery
+from obrisk.news.schema import NewsQuery
+from obrisk.users.schema import UserQuery
 
 
 class Query(NewsQuery, UserQuery, graphene.ObjectType):

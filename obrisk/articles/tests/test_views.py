@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from test_plus.test import TestCase
 
-from bootcamp.articles.models import Article
+from obrisk.articles.models import Article
 
 
 def get_temp_img():

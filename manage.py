@@ -23,8 +23,8 @@ if __name__ == '__main__':
 
         raise
 
-    # This allows easy placement of apps within the inner bootcamp directory.
+    # This allows easy placement of apps within the inner obrisk directory.
     current_path = os.path.dirname(os.path.abspath(__file__))
-    sys.path.append(os.path.join(current_path, 'bootcamp'))
+    sys.path.append(os.path.join(current_path, 'obrisk'))
 
     execute_from_command_line(sys.argv)

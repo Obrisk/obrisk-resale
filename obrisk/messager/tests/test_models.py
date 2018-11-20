@@ -1,6 +1,6 @@
 from test_plus.test import TestCase
 
-from bootcamp.messager.models import Message
+from obrisk.messager.models import Message
 
 
 class MessagerModelsTest(TestCase):

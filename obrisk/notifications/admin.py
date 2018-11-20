@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bootcamp.notifications.models import Notification
+from obrisk.notifications.models import Notification
 
 
 @admin.register(Notification)

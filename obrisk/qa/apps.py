@@ -3,5 +3,5 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class QaConfig(AppConfig):
-    name = 'bootcamp.qa'
+    name = 'obrisk.qa'
     verbose_name = _('Q&A')

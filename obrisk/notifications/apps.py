@@ -3,5 +3,5 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class NotificationsConfig(AppConfig):
-    name = 'bootcamp.notifications'
+    name = 'obrisk.notifications'
     verbose_name = _('Notifications')

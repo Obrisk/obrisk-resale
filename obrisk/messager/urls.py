@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from bootcamp.messager import views
+from obrisk.messager import views
 
 app_name = 'messager'
 urlpatterns = [

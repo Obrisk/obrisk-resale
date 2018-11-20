@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from bootcamp.notifications import views
+from obrisk.notifications import views
 
 app_name = 'notifications'
 urlpatterns = [

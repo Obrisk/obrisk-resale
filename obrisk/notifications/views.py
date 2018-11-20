@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.translation import ugettext_lazy as _
 from django.views.generic import ListView
 
-from bootcamp.notifications.models import Notification
+from obrisk.notifications.models import Notification
 
 
 class NotificationUnreadListView(LoginRequiredMixin, ListView):

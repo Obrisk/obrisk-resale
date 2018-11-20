@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 volumes:
   postgres_data_local: {}
@@ -20,6 +20,7 @@ services:
     command: /start.sh
 
   postgres:
+    image: postgres:10.3-alpine
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile

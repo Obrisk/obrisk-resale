@@ -1,6 +1,6 @@
 from test_plus.test import TestCase
 
-from bootcamp.qa.models import Question, Answer
+from obrisk.qa.models import Question, Answer
 
 
 class QAModelsTest(TestCase):

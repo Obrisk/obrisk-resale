@@ -8,9 +8,9 @@ from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView, ListView, DetailView
 
-from bootcamp.helpers import ajax_required
-from bootcamp.qa.models import Question, Answer
-from bootcamp.qa.forms import QuestionForm
+from obrisk.helpers import ajax_required
+from obrisk.qa.models import Question, Answer
+from obrisk.qa.forms import QuestionForm
 
 
 class QuestionsIndexListView(LoginRequiredMixin, ListView):

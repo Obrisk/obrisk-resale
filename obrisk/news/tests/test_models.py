@@ -1,6 +1,6 @@
 from test_plus.test import TestCase
 
-from bootcamp.news.models import News
+from obrisk.news.models import News
 
 
 class NewsModelsTest(TestCase):

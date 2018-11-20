@@ -2,7 +2,7 @@ from django import forms
 
 from markdownx.fields import MarkdownxFormField
 
-from bootcamp.articles.models import Article
+from obrisk.articles.models import Article
 
 
 class ArticleForm(forms.ModelForm):

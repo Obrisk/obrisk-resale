@@ -13,8 +13,8 @@ def update_site_forward(apps, schema_editor):
     Site.objects.update_or_create(
         id=settings.SITE_ID,
         defaults={
-            'domain': 'vitor@freitas.com trybootcamp.vitorfs.com',
-            'name': 'Bootcamp'
+            'domain': 'vitor@freitas.com tryobrisk.vitorfs.com',
+            'name': 'obrisk'
         }
     )
 

@@ -5,4 +5,4 @@ set -o pipefail
 set -o nounset
 
 
-celery -A bootcamp.taskapp worker -l INFO
+celery -A obrisk.taskapp worker -l INFO

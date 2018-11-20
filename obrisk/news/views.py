@@ -7,8 +7,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DeleteView
 
-from bootcamp.helpers import ajax_required, AuthorRequiredMixin
-from bootcamp.news.models import News
+from obrisk.helpers import ajax_required, AuthorRequiredMixin
+from obrisk.news.models import News
 
 
 class NewsListView(LoginRequiredMixin, ListView):

@@ -3,9 +3,9 @@ from django.test import Client
 
 from test_plus.test import TestCase
 
-from bootcamp.articles.models import Article
-from bootcamp.qa.models import Question
-from bootcamp.news.models import News
+from obrisk.articles.models import Article
+from obrisk.qa.models import Question
+from obrisk.news.models import News
 
 
 class SearchViewsTests(TestCase):

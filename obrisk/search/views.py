@@ -7,10 +7,10 @@ from django.views.generic import ListView
 
 from taggit.models import Tag
 
-from bootcamp.articles.models import Article
-from bootcamp.news.models import News
-from bootcamp.helpers import ajax_required
-from bootcamp.qa.models import Question
+from obrisk.articles.models import Article
+from obrisk.news.models import News
+from obrisk.helpers import ajax_required
+from obrisk.qa.models import Question
 
 
 class SearchListView(LoginRequiredMixin, ListView):

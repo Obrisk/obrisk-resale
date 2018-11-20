@@ -6,8 +6,8 @@ from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 
-from bootcamp.messager.models import Message
-from bootcamp.helpers import ajax_required
+from obrisk.messager.models import Message
+from obrisk.helpers import ajax_required
 
 
 class MessagesListView(LoginRequiredMixin, ListView):

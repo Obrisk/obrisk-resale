@@ -2,8 +2,8 @@ import graphene
 
 from graphene_django.types import DjangoObjectType
 
-from bootcamp.news.models import News
-from bootcamp.helpers import paginate_data
+from obrisk.news.models import News
+from obrisk.helpers import paginate_data
 
 
 class NewsType(DjangoObjectType):

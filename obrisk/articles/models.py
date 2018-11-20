@@ -11,7 +11,7 @@ from markdownx.utils import markdownify
 from taggit.managers import TaggableManager
 
 
-from bootcamp.notifications.models import Notification, notification_handler
+from obrisk.notifications.models import Notification, notification_handler
 
 
 class ArticleQuerySet(models.query.QuerySet):

@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from bootcamp.qa import views
+from obrisk.qa import views
 
 app_name = 'qa'
 urlpatterns = [

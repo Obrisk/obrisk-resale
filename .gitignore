@@ -60,6 +60,6 @@ media/
 
 .env
 
-venv_bootcamp/
+venv_obrisk/
 staticfiles
 .idea

@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 
-from bootcamp.users.models import User
+from obrisk.users.models import User
 
 
 class MyUserChangeForm(UserChangeForm):

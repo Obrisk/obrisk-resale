@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bootcamp.messager.models import Message
+from obrisk.messager.models import Message
 
 
 @admin.register(Message)

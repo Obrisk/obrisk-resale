@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bootcamp.news.models import News
+from obrisk.news.models import News
 
 
 @admin.register(News)
