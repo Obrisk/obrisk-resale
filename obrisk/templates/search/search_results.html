@@ -21,7 +21,7 @@
     <div class="row">
       <div class="col-md-3">
         <div class="list-group" id="list-tab" role="tablist">
-          <a class="list-group-item list-group-item-action active" id="list-articles-list" data-toggle="list" href="#list-articles" role="tab" aria-controls="articles">{% trans 'Articles' %}<span class="badge badge-primary pull-right">{{ articles_count }}</span></a>
+          <a class="list-group-item list-group-item-action active" id="list-classifieds-list" data-toggle="list" href="#list-classifieds" role="tab" aria-controls="classifieds">{% trans 'Classifieds' %}<span class="badge badge-primary pull-right">{{ classifieds_count }}</span></a>
           <a class="list-group-item list-group-item-action" id="list-news-list" data-toggle="list" href="#list-news" role="tab" aria-controls="news">{% trans 'News' %}<span class="badge badge-primary pull-right">{{ news_count }}</span></a>
           <a class="list-group-item list-group-item-action" id="list-questions-list" data-toggle="list" href="#list-questions" role="tab" aria-controls="questions">{% trans 'Questions' %}<span class="badge badge-primary pull-right">{{ questions_count }}</span></a>
           <a class="list-group-item list-group-item-action" id="list-users-list" data-toggle="list" href="#list-users" role="tab" aria-controls="users">{% trans 'Users' %}<span class="badge badge-primary pull-right">{{ users_count }}</span></a>
@@ -30,17 +30,17 @@
       </div>
       <div class="col-md-9">
         <div class="tab-content" id="nav-tabContent">
-          <div class="tab-pane fade show active" id="list-articles" role="tabpanel" aria-labelledby="list-articles-list">
-            {% for article in articles_list %}
+          <div class="tab-pane fade show active" id="list-classifieds" role="tabpanel" aria-labelledby="list-classifieds-list">
+            {% for classified in classifieds_list %}
               <div class="card mb-4">
-                {% thumbnail article.image "750x300" as im %}
+                {% thumbnail classified.image "750x300" as im %}
                   <img src="{{ im.url }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
                 {% empty %}
                   <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
                 {% endthumbnail %}
                 <div class="card-body">
-                  <h2 class="card-title">{{ article.title|title }}</h2>
-                  <p class="card-text">{{ article.content|truncatechars:250 }}</p>
+                  <h2 class="card-title">{{ classified.title|title }}</h2>
+                  <p class="card-text">{{ classified.content|truncatechars:250 }}</p>
                 </div>
               </div>
             {% empty %}

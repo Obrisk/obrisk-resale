@@ -92,7 +92,7 @@ $(function () {
     // Try to correctly decide between ws:// and wss://
     let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     let ws_path = ws_scheme + '://' + window.location.host + "/notifications/";
-    let webSocket = new channels.WebSocketBridge();
+    let webSocket = new WebSocketBridge();
     webSocket.connect(ws_path);
 
     // Helpful debugging

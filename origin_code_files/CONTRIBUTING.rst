@@ -57,7 +57,7 @@ Look through the GitHub issues for features. Anything tagged with "feature" is o
 Write Documentation
 ===================
 
-obrisk could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, articles, and such.
+obrisk could always use more documentation, whether as part of the official docs, in docstrings, or even on the web in blog posts, classifieds, and such.
 
 ===================
 Submit Feedback

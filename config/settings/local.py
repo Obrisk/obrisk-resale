@@ -5,6 +5,15 @@ from django.utils.log import DEFAULT_LOGGING
 from .base import *  # noqa
 from .base import env
 
+
+# DATABASES
+# ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+DATABASES = {
+    'default': env.db('DATABASE_URL'),
+}
+DATABASES['default']['ATOMIC_REQUESTS'] = True
+
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
@@ -23,9 +32,15 @@ ALLOWED_HOSTS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
-        'LOCATION': ''
+    'default': env.cache('CACHE_URL'),
+    'redis': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": env.cache('REDIS_URL'),
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient"
+        },
+        'IGNORE_EXCEPTIONS': True,
+        "KEY_PREFIX": "example" #just trying
     }
 }
 

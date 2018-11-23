@@ -7,7 +7,7 @@ from django.views.generic import ListView
 
 from taggit.models import Tag
 
-from obrisk.articles.models import Article
+from obrisk.classifieds.models import Classified
 from obrisk.news.models import News
 from obrisk.helpers import ajax_required
 from obrisk.qa.models import Question
@@ -26,7 +26,7 @@ class SearchListView(LoginRequiredMixin, ListView):
         context["tags_list"] = Tag.objects.filter(name=query)
         context["news_list"] = News.objects.filter(
             content__icontains=query, reply=False)
-        context["articles_list"] = Article.objects.filter(Q(
+        context["classifieds_list"] = Classified.objects.filter(Q(
             title__icontains=query) | Q(content__icontains=query) | Q(
                 tags__name__icontains=query), status="P")
         context["questions_list"] = Question.objects.filter(
@@ -36,12 +36,12 @@ class SearchListView(LoginRequiredMixin, ListView):
             Q(username__icontains=query) | Q(
                 name__icontains=query))
         context["news_count"] = context["news_list"].count()
-        context["articles_count"] = context["articles_list"].count()
+        context["classifieds_count"] = context["classifieds_list"].count()
         context["questions_count"] = context["questions_list"].count()
         context["users_count"] = context["users_list"].count()
         context["tags_count"] = context["tags_list"].count()
         context["total_results"] = context["news_count"] + \
-            context["articles_count"] + context["questions_count"] + \
+            context["classifieds_count"] + context["questions_count"] + \
             context["users_count"] + context["tags_count"]
         return context
 
@@ -50,20 +50,20 @@ class SearchListView(LoginRequiredMixin, ListView):
 @login_required
 @ajax_required
 def get_suggestions(request):
-    # Convert users, articles, questions objects into list to be
+    # Convert users, classifieds, questions objects into list to be
     # represented as a single list.
     query = request.GET.get('term', '')
     users = list(get_user_model().objects.filter(
         Q(username__icontains=query) | Q(name__icontains=query)))
-    articles = list(Article.objects.filter(
+    classifieds = list(Classified.objects.filter(
         Q(title__icontains=query) | Q(content__icontains=query) | Q(
             tags__name__icontains=query), status="P"))
     questions = list(Question.objects.filter(Q(title__icontains=query) | Q(
         content__icontains=query) | Q(tags__name__icontains=query)))
-    # Add all the retrieved users, articles, questions to data_retrieved
+    # Add all the retrieved users, classifieds, questions to data_retrieved
     # list.
     data_retrieved = users
-    data_retrieved.extend(articles)
+    data_retrieved.extend(classifieds)
     data_retrieved.extend(questions)
     results = []
     for data in data_retrieved:
@@ -73,7 +73,7 @@ def get_suggestions(request):
             data_json['label'] = data.username
             data_json['value'] = data.username
 
-        if isinstance(data, Article):
+        if isinstance(data, Classified):
             data_json['id'] = data.id
             data_json['label'] = data.title
             data_json['value'] = data.title

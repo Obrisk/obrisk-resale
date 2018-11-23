@@ -3,7 +3,7 @@ from django.test import Client
 
 from test_plus.test import TestCase
 
-from obrisk.articles.models import Article
+from obrisk.classifieds.models import Classified
 from obrisk.qa.models import Question
 from obrisk.news.models import News
 
@@ -26,10 +26,10 @@ class SearchViewsTests(TestCase):
         it, because they know this is just a test, and you know than nobody
         wants to publish a test, just a test; everybody always wants the real
         deal."""
-        self.article = Article.objects.create(
+        self.classified = Classified.objects.create(
             user=self.user, title="A really nice first title",
             content=self.content, tags="list, lists", status="P")
-        self.article_2 = Article.objects.create(user=self.other_user,
+        self.classified_2 = Classified.objects.create(user=self.other_user,
                                                 title="A first bad title",
                                                 content="First bad content",
                                                 tags="bad", status="P")
@@ -57,7 +57,7 @@ class SearchViewsTests(TestCase):
         assert self.news_one in response.context["news_list"]
         assert self.question_one in response.context["questions_list"]
         assert self.question_two in response.context["questions_list"]
-        assert self.article in response.context["articles_list"]
+        assert self.classified in response.context["classifieds_list"]
 
     def test_questions_suggestions_results(self):
         response = self.client.get(

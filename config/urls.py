@@ -24,8 +24,10 @@ urlpatterns = [
     # Local apps here
     url(r'^notifications/',
         include('obrisk.notifications.urls', namespace='notifications')),
-    url(r'^articles/',
-        include('obrisk.articles.urls', namespace='articles')),
+    url(r'^classifieds/',
+        include('obrisk.classifieds.urls', namespace='classifieds')),
+     url(r'^posts/',
+        include('obrisk.posts.urls', namespace='posts')),
     url(r'^news/', include('obrisk.news.urls', namespace='news')),
     url(r'^messages/',
         include('obrisk.messager.urls', namespace='messager')),

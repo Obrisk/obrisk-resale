@@ -83,12 +83,13 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
     # Your stuff: custom apps go here
-    'obrisk.articles.apps.ArticlesConfig',
+    'obrisk.classifieds.apps.ClassifiedsConfig',
     'obrisk.messager.apps.MessagerConfig',
     'obrisk.news.apps.NewsConfig',
     'obrisk.notifications.apps.NotificationsConfig',
     'obrisk.qa.apps.QaConfig',
-    'obrisk.search.apps.SearchConfig'
+    'obrisk.search.apps.SearchConfig',
+    'obrisk.posts.apps.PostsConfig',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

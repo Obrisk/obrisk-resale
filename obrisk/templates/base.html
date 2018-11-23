@@ -14,8 +14,10 @@
     <![endif]-->
     {% block css %}
     <!-- Latest compiled and minified Bootstrap 4 beta CSS -->
+    <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>        
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>    <!-- Your stuff: Third-party CSS libraries go here -->
     <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">        
-    <!-- Your stuff: Third-party CSS libraries go here -->
     <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
@@ -42,7 +44,7 @@
                 </ul>
                 <ul class="navbar-nav mr-auto">
                   <li class="nav-item"><a class="nav-link" href="{% url 'news:list' %}">{% trans 'News' %} <span class="sr-only">(current)</span></a></li>
-                  <li class="nav-item"><a class="nav-link" href="{% url 'articles:list' %}">Blog</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{% url 'classifieds:list' %}">Blog</a></li>
                   <li class="nav-item"><a class="nav-link" href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
                   <li class="nav-item"><a class="nav-link" href="{% url 'messager:messages_list' %}">{% trans 'Inbox' %}</a></li>
                   <li class="nav-item"><a class="nav-link" href="{% url 'users:list' %}">{% trans 'Contacts' %}</a></li>
@@ -102,20 +104,16 @@
       <!-- Placed at the end of the document so the pages load faster -->
       {% block javascript %}
         <!-- Required by Bootstrap v4 -->
-        <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>        
-        <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">        
         
         <!-- Your stuff: Third-party javascript libraries go here -->
         <script src="http://upcdn.b0.upaiyun.com/libs/jqueryui/jquery.ui-1.10.2.min.js" integrity="sha384-O4jIYc8wiFPNf25AwmeP5qRInqzSLJuM9t+u843Al1M/OO67y4JsVjlJGaUl4N7J" crossorigin="anonymous"></script>
         <!-- place project specific Javascript in this file -->
         <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
-        <!--script src="{% static 'channels/js/websocketbridge.js' %}" type="text/javascript"></script-->
+        <script src="{% static 'channels/js/websocketbridge.js' %}" type="text/javascript"></script>
         <script type="text/javascript">
           var currentUser = "{{ request.user.username }}"
           $ (function() {
-                  source: "{% url 'search:suggestions' %}",
-                  minLength: 2
+                  source: "{% url 'search:suggestions' %}";
               });
         </script>
       {% endblock javascript %}
@@ -127,3 +125,5 @@
 
   <!-- /.container -->
 </html>
+
+

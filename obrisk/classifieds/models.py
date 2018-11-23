@@ -6,15 +6,13 @@ from django.utils.translation import ugettext_lazy as _
 from slugify import slugify
 
 from django_comments.signals import comment_was_posted
-from markdownx.models import MarkdownxField
-from markdownx.utils import markdownify
 from taggit.managers import TaggableManager
 
 
 from obrisk.notifications.models import Notification, notification_handler
 
 
-class ArticleQuerySet(models.query.QuerySet):
+class ClassifiedQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
     def get_published(self):
@@ -40,7 +38,7 @@ class ArticleQuerySet(models.query.QuerySet):
         return tag_dict.items()
 
 
-class Article(models.Model):
+class Classified(models.Model):
     DRAFT = "D"
     PUBLISHED = "P"
     STATUS = (
@@ -49,22 +47,23 @@ class Article(models.Model):
     )
 
     user = models.ForeignKey(
-        settings.AUTH_USER_MODEL, null=True, related_name="author",
+        settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.SET_NULL)
-    image = models.ImageField(
-        _('Featured image'), upload_to='articles_pictures/%Y/%m/%d/')
+  
     timestamp = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=255, null=False, unique=True)
     slug = models.SlugField(max_length=80, null=True, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
-    content = MarkdownxField()
+    status = models.CharField(max_length=1, choices=STATUS, default=PUBLISHED)
+    content = models.CharField(max_length=400)
+    price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    located_area = models.CharField (max_length=100, default="Not Updated")
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
-    objects = ArticleQuerySet.as_manager()
+    objects = ClassifiedQuerySet.as_manager()
 
     class Meta:
-        verbose_name = _("Article")
-        verbose_name_plural = _("Articles")
+        verbose_name = _("Classified")
+        verbose_name_plural = _("Classifieds")
         ordering = ("-timestamp",)
 
     def __str__(self):
@@ -77,13 +76,22 @@ class Article(models.Model):
 
         super().save(*args, **kwargs)
 
-    def get_markdown(self):
-        return markdownify(self.content)
+#An independent function to create a unique filename for images of one card.
+def get_image_filename(instance, filename):
+    title = instance.classified.title
+    slug = slugify(title)
+    return "classified_images/%s-%s" % (slug, filename)
 
+
+class ClassifiedImages(models.Model):
+    classified = models.ForeignKey(Classified, default=None,\
+    on_delete=models.CASCADE, related_name='classified_images')
+    images = models.ImageField(upload_to=get_image_filename,
+                              verbose_name='Image')
 
 def notify_comment(**kwargs):
-    """Handler to be fired up upon comments signal to notify the author of a
-    given article."""
+    """Handler to be fired up upon comments signal to notify the creater of a
+    given classified."""
     actor = kwargs['request'].user
     receiver = kwargs['comment'].content_object.user
     obj = kwargs['comment'].content_object

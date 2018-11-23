@@ -1,19 +1,19 @@
 from test_plus.test import TestCase
 
-from obrisk.articles.models import Article
+from obrisk.posts.models import Post
 
 
-class ArticlesModelsTest(TestCase):
+class PostsModelsTest(TestCase):
     def setUp(self):
         self.user = self.make_user("test_user")
         self.other_user = self.make_user("other_test_user")
-        self.article = Article.objects.create(
+        self.post = Post.objects.create(
             title="A really nice title",
             content="This is a really good content",
             status="P",
             user=self.user,
         )
-        self.not_p_article = Article.objects.create(
+        self.not_p_post = Post.objects.create(
             title="A really nice to-be title",
             content="""This is a really good content, just if somebody
             published it, that would be awesome, but no, nobody wants to
@@ -24,15 +24,15 @@ class ArticlesModelsTest(TestCase):
         )
 
     def test_object_instance(self):
-        assert isinstance(self.article, Article)
-        assert isinstance(self.not_p_article, Article)
-        assert isinstance(Article.objects.get_published()[0], Article)
+        assert isinstance(self.post, Post)
+        assert isinstance(self.not_p_post, Post)
+        assert isinstance(Post.objects.get_published()[0], Post)
 
     def test_return_values(self):
-        assert self.article.status == "P"
-        assert self.article.status != "p"
-        assert self.not_p_article.status == "D"
-        assert str(self.article) == "A really nice title"
-        assert self.article in Article.objects.get_published()
-        assert Article.objects.get_published()[0].title == "A really nice title"
-        assert self.not_p_article in Article.objects.get_drafts()
+        assert self.post.status == "P"
+        assert self.post.status != "p"
+        assert self.not_p_post.status == "D"
+        assert str(self.post) == "A really nice title"
+        assert self.post in Post.objects.get_published()
+        assert Post.objects.get_published()[0].title == "A really nice title"
+        assert self.not_p_post in Post.objects.get_drafts()

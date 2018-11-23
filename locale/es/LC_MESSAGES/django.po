@@ -18,38 +18,38 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: obrisk/articles/apps.py:7 obrisk/articles/models.py:67
-#: obrisk/templates/articles/article_create.html:13
-#: obrisk/templates/articles/article_detail.html:13
-#: obrisk/templates/articles/article_list.html:5
-#: obrisk/templates/articles/article_list.html:18
+#: obrisk/classifieds/apps.py:7 obrisk/classifieds/models.py:67
+#: obrisk/templates/classifieds/classified_create.html:13
+#: obrisk/templates/classifieds/classified_detail.html:13
+#: obrisk/templates/classifieds/classified_list.html:5
+#: obrisk/templates/classifieds/classified_list.html:18
 #: obrisk/templates/search/search_results.html:24
 #: obrisk/templates/users/user_detail.html:67
-msgid "Articles"
+msgid "Classifieds"
 msgstr "Artículos"
 
-#: obrisk/articles/models.py:47 obrisk/qa/models.py:77
+#: obrisk/classifieds/models.py:47 obrisk/qa/models.py:77
 msgid "Draft"
 msgstr "Borrador"
 
-#: obrisk/articles/models.py:48
+#: obrisk/classifieds/models.py:48
 msgid "Published"
 msgstr "Publicado"
 
-#: obrisk/articles/models.py:55
+#: obrisk/classifieds/models.py:55
 msgid "Featured image"
 msgstr "Imagen destacada"
 
-#: obrisk/articles/models.py:66
-msgid "Article"
+#: obrisk/classifieds/models.py:66
+msgid "Classified"
 msgstr "Articulo"
 
-#: obrisk/articles/views.py:37
-msgid "Your article has been created."
+#: obrisk/classifieds/views.py:37
+msgid "Your classified has been created."
 msgstr "Su articulo ha sido creado."
 
-#: obrisk/articles/views.py:53
-msgid "Your article has been updated."
+#: obrisk/classifieds/views.py:53
+msgid "Your classified has been updated."
 msgstr "Su articulo ha sido actualizado."
 
 #: obrisk/messager/apps.py:7
@@ -515,10 +515,10 @@ msgid ""
 "mail address</a>."
 msgstr ""
 
-#: obrisk/templates/articles/article_create.html:12
-#: obrisk/templates/articles/article_detail.html:12
-#: obrisk/templates/articles/article_list.html:17
-#: obrisk/templates/articles/article_update.html:12
+#: obrisk/templates/classifieds/classified_create.html:12
+#: obrisk/templates/classifieds/classified_detail.html:12
+#: obrisk/templates/classifieds/classified_list.html:17
+#: obrisk/templates/classifieds/classified_update.html:12
 #: obrisk/templates/qa/answer_form.html:11
 #: obrisk/templates/qa/question_detail.html:14
 #: obrisk/templates/qa/question_form.html:11
@@ -527,58 +527,58 @@ msgstr ""
 msgid "Home"
 msgstr "Inicio"
 
-#: obrisk/templates/articles/article_create.html:14
-#: obrisk/templates/articles/article_detail.html:83
-#: obrisk/templates/articles/article_list.html:80
-msgid "Write a new article"
+#: obrisk/templates/classifieds/classified_create.html:14
+#: obrisk/templates/classifieds/classified_detail.html:83
+#: obrisk/templates/classifieds/classified_list.html:80
+msgid "Write a new classified"
 msgstr "Escribir articulo nuevo"
 
-#: obrisk/templates/articles/article_create.html:21
+#: obrisk/templates/classifieds/classified_create.html:21
 #: obrisk/templates/qa/question_form.html:20
 msgid "Publish"
 msgstr "Publicar"
 
-#: obrisk/templates/articles/article_create.html:22
-#: obrisk/templates/articles/article_update.html:22
+#: obrisk/templates/classifieds/classified_create.html:22
+#: obrisk/templates/classifieds/classified_update.html:22
 #: obrisk/templates/qa/question_form.html:21
 msgid "Save as draft"
 msgstr "Borrador"
 
-#: obrisk/templates/articles/article_create.html:23
-#: obrisk/templates/articles/article_update.html:23
+#: obrisk/templates/classifieds/classified_create.html:23
+#: obrisk/templates/classifieds/classified_update.html:23
 #: obrisk/templates/news/news_form_modal.html:25
 #: obrisk/templates/qa/answer_form.html:21
 #: obrisk/templates/qa/question_form.html:22
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: obrisk/templates/articles/article_detail.html:23
+#: obrisk/templates/classifieds/classified_detail.html:23
 #: obrisk/templates/qa/question_detail.html:39
 #: obrisk/templates/qa/question_sample.html:18
 msgid "by"
 msgstr "por"
 
-#: obrisk/templates/articles/article_detail.html:28
-#: obrisk/templates/articles/article_list.html:38
+#: obrisk/templates/classifieds/classified_detail.html:28
+#: obrisk/templates/classifieds/classified_list.html:38
 msgid "Posted"
 msgstr "Publicado"
 
-#: obrisk/templates/articles/article_detail.html:32
-#: obrisk/templates/articles/article_detail.html:36
-#: obrisk/templates/articles/article_list.html:28
+#: obrisk/templates/classifieds/classified_detail.html:32
+#: obrisk/templates/classifieds/classified_detail.html:36
+#: obrisk/templates/classifieds/classified_list.html:28
 #: obrisk/templates/search/search_results.html:37
 msgid "Featured Image"
 msgstr "Imagen destacada"
 
-#: obrisk/templates/articles/article_detail.html:44
+#: obrisk/templates/classifieds/classified_detail.html:44
 msgid "Leave a Comment"
 msgstr "Deje un comentario"
 
-#: obrisk/templates/articles/article_detail.html:52
+#: obrisk/templates/classifieds/classified_detail.html:52
 msgid "Add comment"
 msgstr "Agregue un comentario"
 
-#: obrisk/templates/articles/article_detail.html:64
+#: obrisk/templates/classifieds/classified_detail.html:64
 #: obrisk/templates/messager/message_list.html:21
 #: obrisk/templates/messager/single_message.html:6
 #: obrisk/templates/notifications/notification_list.html:23
@@ -587,7 +587,7 @@ msgstr "Agregue un comentario"
 msgid "Picture Profile"
 msgstr "Imagen de perfil"
 
-#: obrisk/templates/articles/article_detail.html:66
+#: obrisk/templates/classifieds/classified_detail.html:66
 #: obrisk/templates/base.html:67
 #: obrisk/templates/messager/message_list.html:23
 #: obrisk/templates/messager/single_message.html:8
@@ -600,56 +600,56 @@ msgstr "Imagen de perfil"
 msgid "No Profile Picture"
 msgstr "Sin imagen de perfil"
 
-#: obrisk/templates/articles/article_detail.html:83
-#: obrisk/templates/articles/article_list.html:80
-msgid "New Article"
+#: obrisk/templates/classifieds/classified_detail.html:83
+#: obrisk/templates/classifieds/classified_list.html:80
+msgid "New Classified"
 msgstr "Articulo nuevo"
 
-#: obrisk/templates/articles/article_detail.html:84
-msgid "Edit this article"
+#: obrisk/templates/classifieds/classified_detail.html:84
+msgid "Edit this classified"
 msgstr "Edite este articulo"
 
-#: obrisk/templates/articles/article_detail.html:84
+#: obrisk/templates/classifieds/classified_detail.html:84
 msgid "Edit"
 msgstr "Editar"
 
-#: obrisk/templates/articles/article_detail.html:90
-#: obrisk/templates/articles/article_list.html:87
+#: obrisk/templates/classifieds/classified_detail.html:90
+#: obrisk/templates/classifieds/classified_list.html:87
 msgid "Cloud tag"
 msgstr "Nube tematica"
 
-#: obrisk/templates/articles/article_list.html:35
+#: obrisk/templates/classifieds/classified_list.html:35
 msgid "Read More"
 msgstr "Leer mas"
 
-#: obrisk/templates/articles/article_list.html:47
-msgid "There is no published article yet"
+#: obrisk/templates/classifieds/classified_list.html:47
+msgid "There is no published classified yet"
 msgstr "No se ha publica ningun articulo aun"
 
-#: obrisk/templates/articles/article_list.html:47
+#: obrisk/templates/classifieds/classified_list.html:47
 msgid "Be the first one to publish one"
 msgstr "Sea el primero en publicar uno"
 
-#: obrisk/templates/articles/article_list.html:53
+#: obrisk/templates/classifieds/classified_list.html:53
 #: obrisk/templates/qa/question_list.html:58
 msgid "Newer"
 msgstr "Mas recientes"
 
-#: obrisk/templates/articles/article_list.html:65
+#: obrisk/templates/classifieds/classified_list.html:65
 #: obrisk/templates/qa/question_list.html:70
 msgid "Older"
 msgstr "Mas antiguos"
 
-#: obrisk/templates/articles/article_list.html:81
-#: obrisk/templates/articles/article_update.html:13
+#: obrisk/templates/classifieds/classified_list.html:81
+#: obrisk/templates/classifieds/classified_update.html:13
 msgid "Drafts"
 msgstr "Borradores"
 
-#: obrisk/templates/articles/article_update.html:14
-msgid "Update an article"
+#: obrisk/templates/classifieds/classified_update.html:14
+msgid "Update an classified"
 msgstr "Actualizar un articulo"
 
-#: obrisk/templates/articles/article_update.html:21
+#: obrisk/templates/classifieds/classified_update.html:21
 msgid "Update"
 msgstr "Actualizar"
 

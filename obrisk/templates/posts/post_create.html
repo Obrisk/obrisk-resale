@@ -10,17 +10,17 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'news:list' %}">{% trans 'Home' %}</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'articles:list' %}">{% trans 'Classifieds' %}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{% trans 'Write a new article' %}</li>
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'posts' %}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{% trans 'Post a new article, job or an event' %}</li>
     </ol>
   </nav>
-  <form action="{% url 'articles:write_new' %}" enctype="multipart/form-data"  id="article-form" method="post" role="form">
+  <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
       <button type="button" class="btn btn-primary publish">{% trans 'Publish' %}</button>
       <button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
-      <a href="{% url 'articles:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+      <a href="{% url 'posts:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
   </form>
   {{ form.media }}
@@ -28,5 +28,5 @@
 {% endblock content %}
 
 {% block modal %}
-  <script src="{% static 'js/articles.js' %}"></script>
+  <script src="{% static 'js/posts.js' %}"></script>
 {% endblock modal %}

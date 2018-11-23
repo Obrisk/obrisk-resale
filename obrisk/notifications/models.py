@@ -81,7 +81,7 @@ class Notification(models.Model):
     Examples::
 
         <Sebastian> <Logged In> <1 minute ago>
-        <Sebastian> <commented> <Article> <2 hours ago>
+        <Sebastian> <commented> <Classified> <2 hours ago>
     """
     LIKED = 'L'
     COMMENTED = 'C'
