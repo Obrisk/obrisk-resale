@@ -1,6 +1,6 @@
 from test_plus.test import TestCase
 
-from obrisk.news.models import News
+from obrisk.stories.models import Stories
 from obrisk.notifications.models import Notification, notification_handler
 
 
@@ -58,7 +58,7 @@ class NotificationsModelsTest(TestCase):
 
     def test_single_notification(self):
         Notification.objects.mark_all_as_read()
-        obj = News.objects.create(
+        obj = Stories.objects.create(
             user=self.user,
             content="This is a short content."
         )

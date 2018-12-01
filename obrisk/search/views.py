@@ -8,23 +8,23 @@ from django.views.generic import ListView
 from taggit.models import Tag
 
 from obrisk.classifieds.models import Classified
-from obrisk.news.models import News
+from obrisk.stories.models import Stories
 from obrisk.helpers import ajax_required
 from obrisk.qa.models import Question
 
 
 class SearchListView(LoginRequiredMixin, ListView):
     """CBV to contain all the search results"""
-    model = News
+    model = Stories
     template_name = "search/search_results.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         query = self.request.GET.get("query")
-        context["active"] = 'news'
+        context["active"] = 'stories'
         context["hide_search"] = True
         context["tags_list"] = Tag.objects.filter(name=query)
-        context["news_list"] = News.objects.filter(
+        context["stories_list"] = Stories.objects.filter(
             content__icontains=query, reply=False)
         context["classifieds_list"] = Classified.objects.filter(Q(
             title__icontains=query) | Q(content__icontains=query) | Q(
@@ -35,12 +35,12 @@ class SearchListView(LoginRequiredMixin, ListView):
         context["users_list"] = get_user_model().objects.filter(
             Q(username__icontains=query) | Q(
                 name__icontains=query))
-        context["news_count"] = context["news_list"].count()
+        context["stories_count"] = context["stories_list"].count()
         context["classifieds_count"] = context["classifieds_list"].count()
         context["questions_count"] = context["questions_list"].count()
         context["users_count"] = context["users_list"].count()
         context["tags_count"] = context["tags_list"].count()
-        context["total_results"] = context["news_count"] + \
+        context["total_results"] = context["stories_count"] + \
             context["classifieds_count"] + context["questions_count"] + \
             context["users_count"] + context["tags_count"]
         return context

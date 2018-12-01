@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{% block head_title %}{% trans "Delete stories" %}{% endblock %}
+
+{% block content %}
+<h1>{% trans "Delete a posted stories" %}</h1>
+
+<p>{% trans 'Are you sure you want to continue? If you do this you will delete this stories' %}</p>
+
+<form method="post" action="{% url 'stories:delete_stories' stories.pk %}">
+  {% csrf_token %}
+  <button class="btn btn-danger" type="submit">{% trans 'Delete' %}</button>
+</form>
+
+
+{% endblock %}

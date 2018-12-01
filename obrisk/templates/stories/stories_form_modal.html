@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<div class="modal fade" id="newsFormModal" tabindex="-1" role="dialog" aria-labelledby="newsFormModalTitle" aria-hidden="true">
+<div class="modal fade" id="storiesFormModal" tabindex="-1" role="dialog" aria-labelledby="storiesFormModalTitle" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -10,16 +10,16 @@
         </button>
       </div>
       <div class="modal-body">
-        <form id="postNewsForm" role="form" method="post" action="#" onsubmit="return false">
+        <form id="postStoriesForm" role="form" method="post" action="#" onsubmit="return false">
           {% csrf_token %}
           <div class="form-group">
-            <textarea id="newsInput" name="post" rows="3" class="form-control" maxlength="280"></textarea>
-            <span id="newsCounter" class="pull-right">280</span>
+            <textarea id="storiesInput" name="post" rows="3" class="form-control" maxlength="280"></textarea>
+            <span id="storiesCounter" class="pull-right">280</span>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" id="postNews" class="btn btn-primary">
+        <button type="button" id="postStories" class="btn btn-primary">
           <i class="fa fa-paper-plane" aria-hidden="true"></i> {% trans 'Post' %}
         </button>
         <button type="button" class="btn btn-default" data-dismiss="modal">{% trans 'Cancel' %}</button>

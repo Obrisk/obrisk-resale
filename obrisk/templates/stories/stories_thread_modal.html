@@ -1,12 +1,12 @@
 {% load i18n static %}
 {% load thumbnail %}
 
-<div class="modal fade" id="newsThreadModal" tabindex="-1" role="dialog" aria-labelledby="newsThreadModalLabel" aria-hidden="true">
+<div class="modal fade" id="storiesThreadModal" tabindex="-1" role="dialog" aria-labelledby="storiesThreadModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <!-- Body -->
       <div class="modal-body" >
-        <ul class="stream" id="newsContent"></ul>
+        <ul class="stream" id="storiesContent"></ul>
         <ul class="stream">
           <li class="card">
             <div class="card-body">
@@ -18,7 +18,7 @@
                 {% endthumbnail %}
               </div>
               <div class="post">
-                <form id="replyNewsForm" role="form" method="post" action="#" onsubmit="return false">
+                <form id="replyStoriesForm" role="form" method="post" action="#" onsubmit="return false">
                   {% csrf_token %}
                   <input type="hidden" name="parent" value="">
                   <div class="form-group">
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="card-footer">
-              <button type="button" id="replyNews" class="btn btn-primary pull-right">
+              <button type="button" id="replyStories" class="btn btn-primary pull-right">
                 <i class="fa fa-paper-plane" aria-hidden="true"></i> {% trans 'Reply' %}
               </button>
             </div>

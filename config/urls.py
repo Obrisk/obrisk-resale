@@ -28,7 +28,7 @@ urlpatterns = [
         include('obrisk.classifieds.urls', namespace='classifieds')),
      url(r'^posts/',
         include('obrisk.posts.urls', namespace='posts')),
-    url(r'^news/', include('obrisk.news.urls', namespace='news')),
+    url(r'^stories/', include('obrisk.stories.urls', namespace='stories')),
     url(r'^messages/',
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),

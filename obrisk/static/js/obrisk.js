@@ -37,18 +37,18 @@ $(function () {
     };
 
     function update_social_activity (id_value) {
-        let newsToUpdate = $("[news-id=" + id_value + "]");
+        let storiesToUpdate = $("[stories-id=" + id_value + "]");
         payload = {
             'id_value': id_value,
         };
         $.ajax({
-            url: '/news/update-interactions/',
+            url: '/stories/update-interactions/',
             data: payload,
             type: 'POST',
             cache: false,
             success: function (data) {
-                $(".like-count", newsToUpdate).text(data.likes);
-                $(".comment-count", newsToUpdate).text(data.comments);
+                $(".like-count", storiesToUpdate).text(data.likes);
+                $(".comment-count", storiesToUpdate).text(data.comments);
             },
         });
     };
@@ -116,7 +116,7 @@ $(function () {
                 update_social_activity(event.id_value);
                 break;
 
-            case "additional_news":
+            case "additional_stories":
                 if (event.actor_name !== currentUser) {
                     $(".stream-update").show();
                 }

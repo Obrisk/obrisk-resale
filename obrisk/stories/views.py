@@ -8,43 +8,43 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DeleteView
 
 from obrisk.helpers import ajax_required, AuthorRequiredMixin
-from obrisk.news.models import News
+from obrisk.stories.models import Stories
 
 
-class NewsListView(LoginRequiredMixin, ListView):
+class StoriesListView(LoginRequiredMixin, ListView):
     """A really simple ListView, with some JS magic on the UI."""
-    model = News
+    model = Stories
     paginate_by = 15
 
     def get_queryset(self, **kwargs):
-        return News.objects.filter(reply=False)
+        return Stories.objects.filter(reply=False)
 
 
-class NewsDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
+class StoriesDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     """Implementation of the DeleteView overriding the delete method to
     allow a no-redirect response to use with AJAX call."""
-    model = News
-    success_url = reverse_lazy("news:list")
+    model = Stories
+    success_url = reverse_lazy("stories:list")
 
 
 @login_required
 @ajax_required
 @require_http_methods(["POST"])
-def post_news(request):
+def post_stories(request):
     """A function view to implement the post functionality with AJAX allowing
-    to create News instances as parent ones."""
+    to create Stories instances as parent ones."""
     user = request.user
     post = request.POST['post']
     post = post.strip()
     if len(post) > 0 and len(post) <= 280:
-        posted = News.objects.create(
+        posted = Stories.objects.create(
             user=user,
             content=post,
         )
         html = render_to_string(
-            'news/news_single.html',
+            'stories/stories_single.html',
             {
-                'news': posted,
+                'stories': posted,
                 'request': request
             })
         return HttpResponse(html)
@@ -59,28 +59,28 @@ def post_news(request):
 @ajax_required
 @require_http_methods(["POST"])
 def like(request):
-    """Function view to receive AJAX, returns the count of likes a given news
+    """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""
-    news_id = request.POST['news']
-    news = News.objects.get(pk=news_id)
+    stories_id = request.POST['stories']
+    stories = Stories.objects.get(pk=stories_id)
     user = request.user
-    news.switch_like(user)
-    return JsonResponse({"likes": news.count_likers()})
+    stories.switch_like(user)
+    return JsonResponse({"likes": stories.count_likers()})
 
 
 @login_required
 @ajax_required
 @require_http_methods(["GET"])
 def get_thread(request):
-    """Returns a list of news with the given news as parent."""
-    news_id = request.GET['news']
-    news = News.objects.get(pk=news_id)
-    news_html = render_to_string("news/news_single.html", {"news": news})
+    """Returns a list of stories with the given stories as parent."""
+    stories_id = request.GET['stories']
+    stories = Stories.objects.get(pk=stories_id)
+    stories_html = render_to_string("stories/stories_single.html", {"stories": stories})
     thread_html = render_to_string(
-        "news/news_thread.html", {"thread": news.get_thread()})
+        "stories/stories_thread.html", {"thread": stories.get_thread()})
     return JsonResponse({
-        "uuid": news_id,
-        "news": news_html,
+        "uuid": stories_id,
+        "stories": stories_html,
         "thread": thread_html,
     })
 
@@ -90,12 +90,12 @@ def get_thread(request):
 @require_http_methods(["POST"])
 def post_comment(request):
     """A function view to implement the post functionality with AJAX, creating
-    News instances who happens to be the children and commenters of the root
+    Stories instances who happens to be the children and commenters of the root
     post."""
     user = request.user
     post = request.POST['reply']
     par = request.POST['parent']
-    parent = News.objects.get(pk=par)
+    parent = Stories.objects.get(pk=par)
     post = post.strip()
     if post:
         parent.reply_this(user, post)
@@ -109,6 +109,6 @@ def post_comment(request):
 @require_http_methods(["POST"])
 def update_interactions(request):
     data_point = request.POST['id_value']
-    news = News.objects.get(pk=data_point)
-    data = {'likes': news.count_likers(), 'comments': news.count_thread()}
+    stories = Stories.objects.get(pk=data_point)
+    data = {'likes': stories.count_likers(), 'comments': stories.count_thread()}
     return JsonResponse(data)

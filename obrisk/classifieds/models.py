@@ -49,7 +49,9 @@ class Classified(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.SET_NULL)
-  
+    
+    image = models.ImageField(
+        _('Featured image'), upload_to='classified_pictures/%Y/%m/%d/')
     timestamp = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=255, null=False, unique=True)
     slug = models.SlugField(max_length=80, null=True, blank=True)
@@ -76,19 +78,6 @@ class Classified(models.Model):
 
         super().save(*args, **kwargs)
 
-#An independent function to create a unique filename for images of one card.
-def get_image_filename(instance, filename):
-    title = instance.classified.title
-    slug = slugify(title)
-    return "classified_images/%s-%s" % (slug, filename)
-
-
-class ClassifiedImages(models.Model):
-    classified = models.ForeignKey(Classified, default=None,\
-    on_delete=models.CASCADE, related_name='classified_images')
-    images = models.ImageField(upload_to=get_image_filename,
-                              verbose_name='Image')
-
 def notify_comment(**kwargs):
     """Handler to be fired up upon comments signal to notify the creater of a
     given classified."""
@@ -98,6 +87,5 @@ def notify_comment(**kwargs):
     notification_handler(
         actor, receiver, Notification.COMMENTED, action_object=obj
         )
-
 
 comment_was_posted.connect(receiver=notify_comment)

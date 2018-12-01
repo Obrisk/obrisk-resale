@@ -1,13 +1,13 @@
 from django.conf.urls import url
 
-from obrisk.news import views
+from obrisk.stories import views
 
-app_name = 'news'
+app_name = 'stories'
 urlpatterns = [
-    url(r'^$', views.NewsListView.as_view(), name='list'),
+    url(r'^$', views.StoriesListView.as_view(), name='list'),
     url(r'^delete/(?P<pk>[-\w]+)/$',
-        views.NewsDeleteView.as_view(), name='delete_news'),
-    url(r'^post-news/$', views.post_news, name='post_news'),
+        views.StoriesDeleteView.as_view(), name='delete_stories'),
+    url(r'^post-stories/$', views.post_stories, name='post_stories'),
     url(r'^like/$', views.like, name='like_post'),
     url(r'^get-thread/$', views.get_thread, name='get_thread'),
     url(r'^post-comment/$', views.post_comment, name='post_comments'),

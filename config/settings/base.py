@@ -85,7 +85,7 @@ LOCAL_APPS = [
     # Your stuff: custom apps go here
     'obrisk.classifieds.apps.ClassifiedsConfig',
     'obrisk.messager.apps.MessagerConfig',
-    'obrisk.news.apps.NewsConfig',
+    'obrisk.stories.apps.StoriesConfig',
     'obrisk.notifications.apps.NotificationsConfig',
     'obrisk.qa.apps.QaConfig',
     'obrisk.search.apps.SearchConfig',
@@ -111,7 +111,7 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = 'news:list'
+LOGIN_REDIRECT_URL = 'stories:list'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = 'account_login'
 

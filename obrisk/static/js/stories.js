@@ -37,18 +37,18 @@ $(function () {
     });
 
     // Focus on the modal input by default.
-    $('#newsFormModal').on('shown.bs.modal', function () {
-        $('#newsInput').trigger('focus')
+    $('#storiesFormModal').on('shown.bs.modal', function () {
+        $('#storiesInput').trigger('focus')
     });
 
-    $('#newsThreadModal').on('shown.bs.modal', function () {
+    $('#storiesThreadModal').on('shown.bs.modal', function () {
         $('#replyInput').trigger('focus')
     });
 
     // Counts textarea characters to provide data to user.
-    $("#newsInput").keyup(function () {
+    $("#storiesInput").keyup(function () {
         var charCount = $(this).val().length;
-        $("#newsCounter").text(280 - charCount);
+        $("#storiesCounter").text(280 - charCount);
     });
 
     $("#replyInput").keyup(function () {
@@ -58,17 +58,17 @@ $(function () {
 
     $("input, textarea").attr("autocomplete", "off");
 
-    $("#postNews").click(function () {
-        // Ajax call after pushing button, to register a News object.
+    $("#postStories").click(function () {
+        // Ajax call after pushing button, to register a Stories object.
         $.ajax({
-            url: '/news/post-news/',
-            data: $("#postNewsForm").serialize(),
+            url: '/stories/post-stories/',
+            data: $("#postStoriesForm").serialize(),
             type: 'POST',
             cache: false,
             success: function (data) {
                 $("ul.stream").prepend(data);
-                $("#newsInput").val("");
-                $("#newsFormModal").modal("hide");
+                $("#storiesInput").val("");
+                $("#storiesFormModal").modal("hide");
                 hide_stream_update();
             },
             error : function(data){
@@ -77,16 +77,16 @@ $(function () {
         });
     });
 
-    $("#replyNews").click(function () {
-        // Ajax call to register a reply to any given News object.
+    $("#replyStories").click(function () {
+        // Ajax call to register a reply to any given Stories object.
         $.ajax({
-            url: '/news/post-comment/',
-            data: $("#replyNewsForm").serialize(),
+            url: '/stories/post-comment/',
+            data: $("#replyStoriesForm").serialize(),
             type: 'POST',
             cache: false,
             success: function (data) {
                 $("#replyInput").val("");
-                $("#newsThreadModal").modal("hide");
+                $("#storiesThreadModal").modal("hide");
             },
             error: function(data){
                 alert(data.responseText);
@@ -97,13 +97,13 @@ $(function () {
     $("ul.stream").on("click", ".like", function () {
         // Ajax call on action on like button.
         var li = $(this).closest("li");
-        var news = $(li).attr("news-id");
+        var stories = $(li).attr("stories-id");
         payload = {
-            'news': news,
+            'stories': stories,
             'csrf_token': csrftoken
         }
         $.ajax({
-            url: '/news/like/',
+            url: '/stories/like/',
             data: payload,
             type: 'POST',
             cache: false,
@@ -122,21 +122,21 @@ $(function () {
     });
 
     $("ul.stream").on("click", ".comment", function () {
-        // Ajax call to request a given News object detail and thread, and to
+        // Ajax call to request a given Stories object detail and thread, and to
         // show it in a modal.
         var post = $(this).closest(".card");
-        var news = $(post).closest("li").attr("news-id");
-        $("#newsThreadModal").modal("show");
+        var stories = $(post).closest("li").attr("stories-id");
+        $("#storiesThreadModal").modal("show");
         $.ajax({
-            url: '/news/get-thread/',
-            data: {'news': news},
+            url: '/stories/get-thread/',
+            data: {'stories': stories},
             cache: false,
             beforeSend: function () {
                 $("#threadContent").html("<li class='loadcomment'><img src='/static/img/loading.gif'></li>");
             },
             success: function (data) {
                 $("input[name=parent]").val(data.uuid)
-                $("#newsContent").html(data.news);
+                $("#storiesContent").html(data.stories);
                 $("#threadContent").html(data.thread);
             }
         });
@@ -148,7 +148,7 @@ $(function () {
 /* Example query for the GraphQL endpoint.
 
     query{
-        news(uuidId: "--insert here the required uuid_id value for the lookup"){
+        stories(uuidId: "--insert here the required uuid_id value for the lookup"){
           uuidId
           content
           timestamp
@@ -165,7 +165,7 @@ $(function () {
             content
           }
         }
-        paginatedNews(page: 1){
+        paginatedStories(page: 1){
           page
           pages
           hasNext

@@ -12,8 +12,8 @@ from channels.layers import get_channel_layer
 from obrisk.notifications.models import Notification, notification_handler
 
 
-class News(models.Model):
-    """News model to contain small information snippets in the same manner as
+class Stories(models.Model):
+    """Stories model to contain small information snippets in the same manner as
     Twitter does."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="publisher",
@@ -25,12 +25,12 @@ class News(models.Model):
         primary_key=True, default=uuid.uuid4, editable=False)
     content = models.TextField(max_length=280)
     liked = models.ManyToManyField(settings.AUTH_USER_MODEL,
-        blank=True, related_name="liked_news")
+        blank=True, related_name="liked_stories")
     reply = models.BooleanField(verbose_name=_("Is a reply?"), default=False)
 
     class Meta:
-        verbose_name = _("News")
-        verbose_name_plural = _("News")
+        verbose_name = _("Stories")
+        verbose_name_plural = _("Stories")
         ordering = ("-timestamp",)
 
     def __str__(self):
@@ -42,14 +42,14 @@ class News(models.Model):
             channel_layer = get_channel_layer()
             payload = {
                     "type": "receive",
-                    "key": "additional_news",
+                    "key": "additional_stories",
                     "actor_name": self.user.username
 
                 }
             async_to_sync(channel_layer.group_send)('notifications', payload)
 
     def get_absolute_url(self):
-        return reverse("news:detail", kwargs={"uuid_id": self.uuid})
+        return reverse("stories:detail", kwargs={"uuid_id": self.uuid})
 
     def switch_like(self, user):
         if user in self.liked.all():
@@ -70,8 +70,8 @@ class News(models.Model):
             return self
 
     def reply_this(self, user, text):
-        """Handler function to create a News instance as a reply to any
-        published news.
+        """Handler function to create a Stories instance as a reply to any
+        published stories.
 
         :requires:
 
@@ -79,14 +79,14 @@ class News(models.Model):
         :param content: String with the reply.
         """
         parent = self.get_parent()
-        reply_news = News.objects.create(
+        reply_stories = Stories.objects.create(
             user=user,
             content=text,
             reply=True,
             parent=parent
         )
         notification_handler(
-            user, parent.user, Notification.REPLY, action_object=reply_news,
+            user, parent.user, Notification.REPLY, action_object=reply_stories,
             id_value=str(parent.uuid_id), key='social_update')
 
     def get_thread(self):

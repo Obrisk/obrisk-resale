@@ -2,7 +2,7 @@ from django import forms
 
 from markdownx.fields import MarkdownxFormField
 
-from obrisk.classifieds.models import Classified, ClassifiedImages
+from obrisk.classifieds.models import Classified
 
 
 class ClassifiedForm(forms.ModelForm):
@@ -12,12 +12,5 @@ class ClassifiedForm(forms.ModelForm):
 
     class Meta:
         model = Classified
-        fields = ["title", "content", "tags", "status", "edited", "price", "located_area"]
+        fields = ["title", "content", "image", "tags", "status", "edited", "price", "located_area"]
 
-
-class ClassifiedImageForm(forms.ModelForm):
-    images = forms.ImageField(label='Image')
-
-    class Meta:
-        model = ClassifiedImages
-        fields = ["images"]

@@ -73,24 +73,24 @@ msgstr "Mensaje"
 msgid "Messages"
 msgstr "Mensajes"
 
-#: obrisk/news/apps.py:7 obrisk/news/models.py:32
-#: obrisk/news/models.py:33 obrisk/templates/base.html:44
-#: obrisk/templates/news/news_list.html:16
+#: obrisk/stories/apps.py:7 obrisk/stories/models.py:32
+#: obrisk/stories/models.py:33 obrisk/templates/base.html:44
+#: obrisk/templates/stories/stories_list.html:16
 #: obrisk/templates/search/search_results.html:25
-msgid "News"
+msgid "Stories"
 msgstr "Noticias"
 
-#: obrisk/news/models.py:29
+#: obrisk/stories/models.py:29
 msgid "Is a reply?"
 msgstr "¿Es una respuesta?"
 
-#: obrisk/news/views.py:54
+#: obrisk/stories/views.py:54
 #, python-brace-format
 msgid "Text is {lenght} characters longer than accepted."
 msgstr "El texto es {lenght} caracteres mas largo de lo aceptado."
 
-#: obrisk/news/views.py:57 obrisk/news/views.py:73
-#: obrisk/news/views.py:112 obrisk/qa/views.py:122 obrisk/qa/views.py:152
+#: obrisk/stories/views.py:57 obrisk/stories/views.py:73
+#: obrisk/stories/views.py:112 obrisk/qa/views.py:122 obrisk/qa/views.py:152
 #: obrisk/qa/views.py:167
 msgid "Wrong request type."
 msgstr "Tipo de request equivocado."
@@ -546,7 +546,7 @@ msgstr "Borrador"
 
 #: obrisk/templates/classifieds/classified_create.html:23
 #: obrisk/templates/classifieds/classified_update.html:23
-#: obrisk/templates/news/news_form_modal.html:25
+#: obrisk/templates/stories/stories_form_modal.html:25
 #: obrisk/templates/qa/answer_form.html:21
 #: obrisk/templates/qa/question_form.html:22
 msgid "Cancel"
@@ -591,9 +591,9 @@ msgstr "Imagen de perfil"
 #: obrisk/templates/base.html:67
 #: obrisk/templates/messager/message_list.html:23
 #: obrisk/templates/messager/single_message.html:8
-#: obrisk/templates/news/news_single.html:11
-#: obrisk/templates/news/news_thread.html:13
-#: obrisk/templates/news/news_thread_modal.html:17
+#: obrisk/templates/stories/stories_single.html:11
+#: obrisk/templates/stories/stories_thread.html:13
+#: obrisk/templates/stories/stories_thread_modal.html:17
 #: obrisk/templates/notifications/notification_list.html:25
 #: obrisk/templates/search/search_results.html:71
 #: obrisk/templates/users/user_list.html:24
@@ -662,9 +662,9 @@ msgstr "Bandeja de entrada"
 msgid "Contacts"
 msgstr "Contactos"
 
-#: obrisk/templates/base.html:65 obrisk/templates/news/news_single.html:9
-#: obrisk/templates/news/news_thread.html:11
-#: obrisk/templates/news/news_thread_modal.html:15
+#: obrisk/templates/base.html:65 obrisk/templates/stories/stories_single.html:9
+#: obrisk/templates/stories/stories_thread.html:11
+#: obrisk/templates/stories/stories_thread_modal.html:15
 msgid "User Image"
 msgstr "Imagen de usario"
 
@@ -700,49 +700,49 @@ msgstr "¡Iniciemos ahora!"
 msgid "Write a message..."
 msgstr "Escriba un mensaje..."
 
-#: obrisk/templates/news/news_confirm_delete.html:5
-msgid "Delete news"
+#: obrisk/templates/stories/stories_confirm_delete.html:5
+msgid "Delete stories"
 msgstr "Borrar noticia"
 
-#: obrisk/templates/news/news_confirm_delete.html:8
-msgid "Delete a posted news"
+#: obrisk/templates/stories/stories_confirm_delete.html:8
+msgid "Delete a posted stories"
 msgstr "Borrar una noticia publicada"
 
-#: obrisk/templates/news/news_confirm_delete.html:10
+#: obrisk/templates/stories/stories_confirm_delete.html:10
 msgid ""
-"Are you sure you want to continue? If you do this you will delete this news"
+"Are you sure you want to continue? If you do this you will delete this stories"
 msgstr "¿Esta seguro de continuar? Este cambio es irreversible"
 
-#: obrisk/templates/news/news_confirm_delete.html:14
+#: obrisk/templates/stories/stories_confirm_delete.html:14
 msgid "Delete"
 msgstr "Borrar"
 
-#: obrisk/templates/news/news_form_modal.html:7
+#: obrisk/templates/stories/stories_form_modal.html:7
 msgid "Share something new!"
 msgstr "¡Comparta algo!"
 
-#: obrisk/templates/news/news_form_modal.html:23
+#: obrisk/templates/stories/stories_form_modal.html:23
 msgid "Post"
 msgstr "Publicar"
 
-#: obrisk/templates/news/news_list.html:18
+#: obrisk/templates/stories/stories_list.html:18
 msgid "Share something"
 msgstr "Compartir algo"
 
-#: obrisk/templates/news/news_list.html:23
+#: obrisk/templates/stories/stories_list.html:23
 msgid "Most Recent Posts"
 msgstr "Publicaciones mas recientes"
 
-#: obrisk/templates/news/news_list.html:33
+#: obrisk/templates/stories/stories_list.html:33
 msgid "There are new posts"
 msgstr "Hay publicaciones nuevas"
 
-#: obrisk/templates/news/news_single.html:17
-#: obrisk/templates/news/news_thread.html:19
-msgid "Click to remove this news"
+#: obrisk/templates/stories/stories_single.html:17
+#: obrisk/templates/stories/stories_thread.html:19
+msgid "Click to remove this stories"
 msgstr "Click aqui para borrar"
 
-#: obrisk/templates/news/news_thread_modal.html:33
+#: obrisk/templates/stories/stories_thread_modal.html:33
 msgid "Reply"
 msgstr "Contestar"
 

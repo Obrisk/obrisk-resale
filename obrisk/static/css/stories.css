@@ -148,7 +148,7 @@
   text-align: center;
 }
 
-.remove-news {
+.remove-stories {
   color: #bbbbbb;
   font-size: .8em;
   padding-top: .2em;
@@ -156,6 +156,6 @@
   cursor: pointer;
 }
 
-.remove-news:hover {
+.remove-stories:hover {
   color: #333333;
 }
