@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load crispy_forms_tags %}
+{% load thumbnail %}
+
+{% block title %} Report {% endblock %}
+
+{% block content %}
+   <!-- Comments Form -->
+   {% if sent %}
+    <h1> your report has been sent! </h1>
+  {% else %}
+   <div class="card my-4">
+        <h5 class="card-header">{% trans 'Please take 1 minute to choose the reason and complete the form why the ad is inappropiate.' %}:</h5>
+        <div class="card-body">
+          {% if user.is_authenticated %}
+          <form action="{% url 'classifieds:report' form.instance.pk %}" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            
+            <input type="hidden" name="reporter" value="{{ user }}">
+            <!--input type="hidden" name="classified_ad" value="{% url 'classifieds:classified' classified.slug %}"-->
+            <input type="submit" value="{% trans 'Submit the report' %}" id="id_submit" >
+
+            </form>
+          {% endif %}
+        </div>
+      </div>
+  {% endif %}
+
+
+    
+{% endblock content %}
