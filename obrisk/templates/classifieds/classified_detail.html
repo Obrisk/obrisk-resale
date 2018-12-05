@@ -34,43 +34,22 @@
           <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="Card Image">
         {% endthumbnail %}
         <!-- <img src="{{ MEDIA_URL }}{{ classified.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
+       
         <hr>
         <!-- Post Content -->
-        <p class="card-text">{{ classified.get_markdown|safe }}</p>
+
+        <p class="card-text">{{ classified.details }}</p>
+        <p class="card-subtitle mb-2"  > {{ classified.street_area }}</p>
+        <p class="card-subtitle mb-2"  >{{ classified.district }}</p>
+        <p class="card-subtitle mb-2"  >{{ classified.city }}</p>
+        <h1 class="card-title ">{{ classified.price }} </h1> 
+        </hr>
+
         <hr>
-
-        <!-- Comments Form -->
-        <div class="card my-4">
-          <h5 class="card-header">{% trans 'Leave a Comment' %}:</h5>
-          <div class="card-body">
-            {% if user.is_authenticated %}
-              {% get_comment_form for classified as form %}
-              <form action="{% comment_form_target %}" method="POST">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <input type="hidden" name="next" value="{% url 'classifieds:classified' classified.slug %}" />
-                <input type="submit" value="{% trans 'Add comment' %}" id="id_submit" />
-              </form>
-            {% endif %}
-          </div>
-        </div>
-
-        <!-- Single Comment -->
-
-        {% get_comment_list for classified as comment_list %}
-        {% for comment in comment_list %}
-          <div class="media mb-4">
-            {% thumbnail comment.user.picture "x50" as im %}
-              <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
-            {% empty %}
-              <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="50px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
-            <div class="media-body">
-              <h5 class="mt-0">{{ comment.user.get_profile_name|title }}</h5>
-              {{ comment }}
-            </div>
-          </div>
-        {% endfor %}
+        <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-success">{% trans 'Respond' %} </a> Chat with the seller <br> <br>
+        <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-danger">{% trans 'Report' %} </a>
+        <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-primary">{% trans 'Back' %} </a>
+        </hr>
       </div>
 
       <!-- Sidebar Widgets Column -->

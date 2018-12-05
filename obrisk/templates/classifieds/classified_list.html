@@ -30,9 +30,10 @@
               <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
             {% endthumbnail %}
             <div class="card-body">
-              <h2 class="card-title">{{ classified.title|title }}</h2>
-              <p class="card-text">{{ classified.get_markdown|safe|truncatechars:150 }}</p>
-              <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-primary">{% trans 'Read More' %} &rarr;</a>
+            <h1 class="card-subtitle">{{ classified.title}} <h1>
+            <h2 class="card-title ">{{ classified.price|title }} </h2> <p style="display:inline" class="card-subtitle mb-2"  >{{ classified.district }}</p>
+              <p class="card-text">{{ classified.details|safe|truncatechars:30 }}</p>  
+              <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-primary">{% trans 'More' %} &rarr;</a>
             </div>
             <div class="card-footer text-muted">
               {% trans 'Posted' %} {{ classified.timestamp|naturaltime }}
@@ -44,7 +45,8 @@
             </div>
           </div>
         {% empty %}
-          <h4 class="no-data">{% trans 'There are no classified ads yet' %}. <a href="{% url 'classifieds:write_new' %}">{% trans 'Do you want to sell something?!, be the first one to publish' %}!</a></h4>
+          <h4 class="no-data">{% trans 'There are no classified ads based on your location. Do you want to sell something?!' %}
+           <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>
         {% endfor %}
 
         {% if is_paginated %}
@@ -78,13 +80,13 @@
           <div class="card my-4">
             <div class="card-body text-center">
               <a class="btn btn-success" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
-              <a class="btn btn-primary" href="{% url 'classifieds:drafts' %}" title="{% trans 'Drafts' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Drafts' %}</a>
+              <!--a class="btn btn-primary" href="{% url 'classifieds:drafts' %}" title="{% trans 'Drafts' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Drafts' %}</a-->
             </div>
           </div>
         {% endif %}
         <!-- Cloud Tag Widget -->
         <div class="card my-4">
-          <h5 class="card-header">{% trans 'Cloud tag' %}</h5>
+          <h5 class="card-header">{% trans 'Tags' %}</h5>
           <div class="card-body">
             {% for tag, count in popular_tags %}
               <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>

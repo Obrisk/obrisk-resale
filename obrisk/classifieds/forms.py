@@ -12,5 +12,5 @@ class ClassifiedForm(forms.ModelForm):
 
     class Meta:
         model = Classified
-        fields = ["title", "content", "image", "tags", "status", "edited", "price", "street_area", "district", "city"]
+        fields = ["title", "details", "image", "tags", "status", "edited", "price", "street_area", "district", "city"]
 
