@@ -46,11 +46,17 @@
         </hr>
 
         <hr>
-        <a href="{% url 'messager:conversation_detail' classified.user %}" class="btn btn-success">{% trans 'Respond' %} </a> Chat with the seller <br> <br>
+        {% if request.user == classified.user%}
+           <a class="btn btn-primary" href="{% url 'classifieds:edit_classified' classified.id %}" title="{% trans 'Edit this classified' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+           <a href="{% url 'classifieds:list' %}" class="btn btn-primary">{% trans 'Back' %} </a> <br> <br>   
+        {% else %}
+        <a href="{% url 'messager:conversation_detail' classified.user %}" class="btn btn-success">{% trans 'Respond' %} </a> 
+        <a href="{% url 'classifieds:list' %}" class="btn btn-primary">{% trans 'Back' %} </a> <br>
+        The respond button will redirect you to start a converstation with the seller  <br> <br>
         <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a>
-        <a href="{% url 'classifieds:list' %}" class="btn btn-primary">{% trans 'Back' %} </a> <br> <br>
-        <p> Note: if a classified ad is casted more than 5 reports it will be automatically deleted <br>
-           and the publisher will be in a gray zone of being blocked! </p>
+        
+
+        {% endif %}
         </hr>
       </div>
 
@@ -62,7 +68,6 @@
           <div class="card my-4">
             <div class="card-body text-center">
               <a class="btn btn-success" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
-              <a class="btn btn-primary" href="{% url 'classifieds:edit_classified' classified.id %}" title="{% trans 'Edit this classified' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
             </div>
           </div>
         {% endif %}

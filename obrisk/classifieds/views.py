@@ -70,8 +70,11 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
-class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, CreateView):
-    """Basic EditView implementation to edit existing classifieds."""
+class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+    """This class has to inherit FormClass model but failed to implement that
+    Update view will use the model Classified which is not a nice implementation.
+    There is no need of a model here just render a form and the send email. """
+
     message = _("Your report has been submitted.")
     model = Classified
     form_class = ClassifiedReportForm
