@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
-from django.views.generic import View, CreateView, ListView, UpdateView, DetailView
+from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView
+from django.views.generic.edit import BaseFormView
 from django.urls import reverse
 from django.shortcuts import render
 from django.utils.translation import ugettext_lazy as _
@@ -69,38 +70,35 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
-class ReportClassifiedView(View):
+class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, CreateView):
     """Basic EditView implementation to edit existing classifieds."""
-    message = _("Your classified has been updated.")
+    message = _("Your report has been submitted.")
+    model = Classified
     form_class = ClassifiedReportForm
     template_name = 'classifieds/classified_report.html'
-
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(ReportClassifiedView, self).dispatch(*args, **kwargs)
 
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
-    def get(self, request, *args, **kwargs):
-          form = self.form_class(request.GET)
-          return render(request, self.template_name, {'form': form})
+    def get_success_url(self):
+        messages.success(self.request, self.message)
+        return reverse('classifieds:list')
 
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            cd = form.cleaned_data
-            subject = 'A classified ad post has been reported'
-            message = 'Read '. format (cd['reporter'], cd['classified_ad'])
-            send_mail(subject, message, 'obriskdesk@obrisk.com', [cd['elishakingdom@yahoo.com']])
-            sent = True
-            return reverse('classifieds:report')
-        else:
-            form = ClassifiedReportForm()
-        return render(request, self.template_name, {'form': form})
-    
 
+    """ If it was a FormView then,
+    def dispatch(self, request, *args, **kwargs):
+        self.user = request.user
+        return super().dispatch(self, request, *args, **kwargs)
+
+    def get_object ()
+
+    def form_valid(self, form):
+        self.object = None
+        return super().form_valid(form)
+
+    def post(self , request , *args , **kwargs):
+        return super().post(self, request, *args, **kwargs)"""
 
 
 class DetailClassifiedView(LoginRequiredMixin, DetailView):

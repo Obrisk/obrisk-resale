@@ -14,7 +14,7 @@ class ClassifiedForm(forms.ModelForm):
         model = Classified
         fields = ["title", "details", "image", "tags", "status", "edited", "price", "street_area", "district", "city"]
 
-class ClassifiedReportForm(forms.Form):
+class ClassifiedReportForm(forms.ModelForm):
     laws = 'lw'
     abusive = 'ab'
     Infringes = 'in'
@@ -28,7 +28,11 @@ class ClassifiedReportForm(forms.Form):
     )
 
     reporter = forms.CharField(widget=forms.HiddenInput())
-    classified_ad = forms.URLField(widget=forms.HiddenInput())
+    user = forms.CharField(widget=forms.HiddenInput())
+    slug = forms.SlugField(widget=forms.HiddenInput())
     reason = forms.ChoiceField(choices= reason_choices)
     details = forms.CharField (max_length=300, required=False, )
-    
+
+    class Meta:
+        model = Classified
+        fields = ["slug", "user"]

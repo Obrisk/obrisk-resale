@@ -46,8 +46,8 @@
         </hr>
 
         <hr>
-        <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-success">{% trans 'Respond' %} </a> Chat with the seller <br> <br>
-        <a href="{% url 'classifieds:report' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a>
+        <a href="{% url 'messager:conversation_detail' classified.user %}" class="btn btn-success">{% trans 'Respond' %} </a> Chat with the seller <br> <br>
+        <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a>
         <a href="{% url 'classifieds:list' %}" class="btn btn-primary">{% trans 'Back' %} </a> <br> <br>
         <p> Note: if a classified ad is casted more than 5 reports it will be automatically deleted <br>
            and the publisher will be in a gray zone of being blocked! </p>
