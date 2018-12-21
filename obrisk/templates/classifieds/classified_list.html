@@ -32,15 +32,16 @@
                     <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
                   {% endthumbnail %}
                   <div class="card-body">
-                  <h1 class="card-subtitle">{{ classified.title}} <h1>
-                  <h2 class="card-title ">{{ classified.price|title }} </h2> <p style="display:inline" class="card-subtitle mb-2"  >{{ classified.district }}</p>
-                    <p class="card-text">{{ classified.details|safe|truncatechars:30 }}</p>  
-                    <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a>
+                  <h3 class="card-title"> {{ classified.title}} </h3>
+                  <h5 class="card-subtitle "> CNY {{ classified.price|title }} </h5> 
+                  <!-- <h6 class="card-subtitle "> {{ classified.district }} </h6> -->
+                  <p class="card-text"> {{ classified.details|safe|truncatechars:50 }}</p>  
+                  <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a>
                   </div>
                   <div class="card-footer text-muted">
-                    {% trans 'Posted' %} {{ classified.timestamp|naturaltime }}
+                    {% trans 'Posted' %} {{ classified.timestamp|naturaltime }} <br>
                     <i class="lead fa fa-user"></i>
-                    <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
+                    <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a> <br>
                     {% for tag in classified.tags.names %}
                       <a href="#">{{ tag }}</a>
                     {% endfor %}

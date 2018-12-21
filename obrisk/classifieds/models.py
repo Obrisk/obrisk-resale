@@ -60,7 +60,7 @@ class Classified(models.Model):
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00 , null=False)
     city = models.CharField (max_length=100, null=False)
     district = models.CharField (max_length=100, null=False)
-    street_area = models.CharField (max_length=100, null=False)
+    located_area = models.CharField (max_length=100, null=False)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)
     edited = models.BooleanField(default=False)

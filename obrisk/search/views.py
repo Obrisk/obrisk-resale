@@ -27,7 +27,7 @@ class SearchListView(LoginRequiredMixin, ListView):
         context["stories_list"] = Stories.objects.filter(
             content__icontains=query, reply=False)
         context["classifieds_list"] = Classified.objects.filter(Q(
-            title__icontains=query) | Q(content__icontains=query) | Q(
+            title__icontains=query) | Q(details__icontains=query) | Q(
                 tags__name__icontains=query), status="P")
         context["questions_list"] = Question.objects.filter(
             Q(title__icontains=query) | Q(content__icontains=query) | Q(

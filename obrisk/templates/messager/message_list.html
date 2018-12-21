@@ -44,6 +44,10 @@
             {% csrf_token %}
             <input type="hidden" name="to" value="{{ active }}">
             <input class="form-control" type="text" name="message" placeholder="{% trans 'Write a message...' %}" maxlength="1000" autocomplete="off">
+
+          </div>
+          <div class="col-xs-2 col-sm-1">
+              <button id="go" type="submit" class="btn btn-dark input-lg">Send</button>
           </div>
         </form>
       </div>

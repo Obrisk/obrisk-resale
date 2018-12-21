@@ -44,7 +44,7 @@
             </div>
           </div>
         {% empty %}
-          <h4 class="no-data">{% trans 'There is no published post yet' %}. <a href="{% url 'posts:write_new' %}">{% trans 'Do you have any important info, events or jobs opportunities?! Be the first one to publish one' %}!</a></h4>
+          <h4 class="no-data">{% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}. <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
         {% endfor %}
 
         {% if is_paginated %}
@@ -78,7 +78,9 @@
           <div class="card my-4">
             <div class="card-body text-center">
               <a class="btn btn-success" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
+              {%if request.user == post.user %}
               <a class="btn btn-dark" href="{% url 'posts:drafts' %}" title="{% trans 'Drafts' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Drafts' %}</a>
+              {% endif %}
             </div>
           </div>
         {% endif %}
