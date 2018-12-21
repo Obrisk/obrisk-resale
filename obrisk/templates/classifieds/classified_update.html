@@ -9,8 +9,8 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'stories:list' %}">{% trans 'Home' %}</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'classifieds:drafts' %}">{% trans 'Drafts' %}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
+      <!-- <li class="breadcrumb-item"><a href="{% url 'classifieds:drafts' %}">{% trans 'Drafts' %}</a></li> -->
       <li class="breadcrumb-item active" aria-current="page">{% trans 'Update your classified ad' %}</li>
     </ol>
   </nav>
@@ -18,7 +18,7 @@
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
-      <button type="button" class="btn btn-primary update">{% trans 'Update' %}</button>
+      <button type="button" class="btn btn-dark update">{% trans 'Update' %}</button>
       <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
       <a href="{% url 'classifieds:drafts' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>

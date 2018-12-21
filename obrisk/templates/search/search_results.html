@@ -13,7 +13,7 @@
   <div class="container">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'stories:list' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
         <li class="breadcrumb-item active"><a href="#">{% trans 'Search Results' %}</a></li>
       </ol>
     </nav>
@@ -40,7 +40,7 @@
                 {% endthumbnail %}
                 <div class="card-body">
                   <h2 class="card-title">{{ classified.title|title }}</h2>
-                  <p class="card-text">{{ classified.content|truncatechars:250 }}</p>
+                  <p class="card-text">{{ classified.details|truncatechars:250 }}</p>
                 </div>
               </div>
             {% empty %}

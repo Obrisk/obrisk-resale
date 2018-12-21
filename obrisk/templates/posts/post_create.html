@@ -9,16 +9,16 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'stories:list' %}">{% trans 'Home' %}</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'posts' %}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{% trans 'Post a new article, job or an event' %}</li>
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
+      <!-- <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'posts' %}</a></li> -->
+      <li class="breadcrumb-item active" aria-current="page">{% trans 'Post a new article, job, an event, e.t.c' %}</li>
     </ol>
   </nav>
-  <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
+  <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data"  id="posts-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
-      <button type="button" class="btn btn-primary publish">{% trans 'Publish' %}</button>
+      <button type="button" class="btn btn-dark publish">{% trans 'Publish' %}</button>
       <button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
       <a href="{% url 'posts:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>

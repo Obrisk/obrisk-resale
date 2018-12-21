@@ -14,7 +14,7 @@
   <div class="container">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'stories:list' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
         <li class="breadcrumb-item active"><a href="{% url 'classifieds:list' %}">{% trans 'Classifieds' %}</a></li>
       </ol>
     </nav>
@@ -22,28 +22,32 @@
       <!-- Blog Entries Column -->
       <div class="col-md-8">
         {% for classified in classifieds %}
-          <!-- Blog Post -->
-          <div class="card mb-4">
-            {% thumbnail classified.image "750x300" as im %}
-              <img src="{{ im.url }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
-            {% empty %}
-              <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-            {% endthumbnail %}
-            <div class="card-body">
-            <h1 class="card-subtitle">{{ classified.title}} <h1>
-            <h2 class="card-title ">{{ classified.price|title }} </h2> <p style="display:inline" class="card-subtitle mb-2"  >{{ classified.district }}</p>
-              <p class="card-text">{{ classified.details|safe|truncatechars:30 }}</p>  
-              <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-primary">{% trans 'More' %} &rarr;</a>
+          <!-- Classified ad. -->
+          <div class="row">
+              <div class="col-sm-6">
+                <div class="card mb-4">
+                  {% thumbnail classified.image "400x300" as im %}
+                    <img src="{{ im.url }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
+                  {% empty %}
+                    <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+                  {% endthumbnail %}
+                  <div class="card-body">
+                  <h1 class="card-subtitle">{{ classified.title}} <h1>
+                  <h2 class="card-title ">{{ classified.price|title }} </h2> <p style="display:inline" class="card-subtitle mb-2"  >{{ classified.district }}</p>
+                    <p class="card-text">{{ classified.details|safe|truncatechars:30 }}</p>  
+                    <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a>
+                  </div>
+                  <div class="card-footer text-muted">
+                    {% trans 'Posted' %} {{ classified.timestamp|naturaltime }}
+                    <i class="lead fa fa-user"></i>
+                    <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
+                    {% for tag in classified.tags.names %}
+                      <a href="#">{{ tag }}</a>
+                    {% endfor %}
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="card-footer text-muted">
-              {% trans 'Posted' %} {{ classified.timestamp|naturaltime }}
-              <i class="lead fa fa-user"></i>
-              <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
-              {% for tag in classified.tags.names %}
-                <a href="#">{{ tag }}</a>
-              {% endfor %}
-            </div>
-          </div>
         {% empty %}
           <h4 class="no-data">{% trans 'There are no classified ads based on your location. Do you want to sell something?!' %}
            <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>
@@ -80,7 +84,7 @@
           <div class="card my-4">
             <div class="card-body text-center">
               <a class="btn btn-success" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
-              <!--a class="btn btn-primary" href="{% url 'classifieds:drafts' %}" title="{% trans 'Drafts' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Drafts' %}</a-->
+              <!--a class="btn btn-dark" href="{% url 'classifieds:drafts' %}" title="{% trans 'Drafts' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Drafts' %}</a-->
             </div>
           </div>
         {% endif %}
