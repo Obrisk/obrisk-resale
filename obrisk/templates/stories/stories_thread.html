@@ -16,7 +16,7 @@
       <div class="post">
         {% if reply.user == request.user %}
           <a href="{% url 'stories:delete_stories' reply.pk %}">
-            <i class="fa fa-times pull-right" aria-hidden="true" title="{% trans 'Click to remove this stories' %}"></i>
+            <i class="fa fa-times pull-right" aria-hidden="true" title="{% trans 'Click to remove this story' %}"></i>
           </a>
         {% endif %}
         <p>

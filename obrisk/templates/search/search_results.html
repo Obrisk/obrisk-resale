@@ -17,6 +17,20 @@
         <li class="breadcrumb-item active"><a href="#">{% trans 'Search Results' %}</a></li>
       </ol>
     </nav>
+
+     <!-- This search bar should be displayed with pre-filled in values that user searched for. -->
+      <!-- currently it is not doing so -->
+      <div class="col-md-9"> 
+      <form class="form-inline" role="search" action="{% url 'search:results' %}">
+          <div class="input-group">
+            <input name="query" type="search" id="searchInput" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search">
+            <div class="input-group-append">
+              <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+            </div>
+          </div>
+        </form>
+      </div>
+
     <!-- row -->
     <div class="row">
       <div class="col-md-3">

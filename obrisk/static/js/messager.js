@@ -24,17 +24,26 @@ $(function () {
             cache: false,
             success: function (data) {
                 $(".send-message").before(data);
-                scrollConversationScreen();
+                scrollMessages();
             }
         });
     };
 
-    function scrollConversationScreen() {
+    // function scrollConversationScreen() {
+    //     /* Set focus on the input box from the form, and rolls to show the
+    //     the most recent message.
+    //     */
+    //     $("input[name='message']").focus();
+    //     $('.conversation').scrollTop($('.conversation')[0].scrollHeight);
+    // }
+
+    function scrollMessages() {
         /* Set focus on the input box from the form, and rolls to show the
-        the most recent message.
+            the most recent message.
         */
         $("input[name='message']").focus();
-        $('.conversation').scrollTop($('.conversation')[0].scrollHeight);
+        var d = $('#messages');
+        d.scrollTop(d.prop("scrollHeight"));
     }
 
     $("#send").submit(function () {
@@ -46,11 +55,21 @@ $(function () {
             success: function (data) {
                 $(".send-message").before(data);
                 $("input[name='message']").val('');
-                scrollConversationScreen();
+                scrollMessages();
             }
         });
         return false;
     });
+
+    // //This helps the text in the textarea of the message to be send
+    // //when press enter and go new line with shift + enter!
+    // $("#sendText").keypress(function (e) {
+    //     if(e.which == 13 && !e.shiftKey) {        
+    //         $(this).closest("form").submit();
+    //         e.preventDefault();
+    //         return false;
+    //     }
+    // });
 
     // WebSocket connection management block.
     // Correctly decide between ws:// and wss://

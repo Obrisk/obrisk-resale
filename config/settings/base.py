@@ -111,7 +111,7 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = 'stories:list'
+LOGIN_REDIRECT_URL = 'posts:list'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = 'account_login'
 
@@ -236,7 +236,7 @@ ADMINS = [
      ('Elisha Kingdom', 'elishakingdom@yahoo.com'),
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
-# MANAGERS = ADMINS
+MANAGERS = ADMINS
 
 
 # django-allauth
