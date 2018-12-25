@@ -39,7 +39,7 @@
         <p class="card-text">{{ post.get_markdown|safe }}</p>
         <hr>
 
-        <!-- Comments Form -->
+        <!-- Comments Form >
         <div class="card my-4">
           <h5 class="card-header">{% trans 'Leave a Comment' %}:</h5>
           <div class="card-body">
@@ -55,7 +55,6 @@
           </div>
         </div>
 
-        <!-- Single Comment -->
 
         {% get_comment_list for post as comment_list %}
         {% for comment in comment_list %}
@@ -71,13 +70,15 @@
             </div>
           </div>
         {% endfor %}
-      </div>
+      <div> -->
 
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
 
-        <!-- Write post Widget -->
-        {% if request.user.is_authenticated %}
+        <!-- As of now, I don't want to encourage users to write posts thus
+        Don't preview option to write new article unless user was the author -->
+
+        {% if request.user == post.user %}
           <div class="card my-4">
             <div class="card-body text-center">
               <a class="btn btn-success" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
@@ -85,6 +86,7 @@
             </div>
           </div>
         {% endif %}
+
         <!-- Cloud Tag Widget -->
         <div class="card my-4">
           <h5 class="card-header">{% trans 'Cloud tag' %}</h5>

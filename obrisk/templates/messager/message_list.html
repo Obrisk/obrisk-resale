@@ -9,9 +9,13 @@
 
 {% block content %}
 
-  <!-- <div class="page-header">
-    <h1>{{ request.user.get_profile_name|title }} {% trans 'Conversations' %}</h1>
-  </div> -->
+<nav class="navbar fixed-top navbar-expand-md" aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'messager:contacts_list' %}">{% trans 'Contacts' %}</a></li>
+        <li class="breadcrumb-item active {% if active == user.username %}active{% endif %}" aria-current="page" > {{active}} </li>
+    </ol>
+  </nav>
 
   <div class="row" style="margin-top: 1em">
     <div id="conversation" class="col-md-9">
@@ -29,7 +33,7 @@
      
     </div>
 
-  </div>
+  </div> <br>
 
   <div class="chat-box">
       <form role="form" method="post" action="#" id="send">
@@ -51,8 +55,10 @@
 {% block modal %}
   <script type="text/javascript">
       var activeUser = "{{ active }}";
+      //This scrolls the div #messages only to the bottom
       var d = $('#messages');
       d.scrollTop(d.prop("scrollHeight"));
+
   </script>
   <script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
 {% endblock modal %}

@@ -14,6 +14,15 @@ $(function () {
         };
     };
 
+    function scrollMessages() {
+        /* Set focus on the input box from the form, and rolls to show the
+            the most recent message.
+        */
+        $("input[name='message']").focus();
+        var d = $('#messages');
+        d.scrollTop(d.prop("scrollHeight"));
+    }
+    
     function addNewMessage(message_id) {
         /* This function calls the respective AJAX view, so it will be able to
         load the received message in a proper way.
@@ -29,22 +38,7 @@ $(function () {
         });
     };
 
-    // function scrollConversationScreen() {
-    //     /* Set focus on the input box from the form, and rolls to show the
-    //     the most recent message.
-    //     */
-    //     $("input[name='message']").focus();
-    //     $('.conversation').scrollTop($('.conversation')[0].scrollHeight);
-    // }
-
-    function scrollMessages() {
-        /* Set focus on the input box from the form, and rolls to show the
-            the most recent message.
-        */
-        $("input[name='message']").focus();
-        var d = $('#messages');
-        d.scrollTop(d.prop("scrollHeight"));
-    }
+    
 
     $("#send").submit(function () {
         $.ajax({

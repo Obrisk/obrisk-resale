@@ -37,7 +37,17 @@
         </ul>
         <ul class="stream" id="threadContent"></ul>
       </div>
-      <!-- Body -->
     </div>
   </div>
 </div>
+ 
+{% block modal %}
+<script>
+  $(document).ready(function(){
+    $('#replyStories').prop('disabled',true);
+    $('#replyInput').keyup(function(){
+        $('#replyStories').prop('disabled', this.value == "" ? true : false);     
+    })
+  });
+</script>
+{% endblock modal %}

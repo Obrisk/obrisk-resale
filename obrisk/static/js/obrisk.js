@@ -18,7 +18,10 @@ Issues with the above approach:
 3. Really Unforgiving: No way to override this behavior
 4. Undocumented: No mention in the documentation, or it's too hard for me to find
 */
+
+
 $('.form-group').removeClass('row');
+
 
 /* Notifications JS basic client */
 $(function () {
@@ -88,21 +91,23 @@ $(function () {
         return false;
     });
 
+     
+    
     // Code block to manage WebSocket connections
     // Try to correctly decide between ws:// and wss://
     let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     let ws_path = ws_scheme + '://' + window.location.host + "/notifications/";
-    let webSocket = new WebSocketBridge();
+    let webSocket = new channels.WebSocketBridge();
     webSocket.connect(ws_path);
 
-    // Helpful debugging
-    webSocket.socket.onopen = function () {
-        console.log("Connected to " + ws_path);
-    };
+    // When debugging websockets uncomment these lines.
+    // webSocket.socket.onopen = function () {
+    //     //console.log("Connected to " + ws_path);
+    // };
 
-    webSocket.socket.onclose = function () {
-        console.error("Disconnected from " + ws_path);
-    };
+    // webSocket.socket.onclose = function () {
+    //     //console.log("Disconnected from " + ws_path);
+    // };
 
     // Listen the WebSocket bridge created throug django-channels library.
     webSocket.listen(function(event) {
