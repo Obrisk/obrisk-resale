@@ -11,21 +11,6 @@ from taggit.managers import TaggableManager
 from cloudinary.models import CloudinaryField
 
 
-#An independent function to create a unique filename for displayImage of one card.
-def get_displayImage_filename(instance, filename):
-    title = instance.title
-    user = instance.user
-    #Get time in DateTime data type and convert it to string for splitting as char arrays
-    dateTime =str(instance.timestamp)
-    year = dateTime[0:3]
-    month = dateTime[5:6]
-    day = dateTime[8:9]
-    #This joins with the slug that will be created.
-    location = "classified_images/" +year+ "/"+month+ "/"+ day + "/"+ user 
-    slug = slugify(title)
-    return location +"/%s-%s" % (slug, filename)
-
-
 class ClassifiedQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
@@ -95,25 +80,10 @@ class Classified(models.Model):
 
         super().save(*args, **kwargs)
 
-#An independent function to create a unique filename for images of one card.
-def get_images_filename(instance, filename):
-    #First get the title and user names from the Classified class 
-    title = instance.classified.title
-    user = instance.classified.user
-    #Get time in DateTime data type and convert it to string for splitting as char arrays
-    dateTime =str(instance.created)
-    year = dateTime[0:4]
-    month = dateTime[5:7]
-    day = dateTime[8:10]
-    #This joins with the slug that will be created.
-    location = "classified_images/" +year+ "/"+month+ "/"+ day+ "/"+ user
-    slug = slugify(title)
-    return location +"/%s-%s" % (slug, filename)
-
 
 class ClassifiedImages(models.Model):
-    classified = models.ForeignKey(Classified, on_delete=models.CASCADE)
-    image = CloudinaryField('image', default=)
+    classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
+    image = CloudinaryField('image')
 
     """ Informative name for model """
     def __unicode__(self):
@@ -122,3 +92,9 @@ class ClassifiedImages(models.Model):
         except AttributeError:
             public_id = ''
         return "Image <%s:%s>" % (self.classified, public_id)
+
+def get_displayImage_filename():
+    return "Since adding cloudinary these functions are useless!"
+
+def get_images_filename():
+    return "Also this is useless"

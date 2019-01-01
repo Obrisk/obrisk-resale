@@ -12,7 +12,7 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 
 from obrisk.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified, ClassifiedImages, get_images_filename
+from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm, ImagesCreateFormSet
 
 import json
@@ -32,9 +32,7 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        #Below fetch only the first image.
-        context['image'] = ClassifiedImages.objects.filter(classified=self.object.id)[0]  
-        context['popular_tags'] = Classified.objects.get_counted_tags()
+        context['popular_tags'] = Classified.objects.get_counted_tags()        
         return context
 
     def get_queryset(self, **kwargs):
@@ -112,8 +110,8 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     
         if form.is_valid():
             #Force users to upload at least one image for a classified.
-            if len(images) == 0:
-                return self.form_invalid(form) 
+            # if not images:
+            #     return self.form_invalid(form) 
                 #I have to tell users to upload an image.
             classified = form.save(commit=False)
             classified.user = request.user
@@ -196,7 +194,7 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        context = super().get_context_data(**kwargs)
+        context = super(DetailClassifiedView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
         return context

@@ -28,13 +28,20 @@
               <div class="col-sm-6">
                 <div class="card mb-4" style="max-height: 400px;">
 
-                  <!--Display image-->
-                  {% thumbnail classified.displayImage "250x250" as im %}
-                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
-                  {% empty %}
-                    <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-                  {% endthumbnail %}
+                  <!--Display image-->  
+                    <div class="public_id card-img-top">
 
+                      {% for image in classified.images.all|slice:":1" %}
+                           {% cloudinary image THUMBNAIL %}
+                           {% with "yes" as display %}
+                           {% endwith %}
+                       {% endfor %} 
+                       {% if not display%}
+                          <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+                        {% endif %}
+                        
+                      
+                      
                   <div class="card-body">
                   <h3 class="card-title"> {{ classified.title}} </h3>
                   <h5 class="card-subtitle "> CNY {{ classified.price|title }} </h5> 
