@@ -1,3 +1,4 @@
+import uuid
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
@@ -5,11 +6,24 @@ from django.utils.translation import ugettext_lazy as _
 
 from slugify import slugify
 
-from django_comments.signals import comment_was_posted
 from taggit.managers import TaggableManager
 
+from cloudinary.models import CloudinaryField
 
-from obrisk.notifications.models import Notification, notification_handler
+
+#An independent function to create a unique filename for displayImage of one card.
+def get_displayImage_filename(instance, filename):
+    title = instance.title
+    user = instance.user
+    #Get time in DateTime data type and convert it to string for splitting as char arrays
+    dateTime =str(instance.timestamp)
+    year = dateTime[0:3]
+    month = dateTime[5:6]
+    day = dateTime[8:9]
+    #This joins with the slug that will be created.
+    location = "classified_images/" +year+ "/"+month+ "/"+ day + "/"+ user 
+    slug = slugify(title)
+    return location +"/%s-%s" % (slug, filename)
 
 
 class ClassifiedQuerySet(models.query.QuerySet):
@@ -49,17 +63,16 @@ class Classified(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.SET_NULL)
-    
-    image = models.ImageField(
-        _('Featured image'), upload_to='classified_pictures/%Y/%m/%d/')
-    timestamp = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=255, null=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    #displayImage = ProcessedImageField(upload_to=get_displayImage_filename, processors=[ResizeToFit(300)], format='JPEG', options={'quality': 90}, default=None)
     slug = models.SlugField(max_length=80, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=PUBLISHED)
     details = models.CharField(max_length=400)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00 , null=False)
+    #city = models.ForeignKey(Cities, on_delete=models.CASCADE, null=False)
+    #city = models.CharField(max_length=1, choices=CITIES)
     city = models.CharField (max_length=100, null=False)
-    district = models.CharField (max_length=100, null=False)
     located_area = models.CharField (max_length=100, null=False)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)
@@ -82,14 +95,30 @@ class Classified(models.Model):
 
         super().save(*args, **kwargs)
 
-def notify_comment(**kwargs):
-    """Handler to be fired up upon comments signal to notify the creater of a
-    given classified."""
-    actor = kwargs['request'].user
-    receiver = kwargs['comment'].content_object.user
-    obj = kwargs['comment'].content_object
-    notification_handler(
-        actor, receiver, Notification.COMMENTED, action_object=obj
-        )
+#An independent function to create a unique filename for images of one card.
+def get_images_filename(instance, filename):
+    #First get the title and user names from the Classified class 
+    title = instance.classified.title
+    user = instance.classified.user
+    #Get time in DateTime data type and convert it to string for splitting as char arrays
+    dateTime =str(instance.created)
+    year = dateTime[0:4]
+    month = dateTime[5:7]
+    day = dateTime[8:10]
+    #This joins with the slug that will be created.
+    location = "classified_images/" +year+ "/"+month+ "/"+ day+ "/"+ user
+    slug = slugify(title)
+    return location +"/%s-%s" % (slug, filename)
 
-comment_was_posted.connect(receiver=notify_comment)
+
+class ClassifiedImages(models.Model):
+    classified = models.ForeignKey(Classified, on_delete=models.CASCADE)
+    image = CloudinaryField('image', default=)
+
+    """ Informative name for model """
+    def __unicode__(self):
+        try:
+            public_id = self.image.public_id
+        except AttributeError:
+            public_id = ''
+        return "Image <%s:%s>" % (self.classified, public_id)

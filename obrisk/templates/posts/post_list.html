@@ -23,26 +23,30 @@
       <div class="col-md-8">
         {% for post in posts %}
           <!-- Blog Post -->
-          <div class="card mb-4">
-            {% thumbnail post.image "750x300" as im %}
-              <img src="{{ im.url }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
-            {% empty %}
-              <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-            {% endthumbnail %}
-            <div class="card-body">
-              <h2 class="card-title">{{ post.title|title }}</h2>
-              <p class="card-text">{{ post.get_markdown|safe|truncatechars:150 }}</p>
-              <a href="{% url 'posts:post' post.slug %}" class="btn btn-dark">{% trans 'Read More' %} &rarr;</a>
+          <div class="card card-cascade mb-4"> 
+            <!-- Card image -->
+            <div class="view view-cascade gradient-card-header blue-gradient">
+              {% thumbnail post.image "200x200" as im %}
+                <img src="{{ im.url }}"   width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class=" card-img-top">
+              {% empty %}
+                <img class="card-img-top"  width="{{ im.width }}" height="{{ im.height }}" src="http://placehold.it/750x300" alt="  Card image cap">
+              {% endthumbnail %}
             </div>
-            <div class="card-footer text-muted">
-              {% trans 'Posted' %} {{ post.timestamp|naturaltime }}
-              <i class="lead fa fa-user"></i>
-              <a href="{% url 'users:detail' post.user.username %}">{{ post.user.get_profile_name|title }}</a>
-              {% for tag in post.tags.names %}
-                <a href="#">{{ tag }}</a>
+              <div class="card-body">
+                <h2 class="card-title">{{ post.title|title }}</h2>
+                <p class="card-text">{{ post.get_markdown|safe|truncatechars:150 }}</p>
+                <a href="{% url 'posts:post' post.slug %}" class="btn btn-dark">{% trans 'Read More' %} &rarr;</a>
+              </div>
+              <div class="card-footer text-muted">
+                {% trans 'Posted' %} {{ post.timestamp|naturaltime }} <br>
+                <i class="lead fa fa-user"></i>
+                <a href="{% url 'users:detail' post.user.username %}">{{ post.user.get_profile_name|title }}</a> <br>
+                {% for tag in post.tags.names %}
+                  <a href="#">{{ tag }}</a>
               {% endfor %}
             </div>
           </div>
+        
         {% empty %}
           <h4 class="no-data">{% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}. <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
         {% endfor %}

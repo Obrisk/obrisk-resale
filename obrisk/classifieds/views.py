@@ -9,11 +9,19 @@ from django.utils.translation import ugettext_lazy as _
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 
 from obrisk.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm
+from obrisk.classifieds.models import Classified, ClassifiedImages, get_images_filename
+from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm, ImagesCreateFormSet
+
+import json
+import six
+from cloudinary.forms import cl_init_js_callbacks
+
+
+def filter_nones(d):
+    return dict((k, v) for k, v in six.iteritems(d) if v is not None)
 
 
 class ClassifiedsListView(LoginRequiredMixin, ListView):
@@ -24,11 +32,30 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        #Below fetch only the first image.
+        context['image'] = ClassifiedImages.objects.filter(classified=self.object.id)[0]  
         context['popular_tags'] = Classified.objects.get_counted_tags()
         return context
 
     def get_queryset(self, **kwargs):
         return Classified.objects.get_published()
+
+    # def list(self, request):
+    #     defaults = dict(format="jpg", height=150, width=150)
+    #     defaults["class"] = "thumbnail inline"
+
+    #     # The different transformations to present
+    #     samples = [
+    #         dict(crop="fill", radius=10),
+    #         dict(crop="scale"),
+    #         dict(crop="fit", format="png"),
+    #         dict(crop="thumb", gravity="face"),
+    #         dict(format="png", angle=20, height=None, width=None, transformation=[
+    #             dict(crop="fill", gravity="north", width=150, height=150, effect="sepia"),
+    #         ]),
+    #     ]
+    #     samples = [filter_nones(dict(defaults, **sample)) for sample in samples]
+    #     return render(request, 'classified/classified_list.html', dict(images=ClassifiedImages.objects.all(), samples=samples))
 
 
 class DraftsListView(ClassifiedsListView):
@@ -45,7 +72,65 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_create.html'
 
+    def __init__(self, **kwargs):
+        # i think self.object could be as self.request.user
+        self.object = None
+        super().__init__(**kwargs)
 
+        # Go through keyword arguments, and either save their values to our
+        # instance, or raise an error.
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        if self.request.POST:
+            images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES)
+            #images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES, user=self.object)
+
+        else:
+            #images_formset = ImagesCreateFormSet(instance=self.object)
+            images_formset = ImagesCreateFormSet()
+            #images_formset = ImageDirectForm()
+        context['formset'] = images_formset
+        context['user'] = self.object
+        #context = dict(images_formset = ImagesCreateFormSet())
+        #cl_init_js_callbacks(context['images_formset'], self.request)
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        form = ClassifiedForm(self.request.POST)
+        #images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES)
+
+        images = request.FILES.getlist('image')
+    
+        if form.is_valid():
+            #Force users to upload at least one image for a classified.
+            if len(images) == 0:
+                return self.form_invalid(form) 
+                #I have to tell users to upload an image.
+            classified = form.save(commit=False)
+            classified.user = request.user
+            classified.save()
+            
+            for _ in images:
+                img = ClassifiedImages()
+                img.classified = classified
+                img.save()
+            return self.form_valid(form)
+            #ret = dict(image_id=form.instance.id)   
+        else:
+            #ret = dict(errors=form.errors)
+            return self.form_invalid(form)
+        #return HttpResponse(json.dumps(ret), content_type='application/json')
+            
+        
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -53,6 +138,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
 
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
@@ -97,7 +183,7 @@ class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     def get_object ()
 
     def form_valid(self, form):
-        self.object = None
+        self.request.user = None
         return super().form_valid(form)
 
     def post(self , request , *args , **kwargs):
@@ -107,3 +193,12 @@ class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 class DetailClassifiedView(LoginRequiredMixin, DetailView):
     """Basic DetailView implementation to call an individual classified."""
     model = Classified
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super().get_context_data(**kwargs)
+        # Add in a QuerySet of all the images
+        context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
+        return context
+
+

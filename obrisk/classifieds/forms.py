@@ -1,18 +1,72 @@
 from django import forms
+from django.forms import BaseModelFormSet
+from django.forms.models import inlineformset_factory
+from django.conf import settings
 
-from markdownx.fields import MarkdownxFormField
+from cloudinary.forms import CloudinaryJsFileField
+# Next two lines are only used for generating the upload preset sample name
+from cloudinary.compat import to_bytes
+import cloudinary, hashlib
 
-from obrisk.classifieds.models import Classified
+from obrisk.classifieds.models import Classified, ClassifiedImages
 
 
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField(
         widget=forms.HiddenInput(), required=False, initial=False)
-
     class Meta:
         model = Classified
-        fields = ["title", "details", "image", "tags", "status", "edited", "price", "located_area", "district", "city"]
+        fields = ["title", "details", "status", "edited", "price", "located_area", "city", "tags"]
+        widgets = {'user': forms.HiddenInput()}
+
+#Below code is to handle multiple images in a classified.
+#https://stackoverflow.com/questions/51510373/how-to-carry-out-uploading-multiple-files-in-django-with-createview
+
+class ImagesForm(forms.ModelForm):
+    image = CloudinaryJsFileField(attrs={'multiple': 1})
+
+    class Meta:
+        model = ClassifiedImages
+        fields = ["image"]
+
+
+class ImageDirectForm(ImagesForm):
+    image = CloudinaryJsFileField()
+
+# class ImageUnsignedDirectForm(ImagesForm):
+#     upload_preset_name = "sample_" + hashlib.sha1(to_bytes(cloudinary.config().api_key + cloudinary.config().api_secret)).hexdigest()[0:10]
+#     image = CloudinaryUnsignedJsFileField(upload_preset_name)
+
+# ImagesCreateFormSet = inlineformset_factory(Classified, ClassifiedImages, fields =["image"], extra=3)
+
+#### Declare FORMSET !!! ###
+# class BaseImagesFormSet(BaseModelFormSet):
+
+#     """By default, when you create a formset from a model, the formset
+#     will use a queryset that includes all objects in the model"""
+
+#     def __init__(self, *args, **kwargs):
+#         if 'user' in kwargs.keys():
+#             user = kwargs.pop('user')
+#         else:
+#             user = None
+#         super().__init__(*args, **kwargs)
+#         if user and isinstance(settings.AUTH_USER_MODEL):
+#             self.queryset = ClassifiedImages.objects.filter(user=user)
+#         else:
+#             self.queryset = ClassifiedImages.objects.none()
+
+"""I usually declare formset for create operations and formset for update operations separately"""          
+ImagesCreateFormSet = forms.modelformset_factory(ClassifiedImages, ImageDirectForm,
+                                                    fields=ImagesForm.Meta.fields, extra=3,
+                                                    formset=BaseModelFormSet)
+
+
+# ImagesUpdateFormSet = forms.modelformset_factory(ClassifiedImages, ImagesForm, can_delete=True,
+#                                               fields=PropertyImageForm.Meta.fields, extra=3,
+#                                               formset=BaseImagesFormSet)
+
 
 class ClassifiedReportForm(forms.ModelForm):
     laws = 'lw'

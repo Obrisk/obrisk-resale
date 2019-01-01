@@ -3,6 +3,9 @@ Base settings to build other settings files upon.
 """
 
 import environ
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path('obrisk')
@@ -65,6 +68,9 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     'crispy_forms',
+    'cloudinary',
+    'imagekit',
+    'material',
     'sorl.thumbnail',
     'allauth',
     'allauth.account',
@@ -256,6 +262,11 @@ SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 
 # Your stuff...
 # ------------------------------------------------------------------------------
+cloudinary.config( 
+  cloud_name = "CLOUDINARY_NAME", 
+  api_key = "CLOUDINARY_API_KEY", 
+  api_secret = "CLOUDINARY_API_SECRET" 
+)
 
 # REDIS setup
 REDIS_URL = f'{env("REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'
