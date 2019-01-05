@@ -1,9 +1,11 @@
 {% load static i18n thumbnail %}
+{% load cloudinary %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <!--This is to ensure scripts are loaded from my site only!-->
+    <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}Obrisk{% endblock title %}</title>
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
@@ -13,18 +15,21 @@
     <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
-    {% block css %}
+    {% block cdn %}
     <!-- Latest compiled and minified Bootstrap 4 beta CSS -->
     <script src="https://cdn.bootcss.com/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>        
     <script src="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>    <!-- Your stuff: Third-party CSS libraries go here -->
     <script src="http://upcdn.b0.upaiyun.com/libs/jqueryui/jquery.ui-1.10.2.min.js" integrity="sha384-O4jIYc8wiFPNf25AwmeP5qRInqzSLJuM9t+u843Al1M/OO67y4JsVjlJGaUl4N7J" crossorigin="anonymous"></script>
-    <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
+    
     <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">        
     <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+    {% cloudinary_includes %}
+    {% cloudinary_js_config %}
+    
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
-    {% endblock css %}
+    {% endblock cdn %}
     {% block head %}{% endblock head %}
   </head>
   <body>
@@ -106,16 +111,21 @@
       ================================================== -->
       <!-- Placed at the end of the document so the pages load faster -->
       {% block javascript %}
-        <!-- Required by Bootstrap v4 -->
-        
-        <!-- Your stuff: Third-party javascript libraries go here -->
+        <!-- Third-party javascript libraries go here -->
         <!-- place project specific Javascript in this file -->
+        <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
         <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
         <script type="text/javascript">
           var currentUser = "{{ request.user.username }}"
           $ (function() {
                   source: "{% url 'search:suggestions' %}";
               });
+
+          $(function() {
+            if($.fn.cloudinary_fileupload !== undefined) {
+              $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
+            }
+          }); 
         </script>
       {% endblock javascript %}
 

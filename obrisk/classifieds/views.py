@@ -13,7 +13,7 @@ from django.http import HttpResponse
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm, ImagesCreateFormSet
+from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm, ImageDirectForm #ImagesCreateFormSet
 
 import json
 import six
@@ -82,19 +82,11 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        
-        if self.request.POST:
-            images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES)
-            #images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES, user=self.object)
 
-        else:
-            #images_formset = ImagesCreateFormSet(instance=self.object)
-            images_formset = ImagesCreateFormSet()
-            #images_formset = ImageDirectForm()
-        context['formset'] = images_formset
-        context['user'] = self.object
-        #context = dict(images_formset = ImagesCreateFormSet())
-        #cl_init_js_callbacks(context['images_formset'], self.request)
+        context = dict(formset = ImageDirectForm())
+        #This callback is needed in  cloudinary/forms.py
+        cl_init_js_callbacks(context['formset'], self.request)
+        context['form'] = ClassifiedForm()
         return context
     
     def post(self, request, *args, **kwargs):
@@ -104,29 +96,32 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         validity.
         """
         form = ClassifiedForm(self.request.POST)
-        #images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES)
-
-        images = request.FILES.getlist('image')
-    
+        formset = ImageDirectForm(self.request.POST)
         if form.is_valid():
             #Force users to upload at least one image for a classified.
-            # if not images:
+            # if not images_id in the formset:
             #     return self.form_invalid(form) 
                 #I have to tell users to upload an image.
+
+            #This has to be done in the form_valid() but I choose to put it here without proof if it is the best place.
             classified = form.save(commit=False)
-            classified.user = request.user
+            #Save the user created the classified as it was not included in the form.
+            classified.user = self.request.user   
             classified.save()
-            
-            for _ in images:
-                img = ClassifiedImages()
-                img.classified = classified
-                img.save()
+
+            imgForm = formset.save(commit=False)
+            imgForm.classified = classified
+            imgForm.save()
+            #Response is useful for debugging only.
+            cloudinaryResponse = dict(image_id=form.instance.id) 
+            print (json.dumps(cloudinaryResponse))
             return self.form_valid(form)
-            #ret = dict(image_id=form.instance.id)   
+              
         else:
-            #ret = dict(errors=form.errors)
+            #Remember to comment these print calls in production
+            cloudinaryResponse = dict(errors=form.errors)
+            print (json.dumps(cloudinaryResponse))
             return self.form_invalid(form)
-        #return HttpResponse(json.dumps(ret), content_type='application/json')
             
         
     def form_valid(self, form):

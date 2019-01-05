@@ -35,9 +35,10 @@
                            {% cloudinary image THUMBNAIL %}
                            {% with "yes" as display %}
                            {% endwith %}
-                       {% endfor %} 
-                       {% if not display%}
-                          <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
+                      {% endfor %} 
+                    </div>
+                        {% if display is not "yes" %}
+                          <img src="https://res.cloudinary.com/obrisk/image/upload/c_scale,h_150,w_150/v1546075169/samples/ecommerce/accessories-bag.jpg"/>
                         {% endif %}
                         
                       

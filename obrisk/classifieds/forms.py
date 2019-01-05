@@ -57,10 +57,10 @@ class ImageDirectForm(ImagesForm):
 #         else:
 #             self.queryset = ClassifiedImages.objects.none()
 
-"""I usually declare formset for create operations and formset for update operations separately"""          
-ImagesCreateFormSet = forms.modelformset_factory(ClassifiedImages, ImageDirectForm,
-                                                    fields=ImagesForm.Meta.fields, extra=3,
-                                                    formset=BaseModelFormSet)
+# """I usually declare formset for create operations and formset for update operations separately"""          
+# ImagesCreateFormSet = forms.modelformset_factory(ClassifiedImages, ImageDirectForm,
+#                                                     fields=ImagesForm.Meta.fields, extra=3,
+#                                                     formset=BaseModelFormSet)
 
 
 # ImagesUpdateFormSet = forms.modelformset_factory(ClassifiedImages, ImagesForm, can_delete=True,

@@ -4,6 +4,7 @@
 {% load cloudinary %}
 
 {% block head %}
+
 {% endblock head %}
 
 {% block content %}
@@ -15,6 +16,10 @@
       <li class="breadcrumb-item active" aria-current="page">{% trans 'Write a new classified' %}</li>
     </ol>
   </nav>
+
+
+<div id="classified-form" >
+
   <form action="{% url 'classifieds:write_new' %}" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
@@ -24,13 +29,15 @@
      <!-- {{ formset.empty_form }}
    </div>
    ... -->
-   <div id="images">
-       {{ formset.management_form }}
-       {% for image_form in formset %}
-           {{ image_form }}
-       {% endfor %}
+   <div id="cloudinary-upload">
+     <!--If computer, add a drag&drop zone via a css #cloudinary-upload { position: relative; min-height: 90px}-->
 
-   </div>
+        <!-- {{ formset.management_form }}
+        {% for image_form in formset %} -->
+            {{ image_form }}
+        <!-- {% endfor %} -->
+
+    </div>
 
     <div class="form-group">
       <button type="button" class="btn btn-dark publish">{% trans 'Publish' %}</button>
@@ -40,61 +47,130 @@
   </form>
   {{ form.media }}
 
+
    <!-- status box -->
    <div class="status">
-    <h2>Status</h2>
+    <h4>Status</h4>
     <span class="status_value">Idle</span>
   </div>
-  <div class="uploaded_info_holder">
-  <a href="{% url 'classifieds:list' %}" class="back_link">Back to list...</a>
-  <!-- {% if unsigned %}
-    <a href="?unsigned=false">Switch to signed upload</a>
+
+  <div class="progress_bar">
+      
+  </div>
+
+
+<!-- Thumbnail to show uploaded images-->
+{% if posted %}
+<div class="results">
+  {% if posted.errors %}
+    Errors: {{ posted.errors }}
   {% else %}
-    <a href="?unsigned=true">Switch to unsigned upload</a>
-  {% endif %} -->
+    <div class="uploaded_info">
+
+        <!--Only for debugging remember to comment-->
+        <!--check if it is unsigned/signed-->   
+        {% if unsigned %}
+          <a href="?unsigned=false">Switch to signed upload</a>
+        {% else %}
+          <a href="?unsigned=true">Switch to unsigned upload</a>
+        {% endif %}
+        
+
+        <div class="data">
+          <table>
+            {% for key, value in posted.image.metadata.items %}
+              <tr><td>{{ key }}</td><td>{{ value }}</td></tr>
+            {% endfor %}
+          </table>
+        </div>
+        <!--End of debugging-->
+
+      <div class="image">
+        {% cloudinary posted.image THUMBNAIL %}
+      </div>
+    </div>
+  {% endif %}
 </div>
+{% endif %}
+
+</div>
+
 {% endblock content %}
 
 
-  {% block javascript %}
-  <script type="text/javascript">
-    function prettydump(obj) {
-      ret = ""
-      $.each(obj, function(key, value) {
-        ret += "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
-      });
-      return ret;
-    }
-    $(function () {
-      $('#direct_upload input[type="file"]')
-      .cloudinary_fileupload({
-        dropZone: '#direct_upload',
-        start: function () {
-          $('.status_value').text('Starting direct upload...');
-        },
-        progress: function () {
-          $('.status_value').text('Uploading...');
-        },
-      })
-      .on('cloudinarydone', function (e, data) {
-          $('.status_value').text('Updating backend...');
-          $.post(this.form.action, $(this.form).serialize()).always(function (result, status, jqxhr) {
-            $('.status_value').text(result.errors ? JSON.stringify(result.errors) : status);
-          });
-          var info = $('<div class="uploaded_info"/>');
-          $(info).append($('<div class="data"/>').append(prettydump(data.result)));
-          $(info).append($('<div class="image"/>').append(
-             $.cloudinary.image(data.result.public_id, {
-             format: data.result.format, width: 150, height: 150, crop: "fill"
-             })
-          ));
-          $('.uploaded_info_holder').append(info);
-      });
-    });
+{% block javascript %}
 
-</script>
 <script src="{% static 'js/classifieds.js' %}"></script>
 
-{% endblock %}
+
+<script type="text/javascript">
+  //All the below script should go to the above.js file.  
+    //This initialize Blueimp File Upload library for direct upload
+    $(function() {
+      if($.fn.cloudinary_fileupload !== undefined) {
+        $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
+      }
+    });
+</script>
+  
+
+<script type="text/javascript">
+
+  function prettydump(obj) {
+    ret = ""
+    $.each(obj, function(key, value) {
+      ret += "<tr><td>" + key + "</td><td>" + value + "</td></tr>";
+    });
+    return ret;
+  }
+
+  //This function is to allow drag and drop with updating the progress.
+  $(function () {
+    $('#cloudinary-upload input[type="file"]')
+    .cloudinary_fileupload({
+      dropZone: '#cloudinary-upload',
+      start: function () {
+        $('.status_value').text('Starting direct upload...');
+      },
+      progress: function () {
+        $('.status_value').text('Uploading...');
+      },
+    })
+    .on('cloudinary-upload', function (e, data) {
+        //Create a 150x100 thumbnail of an uploaded image and updates an input field with the public ID of this image.
+        $('.status_value').text('Updating backend...');
+        $.post(this.form.action, $(this.form).serialize()).always(function (result, status, jqxhr) {
+          $('.status_value').text(result.errors ? JSON.stringify(result.errors) : status);
+        });
+        var info = $('<div class="uploaded_info"/>');
+        $(info).append($('<div class="data"/>').append(prettydump(data.result)));
+        $(info).append($('<div class="image"/>').append(
+           $.cloudinary.image(data.result.public_id, {
+           format: data.result.format, width: 150, height: 150, crop: "fill"
+           })
+        ));
+        $('.uploaded_info_holder').append(info);
+    });
+  });
+
+  //updates a progress bar according to the data of the fileuploadprogress event:
+  $('.cloudinary-upload').bind('fileuploadprogress', function(e, data) { 
+  $('.progress_bar').css('width', Math.round((data.loaded * 100.0) / data.total) + '%'); 
+});
+
+  //Create a 150x100 thumbnail of an uploaded image and updates an input field with the public ID of this image.
+//   $('.cloudinary-fileupload').bind('cloudinarydone', function(e, data) {  
+//   $('.preview').html(
+//     $.cloudinary.image(data.result.public_id, 
+//       { format: data.result.format, version: data.result.version, 
+//         crop: 'fill', width: 150, height: 100 })
+//   );    
+//   $('.image_public_id').val(data.result.public_id);    
+//   return true;
+// });
+
+</script>
+
+{% endblock javascript %}
 
   
