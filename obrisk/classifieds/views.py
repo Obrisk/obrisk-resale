@@ -13,11 +13,12 @@ from django.http import HttpResponse
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm, ImageDirectForm #ImagesCreateFormSet
+from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm #ImageDirectForm #ImagesCreateFormSet
 
 import json
 import six
 from cloudinary.forms import cl_init_js_callbacks
+from cloudinary import CloudinaryResource
 
 
 def filter_nones(d):
@@ -83,55 +84,45 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context = dict(formset = ImageDirectForm())
-        #This callback is needed in  cloudinary/forms.py
-        cl_init_js_callbacks(context['formset'], self.request)
+        # context = dict(formset = ImageDirectForm())
+        # #This callback is needed in  cloudinary/forms.py
+        # cl_init_js_callbacks(context['formset'], self.request)
         context['form'] = ClassifiedForm()
         return context
-    
-    def post(self, request, *args, **kwargs):
-        """
-        Handles POST requests, instantiating a form instance and its inline
-        formsets with the passed POST variables and then checking them for
-        validity.
-        """
-        form = ClassifiedForm(self.request.POST)
-        formset = ImageDirectForm(self.request.POST)
-        if form.is_valid():
-            #Force users to upload at least one image for a classified.
-            # if not images_id in the formset:
-            #     return self.form_invalid(form) 
-                #I have to tell users to upload an image.
+                  
+    def form_valid(self, form):
 
-            #This has to be done in the form_valid() but I choose to put it here without proof if it is the best place.
-            classified = form.save(commit=False)
-            #Save the user created the classified as it was not included in the form.
-            classified.user = self.request.user   
-            classified.save()
+        classified = form.save()
 
-            imgForm = formset.save(commit=False)
-            imgForm.classified = classified
-            imgForm.save()
+        images_list = json.loads(self.request.body)
+
+        for _ in images_list:
+            get_public_id = self.request.POST.get('public_id')
+            get_type = self.request.POST.get('type')
+            get_resource_type = self.request.POST.get('resource_type')
+            get_version = self.request.POST.get('version')
+            get_format = self.request.POST.get('format')
+
+            json_response = {"public_id":get_public_id, "type":get_type, "resource_type":get_resource_type, "version":get_version, "format": get_format}
+
+            # Populate a CloudinaryResource object using the upload response
+            result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+
+            str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
+
+            img = ClassifiedImages(image= str_result)
+            img.classified = classified
+            img.save()
+
             #Response is useful for debugging only.
             cloudinaryResponse = dict(image_id=form.instance.id) 
             print (json.dumps(cloudinaryResponse))
-            return self.form_valid(form)
               
-        else:
-            #Remember to comment these print calls in production
-            cloudinaryResponse = dict(errors=form.errors)
-            print (json.dumps(cloudinaryResponse))
-            return self.form_invalid(form)
-            
-        
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
+        return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
-
 
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):

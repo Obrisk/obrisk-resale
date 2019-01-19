@@ -259,7 +259,7 @@ ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 
 
-# Your stuff...
+# Other stuff...
 # ------------------------------------------------------------------------------
 cloudinary.config( 
   cloud_name = "CLOUDINARY_NAME", 

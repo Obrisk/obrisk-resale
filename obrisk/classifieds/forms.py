@@ -3,10 +3,9 @@ from django.forms import BaseModelFormSet
 from django.forms.models import inlineformset_factory
 from django.conf import settings
 
-from cloudinary.forms import CloudinaryJsFileField
+from cloudinary.forms import CloudinaryJsFileField, CloudinaryUnsignedJsFileField
 # Next two lines are only used for generating the upload preset sample name
-from cloudinary.compat import to_bytes
-import cloudinary, hashlib
+import cloudinary
 
 from obrisk.classifieds.models import Classified, ClassifiedImages
 
@@ -15,6 +14,7 @@ class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField(
         widget=forms.HiddenInput(), required=False, initial=False)
+
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "located_area", "city", "tags"]
@@ -23,19 +23,19 @@ class ClassifiedForm(forms.ModelForm):
 #Below code is to handle multiple images in a classified.
 #https://stackoverflow.com/questions/51510373/how-to-carry-out-uploading-multiple-files-in-django-with-createview
 
-class ImagesForm(forms.ModelForm):
-    image = CloudinaryJsFileField(attrs={'multiple': 1})
+# class ImagesForm(forms.ModelForm):
+#     image = CloudinaryJsFileField(attrs={'multiple': 1})
 
-    class Meta:
-        model = ClassifiedImages
-        fields = ["image"]
+#     class Meta:
+#         model = ClassifiedImages
+#         fields = ["image"]
 
 
-class ImageDirectForm(ImagesForm):
-    image = CloudinaryJsFileField()
+# class ImageDirectForm(ImagesForm):
+#     image = CloudinaryJsFileField()
 
 # class ImageUnsignedDirectForm(ImagesForm):
-#     upload_preset_name = "sample_" + hashlib.sha1(to_bytes(cloudinary.config().api_key + cloudinary.config().api_secret)).hexdigest()[0:10]
+#     upload_preset_name = 
 #     image = CloudinaryUnsignedJsFileField(upload_preset_name)
 
 # ImagesCreateFormSet = inlineformset_factory(Classified, ClassifiedImages, fields =["image"], extra=3)

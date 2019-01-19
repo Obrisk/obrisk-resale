@@ -94,7 +94,9 @@ class ClassifiedImages(models.Model):
         return "Image <%s:%s>" % (self.classified, public_id)
 
 def get_displayImage_filename():
-    return "Since adding cloudinary these functions are useless!"
+    return """Since adding cloudinary these functions are useless!
+            I keep them here to keep the migrations consistency as they will need these functions!"""
 
 def get_images_filename():
-    return "Also this is useless"
+    return """Since adding cloudinary these functions are useless!
+            I keep them here to keep the migrations consistency as they will need these functions!"""
