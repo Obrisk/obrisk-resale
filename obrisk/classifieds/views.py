@@ -13,11 +13,12 @@ from django.http import HttpResponse
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm, ImagesCreateFormSet
+from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm #ImagesCreateFormSet
 
 import json
 import six
 from cloudinary.forms import cl_init_js_callbacks
+from cloudinary import CloudinaryResource
 
 
 def filter_nones(d):
@@ -83,16 +84,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         
-        if self.request.POST:
-            images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES)
-            #images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES, user=self.object)
-
-        else:
-            #images_formset = ImagesCreateFormSet(instance=self.object)
-            images_formset = ImagesCreateFormSet()
-            #images_formset = ImageDirectForm()
-        context['formset'] = images_formset
-        context['user'] = self.object
+        # context['user'] = self.object
         #context = dict(images_formset = ImagesCreateFormSet())
         #cl_init_js_callbacks(context['images_formset'], self.request)
         return context
@@ -104,24 +96,33 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         validity.
         """
         form = ClassifiedForm(self.request.POST)
-        #images_formset = ImagesCreateFormSet(self.request.POST, self.request.FILES)
-
-        images = request.FILES.getlist('image')
     
         if form.is_valid():
-            #Force users to upload at least one image for a classified.
-            # if not images:
-            #     return self.form_invalid(form) 
-                #I have to tell users to upload an image.
             classified = form.save(commit=False)
-            classified.user = request.user
+            classified.user = self.request.user
             classified.save()
+
+            images_list = json.loads(self.request.POST('data'))
+
+            for _ in images_list:
+                get_public_id = self.request.POST.get('public_id')
+                get_type = self.request.POST.get('type')
+                get_resource_type = self.request.POST.get('resource_type')
+                get_version = self.request.POST.get('version')
+                get_format = self.request.POST.get('format')
+
+                json_response = {"public_id":get_public_id, "type":get_type, "resource_type":get_resource_type, "version":get_version, "format": get_format}
+
+                # Populate a CloudinaryResource object using the upload response
+                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+
+                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
             
-            for _ in images:
-                img = ClassifiedImages()
-                img.classified = classified
-                img.save()
-            return self.form_valid(form)
+                for _ in images_list:
+                    img = ClassifiedImages(image=str_result)
+                    img.classified = classified
+                    img.save()
+                return self.form_valid(form)
             #ret = dict(image_id=form.instance.id)   
         else:
             #ret = dict(errors=form.errors)
