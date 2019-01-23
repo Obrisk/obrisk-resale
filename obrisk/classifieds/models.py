@@ -8,6 +8,7 @@ from slugify import slugify
 
 from taggit.managers import TaggableManager
 
+from cloudinary.models import CloudinaryField
 
 
 class ClassifiedQuerySet(models.query.QuerySet):
@@ -82,7 +83,7 @@ class Classified(models.Model):
 
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
-    imageUrl = models.URLField(default="https://res.cloudinary.com/obrisk/image/upload/v1546075169/samples/ecommerce/accessories-bag.jpg", max_length= 500)
+    image = CloudinaryField('image')
 
     """ Informative name for model """
     def __unicode__(self):

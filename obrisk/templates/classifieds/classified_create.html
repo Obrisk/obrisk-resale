@@ -86,20 +86,18 @@
   },
   (error, result) => { if (result.event == "success")  { 
     //All console.log are for debugging.
-    console.log('${result.info.secure_url} uploaded')
-       
-        images.push(result.info.secure_url);
+    console.log(result.info);
+        var str = JSON.stringify(result.info);
+        images.push (str);
 
    } });
+   console.log(images);
 
   document.getElementById("upload_widget").addEventListener("click", function(){
      myWidget.open();
   }, false);
 
-
-  //
   const images_id = "{{ form.images.auto_id }}";
-  const imgSize_id = "{{ form.imgSize.auto_id }}";
   
   //Add the images values in the form before submitting the form.
   function setImages() {
@@ -108,7 +106,6 @@
     }
     else {
       document.getElementById(images_id).value = images;
-      document.getElementById(imgSize_id).value = images.length;
     }
     
   }

@@ -10,21 +10,17 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
-from django.forms.utils import ErrorList
 from django import forms
+
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm #ImagesCreateFormSet
+from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm 
 
 import json
-import six
-from cloudinary.forms import cl_init_js_callbacks
+import re
 from cloudinary import CloudinaryResource
 
-
-def filter_nones(d):
-    return dict((k, v) for k, v in six.iteritems(d) if v is not None)
 
 
 class ClassifiedsListView(LoginRequiredMixin, ListView):
@@ -40,24 +36,6 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, **kwargs):
         return Classified.objects.get_published()
-
-    # def list(self, request):
-    #     defaults = dict(format="jpg", height=150, width=150)
-    #     defaults["class"] = "thumbnail inline"
-
-    #     # The different transformations to present
-    #     samples = [
-    #         dict(crop="fill", radius=10),
-    #         dict(crop="scale"),
-    #         dict(crop="fit", format="png"),
-    #         dict(crop="thumb", gravity="face"),
-    #         dict(format="png", angle=20, height=None, width=None, transformation=[
-    #             dict(crop="fill", gravity="north", width=150, height=150, effect="sepia"),
-    #         ]),
-    #     ]
-    #     samples = [filter_nones(dict(defaults, **sample)) for sample in samples]
-    #     return render(request, 'classified/classified_list.html', dict(images=ClassifiedImages.objects.all(), samples=samples))
-
 
 class DraftsListView(ClassifiedsListView):
     """Overriding the original implementation to call the drafts classifieds
@@ -104,12 +82,19 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             classified.user = self.request.user
             classified.save()
 
-            images_list = form.cleaned_data['images'].split(',')
-            print (images_list)
+            # split one long string of JSON objects into a list of string each for one JSON obj 
+            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
 
-            #I no longer need the img_size in the form of Classified. I should update that.
-            for img_url in images_list:
-                img = ClassifiedImages(imageUrl=img_url)
+            for image_obj in cloudinary_list:
+                #convert the obj from string into JSON.
+                json_response = json.loads(image_obj)
+
+                #Populate a CloudinaryResource object using the upload response
+                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+
+                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
+
+                img = ClassifiedImages(image= str_result)
                 img.classified = classified
                 img.save()
             return self.form_valid(form) 
