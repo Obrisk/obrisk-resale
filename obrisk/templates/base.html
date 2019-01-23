@@ -24,8 +24,8 @@
     
     <link rel="stylesheet" href="https://cdn.bootcss.com/twitter-bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">        
     <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
-    <!-- {% cloudinary_includes %}
-    {% cloudinary_js_config %} -->
+    {% cloudinary_includes %}
+    {% cloudinary_js_config %}
     
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
@@ -122,11 +122,11 @@
                   source: "{% url 'search:suggestions' %}";
               });
 
-          // $(function() {
-          //   if($.fn.cloudinary_fileupload !== undefined) {
-          //     $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
-          //   }
-          // }); 
+          $(function() {
+            if($.fn.cloudinary_fileupload !== undefined) {
+              $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
+            }
+          }); 
         </script>
       {% endblock javascript %}
 

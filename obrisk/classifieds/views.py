@@ -100,47 +100,19 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         form = ClassifiedForm(self.request.POST)
     
         if form.is_valid():
-            print("Debugging!")
-            # classified = form.save(commit=False)
-            # classified.user = self.request.user
-            # classified.save()
+            classified = form.save(commit=False)
+            classified.user = self.request.user
+            classified.save()
 
-            # if self.request.POST.get('public_id'): 
-            # body_unicode = self.request.body.decode('utf-8')
-            # body_data = json.loads(body_unicode)
-            # print (body_data)
+            images_list = form.cleaned_data['images'].split(',')
+            print (images_list)
 
-            #another = self.request.body.decode("utf-8")#['public_id']
-            # print (self.request.body)
-            # another_data = json.loads(another)
-            # print (another_data)
-
-            images_list = self.request.POST.get('images')
-            print(images_list) 
-
-                # for _ in images_list:
-                #     get_public_id = self.request.POST.get('publicId')
-                #     get_type = self.request.POST.get('type')
-                #     get_resource_type = self.request.POST.get('resource_type')
-                #     get_version = self.request.POST.get('version')
-                #     get_format = self.request.POST.get('format')
-
-                #     json_response = {"public_id":get_public_id, "type":get_type, "resource_type":get_resource_type, "version":get_version, "format": get_format}
-
-                #     # Populate a CloudinaryResource object using the upload response
-                #     result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
-
-                #     str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
-                
-                #     for _ in images_list:
-                #         img = ClassifiedImages(image=str_result)
-                #         img.classified = classified
-                #         img.save()
-                #return self.form_valid(form)
-                #ret = dict(image_id=form.instance.id)   
-            # else:
-            #     form._errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(["You can't upload a classified ad without images"])
-            #     return self.form_invalid(form)
+            #I no longer need the img_size in the form of Classified. I should update that.
+            for img_url in images_list:
+                img = ClassifiedImages(imageUrl=img_url)
+                img.classified = classified
+                img.save()
+            return self.form_valid(form) 
         else:
             #ret = dict(errors=form.errors)
             return self.form_invalid(form)

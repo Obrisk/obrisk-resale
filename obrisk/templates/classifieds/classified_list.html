@@ -33,12 +33,9 @@
 
                       {% for image in classified.images.all|slice:":1" %}
                            {% cloudinary image THUMBNAIL %}
-                           {% with "yes" as display %}
-                           {% endwith %}
-                       {% endfor %} 
-                       {% if not display%}
-                          <img class="card-img-top" src="http://placehold.it/750x300" alt="Card image cap">
-                        {% endif %}
+                      {% endfor %} 
+                    </div>
+                      
                         
                       
                       
