@@ -13,13 +13,16 @@ from obrisk.classifieds.models import Classified, ClassifiedImages
 
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
-    edited = forms.BooleanField(
-        widget=forms.HiddenInput(), required=False, initial=False)
+    edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
+    images = forms.CharField(widget=forms.HiddenInput(), max_length=4000)
+    imgSize = forms.IntegerField(widget=forms.HiddenInput(), max_value=6)
+
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "located_area", "city", "tags"]
+        fields = ["title", "details", "status", "edited", "price", "located_area", "city", "tags", "images", "imgSize"]
         widgets = {'user': forms.HiddenInput()}
-        
+
+            
 
 class ClassifiedReportForm(forms.ModelForm):
     laws = 'lw'

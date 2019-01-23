@@ -1,6 +1,7 @@
 from django.contrib import admin
-from obrisk.classifieds.models import Classified
+from obrisk.classifieds.models import Classified, ClassifiedImages
 
+admin.site.register(ClassifiedImages)
 
 @admin.register(Classified)
 class ClassifiedAdmin(admin.ModelAdmin):

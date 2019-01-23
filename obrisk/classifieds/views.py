@@ -10,6 +10,8 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
+from django.forms.utils import ErrorList
+from django import forms
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
@@ -98,37 +100,52 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         form = ClassifiedForm(self.request.POST)
     
         if form.is_valid():
-            classified = form.save(commit=False)
-            classified.user = self.request.user
-            classified.save()
+            print("Debugging!")
+            # classified = form.save(commit=False)
+            # classified.user = self.request.user
+            # classified.save()
 
-            images_list = json.loads(self.request.POST('data'))
+            # if self.request.POST.get('public_id'): 
+            # body_unicode = self.request.body.decode('utf-8')
+            # body_data = json.loads(body_unicode)
+            # print (body_data)
 
-            for _ in images_list:
-                get_public_id = self.request.POST.get('public_id')
-                get_type = self.request.POST.get('type')
-                get_resource_type = self.request.POST.get('resource_type')
-                get_version = self.request.POST.get('version')
-                get_format = self.request.POST.get('format')
+            #another = self.request.body.decode("utf-8")#['public_id']
+            # print (self.request.body)
+            # another_data = json.loads(another)
+            # print (another_data)
 
-                json_response = {"public_id":get_public_id, "type":get_type, "resource_type":get_resource_type, "version":get_version, "format": get_format}
+            images_list = self.request.POST.get('images')
+            print(images_list) 
 
-                # Populate a CloudinaryResource object using the upload response
-                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+                # for _ in images_list:
+                #     get_public_id = self.request.POST.get('publicId')
+                #     get_type = self.request.POST.get('type')
+                #     get_resource_type = self.request.POST.get('resource_type')
+                #     get_version = self.request.POST.get('version')
+                #     get_format = self.request.POST.get('format')
 
-                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
-            
-                for _ in images_list:
-                    img = ClassifiedImages(image=str_result)
-                    img.classified = classified
-                    img.save()
-                return self.form_valid(form)
-            #ret = dict(image_id=form.instance.id)   
+                #     json_response = {"public_id":get_public_id, "type":get_type, "resource_type":get_resource_type, "version":get_version, "format": get_format}
+
+                #     # Populate a CloudinaryResource object using the upload response
+                #     result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+
+                #     str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
+                
+                #     for _ in images_list:
+                #         img = ClassifiedImages(image=str_result)
+                #         img.classified = classified
+                #         img.save()
+                #return self.form_valid(form)
+                #ret = dict(image_id=form.instance.id)   
+            # else:
+            #     form._errors[forms.forms.NON_FIELD_ERRORS] = ErrorList(["You can't upload a classified ad without images"])
+            #     return self.form_invalid(form)
         else:
             #ret = dict(errors=form.errors)
             return self.form_invalid(form)
-        #return HttpResponse(json.dumps(ret), content_type='application/json')
-            
+            #return HttpResponse(json.dumps(ret), content_type='application/json')
+                
         
     def form_valid(self, form):
         form.instance.user = self.request.user

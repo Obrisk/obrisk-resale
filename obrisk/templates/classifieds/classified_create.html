@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% load crispy_forms_tags %}
-{% load cloudinary %}
+<!-- {% load cloudinary %} -->
 
 {% block head %}
 {% endblock head %}
@@ -15,52 +15,80 @@
       <li class="breadcrumb-item active" aria-current="page">{% trans 'Write a new classified' %}</li>
     </ol>
   </nav>
-  <form action="{% url 'classifieds:write_new' %}" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
+  <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
+  
+     <button id="upload_widget" class="cloudinary-button" onclick="checkTitle()"> Upload image </button> 
 
+     <br> <br> 
     <div class="form-group">
-      <button type="button" class="btn btn-dark publish">{% trans 'Publish' %}</button>
+      <button type="button" class="btn btn-dark publish" onclick="setImages()" >{% trans 'Publish' %}</button>
       <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
       <a href="{% url 'classifieds:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
   </form>
   {{ form.media }}
 
-<div id="cloudinary" > 
-  <button id="upload_widget" class="cloudinary-button"> Upload image </button> <br> 
-</div>
 
 {% endblock content %}
 
 
 {% block javascript %}
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript"></script> 
-<script type="text/javascript"> 
-  const url = 'classifieds:write_new'
+<script type="text/javascript">
+
+  const url = "{% url 'classifieds:write_new' %}" ///classifieds/write-new-classified/
+  const user = "{{ request.user.username }}";
+
+
+  function getFolder() {
+    var d = new Date();
+    return "classifieds/" + user;
+  }
+  const title_id = "{{ form.title.auto_id }}";
+
+  function checkTitle() {
+    if (!document.getElementById(title_id).value){
+        alert ("Please fill in the title of the classified ad before uploading images!");
+        return false;
+     }
+     else {
+        return true;
+     }
+  }
+  
+  function getFileName() {
+      var title = document.getElementById(title_id).value;
+      var d = new Date();
+      var date = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
+      var time = d.getHours() + "hrs-" + d.getMinutes() + "min-" + d.getSeconds() +"sec";
+
+      if (!document.getElementById(title_id).value) {
+        return "no-title" + "--" + date + "--" + time;
+      }
+      else {
+        return title + "--" + date + "--" + time;
+      }
+      
+  }
+  var images = [];
      
   var myWidget = cloudinary.applyUploadWidget(document.getElementById("upload_widget"), 
   {   cloudName: "obrisk",
       upload_preset: 'hizonedev_preset',
-      //publicId: getFileName(),
-      sources: "local,camera", 
+      publicId: getFileName(),
+      sources: ["local","camera"], 
       maxFiles: "6",  
-      folder: "classifieds", 
+      folder: getFolder(), 
       resourceType: "image",
       autoMinimize: "true",
   },
   (error, result) => { if (result.event == "success")  { 
     //All console.log are for debugging.
-    console.log(result.info)
-      // send a post request to one of your routes which would handle saving the data
-      fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(result.info),
-                })
-                .then(response => response.json())
+    console.log('${result.info.secure_url} uploaded')
+       
+        images.push(result.info.secure_url);
 
    } });
 
@@ -69,6 +97,22 @@
   }, false);
 
 
+  //
+  const images_id = "{{ form.images.auto_id }}";
+  const imgSize_id = "{{ form.imgSize.auto_id }}";
+  
+  //Add the images values in the form before submitting the form.
+  function setImages() {
+    if (images.length < 1) {
+      alert("You must upload at least one image for a classified ad for people to see what you're selling!");
+    }
+    else {
+      document.getElementById(images_id).value = images;
+      document.getElementById(imgSize_id).value = images.length;
+    }
+    
+  }
+    
 </script>
 <script src="{% static 'js/classifieds.js' %}"></script>
 
