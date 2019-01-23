@@ -84,6 +84,7 @@ class Classified(models.Model):
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
     image = CloudinaryField('image')
+    imageUrl = models.URLField(max_length= 500)
 
     """ Informative name for model """
     def __unicode__(self):
