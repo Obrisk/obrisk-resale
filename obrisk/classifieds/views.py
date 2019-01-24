@@ -10,19 +10,16 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
+from django import forms
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm #ImageDirectForm #ImagesCreateFormSet
+from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm 
 
 import json
-import six
-from cloudinary.forms import cl_init_js_callbacks
+import re
 from cloudinary import CloudinaryResource
 
-
-def filter_nones(d):
-    return dict((k, v) for k, v in six.iteritems(d) if v is not None)
 
 
 class ClassifiedsListView(LoginRequiredMixin, ListView):
@@ -38,24 +35,6 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self, **kwargs):
         return Classified.objects.get_published()
-
-    # def list(self, request):
-    #     defaults = dict(format="jpg", height=150, width=150)
-    #     defaults["class"] = "thumbnail inline"
-
-    #     # The different transformations to present
-    #     samples = [
-    #         dict(crop="fill", radius=10),
-    #         dict(crop="scale"),
-    #         dict(crop="fit", format="png"),
-    #         dict(crop="thumb", gravity="face"),
-    #         dict(format="png", angle=20, height=None, width=None, transformation=[
-    #             dict(crop="fill", gravity="north", width=150, height=150, effect="sepia"),
-    #         ]),
-    #     ]
-    #     samples = [filter_nones(dict(defaults, **sample)) for sample in samples]
-    #     return render(request, 'classified/classified_list.html', dict(images=ClassifiedImages.objects.all(), samples=samples))
-
 
 class DraftsListView(ClassifiedsListView):
     """Overriding the original implementation to call the drafts classifieds
@@ -83,13 +62,47 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
-        # context = dict(formset = ImageDirectForm())
-        # #This callback is needed in  cloudinary/forms.py
-        # cl_init_js_callbacks(context['formset'], self.request)
-        context['form'] = ClassifiedForm()
+        
+        # context['user'] = self.object
+        #context = dict(images_formset = ImagesCreateFormSet())
+        #cl_init_js_callbacks(context['images_formset'], self.request)
         return context
-                  
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        form = ClassifiedForm(self.request.POST)
+    
+        if form.is_valid():
+            classified = form.save(commit=False)
+            classified.user = self.request.user
+            classified.save()
+
+            # split one long string of JSON objects into a list of string each for one JSON obj 
+            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
+
+            for image_obj in cloudinary_list:
+                #convert the obj from string into JSON.
+                json_response = json.loads(image_obj)
+
+                #Populate a CloudinaryResource object using the upload response
+                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+
+                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
+
+                img = ClassifiedImages(image= str_result)
+                img.classified = classified
+                img.save()
+            return self.form_valid(form) 
+        else:
+            #ret = dict(errors=form.errors)
+            return self.form_invalid(form)
+            #return HttpResponse(json.dumps(ret), content_type='application/json')
+                
+        
     def form_valid(self, form):
 
         classified = form.save()
