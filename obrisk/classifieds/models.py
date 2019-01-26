@@ -19,7 +19,7 @@ class ClassifiedQuerySet(models.query.QuerySet):
         return self.filter(status="P")
 
     def get_drafts(self):
-        """Returns only the items marked as DRAFT in the current queryset."""
+        """Returns only the items marked as EXPIRED in the current queryset."""
         return self.filter(status="D")
 
     def get_counted_tags(self):
@@ -38,11 +38,20 @@ class ClassifiedQuerySet(models.query.QuerySet):
 
 
 class Classified(models.Model):
-    DRAFT = "D"
-    PUBLISHED = "P"
+    EXPIRED = "E"
+    ACTIVE = "P"
     STATUS = (
-        (DRAFT, _("Draft")),
-        (PUBLISHED, _("Published")),
+        (EXPIRED, _("Expired")),
+        (ACTIVE, _("Active")),
+    )
+
+    ARTICLE = "A"
+    EVENT = "E"
+    JOBS = "J"
+    CATEGORY = (
+        (ARTICLE, _("Article")),
+        (EVENT, _("Event")),
+        (JOBS, _("Job")),
     )
 
     user = models.ForeignKey(
@@ -52,15 +61,14 @@ class Classified(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     #displayImage = ProcessedImageField(upload_to=get_displayImage_filename, processors=[ResizeToFit(300)], format='JPEG', options={'quality': 90}, default=None)
     slug = models.SlugField(max_length=80, null=True, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS, default=PUBLISHED)
+    status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
     details = models.CharField(max_length=400)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00 , null=False)
-    #city = models.ForeignKey(Cities, on_delete=models.CASCADE, null=False)
-    #city = models.CharField(max_length=1, choices=CITIES)
     city = models.CharField (max_length=100, null=False)
     located_area = models.CharField (max_length=100, null=False)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)
+    category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
     objects = ClassifiedQuerySet.as_manager()
@@ -80,10 +88,17 @@ class Classified(models.Model):
 
         super().save(*args, **kwargs)
 
+class CloudinaryFieldFix(CloudinaryField):
+    def to_python(self, value):
+        if value is False:
+            return value
+        else:
+            return super(CloudinaryFieldFix, self).to_python(value)
+
 
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
-    image = CloudinaryField('image')
+    image = CloudinaryFieldFix('image')
 
     """ Informative name for model """
     def __unicode__(self):

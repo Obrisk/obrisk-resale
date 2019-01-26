@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% load humanize thumbnail %}
-{% load cloudinary %}
+<!-- {% load cloudinary %} -->
 
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
@@ -31,11 +31,11 @@
                   <!--Display image-->  
                     <div class="public_id card-img-top">
 
-                      {% for image in classified.images.all|slice:":1" %}
+                      <!-- {% for image in classified.images.all|slice:":1" %}
                            {% cloudinary image THUMBNAIL %}
                            {% with "yes" as display %}
                            {% endwith %}
-                      {% endfor %} 
+                      {% endfor %}  -->
                     </div>
                         {% if display is not "yes" %}
                           <img src="https://res.cloudinary.com/obrisk/image/upload/c_scale,h_150,w_150/v1546075169/samples/ecommerce/accessories-bag.jpg"/>

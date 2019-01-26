@@ -1,23 +1,23 @@
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
-from django.contrib.auth.forms import UserChangeForm, UserCreationForm
+from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 from obrisk.users.models import User
 
 
-class MyUserChangeForm(UserChangeForm):
-    class Meta(UserChangeForm.Meta):
+class MyUserChangeForm(CustomUserChangeForm):
+    class Meta(CustomUserChangeForm.Meta):
         model = User
 
 
-class MyUserCreationForm(UserCreationForm):
+class MyUserCreationForm(CustomUserCreationForm):
 
-    error_message = UserCreationForm.error_messages.update({
+    error_message = CustomUserCreationForm.error_messages.update({
         'duplicate_username': 'This username has already been taken.'
     })
 
-    class Meta(UserCreationForm.Meta):
+    class Meta(CustomUserCreationForm.Meta):
         model = User
 
     def clean_username(self):

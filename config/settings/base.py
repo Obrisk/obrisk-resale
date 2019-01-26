@@ -70,13 +70,14 @@ THIRD_PARTY_APPS = [
     'cloudinary',
     'material',
     'sorl.thumbnail',
+    'phonenumber_field',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     # 'allauth.socialaccount.providers.amazon',
     # 'allauth.socialaccount.providers.github',
     # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.linkedin',
+     'allauth.socialaccount.providers.linkedin',
     # 'allauth.socialaccount.providers.slack',
     'channels',
     'django_comments',
@@ -256,6 +257,13 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
+
+SOCIALACCOUNT_PROVIDERS = {
+    'weixin': {
+        'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
+        'SCOPE': ['snsapi_base'],
+    }
+}
 
 
 # Other stuff...
