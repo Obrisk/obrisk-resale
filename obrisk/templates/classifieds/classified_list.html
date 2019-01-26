@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% load humanize thumbnail %}
-<!-- {% load cloudinary %} -->
+{% load cloudinary %}
 
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
@@ -46,7 +46,6 @@
                   <div class="card-body">
                   <h3 class="card-title"> {{ classified.title}} </h3>
                   <h5 class="card-subtitle "> CNY {{ classified.price|title }} </h5> 
-                  <!-- <h6 class="card-subtitle "> {{ classified.district }} </h6> -->
                   <p class="card-text"> {{ classified.details|safe|truncatechars:50 }}</p>  
                   <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a>
                   </div>

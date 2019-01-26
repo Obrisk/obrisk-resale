@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView
 from django.views.generic.edit import BaseFormView
 from django.urls import reverse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.template import RequestContext
 from django.core.mail import send_mail
@@ -30,10 +30,12 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        context['images'] = ClassifiedImages.objects.filter(classified=self.classified.id)
         context['popular_tags'] = Classified.objects.get_counted_tags()        
         return context
 
     def get_queryset(self, **kwargs):
+        self.classified = get_object_or_404(Classified)
         return Classified.objects.get_published()
 
 class DraftsListView(ClassifiedsListView):
@@ -191,11 +193,11 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
     """Basic DetailView implementation to call an individual classified."""
     model = Classified
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(DetailClassifiedView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the images
-        context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
-        return context
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get a context
+    #     context = super(DetailClassifiedView, self).get_context_data(**kwargs)
+    #     # Add in a QuerySet of all the images
+    #     context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
+    #     return context
 
 
