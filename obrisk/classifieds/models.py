@@ -14,17 +14,17 @@ from cloudinary.models import CloudinaryField
 class ClassifiedQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
-    def get_published(self):
+    def get_active(self):
         """Returns only the published items in the current queryset."""
-        return self.filter(status="P")
+        return self.filter(status="A")
 
-    def get_drafts(self):
+    def get_expired(self):
         """Returns only the items marked as EXPIRED in the current queryset."""
-        return self.filter(status="D")
+        return self.filter(status="E")
 
     def get_counted_tags(self):
         tag_dict = {}
-        query = self.filter(status='P').annotate(
+        query = self.filter(status='A').annotate(
             tagged=Count('tags')).filter(tags__gt=0)
         for obj in query:
             for tag in obj.tags.names():
@@ -39,19 +39,10 @@ class ClassifiedQuerySet(models.query.QuerySet):
 
 class Classified(models.Model):
     EXPIRED = "E"
-    ACTIVE = "P"
+    ACTIVE = "A"
     STATUS = (
         (EXPIRED, _("Expired")),
         (ACTIVE, _("Active")),
-    )
-
-    ARTICLE = "A"
-    EVENT = "E"
-    JOBS = "J"
-    CATEGORY = (
-        (ARTICLE, _("Article")),
-        (EVENT, _("Event")),
-        (JOBS, _("Job")),
     )
 
     user = models.ForeignKey(
@@ -68,7 +59,6 @@ class Classified(models.Model):
     located_area = models.CharField (max_length=100, null=False)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)
-    category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
     objects = ClassifiedQuerySet.as_manager()
