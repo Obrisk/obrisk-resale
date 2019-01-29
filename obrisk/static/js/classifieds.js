@@ -1,11 +1,11 @@
 $(function () {
-    $(".publish").click(function () {
-        $("input[name='status']").val("P");
+    $(".create").click(function () {
+        $("input[name='status']").val("A");
         $("#classified-form").submit();
     });
 
     $(".update").click(function () {
-        $("input[name='status']").val("P");
+        $("input[name='status']").val("A");
         //$("input[name='edited']").prop("checked");
         $("input[name='edited']").val("True");
         $("#classified-form").submit();

@@ -24,7 +24,7 @@
 
      <br> <br> 
     <div class="form-group">
-      <button type="button" class="btn btn-dark publish" onclick="setImages()" >{% trans 'Publish' %}</button>
+      <button type="button" class="btn btn-dark create" onclick="setImages()" >{% trans 'Create' %}</button>
       <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
       <a href="{% url 'classifieds:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
@@ -109,6 +109,7 @@
     }
     else {
       document.getElementById(images_id).value = images;
+      console.log("Things reach here!")
     }
     
   }

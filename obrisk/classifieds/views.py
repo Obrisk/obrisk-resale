@@ -35,15 +35,14 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        # context['images'] = ClassifiedImages.objects.filter(classified=self.classified.id)
-        context['popular_tags'] = Classified.objects.get_counted_tags()        
-        context['display_image'] = ClassifiedImages.objects.filter(classified=self.classified.id)[:1]
+        context['popular_tags'] = Classified.objects.get_counted_tags()
+        context['image'] = str(ClassifiedImages.objects.all())
        
         return context
 
     def get_queryset(self, **kwargs):
-        self.classified = get_object_or_404(Classified)
-        return Classified.objects.get_active()
+        qs = Classified.objects.get_active()
+        return qs
 
 class DraftsListView(ClassifiedsListView):
     """Overriding the original implementation to call the drafts classifieds
@@ -114,33 +113,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 
         
     def form_valid(self, form):
-
-        classified = form.save()
-
-        images_list = json.loads(self.request.body)
-
-        for _ in images_list:
-            get_public_id = self.request.POST.get('public_id')
-            get_type = self.request.POST.get('type')
-            get_resource_type = self.request.POST.get('resource_type')
-            get_version = self.request.POST.get('version')
-            get_format = self.request.POST.get('format')
-
-            json_response = {"public_id":get_public_id, "type":get_type, "resource_type":get_resource_type, "version":get_version, "format": get_format}
-
-            # Populate a CloudinaryResource object using the upload response
-            result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
-
-            str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
-
-            img = ClassifiedImages(image= str_result)
-            img.classified = classified
-            img.save()
-
-            #Response is useful for debugging only.
-            cloudinaryResponse = dict(image_id=form.instance.id) 
-            print (json.dumps(cloudinaryResponse))
-              
+        form.instance.user = self.request.user
         return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):

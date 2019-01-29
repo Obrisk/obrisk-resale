@@ -41,8 +41,8 @@ class Classified(models.Model):
     EXPIRED = "E"
     ACTIVE = "A"
     STATUS = (
-        (EXPIRED, _("Expired")),
         (ACTIVE, _("Active")),
+        (EXPIRED, _("Expired")),
     )
 
     user = models.ForeignKey(
