@@ -17,11 +17,11 @@ from obrisk.notifications.models import Notification, notification_handler
 class PostQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
-    def get_published(self):
+    def get_active(self):
         """Returns only the published items in the current queryset."""
         return self.filter(status="P")
 
-    def get_drafts(self):
+    def get_expireds(self):
         """Returns only the items marked as DRAFT in the current queryset."""
         return self.filter(status="D")
 
@@ -47,6 +47,15 @@ class Post(models.Model):
         (DRAFT, _("Draft")),
         (PUBLISHED, _("Published")),
     )
+    
+    ARTICLE = "A"
+    EVENT = "E"
+    JOBS = "J"
+    CATEGORY = (
+        (ARTICLE, _("Article")),
+        (EVENT, _("Event")),
+        (JOBS, _("Job")),
+    )
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="author",
@@ -58,6 +67,7 @@ class Post(models.Model):
     slug = models.SlugField(max_length=80, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
     content = MarkdownxField()
+    category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
     objects = PostQuerySet.as_manager()

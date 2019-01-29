@@ -21,28 +21,35 @@ import re
 from cloudinary import CloudinaryResource
 
 
-
 class ClassifiedsListView(LoginRequiredMixin, ListView):
     """Basic ListView implementation to call the published classifieds list."""
     model = Classified
     paginate_by = 15
     context_object_name = "classifieds"
 
+    # def get_queryset(self, **kwargs):
+    #     self.classified = get_object_or_404(Classified,
+    #                                    slug=self.kwargs['classified'])
+    #     return self.classified.filter(status="ACTIVE")
+
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['images'] = ClassifiedImages.objects.filter(classified=self.classified.id)
+        # context['images'] = ClassifiedImages.objects.filter(classified=self.classified.id)
         context['popular_tags'] = Classified.objects.get_counted_tags()        
+        context['display_image'] = ClassifiedImages.objects.filter(classified=self.classified.id)[:1]
+       
         return context
 
     def get_queryset(self, **kwargs):
         self.classified = get_object_or_404(Classified)
-        return Classified.objects.get_published()
+        return Classified.objects.get_active()
 
 class DraftsListView(ClassifiedsListView):
     """Overriding the original implementation to call the drafts classifieds
     list."""
     def get_queryset(self, **kwargs):
-        return Classified.objects.get_drafts()
+        return Classified.objects.get_expireds()
 
 
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
@@ -101,6 +108,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             return self.form_valid(form) 
         else:
             #ret = dict(errors=form.errors)
+            print(form.errors)
             return self.form_invalid(form)
             #return HttpResponse(json.dumps(ret), content_type='application/json')
                 
