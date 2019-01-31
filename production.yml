@@ -3,7 +3,6 @@ version: '3'
 volumes:
   postgres_data: {}
   postgres_backup: {}
-  caddy: {}
   redis: {}
 
 networks:  # <-- and here
@@ -19,6 +18,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
+    container_name: django
     env_file: .env
     networks:
       - nginx_network
@@ -33,6 +33,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
+    container_name: postgres
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
@@ -40,7 +41,8 @@ services:
       - database1_network
 
   nginx:
-    image: nginx:1.13
+    image: nginx:alpine
+    container_name: nginx
     ports:
       - 8000:80
     volumes:
@@ -52,6 +54,7 @@ services:
 
   redis:
     image: redis:3.0-alpine
+    container_name: redis
     volumes:
       - 'redis:/data'
     ports:
