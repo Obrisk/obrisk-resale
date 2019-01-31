@@ -32,13 +32,16 @@ COPY ./compose/production/django/celery/beat/start.sh /start-celerybeat.sh
 RUN sed -i 's/\r//' /start-celerybeat.sh
 RUN chmod +x /start-celerybeat.sh
 
-COPY . /app
+COPY . /django/app
 
-RUN chown -R django /app
+RUN chown -R django /django/app
 
 USER django
 
-WORKDIR /app
+WORKDIR /django/app
+
+RUN python manage.py collectstatic --no-input  # <-- here
+
 
 ENTRYPOINT ["/entrypoint.sh"]
 

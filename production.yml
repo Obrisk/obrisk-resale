@@ -4,6 +4,8 @@ volumes:
   postgres_data: {}
   postgres_backup: {}
   redis: {}
+  static_volume:  # <-- declare the static volume
+  media_volume:  # <-- declare the media volume
 
 networks:  # <-- and here
   nginx_network:
@@ -20,6 +22,10 @@ services:
       dockerfile: ./compose/production/django/Dockerfile
     container_name: django
     env_file: .env
+    volumes:
+      - .:/django/src
+      - static_volume:/opt/services/djangoapp/static  # <-- bind the static volume
+      - media_volume:/opt/services/djangoapp/media  # <-- bind the media volume
     networks:
       - nginx_network
       - database1_network
@@ -34,6 +40,7 @@ services:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
     container_name: postgres
+    env_file: .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
@@ -41,12 +48,16 @@ services:
       - database1_network
 
   nginx:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: ./compose/production/nginx/Dockerfile
     container_name: nginx
     ports:
       - 8000:80
     volumes:
-      - ./config/nginx/conf.d:/etc/nginx/conf.d
+      - ./compose/production/nginx/default.conf:/etc/nginx/default.conf
+      - static_volume:/django/static  # <-- bind the static volume
+      - media_volume:/django/media  # <-- bind the media volume
     depends_on:
       - django
     networks:
@@ -55,6 +66,7 @@ services:
   redis:
     image: redis:3.0-alpine
     container_name: redis
+    env_file: .env
     volumes:
       - 'redis:/data'
     ports:
