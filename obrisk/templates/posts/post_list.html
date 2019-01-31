@@ -50,9 +50,8 @@
                         <div class="text-right">
                             <a href="{% url 'posts:post' post.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a> <br>
                         </div>
-
                     </div>
-                    
+
                     {% trans 'Posted' %} {{ post.timestamp|naturaltime }}
                     <div class="text-muted">
                         {% for tag in post.tags.names %}

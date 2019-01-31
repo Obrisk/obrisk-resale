@@ -41,3 +41,6 @@ USER django
 WORKDIR /app
 
 ENTRYPOINT ["/entrypoint.sh"]
+
+# define the default command to run when starting the container
+CMD ["gunicorn", "--chdir", "/config", "--bind", ":8000", "wsgi:application"]

@@ -1,9 +1,18 @@
-version: '2'
+version: '3'
 
 volumes:
   postgres_data: {}
   postgres_backup: {}
   caddy: {}
+  redis: {}
+
+networks:  # <-- and here
+  nginx_network:
+    driver: bridge
+  database1_network:  # <-- add the bridge
+    driver: bridge
+  redis_network:  # <-- add the bridge
+    driver: bridge
 
 services:
   django:
@@ -11,20 +20,14 @@ services:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
     env_file: .env
+    networks:
+      - nginx_network
+      - database1_network
+      - redis_network
     depends_on:
       - postgres
       - redis
     command: daphne -b 0.0.0.0 -p 8000 config.asgi:channel_layer
-
-  worker:
-    build:
-      context: .
-      dockerfile: ./compose/production/django/Dockerfile
-    command: python manage.py runworker
-    env_file: .env
-    depends_on:
-      - postgres
-      - redis
 
   postgres:
     build:
@@ -33,19 +36,27 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
+    networks:
+      - database1_network
 
-  caddy:
-    build:
-      context: .
-      dockerfile: ./compose/production/caddy/Dockerfile
+  nginx:
+    image: nginx:1.13
+    ports:
+      - 8000:80
+    volumes:
+      - ./config/nginx/conf.d:/etc/nginx/conf.d
     depends_on:
       - django
-    volumes:
-      - caddy:/root/.caddy
-    env_file: .env
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
+    networks:
+      - nginx_network
 
   redis:
-    image: redis:3.0
+    image: redis:3.0-alpine
+    volumes:
+      - 'redis:/data'
+    ports:
+      - '6379:6379'
+    networks:
+      -redis_network
+
+
