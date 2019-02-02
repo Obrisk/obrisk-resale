@@ -1,71 +1,77 @@
-version: '2'
+version: '3'
 
 volumes:
   postgres_data: {}
   postgres_backup: {}
-  caddy: {}
+  redis: {}
+  static_volume:  # <-- declare the static volume
+  media_volume:  # <-- declare the media volume
+
+networks:  # <-- and here
+  nginx_network:
+    driver: bridge
+  database1_network:  # <-- add the bridge
+    driver: bridge
+  redis_network:  # <-- add the bridge
+    driver: bridge
 
 services:
   django:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
-    container_name: django1
+    image: django-ob 
+    container_name: django
     env_file: .env
+    volumes:
+      - .:/django/src
+      - static_volume:/opt/services/djangoapp/static  # <-- bind the static volume
+      - media_volume:/opt/services/djangoapp/media  # <-- bind the media volume
+    networks:
+      - nginx_network
+      - database1_network
+      - redis_network
     depends_on:
       - postgres
       - redis
     command: daphne -b 0.0.0.0 -p 8000 config.asgi:channel_layer
 
-  worker:
-    build:
-      context: .
-      dockerfile: ./compose/production/django/Dockerfile
-    container_name: worker1
-    command: python manage.py runworker
-    env_file: .env
-    depends_on:
-      - postgres
-      - redis
-
   postgres:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
+    image: postgres-ob
     container_name: postgres1
+    env_file: .env
     volumes:
       - postgres_data:/var/lib/postgresql/data
       - postgres_backup:/backups
-
-  caddy:
-    build:
-      context: .
-      dockerfile: ./compose/production/caddy/Dockerfile
-    container_name: caddy1
-    depends_on:
-      - django
-    volumes:
-      - caddy:/root/.caddy
-    env_file: .env
-    ports:
-      - "0.0.0.0:80:80"
-      - "0.0.0.0:443:443"
-
-  redis:
-    image: redis:3.0
-    container_name: redis1
-    restart: unless-stopped
-    expose:
-        - "6379"
-    volumes:
-        - redisdata:/data
+    networks:
+      - database1_network
 
   nginx:
-    image: nginx:latest
-    restart: always
-    build: ./compose/production/nginx/
-    container_name: nginx1
+    image: nginx:1.13-alpine
+    container_name: nginx
     ports:
-      - "8000:80"
-    links:
-      - web
+      - 8000:80
+    volumes:
+      - ./compose/production/nginx/default.conf:/etc/nginx/default.conf
+      - static_volume:/django/static  # <-- bind the static volume
+      - media_volume:/django/media  # <-- bind the media volume
+    depends_on:
+      - django
+    networks:
+      - nginx_network
+
+  redis:
+    image: redis:3.0-alpine
+    container_name: redis
+    env_file: .env
+    volumes:
+      - 'redis:/data'
+    ports:
+      - '6379:6379'
+    networks:
+      - redis_network
+
+

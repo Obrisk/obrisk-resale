@@ -4,6 +4,8 @@ from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from phonenumber_field.modelfields import PhoneNumberField
+
 from obrisk.notifications.models import Notification, notification_handler
 
 
@@ -12,24 +14,28 @@ class User(AbstractUser):
     name = models.CharField(_("User's name"), blank=True, max_length=255)
     picture = models.ImageField(
         _('Profile picture'), upload_to='profile_pics/', null=True, blank=True)
-    location = models.CharField(
-        _('Location'), max_length=50, null=True, blank=True)
     job_title = models.CharField(
         _('Job title'), max_length=50, null=True, blank=True)
     personal_url = models.URLField(
         _('Personal URL'), max_length=555, blank=True, null=True)
     facebook_account = models.URLField(
         _('Facebook profile'), max_length=255, blank=True, null=True)
-    twitter_account = models.URLField(
-        _('Twitter account'), max_length=255, blank=True, null=True)
-    github_account = models.URLField(
-        _('GitHub profile'), max_length=255, blank=True, null=True)
+    instagram_account = models.URLField(
+        _('Instagram account'), max_length=255, blank=True, null=True)
     linkedin_account = models.URLField(
         _('LinkedIn profile'), max_length=255, blank=True, null=True)
     short_bio = models.CharField(
         _('Describe yourself'), max_length=60, blank=True, null=True)
     bio = models.CharField(
         _('Short bio'), max_length=280, blank=True, null=True)
+    country = models.CharField(
+        _('Country'), max_length=50, default= "Unknown_country")
+    city = models.CharField (max_length=50, default= "Unknown_city")
+    nationality = models.CharField (max_length=50, blank=True, null=True) 
+    points = models.IntegerField(default=0)
+    phone_number = PhoneNumberField(default="Unknown_phone_no")  #Needs a country's code 
+    is_official = models.BooleanField (default=False)      #For the use of published posts
+
 
     def __str__(self):
         return self.username

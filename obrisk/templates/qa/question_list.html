@@ -10,12 +10,12 @@
 {% block content %}
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'news:list' %}">{% trans 'Home' %}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
       <li class="breadcrumb-item active" aria-current="page">{% trans 'Q.A' %}</li>
     </ol>
   </nav>
   <div class="page-header">
-    <a href="{% url 'qa:ask_question' %}" class="btn btn-primary pull-right">
+    <a href="{% url 'qa:ask_question' %}" class="btn btn-dark pull-right">
       <i class="fa fa-pencil" aria-hidden="true"></i> {% trans "Ask a Question" %}
     </a>
     <h1>{% trans "Questions" %}</h1>

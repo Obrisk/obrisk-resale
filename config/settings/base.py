@@ -1,8 +1,10 @@
 """
 Base settings to build other settings files upon.
 """
-
 import environ
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path('obrisk')
@@ -23,7 +25,7 @@ DEBUG = env.bool('DJANGO_DEBUG', False)
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Chongqing'
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
 LANGUAGE_CODE = 'en-us'
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
@@ -65,14 +67,17 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     'crispy_forms',
+    'cloudinary',
+    'material',
     'sorl.thumbnail',
+    'phonenumber_field',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     # 'allauth.socialaccount.providers.amazon',
     # 'allauth.socialaccount.providers.github',
     # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.linkedin',
+     'allauth.socialaccount.providers.linkedin',
     # 'allauth.socialaccount.providers.slack',
     'channels',
     'django_comments',
@@ -85,7 +90,7 @@ LOCAL_APPS = [
     # Your stuff: custom apps go here
     'obrisk.classifieds.apps.ClassifiedsConfig',
     'obrisk.messager.apps.MessagerConfig',
-    'obrisk.news.apps.NewsConfig',
+    'obrisk.stories.apps.StoriesConfig',
     'obrisk.notifications.apps.NotificationsConfig',
     'obrisk.qa.apps.QaConfig',
     'obrisk.search.apps.SearchConfig',
@@ -111,7 +116,7 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = 'news:list'
+LOGIN_REDIRECT_URL = 'posts:list'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = 'account_login'
 
@@ -230,13 +235,13 @@ EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.smtp.Ema
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL regex.
-ADMIN_URL = r'^admin/'
+ADMIN_URL = r'^obdev2018/'
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
-# ADMINS = [
-#     ("""Vitor Freitas""", 'vitor-freitas@example.com'),
-# ]
+ADMINS = [
+     ('Elisha Kingdom', 'elishakingdom@yahoo.com'),
+]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
-# MANAGERS = ADMINS
+MANAGERS = ADMINS
 
 
 # django-allauth
@@ -253,9 +258,21 @@ ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 
+SOCIALACCOUNT_PROVIDERS = {
+    'weixin': {
+        'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
+        'SCOPE': ['snsapi_base'],
+    }
+}
 
-# Your stuff...
+
+# Other stuff...
 # ------------------------------------------------------------------------------
+cloudinary.config( 
+  cloud_name = "CLOUDINARY_NAME", 
+  api_key = "CLOUDINARY_API_KEY", 
+  api_secret = "CLOUDINARY_API_SECRET" 
+)
 
 # REDIS setup
 REDIS_URL = f'{env("REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'

@@ -5,7 +5,7 @@ from test_plus.test import TestCase
 
 from obrisk.classifieds.models import Classified
 from obrisk.qa.models import Question
-from obrisk.news.models import News
+from obrisk.stories.models import Stories
 
 
 class SearchViewsTests(TestCase):
@@ -47,14 +47,14 @@ class SearchViewsTests(TestCase):
             everybody always wants the real deal.""",
             has_answer=True, tags="test1,test2"
         )
-        self.news_one = News.objects.create(user=self.user,
+        self.stories_one = Stories.objects.create(user=self.user,
                                             content="This is the first lazy content.")
 
-    def test_news_search_results(self):
+    def test_stories_search_results(self):
         response = self.client.get(
             reverse("search:results"), {'query': 'This is'})
         assert response.status_code == 200
-        assert self.news_one in response.context["news_list"]
+        assert self.stories_one in response.context["stories_list"]
         assert self.question_one in response.context["questions_list"]
         assert self.question_two in response.context["questions_list"]
         assert self.classified in response.context["classifieds_list"]

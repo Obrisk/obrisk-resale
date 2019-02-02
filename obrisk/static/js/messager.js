@@ -14,6 +14,15 @@ $(function () {
         };
     };
 
+    function scrollMessages() {
+        /* Set focus on the input box from the form, and rolls to show the
+            the most recent message.
+        */
+        $("input[name='message']").focus();
+        var d = $('#messages');
+        d.scrollTop(d.prop("scrollHeight"));
+    }
+    
     function addNewMessage(message_id) {
         /* This function calls the respective AJAX view, so it will be able to
         load the received message in a proper way.
@@ -24,18 +33,12 @@ $(function () {
             cache: false,
             success: function (data) {
                 $(".send-message").before(data);
-                scrollConversationScreen();
+                scrollMessages();
             }
         });
     };
 
-    function scrollConversationScreen() {
-        /* Set focus on the input box from the form, and rolls to show the
-        the most recent message.
-        */
-        $("input[name='message']").focus();
-        $('.conversation').scrollTop($('.conversation')[0].scrollHeight);
-    }
+    
 
     $("#send").submit(function () {
         $.ajax({
@@ -46,11 +49,21 @@ $(function () {
             success: function (data) {
                 $(".send-message").before(data);
                 $("input[name='message']").val('');
-                scrollConversationScreen();
+                scrollMessages();
             }
         });
         return false;
     });
+
+    // //This helps the text in the textarea of the message to be send
+    // //when press enter and go new line with shift + enter!
+    // $("#sendText").keypress(function (e) {
+    //     if(e.which == 13 && !e.shiftKey) {        
+    //         $(this).closest("form").submit();
+    //         e.preventDefault();
+    //         return false;
+    //     }
+    // });
 
     // WebSocket connection management block.
     // Correctly decide between ws:// and wss://

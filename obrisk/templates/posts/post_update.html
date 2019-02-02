@@ -9,18 +9,18 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'news:list' %}">{% trans 'Home' %}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
       <li class="breadcrumb-item"><a href="{% url 'posts:drafts' %}">{% trans 'Drafts' %}</a></li>
       <li class="breadcrumb-item active" aria-current="page">{% trans 'Update the post' %}</li>
     </ol>
   </nav>
-  <form action="{% url 'posts:edit_classified' form.instance.pk %}" enctype="multipart/form-data"  id="post-form" method="post" role="form">
+  <form action="{% url 'posts:edit_post' form.instance.pk %}" enctype="multipart/form-data"  id="posts-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
-      <button type="button" class="btn btn-primary update">{% trans 'Update' %}</button>
+      <button type="button" class="btn btn-dark update">{% trans 'Update' %}</button>
       <button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
-      <a href="{% url 'posts:drafts' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+      <a href="{% url 'posts:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
   </form>
   {{ form.media }}

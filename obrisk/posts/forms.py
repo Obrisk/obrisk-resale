@@ -7,8 +7,9 @@ class PostForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField(
         widget=forms.HiddenInput(), required=False, initial=False)
+    image = forms.ImageField(required=False)
     content = MarkdownxFormField()
 
     class Meta:
         model = Post
-        fields = ["title", "content", "image", "tags", "status", "edited"]
+        fields = ["title", "content", "image", "tags", "status", "edited", "category"]

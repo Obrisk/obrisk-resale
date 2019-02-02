@@ -21,14 +21,14 @@ class PostsListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self, **kwargs):
-        return Post.objects.get_published()
+        return Post.objects.get_active()
 
 
 class DraftsListView(PostsListView):
     """Overriding the original implementation to call the drafts Posts
     list."""
     def get_queryset(self, **kwargs):
-        return Post.objects.get_drafts()
+        return Post.objects.get_expireds()
 
 
 class CreatePostView(LoginRequiredMixin, CreateView):

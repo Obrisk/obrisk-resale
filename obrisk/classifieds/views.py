@@ -1,15 +1,24 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django.contrib.auth.decorators import login_required, permission_required
+from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView
+from django.views.generic.edit import BaseFormView
 from django.urls import reverse
+from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-#from django.forms import formset_factory
-from django.forms import modelform_factory
 from django.template import RequestContext
+from django.core.mail import send_mail
+from django.utils.decorators import method_decorator
+from django.http import HttpResponse
+from django import forms
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedImageForm
+from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm 
+
+import json
+import re
+from cloudinary import CloudinaryResource
 
 
 class ClassifiedsListView(LoginRequiredMixin, ListView):
@@ -18,20 +27,28 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
     paginate_by = 15
     context_object_name = "classifieds"
 
+    # def get_queryset(self, **kwargs):
+    #     self.classified = get_object_or_404(Classified,
+    #                                    slug=self.kwargs['classified'])
+    #     return self.classified.filter(status="ACTIVE")
+
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['popular_tags'] = Classified.objects.get_counted_tags()
+        context['image'] = str(ClassifiedImages.objects.all())
+       
         return context
 
     def get_queryset(self, **kwargs):
-        return Classified.objects.get_published()
-
+        qs = Classified.objects.get_active()
+        return qs
 
 class DraftsListView(ClassifiedsListView):
     """Overriding the original implementation to call the drafts classifieds
     list."""
     def get_queryset(self, **kwargs):
-        return Classified.objects.get_drafts()
+        return Classified.objects.get_expireds()
 
 
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
@@ -41,10 +58,63 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_create.html'
 
+    def __init__(self, **kwargs):
+        # i think self.object could be as self.request.user
+        self.object = None
+        super().__init__(**kwargs)
 
+        # Go through keyword arguments, and either save their values to our
+        # instance, or raise an error.
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # context['user'] = self.object
+        #context = dict(images_formset = ImagesCreateFormSet())
+        #cl_init_js_callbacks(context['images_formset'], self.request)
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        form = ClassifiedForm(self.request.POST)
+    
+        if form.is_valid():
+            classified = form.save(commit=False)
+            classified.user = self.request.user
+            classified.save()
+
+            # split one long string of JSON objects into a list of string each for one JSON obj 
+            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
+
+            for image_obj in cloudinary_list:
+                #convert the obj from string into JSON.
+                json_response = json.loads(image_obj)
+
+                #Populate a CloudinaryResource object using the upload response
+                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+
+                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
+
+                img = ClassifiedImages(image= str_result)
+                img.classified = classified
+                img.save()
+            return self.form_valid(form) 
+        else:
+            #ret = dict(errors=form.errors)
+            print(form.errors)
+            return self.form_invalid(form)
+            #return HttpResponse(json.dumps(ret), content_type='application/json')
+                
+        
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super().form_valid(form)
+        return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
@@ -66,48 +136,49 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
+class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+    """This class has to inherit FormClass model but failed to implement that
+    Update view will use the model Classified which is not a nice implementation.
+    There is no need of a model here just render a form and the send email. """
+
+    message = _("Your report has been submitted.")
+    model = Classified
+    form_class = ClassifiedReportForm
+    template_name = 'classifieds/classified_report.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, self.message)
+        return reverse('classifieds:list')
+
+
+    """ If it was a FormView then,
+    def dispatch(self, request, *args, **kwargs):
+        self.user = request.user
+        return super().dispatch(self, request, *args, **kwargs)
+
+    def get_object ()
+
+    def form_valid(self, form):
+        self.request.user = None
+        return super().form_valid(form)
+
+    def post(self , request , *args , **kwargs):
+        return super().post(self, request, *args, **kwargs)"""
+
 
 class DetailClassifiedView(LoginRequiredMixin, DetailView):
     """Basic DetailView implementation to call an individual classified."""
     model = Classified
 
-# Below handling multiple images see below for help
-#https://docs.djangoproject.com/en/2.1/topics/forms/formsets/
-#https://stackoverflow.com/questions/34006994/how-to-upload-multiple-images-to-a-blog-post-in-django
-
-@login_required
-def post(request):
-
-        ImageFormSet = modelformset_factory(ClassifiedImages,
-                                            form=ClassifiedImageForm, extra=5)
-
-        if request.method == 'POST':
-
-            classifiedForm = ClassifiedForm(request.POST)
-            formset = ImageFormSet(request.POST, request.FILES,
-                                queryset=ClassifiedImages.objects.none())
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get a context
+    #     context = super(DetailClassifiedView, self).get_context_data(**kwargs)
+    #     # Add in a QuerySet of all the images
+    #     context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
+    #     return context
 
 
-            if classifiedForm.is_valid() and formset.is_valid():
-                classified_form = classifiedForm.save(commit=False)
-                classified_form.user = request.user
-                classified_form.save()
-
-                for form in formset.cleaned_data:
-                    image = form['image']
-                    photo = ClassifiedImages(classified=classified_form, images=image)
-                    photo.save()
-                messages.success(request,
-                                "You have successfully created your classified!")
-                #Take back to the list.
-                return reverse('classifieds:list')
-            else:
-                print classifiedForm.errors, formset.errors
-        else:
-            classifiedForm = ClassifiedForm()
-            formset = ImageFormSet(queryset=ClassifiedImages.objects.none())
-        return render(request, 'classified_list.html',
-                    {'classifiedForm': classifiedForm, 'formset': formset},
-                    context_instance=RequestContext(request))
-
-   

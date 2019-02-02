@@ -12,6 +12,11 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name='about'),
+    url(r'^terms-and-conditions/$',
+        TemplateView.as_view(template_name='pages/terms.html'), name='terms_and_conditions'),
+    url(r'^privacy-policy/$',
+        TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
+
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
     # User management
@@ -28,7 +33,7 @@ urlpatterns = [
         include('obrisk.classifieds.urls', namespace='classifieds')),
      url(r'^posts/',
         include('obrisk.posts.urls', namespace='posts')),
-    url(r'^news/', include('obrisk.news.urls', namespace='news')),
+    url(r'^stories/', include('obrisk.stories.urls', namespace='stories')),
     url(r'^messages/',
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),

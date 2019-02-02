@@ -34,9 +34,31 @@ class MessagesListView(LoginRequiredMixin, ListView):
             self.request.user)
         return Message.objects.get_conversation(active_user, self.request.user)
 
+class ContactsListView(LoginRequiredMixin, ListView):
+    """This CBV is used to filter the list of contacts in the user"""
+    """and allow the user to select the active one before chatting"""
+    model = Message
+    paginate_by = 50
+    template_name = "messager/contact_list.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context['users_list'] = get_user_model().objects.filter(
+            is_active=True).exclude(
+                username=self.request.user).order_by('username')
+        last_conversation = Message.objects.get_most_recent_conversation(
+            self.request.user
+        )
+        context['active'] = last_conversation.username
+        return context
+
+    def get_queryset(self):
+        active_user = Message.objects.get_most_recent_conversation(
+            self.request.user)
+        return Message.objects.get_conversation(active_user, self.request.user)
 
 class ConversationListView(MessagesListView):
-    """CBV to render the inbox, showing an specific conversation with a given
+    """CBV to render the inbox, showing a specific conversation with a given
     user, who requires to be active too."""
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

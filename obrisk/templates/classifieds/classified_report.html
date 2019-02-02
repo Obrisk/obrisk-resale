@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load crispy_forms_tags %}
+{% load thumbnail %}
+
+{% block title %} Report {% endblock %}
+
+{% block content %}
+   <!-- Comments Form -->
+   {% if sent %}
+    <h1> your report has been sent! </h1>
+  {% else %}
+    <!-- {% if user.is_authenticated %} -->
+    <p> Hello {{request.user}}, you are about to send a negative report about this classified ad. 
+      Please be sure of what you are about to do. Please take few minutes to read and complete the form below <br> <br>
+      Note: if a classified ad is casted more than 10 reports it will be automatically deleted <br>
+      and the publisher will be in a gray zone of being blocked. Also if the reviewer finds absolutely nothing is wrong
+      with the ad, then reporters will be discredited too. If this happens many times then a reporter will also,
+      be in a chance of being blocked. </p>
+
+      <div class="card my-4">
+        <h5 class="card-header">{% trans ' Choose the reason and complete the form why the ad is inappropiate.' %}:</h5>
+        <div class="card-body">
+        
+          <!-- Reverse for 'report_classified' with arguments '('',)' not found. 1 pattern(s) tried: ['classifieds/report/(?P<pk>\\d+)/$'] 
+            This error above was thrown each time I chanded form.instance.pk to something like classified.user-->
+          <form action="{% url 'classifieds:report_classified' form.instance.pk %}" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
+            {% csrf_token %}
+            {{ form|crispy }}
+            
+            <!-- <input type="hidden" name="reporter" value="{{ user }}">
+            <input type="hidden" name="slug" value="{% url 'classifieds:classified' classified.slug %}" -->
+            <input type="submit" value="{% trans 'Submit the report' %}" id="id_submit" >
+
+            </form>
+          
+        </div>
+      </div>
+    <!-- {% endif %} -->
+  {% endif %}
+
+
+    
+{% endblock content %}

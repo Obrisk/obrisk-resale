@@ -1525,7 +1525,7 @@
 }
 .fa-y-combinator-square:before,
 .fa-yc-square:before,
-.fa-hacker-news:before {
+.fa-hacker-stories:before {
   content: "\f1d4";
 }
 .fa-tencent-weibo:before {
@@ -1592,7 +1592,7 @@
 .fa-yelp:before {
   content: "\f1e9";
 }
-.fa-newspaper-o:before {
+.fa-storiespaper-o:before {
   content: "\f1ea";
 }
 .fa-wifi:before {

@@ -26,13 +26,13 @@ class PostsModelsTest(TestCase):
     def test_object_instance(self):
         assert isinstance(self.post, Post)
         assert isinstance(self.not_p_post, Post)
-        assert isinstance(Post.objects.get_published()[0], Post)
+        assert isinstance(Post.objects.get_active()[0], Post)
 
     def test_return_values(self):
         assert self.post.status == "P"
         assert self.post.status != "p"
         assert self.not_p_post.status == "D"
         assert str(self.post) == "A really nice title"
-        assert self.post in Post.objects.get_published()
-        assert Post.objects.get_published()[0].title == "A really nice title"
-        assert self.not_p_post in Post.objects.get_drafts()
+        assert self.post in Post.objects.get_active()
+        assert Post.objects.get_active()[0].title == "A really nice title"
+        assert self.not_p_post in Post.objects.get_expireds()

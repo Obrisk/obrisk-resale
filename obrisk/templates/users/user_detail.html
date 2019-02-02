@@ -28,7 +28,7 @@
           <i class="fa fa-user-circle-o" aria-hidden="true"></i>
           {{ object.get_profile_name|title }}
           <br />
-          <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br />
+          <!-- <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
           {% if object.job_title %}
             <i class="fa fa-briefcase" aria-hidden="true"></i>  {{ object.job_title }} <br />
           {% endif %}
@@ -39,22 +39,14 @@
     </div>
     <div id="objective"><p>{{ object.bio }}</p></div>
     <div class="clear"></div>
-    {% if object.personal_url %}
-      <a href="{{ object.personal_url }}" style="font-size: 2em" title="{% trans 'RSS Channel' %}"><i class="fa fa-rss"></i>  </a>
-    {% endif %}
-    {% if object.twitter_account %}
-      <a href="{{ object.twitter_account }}" style="font-size: 2em" title="{% trans 'Twitter Profile' %}"><i class="fa fa-twitter"></i>  </a>
-    {% endif %}
-    {% if object.github_account %}
-      <a href="{{ object.github_account }}" style="font-size: 2em" title="{% trans 'Github Profile' %}"><i class="fa fa-github"></i>  </a>
-    {% endif %}
+ 
     {% if object.linkedin_account %}
       <a href="{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i>  </a>
     {% endif %}
     {% if object.facebook_account %}
       <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i>  </a>
     {% endif %}
-    <a class="btn btn-dark pull-right" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+
   </div>
   {% if request.user.username == object.username %}
     <!-- Data tiles -->

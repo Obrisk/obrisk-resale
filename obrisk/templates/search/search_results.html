@@ -13,16 +13,30 @@
   <div class="container">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'news:list' %}">{% trans 'Home' %}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
         <li class="breadcrumb-item active"><a href="#">{% trans 'Search Results' %}</a></li>
       </ol>
     </nav>
+
+     <!-- This search bar should be displayed with pre-filled in values that user searched for. -->
+      <!-- currently it is not doing so -->
+      <div class="col-md-9"> 
+      <form class="form-inline" role="search" action="{% url 'search:results' %}">
+          <div class="input-group">
+            <input name="query" type="search" id="searchInput" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search">
+            <div class="input-group-append">
+              <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+            </div>
+          </div>
+        </form>
+      </div>
+
     <!-- row -->
     <div class="row">
       <div class="col-md-3">
         <div class="list-group" id="list-tab" role="tablist">
           <a class="list-group-item list-group-item-action active" id="list-classifieds-list" data-toggle="list" href="#list-classifieds" role="tab" aria-controls="classifieds">{% trans 'Classifieds' %}<span class="badge badge-primary pull-right">{{ classifieds_count }}</span></a>
-          <a class="list-group-item list-group-item-action" id="list-news-list" data-toggle="list" href="#list-news" role="tab" aria-controls="news">{% trans 'News' %}<span class="badge badge-primary pull-right">{{ news_count }}</span></a>
+          <a class="list-group-item list-group-item-action" id="list-stories-list" data-toggle="list" href="#list-stories" role="tab" aria-controls="stories">{% trans 'Stories' %}<span class="badge badge-primary pull-right">{{ stories_count }}</span></a>
           <a class="list-group-item list-group-item-action" id="list-questions-list" data-toggle="list" href="#list-questions" role="tab" aria-controls="questions">{% trans 'Questions' %}<span class="badge badge-primary pull-right">{{ questions_count }}</span></a>
           <a class="list-group-item list-group-item-action" id="list-users-list" data-toggle="list" href="#list-users" role="tab" aria-controls="users">{% trans 'Users' %}<span class="badge badge-primary pull-right">{{ users_count }}</span></a>
           <a class="list-group-item list-group-item-action" id="list-tags-list" data-toggle="list" href="#list-tags" role="tab" aria-controls="tags">{% trans 'Tags' %}<span class="badge badge-primary pull-right">{{ tags_count }}</span></a>
@@ -40,16 +54,16 @@
                 {% endthumbnail %}
                 <div class="card-body">
                   <h2 class="card-title">{{ classified.title|title }}</h2>
-                  <p class="card-text">{{ classified.content|truncatechars:250 }}</p>
+                  <p class="card-text">{{ classified.details|truncatechars:250 }}</p>
                 </div>
               </div>
             {% empty %}
               <h4 class="no-data">{% trans 'There are no results related to your search' %}.</h4>
             {% endfor %}
           </div>
-          <div class="tab-pane fade" id="list-news" role="tabpanel" aria-labelledby="list-news-list">
-            {% for news in news_list %}
-              {% include 'news/news_single.html' with news=news %}
+          <div class="tab-pane fade" id="list-stories" role="tabpanel" aria-labelledby="list-stories-list">
+            {% for stories in stories_list %}
+              {% include 'stories/stories_single.html' with stories=stories %}
             {% empty %}
               <h4 class="no-data">{% trans 'There are no results related to your search' %}.</h4>
             {% endfor %}

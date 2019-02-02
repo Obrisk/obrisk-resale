@@ -8,7 +8,7 @@
 
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'news:list' %}">{% trans 'Home' %}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
       <li class="breadcrumb-item"><a href="{% url 'qa:index_all' %}">{% trans 'Q&A' %}</a></li>
       <li class="breadcrumb-item active" aria-current="page">{% trans 'Answer a question' %}</li>
     </ol>
@@ -17,7 +17,7 @@
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
-      <button id="answer" type="submit" class="btn btn-primary">{% trans 'Answer' %}</button>
+      <button id="answer" type="submit" class="btn btn-dark">{% trans 'Answer' %}</button>
       <a href="{% url 'qa:index_all' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
   </form>
