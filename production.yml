@@ -20,6 +20,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/django/Dockerfile
+    image: django-ob 
     container_name: django
     env_file: .env
     volumes:
@@ -39,6 +40,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
+    image: postgres-ob
     container_name: postgres
     env_file: .env
     volumes:
@@ -48,9 +50,7 @@ services:
       - database1_network
 
   nginx:
-    build:
-      context: .
-      dockerfile: ./compose/production/nginx/Dockerfile
+    image: nginx:1.13-alpine
     container_name: nginx
     ports:
       - 8000:80
@@ -72,6 +72,6 @@ services:
     ports:
       - '6379:6379'
     networks:
-      -redis_network
+      - redis_network
 
 

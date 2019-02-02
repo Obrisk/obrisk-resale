@@ -16,6 +16,7 @@ RUN addgroup -S django \
 
 # Requirements have to be pulled and installed here, otherwise caching won't work
 COPY ./requirements /requirements
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir -r /requirements/production.txt \
     && rm -rf /requirements
 
@@ -32,16 +33,15 @@ COPY ./compose/production/django/celery/beat/start.sh /start-celerybeat.sh
 RUN sed -i 's/\r//' /start-celerybeat.sh
 RUN chmod +x /start-celerybeat.sh
 
-COPY . /django/app
+COPY . /django/src
 
-RUN chown -R django /django/app
+RUN chown -R django /django/src
 
 USER django
 
-WORKDIR /django/app
+WORKDIR /django/src
 
-RUN python manage.py collectstatic --no-input  # <-- here
-
+# RUN python manage.py collectstatic --no-input  
 
 ENTRYPOINT ["/entrypoint.sh"]
 
