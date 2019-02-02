@@ -3,7 +3,7 @@
 argon2-cffi>=18.1.0  # https://github.com/hynek/argon2_cffi
 awesome-slugify>=1.6.5  # https://github.com/dimka665/awesome-slugify
 Pillow>=5.2.0  # https://github.com/python-pillow/Pillow
-psycopg>=2.7.7  # https://github.com/psycopg/psycopg2
+psycopg2>=2.7.7  # https://github.com/psycopg/psycopg2
 pytz>=2018.5  # https://github.com/stub42/pytz
 redis==2.10.6  # https://github.com/antirez/redis
 whitenoise>=3.3.1  # https://github.com/evansd/whitenoise
