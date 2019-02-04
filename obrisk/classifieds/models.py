@@ -90,12 +90,15 @@ class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
     image = CloudinaryFieldFix('image')
 
-    """ Informative name for model """
-    def __unicode__(self):
-        try:
-            public_id = self.image.public_id
-        except AttributeError:
-            public_id = ''
-        return "Image <%s:%s>" % (self.classified, public_id)
+    # """ Informative name for model """
+    # def __unicode__(self):
+    #     try:
+    #         public_id = self.image.public_id
+    #     except AttributeError:
+    #         public_id = ''
+    #     return "Image <%s:%s>" % (self.classified, public_id)
+
+    def __str__(self):
+        return str(self.image)
 
 
