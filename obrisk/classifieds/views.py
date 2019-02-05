@@ -27,12 +27,6 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
     paginate_by = 15
     context_object_name = "classifieds"
 
-    # def get_queryset(self, **kwargs):
-    #     self.classified = get_object_or_404(Classified,
-    #                                    slug=self.kwargs['classified'])
-    #     return self.classified.filter(status="ACTIVE")
-
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['popular_tags'] = Classified.objects.get_counted_tags()
@@ -57,24 +51,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     message = _("Your classified has been created.")
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_create.html'
-
-    def __init__(self, **kwargs):
-        # i think self.object could be as self.request.user
-        self.object = None
-        super().__init__(**kwargs)
-
-        # Go through keyword arguments, and either save their values to our
-        # instance, or raise an error.
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        # context['user'] = self.object
-        #context = dict(images_formset = ImagesCreateFormSet())
-        #cl_init_js_callbacks(context['images_formset'], self.request)
-        return context
     
     def post(self, request, *args, **kwargs):
         """
@@ -101,7 +77,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
                 str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
 
-                img = ClassifiedImages(image= str_result)
+                img = ClassifiedImages(images= str_result)
                 img.classified = classified
                 img.save()
             return self.form_valid(form) 
@@ -109,9 +85,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             #ret = dict(errors=form.errors)
             print(form.errors)
             return self.form_invalid(form)
-            #return HttpResponse(json.dumps(ret), content_type='application/json')
-                
-        
+                  
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(CreateClassifiedView, self).form_valid(form)

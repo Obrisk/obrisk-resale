@@ -41,9 +41,9 @@
 
                 <div class="container">
                     <div class="row">
-                        {% for item in images %}
+                        {% for item in classified.images %}
                         <a class="col s12 m3" href="javascript:pswpInit({{ forloop.counter0 }});">
-                            <img src="{{ item.thumb.url }}" class="responsive-img dpg-album-image" alt="{{ item.alt }}" />
+                            <img src="{{ item }}" class="responsive-img dpg-album-image" alt="classified" />
                         </a>
                         {% endfor %}
                     </div>

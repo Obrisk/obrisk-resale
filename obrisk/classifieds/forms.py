@@ -10,6 +10,7 @@ class ClassifiedForm(forms.ModelForm):
 
     class Meta:
         model = Classified
+        exclude = ["image"]
         fields = ["title", "details", "status", "edited", "price", "located_area", "city", "tags", "images"]
         widgets = {'user': forms.HiddenInput()}
            
