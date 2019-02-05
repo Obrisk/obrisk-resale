@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from slugify import slugify
 
 from taggit.managers import TaggableManager
-
 from cloudinary.models import CloudinaryField
 
 
@@ -53,7 +52,7 @@ class Classified(models.Model):
     #displayImage = ProcessedImageField(upload_to=get_displayImage_filename, processors=[ResizeToFit(300)], format='JPEG', options={'quality': 90}, default=None)
     slug = models.SlugField(max_length=80, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
-    details = models.CharField(max_length=400)
+    details = models.CharField(max_length=1000)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00 , null=False)
     city = models.CharField (max_length=100, null=False)
     located_area = models.CharField (max_length=100, null=False)

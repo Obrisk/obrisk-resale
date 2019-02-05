@@ -6,11 +6,10 @@ from obrisk.classifieds.models import Classified, ClassifiedImages
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
-    images = forms.CharField(max_length=5000, widget=forms.HiddenInput())
+    images = forms.CharField(max_length=6000, widget=forms.HiddenInput())
 
     class Meta:
         model = Classified
-        exclude = ["image"]
         fields = ["title", "details", "status", "edited", "price", "located_area", "city", "tags", "images"]
         widgets = {'user': forms.HiddenInput()}
            
