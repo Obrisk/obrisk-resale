@@ -20,7 +20,7 @@
     {% csrf_token %}
     {{ form|crispy }}
   
-     <button id="upload_widget" class="cloudinary-button" onclick="checkTitle()"> Upload image </button> 
+     <button id="upload_widget" class="cloudinary-button"> Upload images </button> 
 
      
     <div class="form-group">
@@ -50,16 +50,7 @@
     return "classifieds/" + user;
   }
   const title_id = "{{ form.title.auto_id }}";
-
-  function checkTitle() {
-    if (!document.getElementById(title_id).value){
-        alert ("Please fill in the title of the classified ad before uploading images!");
-        return false;
-     }
-     else {
-        return true;
-     }
-  }
+  const details_id = "{{ form.details.auto_id }}";
   
   function getFileName() {
       var title = document.getElementById(title_id).value;
@@ -67,19 +58,22 @@
       var date = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
       var time = d.getHours() + "hrs-" + d.getMinutes() + "min-" + d.getSeconds() +"sec";
 
-      if (!document.getElementById(title_id).value) {
-        return "no-title" + "--" + date + "--" + time;
-      }
-      else {
-        return title + "--" + date + "--" + time;
-      }
-      
+      return title + "--" + date + "--" + time;    
   }
   var images = [];
      
   var myWidget = cloudinary.applyUploadWidget(document.getElementById("upload_widget"), 
   {   cloudName: "obrisk",
       upload_preset: 'hizonedev_preset',
+      preBatch: (cb, data) => {
+        if (!document.getElementById(title_id).value || !document.getElementById(title_id).value){
+            alert ("Please fill in other information of the classified ad before uploading images!");
+            cb ({cancel: true});
+        }
+        else {
+          cb();
+        }
+      },
       publicId: getFileName(),
       sources: ["local","camera"], 
       maxFiles: "6",  
@@ -94,11 +88,8 @@
         images.push (str);
 
    } });
+   console.log(document.getElementById(title_id).value);
    console.log(images);
-
-  document.getElementById("upload_widget").addEventListener("click", function(){
-     myWidget.open();
-  }, false);
 
   const images_id = "{{ form.images.auto_id }}";
   
@@ -106,6 +97,7 @@
   function setImages() {
     if (images.length < 1) {
       alert("You must upload at least one image for a classified ad for people to see what you're selling!");
+      return false;
     }
     else {
       document.getElementById(images_id).value = images;
