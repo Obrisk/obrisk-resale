@@ -6,6 +6,7 @@ from obrisk.classifieds.models import Classified, ClassifiedImages
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
+    details = forms.CharField(widget=forms.Textarea)
     images = forms.CharField(max_length=6000, widget=forms.HiddenInput())
 
     class Meta:
