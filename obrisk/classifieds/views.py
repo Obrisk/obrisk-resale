@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views import View
 from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView
 from django.views.generic.edit import BaseFormView
 from django.urls import reverse
@@ -51,6 +52,11 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     message = _("Your classified has been created.")
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_create.html'
+
+    def __init__(self, **kwargs):
+        # i think self.object could be as self.request.user
+        self.object = None
+        super().__init__(**kwargs)
     
     def post(self, request, *args, **kwargs):
         """
@@ -110,13 +116,12 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
-class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+class ReportClassifiedView(LoginRequiredMixin, View):
     """This class has to inherit FormClass model but failed to implement that
     Update view will use the model Classified which is not a nice implementation.
     There is no need of a model here just render a form and the send email. """
 
     message = _("Your report has been submitted.")
-    model = Classified
     form_class = ClassifiedReportForm
     template_name = 'classifieds/classified_report.html'
 
