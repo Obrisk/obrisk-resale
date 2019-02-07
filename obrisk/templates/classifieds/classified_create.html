@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% load crispy_forms_tags %}
-<!-- {% load cloudinary %} -->
 
 {% block head %}
 
@@ -60,24 +59,20 @@
       var date = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
       var time = d.getHours() + "hrs-" + d.getMinutes() + "min-" + d.getSeconds() +"sec";
 
-
-      return img_title + "--" + date + "--" + time;    
+      return date + "--" + time;    
   }
   var images = [];
-     
+    
   var myWidget = cloudinary.applyUploadWidget(document.getElementById("upload_widget"), 
   {   cloudName: "obrisk",
       upload_preset: 'hizonedev_preset',
       button_class: 'cloud-button btn btn-dark',
       button_caption: 'Upload Images',
-      field_name: 'src-images[]',
       show_powered_by: false,
       preBatch: (cb, data) => {
         img_title = $("#"+title_id).val();
         details = $("#"+details_id).val();
-        console.log(img_title);
 
-        getFileName();
         if (!img_title || !details){
             alert ("Please fill in other information of the classified ad before uploading images!");
             cb ({cancel: true});  
@@ -124,6 +119,7 @@
       }
       else {
           $("input[name='images']").val(images);
+          $("input[name='image']").val(images[0]);
           $("input[name='status']").val("A");
           $("#classified-form").submit();
       }

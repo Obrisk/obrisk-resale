@@ -6,6 +6,9 @@
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
 {% block head %}
+{% block javascript %}
+<script>  $.cloudinary.responsive() </script>  
+{% endblock javascript %}
 
 {% endblock head %}
 
@@ -26,23 +29,20 @@
           <!-- Classified ad. -->
           <div class="row">
               <div class="col-sm-6">
-                <div class="card mb-4" style="max-height: 430px;">
-                    {% if display is not "yes" %}
-                      <img src="https://res.cloudinary.com/obrisk/image/upload/c_scale,h_150,w_150/v1546075169/samples/ecommerce/accessories-bag.jpg"/>
-                    {% endif %}
-                  <!--Display image>  
-                    < <div class="public_id card-img-top"> >
-
-                      < {% for image in classified.images.all|slice:":1" %}
-                           {% cloudinary image THUMBNAIL %}
-                           {% with "yes" as display %}
-                           {% endwith %}
-                      {% endfor %}  >
-                    </div-->
+                <div class="card mb-4" style="max-height: 400px;">  
+                   <!--Display image-->  
+                   <div  style="max-height:100%; max-width:100%;">
+                      {% for photo in images %}
+                      {% if photo.classified == classified %} 
+                        {% cloudinary images.first.images   width="auto" class="cld-responsive" height=150  %}
+                      {% endif %}
+                      {% endfor %}
+                  </div>
+                  
   
                   <div class="card-body">
-                      <h3 class="card-title"> {{ classified.title}} </h3>
-                      <h5 class="card-subtitle text-danger"> CNY {{ classified.price|title }} </h5> 
+                      <h4 class="card-title"> {{ classified.title}} </h4>
+                      <h6 class="card-subtitle text-danger"> CNY {{ classified.price|title }} </h6> 
                       <p class="card-text"> {{ classified.details|safe|truncatechars:70 }}</p>  
                       <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a>
                   </div>
@@ -50,9 +50,6 @@
                   <div class="card-footer text-muted">
                       <i class="lead fa fa-user"></i>
                       <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a> <br>
-                      {% for tag in classified.tags.names %}
-                          <a href="#">{{ tag }}</a>
-                      {% endfor %}
                   </div>
                 </div>
               </div>
@@ -113,3 +110,4 @@
   <!-- /.container -->
 
 {% endblock content %}
+

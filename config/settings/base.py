@@ -238,7 +238,7 @@ EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.smtp.Ema
 ADMIN_URL = r'^obdev2018/'
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [
-     ('Elisha Kingdom', 'elishakingdom@yahoo.com'),
+     ('Elisha Kingdom', 'el@obrisk.com'),
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
@@ -269,9 +269,9 @@ SOCIALACCOUNT_PROVIDERS = {
 # Other stuff...
 # ------------------------------------------------------------------------------
 cloudinary.config( 
-  cloud_name = "CLOUDINARY_NAME", 
-  api_key = "CLOUDINARY_API_KEY", 
-  api_secret = "CLOUDINARY_API_SECRET" 
+  cloud_name = env('CLOUDINARY_NAME', default='obrisk'), 
+  api_key = env.int('CLOUDINARY_API_KEY', default=552744827567953), 
+  api_secret = env("CLOUDINARY_API_SECRET", default='YBJU2LnEKll7BPqZ6Gzu1phoUks') 
 )
 
 # REDIS setup

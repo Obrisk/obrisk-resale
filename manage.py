@@ -1,8 +1,6 @@
 import os
 import sys
 
-import os
-
 #os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.production'
 
 if __name__ == '__main__':
