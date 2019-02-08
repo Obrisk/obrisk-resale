@@ -31,10 +31,10 @@
               <div class="col-sm-6">
                 <div class="card mb-4" style="max-height: 400px;">  
                    <!--Display image-->  
-                   <div  style="max-height:100%; max-width:100%;">
+                   <div class="card-img-top img-responsive">
                       {% for photo in images %}
                           {% if photo.classified == classified %}
-                          {% cloudinary photo.image  width="auto" class="cld-responsive" height=150  %}
+                          {% cloudinary photo.image width="auto" class="cld-responsive" height=150 crop=fit %}
                       {{ "<!--" }}      
                       {% endif %}
                       {% endfor %}
