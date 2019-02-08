@@ -9,7 +9,7 @@ $(function () {
             if (status === 'online') {
                 elem.attr("class", "btn btn-success btn-circle");
             } else {
-                elem.attr("class", "btn btn-danger btn-circle");
+                elem.attr("class", "btn btn-dark btn-circle");
             };
         };
     };

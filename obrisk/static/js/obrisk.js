@@ -33,7 +33,7 @@ $(function () {
             cache: false,
             success: function (data) {
                 if (!data.includes(emptyMessage)) {
-                    $("#notifications").addClass("btn-danger");
+                    $("#notifications").addClass("btn-dark");
                 }
             },
         });
@@ -84,7 +84,7 @@ $(function () {
                         content: data,
                     });
                     $("#notifications").popover('show');
-                    $("#notifications").removeClass("btn-danger")
+                    $("#notifications").removeClass("btn-dark")
                 },
             });
         }
@@ -113,11 +113,11 @@ $(function () {
     webSocket.listen(function(event) {
         switch (event.key) {
             case "notification":
-                $("#notifications").addClass("btn-danger");
+                $("#notifications").addClass("btn-dark");
                 break;
 
             case "social_update":
-                $("#notifications").addClass("btn-danger");
+                $("#notifications").addClass("btn-dark");
                 update_social_activity(event.id_value);
                 break;
 

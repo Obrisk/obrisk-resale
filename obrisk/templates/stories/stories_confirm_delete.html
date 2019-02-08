@@ -11,8 +11,8 @@
 
 <form method="post" action="{% url 'stories:delete_stories' stories.pk %}">
   {% csrf_token %}
-  <button class="btn btn-danger" type="submit">{% trans 'Delete' %}</button>
-  <a href="{% url 'stories:list' %}" class="btn btn-success">Cancel</a>
+  <button class="btn btn-dark" type="submit">{% trans 'Delete' %}</button>
+  <a href="{% url 'stories:list' %}" class="btn btn-dark">Cancel</a>
 
 </form>
 
