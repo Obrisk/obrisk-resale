@@ -15,7 +15,7 @@ from django import forms
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm 
+from obrisk.classifieds.forms import ClassifiedForm
 
 import json
 import re
@@ -82,7 +82,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
                 str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
                 
-                img = ClassifiedImages(images= str_result)
+                img = ClassifiedImages(image = str_result)
                 img.classified = classified
                 img.save()
             return self.form_valid(form) 
@@ -115,13 +115,12 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
-class ReportClassifiedView(LoginRequiredMixin, CreateView):
+class ReportClassifiedView(LoginRequiredMixin, View):
     """This class has to inherit FormClass model but failed to implement that
     Update view will use the model Classified which is not a nice implementation.
     There is no need of a model here just render a form and the send email. """
 
     message = _("Your report has been submitted.")
-    form_class = ClassifiedReportForm
     template_name = 'classifieds/classified_report.html'
 
     def form_valid(self, form):
@@ -131,21 +130,6 @@ class ReportClassifiedView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
-
-
-    """ If it was a FormView then,
-    def dispatch(self, request, *args, **kwargs):
-        self.user = request.user
-        return super().dispatch(self, request, *args, **kwargs)
-
-    def get_object ()
-
-    def form_valid(self, form):
-        self.request.user = None
-        return super().form_valid(form)
-
-    def post(self , request , *args , **kwargs):
-        return super().post(self, request, *args, **kwargs)"""
 
 
 class DetailClassifiedView(LoginRequiredMixin, DetailView):

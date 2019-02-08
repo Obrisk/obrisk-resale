@@ -33,10 +33,12 @@
                    <!--Display image-->  
                    <div  style="max-height:100%; max-width:100%;">
                       {% for photo in images %}
-                      {% if photo.classified == classified %} 
-                        {% cloudinary images.first.images   width="auto" class="cld-responsive" height=150  %}
+                          {% if photo.classified == classified %}
+                          {% cloudinary photo.image  width="auto" class="cld-responsive" height=150  %}
+                      {{ "<!--" }}      
                       {% endif %}
                       {% endfor %}
+                      {{ "-->" }}
                   </div>
                   
   

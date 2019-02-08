@@ -7,7 +7,7 @@ class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
     details = forms.CharField(widget=forms.Textarea)
-    images = forms.CharField(max_length=6000, widget=forms.HiddenInput())
+    images = forms.CharField(max_length=6000, widget=forms.HiddenInput()) #This is not related with any model
 
     class Meta:
         model = Classified
@@ -15,25 +15,23 @@ class ClassifiedForm(forms.ModelForm):
         widgets = {'user': forms.HiddenInput()}
            
 
-class ClassifiedReportForm(forms.ModelForm):
-    laws = 'lw'
-    abusive = 'ab'
-    Infringes = 'in'
-    others = 'ot'
+# class ClassifiedReportForm(forms.ModelForm):
+#     laws = 'lw'
+#     abusive = 'ab'
+#     Infringes = 'in'
+#     others = 'ot'
 
-    reason_choices = (
-        (laws, "Violating the laws and regulations"),
-        (abusive, "Abusive content"),  
-        (Infringes, "Infringes my rights"),  
-        (others, "others"),  
-    )
+#     reason_choices = (
+#         (laws, "Violating the laws and regulations"),
+#         (abusive, "Abusive content"),  
+#         (Infringes, "Infringes my rights"),  
+#         (others, "others"),  
+#     )
 
-    reporter = forms.CharField(widget=forms.HiddenInput())
-    user = forms.CharField(widget=forms.HiddenInput())
-    slug = forms.SlugField(widget=forms.HiddenInput())
-    reason = forms.ChoiceField(choices= reason_choices)
-    details = forms.CharField (max_length=300, required=False, )
+#     reporter = forms.CharField(widget=forms.HiddenInput())
+#     reason = forms.ChoiceField(choices= reason_choices)
+#     details = forms.CharField (max_length=3000, required=False, )
 
-    class Meta:
-        model = Classified
-        fields = ["slug", "user"]
+#     class Meta:
+#         model = Classified
+#         fields = ["slug", "user"]
