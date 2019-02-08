@@ -1,5 +1,4 @@
 from django import forms
-
 from obrisk.classifieds.models import Classified, ClassifiedImages
 
 
@@ -11,10 +10,13 @@ class ClassifiedForm(forms.ModelForm):
 
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "located_area", "city", "tags", "images"]
+        fields = ["title", "details", "status", "edited", "price", "located_area", "tags", "images"]
         widgets = {'user': forms.HiddenInput()}
+        help_texts = {
+            "located_area": "It can be a street name, address or other description.\
+            Your city is added by default based on your location.",
+        }
            
-
 # class ClassifiedReportForm(forms.ModelForm):
 #     laws = 'lw'
 #     abusive = 'ab'

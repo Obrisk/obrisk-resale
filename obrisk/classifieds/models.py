@@ -47,14 +47,16 @@ class Classified(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.SET_NULL)
-    title = models.CharField(max_length=255, null=False)
+    title = models.CharField(max_length=255)
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
     slug = models.SlugField(max_length=300, null=True, blank=True, unique=True, editable=False)
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
     details = models.CharField(max_length=2000)
-    price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00 , null=False)
-    city = models.CharField (max_length=100, null=False)
-    located_area = models.CharField (max_length=100, null=False)
+    price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    located_area = models.CharField (max_length=100)
+    city = models.CharField (max_length=100)
+    province_region = models.CharField(max_length= 100)
+    country = models.CharField(max_length= 100)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)
     edited = models.BooleanField(default=False)
@@ -74,6 +76,13 @@ class Classified(models.Model):
         if not self.slug:
             self.slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
                                 to_lower=True, max_length=300)
+        
+        if not self.city:
+            self.city =self.user.city
+        if not self.province_region:
+            self.province_region = self.user.province_region
+        if not self.country:
+            self.country = self.user.country
 
         super().save(*args, **kwargs)
 

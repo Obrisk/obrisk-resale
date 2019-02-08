@@ -45,7 +45,7 @@
                   <div class="card-body">
                       <h4 class="card-title"> {{ classified.title}} </h4>
                       <h6 class="card-subtitle text-danger"> CNY {{ classified.price|title }} </h6> 
-                      <p class="card-text"> {{ classified.details|safe|truncatechars:70 }}</p>  
+                      <p class="card-text"> {{ classified.details|safe|truncatechars:30 }}</p>  
                       <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a>
                   </div>
 
