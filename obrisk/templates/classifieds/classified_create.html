@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% load crispy_forms_tags %}
-<!-- {% load cloudinary %} -->
 
 {% block head %}
 
@@ -20,11 +19,10 @@
     {% csrf_token %}
     {{ form|crispy }}
   
-     <button id="upload_widget" class="cloudinary-button" onclick="checkTitle()"> Upload image </button> 
+     <button id="upload_widget" class="cloud-button"> Upload images </button> 
 
-     <br> <br> 
-    <div class="form-group">
-      <button type="button" class="btn btn-dark create" onclick="setImages()" >{% trans 'Create' %}</button>
+    <div class="form-group"> <br>
+      <button type="button" class="btn btn-dark create" >{% trans 'Submit' %}</button>
       <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
       <a href="{% url 'classifieds:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
@@ -35,7 +33,6 @@
 {% endblock content %}
 
 {% block javascript %}
-<script src="{% static 'js/classifieds.js' %}"></script>
 
 <script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript">  </script>
 
@@ -50,36 +47,40 @@
     return "classifieds/" + user;
   }
   const title_id = "{{ form.title.auto_id }}";
+  const details_id = "{{ form.details.auto_id }}";
+  const located_area = "{{ form.located_area.auto_id }}";
+  const city = "{{ form.city.auto_id }}";
+  const tags = "{{ form.tags.auto_id }}";
+   
+  var img_title, details;
 
-  function checkTitle() {
-    if (!document.getElementById(title_id).value){
-        alert ("Please fill in the title of the classified ad before uploading images!");
-        return false;
-     }
-     else {
-        return true;
-     }
-  }
-  
   function getFileName() {
-      var title = document.getElementById(title_id).value;
       var d = new Date();
       var date = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
       var time = d.getHours() + "hrs-" + d.getMinutes() + "min-" + d.getSeconds() +"sec";
 
-      if (!document.getElementById(title_id).value) {
-        return "no-title" + "--" + date + "--" + time;
-      }
-      else {
-        return title + "--" + date + "--" + time;
-      }
-      
+      return date + "--" + time;    
   }
   var images = [];
-     
+    
   var myWidget = cloudinary.applyUploadWidget(document.getElementById("upload_widget"), 
   {   cloudName: "obrisk",
       upload_preset: 'hizonedev_preset',
+      button_class: 'cloud-button btn btn-dark',
+      button_caption: 'Upload Images',
+      show_powered_by: false,
+      preBatch: (cb, data) => {
+        img_title = $("#"+title_id).val();
+        details = $("#"+details_id).val();
+
+        if (!img_title || !details){
+            alert ("Please fill in other information of the classified ad before uploading images!");
+            cb ({cancel: true});  
+        }
+        else {
+            cb();
+        }
+      },
       publicId: getFileName(),
       sources: ["local","camera"], 
       maxFiles: "6",  
@@ -89,30 +90,53 @@
   },
   (error, result) => { if (result.event == "success")  { 
     //All console.log are for debugging.
-    console.log(result.info);
+    // console.log(result.info);
         var str = JSON.stringify(result.info);
         images.push (str);
 
    } });
-   console.log(images);
-
-  document.getElementById("upload_widget").addEventListener("click", function(){
-     myWidget.open();
-  }, false);
+  //  console.log(images);
 
   const images_id = "{{ form.images.auto_id }}";
-  
-  //Add the images values in the form before submitting the form.
-  function setImages() {
-    if (images.length < 1) {
-      alert("You must upload at least one image for a classified ad for people to see what you're selling!");
-    }
-    else {
-      document.getElementById(images_id).value = images;
-      console.log("Things reach here!")
-    }
+
+  $(function () {
+      $(".cloudinary-button").click(function(){
+         
+
+      });
+    $(".create").click(function (event) {
+      if (images.length < 1) {
+          event.preventDefault();
+          alert("You must upload at least one image for a classified ad for people to see what you're selling!");
+          //return false;
+      }
+      else if (!document.getElementById(located_area).value || 
+          !document.getElementById(located_area).value ||
+          !document.getElementById(located_area).value )
+          {
+              event.preventDefault();
+              alert("Please fill in all of the information!");
+      }
+      else {
+          $("input[name='images']").val(images);
+          $("input[name='image']").val(images[0]);
+          $("input[name='status']").val("A");
+          $("#classified-form").submit();
+      }
+    }); 
     
-  }
+    $(".update").click(function () {
+        $("input[name='status']").val("A");
+        //$("input[name='edited']").prop("checked");
+        $("input[name='edited']").val("True");
+        $("#classified-form").submit();
+    });
+
+    $(".draft").click(function () {
+        $("input[name='status']").val("D");
+        $("#classified-form").submit();
+    });
+});
     
 </script>
 

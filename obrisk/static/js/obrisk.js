@@ -128,7 +128,7 @@ $(function () {
                 break;
 
             default:
-                console.log('error: ', event);
+                // console.log('error: ', event);
                 break;
         };
     });

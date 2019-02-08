@@ -14,7 +14,6 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
 
 	<script>
-		var count = 0;
 		function disableSubmit() {
 		 document.getElementById("submit").disabled = true;
 		}
@@ -22,10 +21,7 @@
 		 function activateButton(element) {
 	 
 				 if(element.checked) {
-						count ++;
-						if (count === 2) {
-								document.getElementById("submit").disabled = false;
-						} 
+						document.getElementById("submit").disabled = false;
 					}
 					else  {
 					 document.getElementById("submit").disabled = true;
@@ -48,8 +44,7 @@
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
           {% csrf_token %}
 					{{ form|crispy }}
-					<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree to <a href="#">Terms & Conditions</a> <br>
-					<input type="checkbox" name="laws" id="laws" onchange="activateButton(this)">  I Agree to <a href="#">China internet laws</a>
+				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the <a href="http://www.miit.gov.cn/n1146295/n1146557/index.html">local laws</a>
 
           {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />

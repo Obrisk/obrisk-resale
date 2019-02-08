@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static i18n %}
-{% load comments crispy_forms_tags thumbnail humanize %}
+{% load cloudinary comments crispy_forms_tags thumbnail humanize %}
 
 {% block css %}
-    <link rel="stylesheet" href="{% static 'external/photoswipe/photoswipe.css' %}"> 
-    <link rel="stylesheet" href="{% static 'external/photoswipe/default-skin/default-skin.css' %}"> 
+    <!-- <link rel="stylesheet" href="{% static 'external/photoswipe/photoswipe.css' %}"> 
+    <link rel="stylesheet" href="{% static 'external/photoswipe/default-skin/default-skin.css' %}">  -->
 {% endblock css %}
 
 {% block title %}{{ classified.title|title }}{% endblock %}
@@ -25,7 +25,7 @@
       <!-- Post Content Column -->
       <div class="col-lg-8">
         <!-- Title -->
-        <h1 class="mt-4">{{ classified.title|title }}</h1>
+        <h3 class="mt-4">{{ classified.title|title }}</h3>
         <!-- Author -->
         <p class="lead">{% trans 'by' %}
           <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
@@ -41,11 +41,11 @@
 
                 <div class="container">
                     <div class="row">
-                        {% for item in images %}
-                        <a class="col s12 m3" href="javascript:pswpInit({{ forloop.counter0 }});">
-                            <img src="{{ item.thumb.url }}" class="responsive-img dpg-album-image" alt="{{ item.alt }}" />
-                        </a>
-                        {% endfor %}
+                      {% for photo in images %}
+                      <div class="photo">
+                          {% cloudinary photo.image  width=200 height=200  %}
+                      </div>
+                      {% endfor %}
                     </div>
                 </div>
             </section>
@@ -54,7 +54,10 @@
             <!-- Classified more Content -->
             <p class="card-subtitle mb-2"  >{{ classified.city }}</p>
             <p class="card-subtitle mb-2"  > {{ classified.located_area }}</p>
-            <h1 class="card-title ">{{ classified.price }} </h1> 
+            <h4 class="card-title ">{{ classified.price }} </h4> <br> 
+            {% for tag in classified.tags.names %}
+                <a href="#">{{ tag }}</a>
+            {% endfor %}
 
             <hr>
             {% if request.user == classified.user%}
@@ -64,7 +67,7 @@
             <a href="{% url 'messager:conversation_detail' classified.user %}" class="btn btn-success">{% trans 'Respond' %} </a> 
             <a href="{% url 'classifieds:list' %}" class="btn btn-dark">{% trans 'Back' %} </a> <br>
             The respond button will redirect you to start a converstation with the seller  <br> <br>
-            <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a>
+            <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
             {% endif %}
   
       </div>
@@ -72,15 +75,6 @@
 
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
-
-        <!-- Write Classified Widget -->
-        {% if request.user.is_authenticated %}
-          <div class="card my-4">
-            <div class="card-body text-center">
-              <a class="btn btn-success" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
-            </div>
-          </div>
-        {% endif %}
 
         <!-- Cloud Tag Widget -->
         <div class="card my-4">
@@ -97,38 +91,34 @@
   </div>
   <!-- /.container -->
 
-
-
-
-
        <!-- PhotoSwipe -->
   <!-- Root element of PhotoSwipe. Must have class pswp. -->
-  <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+  <!-- <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true"> -->
       <!-- Background of PhotoSwipe. 
             It's a separate element as animating opacity is faster than rgba(). -->
-      <div class="pswp__bg"></div>
+      <!-- <div class="pswp__bg"></div> -->
       <!-- Slides wrapper with overflow:hidden. -->
-      <div class="pswp__scroll-wrap">
+      <!-- <div class="pswp__scroll-wrap"> -->
           <!-- Container that holds slides. 
               PhotoSwipe keeps only 3 of them in the DOM to save memory.
               Don't modify these 3 pswp__item elements, data is added later on. -->
-          <div class="pswp__container">
+          <!-- <div class="pswp__container">
               <div class="pswp__item"></div>
               <div class="pswp__item"></div>
               <div class="pswp__item"></div>
-          </div>
+          </div> -->
           <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-          <div class="pswp__ui pswp__ui--hidden">
-              <div class="pswp__top-bar">
+          <!-- <div class="pswp__ui pswp__ui--hidden">
+              <div class="pswp__top-bar"> -->
                   <!--  Controls are self-explanatory. Order can be changed. -->
-                  <div class="pswp__counter"></div>
+                  <!-- <div class="pswp__counter"></div>
                   <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
                   <button class="pswp__button pswp__button--share" title="Share"></button>
                   <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                  <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                  <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button> -->
                   <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
                   <!-- element will get class pswp__preloader--active when preloader is running -->
-                  <div class="pswp__preloader">
+                  <!-- <div class="pswp__preloader">
                       <div class="pswp__preloader__icn">
                         <div class="pswp__preloader__cut">
                           <div class="pswp__preloader__donut"></div>
@@ -148,7 +138,7 @@
               </div>
           </div>
       </div>
-  </div>
+  </div> -->
 
 
 {% block js %}
@@ -164,8 +154,8 @@
           {% endfor %}
       ];
   </script> -->
-  <script src="{% static 'external/photoswipe/photoswipe.min.js' %}"></script> 
-  <script src="{% static 'external/photoswipe/photoswipe-ui-default.min.js' %}"></script>
+  <!-- <script src="{% static 'external/photoswipe/photoswipe.min.js' %}"></script> 
+  <script src="{% static 'external/photoswipe/photoswipe-ui-default.min.js' %}"></script> -->
 {% endblock js %}
 
 

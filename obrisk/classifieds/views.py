@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
+from django.views import View
 from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView
 from django.views.generic.edit import BaseFormView
 from django.urls import reverse
@@ -14,7 +15,7 @@ from django import forms
 
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm, ClassifiedReportForm 
+from obrisk.classifieds.forms import ClassifiedForm
 
 import json
 import re
@@ -27,22 +28,15 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
     paginate_by = 15
     context_object_name = "classifieds"
 
-    # def get_queryset(self, **kwargs):
-    #     self.classified = get_object_or_404(Classified,
-    #                                    slug=self.kwargs['classified'])
-    #     return self.classified.filter(status="ACTIVE")
-
-
     def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
+        context = super(ClassifiedsListView, self).get_context_data(*args, **kwargs)
         context['popular_tags'] = Classified.objects.get_counted_tags()
-        context['image'] = str(ClassifiedImages.objects.all())
-       
+        context['images'] = ClassifiedImages.objects.all()
         return context
 
     def get_queryset(self, **kwargs):
-        qs = Classified.objects.get_active()
-        return qs
+        return Classified.objects.get_active()
+
 
 class DraftsListView(ClassifiedsListView):
     """Overriding the original implementation to call the drafts classifieds
@@ -62,19 +56,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         # i think self.object could be as self.request.user
         self.object = None
         super().__init__(**kwargs)
-
-        # Go through keyword arguments, and either save their values to our
-        # instance, or raise an error.
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        
-        # context['user'] = self.object
-        #context = dict(images_formset = ImagesCreateFormSet())
-        #cl_init_js_callbacks(context['images_formset'], self.request)
-        return context
     
     def post(self, request, *args, **kwargs):
         """
@@ -99,19 +80,17 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 #Populate a CloudinaryResource object using the upload response
                 result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
 
-                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png" 
-
-                img = ClassifiedImages(image= str_result)
+                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
+                
+                img = ClassifiedImages(image = str_result)
                 img.classified = classified
                 img.save()
             return self.form_valid(form) 
         else:
             #ret = dict(errors=form.errors)
-            print(form.errors)
+            # print(form.errors)
             return self.form_invalid(form)
-            #return HttpResponse(json.dumps(ret), content_type='application/json')
-                
-        
+                  
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super(CreateClassifiedView, self).form_valid(form)
@@ -136,14 +115,12 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
-class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+class ReportClassifiedView(LoginRequiredMixin, View):
     """This class has to inherit FormClass model but failed to implement that
     Update view will use the model Classified which is not a nice implementation.
     There is no need of a model here just render a form and the send email. """
 
     message = _("Your report has been submitted.")
-    model = Classified
-    form_class = ClassifiedReportForm
     template_name = 'classifieds/classified_report.html'
 
     def form_valid(self, form):
@@ -155,30 +132,15 @@ class ReportClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         return reverse('classifieds:list')
 
 
-    """ If it was a FormView then,
-    def dispatch(self, request, *args, **kwargs):
-        self.user = request.user
-        return super().dispatch(self, request, *args, **kwargs)
-
-    def get_object ()
-
-    def form_valid(self, form):
-        self.request.user = None
-        return super().form_valid(form)
-
-    def post(self , request , *args , **kwargs):
-        return super().post(self, request, *args, **kwargs)"""
-
-
 class DetailClassifiedView(LoginRequiredMixin, DetailView):
     """Basic DetailView implementation to call an individual classified."""
     model = Classified
 
-    # def get_context_data(self, **kwargs):
-    #     # Call the base implementation first to get a context
-    #     context = super(DetailClassifiedView, self).get_context_data(**kwargs)
-    #     # Add in a QuerySet of all the images
-    #     context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
-    #     return context
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(DetailClassifiedView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the images
+        context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
+        return context
 
 

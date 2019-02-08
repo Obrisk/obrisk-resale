@@ -306,7 +306,7 @@
          * const webSocketBridge = new WebSocketBridge();
          * webSocketBridge.connect();
          * webSocketBridge.listen(function(payload, stream) {
-         *   console.log(payload, stream);
+        //  *   console.log(payload, stream);
          * });
          */
     

@@ -1,4 +1,4 @@
-import uuid
+import datetime
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from slugify import slugify
 
 from taggit.managers import TaggableManager
-
 from cloudinary.models import CloudinaryField
 
 
@@ -48,19 +47,21 @@ class Classified(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.SET_NULL)
-    title = models.CharField(max_length=255, null=False)
-    timestamp = models.DateTimeField(auto_now_add=True)
-    #displayImage = ProcessedImageField(upload_to=get_displayImage_filename, processors=[ResizeToFit(300)], format='JPEG', options={'quality': 90}, default=None)
-    slug = models.SlugField(max_length=80, null=True, blank=True)
+    title = models.CharField(max_length=255)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+    slug = models.SlugField(max_length=300, null=True, blank=True, unique=True, editable=False)
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
-    details = models.CharField(max_length=400)
-    price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00 , null=False)
-    city = models.CharField (max_length=100, null=False)
-    located_area = models.CharField (max_length=100, null=False)
+    details = models.CharField(max_length=2000)
+    price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    located_area = models.CharField (max_length=100)
+    city = models.CharField (max_length=100)
+    province_region = models.CharField(max_length= 100)
+    country = models.CharField(max_length= 100)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
+    date = models.DateField(default=datetime.date.today)
     objects = ClassifiedQuerySet.as_manager()
 
     class Meta:
@@ -73,8 +74,15 @@ class Classified(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(f"{self.user.username}-{self.title}",
-                                to_lower=True, max_length=80)
+            self.slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
+                                to_lower=True, max_length=300)
+        
+        if not self.city:
+            self.city =self.user.city
+        if not self.province_region:
+            self.province_region = self.user.province_region
+        if not self.country:
+            self.country = self.user.country
 
         super().save(*args, **kwargs)
 
@@ -97,5 +105,8 @@ class ClassifiedImages(models.Model):
         except AttributeError:
             public_id = ''
         return "Image <%s:%s>" % (self.classified, public_id)
+
+    def __str__(self):
+        return str(self.image)
 
 
