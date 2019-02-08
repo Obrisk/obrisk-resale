@@ -88,7 +88,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             return self.form_valid(form) 
         else:
             #ret = dict(errors=form.errors)
-            print(form.errors)
+            # print(form.errors)
             return self.form_invalid(form)
                   
     def form_valid(self, form):

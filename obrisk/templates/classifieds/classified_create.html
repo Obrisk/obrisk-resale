@@ -90,12 +90,12 @@
   },
   (error, result) => { if (result.event == "success")  { 
     //All console.log are for debugging.
-    console.log(result.info);
+    // console.log(result.info);
         var str = JSON.stringify(result.info);
         images.push (str);
 
    } });
-   console.log(images);
+  //  console.log(images);
 
   const images_id = "{{ form.images.auto_id }}";
 

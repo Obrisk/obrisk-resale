@@ -84,7 +84,7 @@ $(function () {
 
     // Helpful debugging
     webSocket.socket.onopen = function () {
-        console.log("Connected to inbox stream");
+        // console.log("Connected to inbox stream");
         // Commenting this block until I find a better way to manage how to
         // report the user status.
 
@@ -97,7 +97,7 @@ $(function () {
     };
 
     webSocket.socket.onclose = function () {
-        console.log("Disconnected from inbox stream");
+        // console.log("Disconnected from inbox stream");
     };
 
     // onmessage management.
@@ -118,8 +118,8 @@ $(function () {
                 break;
 
             default:
-                console.log('error: ', event);
-                console.log(typeof(event))
+                // console.log('error: ', event);
+                // console.log(typeof(event))
                 break;
         }
     });
