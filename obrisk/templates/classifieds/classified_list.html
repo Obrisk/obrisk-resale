@@ -28,25 +28,25 @@
         {% for classified in classifieds %}
           <!-- Classified ad. -->
           <div class="row">
-              <div class="col-sm-6">
-                <div class="card mb-4" style="max-height: 400px;">  
+              <div class="col-sm-3">
+                <div class="card mb-4" style="max-height: 300px;">  
                    <!--Display image-->  
                    <div class="card-img-top img-responsive">
                       {% for photo in images %}
                           {% if photo.classified == classified %}
-                          {% cloudinary photo.image width="auto" class="cld-responsive" height=150 crop=fit %}
+                          {% cloudinary photo.image width="auto" class="cld-responsive" height=80 crop=fit %}
                       {{ "<!--" }}      
                       {% endif %}
                       {% endfor %}
                       {{ "-->" }}
                   </div>
                   
-  
-                  <div class="card-body">
-                      <h4 class="card-title"> {{ classified.title}} </h4>
+                  <div class="card-body">  
+                      <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
+                        <h4 class="card-title" > {{ classified.title}} </h4>
+                      </a>
                       <h6 class="card-subtitle text-danger"> CNY {{ classified.price|title }} </h6> 
-                      <p class="card-text"> {{ classified.details|safe|truncatechars:30 }}</p>  
-                      <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">{% trans 'More' %} &rarr;</a>
+                      <p class="card-text"> {{ classified.details|safe|truncatechars:30 }}</p> 
                   </div>
 
                   <div class="card-footer text-muted">
@@ -82,9 +82,8 @@
             {% endif %}
           </ul>
         {% endif %}
-
       </div>
-
+    
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
         <!-- Write Classified Widget -->
