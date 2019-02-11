@@ -8,7 +8,7 @@ from .base import env
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env('SECRET_KEY')
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.obrisk.com'])
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['.obrisk.com', '13.124.153.224'])
 
 # DATABASES
 # ------------------------------------------------------------------------------

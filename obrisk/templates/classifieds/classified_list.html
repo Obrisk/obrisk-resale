@@ -22,19 +22,22 @@
         <li class="breadcrumb-item active"><a href="{% url 'classifieds:list' %}">{% trans 'Classifieds' %}</a></li>
       </ol>
     </nav>
+
     <div class="row">
-      <!-- Blog Entries Column -->
-      <div class="col-md-8">
+      <!-- Classified Entries Column -->
+      <!-- <div class="col-md-8"> -->
+        <!-- <div class="row">  -->
         {% for classified in classifieds %}
           <!-- Classified ad. -->
-          <div class="row">
-              <div class="col-sm-3">
-                <div class="card mb-4" style="max-height: 300px;">  
-                   <!--Display image-->  
+              <!-- <div class="col-sm-4"> -->
+                <div class="card mr-2 mb-3" style="max-height: 250px; max-width:150px">  
+                   <!--Display image-->
+
                    <div class="card-img-top img-responsive">
+                      <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                       {% for photo in images %}
                           {% if photo.classified == classified %}
-                          {% cloudinary photo.image width="auto" class="cld-responsive" height=80 crop=fit %}
+                          {% cloudinary photo.image width="auto:50" class="cld-responsive" height=100 crop=fit %}
                       {{ "<!--" }}      
                       {% endif %}
                       {% endfor %}
@@ -42,20 +45,23 @@
                   </div>
                   
                   <div class="card-body">  
-                      <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
-                        <h4 class="card-title" > {{ classified.title}} </h4>
-                      </a>
-                      <h6 class="card-subtitle text-danger"> CNY {{ classified.price|title }} </h6> 
-                      <p class="card-text"> {{ classified.details|safe|truncatechars:30 }}</p> 
+                        <h6 class="card-title" > {{ classified.title}} <h6> 
+                        <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
+                        <small class="card-text"> {{ classified.details|safe|truncatechars:20 }}</small>    
                   </div>
+                </a>
 
-                  <div class="card-footer text-muted">
+                  <!-- <div class="card-footer text-muted">
                       <i class="lead fa fa-user"></i>
                       <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a> <br>
-                  </div>
+                  </div> -->
                 </div>
-              </div>
-            </div>
+                <!-- <div class="row">
+                    <br><br>
+                  </div> -->
+                
+              <!-- </div> -->
+            <!-- </div> -->
         {% empty %}
           <h4 class="no-data">{% trans 'There are no classified ads based on your location. Do you want to sell something?!' %}
            <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>
@@ -83,6 +89,8 @@
           </ul>
         {% endif %}
       </div>
+
+      
     
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
@@ -106,6 +114,7 @@
         </div>
       </div>
     </div>
+  
     <!-- /.row -->
   </div>
   <!-- /.container -->

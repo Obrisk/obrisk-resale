@@ -258,12 +258,12 @@ ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 
-SOCIALACCOUNT_PROVIDERS = {
-    'weixin': {
-        'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
-        'SCOPE': ['snsapi_base'],
-    }
-}
+# SOCIALACCOUNT_PROVIDERS = {
+#     'weixin': {
+#         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
+#         'SCOPE': ['snsapi_base'],
+#     }
+# }
 
 
 # Other stuff...
