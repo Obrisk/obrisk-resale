@@ -26,18 +26,15 @@
     <div class="row">
       <!-- Classified Entries Column -->
       <!-- <div class="col-md-8"> -->
-        <!-- <div class="row">  -->
         {% for classified in classifieds %}
           <!-- Classified ad. -->
-              <!-- <div class="col-sm-4"> -->
-                <div class="card mr-2 mb-3" style="max-height: 250px; max-width:150px">  
+                <div class="card mr-2 mb-3" style="max-height: 250px; max-width:160px">  
                    <!--Display image-->
-
                    <div class="card-img-top img-responsive">
                       <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                       {% for photo in images %}
                           {% if photo.classified == classified %}
-                          {% cloudinary photo.image width="auto:50" class="cld-responsive" height=100 crop=fit %}
+                          {% cloudinary photo.image width="auto:80" class="cld-responsive" height=100 crop=fit %}
                       {{ "<!--" }}      
                       {% endif %}
                       {% endfor %}
@@ -89,8 +86,6 @@
           </ul>
         {% endif %}
       </div>
-
-      
     
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
@@ -113,7 +108,7 @@
           </div>
         </div>
       </div>
-    </div>
+    <!-- </div> -->
   
     <!-- /.row -->
   </div>

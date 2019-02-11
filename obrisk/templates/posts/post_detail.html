@@ -30,13 +30,11 @@
         <!-- Featured Image -->
         {% thumbnail post.image "900x300" as im %}
           <img src="{{ im.url }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
-        {% empty %}
-          <img class="img-fluid rounded" src="http://placehold.it/900x300" alt="Card Image">
         {% endthumbnail %}
         <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
         <hr>
         <!-- Post Content -->
-        <p class="card-text">{{ post.get_markdown|safe }}</p>
+        <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
         <hr>
 
         <!-- Comments Form >

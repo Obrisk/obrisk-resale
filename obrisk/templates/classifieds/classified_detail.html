@@ -2,11 +2,6 @@
 {% load static i18n %}
 {% load cloudinary comments crispy_forms_tags thumbnail humanize %}
 
-{% block css %}
-    <!-- <link rel="stylesheet" href="{% static 'external/photoswipe/photoswipe.css' %}"> 
-    <link rel="stylesheet" href="{% static 'external/photoswipe/default-skin/default-skin.css' %}">  -->
-{% endblock css %}
-
 {% block title %}{{ classified.title|title }}{% endblock %}
 
 {% block content %}
@@ -19,17 +14,16 @@
         <li class="breadcrumb-item active" aria-current="page">{{ classified.title|title }}</li>
       </ol>
     </nav>
-
     
     <div class="row">
       <!-- Post Content Column -->
       <div class="col-lg-8">
         <!-- Title -->
-        <h3 class="mt-4">{{ classified.title|title }}</h3>
-        <!-- Author -->
-        <p class="lead">{% trans 'by' %}
-          <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
-        </p>
+        <h4 class="mt-4 text-center">{{ classified.title|title }}</h4>
+        <!-- Location -->
+        <i class="lead fa fa-map-marker"></i> <span class="card-subtitle mb-2"> {{ classified.located_area }} </span>
+            <br> <small class="card-subtitle mb-2"  >   {{ classified.city }}</small>
+            
 
         <hr>
         <!-- Date/Time -->
@@ -37,13 +31,13 @@
 
         <hr>
         <section class="col s12 m12 l10 offset-l1">
-            <p class="card-text">{{ classified.details }}</p>
+            <p class="card-text text-justify">{{ classified.details }}</p>
 
                 <div class="container">
                     <div class="row">
                       {% for photo in images %}
-                      <div class="photo">
-                          {% cloudinary photo.image  width=200 height=200  %}
+                      <div class="photo mr-2 mb-3">
+                          {% cloudinary photo.image width=270 height=270  %}
                       </div>
                       {% endfor %}
                     </div>
@@ -52,12 +46,10 @@
        
             <hr>
             <!-- Classified more Content -->
-            <p class="card-subtitle mb-2"  >{{ classified.city }}</p>
-            <p class="card-subtitle mb-2"  > {{ classified.located_area }}</p>
-            <h4 class="card-title ">{{ classified.price }} </h4> <br> 
-            {% for tag in classified.tags.names %}
-                <a href="#">{{ tag }}</a>
-            {% endfor %}
+            <p class="lead">{% trans 'by' %}
+            <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
+            </p>
+            <h5 class="card-title "> {% trans 'CNY' %} {{ classified.price }} </h5> <br> 
 
             <hr>
             {% if request.user == classified.user%}
@@ -87,79 +79,8 @@
         </div>
       </div>
     </div>
-    <!-- /.row -->
+   
   </div>
-  <!-- /.container -->
-
-       <!-- PhotoSwipe -->
-  <!-- Root element of PhotoSwipe. Must have class pswp. -->
-  <!-- <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true"> -->
-      <!-- Background of PhotoSwipe. 
-            It's a separate element as animating opacity is faster than rgba(). -->
-      <!-- <div class="pswp__bg"></div> -->
-      <!-- Slides wrapper with overflow:hidden. -->
-      <!-- <div class="pswp__scroll-wrap"> -->
-          <!-- Container that holds slides. 
-              PhotoSwipe keeps only 3 of them in the DOM to save memory.
-              Don't modify these 3 pswp__item elements, data is added later on. -->
-          <!-- <div class="pswp__container">
-              <div class="pswp__item"></div>
-              <div class="pswp__item"></div>
-              <div class="pswp__item"></div>
-          </div> -->
-          <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-          <!-- <div class="pswp__ui pswp__ui--hidden">
-              <div class="pswp__top-bar"> -->
-                  <!--  Controls are self-explanatory. Order can be changed. -->
-                  <!-- <div class="pswp__counter"></div>
-                  <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-                  <button class="pswp__button pswp__button--share" title="Share"></button>
-                  <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-                  <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button> -->
-                  <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
-                  <!-- element will get class pswp__preloader--active when preloader is running -->
-                  <!-- <div class="pswp__preloader">
-                      <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                          <div class="pswp__preloader__donut"></div>
-                        </div>
-                      </div>
-                  </div>
-              </div>
-              <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                  <div class="pswp__share-tooltip"></div> 
-              </div>
-              <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-              </button>
-              <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-              </button>
-              <div class="pswp__caption">
-                  <div class="pswp__caption__center"></div>
-              </div>
-          </div>
-      </div>
-  </div> -->
-
-
-{% block js %}
-  <!-- <script>
-      // build the json album images collection 
-      window.djangoAlbumImages = [
-          {% for item in images %}
-              {
-                  src: '{{ item.image.url }}',
-                  w:  {{ item.width }},
-                  h:  {{ item.height }}
-              },
-          {% endfor %}
-      ];
-  </script> -->
-  <!-- <script src="{% static 'external/photoswipe/photoswipe.min.js' %}"></script> 
-  <script src="{% static 'external/photoswipe/photoswipe-ui-default.min.js' %}"></script> -->
-{% endblock js %}
-
-
-
 {% endblock content %}
 
 
