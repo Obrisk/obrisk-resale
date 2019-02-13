@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from django_private_chat import urls as django_private_chat_urls
 
 from graphene_django.views import GraphQLView
 
@@ -38,6 +39,8 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
+    url(r'^', include('django_private_chat.urls')),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

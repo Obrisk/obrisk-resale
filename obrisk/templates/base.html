@@ -56,7 +56,7 @@
                   <li class="nav-item"><a class="nav-link" href="{% url 'classifieds:list' %}">Classifieds</a></li>
                   <li class="nav-item"><a class="nav-link" href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
                   <li class="nav-item"><a class="nav-link" href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
-                  <li class="nav-item"><a class="nav-link" href="{% url 'users:list' %}">{% trans 'Chat' %}</a></li>
+                  <li class="nav-item"><a class="nav-link" href="{% url 'messager:contacts_list' %}">{% trans 'Chat' %}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                   {# if not hide_search #}
@@ -130,6 +130,9 @@
       {% endblock javascript %}
 
       {% block modal %}{% endblock modal %}
+      
+      <!-- For the chat-app-->
+      {% block extra_js %}{% endblock extra_js %}
 
     {% endblock body %}
   </body>

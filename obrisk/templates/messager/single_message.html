@@ -1,18 +1,42 @@
 {% load static i18n humanize %}
 {% load thumbnail %}
 
-<li>
-  {% thumbnail message.sender.picture "x45" as im %}
-    <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
-  {% empty %}
-    <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
-  {% endthumbnail %}
-  <div>
-    <b>
-      <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a>
-    </b>
-    <small> - {{ message.timestamp|date:'N d G:i' }}</small>
-    <br>
-    {{ message.message }}
-  </div>
-</li>
+<div class="row {% if msg.read %}msg-read{% else %}msg-unread{% endif %}"
+    data-id="{{ msg.id }}">
+        {% if msg.sender == request.user %}
+        <p class="pull-right"> 
+            <span class="timestamp pull-right">
+            <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
+            <small>{{ msg.get_formatted_create_datetime }}</small>
+            </span> </span> <br> 
+               
+            {{ msg.text }}
+            
+            <span class="pull-right">
+            {% thumbnail msg.sender.picture "x45" as im %}
+                    <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
+                {% empty %}
+                    <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
+            {% endthumbnail %}
+             </span>
+        </p>
+          
+        {% else %}
+            <p class="pull-left">
+                <span class="timestamp">
+                <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
+                <small>{{ msg.get_formatted_create_datetime }}</small>
+                </span> </span> <br>
+                {% thumbnail msg.sender.picture "x45" as im %}
+                    <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
+                {% empty %}
+                    <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
+                {% endthumbnail %}
+                {{ msg.text }}
+                
+            </p>
+            
+        {% endif %}
+    </div>
+
+

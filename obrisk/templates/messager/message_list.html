@@ -8,21 +8,20 @@
 {% endblock head %}
 
 {% block content %}
-
-<nav class="navbar fixed-top navbar-expand-md" aria-label="breadcrumb">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'messager:contacts_list' %}">{% trans 'Contacts' %}</a></li>
-        <li class="breadcrumb-item active {% if active == user.username %}active{% endif %}" aria-current="page" > {{active}} </li>
-    </ol>
-  </nav>
+<!-- <nav aria-label="breadcrumb ">
+  <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
+      <li class="breadcrumb-item" ><a href="{% url 'messager:contacts_list' %}"> {% trans 'Chat' %}</a>  </li>
+      <li class="breadcrumb-item active {% if active == user.username %}active{% endif %}" aria-current="page" > {{active}} </li>
+  </ol>
+</nav> -->
 
   <div class="row" style="margin-top: 1em">
     <div id="conversation" class="col-md-9">
       <div id="messages" class="messages-list">
         {% if message_list %}
           {% for message in message_list %}
-            {% include 'messager/single_message.html' with message=message %}
+           
           {% endfor %}
         {% else %}
           <h4>{% trans 'This is the begining of a great new conversation.' %}</h4>

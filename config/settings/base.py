@@ -69,6 +69,7 @@ THIRD_PARTY_APPS = [
     'crispy_forms',
     'cloudinary',
     'material',
+    'django_private_chat',
     'sorl.thumbnail',
     'phonenumber_field',
     'allauth',
@@ -293,3 +294,8 @@ CHANNEL_LAYERS = {
 GRAPHENE = {
     'SCHEMA': 'obrisk.schema.schema'
 }
+
+CHAT_WS_SERVER_HOST = 'localhost'
+CHAT_WS_SERVER_PORT = 5002
+CHAT_WS_SERVER_PROTOCOL = 'ws'
+DATETIME_FORMAT ='M d H:i'

@@ -36,6 +36,7 @@ class User(AbstractUser):
     points = models.IntegerField(default=0)
     phone_number = PhoneNumberField(default="Unknown_phone_no")  #Needs a country's code 
     is_official = models.BooleanField (default=False)      #For the use of published posts
+    is_seller = models.BooleanField (default=False)  #For sellers in Classifieds.
 
 
     def __str__(self):
