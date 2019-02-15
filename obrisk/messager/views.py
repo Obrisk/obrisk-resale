@@ -88,7 +88,7 @@ def send_message(request):
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message)
         return render(request, 'messager/single_message.html',
-                      {'message': msg})
+                      {'msg': msg})
 
     return HttpResponse()
 
@@ -102,4 +102,4 @@ def receive_message(request):
     message_id = request.GET.get('message_id')
     message = Message.objects.get(pk=message_id)
     return render(request,
-                  'messager/single_message.html', {'message': message})
+                  'messager/single_message.html', {'msg': message})

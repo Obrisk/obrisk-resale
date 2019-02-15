@@ -38,8 +38,6 @@ $(function () {
         });
     };
 
-    
-
     $("#send").submit(function () {
         $.ajax({
             url: '/messages/send-message/',
@@ -118,8 +116,8 @@ $(function () {
                 break;
 
             default:
-                // console.log('error: ', event);
-                // console.log(typeof(event))
+                console.log('error: ', event);
+                console.log(typeof(event))
                 break;
         }
     });

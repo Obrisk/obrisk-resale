@@ -37,14 +37,13 @@
                 <div class="add-message">
                     <div class="form-group input-group">
                         <textarea id="chat-message" class="form-control message"
-                                  placeholder="{% trans 'Write a message' %}"></textarea>
-                    
+                                  placeholder="{% trans 'Write a message' %}"></textarea>                   
                     
                     <div class="clearfix">
-                            <br><button id="btn btn-dark btn-send-message" type="submit" class="pull-right send-message"
-                            style="margin-left: 10px;" >  <i class="fa fa-paper-plane-o" aria-hidden="true"></i>
+                            <br><button id="btn-send-message" type="submit" class="pull-right send-message"
+                            style="margin-left: 10px;" >  <i class="fa fa-paper-plane-o" aria-hidden="true"></i> </button>
                     </div>       
-                </div>
+                 </div>
                 </div>
             </div>
         </div>
@@ -103,24 +102,59 @@
                 });
             }
 
+            // function addNewMessage(packet) {
+            //     var msg_class = "";
+            //     if (packet['sender_name'] == $("#owner_username").val()) {
+            //         msg_class = "pull-right";
+
+            //         var msgElemOwner =
+            //         $('<div class="row msg-unread" data-id="' + packet.message_id + '">' +
+            //             '<p class="' + msg_class + '">' +
+            //             '<span>' + packet['sender_name'] + ': </span>' + + 
+            //             packet['message'] +
+            //             ' <span class="timestamp">&ndash; <span data-livestamp="' + packet['created'] + '"> ' + packet['created'] + '</span></span> ' +
+            //             '</p> ' +
+            //             '</div>');
+            //         $('#messages').append(msgElemOwner);
+
+            //     } else {
+            //         msg_class = "pull-left";
+
+            //         var msgElemOpponent =
+            //         $('<div class="row msg-unread" data-id="' + packet.message_id + '">' +
+            //             '<p class="' + msg_class + '">' +
+            //             '<span>' + packet['sender_name'] + ': </span>' +
+            //             packet['message'] +
+            //             ' <span class="timestamp">&ndash; <span data-livestamp="' + packet['created'] + '"> ' + packet['created'] + '</span></span> ' +
+            //             '</p> ' +
+            //             '</div>');
+            //         $('#messages').append(msgElemOpponent);
+            //         }
+            //         scrollToLastMessage();
+            //     }
+
             function addNewMessage(packet) {
-                var msg_class = "";
-                if (packet['sender_name'] == $("#owner_username").val()) {
-                    msg_class = "pull-left";
-                } else {
-                    msg_class = "pull-right";
-                }
-                var msgElem =
-                    $('<div class="row msg-unread" data-id="' + packet.message_id + '">' +
-                        '<p class="' + msg_class + '">' +
-                        '<span class="username">' + packet['sender_name'] + ': </span>' +
-                        packet['message'] +
-                        ' <span class="timestamp">&ndash; <span data-livestamp="' + packet['created'] + '"> ' + packet['created'] + '</span></span> ' +
-                        '</p> ' +
-                        '</div>');
-                $('#messages').append(msgElem);
-                scrollToLastMessage()
-            }
+                /* This function calls the respective AJAX view, so it will be able to
+                load the received message in a proper way.
+                */
+                $.ajax({
+                    url: 'messager/messages/receive-message/',
+                    type: "GET",
+                    data: {'message_id': message_id},
+                    cache: false
+                    //Below code is just not working...
+                    // success: function (data) {
+                    //     alert("Inside success");
+                    //     //$(".messages").before(data);
+                    //     $('#messages').append(data);
+                    //     scrollToLastMessage();
+                    // },
+                    // error: function (data) {
+                    //     alert("This is a failure");
+                    //     alert(data.status +" " + data.statusText +"   " + data);
+                    // }
+                });
+            };                         
 
             function scrollToLastMessage() {
                 var $msgs = $('#messages');
