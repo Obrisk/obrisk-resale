@@ -42,7 +42,7 @@ class DraftsListView(ClassifiedsListView):
     """Overriding the original implementation to call the drafts classifieds
     list."""
     def get_queryset(self, **kwargs):
-        return Classified.objects.get_expireds()
+        return Classified.objects.get_expired()
 
 
 class CreateClassifiedView(LoginRequiredMixin, CreateView):

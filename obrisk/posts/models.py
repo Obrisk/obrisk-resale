@@ -21,7 +21,7 @@ class PostQuerySet(models.query.QuerySet):
         """Returns only the published items in the current queryset."""
         return self.filter(status="P")
 
-    def get_expireds(self):
+    def get_expired(self):
         """Returns only the items marked as DRAFT in the current queryset."""
         return self.filter(status="D")
 

@@ -100,10 +100,6 @@
   const images_id = "{{ form.images.auto_id }}";
 
   $(function () {
-      $(".cloudinary-button").click(function(){
-         
-
-      });
     $(".create").click(function (event) {
       if (images.length < 1) {
           event.preventDefault();
@@ -125,13 +121,6 @@
       }
     }); 
     
-    $(".update").click(function () {
-        $("input[name='status']").val("A");
-        //$("input[name='edited']").prop("checked");
-        $("input[name='edited']").val("True");
-        $("#classified-form").submit();
-    });
-
     $(".draft").click(function () {
         $("input[name='status']").val("D");
         $("#classified-form").submit();

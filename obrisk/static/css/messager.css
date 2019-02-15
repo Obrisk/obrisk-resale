@@ -29,14 +29,9 @@
   margin-left: 60px;
 }
 
-.messages-list .picture {
+/* .messages-list .picture {
   border-radius: 5px;
   float: left;
-}
+} */
 
-.chat-box {
-  position: fixed;
-  bottom: 0;
-  width: 43%;
-  background-color: white;
-}
+

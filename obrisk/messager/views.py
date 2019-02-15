@@ -99,7 +99,16 @@ def send_message(request):
 def receive_message(request):
     """Simple AJAX functional view to return a rendered single message on the
     receiver side providing realtime connections."""
-    message_id = request.GET.get('message_id')
-    message = Message.objects.get(pk=message_id)
+
+    class Empty(): pass
+    msg = Empty()
+    msg.text = request.GET.get('packet[message]')
+    msg.get_formatted_create_datetime = request.GET.get('packet[created]')
+    msg.sender = request.GET.get('packet[sender_name]')
+    msg.id = request.GET.get('packet[message_id]')
+    #override the request.user only this time when ajax is called
+    #Since it is an asgi request user is not passed.
+    request.user = request.GET.get('packet[sender_name]')
+
     return render(request,
-                  'messager/single_message.html', {'msg': message})
+                  'messager/single_message.html', {'msg': msg })

@@ -7,6 +7,7 @@ from django.views import defaults as default_views
 from django_private_chat import urls as django_private_chat_urls
 
 from graphene_django.views import GraphQLView
+from obrisk.messager import views
 
 urlpatterns = [
     url(r'^$',
@@ -17,6 +18,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/terms.html'), name='terms_and_conditions'),
     url(r'^privacy-policy/$',
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
+    url(r'^dialogs/receive-message', views.receive_message, name='receive_message_2' ),
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),

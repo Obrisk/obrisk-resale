@@ -4,29 +4,30 @@
 <div class="row {% if msg.read %}msg-read{% else %}msg-unread{% endif %}"
     data-id="{{ msg.id }}">
         {% if msg.sender == request.user %}
-        <p class="pull-right"> 
-            <span class="timestamp pull-right">
+        <p class="float-right"> 
+            <span class="timestamp float-right">
             <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
             <small>{{ msg.get_formatted_create_datetime }}</small>
             </span> </span> <br> 
                
             {{ msg.text }}
             
-            <span class="pull-right">
+            <span class="float-right">
             {% thumbnail msg.sender.picture "x45" as im %}
                     <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
                 {% empty %}
                     <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
             {% endthumbnail %}
              </span>
-        </p>
+            </p>
           
         {% else %}
-            <p class="pull-left">
+            <p class="float-left">
                 <span class="timestamp">
                 <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
                 <small>{{ msg.get_formatted_create_datetime }}</small>
                 </span> </span> <br>
+
                 {% thumbnail msg.sender.picture "x45" as im %}
                     <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
                 {% empty %}

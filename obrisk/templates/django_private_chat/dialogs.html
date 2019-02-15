@@ -20,10 +20,12 @@
                     </div>
                 </div>
 
-                <p> {{ opponent_username }}  </p>
-                <p class="text-success" id="online-status" style="display: none">{% trans "Online" %}</p>
-                <p class="text-danger" id="offline-status" style="display: none">{% trans "Offline" %}</p>
+                <p>{{ opponent_username }} </p>
+                <p class="text-success" id="online-status" style="display: none"> {% trans " online" %}</p>
+                <p class="text-danger" id="offline-status" style="display: none"> {% trans " offline" %}</p> 
+            </div>
 
+            <div class="row">
                 <div class="messages-container">
                     <div id="messages" class="messages">
                         {% for msg in active_dialog.messages.all %}
@@ -33,27 +35,26 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="add-message">
-                    <div class="form-group input-group">
-                        <textarea id="chat-message" class="form-control message"
-                                  placeholder="{% trans 'Write a message' %}"></textarea>                   
-                    
-                    <div class="clearfix">
-                            <br><button id="btn-send-message" type="submit" class="pull-right send-message"
-                            style="margin-left: 10px;" >  <i class="fa fa-paper-plane-o" aria-hidden="true"></i> </button>
-                    </div>       
-                 </div>
-                </div>
-            </div>
         </div>
-
     </div>
+
+    <div class="chat-box">
+        <div class="form-group input-group">
+            <textarea id="chat-message" class="form-control message"
+                      placeholder="{% trans 'Write a message...' %}"></textarea>                   
+        
+        <div class="clearfix">
+            <br><button id="btn-send-message" type="submit" class="pull-right send-message"
+            style="margin-left: 10px;" >  <i class="fa fa-paper-plane-o" aria-hidden="true"></i> </button>
+        </div>       
+     </div>
+</div>
 {% endblock %}
 
-{% block extra_js %}
-    {{ block.super }}
-    <script src="https://cdn.bootcss.com/scrollmonitor/1.2.0/scrollMonitor.js" integrity="sha384-GgtEIjD01yDlOcDAsSSMEyML+UEOhdE2y46zHpUAwB0z0ISvwvD6AfCtvk+nvj+B" crossorigin="anonymous"></script>
+{% block extra_js %} 
+{{ block.super }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/scrollmonitor/1.2.0/scrollMonitor.js"
+            integrity="sha256-BseZlDlA+yL4qu+Voi82iFa5aaifralQEXIjOjaXgeo=" crossorigin="anonymous"></script>
     <script>
         var base_ws_server_path = "{{ ws_server_path }}";
         $(document).ready(function () {
@@ -138,21 +139,19 @@
                 load the received message in a proper way.
                 */
                 $.ajax({
-                    url: 'messager/messages/receive-message/',
+                    url: 'receive-message/',
                     type: "GET",
-                    data: {'message_id': message_id},
-                    cache: false
+                    data: {'packet': packet},
                     //Below code is just not working...
-                    // success: function (data) {
-                    //     alert("Inside success");
-                    //     //$(".messages").before(data);
-                    //     $('#messages').append(data);
-                    //     scrollToLastMessage();
-                    // },
-                    // error: function (data) {
-                    //     alert("This is a failure");
-                    //     alert(data.status +" " + data.statusText +"   " + data);
-                    // }
+                    success: function (data) {
+                        //$(".messages").before(data);
+                        $('#messages').append(data);
+                        scrollToLastMessage();
+                    },
+                    error: function (data) {
+                        alert("This is a failure");
+                        alert(data.status +" " + data.statusText +"   " + data);
+                    }
                 });
             };                         
 
@@ -339,4 +338,4 @@
         });
 
     </script>
-{% endblock %}
+{% endblock extra_js %}
