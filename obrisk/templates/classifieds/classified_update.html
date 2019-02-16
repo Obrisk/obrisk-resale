@@ -20,7 +20,7 @@
     <div class="form-group">
       <button type="button" class="btn btn-dark update">{% trans 'Update' %}</button>
       <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
-      <a href="{% url 'classifieds:drafts' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+      <a href="{% url 'classifieds:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
   </form>
   {{ form.media }}
@@ -33,6 +33,7 @@
     $(function () {
         $(".update").click(function () {
           $("input[name='status']").val("A");
+          $("input[name='images']").val("samples/ecommerce/accessories-bag.jpg");
           //$("input[name='edited']").prop("checked");
           $("input[name='edited']").val("True");
           $("#classified-form").submit();

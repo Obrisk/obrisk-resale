@@ -39,7 +39,7 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
 
 
 class DraftsListView(ClassifiedsListView):
-    """Overriding the original implementation to call the drafts classifieds
+    """Overriding the original implementation to call the expired classifieds
     list."""
     def get_queryset(self, **kwargs):
         return Classified.objects.get_expired()
@@ -109,6 +109,7 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        #form.instance.images = ClassifiedImages.objects.filter(classified=self.object.id)
         return super().form_valid(form)
 
     def get_success_url(self):
