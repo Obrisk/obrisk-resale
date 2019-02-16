@@ -107,9 +107,9 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_update.html'
 
+    #In this form there is an image that is not saved, deliberately since you can't upload images.
     def form_valid(self, form):
         form.instance.user = self.request.user
-        #form.instance.images = ClassifiedImages.objects.filter(classified=self.object.id)
         return super().form_valid(form)
 
     def get_success_url(self):

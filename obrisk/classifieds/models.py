@@ -1,4 +1,5 @@
 import datetime
+import itertools
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
@@ -73,10 +74,17 @@ class Classified(models.Model):
         return self.title
 
     def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
-                                to_lower=True, max_length=300)
         
+        if not self.slug:
+            self.slug = first_slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
+                                to_lower=True, max_length=300)
+            
+            for x in itertools.count(1):
+                if not Classified.objects.filter(slug=self.slug).exists():
+                    break
+                self.slug = '%s-%d' % (first_slug, x)
+
+        #These locations will be taken from the user's profile, else he has to change location.
         if not self.city:
             self.city =self.user.city
         if not self.province_region:
