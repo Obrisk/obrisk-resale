@@ -1,3 +1,6 @@
+import datetime
+import itertools
+
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
@@ -21,7 +24,7 @@ class PostQuerySet(models.query.QuerySet):
         """Returns only the published items in the current queryset."""
         return self.filter(status="P")
 
-    def get_expired(self):
+    def get_draft(self):
         """Returns only the items marked as DRAFT in the current queryset."""
         return self.filter(status="D")
 
@@ -70,6 +73,7 @@ class Post(models.Model):
     category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
+    date = models.DateField(default=datetime.date.today) #Just for slug.
     objects = PostQuerySet.as_manager()
 
     class Meta:
@@ -82,8 +86,13 @@ class Post(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(f"{self.user.username}-{self.title}",
-                                to_lower=True, max_length=80)
+            self.slug = first_slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
+                                to_lower=True, max_length=300)
+            
+            for x in itertools.count(1):
+                if not Post.objects.filter(slug=self.slug).exists():
+                    break
+                self.slug = '%s-%d' % (first_slug, x)
 
         super().save(*args, **kwargs)
 

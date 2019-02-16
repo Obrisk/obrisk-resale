@@ -87,7 +87,7 @@
         {% if request.user.is_authenticated  and request.user.is_official %}
           <div class="card my-4">
             <div class="card-body text-center">
-              <a class="btn btn-success" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
+              <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
               {%if request.user == post.user %}
               <a class="btn btn-dark" href="{% url 'posts:drafts' %}" title="{% trans 'Drafts' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Drafts' %}</a>
               {% endif %}

@@ -79,7 +79,7 @@
         {% if request.user == post.user %}
           <div class="card my-4">
             <div class="card-body text-center">
-              <a class="btn btn-success" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
+              <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
               <a class="btn btn-dark" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
             </div>
           </div>

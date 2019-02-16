@@ -11,7 +11,7 @@
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
       <!-- <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'posts' %}</a></li> -->
-      <li class="breadcrumb-item active" aria-current="page">{% trans 'Post a new article, job, an event, e.t.c' %}</li>
+      <li class="breadcrumb-item active" aria-current="page">{% trans 'Post new contents' %}</li>
     </ol>
   </nav>
   <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data"  id="posts-form" method="post" role="form">

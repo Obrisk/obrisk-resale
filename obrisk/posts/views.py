@@ -28,7 +28,7 @@ class DraftsListView(PostsListView):
     """Overriding the original implementation to call the drafts Posts
     list."""
     def get_queryset(self, **kwargs):
-        return Post.objects.get_expired()
+        return Post.objects.get_draft()
 
 
 class CreatePostView(LoginRequiredMixin, CreateView):
