@@ -1,14 +1,13 @@
 .messages-container {
   height: 300px;
-  border: 1px solid #DDD;
+  /* border: 1px solid #DDD; */
   position: relative;
 }
 
 .messages {
   box-sizing: border-box;
   padding: 20px;
-  overflow-y: auto;
-  /* overflow: auto;*/
+  overflow: auto;
   height: 300px;
 }
 
@@ -41,10 +40,6 @@
   color: #ffffff;
 }
 
-.add-message {
-  margin-top: 20px;
-}
-
 .away span {
   color: #666;
   font-style: italic;
@@ -59,9 +54,18 @@
   background-color: #aacc99;
 }
 
+.messages .left-picture {
+  border-radius: 5px;
+  float: left;
+}
+
+.messages .right-picture {
+  border-radius: 5px;
+  float: right;
+}
+
 .chat-box {
   position: fixed;
   bottom: 0;
-  width: 43%;
   background-color: white;
 }

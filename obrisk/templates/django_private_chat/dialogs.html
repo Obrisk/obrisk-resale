@@ -4,50 +4,71 @@
 {% load humanize %}
 {% load thumbnail %}
 
-{% block css %}
-    {{ block.super }}
-    <link href="{% static 'css/django_private_chat.css' %}" rel="stylesheet" type="text/css" media="all">
-{% endblock css %}
+{% block head %}
+    <link href="{% static 'css/django_private_chat.css' %}" rel="stylesheet" >
+{% endblock head %}
 
 {% block content %}
-    <input id="owner_username" type="hidden" value="{{ request.user.username }}">
-    <div class="container">
-        <div class="col-md-9">
-            <div class="row">
-                <div class="col-md-3 col-md-offset-9">
-                    <div class="pull-right" hidden id="typing-text">
-                        <strong>{{ opponent_username }} {% trans "is typing..." %}</strong>
-                    </div>
-                </div>
+<input id="owner_username" type="hidden" value="{{ request.user.username }}">
+    <!-- <div class="col-md-3">
+        <div class="user-list-div">
+            <ul>
+                {% for dialog in object_list %}
+                    <li>
+                        {% if dialog.owner == request.user %}
+                            {% with dialog.opponent.username as username %}
+                                <a href="{% url 'dialogs_detail' username %}" id="user-{{ username }}"
+                                   class="btn btn-danger">{% trans "Chat with" %} {{ username }}</a>
+                            {% endwith %}
+                        {% else %}
+                            {% with dialog.owner.username as username %}
+                                <a href="{% url 'dialogs_detail' username %}" id="user-{{ username }}"
+                                   class="btn btn-danger">{% trans "Chat with" %} {{ username }}</a>
+                            {% endwith %}
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div> -->
 
-                <p>{{ opponent_username }} </p>
-                <p class="text-success" id="online-status" style="display: none"> {% trans " online" %}</p>
-                <p class="text-danger" id="offline-status" style="display: none"> {% trans " offline" %}</p> 
+<div class="container">
+    <div class="col-md-9">
+        <div class="row">
+            <div class="col-md-3 col-md-offset-9">
+                <span class="pull-right" hidden id="typing-text">
+                    <strong>{{ opponent_username }} {% trans "is typing..." %}</strong>
+                </span>
             </div>
+            <p> {{ opponent_username }}-</p>
+                
+            <p class="text-success" id="online-status" style="display: none">{% trans " online" %}</p>
+            <p class="text-danger" id="offline-status" style="display: none">{% trans " offline" %}</p> 
+        </div>
 
-            <div class="row">
-                <div class="messages-container">
-                    <div id="messages" class="messages">
-                        {% for msg in active_dialog.messages.all %}
+            <div class="messages-container">
+                <div id="messages" class="messages">
+                    {% for msg in active_dialog.messages.all %}
                         {% include 'messager/single_message.html' with msg=msg %}
-                        {% endfor %}
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
+        
 
+        <div class="row chat-box">
+                <div class="form-group input-group">
+                    <textarea id="chat-message" class="form-control message"
+                              placeholder="{% trans 'Write a message...' %}"></textarea>
+                
+                    <div class="form-group clearfix">
+                    <br><button class="btn btn-dark pull-right" id="btn-send-message" type="submit" value="{% trans 'Send' %}"  style="margin-left: 10px;">
+                    <i class="fa fa-paper-plane-o  send-message" aria-hidden="true"></i>
+                
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="chat-box">
-        <div class="form-group input-group">
-            <textarea id="chat-message" class="form-control message"
-                      placeholder="{% trans 'Write a message...' %}"></textarea>                   
-        
-        <div class="clearfix">
-            <br><button id="btn-send-message" type="submit" class="pull-right send-message"
-            style="margin-left: 10px;" >  <i class="fa fa-paper-plane-o" aria-hidden="true"></i> </button>
-        </div>       
-     </div>
 </div>
 {% endblock %}
 
@@ -149,8 +170,7 @@
                         scrollToLastMessage();
                     },
                     error: function (data) {
-                        alert("This is a failure");
-                        alert(data.status +" " + data.statusText +"   " + data);
+                        console.log(data.status +" " + data.statusText +" " + data);
                     }
                 });
             };                         

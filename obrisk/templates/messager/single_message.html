@@ -7,31 +7,31 @@
         <p class="float-right"> 
             <span class="timestamp float-right">
             <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
-            <small>{{ msg.get_formatted_create_datetime }}</small>
+            <small>  {{ msg.get_formatted_create_datetime }}-</small>
+            <span class="username">{{ msg.sender}}</span>
             </span> </span> <br> 
                
             {{ msg.text }}
             
-            <span class="float-right">
             {% thumbnail msg.sender.picture "x45" as im %}
-                    <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
+                    <img class="right-picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
                 {% empty %}
-                    <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
+                    <img class="right-picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
             {% endthumbnail %}
-             </span>
-            </p>
+        </p>
           
         {% else %}
             <p class="float-left">
                 <span class="timestamp">
+                <span class="username">{{ msg.sender}}-</span>
                 <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
                 <small>{{ msg.get_formatted_create_datetime }}</small>
                 </span> </span> <br>
 
                 {% thumbnail msg.sender.picture "x45" as im %}
-                    <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
+                    <img class="left-picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
                 {% empty %}
-                    <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
+                    <img class="left-picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
                 {% endthumbnail %}
                 {{ msg.text }}
                 

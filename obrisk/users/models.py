@@ -37,7 +37,8 @@ class User(AbstractUser):
     phone_number = PhoneNumberField(default="Unknown_phone_no")  #Needs a country's code 
     is_official = models.BooleanField (default=False)      #For the use of published posts
     is_seller = models.BooleanField (default=False)  #For sellers in Classifieds.
-
+    # near future please add unique 12 digit ID to use instead of username for url's especially in chat.
+    #https://stackoverflow.com/questions/42703059/how-to-create-a-8-digit-unique-id-in-python
 
     def __str__(self):
         return self.username
