@@ -14,14 +14,14 @@
             {{ msg.text }}
             
             {% thumbnail msg.sender.picture "x45" as im %}
-                    <img class="right-picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
+                    <img class="float-right" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
                 {% empty %}
-                    <img class="right-picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
+                    <img class="float-right" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
             {% endthumbnail %}
         </p>
           
         {% else %}
-            <p class="float-left">
+            <p>
                 <span class="timestamp">
                 <span class="username">{{ msg.sender}}-</span>
                 <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
