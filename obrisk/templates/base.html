@@ -125,7 +125,10 @@
             if($.fn.cloudinary_fileupload !== undefined) {
               $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
             }
-          }); 
+          });
+
+          // Raven.config('{% sentry_dsn %}').install();
+          // window.onerror = Raven.process; 
         </script>
       {% endblock javascript %}
 
