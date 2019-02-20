@@ -59,6 +59,7 @@ docs/_build/
 media/
 
 .env
+.env.prod
 
 venv_obrisk/
 staticfiles

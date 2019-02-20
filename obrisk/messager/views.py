@@ -106,9 +106,13 @@ def receive_message(request):
     msg.get_formatted_create_datetime = request.GET.get('packet[created]')
     msg.sender = request.GET.get('packet[sender_name]')
     msg.id = request.GET.get('packet[message_id]')
-    #override the request.user only this time when ajax is called
-    #Since it is an asgi request user is not passed.
-    request.user = request.GET.get('packet[sender_name]')
+    #check the request.user only this time when ajax is called
+    #Since it is an asgi request.user is not passed in template.
+    is_owner = False
+    user = str(request.user)
+    sender = str(msg.sender)
+    if user == sender:
+        is_owner = True
 
-    return render(request,
-                  'messager/single_message.html', {'msg': msg })
+    return render(request, 
+            'messager/single_message.html', {'msg': msg, 'is_owner':is_owner })
