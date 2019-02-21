@@ -7,8 +7,9 @@ from .base import env
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env('SECRET_KEY')
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['obrisk.com', 'www.obrisk.com', '54.180.169.125'])
+ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com', '54.180.169.125']
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -204,7 +205,7 @@ RAVEN_CONFIG = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-CHAT_WS_SERVER_HOST = '127.0.0.1'
+CHAT_WS_SERVER_HOST = '128.0.0.2'
 CHAT_WS_SERVER_PORT = 8002
 CHAT_WS_SERVER_PROTOCOL = 'ws'
 DATETIME_FORMAT ='M d H:i'
