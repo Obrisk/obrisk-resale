@@ -36,7 +36,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     model = Post
     message = _("Your Post has been created.")
     form_class = PostForm
-    template_name = 'posts/Post_create.html'
+    template_name = 'posts/post_create.html'
 
     def form_valid(self, form):
         form.instance.user = self.request.user

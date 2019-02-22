@@ -272,7 +272,7 @@ SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 cloudinary.config( 
   cloud_name = env('CLOUDINARY_NAME', default='obrisk'), 
   api_key = env.int('CLOUDINARY_API_KEY', default=552744827567953), 
-  api_secret = env("CLOUDINARY_API_SECRET", default='YBJU2LnEKll7BPqZ6Gzu1phoUks') 
+  api_secret = env('CLOUDINARY_API_SECRET', default='YBJU2LnEKll7BPqZ6Gzu1phoUks') 
 )
 
 # REDIS setup
