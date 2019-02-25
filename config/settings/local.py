@@ -74,7 +74,7 @@ INSTALLED_APPS += ['django_extensions']  # noqa F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-CHAT_WS_SERVER_HOST = '192.168.0.106'
+CHAT_WS_SERVER_HOST = '192.168.0.104'
 CHAT_WS_SERVER_PORT = 8001
 CHAT_WS_SERVER_PROTOCOL = 'ws'
 DATETIME_FORMAT ='M d H:i'
