@@ -11,7 +11,7 @@ body {
 hr {
   max-width: 50px;
   border-width: 3px;
-  border-color: #F05F40;
+  border-color: #0aeee3;
 }
 
 hr.light {
@@ -19,14 +19,14 @@ hr.light {
 }
 
 a {
-  color: #F05F40;
+  color: black;
   -webkit-transition: all 0.2s;
   -moz-transition: all 0.2s;
   transition: all 0.2s;
 }
 
 a:hover {
-  color: #f05f40;
+  color: #0aeee3;
 }
 
 h1,
@@ -39,7 +39,7 @@ h6 {
 }
 
 .bg-primary {
-  background-color: #F05F40 !important;
+  background-color: #0aeee3 !important;
 }
 
 .bg-dark {
@@ -113,12 +113,12 @@ img::-moz-selection {
 #mainNav .navbar-brand {
   font-weight: 700;
   text-transform: uppercase;
-  color: #F05F40;
+  color: #0aeee3;
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
-  color: #f05f40;
+  color: #0aeee3;
 }
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link,
@@ -131,12 +131,12 @@ img::-moz-selection {
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link:hover,
 #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
-  color: #F05F40;
+  color: #0aeee3;
 }
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link.active,
 #mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active {
-  color: #F05F40 !important;
+  color: #0aeee3 !important;
   background-color: transparent;
 }
 
@@ -172,10 +172,10 @@ img::-moz-selection {
     background-color: #fff;
   }
   #mainNav.navbar-shrink .navbar-brand {
-    color: #F05F40;
+    color: #0aeee3;
   }
   #mainNav.navbar-shrink .navbar-brand:focus, #mainNav.navbar-shrink .navbar-brand:hover {
-    color: #f05f40;
+    color: #0aeee3;
   }
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
@@ -183,7 +183,7 @@ img::-moz-selection {
   }
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
-    color: #F05F40;
+    color: #0aeee3;
   }
 }
 
@@ -303,7 +303,11 @@ header.masthead p {
 }
 
 .text-primary {
-  color: #F05F40 !important;
+  color: white !important;
+}
+
+.text-secondary {
+  color: #0aeee3 !important
 }
 
 .btn {
@@ -319,15 +323,15 @@ header.masthead p {
 }
 
 .btn-dark {
-  background-color: #F05F40;
-  border-color: #F05F40;
+  background-color: white;
+  border-color: white;
 }
 
 .btn-dark:hover, .btn-dark:focus, .btn-dark:active {
   color: #fff;
-  background-color: #ee4b28 !important;
+  background-color: #0aeee3 !important;
 }
 
 .btn-dark:active, .btn-dark:focus {
-  box-shadow: 0 0 0 0.2rem rgba(240, 95, 64, 0.5) !important;
+  box-shadow: 0 0 0 0.2rem #0aeee3 !important;
 }
