@@ -44,21 +44,13 @@
                   <div class="card-body">  
                         <h6 class="card-title" > {{ classified.title}} <h6> 
                         <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
-                        <small class="card-text"> {{ classified.details|safe|truncatechars:20 }}</small>    
+                        <i class="lead fa fa-map-marker"></i>
+                        <span class="card-text small "> {{ classified.located_area|safe }}</span>    
                   </div>
                 </a>
-
-                  <!-- <div class="card-footer text-muted">
-                      <i class="lead fa fa-user"></i>
-                      <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a> <br>
-                  </div> -->
-                </div>
-                <!-- <div class="row">
-                    <br><br>
-                  </div> -->
-                
-              <!-- </div> -->
-            <!-- </div> -->
+              </div>
+              
+             
         {% empty %}
           <h4 class="no-data">{% trans 'There are no classified ads based on your location. Do you want to sell something?!' %}
            <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>

@@ -66,8 +66,8 @@ class Post(models.Model):
     image = models.ImageField(
         _('Featured image'), upload_to='posts_pictures/%Y/%m/%d/')
     timestamp = models.DateTimeField(auto_now_add=True)
-    title = models.CharField(max_length=255, null=False, unique=True)
-    slug = models.SlugField(max_length=80, null=True, blank=True)
+    title = models.CharField(max_length=80, null=False, unique=True)
+    slug = models.SlugField(max_length=150, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
     content = MarkdownxField()
     category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
@@ -87,7 +87,7 @@ class Post(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = first_slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
-                                to_lower=True, max_length=300)
+                                to_lower=True, max_length=150)
             
             for x in itertools.count(1):
                 if not Post.objects.filter(slug=self.slug).exists():
