@@ -23,31 +23,25 @@
       <div class="col-md-8">
         {% for post in posts %}
           <!-- Blog Post -->
-          <div class="card border-dark card-cascade mb-4">
-            <div class="card-header text-white bg-dark py-2 px-3 text-center">{{ post.title|title }}</div>   
+          <div class="card border-dark card-cascade mb-4">            
             <div class="card-body p-3">
             <!-- Card image -->
             <div class="row">
-                <div class="col-3">
+                <div class="col-5">
                 <a href="{% url 'posts:post' post.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                   {% thumbnail post.image "150x150" as im %}
                     <img src="{{ im.url }}"   width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class=" card-img-top">
                   {% endthumbnail %}
                   </div>
 
-                <div class="col-9"> 
-                    <div class="row mb-3">
-                        <small class="card-text">{{ post.get_markdown|safe|truncatechars:70 }}</small> 
-                    </div>
-
-                    <div class="row"> 
-                        <div class="col-6 text-left">
+                <div class="col-7"> 
+                    <strong class="card-title small font-weight-bold" > {{ post.title|title|truncatechars:60 }} </strong> 
+                        <div class="text-left">
                             <i class="lead fa fa-user"></i>
-                            <strong><a href="{% url 'users:detail' post.user.username %}">{{ post.user.get_profile_name|title }}</a> </strong> 
+                            <small> <a style="color:black;" href="{% url 'users:detail' post.user.username %}">
+                              {{ post.user.get_profile_name|title }}</a> </small> 
                         </div>
-                        <div class="text-muted"> <small> {{ post.timestamp|naturaltime }} </small> </div> 
-                      </a>
-                    </div>
+                </a>
                 </div>
               </div>
           </div>

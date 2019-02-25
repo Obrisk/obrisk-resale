@@ -32,18 +32,29 @@
         </div>
     </div> -->
 
+
+
 <div class="container">
     <div class="col-md-9">
+
+    <nav aria-label="breadcrumb ">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" ><a href="{% url 'messager:contacts_list' %}"> {% trans 'Contacts' %}</a>  </li>
+            <li class="breadcrumb-item active {% if active == user.username %}active{% endif %}" aria-current="page" > 
+                 {{ opponent_username }}
+                <span class="text-success" id="online-status" style="display: none">{% trans " online" %}</span>
+                <span class="text-danger" id="offline-status" style="display: none">{% trans " offline" %}</span> 
+            </li>
+        </ol>
+    </nav>
+
         <div class="row">
             <div class="col-md-3 col-md-offset-9">
                 <span class="pull-right" hidden id="typing-text">
                     <strong>{{ opponent_username }} {% trans "is typing..." %}</strong>
                 </span>
             </div>
-            <p> {{ opponent_username }}-</p>
-                
-            <p class="text-success" id="online-status" style="display: none">{% trans " online" %}</p>
-            <p class="text-danger" id="offline-status" style="display: none">{% trans " offline" %}</p> 
+            
         </div>
 
             <div class="messages-container">
