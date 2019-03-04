@@ -98,38 +98,38 @@ $(function () {
     let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
     let ws_path = ws_scheme + '://' + window.location.host + "/notifications/";
     let webSocket = new channels.WebSocketBridge();
-    webSocket.connect(ws_path);
+    //webSocket.connect(ws_path);
 
     // When debugging websockets uncomment these lines.
     // webSocket.socket.onopen = function () {
-    //     //console.log("Connected to " + ws_path);
+    //     console.log("Connected to " + ws_path);
     // };
 
     // webSocket.socket.onclose = function () {
-    //     //console.log("Disconnected from " + ws_path);
+    //     console.log("Disconnected from " + ws_path);
     // };
 
     // Listen the WebSocket bridge created throug django-channels library.
-    webSocket.listen(function(event) {
-        switch (event.key) {
-            case "notification":
-                $("#notifications").addClass("btn-dark");
-                break;
+//     webSocket.listen(function(event) {
+//         switch (event.key) {
+//             case "notification":
+//                 $("#notifications").addClass("btn-dark");
+//                 break;
 
-            case "social_update":
-                $("#notifications").addClass("btn-dark");
-                update_social_activity(event.id_value);
-                break;
+//             case "social_update":
+//                 $("#notifications").addClass("btn-dark");
+//                 update_social_activity(event.id_value);
+//                 break;
 
-            case "additional_stories":
-                if (event.actor_name !== currentUser) {
-                    $(".stream-update").show();
-                }
-                break;
+//             case "additional_stories":
+//                 if (event.actor_name !== currentUser) {
+//                     $(".stream-update").show();
+//                 }
+//                 break;
 
-            default:
-                // console.log('error: ', event);
-                break;
-        };
-    });
+//             default:
+//                 // console.log('error: ', event);
+//                 break;
+//         };
+//     });
 });

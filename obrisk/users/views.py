@@ -21,8 +21,8 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-    fields = ['name', 'email', 'picture', 'job_title', 'location',
-              'facebook_account', 'linkedin_account', 'bio', ]
+    fields = ['name', 'picture', 'job_title', 'city', 'bio',
+               'linkedin_account', 'instagram_account', 'nationality' ]
     model = User
 
     # send the user back to their own page after a successful update

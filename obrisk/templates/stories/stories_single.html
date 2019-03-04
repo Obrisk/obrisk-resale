@@ -11,6 +11,7 @@
         <img src="{% static 'img/user.png' %}" class="pull-left" height="60px" alt="{% trans 'No Profile Picture' %}" />
       {% endthumbnail %}
     </div>
+
     <div class="post">
       {% if stories.user == request.user %}
         <a href="{% url 'stories:delete_stories' stories.pk %}">
@@ -22,11 +23,14 @@
           <a href="{% url 'users:detail' stories.user.username  %}">{{ stories.user.get_profile_name|title }}</a>
         </strong>
       </p>
-      <p>{{ stories }}</p>
+    </div>
+
+      <p class="text-justify" >{{ stories }}</p>
+
       {% if stories.image %}
         <img class="card-img-top" src="{{ stories.image }}" alt="Card image cap">
       {% endif %}
-    </div>
+    
   </div>
   <div class="interaction" id="interaction">
     <a href="#" class="like" title="{% for i in stories.get_likers %}{{ i }}&#10;{% endfor %}">

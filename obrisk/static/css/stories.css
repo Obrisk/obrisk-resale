@@ -67,6 +67,14 @@
   background-color: #e1e8ed;
 }
 
+a {
+  color: #1e1e24;
+}
+
+a:hover {
+  color: #424247;
+}
+
 .compose {
   display: none;
   border-bottom: 1px solid #eee;
