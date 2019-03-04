@@ -11,8 +11,8 @@
 {% block content %}
   <div class="container">
 
-    {% thumbnail object.picture "x250" as im %}
-      <img src="{{ im.url }}" alt="Picture Profile" id="pic">
+    {% thumbnail object.picture "x200" as im %}
+      <img src="{{ im.url }}" style="border-radius: 50%;" alt="Picture Profile" id="pic">
     {% empty %}
       <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
     {% endthumbnail %}
@@ -25,33 +25,50 @@
           {% endif %}
         </h1>
         <p>
-          <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-          {{ object.get_profile_name|title }}
+          {% if object.city %}
+            <i class="fa fa-map-marker" aria-hidden="true"></i>  {{ object.city }} <br />
+          {% endif %}
           <br />
           <!-- <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
           {% if object.job_title %}
             <i class="fa fa-briefcase" aria-hidden="true"></i>  {{ object.job_title }} <br />
           {% endif %}
-          {% if object.location %}
-            <i class="fa fa-map-marker" aria-hidden="true"></i>  {{ object.location }} <br />
+          
+          
+          <br>
+          {% if object.name %}
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            {{ object.get_profile_name|title  }}
           {% endif %}
         </p>
     </div>
+    {% if object.bio %}
     <div id="objective"><p>{{ object.bio }}</p></div>
+    {% endif %}
     <div class="clear"></div>
+
+    {% if object.instagram_account %}
+      <a href="{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-instagram"></i>  </a>
+    {% endif %}
  
     {% if object.linkedin_account %}
       <a href="{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i>  </a>
     {% endif %}
+
     {% if object.facebook_account %}
       <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i>  </a>
+    {% endif %}
+    
+    <br>
+    {% if request.user.username == object.username %}
+      <a class="btn btn-dark pull-right" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
     {% endif %}
 
   </div>
   {% if request.user.username == object.username %}
     <!-- Data tiles -->
     <div class="row tile_count">
-      <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
+      <!-- <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
         <span class="count_top"><i class="glyphicon glyphicon-envelope"></i> {% trans 'Posts' %}</span>
         <div class="count">0</div>
       </div>
@@ -70,9 +87,9 @@
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
         <span class="count_top"><i class="glyphicon glyphicon-education"></i> {% trans 'Answers' %}</span>
         <div class="count">0</div>
-      </div>
+      </div> -->
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="glyphicon glyphicon-fire"></i> {% trans 'Global Interactions' %}</span>
+        <span class="count_top"> <i class="glyphicon glyphicon-fire"> </i> {% trans 'Points' %}</span>
         <div class="count">0</div>
       </div>
     </div>

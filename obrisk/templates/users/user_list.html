@@ -26,10 +26,10 @@
           </a>
         </div>
         <p>
-          <i class="fa fa-envelope" aria-hidden="true"></i>
+          <!-- <i class="fa fa-envelope" aria-hidden="true"></i>
           <a class="email" href="mailto:{{ user.email }}">
             {{ user.get_profile_name|title }}
-          </a>
+          </a> -->
           <span>
             {% if user.job_title %}
               <i class="fa fa-briefcase" aria-hidden="true"></i>
@@ -37,9 +37,9 @@
             {% endif %}
           </span>
           <span>
-            {% if user.location %}
+            {% if user.city %}
               <i class="fa fa-map-marker" aria-hidden="true"></i>
-              <i>  {{ user.location }}</i>
+              <i>  {{ user.city }}</i>
             {% endif %}
           </span>
         </p>
