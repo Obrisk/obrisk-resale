@@ -20,35 +20,42 @@
       <a href="{% url 'qa:ask_question' %}" class="btn btn-dark pull-right">
         <i class="fa fa-pencil" aria-hidden="true"></i> {% trans "Ask a Question" %}
       </a>
-      <h1>{{ question.title }}</h1>
+      <br> <br>
+      <h4>{{ question.title }}</h4>
     </div>
-    <div class="row question" question-id="{{ question.id }}">
+    <div class="row"> 
+      
+    <div class=" question" question-id="{{ question.id }}">
+
       <div class="col-md-1">
         <div class="question-info options">
-          <h3 class="{% if question.has_answer %}bg-success text-white{% endif %}">{{ question.count_answers }}</h3>
-          <small class="text-secondary">{% trans 'Answers' %}</small>
+      
           <i id="questionUpVote" class="fa fa-chevron-up vote up-vote question-vote{% if request.user in question.get_upvoters %} voted{% endif %}" aria-hidden="true" title="{% trans 'Click to up vote; click again to toggle' %}"></i>
-          <h3 id="questionVotes">{{ question.total_votes }}</h3>
+          <h5 id="questionVotes">{{ question.total_votes }}</h5>
           <i id="questionDownVote" class="fa fa-chevron-down vote down-vote question-vote{% if request.user in question.get_downvoters %} voted{% endif %}" aria-hidden="true" title="{% trans 'Click to down vote; click again to toggle' %}"></i>
           <small class="text-secondary">{% trans 'Votes' %}</small>
         </div>
       </div>
+
       <div class="col-md-11">
         <p>{{ question.get_markdown|safe }}</p>
-        <div class="question-user pull-right">
+
+        <div class="question-user">
           <span class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }} {% trans 'by' %}</span>
           <a href="{% url 'users:detail' question.user.username  %}">{{ question.user.get_profile_name|title }}</a>
           {% if question.tags.names %}
             <p>
               {% for tag in question.tags.names %}
-                <span class="badge badge-primary">{{ tag }}</span>
+                <span class="badge badge-dark">{{ tag }}</span>
               {% endfor %}
             </p>
           {% endif %}
         </div>
       </div>
-        <a href="{% url 'qa:propose_answer' question.id %}" class="btn btn-dark pull-right" role="button">{% trans "Submit an answer" %}</a>
     </div>
+  </div>
+  <a href="{% url 'qa:propose_answer' question.id %}" class="btn btn-dark" role="button">{% trans "Submit an answer" %}</a>
+
     <div class="page-header">
       <h1>{% trans 'Answers' %}</h1>
     </div>

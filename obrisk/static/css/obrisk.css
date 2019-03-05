@@ -42,6 +42,14 @@ header .navbar-brand {
   color: #428bca;
 }
 
+a {
+  color: #2e2e31;
+}
+
+a:hover {
+  color:#525258;
+}
+
 
 .alert-debug {
   color: black;

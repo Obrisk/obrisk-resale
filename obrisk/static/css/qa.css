@@ -47,32 +47,33 @@
 }
 
 .options i.vote {
-  font-size: 2em;
+  font-size: 1.5em;
   color: #ddd;
 }
 
 .options i.vote:hover {
   cursor: pointer;
-  color: #428bca;
+  color: #0aeee3;
 }
 
 .options i.voted {
-  color:#ffa700;
+  font-size: 1.5em;
+  color:#2e2e31;
 }
 
 .options i.accept {
-  font-size: 2.6em;
+  font-size: 1.5em;
   color: #dddddd;
   margin-top: .2em;
 }
 
 .options i.accept:hover {
   cursor: pointer;
-  color: #5cb85c;
+  color: #0aeee3;
 }
 
 .options i.accepted {
-  color: #5cb85c;
+  color: #0aeee3;
 }
 
 .answer {
@@ -102,11 +103,11 @@
 }
 
 .favorite:hover {
-  color: #f0ad4e;
+  color: #0aeee3;
 }
 
 .favorited {
-  color: #f0ad4e;
+  color: #0aeee3;
 }
 
 .question-info {
@@ -132,6 +133,10 @@
   margin-bottom: 1.2em;
 }
 
-.glyphicon-star-empty {
+.fa-star-empty {
   font-size: 1em;
+}
+
+.votes {
+  margin-left: .4em;
 }

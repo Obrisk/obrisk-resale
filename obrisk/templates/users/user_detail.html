@@ -54,10 +54,7 @@
         <div class="clear"></div>
     </div>
    
-    <br>
-    {% if request.user.username == object.username %}
-      <a class="btn btn-dark pull-right" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
-    {% endif %}
+    
 
   </div>
     <!-- Data tiles -->
@@ -88,4 +85,8 @@
       </div>
     </div>
     <!-- /data tiles -->
+
+    {% if request.user.username == object.username %}
+      <a class="btn btn-dark pull-right" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+    {% endif %}
 {% endblock content %}
