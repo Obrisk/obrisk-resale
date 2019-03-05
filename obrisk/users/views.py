@@ -2,6 +2,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import DetailView, ListView, RedirectView, UpdateView
 
+from .forms import UserForm
 from .models import User
 
 
@@ -21,8 +22,7 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 
 
 class UserUpdateView(LoginRequiredMixin, UpdateView):
-    fields = ['name', 'picture', 'job_title', 'city', 'bio',
-               'linkedin_account', 'instagram_account', 'nationality' ]
+    form_class = UserForm
     model = User
 
     # send the user back to their own page after a successful update
