@@ -49,11 +49,11 @@ p {
 }
 
 a {
-    color: #999;
+    color: #202024;
 }
 
 a:hover {
-    color: black;
+    color:#424247;
 }
 
 ul {
@@ -61,7 +61,6 @@ ul {
 }
 
 #objective {
-    width: 500px;
     float: left;
 }
 
@@ -113,7 +112,7 @@ ul {
     }
   }
   .tile_count .tile_stats_count .count {
-    font-size: 30px;
+    font-size: 20px;
     line-height: 47px;
     font-weight: 600;
   }
@@ -124,11 +123,11 @@ ul {
   }
   @media (min-width: 992px) and (max-width: 1100px) {
     .tile_count .tile_stats_count .count {
-      font-size: 30px;
+      font-size: 20px;
     }
   }
   .tile_count .tile_stats_count span {
-    font-size: 12px;
+    font-size: 20px;
   }
   @media (min-width:768px) {
     .tile_count .tile_stats_count span {
@@ -136,6 +135,6 @@ ul {
     }
   }
   .tile_count .tile_stats_count .count_bottom i {
-    width: 12px;
+    width: 20px;
   }
   /** /top tiles **/

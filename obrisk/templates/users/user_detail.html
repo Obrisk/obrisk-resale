@@ -18,22 +18,29 @@
     {% endthumbnail %}
 
     <div id="contact-info" class="vcard">
-        <h1 class="fn">
-          {{ object.username|title }}
-          {% if object.short_bio %}
-            <br /><small style="font-size: 50%">{{ object.short_bio }}</small>
-          {% endif %}
-        </h1>
+        <h1 class="fn"> {{ object.username|title }} </h1>
         <p>
-          {% if object.city %}
-            <i class="fa fa-map-marker" aria-hidden="true"></i>  {{ object.city }} <br />
-          {% endif %}
+            {% if object.instagram_account %}
+              <a href="{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-instagram"></i>  </a>
+            {% endif %}
+        
+            {% if object.linkedin_account %}
+              <a href="{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i>  </a>
+            {% endif %}
+        
+            {% if object.facebook_account %}
+              <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i>  </a>
+            {% endif %}
+             
+            <br> <br>
+            {% if object.city %}
+              <i class="fa fa-map-marker" aria-hidden="true"> {{ object.city }} </i>   <br />
+            {% endif %}
           <br />
           <!-- <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
           {% if object.job_title %}
             <i class="fa fa-briefcase" aria-hidden="true"></i>  {{ object.job_title }} <br />
           {% endif %}
-          
           
           <br>
           {% if object.name %}
@@ -41,23 +48,14 @@
             {{ object.get_profile_name|title  }}
           {% endif %}
         </p>
+        {% if object.bio %}
+        <div class="panel-body"  id="objective"><p>{{ object.bio }}</p></div>
+        {% endif %}
+        <div class="clear"></div>
     </div>
-    {% if object.bio %}
-    <div id="objective"><p>{{ object.bio }}</p></div>
-    {% endif %}
-    <div class="clear"></div>
+   
 
-    {% if object.instagram_account %}
-      <a href="{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-instagram"></i>  </a>
-    {% endif %}
- 
-    {% if object.linkedin_account %}
-      <a href="{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i>  </a>
-    {% endif %}
-
-    {% if object.facebook_account %}
-      <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i>  </a>
-    {% endif %}
+    
     
     <br>
     {% if request.user.username == object.username %}
@@ -65,34 +63,32 @@
     {% endif %}
 
   </div>
-  {% if request.user.username == object.username %}
     <!-- Data tiles -->
     <div class="row tile_count">
       <!-- <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="glyphicon glyphicon-envelope"></i> {% trans 'Posts' %}</span>
+        <span class="count_top"><i class="fa fa-envelope"></i> {% trans 'Posts' %}</span>
         <div class="count">0</div>
       </div>
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="glyphicon glyphicon-pencil"></i> {% trans 'Classifieds' %}</span>
+        <span class="count_top"><i class="fa fa-pencil"></i> {% trans 'Classifieds' %}</span>
         <div class="count">0</div>
       </div>
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="glyphicon glyphicon-comment"></i> {% trans 'Comments' %}</span>
+        <span class="count_top"><i class="fa fa-comment"></i> {% trans 'Comments' %}</span>
         <div class="count">0</div>
       </div>
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="glyphicon glyphicon-question-sign"></i> {% trans 'Questions' %}</span>
+        <span class="count_top"><i class="fa fa-question-sign"></i> {% trans 'Questions' %}</span>
         <div class="count">0</div>
       </div>
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="glyphicon glyphicon-education"></i> {% trans 'Answers' %}</span>
+        <span class="count_top"><i class="fa fa-education"></i> {% trans 'Answers' %}</span>
         <div class="count">0</div>
       </div> -->
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"> <i class="glyphicon glyphicon-fire"> </i> {% trans 'Points' %}</span>
-        <div class="count">0</div>
+        <span class="count_top"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</span>
+        <small class="count"> {{ object.points }} </small>
       </div>
     </div>
     <!-- /data tiles -->
-  {% endif %}
 {% endblock content %}
