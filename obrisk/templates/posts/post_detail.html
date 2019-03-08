@@ -18,7 +18,7 @@
       <!-- Post Content Column -->
       <div class="col-lg-8">
         <!-- Title -->
-        <h1 class="mt-4">{{ post.title|title }}</h1>
+        <h4 class="mt-4">{{ post.title|title }}</h4>
         <!-- Author -->
         <p class="lead">{% trans 'by' %}
           <a href="{% url 'users:detail' post.user.username %}">{{ post.user.get_profile_name|title }}</a>
@@ -37,38 +37,52 @@
         <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
         <hr>
 
-        <!-- Comments Form >
+        <!-- Comments Form  -->
+        {% with comments.count as total_comments %}
+          <h2>
+          {{ total_comments }} comment{{ total_comments|pluralize }}
+          </h2>
+        {% endwith %}
+
+
+        {% for comment in comments %}
+        <div class="comment">
+            <p class="info">
+            
+            {{ comment.body|linebreaks }}
+              <span class="media mb-4">
+                {% thumbnail comment.name.picture "x50" as im %}
+                  <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
+                {% empty %}
+                  <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="50px" alt="{% trans 'No Profile Picture' %}" />
+                {% endthumbnail %}
+                <span class="media-body">
+                  <h5 class="mt-0">{{ comment.name.get_profile_name|title }}</h5>
+                </span>
+              </span>
+            {{ comment.created }} </p>
+        </div>
+        {% empty %}
+          <p>There are no comments yet.</p>
+        {% endfor %}
+
+        {% if user.is_authenticated %}
+          {% if new_comment %}
+              <h2>Your comment has been added.</h2>
+          {% else %}
+
         <div class="card my-4">
           <h5 class="card-header">{% trans 'Leave a Comment' %}:</h5>
           <div class="card-body">
-            {% if user.is_authenticated %}
-              {% get_comment_form for post as form %}
-              <form action="{% comment_form_target %}" method="POST">
-                {% csrf_token %}
-                {{ form|crispy }}
-                <input type="hidden" name="next" value="{% url 'posts:post' post.slug %}" />
-                <input type="submit" value="{% trans 'Add comment' %}" id="id_submit" />
-              </form>
-            {% endif %}
-          </div>
-        </div>
-
-
-        {% get_comment_list for post as comment_list %}
-        {% for comment in comment_list %}
-          <div class="media mb-4">
-            {% thumbnail comment.user.picture "x50" as im %}
-              <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
-            {% empty %}
-              <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="50px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
-            <div class="media-body">
-              <h5 class="mt-0">{{ comment.user.get_profile_name|title }}</h5>
-              {{ comment }}
-            </div>
-          </div>
-        {% endfor %}
-      <div> -->
+           
+          <!-- <input type="hidden" name="next" value="{% url 'posts:post' post.slug %}" />   -->
+          <form action="." method="post">
+              {{ comment_form.as_p }}
+              {% csrf_token %}
+              <p><input type="submit" value="Add comment"></p>
+          </form>
+          {% endif %}
+        {% endif %}
 
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">

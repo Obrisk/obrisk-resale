@@ -99,6 +99,19 @@ class Post(models.Model):
     def get_markdown(self):
         return markdownify(self.content)
 
+class Comment(models.Model):
+    post = models.ForeignKey(Post,
+        on_delete=models.CASCADE, related_name='comments')
+    name = models.CharField(max_length=80)
+    body = models.TextField(max_length=200)
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ('created',)
+    def __str__(self):
+        return 'Comment by {} on {}'.format(self.name, self.post)
+
 
 def notify_comment(**kwargs):
     """Handler to be fired up upon comments signal to notify the author of a

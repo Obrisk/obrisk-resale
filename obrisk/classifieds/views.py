@@ -53,7 +53,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     template_name = 'classifieds/classified_create.html'
 
     def __init__(self, **kwargs):
-        # i think self.object could be as self.request.user
         self.object = None
         super().__init__(**kwargs)
     

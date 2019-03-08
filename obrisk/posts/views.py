@@ -5,8 +5,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from obrisk.helpers import AuthorRequiredMixin
-from obrisk.posts.models import Post
-from obrisk.posts.forms import PostForm
+from obrisk.posts.models import Post, Comment
+from obrisk.posts.forms import PostForm, CommentForm
 
 
 class PostsListView(LoginRequiredMixin, ListView):
@@ -66,3 +66,45 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 class DetailPostView(LoginRequiredMixin, DetailView):
     """Basic DetailView implementation to call an individual Post."""
     model = Post
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        comment_form = CommentForm(self.request.POST)
+        self.object = self.get_object()
+
+        if comment_form.is_valid():
+            # Create Comment object but don't save to database yet
+            new_comment = comment_form.save(commit=False)
+            # Assign the current post to the comment
+            new_comment.post = self.object
+            new_comment.name = self.request.user
+            # Save the comment to the database
+            new_comment.save()
+
+            context = context = super(DetailPostView, self).get_context_data(**kwargs)
+            context['comment_form'] = CommentForm()
+            context['comments'] = self.object.comments.all()
+            context['new_comment'] = None
+            return self.render_to_response(context=context)
+        
+        else:
+            context = super(DetailPostView, self).get_context_data(**kwargs)
+            #Return the form with errors.
+            context['comment_form'] = comment_form
+            return self.render_to_response(context)
+           
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(DetailPostView, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the images
+        context['comment_form'] = CommentForm()
+        context['comments'] = self.object.comments.all()
+        context['new_comment'] = None
+        return context
+    
+

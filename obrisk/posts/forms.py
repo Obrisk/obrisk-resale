@@ -1,6 +1,6 @@
 from django import forms
 from markdownx.fields import MarkdownxFormField
-from obrisk.posts.models import Post
+from obrisk.posts.models import Post, Comment
 
 
 class PostForm(forms.ModelForm):
@@ -16,3 +16,10 @@ class PostForm(forms.ModelForm):
         help_texts = {
             "title": "Make it short but descriptive, the maximum is 80 characters.",
         }
+
+class CommentForm(forms.ModelForm):
+
+    class Meta:
+        model = Comment
+        fields = ('body',)
+      

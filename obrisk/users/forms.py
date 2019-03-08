@@ -15,9 +15,12 @@ class CustomUserChangeForm(UserChangeForm):
         fields = UserChangeForm.Meta.fields
 
 class UserForm(forms.ModelForm):
-    bio = forms.CharField (widget=forms.Textarea, required=False) 
+    bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
     
     class Meta:
         model = User
         fields = ('picture', 'name', 'job_title', 'city', 'bio', 'instagram_account',
                'linkedin_account', 'facebook_account', 'nationality' )
+        # widgets = {
+        #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
+        # }

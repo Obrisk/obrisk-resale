@@ -99,7 +99,9 @@ LOCAL_APPS = [
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
-FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
+
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting' 
+
 # MIGRATIONS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#migration-modules
@@ -236,7 +238,8 @@ EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.smtp.Ema
 # ADMIN
 # ------------------------------------------------------------------------------
 # Django Admin URL regex.
-ADMIN_URL = r'^obdev2018-numbers1330/'
+ADMIN_URL = env('ADMIN_URL', default='admin/')
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [
      ('Elisha Kingdom', 'el@obrisk.com'),
@@ -270,9 +273,9 @@ SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 # Other stuff...
 # ------------------------------------------------------------------------------
 cloudinary.config( 
-  cloud_name = env('CLOUDINARY_NAME', default='obrisk'), 
-  api_key = env.int('CLOUDINARY_API_KEY', default=552744827567953), 
-  api_secret = env('CLOUDINARY_API_SECRET', default='YBJU2LnEKll7BPqZ6Gzu1phoUks') 
+  cloud_name = env.str('CLOUDINARY_NAME'), 
+  api_key = env.int('CLOUDINARY_API_KEY'), 
+  api_secret = env.str('CLOUDINARY_API_SECRET') 
 )
 
 # REDIS setup
