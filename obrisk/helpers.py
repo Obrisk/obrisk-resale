@@ -49,3 +49,4 @@ class AuthorRequiredMixin(View):
             raise PermissionDenied
 
         return super().dispatch(request, *args, **kwargs)
+

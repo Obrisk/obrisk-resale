@@ -102,15 +102,17 @@ class Post(models.Model):
 class Comment(models.Model):
     post = models.ForeignKey(Post,
         on_delete=models.CASCADE, related_name='comments')
-    name = models.CharField(max_length=80)
-    body = models.TextField(max_length=200)
+    user =models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, related_name="commentor",
+        on_delete=models.SET_NULL)
+    body = models.TextField(max_length=280)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
         ordering = ('created',)
     def __str__(self):
-        return 'Comment by {} on {}'.format(self.name, self.post)
+        return 'Comment by {} on {}'.format(self.user, self.post)
 
 
 def notify_comment(**kwargs):

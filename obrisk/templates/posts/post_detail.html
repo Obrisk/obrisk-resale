@@ -4,6 +4,10 @@
 
 {% block title %}{{ post.title|title }}{% endblock %}
 
+{% block head %}
+  <link href="{% static 'css/notifications.css' %}" rel="stylesheet">
+{% endblock head %}
+
 {% block content %}
   <!-- Page Content -->
   <div class="container">
@@ -39,29 +43,32 @@
 
         <!-- Comments Form  -->
         {% with comments.count as total_comments %}
-          <h2>
+          <h4>
           {{ total_comments }} comment{{ total_comments|pluralize }}
-          </h2>
+          </h4>
         {% endwith %}
 
 
         {% for comment in comments %}
         <div class="comment">
             <p class="info">
-            
-            {{ comment.body|linebreaks }}
+              <span style="margin: 0px"> {{ comment.body|linebreaks }} </span>  
               <span class="media mb-4">
-                {% thumbnail comment.name.picture "x50" as im %}
+                {% thumbnail comment.user.picture "x30" as im %}
                   <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
                 {% empty %}
                   <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="50px" alt="{% trans 'No Profile Picture' %}" />
                 {% endthumbnail %}
+
                 <span class="media-body">
-                  <h5 class="mt-0">{{ comment.name.get_profile_name|title }}</h5>
+                  <small class="mt-0">{{ comment.user.get_profile_name|title }}- </small>
+                  <small> {{ comment.created }} </small>
                 </span>
               </span>
-            {{ comment.created }} </p>
+             </p>
+             <hr>
         </div>
+
         {% empty %}
           <p>There are no comments yet.</p>
         {% endfor %}
@@ -71,18 +78,21 @@
               <h2>Your comment has been added.</h2>
           {% else %}
 
-        <div class="card my-4">
-          <h5 class="card-header">{% trans 'Leave a Comment' %}:</h5>
+      <div id="comment-notify" class= "notification" > </div>
+
+      <div class="card my-4">
+          <h4 class="card-header">{% trans 'Leave a Comment' %}:</h4>
           <div class="card-body">
-           
-          <!-- <input type="hidden" name="next" value="{% url 'posts:post' post.slug %}" />   -->
-          <form action="." method="post">
-              {{ comment_form.as_p }}
-              {% csrf_token %}
-              <p><input type="submit" value="Add comment"></p>
-          </form>
-          {% endif %}
-        {% endif %}
+
+            <form method="post" id="commentForm">
+                {% csrf_token %}
+                {{ comment_form|crispy }}
+                <input class="btn btn-dark comment-btn" type="button" value="Add comment">
+            </form>
+          </div> 
+      </div> 
+      {% endif %}
+      {% endif %}
 
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
@@ -93,15 +103,17 @@
         {% if request.user == post.user %}
           <div class="card my-4">
             <div class="card-body text-center">
-              <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
-              <a class="btn btn-dark" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+              <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}">
+                 <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
+              <a class="btn btn-dark" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}">
+                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
             </div>
           </div>
         {% endif %}
 
         <!-- Cloud Tag Widget -->
         <div class="card my-4">
-          <h5 class="card-header">{% trans 'Cloud tag' %}</h5>
+          <h4 class="card-header">{% trans 'Cloud tag' %}</h4>
           <div class="card-body">
             {% for tag in post.tags.all %}
               <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
@@ -114,3 +126,13 @@
   </div>
   <!-- /.container -->
 {% endblock content %}
+
+
+
+{% block javascript %}
+<script type="text/javascript">
+    var url = "{% url 'posts:post' post.slug %}"
+</script>
+<script src="{% static 'js/posts.js' %}"> </script>
+
+{% endblock javascript %}

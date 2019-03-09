@@ -8,7 +8,7 @@
   border-width: 0 0 1px 0;
   border-style: solid;
   border-color: #eeeeee;
-  background-color: #fff;
+  background-color: #0aeee3;
   color: #333333;
   text-decoration: none;
 }
@@ -36,5 +36,5 @@ a.notification:hover {
 .notification .media-body {
   padding-top: 5.6px;
   padding-left: 15px;
-
 }
+

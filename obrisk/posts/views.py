@@ -7,6 +7,11 @@ from django.utils.translation import ugettext_lazy as _
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post, Comment
 from obrisk.posts.forms import PostForm, CommentForm
+#For comments in posts.
+from django.http import JsonResponse 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
 
 
 class PostsListView(LoginRequiredMixin, ListView):
@@ -63,9 +68,18 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         return reverse('posts:list')
 
 
+
+@method_decorator(csrf_exempt, name='dispatch')
 class DetailPostView(LoginRequiredMixin, DetailView):
     """Basic DetailView implementation to call an individual Post."""
     model = Post
+
+    def render_to_response(self, context, **response_kwargs):
+        """ Allow AJAX requests to be handled more gracefully """
+        if self.request.is_ajax():
+            return JsonResponse('Your comment has been uploaded!',safe=False, **response_kwargs)
+        else:
+            return super(DetailView,self).render_to_response(context, **response_kwargs)
 
     def post(self, request, *args, **kwargs):
         """
@@ -73,6 +87,7 @@ class DetailPostView(LoginRequiredMixin, DetailView):
         formsets with the passed POST variables and then checking them for
         validity.
         """
+        
         comment_form = CommentForm(self.request.POST)
         self.object = self.get_object()
 
@@ -81,7 +96,7 @@ class DetailPostView(LoginRequiredMixin, DetailView):
             new_comment = comment_form.save(commit=False)
             # Assign the current post to the comment
             new_comment.post = self.object
-            new_comment.name = self.request.user
+            new_comment.user = self.request.user
             # Save the comment to the database
             new_comment.save()
 
@@ -92,6 +107,7 @@ class DetailPostView(LoginRequiredMixin, DetailView):
             return self.render_to_response(context=context)
         
         else:
+            print(comment_form.errors)
             context = super(DetailPostView, self).get_context_data(**kwargs)
             #Return the form with errors.
             context['comment_form'] = comment_form
