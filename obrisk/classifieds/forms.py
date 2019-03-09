@@ -10,11 +10,12 @@ class ClassifiedForm(forms.ModelForm):
 
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "located_area", "tags", "images"]
+        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags", "images"]
         widgets = {'user': forms.HiddenInput()}
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
             Your city is added by default based on your location.",
+            "contact_info": "Phone number, or wechat-ID or any other contacts info, if necessary."
         }
            
 # class ClassifiedReportForm(forms.ModelForm):

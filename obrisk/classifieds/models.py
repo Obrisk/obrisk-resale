@@ -57,6 +57,7 @@ class Classified(models.Model):
     located_area = models.CharField (max_length=100)
     city = models.CharField (max_length=100)
     province_region = models.CharField(max_length= 100)
+    contact_info = models.CharField (max_length=150, null=True, blank=True)
     country = models.CharField(max_length= 100)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)

@@ -5,9 +5,14 @@
 {% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
 
 {% block inner %}
-    <h1>{% trans "Verify Your E-mail Address" %}</h1>
+    <h1>{% trans "Please Verify Your E-mail Address" %}</h1>
 
-    <p>{% blocktrans %}We have sent an e-mail to you for verification. Follow the link provided to finalize the signup process. Please contact us if you do not receive it within a few minutes.{% endblocktrans %}</p>
+    <p>{% blocktrans %}We have sent an e-mail to you for verification.
+        Follow the link provided to finalize the sign-up process.
+        If you do not receive the confirmation e-mail within a few minutes, 
+        be sure to check the spam/junk folder for the e-mail. <br>
+        Please <a href="mailto:obrisk@obrisk.com" > click here </a> to contact us, incase you still have problems with signing up.
+    </p> {% endblocktrans %}
 
 {% endblock %}
 

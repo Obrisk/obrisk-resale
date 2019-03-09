@@ -44,7 +44,8 @@
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
           {% csrf_token %}
 					{{ form|crispy }}
-				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">  I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the <a href="http://www.miit.gov.cn/n1146295/n1146557/index.html">laws</a>
+				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
+				  I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the laws and regulations of the country residing.</a>
 
           {% if redirect_field_value %}
           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
