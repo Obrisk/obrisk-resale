@@ -49,7 +49,7 @@
             <p class="lead">{% trans 'by' %}
             <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
             </p>
-            <h5 class="card-title "> {% trans 'CNY' %} {{ classified.price }} </h5> <br> 
+            <h5 class="card-title " style="color: #5a0303" > {% trans 'CNY' %} {{ classified.price }} </h5> <br> 
 
             <hr>
             {% if request.user == classified.user%}

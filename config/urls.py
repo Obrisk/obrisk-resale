@@ -18,6 +18,8 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/terms.html'), name='terms_and_conditions'),
     url(r'^privacy-policy/$',
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
+    url(r'^contacts/$',
+        TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
     url(r'^dialogs/receive-message', views.receive_message, name='receive_message_2' ),
 
     # Django Admin, use {% url 'admin:index' %}

@@ -32,13 +32,14 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
         context = super(ClassifiedsListView, self).get_context_data(*args, **kwargs)
         context['popular_tags'] = Classified.objects.get_counted_tags()
         context['images'] = ClassifiedImages.objects.all()
+        context['other_classifieds'] = Classified.objects.exclude(city= self.request.user.city)
         return context
 
     def get_queryset(self, **kwargs):
-        return Classified.objects.get_active()
+        return Classified.objects.get_active().filter(city= self.request.user.city)
 
 
-class DraftsListView(ClassifiedsListView):
+class ExpiredListView(ClassifiedsListView):
     """Overriding the original implementation to call the expired classifieds
     list."""
     def get_queryset(self, **kwargs):
