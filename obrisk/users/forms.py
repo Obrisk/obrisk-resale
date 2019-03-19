@@ -20,7 +20,7 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('picture', 'name', 'job_title', 'city', 'bio', 'instagram_account',
-               'linkedin_account', 'facebook_account', 'nationality' )
+               'linkedin_account', 'facebook_account' )
         # widgets = {
         #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
         # }

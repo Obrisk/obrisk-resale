@@ -84,12 +84,15 @@ class Message(models.Model):
             message=message
         )
         channel_layer = get_channel_layer()
+        msg_sender = str(sender)
+        msg_recip = str(recipient)
+        msg = str(new_message.uuid_id)
         payload = {
                 'type': 'receive',
                 'key': 'message',
-                'message_id': new_message.uuid_id,
-                'sender': sender,
-                'recipient': recipient
+                'message_id': msg,
+                'sender': msg_sender,
+                'recipient':  msg_recip
             }
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
         return new_message

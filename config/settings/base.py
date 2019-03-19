@@ -21,6 +21,9 @@ env.read_env(str(ROOT_DIR.path('.env')))
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool('DJANGO_DEBUG', False)
+
+#INTERNATIONALIZATION 
+# ------------------------------------------------------------------------------
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # though not all of them may be available with every OS.
@@ -36,6 +39,15 @@ USE_I18N = True
 USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
+
+LANGUAGES = (
+    ('en', 'English'),
+    ('sw', 'Swahili'),
+)
+
+LOCALE_PATHS = [
+    str(ROOT_DIR.path('locale')),
+]
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -69,7 +81,6 @@ THIRD_PARTY_APPS = [
     'crispy_forms',
     'cloudinary',
     'material',
-    'django_private_chat',
     'sorl.thumbnail',
     'phonenumber_field',
     'allauth',
@@ -156,6 +167,7 @@ AUTH_PASSWORD_VALIDATORS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -297,3 +309,4 @@ CHANNEL_LAYERS = {
 GRAPHENE = {
     'SCHEMA': 'obrisk.schema.schema'
 }
+

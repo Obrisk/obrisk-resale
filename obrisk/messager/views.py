@@ -88,10 +88,9 @@ def send_message(request):
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message)
         return render(request, 'messager/single_message.html',
-                      {'msg': msg})
+                      {'message': msg})
 
     return HttpResponse()
-
 
 @login_required
 @ajax_required
@@ -99,20 +98,7 @@ def send_message(request):
 def receive_message(request):
     """Simple AJAX functional view to return a rendered single message on the
     receiver side providing realtime connections."""
-
-    class Empty(): pass
-    msg = Empty()
-    msg.text = request.GET.get('packet[message]')
-    msg.get_formatted_create_datetime = request.GET.get('packet[created]')
-    msg.sender = request.GET.get('packet[sender_name]')
-    msg.id = request.GET.get('packet[message_id]')
-    #check the request.user only this time when ajax is called
-    #Since it is an asgi request.user is not passed in template.
-    is_owner = False
-    user = str(request.user)
-    sender = str(msg.sender)
-    if user == sender:
-        is_owner = True
-
-    return render(request, 
-            'messager/single_message.html', {'msg': msg, 'is_owner':is_owner })
+    message_id = request.GET.get('message_id')
+    message = Message.objects.get(pk=message_id)
+    return render(request,
+                  'messager/single_message.html', {'message': message})

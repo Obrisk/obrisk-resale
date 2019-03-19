@@ -1,0 +1,1131 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# 
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-11 20:31+0800\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: .\obrisk\classifieds\apps.py:7 .\obrisk\classifieds\models.py:71
+#: .\obrisk\templates\classifieds\classified_create.html:14
+#: .\obrisk\templates\classifieds\classified_detail.html:13
+#: .\obrisk\templates\classifieds\classified_list.html:6
+#: .\obrisk\templates\classifieds\classified_list.html:22
+#: .\obrisk\templates\search\search_results.html:38
+#: .\obrisk\templates\users\user_detail.html:67
+msgid "Classifieds"
+msgstr ""
+
+#: .\obrisk\classifieds\models.py:44
+msgid "Active"
+msgstr ""
+
+#: .\obrisk\classifieds\models.py:45
+msgid "Expired"
+msgstr ""
+
+#: .\obrisk\classifieds\models.py:70
+msgid "Classified"
+msgstr ""
+
+#: .\obrisk\classifieds\views.py:52
+msgid "Your classified has been created."
+msgstr ""
+
+#: .\obrisk\classifieds\views.py:106
+msgid "Your classified has been updated."
+msgstr ""
+
+#: .\obrisk\classifieds\views.py:124
+msgid "Your report has been submitted."
+msgstr ""
+
+#: .\obrisk\messager\apps.py:7
+msgid "Messager"
+msgstr ""
+
+#: .\obrisk\messager\models.py:48
+msgid "Sender"
+msgstr ""
+
+#: .\obrisk\messager\models.py:51
+msgid "Recipient"
+msgstr ""
+
+#: .\obrisk\messager\models.py:58
+msgid "Message"
+msgstr ""
+
+#: .\obrisk\messager\models.py:59
+#: .\obrisk\templates\messager\message_list.html:4
+msgid "Messages"
+msgstr ""
+
+#: .\obrisk\notifications\apps.py:7 .\obrisk\notifications\models.py:136
+#: .\obrisk\templates\base.html:48
+#: .\obrisk\templates\notifications\notification_list.html:4
+msgid "Notifications"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:100
+msgid "liked"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:101
+msgid "commented"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:102
+msgid "cavorited"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:103
+#: .\obrisk\templates\qa\answer_sample.html:33
+msgid "answered"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:104
+msgid "accepted"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:105
+msgid "edited"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:106
+msgid "also commented"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:107
+msgid "logged in"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:108
+msgid "logged out"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:109
+msgid "voted on"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:110
+msgid "shared"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:111
+msgid "created an account"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:112
+msgid "replied to"
+msgstr ""
+
+#: .\obrisk\notifications\models.py:135
+msgid "Notification"
+msgstr ""
+
+#: .\obrisk\notifications\views.py:30
+#, python-brace-format
+msgid "All notifications to {request.user.username} have been marked as read."
+msgstr ""
+
+#: .\obrisk\notifications\views.py:48
+#, python-brace-format
+msgid "The notification {notification.slug} has been marked as read."
+msgstr ""
+
+#: .\obrisk\posts\apps.py:6 .\obrisk\posts\models.py:81
+#: .\obrisk\templates\posts\post_list.html:5
+#: .\obrisk\templates\users\user_detail.html:63
+msgid "Posts"
+msgstr ""
+
+#: .\obrisk\posts\models.py:50 .\obrisk\qa\models.py:77
+msgid "Draft"
+msgstr ""
+
+#: .\obrisk\posts\models.py:51 .\obrisk\templates\base.html:54
+msgid "Published"
+msgstr ""
+
+#: .\obrisk\posts\models.py:58
+msgid "Article"
+msgstr ""
+
+#: .\obrisk\posts\models.py:59
+msgid "Event"
+msgstr ""
+
+#: .\obrisk\posts\models.py:60
+msgid "Job"
+msgstr ""
+
+#: .\obrisk\posts\models.py:67
+msgid "Featured image"
+msgstr ""
+
+#: .\obrisk\posts\models.py:80
+#: .\obrisk\templates\stories\stories_form_modal.html:23
+msgid "Post"
+msgstr ""
+
+#: .\obrisk\posts\views.py:42
+msgid "Your Post has been created."
+msgstr ""
+
+#: .\obrisk\posts\views.py:58
+msgid "Your Post has been updated."
+msgstr ""
+
+#: .\obrisk\qa\apps.py:7 .\obrisk\templates\base.html:57
+#: .\obrisk\templates\qa\answer_form.html:12
+#: .\obrisk\templates\qa\question_form.html:12
+msgid "Q&A"
+msgstr ""
+
+#: .\obrisk\qa\models.py:35
+msgid "Vote"
+msgstr ""
+
+#: .\obrisk\qa\models.py:36 .\obrisk\templates\qa\question_detail.html:36
+#: .\obrisk\templates\qa\question_sample.html:17
+msgid "Votes"
+msgstr ""
+
+#: .\obrisk\qa\models.py:75
+msgid "Open"
+msgstr ""
+
+#: .\obrisk\qa\models.py:76
+msgid "Closed"
+msgstr ""
+
+#: .\obrisk\qa\models.py:93
+msgid "Question"
+msgstr ""
+
+#: .\obrisk\qa\models.py:94 .\obrisk\templates\qa\question_list.html:4
+#: .\obrisk\templates\qa\question_list.html:21
+#: .\obrisk\templates\search\search_results.html:40
+#: .\obrisk\templates\users\user_detail.html:75
+msgid "Questions"
+msgstr ""
+
+#: .\obrisk\qa\models.py:150 .\obrisk\templates\qa\answer_form.html:20
+msgid "Answer"
+msgstr ""
+
+#: .\obrisk\qa\models.py:151 .\obrisk\templates\qa\question_detail.html:60
+#: .\obrisk\templates\qa\question_sample.html:15
+#: .\obrisk\templates\users\user_detail.html:79
+msgid "Answers"
+msgstr ""
+
+#: .\obrisk\qa\views.py:66
+msgid "Your question has been created."
+msgstr ""
+
+#: .\obrisk\qa\views.py:83
+msgid "Thank you! Your answer has been posted."
+msgstr ""
+
+#: .\obrisk\qa\views.py:119 .\obrisk\qa\views.py:146
+msgid "Database integrity error."
+msgstr ""
+
+#: .\obrisk\search\apps.py:7 .\obrisk\templates\base.html:64
+#: .\obrisk\templates\search\search_results.html:26
+msgid "Search"
+msgstr ""
+
+#: .\obrisk\stories\apps.py:7 .\obrisk\stories\models.py:32
+#: .\obrisk\stories\models.py:33 .\obrisk\templates\base.html:56
+#: .\obrisk\templates\search\search_results.html:39
+#: .\obrisk\templates\stories\stories_list.html:16
+msgid "Stories"
+msgstr ""
+
+#: .\obrisk\stories\models.py:29
+msgid "Is a reply?"
+msgstr ""
+
+#: .\obrisk\stories\views.py:55
+#, python-brace-format
+msgid "Text is {lenght} characters longer than accepted."
+msgstr ""
+
+#: .\obrisk\templates\account\account_inactive.html:5
+#: .\obrisk\templates\account\account_inactive.html:8
+msgid "Account Inactive"
+msgstr ""
+
+#: .\obrisk\templates\account\account_inactive.html:10
+msgid "This account is inactive."
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:7
+msgid "Account"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:10
+msgid "E-mail Addresses"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:13
+msgid "The following e-mail addresses are associated with your account:"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:27
+msgid "Verified"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:29
+msgid "Unverified"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:31
+msgid "Primary"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:37
+msgid "Make Primary"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:38
+msgid "Re-send Verification"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:39
+msgid "Remove"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:46
+msgid "Warning:"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:46
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:51
+msgid "Add E-mail Address"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:56
+msgid "Add E-mail"
+msgstr ""
+
+#: .\obrisk\templates\account\email.html:66
+msgid "Do you really want to remove the selected e-mail address?"
+msgstr ""
+
+#: .\obrisk\templates\account\email\email_confirmation_signup_message.txt:2
+#, python-format
+msgid ""
+"\n"
+"\n"
+"Hello !\n"
+"\n"
+"You're receiving this e-mail because user %(user_display)s has given yours "
+"as an e-mail address to connect their account.\n"
+"\n"
+"To confirm this is correct, go to %(activate_url)s\n"
+msgstr ""
+
+#: .\obrisk\templates\account\email\email_confirmation_signup_message.txt:10
+msgid ""
+"\n"
+"\n"
+"Do not use this email to reply back to us. Please contact us via "
+"support@obrisk.com incase you are facing any problem with signing up or "
+"using the website. \n"
+"We will reply within the shortest possible time. \n"
+"\n"
+"Regards,\n"
+"Obrisk team!\n"
+"\n"
+"www.obrisk.com | Copyright © 2019  \n"
+"\n"
+msgstr ""
+
+#: .\obrisk\templates\account\email_confirm.html:6
+#: .\obrisk\templates\account\email_confirm.html:10
+msgid "Confirm E-mail Address"
+msgstr ""
+
+#: .\obrisk\templates\account\email_confirm.html:16
+#, python-format
+msgid ""
+"Please confirm that <a href=\"mailto:%(email)s\">%(email)s</a> is an e-mail "
+"address for user %(user_display)s."
+msgstr ""
+
+#: .\obrisk\templates\account\email_confirm.html:20
+msgid "Confirm"
+msgstr ""
+
+#: .\obrisk\templates\account\email_confirm.html:27
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new e-mail confirmation request</a>."
+msgstr ""
+
+#: .\obrisk\templates\account\login.html:8
+#: .\obrisk\templates\account\login.html:23
+#: .\obrisk\templates\account\signup.html:8
+msgid "Account Login"
+msgstr ""
+
+#: .\obrisk\templates\account\login.html:26
+#, python-format
+msgid ""
+"Please sign in with one\n"
+"              of your existing third party accounts. Or, sign up for a "
+"%(site_name)s\n"
+"              account and sign in below:"
+msgstr ""
+
+#: .\obrisk\templates\account\login.html:33
+msgid "or"
+msgstr ""
+
+#: .\obrisk\templates\account\login.html:37
+msgid ""
+"If you have not created an account yet, then please\n"
+"              sign up first."
+msgstr ""
+
+#: .\obrisk\templates\account\login.html:48
+#: .\obrisk\templates\pages\home.html:34
+msgid "Login"
+msgstr ""
+
+#: .\obrisk\templates\account\login.html:51
+msgid "Or sign up for obrisk"
+msgstr ""
+
+#: .\obrisk\templates\account\login.html:52
+msgid "Forgot your password?"
+msgstr ""
+
+#: .\obrisk\templates\account\logout.html:5
+#: .\obrisk\templates\account\logout.html:8
+#: .\obrisk\templates\account\logout.html:17
+msgid "Sign Out"
+msgstr ""
+
+#: .\obrisk\templates\account\logout.html:10
+msgid "Are you sure you want to sign out?"
+msgstr ""
+
+#: .\obrisk\templates\account\password_change.html:6
+#: .\obrisk\templates\account\password_change.html:9
+#: .\obrisk\templates\account\password_change.html:14
+#: .\obrisk\templates\account\password_reset_from_key.html:5
+#: .\obrisk\templates\account\password_reset_from_key.html:8
+#: .\obrisk\templates\account\password_reset_from_key_done.html:4
+#: .\obrisk\templates\account\password_reset_from_key_done.html:7
+msgid "Change Password"
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset.html:7
+#: .\obrisk\templates\account\password_reset.html:11
+#: .\obrisk\templates\account\password_reset_done.html:6
+#: .\obrisk\templates\account\password_reset_done.html:9
+msgid "Password Reset"
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset.html:16
+msgid ""
+"Forgotten your password? Enter your e-mail address below, and we'll send you "
+"an e-mail allowing you to reset it."
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset.html:21
+msgid "Reset My Password"
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset.html:24
+msgid "Please contact us if you have any trouble resetting your password."
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset_done.html:15
+msgid ""
+"We have sent you an e-mail. Please contact us if you do not receive it "
+"within a few minutes."
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset_from_key.html:8
+msgid "Bad Token"
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset_from_key.html:12
+#, python-format
+msgid ""
+"The password reset link was invalid, possibly because it has already been "
+"used.  Please request a <a href=\"%(passwd_reset_url)s\">new password reset</"
+"a>."
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset_from_key.html:19
+msgid "change password"
+msgstr ""
+
+#: .\obrisk\templates\account\password_reset_from_key.html:22
+#: .\obrisk\templates\account\password_reset_from_key_done.html:8
+msgid "Your password is now changed."
+msgstr ""
+
+#: .\obrisk\templates\account\password_set.html:6
+#: .\obrisk\templates\account\password_set.html:9
+#: .\obrisk\templates\account\password_set.html:14
+msgid "Set Password"
+msgstr ""
+
+#: .\obrisk\templates\account\signup.1.html:6
+msgid "Signup"
+msgstr ""
+
+#: .\obrisk\templates\account\signup.1.html:9
+#: .\obrisk\templates\account\signup.1.html:19
+#: .\obrisk\templates\account\signup.html:54
+msgid "Sign Up"
+msgstr ""
+
+#: .\obrisk\templates\account\signup.1.html:11
+#, python-format
+msgid ""
+"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+
+#: .\obrisk\templates\account\signup.html:39
+msgid "Account Creation"
+msgstr ""
+
+#: .\obrisk\templates\account\signup.html:41
+#, python-format
+msgid ""
+"Already have an account? Then please <a href=\"%(login_url)s\">sign in here</"
+"a>."
+msgstr ""
+
+#: .\obrisk\templates\account\signup_closed.html:5
+#: .\obrisk\templates\account\signup_closed.html:8
+msgid "Sign Up Closed"
+msgstr ""
+
+#: .\obrisk\templates\account\signup_closed.html:10
+msgid "We are sorry, but the sign up is currently closed."
+msgstr ""
+
+#: .\obrisk\templates\account\verification_sent.html:5
+#: .\obrisk\templates\account\verified_email_required.html:5
+msgid "Verify Your E-mail Address"
+msgstr ""
+
+#: .\obrisk\templates\account\verification_sent.html:8
+msgid "Please Verify Your E-mail Address"
+msgstr ""
+
+#: .\obrisk\templates\account\verification_sent.html:10
+msgid ""
+"We have sent an e-mail to you for verification.\n"
+"        Follow the link provided to finalize the sign-up process.\n"
+"        If you do not receive the confirmation e-mail within a few "
+"minutes, \n"
+"        be sure to check the spam/junk folder for the e-mail. <br>\n"
+"        Please <a href=\"mailto:obrisk@obrisk.com\" > click here </a> to "
+"contact us, incase you still have problems with signing up.\n"
+"    </p> "
+msgstr ""
+
+#: .\obrisk\templates\account\verified_email_required.html:8
+msgid "Please verify Your e-mail address"
+msgstr ""
+
+#: .\obrisk\templates\account\verified_email_required.html:12
+msgid ""
+"This part of the site requires us to verify that\n"
+"you are who you claim to be. For this purpose, we require that you\n"
+"verify ownership of your e-mail address. "
+msgstr ""
+
+#: .\obrisk\templates\account\verified_email_required.html:16
+msgid ""
+"We have sent an e-mail to you for\n"
+"verification. Please click on the link inside this e-mail. \n"
+msgstr ""
+
+#: .\obrisk\templates\account\verified_email_required.html:20
+#, python-format
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
+"mail address by clicking here. </a>.\n"
+"    <br> <br>If you have any problem, Click <a href=\"mailto:support@obrisk."
+"com\" >  here </a> to contact us. Thank you!\n"
+"    "
+msgstr ""
+
+#: .\obrisk\templates\base.html:58
+msgid "Chat"
+msgstr ""
+
+#: .\obrisk\templates\base.html:75 .\obrisk\templates\qa\answer_sample.html:27
+#: .\obrisk\templates\stories\stories_single.html:9
+#: .\obrisk\templates\stories\stories_thread.html:11
+#: .\obrisk\templates\stories\stories_thread_modal.html:15
+msgid "User Image"
+msgstr ""
+
+#: .\obrisk\templates\base.html:77
+#: .\obrisk\templates\messager\contact_list.html:28
+#: .\obrisk\templates\messager\single_message.html:16
+#: .\obrisk\templates\messager\single_message.html:38
+#: .\obrisk\templates\notifications\notification_list.html:25
+#: .\obrisk\templates\posts\post_detail.html:60
+#: .\obrisk\templates\qa\answer_sample.html:29
+#: .\obrisk\templates\search\search_results.html:85
+#: .\obrisk\templates\stories\stories_single.html:11
+#: .\obrisk\templates\stories\stories_thread.html:13
+#: .\obrisk\templates\stories\stories_thread_modal.html:17
+#: .\obrisk\templates\users\user_list.html:24
+msgid "No Profile Picture"
+msgstr ""
+
+#: .\obrisk\templates\base.html:82
+msgid "Profile Settings"
+msgstr ""
+
+#: .\obrisk\templates\base.html:84
+msgid "Log Out"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_create.html:13
+#: .\obrisk\templates\classifieds\classified_detail.html:12
+#: .\obrisk\templates\classifieds\classified_list.html:21
+#: .\obrisk\templates\classifieds\classified_update.html:12
+#: .\obrisk\templates\messager\contact_list.html:14
+#: .\obrisk\templates\posts\post_create.html:12
+#: .\obrisk\templates\posts\post_detail.html:16
+#: .\obrisk\templates\posts\post_list.html:17
+#: .\obrisk\templates\posts\post_update.html:12
+#: .\obrisk\templates\qa\answer_form.html:11
+#: .\obrisk\templates\qa\question_detail.html:14
+#: .\obrisk\templates\qa\question_form.html:11
+#: .\obrisk\templates\qa\question_list.html:13
+#: .\obrisk\templates\search\search_results.html:16
+msgid "Home"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_create.html:15
+#: .\obrisk\templates\classifieds\classified_list.html:131
+msgid "Write a new classified"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_create.html:25
+msgid "Submit"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_create.html:26
+#: .\obrisk\templates\classifieds\classified_update.html:22
+#: .\obrisk\templates\posts\post_create.html:22
+#: .\obrisk\templates\posts\post_update.html:22
+#: .\obrisk\templates\qa\question_form.html:21
+msgid "Save as draft"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_create.html:27
+#: .\obrisk\templates\classifieds\classified_update.html:23
+#: .\obrisk\templates\posts\post_create.html:23
+#: .\obrisk\templates\posts\post_update.html:23
+#: .\obrisk\templates\qa\answer_form.html:21
+#: .\obrisk\templates\qa\question_form.html:22
+#: .\obrisk\templates\stories\stories_form_modal.html:25
+msgid "Cancel"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:30
+#: .\obrisk\templates\posts\post_detail.html:32
+msgid "Posted"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:49
+#: .\obrisk\templates\posts\post_detail.html:27
+#: .\obrisk\templates\qa\question_detail.html:44
+#: .\obrisk\templates\qa\question_sample.html:23
+msgid "by"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:52
+msgid "CNY"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:56
+msgid "Edit this classified"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:56
+#: .\obrisk\templates\posts\post_detail.html:109
+msgid "Edit"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:57
+#: .\obrisk\templates\classifieds\classified_detail.html:60
+msgid "Back"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:59
+msgid "DM user"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:62
+msgid "Report this classified"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:62
+msgid "Report"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_detail.html:73
+msgid "tags"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:55
+msgid "There are no classified ads based on your location."
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:56
+msgid " be the first one to post"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:93
+msgid "Classified ads in other places"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:131
+msgid "New Classified"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:132
+msgid "expired"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:138
+#: .\obrisk\templates\posts\post_list.html:93
+msgid "Popular tags"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:154
+#: .\obrisk\templates\posts\post_list.html:57
+#: .\obrisk\templates\qa\question_list.html:58
+msgid "Newer"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_list.html:166
+#: .\obrisk\templates\posts\post_list.html:69
+#: .\obrisk\templates\qa\question_list.html:70
+msgid "Older"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_report.html:22
+msgid " Choose the reason and complete the form why the ad is inappropiate."
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_report.html:33
+msgid "Submit the report"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_update.html:13
+#: .\obrisk\templates\posts\post_list.html:86
+#: .\obrisk\templates\posts\post_update.html:13
+msgid "Drafts"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_update.html:14
+msgid "Update your classified ad"
+msgstr ""
+
+#: .\obrisk\templates\classifieds\classified_update.html:21
+#: .\obrisk\templates\posts\post_update.html:21
+msgid "Update"
+msgstr ""
+
+#: .\obrisk\templates\django_private_chat\dialogs.html:21
+#: .\obrisk\templates\django_private_chat\dialogs.html:26
+msgid "Chat with"
+msgstr ""
+
+#: .\obrisk\templates\django_private_chat\dialogs.html:42
+#: .\obrisk\templates\messager\contact_list.html:4
+#: .\obrisk\templates\users\user_list.html:4
+#: .\obrisk\templates\users\user_list.html:13
+msgid "Contacts"
+msgstr ""
+
+#: .\obrisk\templates\django_private_chat\dialogs.html:45
+msgid " online"
+msgstr ""
+
+#: .\obrisk\templates\django_private_chat\dialogs.html:46
+msgid " offline"
+msgstr ""
+
+#: .\obrisk\templates\django_private_chat\dialogs.html:54
+msgid "is typing..."
+msgstr ""
+
+#: .\obrisk\templates\django_private_chat\dialogs.html:72
+#: .\obrisk\templates\messager\message_list.html:36
+msgid "Write a message..."
+msgstr ""
+
+#: .\obrisk\templates\django_private_chat\dialogs.html:75
+msgid "Send"
+msgstr ""
+
+#: .\obrisk\templates\markdownx\widget2.html:8
+msgid "Editor"
+msgstr ""
+
+#: .\obrisk\templates\markdownx\widget2.html:11
+msgid "Preview"
+msgstr ""
+
+#: .\obrisk\templates\messager\contact_list.html:26
+#: .\obrisk\templates\messager\single_message.html:14
+#: .\obrisk\templates\messager\single_message.html:36
+#: .\obrisk\templates\notifications\notification_list.html:23
+#: .\obrisk\templates\posts\post_detail.html:58
+#: .\obrisk\templates\search\search_results.html:83
+#: .\obrisk\templates\users\user_list.html:22
+msgid "Picture Profile"
+msgstr ""
+
+#: .\obrisk\templates\messager\message_list.html:20
+msgid "This is the begining of a great new conversation."
+msgstr ""
+
+#: .\obrisk\templates\messager\message_list.html:21
+msgid "Let's get started now!"
+msgstr ""
+
+#: .\obrisk\templates\notifications\most_recent.html:15
+msgid "See all"
+msgstr ""
+
+#: .\obrisk\templates\notifications\most_recent.html:16
+#: .\obrisk\templates\notifications\notification_list.html:14
+msgid "Mark all as read"
+msgstr ""
+
+#: .\obrisk\templates\notifications\most_recent.html:18
+msgid "You have no unread notification"
+msgstr ""
+
+#: .\obrisk\templates\notifications\notification_list.html:12
+msgid "Unread notifications for"
+msgstr ""
+
+#: .\obrisk\templates\notifications\notification_list.html:30
+msgid "Mark as read"
+msgstr ""
+
+#: .\obrisk\templates\pages\home.html:29
+msgid "Hi! Welcome to Obrisk"
+msgstr ""
+
+#: .\obrisk\templates\pages\home.html:33
+msgid "In here we make things simple and brisk..."
+msgstr ""
+
+#: .\obrisk\templates\pages\home.html:45
+msgid "Sign up"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_create.html:13
+#: .\obrisk\templates\posts\post_detail.html:17
+#: .\obrisk\templates\posts\post_list.html:18
+msgid "posts"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_create.html:14
+msgid "Post new contents"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_create.html:21
+#: .\obrisk\templates\qa\question_form.html:20
+msgid "Publish"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_detail.html:36
+#: .\obrisk\templates\posts\post_detail.html:38
+#: .\obrisk\templates\posts\post_list.html:33
+#: .\obrisk\templates\search\search_results.html:51
+msgid "Featured Image"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_detail.html:84
+msgid "Leave a Comment"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_detail.html:106
+#: .\obrisk\templates\posts\post_list.html:84
+msgid "Write a new post"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_detail.html:107
+#: .\obrisk\templates\posts\post_list.html:84
+msgid "New post"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_detail.html:108
+msgid "Edit this post"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_detail.html:116
+msgid "Cloud tag"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_list.html:51
+msgid ""
+"There is no published post yet. Do you have any important info, events ,jobs "
+"opportunities e.t.c?! Be the first one to"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_list.html:51
+msgid "publish one"
+msgstr ""
+
+#: .\obrisk\templates\posts\post_update.html:14
+msgid "Update the post"
+msgstr ""
+
+#: .\obrisk\templates\qa\answer_form.html:5
+#: .\obrisk\templates\qa\answer_form.html:13
+msgid "Answer a question"
+msgstr ""
+
+#: .\obrisk\templates\qa\answer_sample.html:7
+#: .\obrisk\templates\qa\question_detail.html:33
+msgid "Click to up vote; click again to toggle"
+msgstr ""
+
+#: .\obrisk\templates\qa\answer_sample.html:9
+#: .\obrisk\templates\qa\question_detail.html:35
+msgid "Click to down vote; click again to toggle"
+msgstr ""
+
+#: .\obrisk\templates\qa\answer_sample.html:12
+msgid "Click to unaccept the answer"
+msgstr ""
+
+#: .\obrisk\templates\qa\answer_sample.html:16
+msgid "Click to accept the answer"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_detail.html:15
+#: .\obrisk\templates\qa\question_list.html:14
+msgid "Q.A"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_detail.html:21
+#: .\obrisk\templates\qa\question_list.html:19
+msgid "Ask a Question"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_detail.html:44
+#: .\obrisk\templates\qa\question_sample.html:23
+msgid "Asked"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_detail.html:57
+msgid "Submit an answer"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_detail.html:68
+msgid "There are no answers yet."
+msgstr ""
+
+#: .\obrisk\templates\qa\question_detail.html:69
+msgid "Submit your answer now."
+msgstr ""
+
+#: .\obrisk\templates\qa\question_form.html:5
+#: .\obrisk\templates\qa\question_form.html:13
+msgid "Ask a question"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_list.html:24
+msgid "Questions by topic"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_list.html:35
+msgid "Unanswered"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_list.html:40
+msgid "Answered"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_list.html:45
+msgid "All Questions"
+msgstr ""
+
+#: .\obrisk\templates\qa\question_list.html:52
+msgid "No question to display"
+msgstr ""
+
+#: .\obrisk\templates\search\search_results.html:5
+#: .\obrisk\templates\search\search_results.html:17
+msgid "Search Results"
+msgstr ""
+
+#: .\obrisk\templates\search\search_results.html:41 .\obrisk\users\apps.py:7
+msgid "Users"
+msgstr ""
+
+#: .\obrisk\templates\search\search_results.html:42
+msgid "Tags"
+msgstr ""
+
+#: .\obrisk\templates\search\search_results.html:61
+#: .\obrisk\templates\search\search_results.html:68
+#: .\obrisk\templates\search\search_results.html:75
+#: .\obrisk\templates\search\search_results.html:110
+#: .\obrisk\templates\search\search_results.html:119
+msgid "There are no results related to your search"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_confirm_delete.html:5
+msgid "Delete stories"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_confirm_delete.html:8
+msgid "Delete a posted story"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_confirm_delete.html:10
+msgid ""
+"Are you sure you want to continue? If you do this you will delete this story"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_confirm_delete.html:14
+msgid "Delete"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_form_modal.html:7
+msgid "Share something new!"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_list.html:18
+msgid "Share something"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_list.html:23
+msgid "Most recent stories"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_list.html:33
+msgid "There are new stories"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_single.html:18
+msgid "Click to remove this stories"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_thread.html:19
+msgid "Click to remove this story"
+msgstr ""
+
+#: .\obrisk\templates\stories\stories_thread_modal.html:33
+msgid "Reply"
+msgstr ""
+
+#: .\obrisk\templates\users\user_detail.html:24
+#: .\obrisk\templates\users\user_detail.html:32
+msgid "Facebook Profile"
+msgstr ""
+
+#: .\obrisk\templates\users\user_detail.html:28
+msgid "LinkedIn Profile"
+msgstr ""
+
+#: .\obrisk\templates\users\user_detail.html:71
+msgid "Comments"
+msgstr ""
+
+#: .\obrisk\templates\users\user_detail.html:83 .\obrisk\users\models.py:35
+msgid "Points"
+msgstr ""
+
+#: .\obrisk\templates\users\user_detail.html:90
+#: .\obrisk\templates\users\user_form.html:33
+msgid "Update Profile"
+msgstr ""
+
+#: .\obrisk\users\models.py:14
+msgid "Full name"
+msgstr ""
+
+#: .\obrisk\users\models.py:16
+msgid "Profile picture"
+msgstr ""
+
+#: .\obrisk\users\models.py:18
+msgid "Job title"
+msgstr ""
+
+#: .\obrisk\users\models.py:20
+msgid "Personal URL"
+msgstr ""
+
+#: .\obrisk\users\models.py:22
+msgid "Facebook profile"
+msgstr ""
+
+#: .\obrisk\users\models.py:24
+msgid "Instagram account"
+msgstr ""
+
+#: .\obrisk\users\models.py:26
+msgid "LinkedIn profile"
+msgstr ""
+
+#: .\obrisk\users\models.py:28
+msgid "Describe yourself"
+msgstr ""
+
+#: .\obrisk\users\models.py:30
+msgid "Short bio"
+msgstr "Jitambulishe kwa ufupi"
+
+#: .\obrisk\users\models.py:32
+msgid "Country"
+msgstr "Nchi"
+
+#: .\obrisk\users\models.py:33
+msgid "Province/Region"
+msgstr "Mkoa"
+
+#: .\obrisk\users\models.py:34
+msgid "City"
+msgstr "Mji/Wilaya"
+
+#: .\obrisk\users\models.py:36
+msgid "Phone number"
+msgstr "Namba ya simu"
