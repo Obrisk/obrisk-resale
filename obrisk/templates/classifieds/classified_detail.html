@@ -46,10 +46,16 @@
        
             <hr>
             <!-- Classified more Content -->
-            <p class="lead">{% trans 'by' %}
-            <a href="{% url 'users:detail' classified.user.username %}">{{ classified.user.get_profile_name|title }}</a>
-            </p>
-            <h5 class="card-title " style="color: #5a0303" > {% trans 'CNY' %} {{ classified.price }} </h5> <br> 
+            <h5 class="card-title " style="color: #5a0303" > {% trans 'CNY' %} {{ classified.price }} </h5> 
+
+            <p style="overflow-y: auto;"> <a href="{% url 'users:detail' classified.user.username %}">
+                  {% thumbnail classified.user.picture "x30" as im %}
+                    <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
+                  {% empty %}
+                    <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="{% trans 'No Profile Picture' %}" />
+                  {% endthumbnail %} 
+                  {{ classified.user.get_profile_name|title }}</a>
+              </p>
 
             <hr>
             {% if request.user == classified.user%}
@@ -57,8 +63,8 @@
               <a href="{% url 'classifieds:list' %}" class="btn btn-dark">{% trans 'Back' %} </a> <br> <br>   
             {% else %}
             Do you want this item?
-            <a href="{% url 'messager:conversation_detail' user.username  %}" class="btn btn-dark">{% trans ' Chat with seller' %} </a> 
-            <a href="{% url 'classifieds:list' %}" class="btn btn-dark">{% trans 'Back' %} </a> <br>
+            <a href="{% url 'messager:conversation_detail' user.username  %}" class="btn btn-dark">{% trans ' Chat with seller' %} </a> <br>
+            <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a> <br> <br>
             
             <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
             {% endif %}

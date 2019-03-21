@@ -38,6 +38,24 @@ class MessageQuerySet(models.query.QuerySet):
         qs = self.filter(sender=sender, recipient=recipient)
         return qs.update(unread=False)
 
+    def get_all_conversation(self, recipient):
+        chat_list = []
+        try:
+            qs_sent = self.filter(sender=recipient)
+            qs_recieved = self.filter(recipient=recipient)
+            queryset = qs_sent.union(qs_recieved)
+                
+            for qs in queryset:
+                if qs.sender == recipient:
+                    if qs.recipient not in chat_list:
+                        chat_list.append(qs.recipient)
+            return chat_list
+
+        except self.model.DoesNotExist:
+            return get_user_model().objects.get(username=recipient.username)
+
+
+
 
 class Message(models.Model):
     """A private message sent between users."""
@@ -84,6 +102,7 @@ class Message(models.Model):
             message=message
         )
         channel_layer = get_channel_layer()
+        
         msg_sender = str(sender)
         msg_recip = str(recipient)
         msg = str(new_message.uuid_id)

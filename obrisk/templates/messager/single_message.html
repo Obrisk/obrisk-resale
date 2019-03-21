@@ -2,10 +2,10 @@
 {% load thumbnail %}
 
 <li>
-    {% thumbnail message.sender.picture "x45" as im %}
-      <img class="picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
+    {% thumbnail message.sender.picture "x40" as im %}
+      <img class="picture" src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
     {% empty %}
-      <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
+      <img class="picture" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
     {% endthumbnail %}
     <div>
       <b>

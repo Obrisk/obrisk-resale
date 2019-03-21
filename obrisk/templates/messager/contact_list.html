@@ -8,24 +8,16 @@
 {% endblock head %}
 
 {% block content %}
-<!-- 
-  <nav aria-label="breadcrumb ">
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-        <li class="breadcrumb-item active" aria-current="page"> Contacts </li>
-    </ol>
-  </nav> -->
 
-
-  <div class="row" style="margin-top: 1em">
-    <div class="col-md-3 list-group users-list">
-      {% for user in users_list %}
+<div class="row" style="margin-top: 1em">
+  <div class="col-md-3 list-group users-list">
+      {% for user in conversation_list %}
         <a href="{% url 'messager:conversation_detail' user.username  %}"
            class="list-group-item list-group-item-action {% if active == user.username %}active{% endif %}">
-          {% thumbnail user.picture "x30" as im %}
-            <img src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
+          {% thumbnail user.picture "x40" as im %}
+            <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
           {% empty %}
-            <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
+            <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
           {% endthumbnail %}
           {{ user.get_profile_name|title }}
         </a>
