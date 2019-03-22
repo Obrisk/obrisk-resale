@@ -63,7 +63,7 @@
               <a href="{% url 'classifieds:list' %}" class="btn btn-dark">{% trans 'Back' %} </a> <br> <br>   
             {% else %}
             Do you want this item?
-            <a href="{% url 'messager:conversation_detail' user.username  %}" class="btn btn-dark">{% trans ' Chat with seller' %} </a> <br>
+            <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-dark">{% trans ' Chat with seller' %} </a> <br>
             <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a> <br> <br>
             
             <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->

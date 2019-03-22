@@ -8,24 +8,24 @@
 {% endblock head %}
 
 {% block content %}
-
+<div class="container"> 
   <div class="row" style="margin-top: 1em">
-    <div id="conversation" class="col-md-9">
-      <div id="messages" class="messages-list">
-        {% if message_list %}
-          {% for message in message_list %}
-             {% include 'messager/single_message.html' with message=message %}
-          {% endfor %}
-        {% else %}
-          <h4>{% trans 'This is the begining of a great new conversation.' %}</h4>
-          <p>{% trans "Let's get started now!" %}</p>
-        {% endif %}
+   <div class="col-10 offset-1">
+    <div class="card"> 
+
+    <div id="conversation" class="card-body">
+      <div id="messages" class="container chat-body" ref="chatBody">
+            {% if message_list %}
+              {% for message in message_list %}
+                  {% include 'messager/single_message.html' with message=message %}
+              {% endfor %}
+            {% else %}
+              <h4>{% trans 'This is the begining of a great new conversation.' %}</h4>
+              <p>{% trans "Let's get started now!" %}</p>
+            {% endif %}
         <li class="send-message"></li>
       </div>
-     
     </div>
-
-  </div> <br>
 
   <div class="chat-box">
       <form role="form" method="post" action="#" id="send">
@@ -41,6 +41,11 @@
         </div>
       </form>
     </div>
+    <!-- card end-->
+  </div>
+   </div>
+</div>
+</div>
 
 {% endblock content %}
 

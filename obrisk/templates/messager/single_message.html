@@ -1,11 +1,11 @@
 {% load static i18n humanize %}
 {% load thumbnail %}
 
-<li>
+<!-- <li>
     {% thumbnail message.sender.picture "x40" as im %}
       <img class="picture" src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
     {% empty %}
-      <img class="picture" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+      <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
     {% endthumbnail %}
     <div>
       <b>
@@ -15,53 +15,44 @@
       <br>
       {{ message.message }}
     </div>
-  </li>
+  </li> -->
 
-<!-- <div class="row" data-id="{{ msg.id }}">
-        {% if msg.sender == request.user or is_owner == True %}
-        <p> 
-            <span class="pull-right stamp">
-            <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
-            <small>  {{ msg.get_formatted_create_datetime }}-</small>
-            <span class="username">{{ msg.sender}}</span>
-            </span> </span> <br>
-            
-            {% thumbnail msg.sender.picture "x40" as im %}
-                    <img src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
-                {% empty %}
-                    <img class="pull-right" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
-            
-
-            <span class="pull-right {% if msg.read %}msg-read{% else %}msg-unread{% endif %}" style="right:40px" >    
-                {{ msg.text }}
-            </span>
-        </p>
-        <p class="btn right-brk"> </p>
-        
+ <li class="row chat-section"> 
+    {% if request.user == message.sender %}
+        <div class="right-chat ">
+          <div  class="float-right">
+            <small > {{ message.timestamp|date:'N d G:i' }} </small>
           
-        {% else %}
-            <p>
-                <span class="stamp">
-                <span class="username">{{ msg.sender}}-</span>
-                <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
-                <small>{{ msg.get_formatted_create_datetime }}</small>
-                </span> </span> <br>
-
-                {% thumbnail msg.sender.picture "x40" as im %}
-                    <img class="left-picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
-                {% empty %}
-                    <img class="left-picture" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
-
-                <span class="left-msg ">    
-                    {{ msg.text }}
-                </span>
-                
-            </p> <br>
-            
-        {% endif %}
-    </div> -->
-    
+          
+          <span class="float-right"> 
+            {% thumbnail message.sender.picture "x40" as im %}
+              <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+            {% empty %}
+              <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+            {% endthumbnail %}
+          </span>
+          <br>
+            <span class="speech-bubble speech-bubble-user  text-white subtle-blue-gradient"> {{ message.message }} </span>
+        </div>
+        </div>
+        <br>
+        
+    {% else %}
+        {% thumbnail message.sender.picture "x40" as im %}
+          <img class="picture" src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+        {% empty %}
+          <img class="picture" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+        {% endthumbnail %}
+        <div>
+          <b>
+            <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a>
+          </b>
+          <small> - {{ message.timestamp|date:'N d G:i' }}</small>
+          <br>
+          <span class="speech-bubble speech-bubble-peer"> {{ message.message }} </span>
+        </div>
+          
+    {% endif %}
+</li>
 
 
