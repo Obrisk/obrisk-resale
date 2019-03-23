@@ -1,28 +1,14 @@
 {% load static i18n humanize %}
 {% load thumbnail %}
-
-<!-- <li>
-    {% thumbnail message.sender.picture "x40" as im %}
-      <img class="picture" src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-    {% empty %}
-      <img class="picture" src="{% static 'img/user.png' %}" height="45px" alt="{% trans 'No Profile Picture' %}" />
-    {% endthumbnail %}
-    <div>
-      <b>
-        <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a>
-      </b>
-      <small> - {{ message.timestamp|date:'N d G:i' }}</small>
-      <br>
-      {{ message.message }}
-    </div>
-  </li> -->
-
- <li class="row chat-section"> 
+  
     {% if request.user == message.sender %}
+    <li class="row chat-section">
         <div class="right-chat ">
-          <div  class="float-right">
-            <small > {{ message.timestamp|date:'N d G:i' }} </small>
-          
+          <span class="float-right" > 
+            <small> {{ message.timestamp|date:'N d G:i' }}- </small> 
+            <b> <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a> </b>
+          </span>
+          <br>
           
           <span class="float-right"> 
             {% thumbnail message.sender.picture "x40" as im %}
@@ -30,29 +16,32 @@
             {% empty %}
               <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
             {% endthumbnail %}
-          </span>
-          <br>
+          </span> 
+        
             <span class="speech-bubble speech-bubble-user  text-white subtle-blue-gradient"> {{ message.message }} </span>
-        </div>
+          </span>
         </div>
         <br>
-        
+      </li>    
     {% else %}
+    <li class="row left-chat">
+        <b>
+          <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }} </a>
+        </b>
+        <small class="left-time">-{{ message.timestamp|date:'N d G:i' }}</small>
+      </li>
+
+      <div class=" row left-pic"> 
         {% thumbnail message.sender.picture "x40" as im %}
-          <img class="picture" src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+          <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
         {% empty %}
-          <img class="picture" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+          <img  src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
         {% endthumbnail %}
-        <div>
-          <b>
-            <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a>
-          </b>
-          <small> - {{ message.timestamp|date:'N d G:i' }}</small>
-          <br>
-          <span class="speech-bubble speech-bubble-peer"> {{ message.message }} </span>
-        </div>
+      </div>
+      <span class="speech-bubble speech-bubble-peer"> {{ message.message }} </span>
+      
           
     {% endif %}
-</li>
+
 
 

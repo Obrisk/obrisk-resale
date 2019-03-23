@@ -10,11 +10,11 @@
 {% block content %}
 <div class="container"> 
   <div class="row" style="margin-top: 1em">
-   <div class="col-10 offset-1">
+   <div class="col-sm-12 ">
     <div class="card"> 
 
     <div id="conversation" class="card-body">
-      <div id="messages" class="container chat-body" ref="chatBody">
+      <div id="messages" class=" chat-body" ref="chatBody">
             {% if message_list %}
               {% for message in message_list %}
                   {% include 'messager/single_message.html' with message=message %}

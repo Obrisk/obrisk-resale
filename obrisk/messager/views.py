@@ -42,6 +42,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(*args, **kwargs)
         context['conversation_list'] = Message.objects.get_all_conversation(
             self.request.user)
+        context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         last_conversation = Message.objects.get_most_recent_conversation(
             self.request.user
         )
