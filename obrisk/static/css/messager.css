@@ -1,5 +1,5 @@
 .users-list {
-  height: 83vh;
+  height: 90%;
   overflow-y: auto;
 }
 
@@ -9,16 +9,15 @@
 }
 
 .chat-body {
-  margin-top: -15px;
+  margin-top: -1%;
   margin-bottom: -5px;
-  height: 380px;
- 
-  /*height: 78vh;*/
+  height: 70vh;
   margin: 0;
   padding: 0; 
   overflow-y: auto;
-  padding-right: 5px;
-  padding-left: 5px;
+  padding-right: 10px;
+  padding-left: 10px;
+  overflow-x: hidden;
 }
 
 .chat-body li {
@@ -33,16 +32,16 @@
 
 .right-chat {
   margin-left: auto;
-  margin-right: 15px;
+  margin-right: 1%;
 } 
 
 
 .speech-bubble {
-  display: table;
+  display: flex;
   position: relative;
   border-radius: 0.4em;
   padding: 10px;
-  background-color: #fff;
+  background-color: #0aeee3;
   font-size: 14px;
   
 }
@@ -52,18 +51,26 @@
 }
 
 .left-chat {
-  margin-left: 15px;
+  margin-left: 1%;
 }
 
-
 .left-pic {
-  margin-left: 15px;
-  display: inline;
+  margin-left: 1%;
+  display: flex;
+
+}
+
+img {
+  flex: 0 1 auto;
+  align-self: flex-start;
 }
 
 .speech-bubble-peer {
-  display: inline;
-  margin-left: 15px;
+  display: flex;
+  flex: 0 1 80%;  /*This line doesn't favor iphone5*/
+  margin-top: 4px;
+  margin-left: 2%;
+  
 }
 
 .subtle-blue-gradient {
@@ -86,8 +93,9 @@
   border-right: 0;
   border-top: 0;
   margin-top: -10px;
-  margin-right: -20px;
+  margin-right: -15px;
 }
+
 .speech-bubble-peer:after {
   content: "";
   position: absolute;
@@ -96,21 +104,21 @@
   width: 0;
   height: 0;
   border: 20px solid transparent;
-  border-right-color: #ffffff;
+  border-right-color: #0aeee3;
   border-top: 0;
   border-left: 0;
   margin-top: -10px;
-  margin-left: -20px;
+  margin-left: -15px;
 }
 .chat-section:first-child {
   margin-top: 10px;
 }
 .chat-section {
-  margin-top: 15px;
+  margin-top: 1%;
 }
 
 .card-body {
-  background-color:#0aeee3;
+  background-color: #fff;
 }
 
 

@@ -31,15 +31,14 @@
         <small class="left-time">-{{ message.timestamp|date:'N d G:i' }}</small>
       </li>
 
-      <div class=" row left-pic"> 
+      <div class=" row left-pic "> 
         {% thumbnail message.sender.picture "x40" as im %}
           <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
         {% empty %}
           <img  src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
         {% endthumbnail %}
+        <span class="speech-bubble speech-bubble-peer "> {{ message.message }} </span>
       </div>
-      <span class="speech-bubble speech-bubble-peer"> {{ message.message }} </span>
-      
           
     {% endif %}
 
