@@ -53,9 +53,9 @@ $(function () {
         return false;
     });
 
-    // //This helps the text in the textarea of the message to be send
-    // //when press enter and go new line with shift + enter!
-    // $("#sendText").keypress(function (e) {
+    //This helps the text in the textarea of the message to be send
+    //when press enter and go new line with shift + enter!
+    // $(".text-area").keypress(function (e) {
     //     if(e.which == 13 && !e.shiftKey) {        
     //         $(this).closest("form").submit();
     //         e.preventDefault();

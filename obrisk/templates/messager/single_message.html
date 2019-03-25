@@ -1,51 +1,46 @@
 {% load static i18n humanize %}
 {% load thumbnail %}
-
-<div class="row" data-id="{{ msg.id }}">
-        {% if msg.sender == request.user or is_owner == True %}
-        <p> 
-            <span class="pull-right stamp">
-            <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
-            <small>  {{ msg.get_formatted_create_datetime }}-</small>
-            <span class="username">{{ msg.sender}}</span>
-            </span> </span> <br>
-            
-            {% thumbnail msg.sender.picture "x40" as im %}
-                    <img src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
-                {% empty %}
-                    <img class="pull-right" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
-            
-
-            <span class="pull-right {% if msg.read %}msg-read{% else %}msg-unread{% endif %}" style="right:40px" >    
-                {{ msg.text }}
-            </span>
-        </p>
-        <p class="btn right-brk"> </p>
-        
+  
+    {% if request.user == message.sender %}
+    <li class="row chat-section">
+        <div class="right-chat ">
+          <span class="float-right" > 
+            <small> {{ message.timestamp|date:'N d G:i' }}- </small> 
+            <b> <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a> </b>
+          </span>
+          <br>
           
-        {% else %}
-            <p>
-                <span class="stamp">
-                <span class="username">{{ msg.sender}}-</span>
-                <span data-livestamp="{{ msg.get_formatted_create_datetime }}">
-                <small>{{ msg.get_formatted_create_datetime }}</small>
-                </span> </span> <br>
+          <span class="float-right"> 
+            {% thumbnail message.sender.picture "x40" as im %}
+              <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+            {% empty %}
+              <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+            {% endthumbnail %}
+          </span> 
+        
+            <span class="speech-bubble speech-bubble-user  text-white subtle-blue-gradient"> {{ message.message }} </span>
+          </span>
+        </div>
+        <br>
+      </li>    
+    {% else %}
+    <li class="row left-chat">
+        <b>
+          <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }} </a>
+        </b>
+        <small class="left-time">-{{ message.timestamp|date:'N d G:i' }}</small>
+      </li>
 
-                {% thumbnail msg.sender.picture "x40" as im %}
-                    <img class="left-picture" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}">
-                {% empty %}
-                    <img class="left-picture" src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
+      <div class=" row left-pic "> 
+        {% thumbnail message.sender.picture "x40" as im %}
+          <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+        {% empty %}
+          <img  src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+        {% endthumbnail %}
+        <span class="speech-bubble speech-bubble-peer "> {{ message.message }} </span>
+      </div>
+          
+    {% endif %}
 
-                <span class="left-msg {% if msg.read %}msg-read{% else %}msg-unread{% endif %}">    
-                    {{ msg.text }}
-                </span>
-                
-            </p> <br>
-            
-        {% endif %}
-    </div>
-    
 
 

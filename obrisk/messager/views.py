@@ -20,9 +20,6 @@ class MessagesListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['users_list'] = get_user_model().objects.filter(
-            is_active=True).exclude(
-                username=self.request.user).order_by('username')
         last_conversation = Message.objects.get_most_recent_conversation(
             self.request.user
         )
@@ -43,9 +40,9 @@ class ContactsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['users_list'] = get_user_model().objects.filter(
-            is_active=True).exclude(
-                username=self.request.user).order_by('username')
+        context['conversation_list'] = Message.objects.get_all_conversation(
+            self.request.user)
+        context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         last_conversation = Message.objects.get_most_recent_conversation(
             self.request.user
         )
@@ -55,7 +52,9 @@ class ContactsListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         active_user = Message.objects.get_most_recent_conversation(
             self.request.user)
-        return Message.objects.get_conversation(active_user, self.request.user)
+        return Message.objects.get_conversation(
+            active_user, self.request.user)
+
 
 class ConversationListView(MessagesListView):
     """CBV to render the inbox, showing a specific conversation with a given
@@ -88,10 +87,9 @@ def send_message(request):
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message)
         return render(request, 'messager/single_message.html',
-                      {'msg': msg})
+                      {'message': msg})
 
     return HttpResponse()
-
 
 @login_required
 @ajax_required
@@ -99,20 +97,7 @@ def send_message(request):
 def receive_message(request):
     """Simple AJAX functional view to return a rendered single message on the
     receiver side providing realtime connections."""
-
-    class Empty(): pass
-    msg = Empty()
-    msg.text = request.GET.get('packet[message]')
-    msg.get_formatted_create_datetime = request.GET.get('packet[created]')
-    msg.sender = request.GET.get('packet[sender_name]')
-    msg.id = request.GET.get('packet[message_id]')
-    #check the request.user only this time when ajax is called
-    #Since it is an asgi request.user is not passed in template.
-    is_owner = False
-    user = str(request.user)
-    sender = str(msg.sender)
-    if user == sender:
-        is_owner = True
-
-    return render(request, 
-            'messager/single_message.html', {'msg': msg, 'is_owner':is_owner })
+    message_id = request.GET.get('message_id')
+    message = Message.objects.get(pk=message_id)
+    return render(request,
+                  'messager/single_message.html', {'message': message})

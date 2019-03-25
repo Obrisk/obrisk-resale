@@ -1,5 +1,5 @@
 .users-list {
-  height: 83vh;
+  height: 90%;
   overflow-y: auto;
 }
 
@@ -8,30 +8,129 @@
   vertical-align: middle;
 }
 
-.messages-list {
+.chat-body {
+  margin-top: -1%;
+  margin-bottom: -5px;
+  height: 70vh;
   margin: 0;
-  padding: 0;
-  height: 78vh;
+  padding: 0; 
   overflow-y: auto;
+  padding-right: 10px;
+  padding-left: 10px;
+  overflow-x: hidden;
 }
 
-.messages-list li {
+.chat-body li {
   list-style: none;
   padding: .6em 0;
 }
 
-.messages-list li h5 {
+.chat-body li h5 {
   margin: 0;
   margin-bottom: .2em;
 }
 
-.messages-list li div {
-  margin-left: 60px;
+.text-area {
+  width: 110px;
 }
 
-.messages-list .picture {
-  border-radius: 5px;
-  float: left;
+.msg_send_btn {
+  color: #fff;
+  height: 35px;
+  background-color: #5e1604;
 }
+
+.right-chat {
+  margin-left: auto;
+  margin-right: 1%;
+} 
+
+
+.speech-bubble {
+  display: flex;
+  position: relative;
+  border-radius: 0.4em;
+  padding: 10px;
+  background-color: #0aeee3;
+  font-size: 14px;
+  
+}
+
+.left-time {
+  margin-top: 4px;
+}
+
+.left-chat {
+  margin-left: 1%;
+}
+
+.left-pic {
+  margin-left: 1%;
+  display: flex;
+
+}
+
+img {
+  flex: 0 1 auto;
+  align-self: flex-start;
+}
+
+.speech-bubble-peer {
+  display: flex;
+  flex: 0 1 80%;  /*This line doesn't favor iphone5*/
+  margin-top: 4px;
+  margin-left: 2%;
+  
+}
+
+.subtle-blue-gradient {
+  background: linear-gradient(45deg,#5e1604, #a12904);
+}
+
+.speech-bubble-user {
+  margin-top: 4px;
+}
+
+.speech-bubble-user:after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 10px;
+  width: auto;
+  height: 0;
+  border: 20px solid transparent;
+  border-left-color: #a12904;
+  border-right: 0;
+  border-top: 0;
+  margin-top: -10px;
+  margin-right: -13px;
+}
+
+.speech-bubble-peer:after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 10px;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-right-color: #0aeee3;
+  border-top: 0;
+  border-left: 0;
+  margin-top: -10px;
+  margin-left: -15px;
+}
+.chat-section:first-child {
+  margin-top: 10px;
+}
+.chat-section {
+  margin-top: 1%;
+}
+
+.card-body {
+  background-color: #fff;
+}
+
+
 
 

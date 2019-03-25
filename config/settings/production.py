@@ -205,7 +205,3 @@ RAVEN_CONFIG = {
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-CHAT_WS_SERVER_HOST = '128.0.0.2'
-CHAT_WS_SERVER_PORT = 8002
-CHAT_WS_SERVER_PROTOCOL = 'ws'
-DATETIME_FORMAT ='M d H:i'

@@ -4,7 +4,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
-from django_private_chat import urls as django_private_chat_urls
 
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
@@ -18,7 +17,8 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/terms.html'), name='terms_and_conditions'),
     url(r'^privacy-policy/$',
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
-    url(r'^dialogs/receive-message', views.receive_message, name='receive_message_2' ),
+    url(r'^contacts/$',
+        TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
@@ -41,7 +41,6 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
-    url(r'^', include('django_private_chat.urls')),
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

@@ -29,12 +29,12 @@ class User(AbstractUser):
     bio = models.CharField(
         _('Short bio'), max_length=280, blank=True, null=True)
     country = models.CharField(
-        _('Country'), max_length=100, default="China")
-    province_region = models.CharField (_('Province/Region'), max_length=100, default="Zhejiang")
-    city = models.CharField (max_length=100, default="Hangzhou")
-    nationality = models.CharField (max_length=50, blank=True, null=True) 
-    points = models.IntegerField(default=0)
-    phone_number = PhoneNumberField(default="Unknown_phone_no")  #Needs a country's code 
+        _('Country'), max_length=100, default="Tanzania")
+    province_region = models.CharField (_('Province/Region'), max_length=100, default="Mbeya")
+    city = models.CharField  (  _('City'), max_length=100, default="Mbeya mjini") 
+    points = models.IntegerField(  _('Points'), default=0)
+    nationality = models.CharField (_('Nationality'), max_length=100, blank=True, null=True )
+    phone_number = PhoneNumberField (_('Phone number'), default="Unknown_phone_no")  #Needs a country's code 
     is_official = models.BooleanField (default=False)      #For the use of published posts
     is_seller = models.BooleanField (default=False)  #For sellers in Classifieds.
     # near future please add unique 12 digit ID to use instead of username for url's especially in chat.
