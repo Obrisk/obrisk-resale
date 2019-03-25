@@ -39,17 +39,20 @@ header .navbar-brand {
 }
 
 #notifications.new-notifications {
-  color: #428bca;
+  color: #0aeee3;
 }
 
 a {
-  color: #2e2e31;
+  color: black ;
 }
 
 a:hover {
-  color:#525258;
+  color:#0aeee3;
 }
 
+.bg-dark {
+  background:linear-gradient(45deg,#491104, #c03004);
+}
 
 .alert-debug {
   color: black;
@@ -94,3 +97,19 @@ a:hover {
   margin-left: 45px;
   margin-bottom: 0;
 }
+
+.breadcrumb {
+  background: linear-gradient(45deg, #0aacec ,#0aeee3 );
+}
+
+.card-header {
+  color: white;
+  background:linear-gradient(45deg,#491104, #c03004)
+}
+
+.card {
+  border-color: #491104;
+}
+
+
+

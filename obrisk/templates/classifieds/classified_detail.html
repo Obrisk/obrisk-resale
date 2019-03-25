@@ -2,6 +2,10 @@
 {% load static i18n %}
 {% load cloudinary comments crispy_forms_tags thumbnail humanize %}
 
+{% block head %}
+  <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+{% endblock head %}
+
 {% block title %}{{ classified.title|title }}{% endblock %}
 
 {% block content %}
@@ -46,24 +50,29 @@
        
             <hr>
             <!-- Classified more Content -->
-            <h5 class="card-title " style="color: #5a0303" > {% trans 'CNY' %} {{ classified.price }} </h5> 
+            <h3 class="ribbon">
+              <strong class="ribbon-content">{% trans 'CNY' %} {{ classified.price }}</strong>
+           </h3> 
+           
 
             <p style="overflow-y: auto;"> <a href="{% url 'users:detail' classified.user.username %}">
-                  {% thumbnail classified.user.picture "x30" as im %}
+                  {% thumbnail classified.user.picture "x35" as im %}
                     <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
                   {% empty %}
-                    <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="{% trans 'No Profile Picture' %}" />
+                    <img src="{% static 'img/user.png' %}" class="pull-left" height="35px" alt="{% trans 'No Profile Picture' %}" />
                   {% endthumbnail %} 
-                  {{ classified.user.get_profile_name|title }}</a>
+                  <strong>  {{ classified.user.get_profile_name|title }} </strong> </a>
               </p>
 
             <hr>
             {% if request.user == classified.user%}
-              <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}" title="{% trans 'Edit this classified' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+              <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}" title="{% trans 'Edit this classified' %}">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
               <a href="{% url 'classifieds:list' %}" class="btn btn-dark">&larr;{% trans 'Back' %} </a> <br> <br>   
             {% else %}
             Do you want this item?
-            <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-dark">{% trans ' Chat with seller' %} </a> <br>
+            <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
+            <i class="lead fa fa-shopping-cart"></i>   <strong >  {% trans ' Chat with seller' %} </strong></a>  <br> <br>
             <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a> <br> <br>
             
             <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->

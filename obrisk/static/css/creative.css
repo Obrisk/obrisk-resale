@@ -19,7 +19,7 @@ hr.light {
 }
 
 a {
-  color: black;
+  color: linear-gradient(45deg,#5e1604, #a12904);
   -webkit-transition: all 0.2s;
   -moz-transition: all 0.2s;
   transition: all 0.2s;
@@ -43,7 +43,7 @@ h6 {
 }
 
 .bg-dark {
-  background-color: #212529 !important;
+  background-color: linear-gradient(45deg,#5e1604, #a12904) !important;
 }
 
 .text-faded {
@@ -66,7 +66,7 @@ section {
 
 ::selection {
   color: #fff;
-  background: #212529;
+  background: linear-gradient(45deg,#5e1604, #a12904);
   text-shadow: none;
 }
 
@@ -102,7 +102,7 @@ img::-moz-selection {
 }
 
 #mainNav {
-  border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+  border-bottom: 1px solid;
   background-color: #fff;
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
   -webkit-transition: all 0.2s;
@@ -126,7 +126,7 @@ img::-moz-selection {
   font-size: .9rem;
   font-weight: 700;
   text-transform: uppercase;
-  color: #212529;
+  color: linear-gradient(45deg,#5e1604, #a12904);
 }
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link:hover,
@@ -179,7 +179,7 @@ img::-moz-selection {
   }
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
-    color: #212529;
+    color: linear-gradient(45deg,#5e1604, #a12904);
   }
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
@@ -335,7 +335,3 @@ header.masthead p {
 .btn-dark:active, .btn-dark:focus {
   box-shadow: 0 0 0 0.2rem #0aeee3 !important;
 }
-
-/* .breadcrumb {
-  background-color: #0aeee3;
-} */
