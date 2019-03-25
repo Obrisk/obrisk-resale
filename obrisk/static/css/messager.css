@@ -30,6 +30,16 @@
   margin-bottom: .2em;
 }
 
+.text-area {
+  width: 110px;
+}
+
+.msg_send_btn {
+  color: #fff;
+  height: 35px;
+  background-color: #5e1604;
+}
+
 .right-chat {
   margin-left: auto;
   margin-right: 1%;
@@ -93,7 +103,7 @@ img {
   border-right: 0;
   border-top: 0;
   margin-top: -10px;
-  margin-right: -15px;
+  margin-right: -13px;
 }
 
 .speech-bubble-peer:after {
