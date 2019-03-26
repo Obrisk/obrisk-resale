@@ -51,7 +51,7 @@ a:hover {
 }
 
 .bg-dark {
-  background:linear-gradient(45deg,#491104, #c03004);
+  background:linear-gradient(45deg,#330c04, #8b2100);
 }
 
 .alert-debug {
@@ -61,7 +61,7 @@ a:hover {
 }
 
 .alert-error {
-  color: #b94a48;
+  color: #8b2100;
   background-color: #f2dede;
   border-color: #eed3d7;
 }
@@ -104,11 +104,15 @@ a:hover {
 
 .card-header {
   color: white;
-  background:linear-gradient(45deg,#491104, #c03004)
+  background:linear-gradient(45deg,#330c04, #8b2100)
 }
 
 .card {
-  border-color: #491104;
+  border-color: #8b2100;
+}
+
+.btn-dark {
+  background:linear-gradient(45deg,#330c04, #8b2100)
 }
 
 
