@@ -60,7 +60,7 @@ section {
 
 ::-moz-selection {
   color: #fff;
-  background: #212529;
+  background: #5e1604;
   text-shadow: none;
 }
 
@@ -85,9 +85,9 @@ section {
   font-size: 3em;
   font-weight: 200;
   font-family: "Audiowide", cursive;
-  color: #92c35e;
+  color: #0aeee3;
   text-align: center;
-  text-shadow: 1px 1px 0 #333333;
+  text-shadow: 1px 1px 0 #a12904;
   line-height: 70px;
 }
 
@@ -168,7 +168,7 @@ img::-moz-selection {
     color: #fff;
   }
   #mainNav.navbar-shrink {
-    border-bottom: 1px solid rgba(33, 37, 41, 0.1);
+    border-bottom: 1px solid #a12904;
     background-color: #fff;
   }
   #mainNav.navbar-shrink .navbar-brand {
@@ -325,6 +325,15 @@ header.masthead p {
 .btn-dark {
   background-color: white;
   border-color: white;
+}
+
+.btn-cyan {
+  background-color: #0aeee3;
+}
+
+.btn-cyan:hover, .btn-cyan:focus, .btn-cyan:active {
+  background-color: #8b2100 !important;
+  border-color: #8b2100; 
 }
 
 .btn-dark:hover, .btn-dark:focus, .btn-dark:active {

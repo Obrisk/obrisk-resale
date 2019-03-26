@@ -3,15 +3,28 @@
   overflow-y: auto;
 }
 
+.list-group-item {
+  background-image: linear-gradient(45deg, #0aacec ,#0aeee3 );
+}
+
+.nav {
+  padding-top: 0;
+  margin-top: 0;
+  margin: 0;
+  padding: 0; 
+} 
+
 .chat-status {
   text-align: center;
   vertical-align: middle;
 }
 
-.chat-body {
+.card-body {
+  display: flex;
+  flex-direction: column;
   margin-top: -1%;
   margin-bottom: -5px;
-  height: 70vh;
+  height: 69vh;
   margin: 0;
   padding: 0; 
   overflow-y: auto;
@@ -20,12 +33,16 @@
   overflow-x: hidden;
 }
 
-.chat-body li {
+.card {
+  width: 100%;
+}
+
+.card-body li {
   list-style: none;
   padding: .6em 0;
 }
 
-.chat-body li h5 {
+.card-body li h5 {
   margin: 0;
   margin-bottom: .2em;
 }
@@ -40,47 +57,44 @@
   background-color: #5e1604;
 }
 
-.right-chat {
-  margin-left: auto;
-  margin-right: 1%;
-} 
-
-
 .speech-bubble {
   display: flex;
   position: relative;
   border-radius: 0.4em;
   padding: 10px;
-  background-color: #0aeee3;
+  background:  linear-gradient(45deg, #0aacec ,#0aeee3 );
   font-size: 14px;
   
 }
 
-.left-time {
-  margin-top: 4px;
+.user-msg {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  align-self: flex-end ;
 }
 
-.left-chat {
-  margin-left: 1%;
+.float-right {
+  align-self: flex-end ;
 }
 
-.left-pic {
+.user-msg img {
+  flex: 0 1 0%;
+  align-self: flex-start;
+}
+
+.peer-msg {
   margin-left: 1%;
   display: flex;
-
-}
-
-img {
-  flex: 0 1 auto;
-  align-self: flex-start;
 }
 
 .speech-bubble-peer {
   display: flex;
-  flex: 0 1 80%;  /*This line doesn't favor iphone5*/
+  flex: 0 1 auto;  /*This line doesn't favor iphone5*/
   margin-top: 4px;
   margin-left: 2%;
-  
+  margin-right: auto;
+  margin-left: 1%;
 }
 
 .subtle-blue-gradient {
@@ -88,7 +102,11 @@ img {
 }
 
 .speech-bubble-user {
+  display: flex;
+  flex: 1 1 0%;
   margin-top: 4px;
+  margin-left: auto;
+  margin-right: 1%;
 }
 
 .speech-bubble-user:after {
@@ -114,7 +132,7 @@ img {
   width: 0;
   height: 0;
   border: 20px solid transparent;
-  border-right-color: #0aeee3;
+  border-right-color: #0aacec;
   border-top: 0;
   border-left: 0;
   margin-top: -10px;

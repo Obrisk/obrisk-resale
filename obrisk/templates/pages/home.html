@@ -41,8 +41,9 @@
   <section class="page-section" id="services">
     <div class="container">
       <h2 class="text-center mt-0"> Are you new here?! </h2>
-      <h4 class="text-center h4 mb-2" >
-         <a href="{% url 'account_signup' %}">{% trans 'Sign up' %}</a> </h4>
+      <h4 class="text-center text-secondary h4 mb-2" >
+        <a class="btn btn-cyan btn-xl js-scroll-trigger text-dark"  href="{% url 'account_signup' %}">{% trans 'Sign up now' %} </a> 
+         </h4>
       <hr class="divider my-4">
       <div class="row">
         <div class="col-md-6 text-center">
@@ -72,11 +73,11 @@
   <!-- Footer -->
   <footer class="bg-light py-5">
     <div class="container">
-        <div class="small text-center text-muted">
+        <div class="text-secondary text-center text-muted">
           <!-- <a href="{% url 'about' %}"> about </a> -->
-          <a href="{% url 'about' %}" style="padding: 10px" > about </a>
-          <a href="{% url 'terms_and_conditions' %}" style="padding: 10px"> terms and condition</a>
-          <a href="{% url 'privacy_policy' %}" style="padding: 10px"> privacy policy </a>
+          <a class="text-center text-muted" href="{% url 'about' %}" style="padding: 10px" > about </a>
+          <a class="text-center text-muted" href="{% url 'terms_and_conditions' %}" style="padding: 10px"> terms and condition</a>
+          <a class="text-center text-muted" href="{% url 'privacy_policy' %}" style="padding: 10px"> privacy policy </a>
         </div>
 
       <div class="small text-center text-muted">Copyright &copy; 2019 - Obrisk </div>

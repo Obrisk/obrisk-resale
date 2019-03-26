@@ -23,7 +23,6 @@
       </ol>
     </nav>
 
-    
     <div class="row">
       <!-- Classified Entries Column -->
       <!-- <div class="col-md-8"> -->
@@ -43,10 +42,10 @@
             </div>
             
             <div class="card-body">  
-                  <h6 class="card-title" > {{ classified.title}} <h6> 
-                  <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
-                  <i class="lead fa fa-map-marker"></i>
-                  <span class="card-text small "> {{ classified.located_area|safe }}</span>    
+                <h6 class="card-title" > {{ classified.title}} <h6> 
+                <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
+                <i class="lead fa fa-map-marker"></i>
+                <span class="card-text small "> {{ classified.located_area|safe }}</span>    
             </div>
           </a>
         </div>  
@@ -88,12 +87,14 @@
       </div>
     </div>
 
-    {% if page_obj.number == paginator.num_pages %} <!-- also add, if paginator.num_pages == 0-->
-    <div class="row">     
-        <h4 class="no-data justify-content-center">{% trans 'Classified ads in other places' %} </h4>
-    </div>
+    {% if page_obj.number == paginator.num_pages and other_classifieds %} <!-- also add, if paginator.num_pages == 0-->
+
+      <div class="row">     
+          <h4 class="no-data justify-content-center">{% trans 'Classified ads in other places' %} </h4>
+      </div>
       
-      <div class="row "> 
+      <div class="row ">
+       
       {% for classified in other_classifieds %}
           <!-- Classified ad. -->
           <div class="card mr-2 mb-3" style="max-height: 250px; max-width:160px">  

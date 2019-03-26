@@ -2,15 +2,14 @@
 {% load thumbnail %}
   
     {% if request.user == message.sender %}
-    <li class="row chat-section">
-        <div class="right-chat ">
-          <span class="float-right" > 
-            <small> {{ message.timestamp|date:'N d G:i' }}- </small> 
-            <b> <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a> </b>
-          </span>
-          <br>
-          
-          <span class="float-right"> 
+     <span class="float-right">
+          <small> {{ message.timestamp|date:'N d G:i' }}- </small> 
+          <b> <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a> </b>
+     </span>
+ 
+        <li class="user-msg">
+          <span class="speech-bubble speech-bubble-user text-white subtle-blue-gradient"> {{ message.message }} </span>
+
             {% thumbnail message.sender.picture "x40" as im %}
               <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
             {% empty %}
@@ -18,20 +17,16 @@
             {% endthumbnail %}
           </span> 
         
-            <span class="speech-bubble speech-bubble-user  text-white subtle-blue-gradient"> {{ message.message }} </span>
-          </span>
-        </div>
-        <br>
-      </li>    
+      </li>  
     {% else %}
-    <li class="row left-chat">
+    <li>
         <b>
           <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }} </a>
         </b>
-        <small class="left-time">-{{ message.timestamp|date:'N d G:i' }}</small>
-      </li>
+        <small class="left-time">-{{ message.timestamp|date:'N d G:i' }}</small> <br>
+      
 
-      <div class=" row left-pic "> 
+      <div class="peer-msg"> 
         {% thumbnail message.sender.picture "x40" as im %}
           <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
         {% empty %}
@@ -39,6 +34,7 @@
         {% endthumbnail %}
         <span class="speech-bubble speech-bubble-peer "> {{ message.message }} </span>
       </div>
+      </li>
           
     {% endif %}
 

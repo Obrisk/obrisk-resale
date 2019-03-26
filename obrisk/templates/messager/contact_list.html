@@ -20,7 +20,7 @@
           {% empty %}
             <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
           {% endthumbnail %}
-          {{ user.get_profile_name|title }}
+          <strong>   {{ user.get_profile_name|title }} </strong>
         </a>
       {% endfor %}
     {% else %}
@@ -30,7 +30,8 @@
       <p>{% trans "If you have other questions, chat with the Obrisk team member... " %}</p> 
       <p>{% trans " We will reply you within the shortest time possible." %}</p>
 
-    {% for user in super_users %}  
+    {% for user in super_users %} 
+    {% if forloop.first %} 
       <a href="{% url 'messager:conversation_detail' user.username  %}"
         class="list-group-item list-group-item-action ">
         {% thumbnail user.picture "x40" as im %}
@@ -38,7 +39,8 @@
         {% empty %}
           <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
         {% endthumbnail %}
-        {{ user.get_profile_name|title }}
+        <strong> {{ user.get_profile_name|title }} </strong>
+    {% endif %}
     {% endfor %}    
     </div>
     {% endif %}  
