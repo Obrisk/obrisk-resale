@@ -43,11 +43,11 @@ header .navbar-brand {
 }
 
 a {
-  color: black ;
+  color: #330c04 ;
 }
 
 a:hover {
-  color:#0aeee3;
+  color:#8b2100;
 }
 
 .bg-dark {

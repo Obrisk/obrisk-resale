@@ -10,10 +10,17 @@
 {% block content %}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'messager:contacts_list' %}">{% trans 'Contacts' %}</a></li>
-        <li class="breadcrumb-item active {% if active == user.username %}active{% endif %}" aria-current="page" > {{active}} </li>
+        <li class="breadcrumb-item"><a href="{% url 'messager:contacts_list' %}">{% trans 'Contacts ' %}</a></li>
+        <!-- <li style="padding-left: 2%">  -->
+            {# thumbnail user.picture "x30" as im or get username from {% request.path %} #} 
+              <!-- <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image"> -->
+            {# empty #}
+              <!-- <img src="{% static 'img/user.png' %}"  height="30px" alt="{% trans 'No Profile Picture' %}" /> -->
+            {# endthumbnail #}
+          <!-- </li> -->
+        <li class="breadcrumb-item active {% if active == user.username %}active{% endif %}" aria-current="page" > {{ active}} </li>
     </ol>
-  </nav>
+</nav>
 
   <div class="row">
    <div class="card">
@@ -23,8 +30,8 @@
                   {% include 'messager/single_message.html' with message=message %}
               {% endfor %}
             {% else %}
-              <h4>{% trans 'This is the begining of a great new conversation.' %}</h4>
-              <p>{% trans "Let's get started now!" %}</p>
+              <h4>{% trans 'Hello '  %} {{ request.user.username }}{% trans ' nice to meet you' %}</h4>
+              <p>{% trans "I am " %} {{ active }} {% trans ", Let's talk!" %}</p>
             {% endif %}
         <li class="send-message"></li> <!-- This will hold the space btn few messages that aren't full page and chat-box-->
       </div>

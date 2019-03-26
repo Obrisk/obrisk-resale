@@ -5,14 +5,24 @@
 {% block head_title %}{% trans "Verify Your E-mail Address" %}{% endblock %}
 
 {% block inner %}
-    <h1>{% trans "Please Verify Your E-mail Address" %}</h1>
+ <div class="text-justify" > 
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><h2> {% trans "Please Verify Your E-mail Address" %} </h2> </li>
+        </ol>
+    </nav>
+    <hr>
+    <p> Hello! thank you for signing up for Obrisk. Only one last little step is remaining before you can continue using the website. </p>
 
-    <p>{% blocktrans %}We have sent an e-mail to you for verification.
-        Follow the link provided to finalize the sign-up process.
-        If you do not receive the confirmation e-mail within a few minutes, 
-        be sure to check the spam/junk folder for the e-mail. <br>
+    <p>{% blocktrans %}We have sent an e-mail to the e-mail address you have provided for verification.
+        Follow the link provided in the e-mail to finalize the sign-up process.  </p>
+        <p>If you do not receive the confirmation e-mail within a few minutes, 
+        be sure to check the <strong> spam/junk </strong> folder for the e-mail. <br>
         Please <a href="mailto:obrisk@obrisk.com" > click here </a> to contact us, incase you still have problems with signing up.
     </p> {% endblocktrans %}
+</div>
+
+<hr> 
 
 {% endblock %}
 

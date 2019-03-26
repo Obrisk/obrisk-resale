@@ -11,7 +11,6 @@
 
 <div class="row" style="margin-top: 1em">
   <div class="col-md-6 list-group users-list">
-    {% if conversation_list %}
       {% for user in conversation_list %}
         <a href="{% url 'messager:conversation_detail' user.username  %}"
            class="list-group-item list-group-item-action">
@@ -22,28 +21,30 @@
           {% endthumbnail %}
           <strong>   {{ user.get_profile_name|title }} </strong>
         </a>
-      {% endfor %}
-    {% else %}
+      
 
-    <h4>{% trans "You don't have any contacts in your account." %}</h4>
-      <p>{% trans "Start a chat from classifieds or invite friends! " %}</p>
-      <p>{% trans "If you have other questions, chat with the Obrisk team member... " %}</p> 
+      {% empty %}
+
+      <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+              <li class="breadcrumb-item"><h4>{% trans "You don't have any contacts in your account." %}</h4> </li>
+          </ol>
+      </nav>
+      
+      <p>{% trans "Start a chat from the classifieds details or invite new friends! " %}</p>
+      <p>{% trans "If you have other questions, chat with the Obrisk team member below... " %}</p> 
       <p>{% trans " We will reply you within the shortest time possible." %}</p>
-
-    {% for user in super_users %} 
-    {% if forloop.first %} 
-      <a href="{% url 'messager:conversation_detail' user.username  %}"
-        class="list-group-item list-group-item-action ">
-        {% thumbnail user.picture "x40" as im %}
-          <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-        {% empty %}
-          <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-        {% endthumbnail %}
-        <strong> {{ user.get_profile_name|title }} </strong>
-    {% endif %}
-    {% endfor %}    
-    </div>
-    {% endif %}  
+ 
+        <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
+          class="list-group-item list-group-item-action ">
+          {% thumbnail super_users.first.picture "x40" as im %}
+            <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+          {% empty %}
+            <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+          {% endthumbnail %}
+          <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>   
+    </div> 
+    {% endfor %}
 </div>
 {% endblock content %}
 

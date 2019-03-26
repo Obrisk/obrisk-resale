@@ -7,17 +7,16 @@
           <b> <a href="{% url 'users:detail' message.sender.username  %}">{{ message.sender.get_profile_name|title }}</a> </b>
      </span>
  
-        <li class="user-msg">
-          <span class="speech-bubble speech-bubble-user text-white subtle-blue-gradient"> {{ message.message }} </span>
+    <li class="user-msg">
+      <span class="speech-bubble speech-bubble-user text-white subtle-blue-gradient"> {{ message.message }} </span>
 
-            {% thumbnail message.sender.picture "x40" as im %}
-              <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-            {% empty %}
-              <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
-          </span> 
-        
-      </li>  
+        {% thumbnail message.sender.picture "x40" as im %}
+          <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+        {% empty %}
+          <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+        {% endthumbnail %}
+      </span> 
+    </li>  
     {% else %}
     <li>
         <b>

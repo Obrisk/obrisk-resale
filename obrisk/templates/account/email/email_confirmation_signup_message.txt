@@ -1,16 +1,16 @@
 {% load account %}{% user_display user as user_display %}{% load i18n %}{% autoescape off %}
 {% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
 
-Hello !
+Hello {{ user_display }}!
 
-You're receiving this e-mail because user {{ user_display }} has given yours as an e-mail address to connect their account.
+First, we want to warmly welcome you!. You're receiving this e-mail because user {{ user_display }} has given your e-mail address to sign-up for Obrisk.
 
-To confirm this is correct, go to {{ activate_url }}
+To confirm this is correct, kindly go to {{ activate_url }}
 {% endblocktrans %}{% endautoescape %}
-{% blocktrans with site_name=current_site.name site_domain=current_site.domain %}
+{% blocktrans with site_name=current_site.name site_domain=current_site.domain %} and simply log-in to the website and you're good to go.
 
-Do not use this email to reply back to us. Please contact us via support@obrisk.com incase you are facing any problem with signing up or using the website. 
-We will reply within the shortest possible time. 
+Please not use this email to reply back to us. Please contact us via e-mail address, support@obrisk.com, incase you are facing any problem with signing up or getting started with using the website. 
+We will reply back within the shortest time possible. 
 
 Regards,
 Obrisk team!
