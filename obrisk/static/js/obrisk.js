@@ -29,7 +29,7 @@ $(function () {
 
     function checkNotifications() {
         $.ajax({
-            url: '/notifications/latest-notifications/',
+            url: '/ws/notifications/latest-notifications/',
             cache: false,
             success: function (data) {
                 if (!data.includes(emptyMessage)) {
@@ -73,7 +73,7 @@ $(function () {
         else {
             $("#notifications").popover('dispose');
             $.ajax({
-                url: '/notifications/latest-notifications/',
+                url: '/ws/notifications/latest-notifications/',
                 cache: false,
                 success: function (data) {
                     $("#notifications").popover({
