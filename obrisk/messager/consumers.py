@@ -15,6 +15,7 @@ class MessagerConsumer(AsyncWebsocketConsumer):
 
         else:
             # Accept the connection
+            await self.send({"accept": True})
             await self.channel_layer.group_add(f"{self.scope['user'].username}", self.channel_name)
             await self.accept()
 
