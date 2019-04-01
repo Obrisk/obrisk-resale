@@ -28,7 +28,7 @@ $(function () {
 
     function checkNotifications() {
         $.ajax({
-            url: '/ws/notifications/latest-notifications/',
+            url: ':8443/ws/notifications/latest-notifications/',
             cache: false,
             success: function (data) {
                 if (!data.includes(emptyMessage)) {
@@ -72,7 +72,7 @@ $(function () {
         else {
             $("#notifications").popover('dispose');
             $.ajax({
-                url: '/ws/notifications/latest-notifications/',
+                url: ':8443/ws/notifications/latest-notifications/',
                 cache: false,
                 success: function (data) {
                     $("#notifications").popover({
@@ -93,7 +93,7 @@ $(function () {
     // Code block to manage WebSocket connections
     // Try to correctly decide between ws:// and wss://
     let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    let ws_path = ws_scheme + '://' + window.location.host + '/ws/notifications/';
+    let ws_path = ws_scheme + '://' + window.location.host + ':8443/ws/notifications/';
     let webSocket = new channels.WebSocketBridge();
     webSocket.connect(ws_path);
 
