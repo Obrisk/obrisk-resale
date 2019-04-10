@@ -28,7 +28,7 @@ $(function () {
 
     function checkNotifications() {
         $.ajax({
-            url: ':8443/ws/notifications/latest-notifications/',
+            url: 'wss://www.obrisk.com:443/ws/notifications/latest-notifications/',
             cache: false,
             success: function (data) {
                 if (!data.includes(emptyMessage)) {
@@ -72,7 +72,7 @@ $(function () {
         else {
             $("#notifications").popover('dispose');
             $.ajax({
-                url: ':8443/ws/notifications/latest-notifications/',
+                url: 'wss://www.obrisk.com:443/ws/notifications/latest-notifications/',
                 cache: false,
                 success: function (data) {
                     $("#notifications").popover({
