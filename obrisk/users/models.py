@@ -29,9 +29,9 @@ class User(AbstractUser):
     bio = models.CharField(
         _('Short bio'), max_length=280, blank=True, null=True)
     country = models.CharField(
-        _('Country'), max_length=100, default="Tanzania")
-    province_region = models.CharField (_('Province/Region'), max_length=100, default="Mbeya")
-    city = models.CharField  (  _('City'), max_length=100, default="Mbeya mjini") 
+        _('Country'), max_length=100, default="China")
+    province_region = models.CharField (_('Province/Region'), max_length=100, default="Zhejiang")
+    city = models.CharField  (  _('City'), max_length=100, default="Hangzhou") 
     points = models.IntegerField(  _('Points'), default=0)
     nationality = models.CharField (_('Nationality'), max_length=100, blank=True, null=True )
     phone_number = PhoneNumberField (_('Phone number'), default="Unknown_phone_no")  #Needs a country's code 
