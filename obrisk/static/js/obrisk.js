@@ -25,12 +25,41 @@ $('.form-group').removeClass('row');
 
 /* Notifications JS basic client */
 $(function () {
+    $.ajaxSetup({ 
+        beforeSend: function(xhr, settings) {
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie != '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                // Only send the token to relative URLs i.e. locally.
+                xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+            }
+        } 
+   });
+
+
+
     let emptyMessage = 'You have no unread notification';
 
     function checkNotifications() {
         $.ajax({
-            url: 'wss://www.obrisk.com:443/ws/notifications/latest-notifications/',
+            url: 'wss://www.obrisk.com/ws/notifications/latest-notifications/',
             cache: false,
+            beforeSend: function(xhr, settings) {
+                $.ajaxSettings.beforeSend(xhr, settings);
+            },
             success: function (data) {
                 if (!data.includes(emptyMessage)) {
                     $("#notifications").addClass("btn-dark");
@@ -39,22 +68,6 @@ $(function () {
         });
     };
 
-    function update_social_activity (id_value) {
-        let storiesToUpdate = $("[stories-id=" + id_value + "]");
-        payload = {
-            'id_value': id_value,
-        };
-        $.ajax({
-            url: '/stories/update-interactions/',
-            data: payload,
-            type: 'POST',
-            cache: false,
-            success: function (data) {
-                $(".like-count", storiesToUpdate).text(data.likes);
-                $(".comment-count", storiesToUpdate).text(data.comments);
-            },
-        });
-    };
 
     checkNotifications();
 
@@ -73,8 +86,11 @@ $(function () {
         else {
             $("#notifications").popover('dispose');
             $.ajax({
-                url: 'wss://www.obrisk.com:443/ws/notifications/latest-notifications/',
+                url: 'wss://www.obrisk.com/ws/notifications/latest-notifications/',
                 cache: false,
+                beforeSend: function(xhr, settings) {
+                    $.ajaxSettings.beforeSend(xhr, settings);
+                },
                 success: function (data) {
                     $("#notifications").popover({
                         html: true,
@@ -96,7 +112,8 @@ $(function () {
     // Code block to manage WebSocket connections
     // Try to correctly decide between ws:// and wss://
     let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    let ws_path = ws_scheme + '://' + window.location.host + "/ws/notifications/";
+    let ws_path = "wss://www.obrisk.com/ws/notifications/";
+    console.log( window.location.host);
     let webSocket = new channels.WebSocketBridge();
     webSocket.connect(ws_path);
 

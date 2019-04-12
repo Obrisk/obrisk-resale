@@ -66,7 +66,8 @@ $(function () {
     // WebSocket connection management block.
     // Correctly decide between ws:// and wss://
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    var ws_path = ws_scheme + '://' + window.location.host + "/ws/messages/" + currentUser + "/";
+    var ws_path = "wss://www.obrisk.com/ws/messages/" + currentUser + "/";
+    console.log( window.location.host);
     var webSocket = new channels.WebSocketBridge();
     webSocket.connect(ws_path);
 
