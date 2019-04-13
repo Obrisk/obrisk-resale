@@ -71,7 +71,7 @@
               <a href="{% url 'classifieds:list' %}" class="btn btn-dark">&larr;{% trans 'Back' %} </a> <br> <br>   
             {% else %}
             Do you want this item?
-            <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
+            <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-red">
             <i class="lead fa fa-shopping-cart"></i>   <strong >  {% trans ' Chat with seller' %} </strong></a>  <br> <br>
             <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a> <br> <br>
             

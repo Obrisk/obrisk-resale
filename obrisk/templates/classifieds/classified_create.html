@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block head %}
-
+  <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
@@ -24,7 +24,7 @@
     <div class="form-group"> <br>
       <button type="button" class="btn btn-dark create" >{% trans 'Submit' %}</button>
       <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
-      <a href="{% url 'classifieds:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+      <a href="{% url 'classifieds:list' %}" class="btn btn-danger">{% trans 'Cancel' %}</a>
     </div>
   </form>
   {{ form.media }}

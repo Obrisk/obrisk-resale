@@ -37,7 +37,7 @@ urlpatterns = [
      url(r'^posts/',
         include('obrisk.posts.urls', namespace='posts')),
     url(r'^stories/', include('obrisk.stories.urls', namespace='stories')),
-    url(r'^/ws/messages/',
+    url(r'^ws/messages/',
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),

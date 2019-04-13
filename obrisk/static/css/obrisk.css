@@ -112,8 +112,18 @@ a:hover {
 }
 
 .btn-dark {
-  background:linear-gradient(45deg,#330c04, #8b2100)
+  background: linear-gradient(45deg, #0aacec ,#0aeee3 );
 }
 
+.btn-danger {
+  background-color: white;
+  border-color: #8b2100;
+}
+
+.btn-danger:hover {
+  background-color: white ;
+  border-color: #8b2100;
+  color: #0aacec;
+}
 
 
