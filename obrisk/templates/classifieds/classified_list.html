@@ -28,7 +28,7 @@
       <!-- <div class="col-md-8"> -->
         {% for classified in classifieds %}
           <!-- Classified ad. -->
-          <div class="card mr-2 mb-3" style="max-height: 250px; max-width:160px">  
+          <div class="card mr-2 mb-3" style="max-height: 260px; max-width:160px">  
               <!--Display image-->
               <div class="card-img-top img-responsive">
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
@@ -42,10 +42,10 @@
             </div>
             
             <div class="card-body">  
-                <h6 class="card-title" > {{ classified.title}} <h6> 
-                <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
+                <h6 class="card-title" > {{ classified.title|title|truncatechars:30 }} <h6> 
+                <small class="card-subtitle text-danger"> CNY {{ classified.price|truncatechars:10 }} </small> <br>
                 <i class="lead fa fa-map-marker"></i>
-                <span class="card-text small "> {{ classified.located_area|safe }}</span>    
+                <span class="card-text small "> {{ classified.located_area|safe|truncatechars:25 }}</span>    
             </div>
           </a>
         </div>  

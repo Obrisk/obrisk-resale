@@ -10,9 +10,9 @@
   <div class="container">
     <nav aria-label="breadcrumb">
       <ol class="breadcrumb">
-        <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Blogs' %}</a></li>
-        <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Events' %}</a></li>
-        <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Jobs' %}</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Blog posts' %}</a></li>
+        {% comment %} <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Events' %}</a></li>
+        <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Jobs' %}</a></li> {% endcomment %}
       </ol>
     </nav>
     <div class="row">

@@ -31,7 +31,7 @@
 
         <hr>
         <!-- Date/Time -->
-        <p>{% trans 'Posted' %} {{ classified.timestamp|naturaltime }}  </p>
+        <p><i class="fa fa-clock-o" aria-hidden="true"></i> {% trans 'Posted' %} {{ classified.timestamp|naturaltime }}  </p>
 
         <hr>
         <section class="col s12 m12 l10 offset-l1">
@@ -55,14 +55,18 @@
            </h3> 
            
 
-            <p style="overflow-y: auto;"> <a href="{% url 'users:detail' classified.user.username %}">
+            <p class="lead"> <a href="{% url 'users:detail' classified.user.username %}">
                   {% thumbnail classified.user.picture "x35" as im %}
                     <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
                   {% empty %}
                     <img src="{% static 'img/user.png' %}" class="pull-left" height="35px" alt="{% trans 'No Profile Picture' %}" />
                   {% endthumbnail %} 
-                  <strong>  {{ classified.user.get_profile_name|title }} </strong> </a>
+                 <strong>  {{ classified.user.get_profile_name|title }} </strong> </a>
               </p>
+
+              {% if classified.contact_info %}
+                  <p class="card-text text-justify"> <i class="fa fa-phone-square" aria-hidden="true"></i> <strong> {% trans 'Contacts:' %} </strong> {{ classified.contact_info }} </p>
+              {% endif %}
 
             <hr>
             {% if request.user == classified.user%}
@@ -72,7 +76,7 @@
             {% else %}
             Do you want this item?
             <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-red">
-            <i class="lead fa fa-shopping-cart"></i>   <strong >  {% trans ' Chat with seller' %} </strong></a>  <br> <br>
+            <i class="lead fa fa-shopping-cart"></i>   <strong >  {% trans ' Chat with the seller' %} </strong></a>  <br> <br>
             <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a> <br> <br>
             
             <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->

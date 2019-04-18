@@ -118,6 +118,7 @@ a:hover {
 .btn-danger {
   background-color: white;
   border-color: #8b2100;
+  color: #8b2100;
 }
 
 .btn-danger:hover {

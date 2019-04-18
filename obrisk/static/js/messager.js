@@ -19,7 +19,7 @@ $(function () {
             the most recent message.
         */
         $("input[name='message']").focus();
-        var d = $('#messages');
+        var d = $('.messages');
         d.scrollTop(d.prop("scrollHeight"));
     }
     

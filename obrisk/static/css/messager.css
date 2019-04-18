@@ -1,162 +1,629 @@
-.users-list {
-  height: 90%;
-  overflow-y: auto;
+
+@charset "UTF-8";
+html, body, .chat {
+  height: 100%;
+  overflow: hidden;
 }
 
-.list-group-item {
-  background-image: linear-gradient(45deg, #0aacec ,#0aeee3 );
-}
-
-.nav {
-  padding-top: 0;
-  margin-top: 0;
+body {
   margin: 0;
-  padding: 0; 
-} 
-
-.chat-status {
-  text-align: center;
-  vertical-align: middle;
 }
 
-.card-body {
+.chat {
+  width: 100%;
   display: flex;
-  flex-direction: column;
-  margin-top: -1%;
-  margin-bottom: -5px;
-  height: 69vh;
-  margin: 0;
-  padding: 0; 
-  overflow-y: auto;
-  padding-right: 10px;
-  padding-left: 10px;
-  overflow-x: hidden;
+  flex-flow: column wrap;
 }
 
-.card {
+
+.contacts {
+  flex-basis: 100%;
+  width: 240px;
+  overflow-y: hidden;
+  background-color: skyblue;
+  background-size: 6px 6px;
+}
+.contacts .buttons {
+  margin-right: 6px;
+}
+.contacts .buttons::after {
+  content: " ";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+}
+.contacts button {
+  float: right;
+  height: 30px;
+  width: 30px;
+  margin: 8px 6px 12px;
+  padding: 0;
+  border: 0;
+  border-radius: 2px;
+  font-family: Fontawesome;
+  color: skyblue;
+  background: whitesmoke;
+  cursor: pointer;
+}
+.contacts ul {
+  width: calc(100% - 12px * 2);
+  margin: 0 12px;
+  padding: 0;
+  list-style: none;
+}
+.contacts li {
+  position: relative;
+  width: 100%;
+  height: 84px;
+  margin-bottom: 12px;
+  border-radius: 2px;
+  background: whitesmoke;
+}
+.contacts li::before {
+  content: "";
+  position: absolute;
+  top: 18px;
+  left: 12px;
+  height: 48px;
+  width: 48px;
+  border-radius: 30px;
+  background: gainsboro;
+}
+.contacts li::after {
+  content: "✖";
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  overflow: hidden;
+  height: 0;
+  line-height: 26px;
+  width: 0;
+  margin: 12px;
+  border-radius: 12px;
+  text-align: center;
+  color: whitesmoke;
+  background: tomato;
+  cursor: pointer;
+  transition: height 0.1s, width 0.1s, margin 0.1s;
+}
+.contacts li:hover::after {
+  height: 24px;
+  width: 24px;
+  margin: 0;
+}
+
+
+.chat-title {
+  flex: 0 1 45px;
+  position: relative;
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.2);
+  color: #fff;
+  text-transform: uppercase;
+  text-align: left;
+  padding: 10px 10px 10px 80px;
+}
+.chat-title .name, .chat-title .status {
+  position: absolute;
+  left: 9%;
+  font-weight: normal;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+.chat-title .status {
+  position: absolute;
+  left: 90%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+.chat-title .title-avatar {
+  position: absolute;
+  z-index: 1;
+  top: 8px;
+  left: 7%;
+  border-radius: 30px;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+}
+.chat-title .chat-avatar figure {
+  width: 100%;
+  height: auto;
+}
+
+
+
+.messages {
+  flex: 1 1px;
+  width:100%;
+  background: gainsboro;
+  overflow-y: scroll;
+}
+.messages .messages-content {
+  margin: 0;
+  padding: 0 5px;
+}
+.messages .messages-content::after {
+  content: " ";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+}
+.messages .sender,.user {
+  float: left;
+  clear: both;
+}
+.messages .sender {
+  border-bottom-left-radius: 2px;
+  display:flex;
+  
+}
+.messages .user {
+  float: right;
+  border-bottom-right-radius: 2px;
+  display:flex;
+}
+.message-bubble, .message-bubble-user{
+  background:linear-gradient(45deg,#330c04, #8b2100);
+  color: white;
+  clear: both;
+  line-height: 1.4em;
+  max-width: 224px;
+  margin: 12px;
+  padding: 0.7em 16px;
+  border-radius: 18px;
+  font-family: sans-serif;
+}
+
+.message-bubble-user{
+  background: linear-gradient(45deg, #0aacec ,#0aeee3);
+}
+
+.form {
+  background: gainsboro;
+}
+
+.form-inner {
+  height: 60px;
+  width: calc(100% - 12px * 2);
+  margin: 12px;
+  border-radius: 2px;
+  background: whitesmoke;
+}
+.form-inner button {
+  float: right;
+  height: 100%;
+  width: 60px;
+  padding: 1px0;
+  border: 0;
+  border-radius: 0 2px 2px 0;
+  font: 30px/60px sans-serif;
+  color: whitesmoke;
+  background: skyblue;
+  cursor: pointer;
+}
+
+.small-screen .contacts {
+  display:none;
+}
+.small-screen .message-box{
+  width:100%;
+}
+.small-screen .contacts .buttons {
+  display: none;
+}
+.small-screen .contacts ul {
+  width: 100%;
+  margin: 0;
+}
+.small-screen .contacts li {
+  height: 66px;
+  margin: 0;
+  background: transparent;
+}
+.small-screen .contacts li::before {
+  top: 9px;
+  left: 9px;
+  background: whitesmoke;
+}
+.small-screen .contacts li::after {
+  top: -2px;
+  right: 2px;
+}
+.small-screen .messages {
+  left: 66px;
+  right: 0;
+  width: auto;
+}
+.small-screen .form {
   width: 100%;
 }
 
-.card-body li {
-  list-style: none;
-  padding: .6em 0;
-}
-
-.card-body li h5 {
+.avatar-sender { 
+  left: -50px;
+  border-radius: 30px;
+  overflow: hidden;
   margin: 0;
-  margin-bottom: .2em;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  align-self: flex-start;
 }
 
-.text-area {
-  width: 110px;
+.avatar-user {
+  z-index: 1;
+  bottom: -15px;
+  border-radius: 30px;
+  overflow: hidden auto;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  align-self: flex-start;
 }
 
-.msg_send_btn {
-  color: #fff;
-  height: 35px;
-  background-color: #5e1604;
-}
 
-.speech-bubble {
-  display: flex;
-  position: relative;
-  border-radius: 0.4em;
+ .timestamp {
+  margin-left:10px;
+  font-size: 12px;
+  color: white;
+}
+.message-box {
+  flex: 0 1 40px;
+  width: 90%;
+  background: rgba(0, 0, 0, 0.3);
   padding: 10px;
-  background:  linear-gradient(45deg, #0aacec ,#0aeee3 );
-  font-size: 14px;
+  position: relative;
+}
+.message-box .message-input {
   
+  background: none;
+  border: none;
+  outline: none !important;
+  resize: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  height: 17px;
+  margin: 0;
+  padding-right: 20px;
+  width: 265px;
+}
+.message-box textarea:focus:-webkit-placeholder {
+  color: transparent;
+}
+.message-box .message-submit {
+  margin:0 2px;
+  color: #fff;
+  border: none;
+  background: #248A52;
+  font-size: 10px;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 10px;
+  outline: none !important;
+  width: 100%
 }
 
-.user-msg {
+.message-box .message-submit:hover {
+  background: #1D7745;
+}
+
+.message-box textarea {
+  display: block;
+  box-sizing: padding-box;
+  overflow: hidden;
+  padding: 10px;
+  width: 80%;
+  font-size: 14px;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  border: 0;
+  flex-basis:85%;
+  -webkit-transform-origin: top left;
+          transform-origin: top left;
+  -webkit-transform: scale(0.75);
+          transform: scale(0.75);
+  padding: 5.333333px;
+  border-radius: 6.666667px;
+  border-width: 1.333333px;
+  margin-right: -60px;
+  margin-bottom: -8px;
+}
+.input-group-append{
+  flex-basis: 15%
+}
+.input-group{
+  display:flex;
+}
+/*** Styles added to fix the issue with zoom in on iphone ***/
+/* iPhone < 5: */
+@media screen and (device-aspect-ratio: 2/3) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px; }
+}
+
+/* iPhone 5, 5C, 5S, iPod Touch 5g */
+@media screen and (device-aspect-ratio: 40/71) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+  
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px; }
+}
+
+/* iPhone 6, iPhone 6s, iPhone 7 portrait/landscape */
+@media screen and (device-aspect-ratio: 375/667) {
+    select, textarea, input[type="text"], input[type="password"],
+  
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+  
+    input[type="url"]{ font-size: 16px; }
+}
+
+/* iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus portrait/landscape */
+@media screen and (device-aspect-ratio: 9/16) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+  
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px; }
+}
+
+
+
+
+
+/* @media screen and (max-width:786px){
+  body{
+    overflow: hidden;
+  }
+}
+body{
+  padding-top:55px;
+}
+.chat img {
+  width:30px;
+  height:30px
+}
+
+.back-btn{
+    
+    position: absolute;
+    width: 90px;
+    height: 40px;
+    left: 0px;
+    color: #fff;
+    line-height: 35px;
+    font-size: 30px;
+    padding-left: 10px;
+    cursor: pointer;
+}
+.messages .message .avatar-sender {
+  position: absolute;
+  z-index: 1;
+  bottom: -15px;
+  left: -50px;
+  border-radius: 30px;
+  ! width: 30px; 
+  ! height: 30px; 
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+}
+
+.messages .message .avatar-user {
+  position: absolute;
+  z-index: 1;
+  bottom: -15px;
+  right: -50px;
+  border-radius: 30px;
+  ! width: 30px; 
+  ! height: 30px; 
+  overflow: hidden auto;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+}
+
+.messages .message .timestamp {
+  position: absolute;
+  top: -15px;
+  font-size: 9px;
+  color: rgba(65, 59, 59, 0.3);
+  width: 400px
+}
+.messages .message-personal .timestamp {
+  position: absolute;
+  top: -15px;
+  right:0px;
+  font-size: 9px;
+  color: rgba(65, 59, 59, 0.3);
+  width: 400px
+}
+
+.chat {
+
+  width: 100%;
+  height: 100vh;
+  z-index: 2;
+  overflow: hidden;
+  box-shadow: 0 5px 30px rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.5);
+  /*! border-radius: 20px; 
   display: flex;
-  flex: 0 1 auto;
-  flex-direction: row;
-  align-self: flex-end ;
+  justify-content: space-between;
+  flex-direction: column;
 }
 
-.float-right {
-  align-self: flex-end ;
-}
 
-.user-msg img {
-  display: flex;
-  flex: 0 1 auto;
-  align-self: flex-start;
-}
 
-.peer-msg {
-  display: flex;
+
+/*--------------------
+Messages
+--------------------
+.messages {
   flex: 1 1 auto;
-  flex-direction: row;
-  align-self: flex-end ;
+  color: rgba(255, 255, 255, 0.5);
+  position: relative;
+  width: 100%;
+  overflow: hidden auto;
 }
-
-.peer-msg img {
-  flex: 0 1 auto;
-  align-self: flex-start;
-}
-
-.speech-bubble-peer {
-  display: flex;
-  flex: 0 1 auto;  /*This line doesn't favor iphone5*/
-  margin-top: 4px;
-  margin-left: 2%;
-  margin-right: auto;
-  margin-left: 1%;
-}
-
-.subtle-blue-gradient {
-  background: linear-gradient(45deg,#5e1604, #a12904);
-}
-
-.speech-bubble-user {
-  display: flex;
-  flex: 1 1 0%;
-  margin-top: 4px;
-  margin-left: auto;
-  margin-right: 1%;
-}
-
-.speech-bubble-user:after {
-  content: "";
+.messages .messages-content {
   position: absolute;
-  right: 4px;
-  top: 10px;
-  width: auto;
-  height: 0;
-  border: 20px solid transparent;
-  border-left-color: #a12904;
-  border-right: 0;
-  border-top: 0;
-  margin-top: -10px;
-  margin-right: -13px;
+  top: 4%;
+  left: 0;
+  height: 101%;
+  width: 100%;
 }
-
-.speech-bubble-peer:after {
-  content: "";
+.messages .message {
+  clear: both;
+  float: left;
+  padding: 6px 10px 7px;
+  border-radius: 10px 10px 10px 0;
+  background: rgba(0, 0, 0, 0.3);
+  margin: 8px 0;
+  font-size: 11px;
+  line-height: 1.4;
+  margin-left: 50px;
+  position: relative;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+  max-width:300px;
+  margin-right:50px
+}
+.messages .message .timestamp {
   position: absolute;
-  left: 3px;
-  top: 10px;
-  width: 0;
-  height: 0;
-  border: 20px solid transparent;
-  border-right-color: #0aacec;
-  border-top: 0;
-  border-left: 0;
-  margin-top: -10px;
-  margin-left: -15px;
+  bottom: -15px;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.3);
 }
-.chat-section:first-child {
-  margin-top: 10px;
+.messages .message::before {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  border-top: 6px solid rgba(0, 0, 0, 0.3);
+  left: 0;
+  border-right: 7px solid transparent;
 }
-.chat-section {
-  margin-top: 1%;
+.messages .message .avatar {
+  position: absolute;
+  z-index: 1;
+  bottom: -15px;
+  left: -35px;
+  border-radius: 30px;
+  width: 30px;
+  height: 30px;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+}
+.messages .message .avatar img {
+  width: 100%;
+  height: auto;
+}
+.messages .message.message-personal {
+  float: right;
+  color: #fff;
+  text-align: right;
+  background: linear-gradient(120deg, #248A52, #257287);
+  border-radius: 10px 10px 0 10px;
+  margin-right: 50px;
+  max-width:300px;
+}
+.messages .message.message-personal::before {
+  left: auto;
+  right: 0;
+  border-right: none;
+  border-left: 5px solid transparent;
+  border-top: 4px solid #257287;
+  bottom: -4px;
+}
+.messages .message:last-child {
+  margin-bottom: 30px;
+}
+.messages .message.new {
+  -webkit-transform: scale(0);
+          transform: scale(0);
+  -webkit-transform-origin: 0 0;
+          transform-origin: 0 0;
+  -webkit-animation: bounce 500ms linear both;
+          animation: bounce 500ms linear both;
 }
 
-.card-body {
-  background-color: #fff;
+/*--------------------
+Message Box
+--------------------
+.message-box {
+  flex: 0 1 40px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  position: relative;
+}
+.message-box .message-input {
+  background: none;
+  border: none;
+  outline: none !important;
+  resize: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  height: 17px;
+  margin: 0;
+  padding-right: 20px;
+  width: 265px;
+}
+.message-box input:focus:-webkit-placeholder {
+  color: transparent;
+}
+.message-box .message-submit {
+  margin:0 2px;
+  color: #fff;
+  border: none;
+  background: #248A52;
+  font-size: 10px;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 10px;
+  outline: none !important;
+  width: 100%
 }
 
+.message-box .message-submit:hover {
+  background: #1D7745;
+}
+
+textarea {
+  display: block;
+  box-sizing: padding-box;
+  overflow: hidden;
+  padding: 10px;
+  width: 80%;
+  font-size: 14px;
+  border-radius: 6px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  border: 0;
+  flex-basis:90%;
+}
+.input-group-append{
+  flex-basis: 10%;
+} */
 
 
 
