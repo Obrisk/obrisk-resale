@@ -7,7 +7,8 @@ psycopg2>=2.7.7  # https://github.com/psycopg/psycopg2
 pytz>=2018.5  # https://github.com/stub42/pytz
 redis==2.10.6  # https://github.com/antirez/redis
 whitenoise>=3.3.1  # https://github.com/evansd/whitenoise
-cloudinary>=1.15.0 #https://cloudinary.com
+environ>=1.0    #https://files.pythonhosted.org/packages/29/e4/6f448fcce1649a1f0f265e20bd88b7c8ff36e265657604b920240045928b/environ-1.0.tar.gz
+pypiwin32-223
 
 # Django
 # ------------------------------------------------------------------------------
@@ -23,6 +24,7 @@ django-taggit>=0.22.2  # https://github.com/alex/django-taggit
 sorl-thumbnail>=12.4.1  # https://github.com/jazzband/sorl-thumbnail
 django-phonenumber-field>=2.1.0  #https://github.com/stefanfoulis/django-phonenumber-field
 phonenumbers>=p8.10.4  #https://github.com/stefanfoulis/django-phonenumber-field
+django-imagekit>=4.0.2
 
 # Channels
 # ------------------------------------------------------------------------------

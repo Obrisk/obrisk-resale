@@ -1,5 +1,5 @@
 {% load static i18n thumbnail %}
-{% load cloudinary %}
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -23,8 +23,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">   
     <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
-    {% cloudinary_includes %}
-    {% cloudinary_js_config %}
+    
     
     <!-- This file stores project-specific CSS -->
     <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
@@ -120,11 +119,6 @@
                   source: "{% url 'search:suggestions' %}";
               });
 
-          $(function() {
-            if($.fn.cloudinary_fileupload !== undefined) {
-              $("input.cloudinary-fileupload[type=file]").cloudinary_fileupload();
-            }
-          });
 
           // Raven.config('{# sentry_dsn #}').install();
           // window.onerror = Raven.process; 

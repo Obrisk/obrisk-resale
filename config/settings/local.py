@@ -70,7 +70,7 @@ if os.environ.get('USE_DOCKER') == 'yes':
 # django-extensions
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ['django_extensions']  # noqa F405
+INSTALLED_APPS += ['django_extensions','environ']  # noqa F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------

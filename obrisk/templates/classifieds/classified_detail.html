@@ -1,6 +1,5 @@
 {% extends 'base.html' %}
 {% load static i18n %}
-{% load cloudinary comments crispy_forms_tags thumbnail humanize %}
 
 {% block head %}
   <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
@@ -40,9 +39,9 @@
                 <div class="container">
                     <div class="row">
                       {% for photo in images %}
-                      <div class="photo mr-2 mb-3">
+                      {% comment %} <div class="photo mr-2 mb-3">
                           {% cloudinary photo.image width=270 height=270  %}
-                      </div>
+                      </div> {% endcomment %}
                       {% endfor %}
                     </div>
                 </div>

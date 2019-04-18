@@ -25,3 +25,4 @@ django-debug-toolbar>=1.9.1  # https://github.com/jazzband/django-debug-toolbar
 django-extensions>=2.0.5  # https://github.com/django-extensions/django-extensions
 django-test-plus>=1.0.22  # https://github.com/revsys/django-test-plus
 pytest-django>=3.1.2  # https://github.com/pytest-dev/pytest-django
+django-imagekit>=4.0.2

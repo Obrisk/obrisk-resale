@@ -34,7 +34,6 @@
 
 {% block javascript %}
 
-<script src="https://widget.cloudinary.com/v2.0/global/all.js" type="text/javascript">  </script>
 
 <script type="text/javascript">
 
@@ -63,7 +62,7 @@
   }
   var images = [];
     
-  var myWidget = cloudinary.applyUploadWidget(document.getElementById("upload_widget"), 
+  {% comment %} var myWidget = cloudinary.applyUploadWidget(document.getElementById("upload_widget"),  {% endcomment %}
   {   cloudName: "obrisk",
       upload_preset: 'hizonedev_preset',
       button_class: 'cloud-button btn btn-dark',

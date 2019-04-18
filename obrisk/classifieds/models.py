@@ -8,7 +8,9 @@ from django.utils.translation import ugettext_lazy as _
 from slugify import slugify
 
 from taggit.managers import TaggableManager
-from cloudinary.models import CloudinaryField
+
+from imagekit.models import ImageSpecField
+from imagekit.processors import ResizeToFill
 
 
 class ClassifiedQuerySet(models.query.QuerySet):
@@ -95,16 +97,16 @@ class Classified(models.Model):
 
         super().save(*args, **kwargs)
 
-class CloudinaryFieldFix(CloudinaryField):
-    def to_python(self, value):
-        if value is False:
-            return value
-        else:
-            return super(CloudinaryFieldFix, self).to_python(value)
+
 
 
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
+    file = models.ImageField(upload_to='attachments')
+    file_thumbnail = ImageSpecField(source='file',
+                                    processors=[ResizeToFill(100, 50)],
+                                    format='JPEG',
+                                    options={'quality': 60})
     image = CloudinaryFieldFix('image')
 
     """ Informative name for model """
@@ -118,4 +120,6 @@ class ClassifiedImages(models.Model):
     def __str__(self):
         return str(self.image)
 
+# image = ClassifiedImages.objects.all()[0]
+# 
 

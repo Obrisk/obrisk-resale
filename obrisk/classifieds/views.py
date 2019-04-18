@@ -19,8 +19,6 @@ from obrisk.classifieds.forms import ClassifiedForm
 
 import json
 import re
-from cloudinary import CloudinaryResource
-
 
 class ClassifiedsListView(LoginRequiredMixin, ListView):
     """Basic ListView implementation to call the published classifieds list."""
@@ -71,21 +69,21 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             classified.save()
 
             # split one long string of JSON objects into a list of string each for one JSON obj 
-            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
+          
 
-            for image_obj in cloudinary_list:
-                #convert the obj from string into JSON.
-                json_response = json.loads(image_obj)
+            # for image_obj in cloudinary_list:
+            #     #convert the obj from string into JSON.
+            #     json_response = json.loads(image_obj)
 
-                #Populate a CloudinaryResource object using the upload response
-                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+            #     #Populate a CloudinaryResource object using the upload response
+            #     result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
 
-                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
+            #     str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
                 
-                img = ClassifiedImages(image = str_result)
-                img.classified = classified
-                img.save()
-            return self.form_valid(form) 
+            #     img = ClassifiedImages(image = str_result)
+            #     img.classified = classified
+            #     img.save()
+            # return self.form_valid(form) 
         else:
             #ret = dict(errors=form.errors)
             # print(form.errors)
