@@ -18,8 +18,7 @@
   <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
-  
-     <button id="upload_widget" class="cloud-button"> Upload images </button> 
+
 
     <div class="form-group"> <br>
       <button type="button" class="btn btn-dark create" >{% trans 'Submit' %}</button>
@@ -40,84 +39,13 @@
   const url = "{% url 'classifieds:write_new' %}" ///classifieds/write-new-classified/
   const user = "{{ request.user.username }}";
 
-
-  function getFolder() {
-    var d = new Date();
-    return "classifieds/" + user;
-  }
-  const title_id = "{{ form.title.auto_id }}";
-  const details_id = "{{ form.details.auto_id }}";
-  const located_area = "{{ form.located_area.auto_id }}";
-  const city = "{{ form.city.auto_id }}";
-  const tags = "{{ form.tags.auto_id }}";
-   
-  var img_title, details;
-
-  function getFileName() {
-      var d = new Date();
-      var date = d.getFullYear() + '-' + (d.getMonth()+1) + '-' + d.getDate();
-      var time = d.getHours() + "hrs-" + d.getMinutes() + "min-" + d.getSeconds() +"sec";
-
-      return date + "--" + time;    
-  }
-  var images = [];
-    
-  {% comment %} var myWidget = cloudinary.applyUploadWidget(document.getElementById("upload_widget"),  {% endcomment %}
-  {   cloudName: "obrisk",
-      upload_preset: 'hizonedev_preset',
-      button_class: 'cloud-button btn btn-dark',
-      button_caption: 'Upload Images',
-      show_powered_by: false,
-      preBatch: (cb, data) => {
-        img_title = $("#"+title_id).val();
-        details = $("#"+details_id).val();
-
-        if (!img_title || !details){
-            alert ("Please fill in other information of the classified ad before uploading images!");
-            cb ({cancel: true});  
-        }
-        else {
-            cb();
-        }
-      },
-      publicId: getFileName(),
-      sources: ["local","camera"], 
-      maxFiles: "6",  
-      folder: getFolder(), 
-      resourceType: "image",
-      autoMinimize: "true",
-  },
-  (error, result) => { if (result.event == "success")  { 
-    //All console.log are for debugging.
-    // console.log(result.info);
-        var str = JSON.stringify(result.info);
-        images.push (str);
-
-   } });
-  //  console.log(images);
-
-  const images_id = "{{ form.images.auto_id }}";
-
   $(function () {
     $(".create").click(function (event) {
-      if (images.length < 1) {
-          event.preventDefault();
-          alert("You must upload at least one image for a classified ad for people to see what you're selling!");
-          //return false;
-      }
-      else if (!document.getElementById(located_area).value || 
-          !document.getElementById(located_area).value ||
-          !document.getElementById(located_area).value )
-          {
-              event.preventDefault();
-              alert("Please fill in all of the information!");
-      }
-      else {
-          $("input[name='images']").val(images);
-          $("input[name='image']").val(images[0]);
-          $("input[name='status']").val("A");
-          $("#classified-form").submit();
-      }
+    
+      
+        $("input[name='status']").val("A");
+        $("#classified-form").submit();
+      
     }); 
     
     $(".draft").click(function () {

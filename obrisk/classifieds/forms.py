@@ -6,12 +6,12 @@ class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
     details = forms.CharField(widget=forms.Textarea)
-    images = MultiFileField(min_num=1, max_num=3, max_file_size=1024*1024*5) #This is not related with any model
+    images = MultiFileField(min_num=1, max_num=7, max_file_size=1024*1024*5) #This is not related with any model
     
 
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags", "images"]
+        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags"]
         widgets = {'user': forms.HiddenInput()}
         help_texts = {
             "located_area": "It can be a street name, address or other description.\

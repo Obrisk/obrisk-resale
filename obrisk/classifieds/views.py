@@ -13,12 +13,30 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 from django import forms
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.classifieds.forms import ClassifiedForm
 
 import json
 import re
+
+
+# def gallery(request):
+#     list = ClassifiedImages.objects.filter(is_visible=True).order_by('-created')
+#     paginator = Paginator(list, 10)
+
+#     page = request.GET.get('page')
+#     try:
+#         albums = paginator.page(page)
+#     except PageNotAnInteger:
+#         albums = paginator.page(1) # If page is not an integer, deliver first page.
+#     except EmptyPage:
+#         albums = paginator.page(paginator.num_pages) # If page is out of range (e.g.  9999), deliver last page of results.
+
+#     return render(request, 'gallery.html', { 'albums': list })
+
 
 class ClassifiedsListView(LoginRequiredMixin, ListView):
     """Basic ListView implementation to call the published classifieds list."""
@@ -67,30 +85,21 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             classified = form.save(commit=False)
             classified.user = self.request.user
             classified.save()
-
-            # split one long string of JSON objects into a list of string each for one JSON obj 
-          
-
-            # for image_obj in cloudinary_list:
-            #     #convert the obj from string into JSON.
-            #     json_response = json.loads(image_obj)
-
-            #     #Populate a CloudinaryResource object using the upload response
-            #     result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
-
-            #     str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
                 
-            #     img = ClassifiedImages(image = str_result)
-            #     img.classified = classified
-            #     img.save()
-            # return self.form_valid(form) 
+            img = ClassifiedImages(image = str_result)
+            img.classified = classified
+            img.save()
+            return self.form_valid(form) 
         else:
             #ret = dict(errors=form.errors)
             # print(form.errors)
             return self.form_invalid(form)
                   
     def form_valid(self, form):
-        form.instance.user = self.request.user
+        new_post = form.cleaned_data['classified']
+        for each in form.cleaned_data['image']:
+            ClassifiedImages.objects.create(file=each, post = new_post)
+        # form.instance.user = self.request.user
         return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):
