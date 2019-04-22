@@ -93,26 +93,26 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
-    def handle_uploaded_file(user_id, file):
-        im_orig = ClassifiedImages.open(picture_file)
-     ## First make the image a square. Crop it.
-        imo = do_rotate_on_exif(im_orig)
-        width, height = imo.size
+    # def handle_uploaded_file(user_id, file):
+    #     im_orig = ClassifiedImages.open(picture_file)
+    #  ## First make the image a square. Crop it.
+    #     imo = do_rotate_on_exif(im_orig)
+    #     width, height = imo.size
 
-        if width > height:
-            delta = width - height
-            left = int(delta/2)
-            upper = 0
-            right = height + left
-            lower = height
-        else:
-            delta = height - width
-            left = int(delta)/2
-            upper = 0
-            right = width
-            lower = width + upper
+    #     if width > height:
+    #         delta = width - height
+    #         left = int(delta/2)
+    #         upper = 0
+    #         right = height + left
+    #         lower = height
+    #     else:
+    #         delta = height - width
+    #         left = int(delta)/2
+    #         upper = 0
+    #         right = width
+    #         lower = width + upper
 
-        im = imo.crop((left, upper, right, lower))
+    #     im = imo.crop((left, upper, right, lower))
 
 # def do_rotate_on_exif(im_orig):
 #     try:

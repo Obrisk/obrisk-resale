@@ -8,6 +8,11 @@ from django import forms
 from django.core.exceptions import ValidationError, FieldError
 from django.utils.translation import ugettext_lazy as _
 
+from django.db.models import Field
+from django.conf import settings
+from s3direct.widgets import S3DirectWidget
+
+
 # Feel free to extend this, see
 # http://www.iana.org/assignments/media-types/media-types.xhtml
 MEDIA_TYPES = ['image', 'audio', 'video']
@@ -149,3 +154,16 @@ class MultiImageField(MultiMediaField, forms.ImageField):
             if i:
                 ret.append(i)
         return ret
+
+class S3DirectField(Field):
+    def __init__(self, *args, **kwargs):
+        dest = kwargs.pop('dest', None)
+        self.widget = S3DirectWidget(dest=dest)
+        super(S3DirectField, self).__init__(*args, **kwargs)
+
+    def get_internal_type(self):
+        return 'TextField'
+
+    def formfield(self, *args, **kwargs):
+        kwargs['widget'] = self.widget
+        return super(S3DirectField, self).formfield(*args, **kwargs)

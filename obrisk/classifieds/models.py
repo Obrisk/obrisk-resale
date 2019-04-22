@@ -13,7 +13,7 @@ from imagekit.models import ImageSpecField
 from imagekit.processors import ResizeToFill, ResizeToFit
 from cloudinary.models import CloudinaryField
 from imagekit.models import ProcessedImageField
-# from s3direct.fields import S3DirectField
+from s3direct.fields import S3DirectField
 # from obrisk.classifieds.forms import ClassifiedForm
 
 
@@ -115,11 +115,11 @@ class CloudinaryFieldFix(CloudinaryField):
 
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
-    # image = S3DirectField(dest='example_destination')
-    image = models.ImageField(upload_to='attachments')
+    image = S3DirectField(dest='images', blank=True)
+    # image = models.ImageField(upload_to='attachments')
     image_medium = ProcessedImageField(upload_to='attachments', processors=[ResizeToFit(1280)], format='JPEG', options={'quality': 70})
     image_thumbnail = ProcessedImageField(upload_to='file',processors=[ResizeToFit(1280)], format='JPEG', options={'quality': 60})
-    image = CloudinaryField('image')
+    # image = CloudinaryField('image')
 
     """ Informative name for model """
     def __unicode__(self):
