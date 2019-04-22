@@ -16,129 +16,38 @@ body {
 }
 
 
-.contacts {
-  flex-basis: 100%;
-  width: 240px;
-  overflow-y: hidden;
-  background-color: skyblue;
-  background-size: 6px 6px;
-}
-.contacts .buttons {
-  margin-right: 6px;
-}
-.contacts .buttons::after {
-  content: " ";
-  display: block;
-  clear: both;
-  height: 0;
-  visibility: hidden;
-  font-size: 0;
-}
-.contacts button {
-  float: right;
-  height: 30px;
-  width: 30px;
-  margin: 8px 6px 12px;
-  padding: 0;
-  border: 0;
-  border-radius: 2px;
-  font-family: Fontawesome;
-  color: skyblue;
-  background: whitesmoke;
-  cursor: pointer;
-}
-.contacts ul {
-  width: calc(100% - 12px * 2);
-  margin: 0 12px;
-  padding: 0;
-  list-style: none;
-}
-.contacts li {
-  position: relative;
-  width: 100%;
-  height: 84px;
-  margin-bottom: 12px;
-  border-radius: 2px;
-  background: whitesmoke;
-}
-.contacts li::before {
-  content: "";
-  position: absolute;
-  top: 18px;
-  left: 12px;
-  height: 48px;
-  width: 48px;
-  border-radius: 30px;
-  background: gainsboro;
-}
-.contacts li::after {
-  content: "✖";
-  position: absolute;
-  top: -8px;
-  right: -8px;
-  overflow: hidden;
-  height: 0;
-  line-height: 26px;
-  width: 0;
-  margin: 12px;
-  border-radius: 12px;
-  text-align: center;
-  color: whitesmoke;
-  background: tomato;
-  cursor: pointer;
-  transition: height 0.1s, width 0.1s, margin 0.1s;
-}
-.contacts li:hover::after {
-  height: 24px;
-  width: 24px;
-  margin: 0;
-}
-
-
 .chat-title {
   flex: 0 1 45px;
   position: relative;
   z-index: 2;
-  background: rgba(0, 0, 0, 0.2);
+  background:linear-gradient(45deg,#330c04, #8b2100);
   color: #fff;
-  text-transform: uppercase;
   text-align: left;
   padding: 10px 10px 10px 80px;
 }
-.chat-title .name, .chat-title .status {
+
+.chat-title .back-btn {
   position: absolute;
-  left: 9%;
+  top: 15px;
+  left: 20px;
+}
+.chat-title .name {
+  position: absolute;
+  top: 10px;
+  left: 40px;
   font-weight: normal;
   font-size: 18px;
   margin: 0;
   padding: 0;
 }
+
 .chat-title .status {
   position: absolute;
-  left: 90%;
+  left: 80%;
   color: rgba(255, 255, 255, 0.5);
   font-size: 8px;
   letter-spacing: 1px;
 }
-.chat-title .title-avatar {
-  position: absolute;
-  z-index: 1;
-  top: 8px;
-  left: 7%;
-  border-radius: 30px;
-  width: 30px;
-  height: 30px;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  border: 2px solid rgba(255, 255, 255, 0.24);
-}
-.chat-title .chat-avatar figure {
-  width: 100%;
-  height: auto;
-}
-
-
 
 .messages {
   flex: 1 1px;
@@ -158,6 +67,7 @@ body {
   visibility: hidden;
   font-size: 0;
 }
+
 .messages .sender,.user {
   float: left;
   clear: both;
@@ -172,12 +82,13 @@ body {
   border-bottom-right-radius: 2px;
   display:flex;
 }
+
 .message-bubble, .message-bubble-user{
   background:linear-gradient(45deg,#330c04, #8b2100);
   color: white;
   clear: both;
   line-height: 1.4em;
-  max-width: 224px;
+  max-width: 80%;
   margin: 12px;
   padding: 0.7em 16px;
   border-radius: 18px;
@@ -188,12 +99,48 @@ body {
   background: linear-gradient(45deg, #0aacec ,#0aeee3);
 }
 
-.form {
+.message-bubble-user:after {
+  content: "";
+  position: absolute;
+  right: 4px;
+  top: 10px;
+  width: auto;
+  height: 0;
+  border: 20px solid transparent;
+  border-left-color: #0aacec;
+  border-right: 0;
+  border-top: 0;
+  margin-top: -10px;
+  margin-right: -13px;
+}
+
+.message-bubble-peer:after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 10px;
+  width: 0;
+  height: 0;
+  border: 20px solid transparent;
+  border-right-color: #a12904;
+  border-top: 0;
+  border-left: 0;
+  margin-top: -10px;
+  margin-left: -15px;
+}
+.chat-section:first-child {
+  margin-top: 10px;
+}
+.chat-section {
+  margin-top: 1%;
+}
+
+/* .form {
   background: gainsboro;
 }
 
 .form-inner {
-  height: 60px;
+  height: 40px;
   width: calc(100% - 12px * 2);
   margin: 12px;
   border-radius: 2px;
@@ -203,14 +150,13 @@ body {
   float: right;
   height: 100%;
   width: 60px;
-  padding: 1px0;
+  padding: 1px 0;
   border: 0;
   border-radius: 0 2px 2px 0;
-  font: 30px/60px sans-serif;
-  color: whitesmoke;
-  background: skyblue;
+  background:linear-gradient(45deg,#330c04, #8b2100);
+  border-radius: 12px;
   cursor: pointer;
-}
+} */
 
 .small-screen .contacts {
   display:none;
@@ -218,27 +164,7 @@ body {
 .small-screen .message-box{
   width:100%;
 }
-.small-screen .contacts .buttons {
-  display: none;
-}
-.small-screen .contacts ul {
-  width: 100%;
-  margin: 0;
-}
-.small-screen .contacts li {
-  height: 66px;
-  margin: 0;
-  background: transparent;
-}
-.small-screen .contacts li::before {
-  top: 9px;
-  left: 9px;
-  background: whitesmoke;
-}
-.small-screen .contacts li::after {
-  top: -2px;
-  right: 2px;
-}
+
 .small-screen .messages {
   left: 66px;
   right: 0;
@@ -251,7 +177,6 @@ body {
 .avatar-sender { 
   left: -50px;
   border-radius: 30px;
-  overflow: hidden;
   margin: 0;
   padding: 0;
   border: 2px solid rgba(255, 255, 255, 0.24);
@@ -262,7 +187,6 @@ body {
   z-index: 1;
   bottom: -15px;
   border-radius: 30px;
-  overflow: hidden auto;
   margin: 0;
   padding: 0;
   border: 2px solid rgba(255, 255, 255, 0.24);
@@ -273,11 +197,12 @@ body {
  .timestamp {
   margin-left:10px;
   font-size: 12px;
-  color: white;
+  color: #330c04;
 }
+
 .message-box {
   flex: 0 1 40px;
-  width: 90%;
+  width: 100%;
   background: rgba(0, 0, 0, 0.3);
   padding: 10px;
   position: relative;

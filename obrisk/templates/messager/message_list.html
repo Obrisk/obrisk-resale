@@ -17,14 +17,15 @@
   <div class="chat">
     <div class="chat-title">
         <span > <a class="back-btn" href="{% url 'messager:contacts_list' %}" > <i class="fa fa-chevron-left" aria-hidden="true"></i> </a>
-      
-          <figure class="title-avatar">
-            {# thumbnail user.picture "x30" as im or get username from {% request.path %} #} 
-            <img src="{% static 'img/user.png' %}"  height="30px" alt="{% trans 'No Profile Picture' %}" />
-          {# endthumbnail #}</figure>
+            <figure class="title-avatar">
+            {% comment %} {% thumbnail active.picture "x30" as im %}
+              <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+            {% empty %}
+              <img src="{% static 'img/user.png' %}"  height="30px" alt="{% trans 'No Profile Picture' %}" />
+            {% endthumbnail %} </figure>  {% endcomment %}
 
-           <span class="name"> {{ active}} </span>
-          <span class="status"> online </span>
+            <span class="name"> {{ active}} </span>
+            <span class="status"> online </span>
         </span>
        
     </div>
@@ -53,7 +54,7 @@
             <input type="hidden" name="to" value="{{ active }}">
             <textarea class="form-control" name="message" placeholder="{% trans 'Write a message...' %}" maxlength="1000" autofocus autocomplete="off"></textarea>
             <div class="input-group-append">
-              <button class="msg_send_btn" type="submit"> <i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
+              <button class="btn btn-dark" type="submit"> <i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
             </div> 
             </div>
         </div>

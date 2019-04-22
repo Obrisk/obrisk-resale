@@ -48,7 +48,7 @@ $(function () {
             type: 'POST',
             success: function (data) {
                 $(".send-message").before(data);
-                $("input[name='message']").val('');
+                $('#send')[0].reset();
                 scrollMessages();
             }
         });

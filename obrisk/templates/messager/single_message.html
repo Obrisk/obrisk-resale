@@ -3,9 +3,8 @@
 {% load thumbnail %}
   
     {% if request.user == message.sender %}
-
     <div class="user">
-        <div class="message-container">
+        <div class="message-container-user">
             <div class="timestamp">{{ message.timestamp|date:'N d G:i' }}</div>
 
             <div class="message-bubble-user"> {{ message.message }}  </div>
