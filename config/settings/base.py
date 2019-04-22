@@ -206,7 +206,6 @@ TEMPLATES = [
         'DIRS': [
             str(APPS_DIR.path('templates')),
         ],
-        # 'APP_DIRS': True,
         'OPTIONS': {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
             'debug': DEBUG,
@@ -278,6 +277,61 @@ SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 #         'SCOPE': ['snsapi_base'],
 #     }
 # }
+
+
+
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_AUTO_CREATE_BUCKET = True
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_QUERYSTRING_AUTH = False
+# DO NOT change these unless you know what you're doing.
+_AWS_EXPIRY = 60 * 60 * 24 * 7
+# The region of your bucket, more info:
+# http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
+AWS_S3_REGION_NAME = 'ap-northeast-2'
+
+# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
+AWS_S3_OBJECT_PARAMETERS = {
+    'CacheControl': f'max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate',
+}
+
+# The endpoint of your bucket, more info:
+# http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
+AWS_S3_ENDPOINT_URL = 'http://s3.ap-northeast-2.amazonaws.com/'
+
+
+
+S3DIRECT_DESTINATIONS = {
+    'cloud_destination': {
+        # "key" [required] The location to upload file
+        #       1. String: folder path to upload to
+        #       2. Function: generate folder path + filename using a function  
+        'key': 'uploads/images',
+    
+        # "allowed" [optional] Limit to specific mime types
+        #           List: list of mime types
+        'allowed': ['image/jpeg', 'image/png', 'video/mp4'],
+
+        # "cache_control" [optional] Custom cache control header
+        #                 String: header
+        'cache_control': 'max-age=2592000',
+
+        # "content_length_range" [optional] Limit file size
+        #                        Tuple: (from, to) in bytes
+        'content_length_range': (5000, 20000000),
+
+        # "allow_existence_optimization" [optional] Checks to see if file already exists,
+        #                                returns the URL to the object if so (no upload)
+        #                                Boolean: True, False
+        'allow_existence_optimization': False,
+    }
+}
 
 
 # Other stuff...

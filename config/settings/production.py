@@ -65,30 +65,7 @@ X_FRAME_OPTIONS = 'DENY'
 # ------------------------------------------------------------------------------
 # https://django-storages.readthedocs.io/en/latest/#installation
 INSTALLED_APPS += ['storages']  # noqa F405
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_AUTO_CREATE_BUCKET = True
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_QUERYSTRING_AUTH = False
-# DO NOT change these unless you know what you're doing.
-_AWS_EXPIRY = 60 * 60 * 24 * 7
-# The region of your bucket, more info:
-# http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
-AWS_S3_REGION_NAME = 'eu-west-1'
 
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': f'max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate',
-}
-
-# The endpoint of your bucket, more info:
-# http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
-AWS_S3_ENDPOINT_URL = 'https://s3-eu-west-1.amazonaws.com'
 
 
 

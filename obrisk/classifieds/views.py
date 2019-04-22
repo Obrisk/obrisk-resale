@@ -81,7 +81,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified.user = self.request.user
         classified.save()
 
-        for img in form.cleaned_data['images']:
+        for img in form.cleaned_data['image']:
               
             img = ClassifiedImages(image = img)
             img.classified = classified

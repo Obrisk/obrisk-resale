@@ -8,7 +8,7 @@ class ClassifiedForm(forms.ModelForm):
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
     details = forms.CharField(widget=forms.Textarea)
     # image = MultiFileField(min_num=1, max_num=7, max_file_size=1024*1024*5) #This is not related with any model
-    image = forms.URLField(widget=S3DirectWidget(dest='image'))
+    image = forms.URLField(widget=S3DirectWidget(dest='cloud_destination'))
 
     class Meta:
         model = Classified
