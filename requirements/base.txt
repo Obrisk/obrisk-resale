@@ -25,6 +25,7 @@ sorl-thumbnail>=12.4.1  # https://github.com/jazzband/sorl-thumbnail
 django-phonenumber-field>=2.1.0  #https://github.com/stefanfoulis/django-phonenumber-field
 phonenumbers>=p8.10.4  #https://github.com/stefanfoulis/django-phonenumber-field
 django-imagekit>=4.0.2
+django-s3direct>=1.1.2  #https://github.com/bradleyg/django-s3direct
 
 # Channels
 # ------------------------------------------------------------------------------

@@ -41,15 +41,14 @@
 
   $(function () {
     $(".create").click(function (event) {
-    
-      
+        console.log("Here")
         $("input[name='status']").val("A");
         $("#classified-form").submit();
       
     }); 
     
     $(".draft").click(function () {
-        $("input[name='status']").val("D");
+        $("input[name='status']").val("E");
         $("#classified-form").submit();
     });
 });

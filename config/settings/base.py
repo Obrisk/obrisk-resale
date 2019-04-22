@@ -92,6 +92,7 @@ THIRD_PARTY_APPS = [
     'graphene_django',
     'markdownx',
     'taggit',
+    's3direct',
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -205,6 +206,7 @@ TEMPLATES = [
         'DIRS': [
             str(APPS_DIR.path('templates')),
         ],
+        # 'APP_DIRS': True,
         'OPTIONS': {
             # https://docs.djangoproject.com/en/dev/ref/settings/#template-debug
             'debug': DEBUG,

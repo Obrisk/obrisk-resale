@@ -72,39 +72,70 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
-    
-    def post(self, request, *args, **kwargs):
-        """
-        Handles POST requests, instantiating a form instance and its inline
-        formsets with the passed POST variables and then checking them for
-        validity.
-        """
-        form = ClassifiedForm(self.request.POST)
-    
-        if form.is_valid():
-            classified = form.save(commit=False)
-            classified.user = self.request.user
-            classified.save()
-                
-            img = ClassifiedImages(image = str_result)
-            img.classified = classified
-            img.save()
-            return self.form_valid(form) 
-        else:
-            #ret = dict(errors=form.errors)
-            # print(form.errors)
-            return self.form_invalid(form)
+            
                   
     def form_valid(self, form):
-        new_post = form.cleaned_data['classified']
-        for each in form.cleaned_data['image']:
-            ClassifiedImages.objects.create(file=each, post = new_post)
-        # form.instance.user = self.request.user
+        form.instance.user = self.request.user
+
+        classified = form.save(commit=False)
+        classified.user = self.request.user
+        classified.save()
+
+        for img in form.cleaned_data['images']:
+              
+            img = ClassifiedImages(image = img)
+            img.classified = classified
+            img.save()
+        
         return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
+    def handle_uploaded_file(user_id, file):
+        im_orig = ClassifiedImages.open(picture_file)
+     ## First make the image a square. Crop it.
+        imo = do_rotate_on_exif(im_orig)
+        width, height = imo.size
+
+        if width > height:
+            delta = width - height
+            left = int(delta/2)
+            upper = 0
+            right = height + left
+            lower = height
+        else:
+            delta = height - width
+            left = int(delta)/2
+            upper = 0
+            right = width
+            lower = width + upper
+
+        im = imo.crop((left, upper, right, lower))
+
+# def do_rotate_on_exif(im_orig):
+#     try:
+#         orientation = im_orig._getexif()[274]        
+#         if orientation == 3:
+#             im = im_orig.rotate(180)
+#         elif orientation == 6:
+#             im = im_orig.rotate(-90)
+#         elif orientation == 8:
+#             im = im_orig.rotate(90)
+#         return im
+#     except:
+#         return im_orig
+
+# THUMBNAIL_SIZE = 70, 70
+
+# def create_thumbnail(image_object, user_id):
+#     image_object.thumbnail(THUMBNAIL_SIZE, ClassifiedImages.ANTIALIAS)
+#     image_object.save(profile_image_path + str(user_id) + "_70.jpg", "JPEG")
+#     filedata = open(profile_image_path + str(user_id) + "_70.jpg", 'rb').read()
+#     conn.put(BUCKET_NAME, 'images/provider/' + str(user_id)+'_70.jpg',
+#     S3.S3Object(filedata), {'x-amz-acl': 'public-read', 
+#    'Content-Type': 'image/jpeg'})
 
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):

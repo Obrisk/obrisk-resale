@@ -19,6 +19,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
     url(r'^contacts/$',
         TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
+    url(r'^s3direct/', include('s3direct.urls')),
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
