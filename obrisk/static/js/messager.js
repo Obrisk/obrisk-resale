@@ -36,9 +36,7 @@ $(function () {
                 scrollMessages();
             }
         });
-    };
-
-    
+    };   
 
     $("#send").submit(function () {
         $.ajax({
@@ -55,15 +53,15 @@ $(function () {
         return false;
     });
 
-    // //This helps the text in the textarea of the message to be send
-    // //when press enter and go new line with shift + enter!
-    // $("#sendText").keypress(function (e) {
-    //     if(e.which == 13 && !e.shiftKey) {        
-    //         $(this).closest("form").submit();
-    //         e.preventDefault();
-    //         return false;
-    //     }
-    // });
+    //This helps the text in the textarea of the message to be send
+    //when press enter and go new line with shift + enter!
+    $("#sendText").keypress(function (e) {
+        if(e.which == 13 && !e.shiftKey) {        
+            $(this).closest("form").submit();
+            e.preventDefault();
+            return false;
+        }
+    });
 
     // WebSocket connection management block.
     // Correctly decide between ws:// and wss://

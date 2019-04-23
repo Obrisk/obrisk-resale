@@ -25,7 +25,7 @@
             {% endthumbnail %} </figure>  {% endcomment %}
 
             <span class="name"> {{ active}} </span>
-            <span class="status"> online </span>
+            <span class="status"> Offline </span>
         </span>
        
     </div>
@@ -52,7 +52,7 @@
           {% csrf_token %}
           <div class="input-group">
             <input type="hidden" name="to" value="{{ active }}">
-            <textarea class="form-control" name="message" placeholder="{% trans 'Write a message...' %}" maxlength="1000" autofocus autocomplete="off"></textarea>
+            <textarea class="form-control" id="sendText" name="message" placeholder="{% trans 'Write a message...' %}" maxlength="1000" autofocus autocomplete="off"></textarea>
             <div class="input-group-append">
               <button class="btn btn-dark" type="submit"> <i class="fa fa-paper-plane-o" aria-hidden="true"></i></button>
             </div> 
@@ -76,7 +76,6 @@
 
   function relayout () {
     var width = window.innerWidth;
-    console.log(width, small);
     if (!small && width < 600) {
       small = true;
       container.classList.add('small-screen');
@@ -96,7 +95,6 @@
 
 
  var currentUser = "{{ request.user.username }}";
-
       var activeUser = "{{ active }}";
       //This scrolls the div #messages only to the bottom
       var d = $('.messages');
