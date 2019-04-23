@@ -6,8 +6,10 @@
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
 {% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+
 {% block javascript %}
-<script>  $.cloudinary.responsive() </script>  
+    <script>  $.cloudinary.responsive() </script>  
 {% endblock javascript %}
 
 {% endblock head %}
@@ -128,8 +130,7 @@
       <div class="col-md-4">
         <!-- Write Classified Widget -->
         {% if request.user.is_authenticated %}
-          <div class="card my-4">
-            <div class="card-body text-center">
+            <div class="text-center">
               <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
               
               {% if request.user.is_seller %}
@@ -137,7 +138,7 @@
               {% endif %}
               <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
             </div>
-          </div>
+          
         {% endif %}
         <!-- Cloud Tag Widget -->
         <div class="card my-4">
@@ -152,7 +153,6 @@
     </div>
     
     
-   
   {% if is_paginated %}
   <div class="row">
       <ul class="pagination justify-content-center mb-4">

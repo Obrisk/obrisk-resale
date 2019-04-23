@@ -108,7 +108,7 @@ a:hover {
 }
 
 .card {
-  border-color: #8b2100;
+  border-radius: 0.3em;
 }
 
 .btn-dark {
@@ -117,7 +117,6 @@ a:hover {
 
 .btn-danger {
   background-color: white;
-  border-color: #8b2100;
   color: #8b2100;
 }
 
