@@ -118,4 +118,50 @@ class ClassifiedImages(models.Model):
     def __str__(self):
         return str(self.image)
 
+class OfficialAd(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, null=True, related_name="official_user",
+        on_delete=models.SET_NULL)
+    title = models.CharField(max_length=80)
+    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+    details = models.CharField(max_length=2000)
+    located_area = models.CharField (max_length=100, null=True, blank=True)
+    city = models.CharField (max_length=100)
+    province_region = models.CharField(max_length= 100)
+    contact_info = models.CharField (max_length=150, null=True, blank=True)
+    tags = TaggableManager()
 
+    class Meta:
+        verbose_name = _("OfficialAd")
+        verbose_name_plural = _("OfficialAds")
+        ordering = ("-timestamp",)
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        #These locations will be taken from the user's profile, else he has to change location.
+        if not self.city:
+            self.city =self.user.city
+        if not self.province_region:
+            self.province_region = self.user.province_region
+        if not self.country:
+            self.country = self.user.country
+
+        super().save(*args, **kwargs)
+
+
+class OfficialAdImages(models.Model):
+    official_ad = models.ForeignKey(OfficialAd, on_delete=models.CASCADE, related_name='images')
+    image = CloudinaryFieldFix('image')
+
+    """ Informative name for model """
+    def __unicode__(self):
+        try:
+            public_id = self.image.public_id
+        except AttributeError:
+            public_id = ''
+        return "Image <%s:%s>" % (self.official_ad, public_id)
+
+    def __str__(self):
+        return str(self.image)

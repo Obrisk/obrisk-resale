@@ -14,7 +14,7 @@
       <li class="breadcrumb-item active" aria-current="page">{% trans 'Write a new classified' %}</li>
     </ol>
   </nav>
-  <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
+  <form action="{% url 'classifieds:write_new_official' %}" name="classifiedForm" enctype="multipart/form-data"  id="classified-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
   
@@ -115,13 +115,11 @@
       else {
           $("input[name='images']").val(images);
           $("input[name='image']").val(images[0]);
-          $("input[name='status']").val("A");
           $("#classified-form").submit();
       }
     }); 
     
     $(".draft").click(function () {
-        $("input[name='status']").val("D");
         $("#classified-form").submit();
     });
 });

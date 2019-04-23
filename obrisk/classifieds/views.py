@@ -14,8 +14,8 @@ from django.http import HttpResponse
 from django import forms
 
 from obrisk.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.classifieds.forms import ClassifiedForm
+from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
+from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm
 
 import json
 import re
@@ -45,7 +45,58 @@ class ExpiredListView(ClassifiedsListView):
     def get_queryset(self, **kwargs):
         return Classified.objects.get_expired()
 
+class CreateOfficialAdView(LoginRequiredMixin, CreateView):
+    """Basic CreateView implementation to create new classifieds."""
+    model = OfficialAd
+    message = _("Your classified has been created.")
+    form_class = OfficialAdForm
+    template_name = 'classifieds/official_ad_create.html'
 
+    def __init__(self, **kwargs):
+        self.object = None
+        super().__init__(**kwargs)
+    
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        form = OfficialAdForm(self.request.POST)
+    
+        if form.is_valid():
+            official_ad = form.save(commit=False)
+            official_ad.user = self.request.user
+            official_ad.save()
+
+            # split one long string of JSON objects into a list of string each for one JSON obj 
+            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
+
+            for image_obj in cloudinary_list:
+                #convert the obj from string into JSON.
+                json_response = json.loads(image_obj)
+
+                #Populate a CloudinaryResource object using the upload response
+                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
+
+                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
+                
+                img = OfficialAdImages(image = str_result)
+                img.official_ad = official_ad
+                img.save()
+            return self.form_valid(form) 
+        else:
+            #ret = dict(errors=form.errors)
+            # print(form.errors)
+            return self.form_invalid(form)
+                  
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super(CreateOfficialAdView, self).form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, self.message)
+        return reverse('classifieds:list')
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = Classified

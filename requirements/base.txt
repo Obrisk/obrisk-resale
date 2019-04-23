@@ -23,6 +23,7 @@ django-taggit>=0.22.2  # https://github.com/alex/django-taggit
 sorl-thumbnail>=12.4.1  # https://github.com/jazzband/sorl-thumbnail
 django-phonenumber-field>=2.1.0  #https://github.com/stefanfoulis/django-phonenumber-field
 phonenumbers>=p8.10.4  #https://github.com/stefanfoulis/django-phonenumber-field
+django-star-ratings>=0.7.0 #https://github.com/wildfish/django-star-ratings
 
 # Channels
 # ------------------------------------------------------------------------------

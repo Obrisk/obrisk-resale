@@ -96,6 +96,7 @@ THIRD_PARTY_APPS = [
     'graphene_django',
     'markdownx',
     'taggit',
+    'star_ratings',
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',

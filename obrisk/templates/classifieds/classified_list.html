@@ -64,7 +64,8 @@
           <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
         </ol>
 
-          {% for profile in seller_profile %}  
+          {# for profile in seller_profile #}  
+          {% for ad in official_ads %}
             <div class="carousel-inner">
               <div class="carousel-item active">
                 <img class="d-block w-100" src="..." >
@@ -130,6 +131,10 @@
           <div class="card my-4">
             <div class="card-body text-center">
               <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
+              
+              {% if request.user.is_seller %}
+                 <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}" title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
+              {% endif %}
               <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
             </div>
           </div>

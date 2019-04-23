@@ -10,7 +10,6 @@
 
 {% block content %}
   <div class="container">
-
     {% thumbnail object.picture "x200" as im %}
       <img src="{{ im.url }}" style="border-radius: 50%;" alt="Picture Profile" id="pic">
     {% empty %}
@@ -19,6 +18,11 @@
 
     <div id="contact-info" class="vcard">
         <h1 class="fn"> {{ object.username|title }} </h1>
+
+         {% if object.is_seller %}
+          
+         {% endif %}
+   
         <p>
             {% if object.instagram_account %}
               <a href="{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-instagram"></i>  </a>
@@ -32,7 +36,7 @@
               <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i>  </a>
             {% endif %}
              
-            <br> <br>
+            
             {% if object.city %}
               <i class="fa fa-map-marker" aria-hidden="true"> {{ object.city }} </i>   <br />
             {% endif %}
@@ -53,32 +57,13 @@
         {% endif %}
         <div class="clear"></div>
     </div>
-   
+
+    
     
 
   </div>
     <!-- Data tiles -->
     <div class="row tile_count">
-      <!-- <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="fa fa-envelope"></i> {% trans 'Posts' %}</span>
-        <div class="count">0</div>
-      </div>
-      <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="fa fa-pencil"></i> {% trans 'Classifieds' %}</span>
-        <div class="count">0</div>
-      </div>
-      <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="fa fa-comment"></i> {% trans 'Comments' %}</span>
-        <div class="count">0</div>
-      </div>
-      <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="fa fa-question-sign"></i> {% trans 'Questions' %}</span>
-        <div class="count">0</div>
-      </div>
-      <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"><i class="fa fa-education"></i> {% trans 'Answers' %}</span>
-        <div class="count">0</div>
-      </div> -->
       <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
         <span class="count_top"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</span>
         <small class="count"> {{ object.points }} </small>

@@ -1,5 +1,5 @@
 from django import forms
-from obrisk.classifieds.models import Classified, ClassifiedImages
+from obrisk.classifieds.models import Classified, OfficialAd
 
 
 class ClassifiedForm(forms.ModelForm):
@@ -10,12 +10,26 @@ class ClassifiedForm(forms.ModelForm):
 
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags", "images"]
+        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info","tags", "images"]
         widgets = {'user': forms.HiddenInput()}
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
             Your city is added by default based on your location.",
             "contact_info": "Phone number, or wechat-ID or any other contacts info, if necessary."
+        }
+
+class OfficialAdForm(forms.ModelForm):
+    details = forms.CharField(widget=forms.Textarea)
+    images = forms.CharField(max_length=6000, widget=forms.HiddenInput()) #This is not related with any model
+
+    class Meta:
+        model = OfficialAd
+        fields = ["title", "details", "located_area", "contact_info", "tags", "images"]
+        widgets = {'user': forms.HiddenInput()}
+        help_texts = {
+            "located_area": "It can be a street name, address or other description.\
+            Your city is added by default based on your location.",
+            "contact_info": "Phone number, wechat-ID or e-mail or any other contacts info, if necessary."
         }
            
 # class ClassifiedReportForm(forms.ModelForm):
