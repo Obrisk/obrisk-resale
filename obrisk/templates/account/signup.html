@@ -36,12 +36,13 @@
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
-        <span class="login100-form-title p-b-32">{% trans 'Account Creation' %}</span>
+        <span class="login100-form-title p-b-32" >{% trans 'Account Creation' %}</span>
 				<span class="txt3">
-            <p>{% blocktrans %}Already have an account? Then please <a href="{{ login_url }}">sign in here</a>.{% endblocktrans %}</p>
+            <p>{% blocktrans %}Already have an account? Then please sign in <a href="{{ login_url }}"> here</a>.{% endblocktrans %}</p>
 				</span>
 
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+				  <small >Please enter a valid email as it will require confirmation</small>
           {% csrf_token %}
 					{{ form|crispy }}
 				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">

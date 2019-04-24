@@ -25,7 +25,7 @@ from cloudinary import CloudinaryResource
 class ClassifiedsListView(LoginRequiredMixin, ListView):
     """Basic ListView implementation to call the published classifieds list."""
     model = Classified
-    paginate_by = 15
+    paginate_by = 50
     context_object_name = "classifieds"
 
     def get_context_data(self, *args, **kwargs):
