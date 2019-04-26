@@ -136,7 +136,7 @@ body {
 }
 
 .btn-dark {
-  height: 80%;
+  height: 40px;
   width: 60px;
   padding: 1px 0;
   border: 0;
@@ -164,6 +164,10 @@ body {
 }
 .small-screen .message-box{
   width:100%;
+}
+
+.small-screen .btn-dark {
+  height: 40px;
 }
 
 .small-screen .messages {
@@ -218,8 +222,8 @@ body {
   font-size: 11px;
   height: 17px;
   margin: 0;
-  padding-right: 20px;
-  width: 265px;
+  /*If want to keep space for (+) attachments to chat: padding-right: 20px; */
+  width: 90%;
 }
 .message-box textarea:focus:-webkit-placeholder {
   color: transparent;
@@ -247,12 +251,11 @@ body {
   box-sizing: padding-box;
   overflow: hidden;
   padding: 0px;
-  width: 80%;
+  width: 100%;
   font-size: 14px;
-  border-radius: 6px;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
   border: 0;
-  flex-basis:95%;
+  
   -webkit-transform-origin: top left;
           transform-origin: top left;
   -webkit-transform: scale(0.75);
@@ -268,6 +271,7 @@ body {
 }
 .input-group{
   display:flex;
+  height: 28px;
 }
 /*** Styles added to fix the issue with zoom in on iphone ***/
 /* iPhone < 5: */
