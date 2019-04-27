@@ -71,6 +71,10 @@ a {
   color: #202024;
 }
 
+.heart, .comment, .like-count, .fa-times {
+  color: #8b2100;
+} 
+
 a:hover {
   color: #424247;
 }

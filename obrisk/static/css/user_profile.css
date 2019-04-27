@@ -70,6 +70,22 @@ ul {
     color: #666;
 }
 
+.fa-map-marker, .fa-briefcase {
+  color: #8b2100;
+}
+
+.fa-instagram {
+  color: #cf153d
+}
+
+.fa-linkedin {
+  color: #1556cf
+}
+
+.fa-facebook {
+  color: #2815cf
+}
+
 
 /** top tiles  */
 .tile_count {

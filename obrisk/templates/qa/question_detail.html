@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n static humanize %}
+{% load thumbnail %}
 
 {% block title %}{{ question.title }}{% endblock %}
 
@@ -42,6 +43,11 @@
 
         <div class="question-user">
           <span class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }} {% trans 'by' %}</span>
+          {% thumbnail question.user.picture "x30" as im %}
+              <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
+          {% empty %}
+              <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
+          {% endthumbnail %}
           <a href="{% url 'users:detail' question.user.username  %}">{{ question.user.get_profile_name|title }}</a>
           {% if question.tags.names %}
             <p>
@@ -74,6 +80,6 @@
 {% endblock content %}
 
 
-{% block modal %}
+{% block extra_js %}
   <script src="{% static 'js/qa.js' %}" type="text/javascript"></script>
-{% endblock modal %}
+{% endblock extra_js %}

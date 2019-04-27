@@ -42,6 +42,7 @@ $(function () {
     $("#draft").click(function () {
         // Function to operate the Draft button in the question form, marking
         // the question status as draft.
+        console.log('something')
         $("input[name='status']").val("D");
         $("#question-form").submit();
     });

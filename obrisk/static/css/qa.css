@@ -2,6 +2,10 @@
   border-style: none none solid none;
 }
 
+a {
+  color: black;
+}
+
 .questions .pagination {
   margin: 0;
 }
@@ -139,4 +143,12 @@
 
 .votes {
   margin-left: .4em;
+}
+
+#questionUpVote {
+ color: #8b2100;
+}
+
+.up-vote , .answer-vote{
+  color: #8b2100;
 }

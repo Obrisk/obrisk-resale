@@ -164,9 +164,16 @@ body {
 }
 .small-screen .message-box{
   width:100%;
+  padding: 10px;
+}
+
+.small-screen textarea {
+  
+  height: 40px;
 }
 
 .small-screen .btn-dark {
+  width: 50px;
   height: 40px;
 }
 
@@ -240,10 +247,6 @@ body {
   border-radius: 10px;
   outline: none !important;
   width: 100%
-}
-
-.message-box .message-submit:hover {
-  background: #1D7745;
 }
 
 .message-box textarea {
