@@ -42,13 +42,15 @@
         <p>{{ question.get_markdown|safe }}</p>
 
         <div class="question-user">
-          <span class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }} {% trans 'by' %}</span>
+          <span class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }}</span>
+          <p class="pull-right text-secondary">
           {% thumbnail question.user.picture "x30" as im %}
               <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
           {% empty %}
               <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
           {% endthumbnail %}
-          <a href="{% url 'users:detail' question.user.username  %}">{{ question.user.get_profile_name|title }}</a>
+          <a href="{% url 'users:detail' question.user.username  %}">{{ question.user.get_profile_name|title }}</a> </p>
+          <br /> <br />
           {% if question.tags.names %}
             <p>
               {% for tag in question.tags.names %}

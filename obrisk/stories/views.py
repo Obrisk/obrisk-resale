@@ -99,7 +99,7 @@ def post_comment(request):
     post = post.strip()
     if post:
         parent.reply_this(user, post)
-        return JsonResponse({'comments': parent.count_thread()})
+        return JsonResponse({'comments': parent.count_thread(), 'likes': parent.count_likers()})
 
     else:
         return HttpResponseBadRequest()

@@ -33,6 +33,7 @@ a {
 
 .questions .question-user {
   margin-bottom: .6em;
+  width: 100%;
 }
 
 .options {
@@ -86,6 +87,8 @@ a {
 
 .answer .answer-user, .question .question-user {
   margin-bottom: .6em;
+  width: 100%;
+
 }
 
 .answer .answer-user .user, .question .question-user .user {
@@ -100,7 +103,9 @@ a {
 .answer .answered, .question .asked {
   color: #aaaaaa;
   margin-left: .6em;
+  font-size: 12px;
 }
+
 
 .favorite {
   cursor: pointer;

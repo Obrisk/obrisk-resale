@@ -16,13 +16,13 @@ $(function () {
         return cookieValue;
     };
 
+    var csrftoken = getCookie('csrftoken');
+
     function csrfSafeMethod(method) {
         // These HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
 
-    var csrftoken = getCookie('csrftoken');
-    var page_title = $(document).attr("title");
     // This sets up every ajax call with proper headers.
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {

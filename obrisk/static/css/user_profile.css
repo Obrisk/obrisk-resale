@@ -70,10 +70,6 @@ ul {
     color: #666;
 }
 
-.fa-map-marker, .fa-briefcase {
-  color: #8b2100;
-}
-
 .fa-instagram {
   color: #cf153d
 }
@@ -128,7 +124,7 @@ ul {
     }
   }
   .tile_count .tile_stats_count .count {
-    font-size: 20px;
+    font-size: 40px;
     line-height: 47px;
     font-weight: 600;
   }
@@ -137,20 +133,5 @@ ul {
       font-size: 40px;
     }
   }
-  @media (min-width: 992px) and (max-width: 1100px) {
-    .tile_count .tile_stats_count .count {
-      font-size: 20px;
-    }
-  }
-  .tile_count .tile_stats_count span {
-    font-size: 20px;
-  }
-  @media (min-width:768px) {
-    .tile_count .tile_stats_count span {
-      font-size: 13px;
-    }
-  }
-  .tile_count .tile_stats_count .count_bottom i {
-    width: 20px;
-  }
+  
   /** /top tiles **/

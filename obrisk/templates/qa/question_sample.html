@@ -11,7 +11,7 @@
         <p>{{ question.get_markdown|safe|truncatechars:100 }}</p> </a>
 
         <p class="question-info pull-left text-center">
-            <span class="{% if question.has_answer %}bg-success text-white{% endif %}">{{ question.count_answers }}</span>
+            <span >{{ question.count_answers }}</span>
             <small class="text-secondary">{% trans 'Answers' %}</small>
             <span>{{ question.total_votes }}</span>
             <small class="text-secondary">{% trans 'Votes' %}</small>
