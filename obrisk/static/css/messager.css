@@ -15,6 +15,10 @@ body {
   flex-flow: column wrap;
 }
 
+.list-group {
+  overflow-y: scroll;
+  height: auto;
+}
 
 .chat-title {
   flex: 0 1 45px;

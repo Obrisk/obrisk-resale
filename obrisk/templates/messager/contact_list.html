@@ -11,15 +11,18 @@
 
 <div class="row" style="margin-top: 1em">
   <div class="col-md-6 list-group users-list">
-      {% for user in conversation_list %}
+      {% for chat in conversation_list %}
         <a href="{% url 'messager:conversation_detail' user.username  %}"
            class="list-group-item list-group-item-action">
-          {% thumbnail user.picture "x40" as im %}
+          {% thumbnail chat.recipient.picture "x40" as im %}
             <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
           {% empty %}
             <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
           {% endthumbnail %}
-          <strong>   {{ user.get_profile_name|title }} </strong>
+          <strong>   {{ chat.recipient.get_profile_name|title }} </strong>
+          {%  if chat.unread %}
+          <span> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+          {% endif %}
         </a>
       
 
@@ -27,13 +30,13 @@
 
       <nav aria-label="breadcrumb">
           <ol class="breadcrumb">
-              <li class="breadcrumb-item"><h4>{% trans "You don't have any contacts in your account." %}</h4> </li>
+              <li class="breadcrumb-item"><h4> {% trans "You don't have any contacts in your account." %} </h4> </li>
           </ol>
       </nav>
       
       <p>{% trans "Start a chat from the classifieds details or invite new friends! " %}</p>
       <p>{% trans "If you have other questions, chat with the Obrisk team member below... " %}</p> 
-      <p>{% trans " We will reply you within the shortest time possible." %}</p>
+      <p>{% trans "We will reply you within the shortest time possible." %}</p>
  
         <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
           class="list-group-item list-group-item-action ">
