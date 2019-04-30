@@ -11,7 +11,7 @@
         </div>
 
         <figure class="avatar-user">
-            {% thumbnail message.sender.picture "x30" as im %}
+            {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
             <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
                 {% empty %}
             <img  src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
@@ -23,7 +23,7 @@
     {% else %}
     <div class="sender">
         <figure class="avatar-sender">
-            {% thumbnail message.sender.picture "x30" as im %}
+            {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
             <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
                 {% empty %}
             <img  src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />

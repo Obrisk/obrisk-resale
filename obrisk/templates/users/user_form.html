@@ -16,7 +16,7 @@
       <h1>{{ user.username|title }}</h1>
       {% if user.name %}<p class="lead">{{ user.name }}</p>{% endif %}
       {% if user.picture %}
-        {% thumbnail user.picture "x250" as im %}
+        {% thumbnail user.picture "250x250" crop="center" upscale="true"  as im %}
           <img src="{{ im.url }}" style="border-radius: 50%;" alt="Picture Profile" id="pic">
         {% endthumbnail %}
       {% else %}
