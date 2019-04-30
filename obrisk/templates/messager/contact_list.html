@@ -14,7 +14,7 @@
       {% for user in conversation_list %}
         <a href="{% url 'messager:conversation_detail' user.username  %}"
            class="list-group-item list-group-item-action">
-          {% thumbnail user.picture "x40" as im %}
+          {% thumbnail user.picture "40x40" crop="center" upscale="true"  as im %}
             <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
           {% empty %}
             <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
@@ -37,7 +37,7 @@
  
         <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
           class="list-group-item list-group-item-action ">
-          {% thumbnail super_users.first.picture "x40" as im %}
+          {% thumbnail super_users.first.picture "40x40" crop="center" upscale="true"  as im %}
             <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
           {% empty %}
             <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />

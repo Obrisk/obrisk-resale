@@ -9,15 +9,29 @@
 {% endblock head %}
 
 {% block content %}
-  <div class="container">
-    {% thumbnail object.picture "x200" as im %}
-      <img src="{{ im.url }}" style="border-radius: 50%;" alt="Picture Profile" id="pic">
-    {% empty %}
+<div class="media profile-header d-flex flex-column flex-md-row">
+    {% thumbnail object.picture "150x150" crop="center" upscale="true"  as im %}
+      <img src="{{ im.url }}"  class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" alt="Picture Profile" id="pic">
+        {% empty %}
       <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
-    {% endthumbnail %}
+    {% endthumbnail %} 
+     <div class="media-body">
+    <h1 class="mt-0">{{ object.username|title }}</h1>
+
+  </div>
+  <div class="profile-points">
+        <div class="point-label"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</div>
+        <div class="points"> {{ object.points }} </div>
+</div>
+          {% if request.user.username == object.username %}
+      <a class="btn btn-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+    {% endif %}
+</div>
+
+
+  <div class="container profile-wrapper">
 
     <div id="contact-info" class="vcard">
-        <h1 class="fn"> {{ object.username|title }} </h1>
 
          {% if object.is_seller %}
           
@@ -62,16 +76,4 @@
     
 
   </div>
-    <!-- Data tiles -->
-    <div class="row tile_count">
-      <div class="col-md-2 col-sm-3 col-xs-4 tile_stats_count">
-        <span class="count_top"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</span>
-        <small class="count"> {{ object.points }} </small>
-      </div>
-    </div>
-    <!-- /data tiles -->
-
-    {% if request.user.username == object.username %}
-      <a class="btn btn-dark pull-right" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
-    {% endif %}
 {% endblock content %}
