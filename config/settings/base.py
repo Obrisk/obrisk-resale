@@ -316,7 +316,7 @@ S3DIRECT_DESTINATIONS = {
     
         # "allowed" [optional] Limit to specific mime types
         #           List: list of mime types
-        'allowed': ['image/jpeg', 'image/png', 'video/mp4'],
+        'allowed': ['image/jpeg','image/jpg', 'image/png', 'video/mp4'],
 
         # "cache_control" [optional] Custom cache control header
         #                 String: header

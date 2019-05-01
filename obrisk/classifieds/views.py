@@ -72,6 +72,21 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Handles POST requests, instantiating a form instance and its inline
+        formsets with the passed POST variables and then checking them for
+        validity.
+        """
+        form = ClassifiedForm(self.request.POST)
+    
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            #ret = dict(errors=form.errors)
+            print(form.errors)
+            return self.form_invalid(form)
             
                   
     def form_valid(self, form):
@@ -80,12 +95,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified = form.save(commit=False)
         classified.user = self.request.user
         classified.save()
-
-        for img in form.cleaned_data['image']:
-              
-            img = ClassifiedImages(image = img)
-            img.classified = classified
-            img.save()
         
         return super(CreateClassifiedView, self).form_valid(form)
 
