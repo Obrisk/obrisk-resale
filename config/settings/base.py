@@ -326,6 +326,10 @@ S3DIRECT_DESTINATIONS = {
         #                        Tuple: (from, to) in bytes
         'content_length_range': (5000, 20000000),
 
+        # "server_side_encryption" [optional] Use serverside encryption
+        #                          String: encrytion standard
+        'server_side_encryption': 'AES256',
+
         # "allow_existence_optimization" [optional] Checks to see if file already exists,
         #                                returns the URL to the object if so (no upload)
         #                                Boolean: True, False

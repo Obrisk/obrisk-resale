@@ -99,16 +99,6 @@ class Classified(models.Model):
         super().save(*args, **kwargs)
 
 
-
-class CloudinaryFieldFix(CloudinaryField):
-    def to_python(self, value):
-        if value is False:
-            return value
-        else:
-            return super(CloudinaryFieldFix, self).to_python(value)
-
-
-
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
     image = S3DirectField(dest='images', blank=True)
@@ -123,7 +113,5 @@ class ClassifiedImages(models.Model):
 
     def __str__(self):
         return str(self.image)
-
-# image = ClassifiedImages.objects.all()[0]
-# 
+ 
 
