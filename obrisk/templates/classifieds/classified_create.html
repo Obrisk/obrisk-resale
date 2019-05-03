@@ -3,9 +3,26 @@
 {% load crispy_forms_tags %}
 
 {% block head %}
- <meta charset="utf-8">
-    <title>s3direct</title>
-    {{ form.media }}
+  <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
+
+  <script type="text/javascript">
+  const client = new OSS({
+    region: 'OSS_REGION',
+    accessKeyId: 'OSS_KEY_ID',
+    accessKeySecret: 'OSS_SECRET_KEY',
+    bucket: 'OSS_NAME'
+  });
+
+  client.list().then((result) => {
+    console.log('objects: %j', result.objects);
+    return client.put('my-obj', new OSS.Buffer('hello world'));
+  }).then((result) => {
+    console.log('put result: %j', result);
+    return client.get('my-obj');
+  }).then((result) => {
+    console.log('get result: %j', result.content.toString());
+  });
+</script>
 {% endblock head %}
 
 {% block content %}

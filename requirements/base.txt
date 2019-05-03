@@ -9,7 +9,8 @@ redis==2.10.6  # https://github.com/antirez/redis
 whitenoise>=3.3.1  # https://github.com/evansd/whitenoise
 environ>=1.0    #https://files.pythonhosted.org/packages/29/e4/6f448fcce1649a1f0f265e20bd88b7c8ff36e265657604b920240045928b/environ-1.0.tar.gz
 #pypiwin32      #This is only for windows OS     
-boto3>=1.6.2  # pyup: update minor  # https://github.com/boto/boto3
+
+oss2  #https://github.com/aliyun/aliyun-oss-python-sdk
 
 
 # Django
