@@ -22,22 +22,6 @@ from obrisk.classifieds.forms import ClassifiedForm
 import json
 import re
 
-
-# def gallery(request):
-#     list = ClassifiedImages.objects.filter(is_visible=True).order_by('-created')
-#     paginator = Paginator(list, 10)
-
-#     page = request.GET.get('page')
-#     try:
-#         albums = paginator.page(page)
-#     except PageNotAnInteger:
-#         albums = paginator.page(1) # If page is not an integer, deliver first page.
-#     except EmptyPage:
-#         albums = paginator.page(paginator.num_pages) # If page is out of range (e.g.  9999), deliver last page of results.
-
-#     return render(request, 'gallery.html', { 'albums': list })
-
-
 class ClassifiedsListView(LoginRequiredMixin, ListView):
     """Basic ListView implementation to call the published classifieds list."""
     model = Classified
@@ -102,49 +86,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
-    # def handle_uploaded_file(user_id, file):
-    #     im_orig = ClassifiedImages.open(picture_file)
-    #  ## First make the image a square. Crop it.
-    #     imo = do_rotate_on_exif(im_orig)
-    #     width, height = imo.size
 
-    #     if width > height:
-    #         delta = width - height
-    #         left = int(delta/2)
-    #         upper = 0
-    #         right = height + left
-    #         lower = height
-    #     else:
-    #         delta = height - width
-    #         left = int(delta)/2
-    #         upper = 0
-    #         right = width
-    #         lower = width + upper
-
-    #     im = imo.crop((left, upper, right, lower))
-
-# def do_rotate_on_exif(im_orig):
-#     try:
-#         orientation = im_orig._getexif()[274]        
-#         if orientation == 3:
-#             im = im_orig.rotate(180)
-#         elif orientation == 6:
-#             im = im_orig.rotate(-90)
-#         elif orientation == 8:
-#             im = im_orig.rotate(90)
-#         return im
-#     except:
-#         return im_orig
-
-# THUMBNAIL_SIZE = 70, 70
-
-# def create_thumbnail(image_object, user_id):
-#     image_object.thumbnail(THUMBNAIL_SIZE, ClassifiedImages.ANTIALIAS)
-#     image_object.save(profile_image_path + str(user_id) + "_70.jpg", "JPEG")
-#     filedata = open(profile_image_path + str(user_id) + "_70.jpg", 'rb').read()
-#     conn.put(BUCKET_NAME, 'images/provider/' + str(user_id)+'_70.jpg',
-#     S3.S3Object(filedata), {'x-amz-acl': 'public-read', 
-#    'Content-Type': 'image/jpeg'})
 
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):

@@ -1,15 +1,11 @@
 from django import forms
 from obrisk.classifieds.models import Classified, ClassifiedImages
-from .fields import MultiFileField
-from s3direct.widgets import S3DirectWidget
 
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
     details = forms.CharField(widget=forms.Textarea)
-    # image = MultiFileField(min_num=1, max_num=7, max_file_size=1024*1024*5) #This is not related with any model
-    image = forms.URLField(widget=S3DirectWidget(dest='cloud_destination'))
-
+    images = forms.CharField(widget=forms.HiddenInput())
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags"]

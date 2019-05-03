@@ -9,10 +9,6 @@ from slugify import slugify
 
 from taggit.managers import TaggableManager
 
-from cloudinary.models import CloudinaryField
-
-from s3direct.fields import S3DirectField
-
 class ClassifiedQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
@@ -67,7 +63,6 @@ class Classified(models.Model):
     tags = TaggableManager()
     date = models.DateField(default=datetime.date.today)
     objects = ClassifiedQuerySet.as_manager()
-    # image_thumbnail = ProcessedImageField(upload_to='file',processors=[ResizeToFit(1280)], format='JPEG', options={'quality': 60})
 
     class Meta:
         verbose_name = _("Classified")
@@ -101,7 +96,7 @@ class Classified(models.Model):
 
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
-    image = S3DirectField(dest='images', blank=True)
+    image = models.URLField(max_length=300)
 
     """ Informative name for model """
     def __unicode__(self):
