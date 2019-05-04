@@ -32,6 +32,7 @@
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                 {% for photo in images %}
                     {% if photo.classified == classified %}
+                    <img src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,m_lfit,h_100,w_100/format,png//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,m_lfit,h_100,w_100/format,png />
                 {{ "<!--" }}      
                 {% endif %}
                 {% endfor %}
@@ -100,6 +101,7 @@
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                 {% for photo in images %}
                     {% if photo.classified == classified %}
+                    <img src="//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,m_lfit,h_100,w_100/format,png//image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,m_lfit,h_100,w_100/format,png />
                 {{ "<!--" }}      
                 {% endif %}
                 {% endfor %}
