@@ -35,15 +35,17 @@ var STS = OSS.STS;
 //Create a new client
 //The front end uploads itself to oss, and does not go through the background to get relevant information. Only do the test, this can't be done in the project!
 
-var client = new OSS({
-    region: 'oss-cn-hangzhou',
-    accessKeyId: 'xxxx',
-    accessKeySecret: 'xxxx',
-    bucket: 'xxxxx'
-});
+// var client = new OSS({
+//     region: 'oss-cn-hangzhou',
+//     accessKeyId: 'xxxx',
+//     accessKeySecret: 'xxxx',
+//     bucket: 'xxxxx'
+// });
 // https://help.aliyun.com/document_detail/63401.html?#h3--https-
 //https 上传
 // https://bbs.aliyun.com/read/282088.html
+
+
 //client.options.endpoint.protocol = "https:" 
 var progressBar = 0;
 var progress = '';
@@ -53,14 +55,49 @@ var $wrap = $('#uploader'),
     $totalProgressbar = $("#totalProgressBar");
 var FOLDER = 'folder';
 var uploadType = ''; //Upload type
+
+
+
+// =========================================================================================================================
+// adding a crsf tokken
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
 /**
  * Method Two:
  *In actual production, use this.
  *Get authorization in the background, then generate the client
  */
 
-/*var applyTokenDo = function (func) {
-    var url = appServer; //Request background to obtain authorization address url
+
+var applyTokenDo = function (func) {
+    var url = oss_url; //Request background to obtain authorization address url
     return $.ajax({
       url: url
     }).then(function (result) {
@@ -74,15 +111,9 @@ var uploadType = ''; //Upload type
       });
       return func(client);
     });
-  };*/
+  };
 
-/**
- *The front end is tested by itself,
- *Write data directly without requesting background authorization.
- **/
-var applyTokenDo = function () {
-    return client;
-};
+
 var progress = function (p) { //p percentage 0~1
     return function (done) {
         progressBar = (p * 100).toFixed(2) + '%';

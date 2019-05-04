@@ -28,6 +28,14 @@ from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 
 import oss2
 
+#For images
+from django.http import JsonResponse 
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from obrisk.helpers import ajax_required
+
+
+
 
 # The following code shows the usage of STS, including role-playing to get the temporary user's key and using the temporary user's key to access the OSS.
 
@@ -48,16 +56,16 @@ import oss2
 access_key_id = os.getenv('OSS_STS_ID')
 access_key_secret = os.getenv('OSS_STS_KEY')
 bucket_name = os.getenv('OSS_BUCKET')
-Endpoint = os.getenv('OSS_ENDPOINT')
+endpoint = os.getenv('OSS_ENDPOINT')
 sts_role_arn = os.getenv('OSS_STS_ARN')
 
 # Confirm that the above parameters are filled in correctly.
 for param in (access_key_id, access_key_secret, bucket_name, endpoint, sts_role_arn):
-    Assert '<' not in param, 'Please set the parameter: ' + param
+    print(param)
 
 
 class StsToken(object):
-    Temporary user key returned by """AssumeRole
+    """Temporary user key returned by AssumeRole
     :param str access_key_id: access user id of the temporary user
     :param str access_key_secret: temporary user's access key secret
     :param int expiration: expiration time, UNIX time, seconds from UTC zero on January 1, 1970
@@ -102,9 +110,9 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
 
 # Create a bucket object, all Object related interfaces can be done through the Bucket object
-token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
-auth = oss2.StsAuth(token.access_key_id, token.access_key_secret, token.security_token)
-bucket = oss2.Bucket(auth, endpoint, bucket_name)
+# token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
+# auth = oss2.StsAuth(token.access_key_id, token.access_key_secret, token.security_token)
+# bucket = oss2.Bucket(auth, endpoint, bucket_name)
 
 
 # Upload a string. The object name is motto.txt, and the content is a famous quote.
@@ -186,6 +194,20 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
 
+@login_required
+@ajax_required
+@require_http_methods(["POST"])
+def get_oss_auth(request):
+    """AJAX Functional view to recieve just the minimum information, process
+    and create the new message and return the new data to be attached to the
+    conversation stream."""
+    token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
+    
+    return render(request, 'messager/single_message.html', {
+        'accessKeyId': access_key_id,
+        'accessKeySecret':access_key_secret, 
+        'SecurityToken': token
+    })
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""

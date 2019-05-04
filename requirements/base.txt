@@ -11,6 +11,7 @@ environ>=1.0    #https://files.pythonhosted.org/packages/29/e4/6f448fcce1649a1f0
 #pypiwin32      #This is only for windows OS     
 
 oss2  #https://github.com/aliyun/aliyun-oss-python-sdk
+aliyun-python-sdk-sts>=3.0.1 #https://github.com/aliyun/aliyun-openapi-python-sdk
 
 
 # Django

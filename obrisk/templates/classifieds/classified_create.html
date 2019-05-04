@@ -85,7 +85,7 @@
 
 <script type="text/javascript">
 
-  const url = "{% url 'classifieds:write_new' %}" ///classifieds/write-new-classified/
+  const oss_url = "{% url 'classifieds:get_oss_auth' %}"; ///classifieds/get_oss_auth/
   const user = "{{ request.user.username }}";
 
   $(function () {
