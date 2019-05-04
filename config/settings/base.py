@@ -311,3 +311,4 @@ GRAPHENE = {
     'SCHEMA': 'obrisk.schema.schema'
 }
 
+ACCOUNT_FORMS = {'signup': 'users.forms.CustomSignupForm'}

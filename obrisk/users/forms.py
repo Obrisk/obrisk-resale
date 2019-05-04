@@ -1,6 +1,11 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from .models import User
+
+from obrisk.users.models import User 
+from obrisk.users import models
+
+from allauth.account.forms import SignupForm
+
 
 class CustomUserCreationForm(UserCreationForm):
 
@@ -33,3 +38,7 @@ class UserForm(forms.ModelForm):
         # widgets = {
         #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
         # }
+
+
+
+
