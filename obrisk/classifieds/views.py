@@ -18,7 +18,6 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.classifieds.forms import ClassifiedForm
-
 import json
 import re
 import os
@@ -33,6 +32,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from obrisk.helpers import ajax_required
+
+import oss2
+import base64
 
 
 
@@ -108,28 +110,6 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
     return token
 
-
-# Create a bucket object, all Object related interfaces can be done through the Bucket object
-# token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
-# auth = oss2.StsAuth(token.access_key_id, token.access_key_secret, token.security_token)
-# bucket = oss2.Bucket(auth, endpoint, bucket_name)
-
-
-# Upload a string. The object name is motto.txt, and the content is a famous quote.
-# bucket.put_object('motto.txt', 'Never give up. - Jack Ma')
-
-
-# Download to local file
-# Bucket.get_object_to_file('motto.txt', 'local motto.txt')
-
-
-# Delete the object named motto.txt
-# bucket.delete_object('motto.txt')
-
-
-# Clear local files
-# Os.remove(u'local motto.txt')
-
 class ClassifiedsListView(LoginRequiredMixin, ListView):
     """Basic ListView implementation to call the published classifieds list."""
     model = Classified
@@ -141,6 +121,8 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
         context['popular_tags'] = Classified.objects.get_counted_tags()
         context['images'] = ClassifiedImages.objects.all()
         context['other_classifieds'] = Classified.objects.exclude(city= self.request.user.city)
+        context['image_thumb'] = ClassifiedImages.image_thumb
+        context['image_medium'] = ClassifiedImages.image_medium
         return context
 
     def get_queryset(self, **kwargs):
@@ -179,7 +161,8 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             #ret = dict(errors=form.errors)
             print(form.errors)
             return self.form_invalid(form)
-            
+
+
                   
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -187,6 +170,28 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified = form.save(commit=False)
         classified.user = self.request.user
         classified.save()
+
+        bucket = oss2. Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+
+        for img in form.cleaned_data['images']:
+                  
+            img = ClassifiedImages(image = img)
+            img.classified = classified
+
+            style = 'image/crop,w_140,h_140,x_140,y_140,r_1'
+            bucket_name = img
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style, 
+            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))),
+            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            img.image_thumb = bucket.process_object(img, process)
+            
+            style = 'image/crop,w_250,h_250,x_250,y_250,r_1'
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style, 
+            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))),
+            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            img.image_medium = bucket.process_object(img, process)
+        
+            img.save()
         
         return super(CreateClassifiedView, self).form_valid(form)
 
@@ -252,5 +257,3 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
         return context
-
-

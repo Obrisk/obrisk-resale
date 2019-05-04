@@ -96,7 +96,9 @@ class Classified(models.Model):
 
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
-    image = models.URLField(max_length=300)
+    image = models.CharField(max_length=300)
+    image_thumb = models.CharField(max_length=300)
+    image_medium = models.CharField(max_length=300)
 
     """ Informative name for model """
     def __unicode__(self):

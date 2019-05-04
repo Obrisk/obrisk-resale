@@ -40,9 +40,13 @@
                 <div class="container">
                     <div class="row">
                       {% for photo in images %}
-                      {% comment %} <div class="photo mr-2 mb-3">
-                          {% cloudinary photo.image width=270 height=270  %}
-                      </div> {% endcomment %}
+                      <div class="photo mr-2 mb-3">
+                        <img src='image_thumb'>   
+                        <img src='image_medium'>   
+                      <!-- example
+                        http://image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,w_350,h_550
+                      -->
+                      </div> 
                       {% endfor %}
                     </div>
                 </div>
