@@ -7,22 +7,15 @@
 'use strict';
 //(function(w) {
 /**
- * 以上四个参数，是从后台获取的。bucket和region可以写在前台，但为了以后方便管理，建议统一从后台获取。
- * 后面两个千万不能写在js中!
+* The above four parameters are obtained from the background.The bucket and region can be written in the foreground, but
+for the convenience of management in the future, it is recommended to obtain it from the background.
+*The last two must not be written in js!
  * **/
-// var bucket = 'wifi-uncle'; //前端做测试上传，先自己写死。工程中，这些找后台拿
-// var region = 'oss-cn-shenzhen'; //同上
-// var accessKeyId = '***************'; //同上
-// var accessKeySecret = '***************'; //同上
-var bucket = ''; //前端做测试上传，先自己写死。工程中，这些找后台拿
-var region = 'oss-cn-shenzhen'; //同上
-var accessKeyId = ''; //同上
-var accessKeySecret = ''; //
+
 /**
- *  上传文件对象
- *  fileStats: 文件统计
- * filePath: 上传文件的地址，
- *
+ * Upload file object
+ * fileStats: File statistics
+ * filePath: The address of the uploaded file
  * * */
 var uploader = {
     fileList: [],
@@ -33,13 +26,15 @@ var uploader = {
         curFileSize: 0,
     },
     filePath: "modelData/"
-}; //上传实例对象
+}; //Upload instance object
 var Buffer = OSS.Buffer;
 var OSS = OSS.Wrapper;
 var STS = OSS.STS;
 
-//新建一个client
-//前端自己上传到oss，不经过后台拿相关信息。只做测试，工程中不能这样！
+
+//Create a new client
+//The front end uploads itself to oss, and does not go through the background to get relevant information. Only do the test, this can't be done in the project!
+
 var client = new OSS({
     region: 'oss-cn-hangzhou',
     accessKeyId: 'xxxx',
@@ -53,19 +48,19 @@ var client = new OSS({
 var progressBar = 0;
 var progress = '';
 var $wrap = $('#uploader'),
-    // 图片容器
+    // Picture container
     $queue = $('<ul class="filelist"></ul>').appendTo($wrap.find('.queueList')),
     $totalProgressbar = $("#totalProgressBar");
 var FOLDER = 'folder';
-var uploadType = ''; //上传类型
+var uploadType = ''; //Upload type
 /**
- * 方法二:
- * 实际生产中，用这个。
- * 先往后台获取授权，再生成client
+ * Method Two:
+ *In actual production, use this.
+ *Get authorization in the background, then generate the client
  */
 
 /*var applyTokenDo = function (func) {
-    var url = appServer;// 请求后台获取授权地址url
+    var url = appServer; //Request background to obtain authorization address url
     return $.ajax({
       url: url
     }).then(function (result) {
@@ -80,14 +75,15 @@ var uploadType = ''; //上传类型
       return func(client);
     });
   };*/
+
 /**
- *  前端自己测试用，
- *  不用请求后台授权，直接写死数据。
- * */
+ *The front end is tested by itself,
+ *Write data directly without requesting background authorization.
+ **/
 var applyTokenDo = function () {
     return client;
 };
-var progress = function (p) { //p百分比 0~1
+var progress = function (p) { //p percentage 0~1
     return function (done) {
         progressBar = (p * 100).toFixed(2) + '%';
         $totalProgressbar.css('width', progressBar)
@@ -100,25 +96,25 @@ function getUploadFilePath() {
     return $("#uploadFilePath").val() || "/";
 }
 /**
- *  TODO 下载OSS中文件的流程:
- *  1. 创建个client对象
- *  2. 获取该文件的路径，须带文件名，也就是下面的object。
- *  3. 该文件的文件名
- *  4. 获取到这三个参数后，直接用client调singnatureURL方法，如下：
+ * TODO The process of downloading files in OSS:
+ * 1. Create a client object
+ * 2. Get the path to the file, with the file name, which is the following object.
+ * 3. File name of the file
+ * 4. After getting these three parameters, directly use the client to adjust the singnatureURL method, as follows:
  *
  * */
 var downloadFile = function () {
     var client = applyTokenDo();
-    var object = 'obj/1.jpg'; //测试数据，自行删除
-    var filename = '1.jpg'; //测试数据，自行删除
+    var object = 'obj/1.jpg'; //Test data, delete it by yourself
+    var filename = '1.jpg'; //Test data, delete it by yourself
     console.log(object + ' => ' + filename);
     var result = client.signatureUrl(object, {
-        response: { //这里为啥会有response，具体看官方文档。
+        response: { //Here is the response, see the official documentation.
             'content-disposition': 'attachment; filename="' + filename + '"'
         }
     });
-    window.location = result; //这里是直接下载文件
-    return result; //返回url
+    window.location = result; //Here is the direct download file
+    return result; //Return url
 };
 
 function OssUpload() {
@@ -133,7 +129,7 @@ function OssUpload() {
 }
 OssUpload.prototype = {
     constructor: OssUpload,
-    // 绑定事件
+    // Binding event
     bindEvent: function () {
         var _this = this;
         $("#chooseFile, #addBtn, #chooseFolder").click(function () {
@@ -148,7 +144,7 @@ OssUpload.prototype = {
         });
         $('#js-file,#addDirectory').change(function (e) {
             var files = e.target.files;
-            var curIndex = uploader.fileList.length; //插件中已有的文件长度，追加
+            var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
             var length = files.length;
             var file = null;
             $('#uploader .placeholder').hide();
@@ -156,16 +152,16 @@ OssUpload.prototype = {
             for (var i = 0; i < length; i++) {
                 file = files[i];
                 uploader.fileList[curIndex + i] = file;
-                file.id = uploader.fileList[curIndex + i].id = "WU_LI_" + (curIndex + i + 1); //给每个文件加id
-                uploader.fileStats.totalFilesSize += file.size; //统计文件大小
-                _this.addFile(file); //添加到控件视图中
+                file.id = uploader.fileList[curIndex + i].id = "WU_LI_" + (curIndex + i + 1); //Add id to each file
+                uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                _this.addFile(file); //Add to control view
             }
             uploader.fileStats.totalFilesNum = uploader.fileList.length;
         });
 
         $("#startUpload").click(function () {
             var length = uploader.fileStats.totalFilesNum;
-            var filePath = getUploadFilePath(); //uploader.filePath;//可以自行调整上传位置
+            var filePath = getUploadFilePath(); //uploader.filePath;//Can adjust the upload location by yourself
             var file;
             for (var i = 0; i < length; i++) {
                 file = uploader.fileList[i];
@@ -181,7 +177,7 @@ OssUpload.prototype = {
             var len = list.length;
             for (var i = 0; i < len; i++) {
                 if (uploader.fileList[i].id == id) {
-                    uploader.fileList.splice(i, 1); //从文件列表中删除文件
+                    uploader.fileList.splice(i, 1); //Delete a file from the file list
                     break;
                 }
             }
@@ -189,7 +185,7 @@ OssUpload.prototype = {
         });
     },
     /**
-     * 获取文件所在文件夹名
+     * Get the folder name where the file is located
      *
      * @param file
      */
@@ -206,17 +202,17 @@ OssUpload.prototype = {
         return parentDir;
     },
     /***
-     *  上传文件
-     * @param file 需要上传的文件
-     * @param filePath 上传文件到哪个位置。按官方说法就是key
-     * oss是对象存储, 没有path路径概念，不过个人认为这个可以当作路径比较好理解
+     *  upload files
+     * @param file files to be uploaded
+     * @param filePath to which location to upload the file. According to the official statement is the key
+     * oss is object storage, there is no path path concept, but personally think this can be better understood as a path
      */
     uploadFile: function (file, filePath) {
         var client;
         var total = 0;
         if (uploadType != FOLDER) {
             filePath += file.name;
-        } else { //上传文件夹
+        } else { //Upload folder
             filePath = filePath + this.getParentDirName(file) + file.name;
         }
         client = applyTokenDo();
@@ -225,13 +221,13 @@ OssUpload.prototype = {
             })
             .then(function (res) {
                 $("#" + file.id).children(".success-span").addClass("success");
-                uploader.fileStats.uploadFinishedFilesNum++; //已成功上传数 + 1/
-                uploader.fileStats.curFileSize += file.size; //当前已上传的文件大小
+                uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
                 /**
-                 * 这里有个一个问题:
-                 *  这是在成功回调中计算文件的大小，并不是实时的。
-                 *  举个栗子，你上传一个100M文件，得等到它全部上传完成后，你才知道它上传完，中间进度你并不知道。
-                 *  上面那个上传的process 中貌似是[0,1], 还得计算当前文件的大小乘以当前进度算出这个文件已经上传了多少。
+                 * There is a problem here:
+                 * This is the size of the file in the successful callback, not real-time.
+                 * Give a chestnut, you upload a 100M file, you have to wait until it is all uploaded, you know that it is uploaded, you don't know the progress.
+                 * The uploaded process above looks like [0,1], and you have to calculate the size of the current file multiplied by the current progress to figure out how much the file has been uploaded.
                  *
                  */
                 progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
@@ -246,10 +242,9 @@ OssUpload.prototype = {
     },
 
     /**
-     * TODO 当有文件添加进来时执行，负责view的创建
-     * 百度webuploader界面的
+     * TODO is executed when a file is added, responsible for the creation of the view.
+     * Baidu webuploader interface
      */
-
     addFile: function (file) {
         var $li = $('<li id="' + file.id + '">' +
                 '<p class="title">' + file.name + '</p>' +
