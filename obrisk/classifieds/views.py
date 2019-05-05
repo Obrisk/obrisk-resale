@@ -202,6 +202,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
 
 @login_required
+@ajax_required
 @require_http_methods(["GET"])
 def get_oss_auth(request):
     """AJAX Functional view to recieve just the minimum information, process

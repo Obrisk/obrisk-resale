@@ -67,20 +67,19 @@ var uploadType = ''; //Upload type
  */
 
 
-var applyTokenDo = function (func) {
+var applyTokenDo = function () {
     var url = oss_url; //Request background to obtain authorization address url
     return $.ajax({
-        url: url
-    }).then(function (result) {
-        var creds = result;
-        var client = new OSS({
-            region: region,
-            accessKeyId: creds.AccessKeyId,
-            accessKeySecret: creds.AccessKeySecret,
-            stsToken: creds.SecurityToken,
-            bucket: bucket
-        });
-        return func(client);
+        url: url,
+        async: false,
+        success: function (result) {
+            client = new OSS({
+                region: 'oss-cn-hangzhou',
+                accessKeyId: result.accessKeyId,
+                accessKeySecret: result.accessKeySecret,
+                bucket: 'obrisk'
+            });
+        }
     });
 };
 
@@ -97,27 +96,7 @@ var progress = function (p) { //p percentage 0~1
 function getUploadFilePath() {
     return $("#uploadFilePath").val() || "/";
 }
-/**
- * TODO The process of downloading files in OSS:
- * 1. Create a client object
- * 2. Get the path to the file, with the file name, which is the following object.
- * 3. File name of the file
- * 4. After getting these three parameters, directly use the client to adjust the singnatureURL method, as follows:
- *
- * */
-var downloadFile = function () {
-    var client = applyTokenDo();
-    var object = 'obj/1.jpg'; //Test data, delete it by yourself
-    var filename = '1.jpg'; //Test data, delete it by yourself
-    console.log(object + ' => ' + filename);
-    var result = client.signatureUrl(object, {
-        response: { //Here is the response, see the official documentation.
-            'content-disposition': 'attachment; filename="' + filename + '"'
-        }
-    });
-    window.location = result; //Here is the direct download file
-    return result; //Return url
-};
+
 
 function OssUpload() {
     var _this = this;
@@ -129,6 +108,7 @@ function OssUpload() {
         // $("#statusBar").hide();
     };
 }
+var client;
 OssUpload.prototype = {
     constructor: OssUpload,
     // Binding event
@@ -193,14 +173,14 @@ OssUpload.prototype = {
      * oss is object storage, there is no path path concept, but personally think this can be better understood as a path
      */
     uploadFile: function (file, filePath) {
-        var client;
+
         var total = 0;
         if (uploadType != FOLDER) {
             filePath += file.name;
         } else { //Upload folder
             filePath = filePath + this.getParentDirName(file) + file.name;
         }
-        client = applyTokenDo();
+        applyTokenDo();
         client.multipartUpload(filePath, file, {
                 progress: progress
             })

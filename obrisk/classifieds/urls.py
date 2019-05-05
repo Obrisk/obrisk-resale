@@ -13,5 +13,4 @@ urlpatterns = [
     url(r'^report/(?P<pk>\d+)/$', ReportClassifiedView.as_view(), name='report_classified'),
     url(r'^edit/(?P<pk>\d+)/$', EditClassifiedView.as_view(), name='edit_classified'),
     url(r'^(?P<slug>[-\w]+)/$', DetailClassifiedView.as_view(), name='classified'),
-    url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth')
 ]
