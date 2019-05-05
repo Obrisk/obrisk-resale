@@ -59,35 +59,6 @@ var uploadType = ''; //Upload type
 
 
 // =========================================================================================================================
-// adding a crsf tokken
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-
-function csrfSafeMethod(method) {
-  // these HTTP methods do not require CSRF protection
-  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        }
-    }
-});
 
 /**
  * Method Two:
@@ -99,19 +70,19 @@ $.ajaxSetup({
 var applyTokenDo = function (func) {
     var url = oss_url; //Request background to obtain authorization address url
     return $.ajax({
-      url: url
+        url: url
     }).then(function (result) {
-      var creds = result;
-      var client = new OSS({
-        region: region,
-        accessKeyId: creds.AccessKeyId,
-        accessKeySecret: creds.AccessKeySecret,
-        stsToken: creds.SecurityToken,
-        bucket: bucket
-      });
-      return func(client);
+        var creds = result;
+        var client = new OSS({
+            region: region,
+            accessKeyId: creds.AccessKeyId,
+            accessKeySecret: creds.AccessKeySecret,
+            stsToken: creds.SecurityToken,
+            bucket: bucket
+        });
+        return func(client);
     });
-  };
+};
 
 
 var progress = function (p) { //p percentage 0~1
@@ -214,23 +185,6 @@ OssUpload.prototype = {
             }
             $li.remove();
         });
-    },
-    /**
-     * Get the folder name where the file is located
-     *
-     * @param file
-     */
-    getParentDirName: function (file) {
-        var filePath = '';
-        var parentDir = '';
-        if (file.webkitRelativePath) {
-            filePath = file.webkitRelativePath.split("/");
-            parentDir = filePath[filePath.length - 2] + '/';
-        } else {
-            alert("目前浏览器不支持webkitRelativePath");
-            //return false;
-        }
-        return parentDir;
     },
     /***
      *  upload files
