@@ -74,10 +74,11 @@ var applyTokenDo = function () {
         async: false,
         success: function (result) {
             client = new OSS({
-                region: 'oss-cn-hangzhou',
+                region: result.region,
                 accessKeyId: result.accessKeyId,
                 accessKeySecret: result.accessKeySecret,
-                bucket: 'obrisk'
+                stsToken: result.SecurityToken,
+                bucket: result.bucket
             });
         }
     });

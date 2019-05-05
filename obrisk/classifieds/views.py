@@ -58,6 +58,7 @@ access_key_secret = os.getenv('OSS_STS_KEY')
 bucket_name = os.getenv('OSS_BUCKET')
 endpoint = os.getenv('OSS_ENDPOINT')
 sts_role_arn = os.getenv('OSS_STS_ARN')
+region = os.getenv('OSS_REGION')
 
 # Confirm that the above parameters are filled in correctly.
 for param in (access_key_id, access_key_secret, bucket_name, endpoint, sts_role_arn):
@@ -178,7 +179,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             img.classified = classified
 
             style = 'image/crop,w_140,h_140,x_140,y_140,r_1'
-            bucket_name = img
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
                                                               oss2.compat.to_bytes(bucket_name))),
@@ -186,11 +186,11 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             img.image_thumb = bucket.process_object(img, process)
 
             style = 'image/crop,w_250,h_250,x_250,y_250,r_1'
-            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+            process2 = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
                                                               oss2.compat.to_bytes(bucket_name))),
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            img.image_medium = bucket.process_object(img, process)
+            img.image_medium = bucket.process_object(img, process2)
 
             img.save()
 
@@ -209,12 +209,15 @@ def get_oss_auth(request):
     and create the new message and return the new data to be attached to the
     conversation stream."""
     token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
-    print(token.security_token)
+    key_id = str(token.access_key_id)
+    scrt = str(token.access_key_secret)
     token_value = str(token.security_token)
     data = {
-        'accessKeyId': access_key_id,
-        'accessKeySecret': access_key_secret,
-        'SecurityToken': token_value
+        'region': region,
+        'accessKeyId': key_id,
+        'accessKeySecret': scrt,
+        'SecurityToken': token_value,
+        'bucket': bucket_name
     }
     return JsonResponse(data)
 
