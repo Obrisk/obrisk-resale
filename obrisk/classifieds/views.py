@@ -207,12 +207,13 @@ def get_oss_auth(request):
     """AJAX Functional view to recieve just the minimum information, process
     and create the new message and return the new data to be attached to the
     conversation stream."""
-    print('testing ')
     token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
+    print(token.security_token)
+    token_value = str(token.security_token)
     data = {
         'accessKeyId': access_key_id,
         'accessKeySecret': access_key_secret,
-        'SecurityToken': token
+        'SecurityToken': token_value
     }
     return JsonResponse(data)
 
