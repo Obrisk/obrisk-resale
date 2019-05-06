@@ -8,8 +8,6 @@ class AccountAdapter(DefaultAccountAdapter):
         data = form.cleaned_data
         user.username = data['username']
         user.email = data['email']
-        user.first_name = data['first_name']
-        user.last_name = data['last_name']
         user.province_region = data['province_region']
         user.city = data['city']
        
