@@ -1,21 +1,16 @@
 /**
- * Created By WiFi ON 2017/11/25 16:31
- * github: https://github.com/WiFiUncle/ossUploader
+ * Enable upload when title has been entered 
  */
 
 
-'use strict';
-//(function(w) {
-/**
-* The above four parameters are obtained from the background.The bucket and region can be written in the foreground, but
-for the convenience of management in the future, it is recommended to obtain it from the background.
-*The last two must not be written in js!
- * **/
+
+
+
 
 /**
  * Upload file object
  * fileStats: File statistics
- * filePath: The address of the uploaded file
+ * filename: The address of the uploaded file
  * * */
 var uploader = {
     fileList: [],
@@ -25,7 +20,6 @@ var uploader = {
         uploadFinishedFilesNum: 0,
         curFileSize: 0,
     },
-    filePath: "modelData/"
 }; //Upload instance object
 var Buffer = OSS.Buffer;
 var OSS = OSS.Wrapper;
@@ -58,21 +52,18 @@ var uploadType = ''; //Upload type
 
 
 
-// =========================================================================================================================
+
 
 /**
- * Method Two:
- *In actual production, use this.
- *Get authorization in the background, then generate the client
+ * get sts token
  */
-
-
 var applyTokenDo = function () {
     var url = oss_url; //Request background to obtain authorization address url
     return $.ajax({
         url: url,
         async: false,
         success: function (result) {
+            console.log(result)
             client = new OSS({
                 region: result.region,
                 accessKeyId: result.accessKeyId,
@@ -106,87 +97,117 @@ function OssUpload() {
         _this.bindEvent();
     };
     _this.initPage = function () {
-        // $("#statusBar").hide();
+
     };
 }
+
+
+/**
+ * generate file name using uuid
+ *
+ * @return  {string}  
+ */
+
+function genKey() {
+    return "classifieds/" + user + '/' + slugify($('#id_title').val()) +
+        '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+}
+
+function slugify(string) {
+    const a = 'àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœøṕŕßśșțùúüûǘẃẍÿź·/_,:;'
+    const b = 'aaaaaaaaceeeeghiiiimnnnooooooprssstuuuuuwxyz------'
+    const p = new RegExp(a.split('').join('|'), 'g')
+    return string.toString().toLowerCase()
+        .replace(/\s+/g, '-') // Replace spaces with -
+        .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+        .replace(/&/g, '-and-') // Replace & with ‘and’
+        .replace(/[^\w\-]+/g, '') // Remove all non-word characters
+        .replace(/\-\-+/g, '-') // Replace multiple - with single -
+        .replace(/^-+/, '') // Trim - from start of text
+        .replace(/-+$/, '') // Trim - from end of text
+}
 var client;
+var images = [];
+
 OssUpload.prototype = {
     constructor: OssUpload,
     // Binding event
     bindEvent: function () {
         var _this = this;
-        $("#chooseFile, #addBtn, #chooseFolder").click(function () {
-            var $this = $(this);
-            uploadType = $this.attr("data-type")
-            console.log('bubtton clicked');
-            if (uploadType == FOLDER) {
-                document.getElementById("addDirectory").click();
-            } else {
-                document.getElementById("js-file").click();
-            }
-        });
-        $('#js-file,#addDirectory').change(function (e) {
-            var files = e.target.files;
-            var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
-            var length = files.length;
-            var file = null;
-            $('#uploader .placeholder').hide();
-            $("#statusBar").css('display', 'flex');
-            for (var i = 0; i < length; i++) {
-                file = files[i];
-                uploader.fileList[curIndex + i] = file;
-                file.id = uploader.fileList[curIndex + i].id = "WU_LI_" + (curIndex + i + 1); //Add id to each file
-                uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-                _this.addFile(file); //Add to control view
-            }
-            uploader.fileStats.totalFilesNum = uploader.fileList.length;
-        });
-
-        $("#startUpload").click(function () {
-            var length = uploader.fileStats.totalFilesNum;
-            var filePath = getUploadFilePath(); //uploader.filePath;//Can adjust the upload location by yourself
-            var file;
-            for (var i = 0; i < length; i++) {
-                file = uploader.fileList[i];
-                _this.uploadFile(file, filePath);
-            }
-
-        });
-        $(".queueList .filelist").delegate('li span.cancel', 'click', function () {
-            var $this = $(this);
-            var $li = $this.parent().parent();
-            var id = $li.attr('id');
-            var list = uploader.fileList;
-            var len = list.length;
-            for (var i = 0; i < len; i++) {
-                if (uploader.fileList[i].id == id) {
-                    uploader.fileList.splice(i, 1); //Delete a file from the file list
-                    break;
+        $('#id_title').on("blur", function () {
+            $("#chooseFile, #addBtn").click(function () {
+                var $this = $(this);
+                uploadType = $this.attr("data-type")
+                document.getElementById("image-file").click();
+            });
+            $('#image-file').change(function (e) {
+                var files = e.target.files;
+                var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
+                var length = files.length;
+                var file = null;
+                $('#uploader .placeholder').hide();
+                $("#statusBar").css('display', 'flex');
+                for (var i = 0; i < length; i++) {
+                    file = files[i];
+                    uploader.fileList[curIndex + i] = file;
+                    file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
+                    uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                    _this.addFile(file); //Add to control view
                 }
-            }
-            $li.remove();
+                uploader.fileStats.totalFilesNum = uploader.fileList.length;
+            });
+
+            $("#startUpload").click(function () {
+                var length = uploader.fileStats.totalFilesNum;
+                var filename = genKey();
+                var file;
+                $(".start-uploader").css('display', 'none');
+                for (var i = 0; i < length; i++) {
+                    file = uploader.fileList[i];
+                    _this.uploadFile(file, filename);
+                }
+                $("#id_images").val(Buffer.from(JSON.stringify(images)).toString("base64"));
+
+
+            });
+            $(".queueList .filelist").delegate('li span.cancel', 'click', function () {
+                var $this = $(this);
+                var $li = $this.parent().parent();
+                var id = $li.attr('id');
+                var list = uploader.fileList;
+                var len = list.length;
+                for (var i = 0; i < len; i++) {
+                    if (uploader.fileList[i].id == id) {
+                        uploader.fileList.splice(i, 1); //Delete a file from the file list
+                        break;
+                    }
+                }
+                $li.remove();
+            });
         });
     },
+
     /***
      *  upload files
      * @param file files to be uploaded
-     * @param filePath to which location to upload the file. According to the official statement is the key
+     * @param filename to which location to upload the file. According to the official statement is the key
      * oss is object storage, there is no path path concept, but personally think this can be better understood as a path
      */
-    uploadFile: function (file, filePath) {
+    uploadFile: function (file, filename) {
 
         var total = 0;
-        if (uploadType != FOLDER) {
-            filePath += file.name;
-        } else { //Upload folder
-            filePath = filePath + this.getParentDirName(file) + file.name;
-        }
         applyTokenDo();
-        client.multipartUpload(filePath, file, {
+        client.multipartUpload(filename, file, {
                 progress: progress
             })
             .then(function (res) {
+
                 $("#" + file.id).children(".success-span").addClass("success");
+                $("#" + file.id).children(".file-panel").hide();
                 uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
                 uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
                 /**
@@ -199,11 +220,11 @@ OssUpload.prototype = {
                 progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
 
                 if (total == uploader.fileStats.totalFilesNum) {
-                    console.log("upload success!");
-                    $("#startUpload").text('上传完成');
+                    $("#startUpload").text('Uploaded completed');
                 }
                 $totalProgressbar.css('width', progressBar)
                     .html(progressBar);
+                images.push(res.name)
             });
     },
 
@@ -215,12 +236,12 @@ OssUpload.prototype = {
         var $li = $('<li id="' + file.id + '">' +
                 '<p class="title">' + file.name + '</p>' +
                 '<p class="imgWrap"></p>' +
-                '<p class="progress"><span></span></p><span class="success-span"></span>' +
+                '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
                 '</li>'),
             $btns = $('<div class="file-panel">' +
-                '<span class="cancel">删除</span>' +
+                '<span class="cancel">cancel</span>' +
                 '</div>').appendTo($li),
-            $prgress = $li.find('p.progress span'),
+            $prgress = $li.find('p.upload-state span'),
             $wrap = $li.find('p.imgWrap'),
             $info = $('<p class="error"></p>');
         var imageType = /^image\//;
@@ -242,8 +263,6 @@ OssUpload.prototype = {
         $li.appendTo($queue);
     },
 }
-//w.OssUpload = OssUpload;
-//})(window)
 var ossUpload = '';
 $(function () {
     ossUpload = new OssUpload();
