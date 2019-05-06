@@ -12,6 +12,7 @@
 	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">   
 	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+	<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
 
 	<script>
 		function disableSubmit() {
@@ -42,22 +43,106 @@
 				</span>
 
         <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-				  <small >Please enter a valid email as it will require confirmation</small>
-          {% csrf_token %}
-					{{ form|crispy }}
-				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
-				  I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the laws and regulations of the country residing.</a>
+				  		<small >Please enter a valid email as it will require confirmation</small>
+          		{% csrf_token %}
 
-          {% if redirect_field_value %}
-          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-          {% endif %}
-          <div class="form-group container-login100-form-btn">
-            <button type="submit" id="submit" class="login100-form-btn">{% trans 'Sign Up' %} &raquo;</button>
-          </div>
-        </form>
+							<h5 class="text-center mt-3">Choose your current location </h5>
+							<div class="input-group mb-3 mt-4">
+									<div class="input-group-prepend">
+										<label class="input-group-text" for="province">Province</label>
+									</div>
+									<select class="custom-select" id="province" name="province"></select>
+						</div>
+
+						<div class="input-group mb-3">
+								<div class="input-group-prepend">
+									<label class="input-group-text" for="city">City</label>
+								</div>
+								<select class="custom-select" id="city" name="city"> </select>
+						</div>
+
+						{{ form|crispy }}
+						<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
+						I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the laws and regulations of the country residing.</a>
+
+						{% if redirect_field_value %}
+								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+						{% endif %}
+								<div class="form-group container-login100-form-btn">
+									<button type="submit" id="submit" class="login100-form-btn">{% trans 'Sign Up' %} &raquo;</button>
+								</div>
+				</form>
 			</div>
 		</div>
 	</div>
+
+<script>
+
+var helpers =
+{
+    province: function(result, dropdown, emptyMessage)
+    {
+        // Remove current options
+        dropdown.html('');
+        // Add the empty option with the empty message
+        dropdown.append('<option value="">' + emptyMessage + '</option>');
+        // Check result isnt empty
+        if(result != '')
+        {
+            // Loop through each of the results and append the option to the dropdown
+            $.each(result, function(k, v) {
+                dropdown.append('<option value="' + v.name+ '">' + v.name + '</option>');
+            });
+        }
+    },
+		city: function(result, dropdown, emptyMessage)
+    {
+        // Remove current options
+        dropdown.html('');
+        // Add the empty option with the empty message
+        dropdown.append('<option value="">' + emptyMessage + '</option>');
+        // Check result isnt empty
+        if(result != '')
+        {
+            // Loop through each of the results and append the option to the dropdown
+            $.each(result, function(index, text) {
+                dropdown.append('<option value="' + text + '">' + text + '</option>');
+            });
+        }
+    }
+
+}
+
+const geo_data = [{"name":"Beijing","cities":["Dongcheng District","Xicheng District","Chongwen District","Xuanwu District","Chaoyang District","Haidian District","Fengtai District","Shijingshan District","Tongzhou District","Pinggu District","Shunyi District","Huairou District","Changping District","Mendougou District","Fangshan District","Daxing District","Miyun County","Yanqing County"]},{"name":"Tianjin","cities":["Peace Zone","Hexi District","Hedong District","Hongqiao District","Nankai District","Hebei District","Xiqing District","Jinnan District","Beichen District","Dongli District","Hanyu County","Baoyu County","Jinghai County","Ninghe County","Wuqing County"]},{"name":"Hebei","cities":["Zhangjiakou","Chengde","Baoding","Chuzhou","Hengshui","Shijiazhuang","Xingtai","邯郸","Tangshan","Langfang","Qinhuangdao"]},{"name":"Shanxi","cities":["Taiyuan","Datong","Yangquan","Changzhi","Jincheng","Chuzhou","Jinzhong","Yuncheng","Chuzhou","Linyi","Lvliang"]},{"name":"Inner Mongolia","cities":["Hohhot","Hulunbeier","Xing'an","Tongliao","Chifeng","Xilinguol","Ulanchabu","Baotou","Ordos","Bayanmuer","U Sea","Alashan"]},{"name":"Liaoning","cities":["Shenyang","Dalian","Anshan","Fushun","Benxi","Dandong","Jinzhou","Yingkou","Fuxin","Liaoyang","Panjin","Tieling","Chaoyang","Huludao"]},{"name":"Jilin","cities":["Changchun","Jilin","Siping","Tonghua","White Mountain","Liaoyuan","White City","Songyuan","Yanbian Korean Autonomous Prefecture"]},{"name":"Heilongjiang","cities":["Harbin","Qiqihar","Mudanjiang","Jiamusi","Daqing","Chixi","Shuangyashan","Yichun","Qitaihe","Hegang","Black River","绥化","Daxinganling area"]},{"name":"Shanghai","cities":["Huangpu District","Luwan District","Xuhui District","Changning District","Jing'an District","Putuo District","Zhabei District","Hongkou District","Yangpu District","闵行District","Baoshan District","Jiading District","Pudong New Area","Golden Mountain Area","Songjiang District","Qingpu District","Fengxian District","Chongming County"]},{"name":"Jiangsu","cities":["Nanjing","Wuxi","Xuzhou","Changzhou","Suzhou","Nantong","Lianyungang","Huai'an","Yancheng","Yangzhou","Zhenjiang","Taizhou","Suqian"]},{"name":"Zhejiang","cities":["Hangzhou","Huzhou","Shaoxing","Wenzhou","Jiaxing","Ningbo","Jinhua","Zhangzhou","Zhoushan","Taizhou","Lishui"]},{"name":"Anhui","cities":["Hefei","Wuhu","蚌埠","Huainan","Maanshan","Huaibei","Tongling","Anqing","Huangshan","Yangyang","Suzhou","Chuzhou","Lu'an","Xuancheng","Chizhou","Chuzhou"]},{"name":"Fujian","cities":["Fuzhou","Quanzhou","Sanming","Nanping","Longyan","Zhangzhou","Ningde","Putian","Xiamen"]},{"name":"Jiangxi","cities":["Nanchang","Jiujiang","Jian","Chuzhou","Pingxiang","Xinyu","Yichun","Jingdezhen","Shangrao","Yingtan","Fuzhou"]},{"name":"Shandong","cities":["Jinan","Tai'an","Weifang","Dezhou","Binzhou","Laiwu","Qingdao","Yantai","Rizhao","Dongying","Jining","Heze","Liaocheng","Linyi","Zaozhuang","Zibo","Weihai"]},{"name":"Henan","cities":["Zhengzhou","Kaifeng","Luoyang","Nanyang","Yuhe","Xuchang","Sanmenxia","Pingdingshan","Zhoukou","Zhumadian","Xinxiang","Hebi","Jiao Zuo","Yangyang","Anyang","Shangqiu","Xinyang","Jiyuan"]},{"name":"Hubei","cities":["Wuhan","Shiyan","Xiangfan","Suizhou","Jingmen","Xiaogan","Yichang","Huanggang","Ezhou","Jingzhou","Yellowstone","Xianning"]},{"name":"Hunan","cities":["Changsha","Zhuzhou","Xiangtan","Hengyang","Shaoyang","Yueyang","Zhangjiajie","Yiyang","Changde","娄底","郴州","永州","Huaihua","Xiangxi Tujia and Miao Autonomous Prefecture"]},{"name":"Guangdong","cities":["Guangzhou","Shenzhen","Zhuhai","Dongguan","Foshan","Zhongshan","Huizhou","Shantou","Jiangmen","Maoming","Zhaoqing","Zhanjiang","Meizhou","Iris","Heyuan","Qingyuan","Shaoguan","Jieyang","Yangjiang","Chaozhou","Yunfu"]},{"name":"Guangxi","cities":["Nanning","Guilin","Liuzhou","Chuzhou","Qinzhou","Beihai","Yulin","Guigang","Fangchenggang","Baise","Chongzuo","Guest ","Hezhou","Hechi"]},{"name":"Hainan","cities":["Haikou","Sanya","Qionghai","Chuzhou"]},{"name":"Chongqing","cities":["Wanzhou District","Fuling District","Yuzhong District","Dadukou District","Jiangbei District","Shapingba District","Jiulongpo District","Southbank District","Beibei District","Wansheng District","Shuangqiao District","Yubei District","Banan District","Yujiang District","Changshou District","Jiangjin City","Hechuan City","Yongchuan City"," Nanchuan City"]},{"name":"Sichuan","cities":["Chengdu","Zigong","Panzhihua","Chuzhou","Deyang","Mianyang","Guangyuan","遂宁","Neijiang","Ziyang","Leshan","Meishan","Nan Chong","Yibin","Guangan","Dazhou","Bazhong","Ya'an","Ganzi Tibetan Autonomous Prefecture","Aba Tibetan and Qiang Autonomous Prefecture","Liangshan Yi Autonomous Prefecture"]},{"name":"Guizhou","cities":["Guiyang","Zunyi","Anshun","Six Panshui","Duyun","Kerry","Tongren","Bijie","Xingyi","Chishui","Ren Huai","Qingzhen","Fuquan"]},{"name":"Yunnan","cities":["Kunming","Yuxi","Qujing","Pu'er","Baoshan","Lijiang","Linyi","Zhaotong"]},{"name":"Tibet","cities":["Lhasa","Nagqu area","Changdu area","Nyingchi area","Shannam area","Shigatse area","Ali area"]},{"name":"Shaanxi","cities":["Xi'an","Baoji","Xianyang","Southern","Tongchuan","Yan'an","Yulin","Hanzhong","Ankang","Shangluo"]},{"name":"Gansu","cities":["兰州","嘉峪关","金昌","武威","酒泉","张掖","白银","平凉","庆阳","天水","陇南","定西","Linxia Autonomous Prefecture","Gannan Autonomous Prefecture"]},{"name":"Qinghai","cities":["Xining","Haidong Area","Haixi Mongolian Tibetan Autonomous Prefecture","Hainan Tibetan Autonomous Prefecture","Haibei Tibetan Autonomous Prefecture","Huangnan Tibetan Autonomous Prefecture","Gaolu Tibetan Autonomous Prefecture","Yushu Tibetan Autonomous Prefecture"]},{"name":"Ningxia","cities":["Yinchuan","Shizuishan","Wu Zhong","Zhongwei","Guyuan"]},{"name":"Xinjiang","cities":["Urumqi","Karamai","Changji","Tulufan","Hami","Korla","Aksu","Atushi","Kash","Hetian","Yining","Kui Yu","Tacheng","Usu","Altay","Shihezi"]},{"name":"Hong Kong","cities":["Central and Western District","Wan Chai District","East District","South District","Kowloon-Yau Tsim Mong District","Kowloon-Sham Shui Po District","Kowloon-Kowloon City","Kowloon-Yellow Tai Sin District","Kowloon-Kwun Tong District","New Territories - North District","New Territories - Tai Po District","New Territories - Sha Tin District","New Territories - Sai Kung District","New Territories - Tsuen Wan District","New Territories - Tuen Mun District","New Territories - Yuen Long District","New Territories - Kwai Tsing District","New Territories - Islands District"]},{"name":"Macau","cities":["Hua Di Ma Tang District","St. Anthony Parish","Lobby Area","Wangdetang District","Windhuntang District","Jiayutang District","St. Francis Each parish","Road City"]}]
+
+		$(document).ready(function() {
+		$province = $("select[name='province']");
+		$city = $("select[name='city']");
+		helpers.province(geo_data,  $province, "Select an option");
+		$province.change(function() {
+		helpers.city(geo_data[$("#province").prop('selectedIndex')-1].cities ,  $city, "Select an option")
+		});
+});
+
+
+$(function () {
+    $("#submit").click(function (event) {
+				if (!$("select[name='city']").val() || !$("select[name='province']"))
+				{
+						event.preventDefault();
+						alert("Please fill in your location!");
+				}
+				else {
+						$("input[name='city']").val( $("select[name='city']").val());
+						$("input[name='province']").val($("select[name='province']").val());
+						console.log("Shout out!");
+						$("#signup_form").submit();
+				}
+    }); 
+});
+
+
+</script>
 </body>
 </html>
 

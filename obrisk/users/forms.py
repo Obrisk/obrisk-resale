@@ -7,7 +7,6 @@ from obrisk.users import models
 from obrisk.users.models import PROVINCE_CHOICES, CITY_CHOICES
 from allauth.account.forms import SignupForm
 
-
 class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
@@ -39,23 +38,19 @@ class UserForm(forms.ModelForm):
         # widgets = {
         #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
         # }
-
+    
 class CustomSignupForm(SignupForm): 
-    province_region = forms.ChoiceField (choices=PROVINCE_CHOICES)
-    city = forms.ChoiceField (choices=CITY_CHOICES)
+    province_region = forms.ChoiceField (widget=forms.HiddenInput(), choices=PROVINCE_CHOICES)
+    city = forms.ChoiceField (widget=forms.HiddenInput(), choices=CITY_CHOICES)
 
     class Meta:
         model = User
-    
-    
 
 def signup(self, request, user): 
-     user.first_name = self.cleaned_data['first_name'] 
-     user.last_name = self.cleaned_data['last_name'] 
-     user.province_region = self.cleaned_data['province_region']
-     user.city = self.cleaned_data['city']
-     user.save() 
-     return user 
+    user.province_region = self.cleaned_data['province_region']
+    user.city = self.cleaned_data['city']
+    user.save() 
+    return user 
 
 
 
