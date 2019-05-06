@@ -131,7 +131,7 @@ function slugify(string) {
         .replace(/-+$/, '') // Trim - from end of text
 }
 var client;
-var images = [];
+var images = "";
 
 OssUpload.prototype = {
     constructor: OssUpload,
@@ -170,8 +170,6 @@ OssUpload.prototype = {
                     file = uploader.fileList[i];
                     _this.uploadFile(file, filename);
                 }
-                $("#id_images").val(Buffer.from(JSON.stringify(images)).toString("base64"));
-
 
             });
             $(".queueList .filelist").delegate('li span.cancel', 'click', function () {
@@ -224,7 +222,7 @@ OssUpload.prototype = {
                 }
                 $totalProgressbar.css('width', progressBar)
                     .html(progressBar);
-                images.push(res.name)
+                images += ',' + res.name
             });
     },
 
