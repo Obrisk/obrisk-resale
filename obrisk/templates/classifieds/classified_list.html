@@ -32,9 +32,9 @@
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                 {% for photo in images %}
                     {% if photo.classified == classified %}
-                      <img src='image_thumb'>   
+                      <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
                       <!-- example
-                        http://image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,w_150,h_100
+                        example.jpg?x-oss-process=image/resize,w_150,h_100
                       -->
                 {{ "<!--" }}      
                 {% endif %}
@@ -100,14 +100,14 @@
           <!-- Classified ad. -->
           <div class="card mr-2 mb-3" style="max-height: 250px; max-width:160px">  
               <!--Display image-->
+              
               <div class="card-img-top img-responsive">
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                 {% for photo in images %}
+                                      {{ photo.image }}
+
                     {% if photo.classified == classified %}
-                      <img src='image_thumb'>   
-                      <!-- example
-                        http://image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,w_150,h_100
-                      -->
+
                 {{ "<!--" }}      
                 {% endif %}
                 {% endfor %}

@@ -4,6 +4,9 @@
 
 {% block head %}
   <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 {% endblock head %}
 
 {% block title %}{{ classified.title|title }}{% endblock %}
@@ -38,17 +41,16 @@
             <p class="card-text text-justify">{{ classified.details }}</p>
 
                 <div class="container">
-                    <div class="row">
+                    <div class="slider">
+                    <div>
+                    <div class="image">
                       {% for photo in images %}
-                      <div class="photo mr-2 mb-3">
-                        <img src='image_thumb'>   
-                        <img src='image_medium'>   
-                      <!-- example
-                        http://image-demo.oss-cn-hangzhou.aliyuncs.com/example.jpg?x-oss-process=image/resize,w_350,h_550
-                      -->
+                        <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
+                        <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image }}">  
                       </div> 
                       {% endfor %}
-                    </div>
+                      </div>
+                      </div>
                 </div>
             </section>
        
@@ -101,6 +103,15 @@
     </div>
    
   </div>
+<script type="text/javascript">
+       $('.slider,.slider-nav').slick({
+  dots: true,
+  infinite: true,
+  speed: 500,
+  fade: true,
+  cssEase: 'linear'
+});
+    </script>
 {% endblock content %}
 
 

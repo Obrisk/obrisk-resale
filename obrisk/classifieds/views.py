@@ -21,6 +21,8 @@ from obrisk.classifieds.forms import ClassifiedForm
 import json
 import re
 import os
+import base64
+import datetime
 
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
@@ -34,7 +36,6 @@ from django.views.decorators.http import require_http_methods
 from obrisk.helpers import ajax_required
 
 import oss2
-import base64
 
 
 # The following code shows the usage of STS, including role-playing to get the temporary user's key and using the temporary user's key to access the OSS.
@@ -122,8 +123,7 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
         context['popular_tags'] = Classified.objects.get_counted_tags()
         context['images'] = ClassifiedImages.objects.all()
         context['other_classifieds'] = Classified.objects.exclude(city=self.request.user.city)
-        context['image_thumb'] = ClassifiedImages.image_thumb
-        context['image_medium'] = ClassifiedImages.image_medium
+
         return context
 
     def get_queryset(self, **kwargs):
@@ -160,7 +160,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             return self.form_valid(form)
         else:
-            #ret = dict(errors=form.errors)
+            # ret = dict(errors=form.errors)
             print(form.errors)
             return self.form_invalid(form)
 
@@ -172,26 +172,39 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified.save()
 
         bucket = oss2. Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+        images_json = form.cleaned_data['images']
 
-        for img in form.cleaned_data['images']:
+        # split one long string of JSON objects into a list of string each for one JSON obj
+        images_list = images_json.split(",")
+        print(images_list)
 
-            img = ClassifiedImages(image=img)
+        for index, str_result in enumerate(images_list):
+            if index == 0:
+                continue
+            img = ClassifiedImages(image=str_result)
             img.classified = classified
 
+            d = str(datetime.datetime.now())
+            thumb_name = "" + str(classified.user) + "/thumbnails/" + str(classified.title) + d + str(index)
             style = 'image/crop,w_140,h_140,x_140,y_140,r_1'
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                              oss2.compat.to_bytes(bucket_name))),
+                                                              oss2.compat.to_bytes(thumb_name))),
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            img.image_thumb = bucket.process_object(img, process)
+            bucket.process_object(str_result, process)
+            img.image_thumb = thumb_name
+
+            d2 = str(datetime.datetime.now())
+            mid_name = "" + str(classified.user) + "/displays/" + str(classified.title) + d2 + str(index)
 
             style = 'image/crop,w_250,h_250,x_250,y_250,r_1'
             process2 = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                          oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                              oss2.compat.to_bytes(bucket_name))),
-                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            img.image_medium = bucket.process_object(img, process2)
+                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                               oss2.compat.to_bytes(mid_name))),
+                                                           oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
 
+            bucket.process_object(str_result, process2)
+            img.image_medium = mid_name
             img.save()
 
         return super(CreateClassifiedView, self).form_valid(form)
@@ -202,7 +215,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
 
 @login_required
-@ajax_required
 @require_http_methods(["GET"])
 def get_oss_auth(request):
     """AJAX Functional view to recieve just the minimum information, process

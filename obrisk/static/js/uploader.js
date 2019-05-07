@@ -131,7 +131,7 @@ function slugify(string) {
         .replace(/-+$/, '') // Trim - from end of text
 }
 var client;
-var images = "";
+var images;
 
 OssUpload.prototype = {
     constructor: OssUpload,
@@ -163,10 +163,10 @@ OssUpload.prototype = {
 
             $("#startUpload").click(function () {
                 var length = uploader.fileStats.totalFilesNum;
-                var filename = genKey();
                 var file;
                 $(".start-uploader").css('display', 'none');
                 for (var i = 0; i < length; i++) {
+                    var filename = genKey();
                     file = uploader.fileList[i];
                     _this.uploadFile(file, filename);
                 }
@@ -222,7 +222,8 @@ OssUpload.prototype = {
                 }
                 $totalProgressbar.css('width', progressBar)
                     .html(progressBar);
-                images += ',' + res.name
+
+                images += ',' + res.name;
             });
     },
 
