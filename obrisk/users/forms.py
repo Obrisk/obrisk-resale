@@ -4,7 +4,6 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from obrisk.users.models import User 
 from obrisk.users import models
 
-from obrisk.users.models import PROVINCE_CHOICES, CITY_CHOICES
 from allauth.account.forms import SignupForm
 
 class CustomUserCreationForm(UserCreationForm):
@@ -40,8 +39,8 @@ class UserForm(forms.ModelForm):
         # }
     
 class CustomSignupForm(SignupForm): 
-    province_region = forms.ChoiceField (widget=forms.HiddenInput(), choices=PROVINCE_CHOICES)
-    city = forms.ChoiceField (widget=forms.HiddenInput(), choices=CITY_CHOICES)
+    province_region = forms.CharField (widget=forms.HiddenInput())
+    city = forms.CharField (widget=forms.HiddenInput())
 
     class Meta:
         model = User
