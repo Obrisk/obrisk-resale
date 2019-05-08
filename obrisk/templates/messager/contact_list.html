@@ -11,16 +11,16 @@
 
 <div class="row" style="margin-top: 1em">
   <div class="col-md-6 list-group users-list">
-      {% for chat in conversation_list %}
-        <a href="{% url 'messager:conversation_detail' user.username  %}"
+      {% for user, msg in lists %}
+        <a href="{% url 'messager:conversation_detail' user  %}"
            class="list-group-item list-group-item-action">
-          {% thumbnail chat.recipient.picture "x40" as im %}
+          {% thumbnail user.picture "x40" as im %}
             <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
           {% empty %}
             <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
           {% endthumbnail %}
-          <strong>   {{ chat.recipient.get_profile_name|title }} </strong>
-          {%  if chat.unread %}
+          <strong>   {{ user.get_profile_name|title }} </strong>
+          {%  if msg.unread %}
           <span> <i class="fa fa-circle" aria-hidden="true"></i> </span>
           {% endif %}
         </a>

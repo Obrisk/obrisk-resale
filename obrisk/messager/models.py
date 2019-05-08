@@ -40,25 +40,24 @@ class MessageQuerySet(models.query.QuerySet):
 
     def get_all_conversation(self, recipient):
         chat_list = [] #Stores messages objects
-        user_list = [] #Stores unique users involved in conversation with 
+        msgs_list = []
         try:
             qs_sent = self.filter(sender=recipient)
             qs_recieved = self.filter(recipient=recipient)
-            queryset = qs_sent.union(qs_recieved)
+            queryset = qs_sent.union(qs_recieved).order_by('-timestamp')
             
-            #Search for conversations that user sent msgs
+            #Search for conversations that user was involved
             for qs in queryset:
                 if qs.sender == recipient:
-                    if qs.recipient not in user_list:
-                        user_list.append(qs.recipient)
-                        chat_list.append(qs)
+                    if qs.recipient not in chat_list:
+                        msgs_list.append(qs)
+                        chat_list.append(qs.recipient)
+                        
+                elif qs.sender not in chat_list:
+                    msgs_list.append(qs)
+                    chat_list.append(qs.sender)
 
-            #Search for conversations that user received msgs but didn't send
-            for qs in qs_recieved:
-                if qs.sender not in user_list:
-                    user_list.append(qs.sender)
-                    chat_list.insert(0, qs)
-            return chat_list
+            return chat_list, msgs_list
 
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
