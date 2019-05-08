@@ -3,126 +3,176 @@
 {% load crispy_forms_tags thumbnail humanize %}
 
 {% block head %}
-  <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
 {% endblock head %}
 
 {% block title %}{{ classified.title|title }}{% endblock %}
 
 {% block content %}
-  <!-- Page Content -->
-  <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-        <li class="breadcrumb-item"><a href="{% url 'classifieds:list' %}">{% trans 'Classifieds' %}</a></li>
-        <li class="breadcrumb-item active" aria-current="page">{{ classified.title|title }}</li>
-      </ol>
-    </nav>
-    
-    <div class="row">
-      <!-- Post Content Column -->
-      <div class="col-lg-8">
-        <!-- Title -->
-        <h4 class="mt-4 text-center">{{ classified.title|title }}</h4>
-        <!-- Location -->
-        <i class="lead fa fa-map-marker"></i> <span class="card-subtitle mb-2"> {{ classified.located_area }} </span>
-            <br> <small class="card-subtitle mb-2"  >  {{ classified.city }}</small>
-            
+<!-- Page Content -->
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'classifieds:list' %}">{% trans 'Classifieds' %}</a></li>
+      <li class="breadcrumb-item active" aria-current="page">{{ classified.title|title }}</li>
+    </ol>
+  </nav>
 
-        <hr>
-        <!-- Date/Time -->
-        <p>{% trans 'Posted' %} {{ classified.timestamp|naturaltime }}  </p>
+  <div class="row">
+    <!-- Post Content Column -->
+    <div class="col-lg-8">
+      <!-- Title -->
+      <h4 class="mt-4 text-center">{{ classified.title|title }}</h4>
+      <!-- Location -->
+      <i class="lead fa fa-map-marker"></i> <span class="card-subtitle mb-2"> {{ classified.located_area }} </span>
+      <br> <small class="card-subtitle mb-2"> {{ classified.city }}</small>
 
-        <hr>
-        <section class="col s12 m12 l10 offset-l1">
-            <p class="card-text text-justify">{{ classified.details }}</p>
 
-                <div class="container">
-                    <div class="slider">
-                    <div>
-                    <div class="image">
-                      {% for photo in images %}
-                        <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
-                        <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image }}">  
-                      </div> 
-                      {% endfor %}
-                      </div>
-                      </div>
+      <hr>
+      <!-- Date/Time -->
+      <p>{% trans 'Posted' %} {{ classified.timestamp|naturaltime }} </p>
+
+      <hr>
+      <section class="col s12 m12 l10 offset-l1">
+        <p class="card-text text-justify">{{ classified.details }}</p>
+
+        <div class="container">
+          <div class="slider">
+            <!-- Swiper -->
+            <div class="swiper-container gallery-top">
+              <div class="swiper-wrapper">
+                {% for photo in images %}
+                <div class="swiper-slide"
+                  style="background-image:url(http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image}});background-size: contain;
+    background-repeat: no-repeat;">
                 </div>
-            </section>
-       
-            <hr>
-            <!-- Classified more Content -->
-            <h3 class="ribbon">
-              <strong class="ribbon-content">{% trans 'CNY' %} {{ classified.price }}</strong>
-           </h3> 
-           
-
-            <p style="overflow-y: auto;"> <a href="{% url 'users:detail' classified.user.username %}">
-                  {% thumbnail classified.user.picture "x35" as im %}
-                    <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
-                  {% empty %}
-                    <img src="{% static 'img/user.png' %}" class="pull-left" height="35px" alt="{% trans 'No Profile Picture' %}" />
-                  {% endthumbnail %} 
-                  <strong>  {{ classified.user.get_profile_name|title }} </strong> </a>
-              </p>
-
-            <hr>
-            {% if request.user == classified.user%}
-              <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}" title="{% trans 'Edit this classified' %}">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-              <a href="{% url 'classifieds:list' %}" class="btn btn-dark">&larr;{% trans 'Back' %} </a> <br> <br>   
-            {% else %}
-            Do you want this item?
-            <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
-            <i class="lead fa fa-shopping-cart"></i>   <strong >  {% trans ' Chat with seller' %} </strong></a>  <br> <br>
-            <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a> <br> <br>
-            
-            <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
-            {% endif %}
-  
-      </div>
-
-
-      <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
-
-        <!-- Cloud Tag Widget -->
-        <div class="card my-4">
-          <h5 class="card-header">{% trans 'tags' %}</h5>
-          <div class="card-body">
-            {% for tag in classified.tags.all %}
-              <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
-            {% endfor %}
+                {% endfor %}
+              </div>
+              <!-- Add Arrows -->
+              <div class="swiper-button-next swiper-button-white" style="padding: 25px;background-color: #333333c4;"></div>
+              <div class="swiper-button-prev swiper-button-white" style="padding: 25px;background-color: #333333c4;"></div>
+            </div>
+            <div class="swiper-container gallery-thumbs">
+              <div class="swiper-wrapper">
+              
+                {% for photo in images %}
+                <div class="swiper-slide">
+                  <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb}}">
+                </div>
+                {% endfor %}
+              </div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      <hr>
+      <!-- Classified more Content -->
+      <h3 class="ribbon">
+        <strong class="ribbon-content">{% trans 'CNY' %} {{ classified.price }}</strong>
+      </h3>
+
+
+      <p style="overflow-y: auto;"> <a href="{% url 'users:detail' classified.user.username %}">
+          {% thumbnail classified.user.picture "x35" as im %}
+          <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
+            class="user-image">
+          {% empty %}
+          <img src="{% static 'img/user.png' %}" class="pull-left" height="35px"
+            alt="{% trans 'No Profile Picture' %}" />
+          {% endthumbnail %}
+          <strong> {{ classified.user.get_profile_name|title }} </strong> </a>
+      </p>
+
+      <hr>
+      {% if request.user == classified.user%}
+      <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
+        title="{% trans 'Edit this classified' %}">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+      <a href="{% url 'classifieds:list' %}" class="btn btn-dark">&larr;{% trans 'Back' %} </a> <br> <br>
+      {% else %}
+      Do you want this item?
+      <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
+        <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with seller' %} </strong></a> <br> <br>
+      <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a> <br> <br>
+
+      <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
+      {% endif %}
+
+    </div>
+
+
+    <!-- Sidebar Widgets Column -->
+    <div class="col-md-4">
+
+      <!-- Cloud Tag Widget -->
+      <div class="card my-4">
+        <h5 class="card-header">{% trans 'tags' %}</h5>
+        <div class="card-body">
+          {% for tag in classified.tags.all %}
+          <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
+          {% endfor %}
         </div>
       </div>
     </div>
-   
   </div>
+
+</div>
+<style>
+  .swiper-container {
+    width: 100%;
+    height: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .swiper-slide {
+    background-size: cover;
+    background-position: center;
+  }
+
+  .gallery-top {
+    height: 400px;
+    width: 100%;
+  }
+
+  .gallery-thumbs {
+    height: 140px;
+    box-sizing: border-box;
+    padding: 10px 0;
+  }
+
+  .gallery-thumbs .swiper-slide {
+    height: 100%;
+    opacity: 0.4;
+  }
+
+  .gallery-thumbs .swiper-slide-thumb-active {
+    opacity: 1;
+  }
+</style>
 <script type="text/javascript">
-       $('.slider,.slider-nav').slick({
-  dots: true,
-  infinite: true,
-  speed: 500,
-  fade: true,
-  cssEase: 'linear'
-});
-    </script>
+    var galleryThumbs = new Swiper('.gallery-thumbs', {
+      spaceBetween: 10,
+      slidesPerView: 4,
+      freeMode: true,
+      watchSlidesVisibility: true,
+      watchSlidesProgress: true,
+    });
+    var galleryTop = new Swiper('.gallery-top', {
+      spaceBetween: 10,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      thumbs: {
+        swiper: galleryThumbs
+      }
+    });
+</script>
 {% endblock content %}
-
-
-
-
-
-
-
-
-
-
-
-
-

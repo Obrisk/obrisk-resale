@@ -33,9 +33,6 @@
                 {% for photo in images %}
                     {% if photo.classified == classified %}
                       <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
-                      <!-- example
-                        example.jpg?x-oss-process=image/resize,w_150,h_100
-                      -->
                 {{ "<!--" }}      
                 {% endif %}
                 {% endfor %}
@@ -56,37 +53,6 @@
            <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>
         {% endfor %}
       </div>
-
-    <div class="row"> 
-      <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-        <ol class="carousel-indicators">
-          <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-          <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-        </ol>
-
-          {% for profile in seller_profile %}  
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img class="d-block w-100" src="..." >
-                <div class="carousel-caption d-none d-md-block">
-                    <h5>...</h5>
-                    <p>...</p>
-                </div>
-              </div>
-                
-              <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-              </a>
-              <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-              </a>
-            </div>
-          {% endfor %}
-      </div>
-    </div>
 
     {% if page_obj.number == paginator.num_pages and other_classifieds %} <!-- also add, if paginator.num_pages == 0-->
 
