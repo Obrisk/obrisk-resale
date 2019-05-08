@@ -185,8 +185,8 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             img.classified = classified
 
             d = str(datetime.datetime.now())
-            thumb_name = "" + str(classified.user) + "/thumbnails/" + str(classified.title) + d + str(index)
-            style = 'image/crop,w_140,h_140,x_140,y_140,r_1'
+            thumb_name = "classifieds/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
+            style = 'image/resize,h_140'
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
                                                               oss2.compat.to_bytes(thumb_name))),
@@ -194,17 +194,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             bucket.process_object(str_result, process)
             img.image_thumb = thumb_name
 
-            d2 = str(datetime.datetime.now())
-            mid_name = "" + str(classified.user) + "/displays/" + str(classified.title) + d2 + str(index)
-
-            style = 'image/crop,w_250,h_250,x_250,y_250,r_1'
-            process2 = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                               oss2.compat.to_bytes(mid_name))),
-                                                           oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-
-            bucket.process_object(str_result, process2)
-            img.image_medium = mid_name
             img.save()
 
         return super(CreateClassifiedView, self).form_valid(form)
@@ -277,4 +266,5 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
+        context['images_no'] = len(context['images'])
         return context

@@ -41,6 +41,8 @@
       <section class="col s12 m12 l10 offset-l1">
         <p class="card-text text-justify">{{ classified.details }}</p>
 
+        <p> {{ images_no }} </p>
+
         <div class="container">
           <div class="slider">
             <!-- Swiper -->
@@ -49,7 +51,7 @@
                 {% for photo in images %}
                 <div class="swiper-slide"
                   style="background-image:url(http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image}});background-size: contain;
-    background-repeat: no-repeat;">
+                  background-repeat: no-repeat;">
                 </div>
                 {% endfor %}
               </div>
