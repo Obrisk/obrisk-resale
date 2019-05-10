@@ -174,7 +174,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         bucket = oss2. Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
         images_json = form.cleaned_data['images']
 
-        # split one long string of JSON objects into a list of string each for one JSON obj
+        # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
         print(images_list)
 
@@ -186,7 +186,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
             d = str(datetime.datetime.now())
             thumb_name = "classifieds/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
-            style = 'image/resize,h_140'
+            style = 'image/resize,m_fill,h_140,w_140'
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
                                                               oss2.compat.to_bytes(thumb_name))),
