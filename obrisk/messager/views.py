@@ -24,12 +24,14 @@ class MessagesListView(LoginRequiredMixin, ListView):
             self.request.user
         )
         context['active'] = last_conversation.username
+
         return context
 
     def get_queryset(self):
         active_user = Message.objects.get_most_recent_conversation(
             self.request.user)
         return Message.objects.get_conversation(active_user, self.request.user)
+
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -40,8 +42,9 @@ class ContactsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['conversation_list'] = Message.objects.get_all_conversation(
+        conversation_list, last_msg = Message.objects.get_all_conversation(
             self.request.user)
+        context['lists'] = zip(conversation_list, last_msg)
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         last_conversation = Message.objects.get_most_recent_conversation(
             self.request.user
@@ -50,8 +53,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self):
-        active_user = Message.objects.get_most_recent_conversation(
-            self.request.user)
+        active_user = Message.objects.get_most_recent_conversation(self.request.user)
         return Message.objects.get_conversation(
             active_user, self.request.user)
 
@@ -67,6 +69,9 @@ class ConversationListView(MessagesListView):
     def get_queryset(self):
         active_user = get_user_model().objects.get(
             username=self.kwargs["username"])
+        #Below is called only when the conversation is opened thus mark all msgs as read.
+        #In the near future implement it to query only last 100 messages, and update last few images.
+        Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)
         return Message.objects.get_conversation(active_user, self.request.user)
 
 
