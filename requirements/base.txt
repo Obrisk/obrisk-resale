@@ -18,16 +18,15 @@ aliyun-python-sdk-sts>=3.0.1 #https://github.com/aliyun/aliyun-openapi-python-sd
 # ------------------------------------------------------------------------------
 django>=2.0.7  # pyup: < 2.1  # https://www.djangoproject.com/
 django-allauth>=0.35.0  # https://github.com/pennersr/django-allauth
-django-contrib-comments>=1.8.0  # https://github.com/django/django-contrib-comments
 django-crispy-forms>=1.7.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-environ>=0.4.4  # https://github.com/joke2k/django-environ
 django-markdownx>=2.0.23  # https://github.com/neutronX/django-markdownx
-django-material>=1.4.3  #https://github.com/viewflow/django-material
 django-redis>=4.9.0  # https://github.com/niwinz/django-redis
 django-taggit>=0.22.2  # https://github.com/alex/django-taggit
 sorl-thumbnail>=12.4.1  # https://github.com/jazzband/sorl-thumbnail
 django-phonenumber-field>=2.1.0  #https://github.com/stefanfoulis/django-phonenumber-field
 phonenumbers>=p8.10.4  #https://github.com/stefanfoulis/django-phonenumber-field
+django-star-ratings>=0.7.0 #https://github.com/wildfish/django-star-ratings
 
 # Channels
 # ------------------------------------------------------------------------------

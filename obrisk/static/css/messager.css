@@ -1,123 +1,109 @@
-.users-list {
-  height: 90%;
-  overflow-y: auto;
+
+@charset "UTF-8";
+html, body, .chat {
+  height: 100%;
+  overflow: hidden;
 }
 
-.list-group-item {
-  background-image: linear-gradient(45deg, #0aacec ,#0aeee3 );
-}
-
-.nav {
-  padding-top: 0;
-  margin-top: 0;
+body {
   margin: 0;
-  padding: 0; 
-} 
-
-.chat-status {
-  text-align: center;
-  vertical-align: middle;
 }
 
-.card-body {
-  display: flex;
-  flex-direction: column;
-  margin-top: -1%;
-  margin-bottom: -5px;
-  height: 69vh;
-  margin: 0;
-  padding: 0; 
-  overflow-y: auto;
-  padding-right: 10px;
-  padding-left: 10px;
-  overflow-x: hidden;
-}
-
-.card {
+.chat {
   width: 100%;
-}
-
-.card-body li {
-  list-style: none;
-  padding: .6em 0;
-}
-
-.card-body li h5 {
-  margin: 0;
-  margin-bottom: .2em;
-}
-
-.text-area {
-  width: 110px;
-}
-
-.msg_send_btn {
-  color: #fff;
-  height: 35px;
-  background-color: #5e1604;
-}
-
-.speech-bubble {
   display: flex;
+  flex-flow: column wrap;
+}
+
+.list-group {
+  overflow-y: scroll;
+  height: auto;
+}
+
+.chat-title {
+  flex: 0 1 45px;
   position: relative;
-  border-radius: 0.4em;
-  padding: 10px;
-  background:  linear-gradient(45deg, #0aacec ,#0aeee3 );
-  font-size: 14px;
+  z-index: 2;
+  background:linear-gradient(45deg,#330c04, #8b2100);
+  color: #fff;
+  text-align: left;
+  padding: 10px 10px 10px 80px;
+}
+
+.chat-title .back-btn {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+}
+.chat-title .name {
+  position: absolute;
+  top: 10px;
+  left: 40px;
+  font-weight: normal;
+  font-size: 18px;
+  margin: 0;
+  padding: 0;
+}
+
+.chat-title .status {
+  position: absolute;
+  left: 80%;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 8px;
+  letter-spacing: 1px;
+}
+
+.messages {
+  flex: 1 1px;
+  width:100%;
+  background: gainsboro;
+  overflow-y: scroll;
+}
+.messages .messages-content {
+  margin: 0;
+  padding: 0 5px;
+}
+.messages .messages-content::after {
+  content: " ";
+  display: block;
+  clear: both;
+  height: 0;
+  visibility: hidden;
+  font-size: 0;
+}
+
+.messages .sender,.user {
+  float: left;
+  clear: both;
+}
+.messages .sender {
+  border-bottom-left-radius: 2px;
+  display:flex;
   
 }
-
-.user-msg {
-  display: flex;
-  flex: 0 1 auto;
-  flex-direction: row;
-  align-self: flex-end ;
+.messages .user {
+  float: right;
+  border-bottom-right-radius: 2px;
+  display:flex;
 }
 
-.float-right {
-  align-self: flex-end ;
+.message-bubble, .message-bubble-user{
+  background:linear-gradient(45deg,#330c04, #8b2100);
+  color: white;
+  clear: both;
+  line-height: 1.4em;
+  max-width: 80%;
+  margin: 12px;
+  padding: 0.7em 16px;
+  border-radius: 18px;
+  font-family: sans-serif;
 }
 
-.user-msg img {
-  display: flex;
-  flex: 0 1 auto;
-  align-self: flex-start;
+.message-bubble-user{
+  background: linear-gradient(45deg, #0aacec ,#0aeee3);
 }
 
-.peer-msg {
-  display: flex;
-  flex: 1 1 auto;
-  flex-direction: row;
-  align-self: flex-end ;
-}
-
-.peer-msg img {
-  flex: 0 1 auto;
-  align-self: flex-start;
-}
-
-.speech-bubble-peer {
-  display: flex;
-  flex: 0 1 auto;  /*This line doesn't favor iphone5*/
-  margin-top: 4px;
-  margin-left: 2%;
-  margin-right: auto;
-  margin-left: 1%;
-}
-
-.subtle-blue-gradient {
-  background: linear-gradient(45deg,#5e1604, #a12904);
-}
-
-.speech-bubble-user {
-  display: flex;
-  flex: 1 1 0%;
-  margin-top: 4px;
-  margin-left: auto;
-  margin-right: 1%;
-}
-
-.speech-bubble-user:after {
+.message-bubble-user:after {
   content: "";
   position: absolute;
   right: 4px;
@@ -125,14 +111,14 @@
   width: auto;
   height: 0;
   border: 20px solid transparent;
-  border-left-color: #a12904;
+  border-left-color: #0aacec;
   border-right: 0;
   border-top: 0;
   margin-top: -10px;
   margin-right: -13px;
 }
 
-.speech-bubble-peer:after {
+.message-bubble-peer:after {
   content: "";
   position: absolute;
   left: 3px;
@@ -140,7 +126,7 @@
   width: 0;
   height: 0;
   border: 20px solid transparent;
-  border-right-color: #0aacec;
+  border-right-color: #a12904;
   border-top: 0;
   border-left: 0;
   margin-top: -10px;
@@ -153,10 +139,191 @@
   margin-top: 1%;
 }
 
-.card-body {
-  background-color: #fff;
+.btn-dark {
+  height: 40px;
+  width: 60px;
+  padding: 1px 0;
+  border: 0;
+  border-radius: 0 2px 2px 0;
+  background:linear-gradient(45deg,#330c04, #8b2100);
+  border-radius: 12px;
+  cursor: pointer;
 }
 
+/* .form {
+  background: gainsboro;
+}
+
+.form-inner {
+  height: 40px;
+  width: calc(100% - 12px * 2);
+  margin: 12px;
+  border-radius: 2px;
+  background: whitesmoke;
+}
+ */
+
+.small-screen .contacts {
+  display:none;
+}
+.small-screen .message-box{
+  width:100%;
+  padding: 10px;
+}
+
+.small-screen textarea {
+  
+  height: 40px;
+}
+
+.small-screen .btn-dark {
+  width: 50px;
+  height: 40px;
+}
+
+.small-screen .messages {
+  left: 66px;
+  right: 0;
+  width: auto;
+}
+.small-screen .form {
+  width: 100%;
+}
+
+.avatar-sender { 
+  left: -50px;
+  border-radius: 30px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  align-self: flex-start;
+}
+
+.avatar-user {
+  z-index: 1;
+  bottom: -15px;
+  border-radius: 30px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid rgba(255, 255, 255, 0.24);
+  align-self: flex-start;
+}
+
+
+ .timestamp {
+  margin-left:10px;
+  font-size: 12px;
+  color: #330c04;
+}
+
+.message-box {
+  flex: 0 1 40px;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  position: relative;
+}
+.message-box .message-input {
+  
+  background: none;
+  border: none;
+  outline: none !important;
+  resize: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 11px;
+  height: 17px;
+  margin: 0;
+  /*If want to keep space for (+) attachments to chat: padding-right: 20px; */
+  width: 90%;
+}
+.message-box textarea:focus:-webkit-placeholder {
+  color: transparent;
+}
+.message-box .message-submit {
+  margin:0 2px;
+  color: #fff;
+  border: none;
+  background: #248A52;
+  font-size: 10px;
+  text-transform: uppercase;
+  line-height: 1;
+  padding: 6px 10px;
+  border-radius: 10px;
+  outline: none !important;
+  width: 100%
+}
+
+.message-box textarea {
+  display: block;
+  box-sizing: padding-box;
+  overflow: hidden;
+  padding: 0px;
+  width: 100%;
+  font-size: 14px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  border: 0;
+  
+  -webkit-transform-origin: top left;
+          transform-origin: top left;
+  -webkit-transform: scale(0.75);
+          transform: scale(0.75);
+  padding: 5.333333px;
+  border-radius: 6.666667px;
+  border-width: 1.333333px;
+  margin-right: -30%;
+  margin-bottom: -8px;
+}
+.input-group-append{
+  flex-basis: 5%
+}
+.input-group{
+  display:flex;
+  height: 28px;
+}
+/*** Styles added to fix the issue with zoom in on iphone ***/
+/* iPhone < 5: */
+@media screen and (device-aspect-ratio: 2/3) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px; }
+}
+
+/* iPhone 5, 5C, 5S, iPod Touch 5g */
+@media screen and (device-aspect-ratio: 40/71) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+  
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px; }
+}
+
+/* iPhone 6, iPhone 6s, iPhone 7 portrait/landscape */
+@media screen and (device-aspect-ratio: 375/667) {
+    select, textarea, input[type="text"], input[type="password"],
+  
+    input[type="datetime"], input[type="datetime-local"],
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+  
+    input[type="url"]{ font-size: 16px; }
+}
+
+/* iPhone 6 Plus, iPhone 6s Plus, iPhone 7 Plus portrait/landscape */
+@media screen and (device-aspect-ratio: 9/16) {
+    select, textarea, input[type="text"], input[type="password"],
+    input[type="datetime"], input[type="datetime-local"],
+  
+    input[type="date"], input[type="month"], input[type="time"],
+    input[type="week"], input[type="number"], input[type="email"],
+    input[type="url"]{ font-size: 16px; }
+}
+
+.fa-circle {
+  color: #cf0808;
+}
 
 
 

@@ -41,7 +41,7 @@ a {
 	font-family: Raleway-Regular;
 	font-size: 14px;
 	line-height: 1.7;
-	color: #666666;
+	color: #0aeee3;
 	margin: 0px;
 	transition: all 0.4s;
 	-webkit-transition: all 0.4s;
@@ -55,7 +55,6 @@ a:focus {
 
 a:hover {
 	text-decoration: none;
-  color: #0aeee3;
 }
 
 /*---------------------------------------------*/
@@ -200,7 +199,9 @@ iframe {
 
 .login100-form-title {
   font-family: Raleway-Medium;
-  font-size: 30px;
+  justify-content: center;
+  text-align: center;
+  font-size: 26px;
   color: #555555;
   line-height: 1.2;
   text-transform: uppercase;
@@ -386,7 +387,7 @@ iframe {
 .login100-form-btn {
   font-family: Raleway-Bold;
   font-size: 16px;
-  color: #fff;
+  color: black;
   line-height: 1.2;
 
   display: -webkit-box;
@@ -399,7 +400,7 @@ iframe {
   padding: 0 20px;
   min-width: 150px;
   height: 55px;
-  background-color: #333333;
+  background-color: #0aeee3;
   border-radius: 27px;
 
   -webkit-transition: all 0.4s;

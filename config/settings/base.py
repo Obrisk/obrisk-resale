@@ -76,7 +76,6 @@ DJANGO_APPS = [
 ]
 THIRD_PARTY_APPS = [
     'crispy_forms',
-    'material',
     'sorl.thumbnail',
     'phonenumber_field',
     'allauth',
@@ -88,10 +87,10 @@ THIRD_PARTY_APPS = [
     # 'allauth.socialaccount.providers.linkedin',
     # 'allauth.socialaccount.providers.slack',
     'channels',
-    'django_comments',
     'graphene_django',
     'markdownx',
     'taggit',
+    'star_ratings',
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -328,3 +327,4 @@ GRAPHENE = {
     'SCHEMA': 'obrisk.schema.schema'
 }
 
+ACCOUNT_FORMS = {'signup': 'users.forms.CustomSignupForm'}

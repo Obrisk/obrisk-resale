@@ -70,7 +70,7 @@
 
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {% thumbnail request.user.picture "x30" as im %}
+                      {% thumbnail request.user.picture "30x30" crop="center" upscale="true" as im %}
                         <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
                       {% empty %}
                         <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
@@ -123,8 +123,6 @@
           // window.onerror = Raven.process; 
         </script>
       {% endblock javascript %}
-
-      {% block modal %}{% endblock modal %}
       
       <!-- For the chat-app-->
       {% block extra_js %}{% endblock extra_js %}

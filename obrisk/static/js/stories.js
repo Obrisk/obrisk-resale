@@ -20,13 +20,13 @@ $(function () {
         return cookieValue;
     };
 
+    var csrftoken = getCookie('csrftoken');
+
     function csrfSafeMethod(method) {
         // These HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
-
-    var csrftoken = getCookie('csrftoken');
-    var page_title = $(document).attr("title");
+  
     // This sets up every ajax call with proper headers.
     $.ajaxSetup({
         beforeSend: function(xhr, settings) {
@@ -87,6 +87,7 @@ $(function () {
             success: function (data) {
                 $("#replyInput").val("");
                 $("#storiesThreadModal").modal("hide");
+                location.reload();
             },
             error: function(data){
                 alert(data.responseText);
@@ -98,13 +99,10 @@ $(function () {
         // Ajax call on action on like button.
         var li = $(this).closest("li");
         var stories = $(li).attr("stories-id");
-        payload = {
-            'stories': stories,
-            'csrf_token': csrftoken
-        }
+       
         $.ajax({
             url: '/stories/like/',
-            data: payload,
+            data: { 'stories': stories },
             type: 'POST',
             cache: false,
             success: function (data) {

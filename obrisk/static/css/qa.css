@@ -2,6 +2,10 @@
   border-style: none none solid none;
 }
 
+a {
+  color: black;
+}
+
 .questions .pagination {
   margin: 0;
 }
@@ -29,6 +33,7 @@
 
 .questions .question-user {
   margin-bottom: .6em;
+  width: 100%;
 }
 
 .options {
@@ -82,6 +87,8 @@
 
 .answer .answer-user, .question .question-user {
   margin-bottom: .6em;
+  width: 100%;
+
 }
 
 .answer .answer-user .user, .question .question-user .user {
@@ -96,7 +103,9 @@
 .answer .answered, .question .asked {
   color: #aaaaaa;
   margin-left: .6em;
+  font-size: 12px;
 }
+
 
 .favorite {
   cursor: pointer;
@@ -139,4 +148,12 @@
 
 .votes {
   margin-left: .4em;
+}
+
+#questionUpVote {
+ color: #8b2100;
+}
+
+.up-vote , .answer-vote{
+  color: #8b2100;
 }

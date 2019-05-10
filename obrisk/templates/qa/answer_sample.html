@@ -23,7 +23,7 @@
       </span>
 
     <div class="answer-user">
-      {% thumbnail answer.user.picture "x30" as im %}
+      {% thumbnail answer.user.picture "30x30" crop="center" upscale="true"  as im %}
         <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
       {% empty %}
         <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />

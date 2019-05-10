@@ -19,7 +19,7 @@ $(function () {
             the most recent message.
         */
         $("input[name='message']").focus();
-        var d = $('#messages');
+        var d = $('.messages');
         d.scrollTop(d.prop("scrollHeight"));
     }
     
@@ -28,7 +28,7 @@ $(function () {
         load the received message in a proper way.
          */
         $.ajax({
-            url: '/messages/receive-message/',
+            url: '/ws/messages/receive-message/',
             data: {'message_id': message_id},
             cache: false,
             success: function (data) {
@@ -36,17 +36,17 @@ $(function () {
                 scrollMessages();
             }
         });
-    };
+    };   
 
     $("#send").submit(function () {
         $.ajax({
-            url: '/messages/send-message/',
+            url: '/ws/messages/send-message/',
             data: $("#send").serialize(),
             cache: false,
             type: 'POST',
             success: function (data) {
                 $(".send-message").before(data);
-                $("input[name='message']").val('');
+                $('#send')[0].reset();
                 scrollMessages();
             }
         });
@@ -55,20 +55,18 @@ $(function () {
 
     //This helps the text in the textarea of the message to be send
     //when press enter and go new line with shift + enter!
-    // $(".text-area").keypress(function (e) {
-    //     if(e.which == 13 && !e.shiftKey) {        
-    //         $(this).closest("form").submit();
-    //         e.preventDefault();
-    //         return false;
-    //     }
-    // });
+    $("#sendText").keypress(function (e) {
+        if(e.which == 13 && !e.shiftKey) {        
+            $(this).closest("form").submit();
+            e.preventDefault();
+            return false;
+        }
+    });
 
     // WebSocket connection management block.
     // Correctly decide between ws:// and wss://
     var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-
-    var ws_path = "wss://www.obrisk.com/ws/messages/" + currentUser + "/";
-    console.log( window.location.host);
+    var ws_path = ws_scheme + '://' + window.location.host + "/ws/messages/" + currentUser + "/";
     var webSocket = new channels.WebSocketBridge();
     webSocket.connect(ws_path);
 
@@ -118,8 +116,8 @@ $(function () {
                 break;
 
             default:
-                console.log('error: ', event);
-                console.log(typeof(event))
+                // console.log('error: ', event);
+                // console.log(typeof(event))
                 break;
         }
     });

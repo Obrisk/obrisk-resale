@@ -11,7 +11,7 @@
           <li class="card">
             <div class="card-body">
               <div class="profile-picture">
-                {% thumbnail request.user.picture "x60" as im %}
+                {% thumbnail request.user.picture "60x60" crop="center" upscale="true"  as im %}
                   <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
                 {% empty %}
                   <img src="{% static 'img/user.png' %}" class="pull-left" height="60px" alt="{% trans 'No Profile Picture' %}" />
@@ -41,7 +41,7 @@
   </div>
 </div>
  
-{% block modal %}
+{% block extra_js %}
 <script>
   $(document).ready(function(){
     $('#replyStories').prop('disabled',true);
@@ -50,4 +50,4 @@
     })
   });
 </script>
-{% endblock modal %}
+{% endblock extra_js %}

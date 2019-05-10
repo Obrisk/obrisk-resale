@@ -33,28 +33,29 @@ class MessageQuerySet(models.query.QuerySet):
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
 
-    def mark_conversation_as_read(self, sender, recipient):
-        """Mark as read any unread elements in the current conversation."""
-        qs = self.filter(sender=sender, recipient=recipient)
-        return qs.update(unread=False)
-
     def get_all_conversation(self, recipient):
-        chat_list = []
+        chat_list = [] #Stores conversation list.
+        msgs_list = [] #Stores messages objects
         try:
             qs_sent = self.filter(sender=recipient)
             qs_recieved = self.filter(recipient=recipient)
-            queryset = qs_sent.union(qs_recieved)
-                
+            queryset = qs_sent.union(qs_recieved).order_by('-timestamp')
+            
+            #Search for conversations that user was involved
             for qs in queryset:
                 if qs.sender == recipient:
                     if qs.recipient not in chat_list:
+                        msgs_list.append(qs)
                         chat_list.append(qs.recipient)
-            return chat_list
+                        
+                elif qs.sender not in chat_list:
+                    msgs_list.append(qs)
+                    chat_list.append(qs.sender)
+
+            return chat_list, msgs_list
 
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
-
-
 
 
 class Message(models.Model):

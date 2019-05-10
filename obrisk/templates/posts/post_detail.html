@@ -24,12 +24,18 @@
         <!-- Title -->
         <h4 class="mt-4">{{ post.title|title }}</h4>
         <!-- Author -->
-        <p class="lead">{% trans 'by' %}
-          <a href="{% url 'users:detail' post.user.username %}">{{ post.user.get_profile_name|title }}</a>
+        <p class="lead">
+          <a href="{% url 'users:detail' post.user.username %}"> 
+              {% thumbnail classified.user.picture "35x35" crop="center" upscale="true"  as im %}
+                <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
+              {% empty %}
+                <img src="{% static 'img/user.png' %}" class="pull-left" height="35px" alt="{% trans 'No Profile Picture' %}" />
+              {% endthumbnail %}
+              <strong> {{ post.user.get_profile_name|title }} </strong> </a>
         </p>
         <hr>
         <!-- Date/Time -->
-        <p>{% trans 'Posted' %} {{ post.timestamp|naturaltime }}  </p>
+        <p> <i class="fa fa-clock-o" aria-hidden="true"></i> {% trans 'Posted' %} {{ post.timestamp|naturaltime }}  </p>
         <hr>
         <!-- Featured Image -->
         {% thumbnail post.image "900x300" as im %}

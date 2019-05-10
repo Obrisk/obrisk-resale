@@ -5,7 +5,7 @@
 <li class="infinite-item card" stories-id="{{ stories.uuid_id }}">
   <div class="card-body">
     <div class="profile-picture">
-      {% thumbnail stories.user.picture "x60" as im %}
+      {% thumbnail stories.user.picture "60x60" crop="center" upscale="true"  as im %}
         <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
       {% empty %}
         <img src="{% static 'img/user.png' %}" class="pull-left" height="60px" alt="{% trans 'No Profile Picture' %}" />
