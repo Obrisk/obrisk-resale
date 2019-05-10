@@ -93,7 +93,7 @@ $(function () {
     // Code block to manage WebSocket connections
     // Try to correctly decide between ws:// and wss://
     let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    let ws_path = ws_scheme + '://' + window.location.host + "/ws/notifications/";
+    let ws_path = ws_scheme + "://" + window.location.host + "/ws/notifications/";
     let webSocket = new channels.WebSocketBridge();
     webSocket.connect(ws_path);
 

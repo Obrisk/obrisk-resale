@@ -63,11 +63,6 @@ endpoint = os.getenv('OSS_ENDPOINT')
 sts_role_arn = os.getenv('OSS_STS_ARN')
 region = os.getenv('OSS_REGION')
 
-# Confirm that the above parameters are filled in correctly.
-for param in (access_key_id, access_key_secret, bucket_name, endpoint, sts_role_arn):
-    print(param)
-
-
 class StsToken(object):
     """Temporary user key returned by AssumeRole
     :param str access_key_id: access user id of the temporary user
@@ -157,40 +152,51 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         validity.
         """
         form = OfficialAdForm(self.request.POST)
-    
+
         if form.is_valid():
-            official_ad = form.save(commit=False)
-            official_ad.user = self.request.user
-            official_ad.save()
-
-            # split one long string of JSON objects into a list of string each for one JSON obj 
-            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
-
-            for image_obj in cloudinary_list:
-                #convert the obj from string into JSON.
-                json_response = json.loads(image_obj)
-
-                #Populate a CloudinaryResource object using the upload response
-                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
-
-                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
-                
-                img = OfficialAdImages(image = str_result)
-                img.official_ad = official_ad
-                img.save()
-            return self.form_valid(form) 
+            return self.form_valid(form)
         else:
-            #ret = dict(errors=form.errors)
-            # print(form.errors)
+            # ret = dict(errors=form.errors)
             return self.form_invalid(form)
-                  
+
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super(CreateOfficialAdView, self).form_valid(form)
+
+        classified = form.save(commit=False)
+        classified.user = self.request.user
+        classified.save()
+
+        bucket = oss2. Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+        images_json = form.cleaned_data['images']
+
+        # split one long string of images into a list of string each for one JSON obj
+        images_list = images_json.split(",")
+        print(images_list)
+
+        for index, str_result in enumerate(images_list):
+            if index == 0:
+                continue
+            img = ClassifiedImages(image=str_result)
+            img.classified = classified
+
+            d = str(datetime.datetime.now())
+            thumb_name = "Official-ads/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
+            style = 'image/resize,m_fill,h_140,w_140'
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                          oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                              oss2.compat.to_bytes(thumb_name))),
+                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            bucket.process_object(str_result, process)
+            img.image_thumb = thumb_name
+
+            img.save()
+
+        return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = Classified
@@ -213,8 +219,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             return self.form_valid(form)
         else:
-            # ret = dict(errors=form.errors)
-            print(form.errors)
+            # ret = dict(errors=form.errors) #Handle custom errors here.
             return self.form_invalid(form)
 
     def form_valid(self, form):

@@ -48,15 +48,17 @@
         </div>  
              
         {% empty %}
-          <h4 class="no-data">{% trans 'There are no classified ads based on your location.' %}
-           <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>
+          <h5 class="no-data">{% trans 'Dear '%} {{ request.user.username }} 
+          {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
+           <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a> 
+           {% trans 'Or check what we have found from other places '%}  </h5>
+           <br />
         {% endfor %}
-      </div>
+      
 
-    {% if page_obj.number == paginator.num_pages and other_classifieds %} <!-- also add, if paginator.num_pages == 0-->
+   <!--Will be using ajax in near future.-->
 
-
-      {% for classified in other_classifieds %}
+    {% for classified in other_classifieds %}
           <!-- Classified ad. -->
           <div class="card mr-2 mb-3" style="height: 250px; width:156px">  
               <!--Display image-->
@@ -81,7 +83,7 @@
         </div>  
       {% endfor %}
     </div>
-    {# endif #}
+  <!-- End div for row of all classified ads-->
   </div>
 
   <div class="row">
@@ -117,7 +119,6 @@
   </div>
 
 
-
   <div class="row">
     <!-- Sidebar Widgets Column -->
     <div class="col-md-4">
@@ -127,15 +128,15 @@
         <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i
             class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
 
-        {% if request.user.is_seller %}
-        <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
-          title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i>
-          {% trans 'New Classified' %}</a>
-        {% endif %}
+            {% if request.user.is_seller %}
+            <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
+              title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i>
+              {% trans 'New Classified' %}</a>
+            {% endif %}
         <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
       </div>
-
       {% endif %}
+
       <!-- Cloud Tag Widget -->
       <div class="card my-4">
         <h5 class="card-header">{% trans 'Popular tags' %}</h5>
@@ -158,14 +159,16 @@
       {% else %}
       <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
       {% endif %}
-      {% for i in paginator.page_range %}
-      {% if page_obj.number == i %}
-      <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
-      </li>
-      {% else %}
-      <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-      {% endif %}
-      {% endfor %}
+
+          {% for i in paginator.page_range %}
+              {% if page_obj.number == i %}
+              <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+              </li>
+              {% else %}
+              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+              {% endif %}
+          {% endfor %}
+
       {% if page_obj.has_next %}
       <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Older' %}
           &rarr;</a></li>

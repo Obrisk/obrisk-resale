@@ -13,12 +13,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddField(
             model_name='classifiedimages',
-            name='image_medium',
-            field=models.CharField(default=django.utils.timezone.now, max_length=300),
-            preserve_default=False,
-        ),
-        migrations.AddField(
-            model_name='classifiedimages',
             name='image_thumb',
             field=models.CharField(default=django.utils.timezone.now, max_length=300),
             preserve_default=False,
