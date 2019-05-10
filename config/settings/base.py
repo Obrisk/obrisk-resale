@@ -80,7 +80,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'crispy_forms',
     'cloudinary',
-    'material',
     'sorl.thumbnail',
     'phonenumber_field',
     'allauth',
@@ -92,7 +91,6 @@ THIRD_PARTY_APPS = [
     # 'allauth.socialaccount.providers.linkedin',
     # 'allauth.socialaccount.providers.slack',
     'channels',
-    'django_comments',
     'graphene_django',
     'markdownx',
     'taggit',
