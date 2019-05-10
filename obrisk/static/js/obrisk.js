@@ -22,7 +22,6 @@ Issues with the above approach:
 
 $('.form-group').removeClass('row');
 
-
 /* Notifications JS basic client */
 $(function () {
     let emptyMessage = 'You have no unread notification';
@@ -90,8 +89,6 @@ $(function () {
         }
         return false;
     });
-
-     
     
     // Code block to manage WebSocket connections
     // Try to correctly decide between ws:// and wss://

@@ -2,6 +2,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 
 
+
 from obrisk.classifieds.views import (ClassifiedsListView, ExpiredListView, CreateOfficialAdView, 
                                      CreateClassifiedView, EditClassifiedView, 
                                      ReportClassifiedView, DetailClassifiedView)
@@ -14,5 +15,4 @@ urlpatterns = [
     url(r'^report/(?P<pk>\d+)/$', ReportClassifiedView.as_view(), name='report_classified'),
     url(r'^edit/(?P<pk>\d+)/$', EditClassifiedView.as_view(), name='edit_classified'),
     url(r'^(?P<slug>[-\w]+)/$', DetailClassifiedView.as_view(), name='classified'),
-
 ]

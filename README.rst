@@ -1,42 +1,35 @@
 obrisk
 ========
 
-An enterprise oriented social network
+A location based social network
 
-.. image:: https://travis-ci.org/vitorfs/obrisk.svg?branch=master
-    :target: https://travis-ci.org/vitorfs/obrisk
-    :alt: TravisCI Status
-
-.. image:: https://coveralls.io/repos/github/vitorfs/obrisk/badge.svg?branch=master
-    :target: https://coveralls.io/github/vitorfs/obrisk?branch=master
+.. image:: https://coveralls.io/repos/github/elshaddae/obrisk/badge.svg?branch=master
+    :target: https://coveralls.io/github/elshaddae/obrisk?branch=master
     :alt: Coverage
 
-.. image:: https://requires.io/github/vitorfs/obrisk/requirements.svg?branch=master
-    :target: https://requires.io/github/vitorfs/obrisk/requirements/?branch=master
+.. image:: https://requires.io/github/vitorfs/elshaddae/requirements.svg?branch=master
+    :target: https://requires.io/github/vitorfs/elshaddae/requirements/?branch=master
     :alt: Requirements
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
     :target: https://github.com/pydanny/cookiecutter-django/
     :alt: Built with Cookiecutter Django
 
-:License: MIT
+The project has 5 apps:
 
-obrisk is an open source **enterprise social network** of open purpose, on which you can build for your own ends.
-
-The project has four basic apps:
-
+* Post (A blogging app)
 * Stories (A Twitter-like microblog)
-* Classifieds (A collaborative blog)
+* Classifieds (Second-handed selling)
 * Question & Answers (A Stack Overflow-like platform)
-* Messeger (A basic chat-a-like tool for asynchronous communication.)
+* Messeger (A basic chat for communication.)
 
 Technology Stack
 ----------------
 .. _Python: https://www.python.org/
 .. _`Django Web Framework`: https://www.djangoproject.com/
 .. _PostgreSQL: https://www.postgresql.org/
-.. _`Redis 3.2`: https://redis.io/documentation
-.. _Daphne: https://github.com/django/daphne/
+.. _`Redis 4.2`: https://redis.io/documentation
+.. _Uvicorn: https://github.com/encode/uvicorn/
 .. _Docker: https://docs.docker.com/
 .. _docker-compose: https://docs.docker.com/compose/
 .. _WhiteNoise: http://whitenoise.evans.io/en/stable/
@@ -52,7 +45,6 @@ Basic Commands
 
 Test coverage
 ^^^^^^^^^^^^^
-
 To run the tests, check your test coverage, and generate a simplified coverage report::
 
     $ pytest
@@ -69,7 +61,7 @@ To check the report in console::
 Sentry
 ^^^^^^
 
-Sentry is an error logging aggregator service. You can `sign up`_ for a free account  or download and host it yourself.
+Sentry is an error logging aggregator service. You can host it by yourself.
 The system is setup with reasonable defaults, including 404 logging and integration with the WSGI application.
 
 .. _`sign up`: https://sentry.io/signup/?code=cookiecutter
@@ -80,18 +72,7 @@ You must set the DSN url in production.
 Deployment
 ----------
 
-The following details how to deploy this application.
-
-
-Heroku
-^^^^^^
-
-See detailed `cookiecutter-django Heroku documentation`_.
-
-.. _`cookiecutter-django Heroku documentation`: http://cookiecutter-django.readthedocs.io/en/latest/deployment-on-heroku.html
-
-
-Docker
+With Docker
 ^^^^^^
 
 See detailed `cookiecutter-django Docker documentation`_.

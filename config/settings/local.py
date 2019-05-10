@@ -70,13 +70,6 @@ if os.environ.get('USE_DOCKER') == 'yes':
 # django-extensions
 # ------------------------------------------------------------------------------
 # https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration
-INSTALLED_APPS += ['django_extensions']  # noqa F405
-
-# Your stuff...
-# ------------------------------------------------------------------------------
-CHAT_WS_SERVER_HOST = '192.168.0.105'
-CHAT_WS_SERVER_PORT = 8001
-CHAT_WS_SERVER_PROTOCOL = 'ws'
-DATETIME_FORMAT ='M d H:i'
+INSTALLED_APPS += ['django_extensions','environ']  # noqa F405
 
 

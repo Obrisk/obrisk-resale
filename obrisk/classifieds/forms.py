@@ -1,16 +1,15 @@
 from django import forms
 from obrisk.classifieds.models import Classified, OfficialAd
 
-
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
     details = forms.CharField(widget=forms.Textarea)
-    images = forms.CharField(max_length=6000, required=False, widget=forms.HiddenInput()) #This is not related with any model
-
+    images = forms.CharField(widget=forms.HiddenInput(), max_length=1500 , required=False) #100 for each image.
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info","tags", "images"]
+        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags"]
+
         widgets = {'user': forms.HiddenInput()}
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
