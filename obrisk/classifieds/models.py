@@ -8,8 +8,6 @@ from django.utils.translation import ugettext_lazy as _
 from slugify import slugify
 
 from taggit.managers import TaggableManager
-from cloudinary.models import CloudinaryField
-
 
 class ClassifiedQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
@@ -95,17 +93,11 @@ class Classified(models.Model):
 
         super().save(*args, **kwargs)
 
-class CloudinaryFieldFix(CloudinaryField):
-    def to_python(self, value):
-        if value is False:
-            return value
-        else:
-            return super(CloudinaryFieldFix, self).to_python(value)
-
 
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
-    image = CloudinaryFieldFix('image')
+    image = models.CharField(max_length=300)
+    image_thumb = models.CharField(max_length=300)
 
     """ Informative name for model """
     def __unicode__(self):
@@ -153,7 +145,7 @@ class OfficialAd(models.Model):
 
 class OfficialAdImages(models.Model):
     official_ad = models.ForeignKey(OfficialAd, on_delete=models.CASCADE, related_name='images')
-    image = CloudinaryFieldFix('image')
+    image = models.CharField(max_length=300)
 
     """ Informative name for model """
     def __unicode__(self):

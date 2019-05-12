@@ -13,13 +13,100 @@ from django.utils.decorators import method_decorator
 from django.http import HttpResponse
 from django import forms
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 from obrisk.helpers import AuthorRequiredMixin
+
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm
 
 import json
 import re
-from cloudinary import CloudinaryResource
+import os
+import base64
+import datetime
+
+from aliyunsdkcore import client
+from aliyunsdksts.request.v20150401 import AssumeRoleRequest
+
+import oss2
+
+# For images
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
+from obrisk.helpers import ajax_required
+
+import oss2
+
+
+# The following code shows the usage of STS, including role-playing to get the temporary user's key and using the temporary user's key to access the OSS.
+
+# STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
+# STS's official documentation can be found at https://help.aliyun.com/document_detail/28627.html
+
+# Initialize the information such as AccessKeyId, AccessKeySecret, and Endpoint.
+# Get through environment variables, or replace something like "< your AccessKeyId>" with a real AccessKeyId.
+# Note: AccessKeyId and AccessKeySecret are the keys of the sub-users.
+# RoleArn can be viewed in the console under Access Control > Role Management > Administration > Basic Information > Arn.
+#
+# Taking the Hangzhou area as an example, the Endpoint can be:
+#   http://oss-cn-hangzhou.aliyuncs.com
+#   https://oss-cn-hangzhou.aliyuncs.com
+# Access by HTTP and HTTPS respectively.
+
+
+access_key_id = os.getenv('OSS_STS_ID')
+access_key_secret = os.getenv('OSS_STS_KEY')
+bucket_name = os.getenv('OSS_BUCKET')
+endpoint = os.getenv('OSS_ENDPOINT')
+sts_role_arn = os.getenv('OSS_STS_ARN')
+region = os.getenv('OSS_REGION')
+
+class StsToken(object):
+    """Temporary user key returned by AssumeRole
+    :param str access_key_id: access user id of the temporary user
+    :param str access_key_secret: temporary user's access key secret
+    :param int expiration: expiration time, UNIX time, seconds from UTC zero on January 1, 1970
+    :param str security_token: temporary user token
+    :param str request_id: request ID
+    """
+
+    def __init__(self):
+        self.access_key_id = ''
+        self.access_key_secret = ''
+        self.expiration = 0
+        self.security_token = ''
+        self.request_id = ''
+
+
+def fetch_sts_token(access_key_id, access_key_secret, role_arn):
+    """Sub User Role Playing to Get the Key of a Temporary User
+    :param access_key_id: access key id of the subuser
+    :param access_key_secret: subuser's access key secret
+    :param role_arn: Arn of the STS role
+    :return StsToken: temporary user key
+    """
+    clt = client.AcsClient(access_key_id, access_key_secret, 'cn-hangzhou')
+    req = AssumeRoleRequest.AssumeRoleRequest()
+
+    req.set_accept_format('json')
+    req.set_RoleArn(role_arn)
+    req.set_RoleSessionName('oss-python-sdk-example')
+
+    body = clt.do_action_with_exception(req)
+
+    j = json.loads(oss2.to_unicode(body))
+
+    token = StsToken()
+
+    token.access_key_id = j['Credentials']['AccessKeyId']
+    token.access_key_secret = j['Credentials']['AccessKeySecret']
+    token.security_token = j['Credentials']['SecurityToken']
+    token.request_id = j['RequestId']
+    token.expiration = oss2.utils.to_unixtime(j['Credentials']['Expiration'], '%Y-%m-%dT%H:%M:%SZ')
+
+    return token
 
 
 class ClassifiedsListView(LoginRequiredMixin, ListView):
@@ -32,16 +119,18 @@ class ClassifiedsListView(LoginRequiredMixin, ListView):
         context = super(ClassifiedsListView, self).get_context_data(*args, **kwargs)
         context['popular_tags'] = Classified.objects.get_counted_tags()
         context['images'] = ClassifiedImages.objects.all()
-        context['other_classifieds'] = Classified.objects.exclude(city= self.request.user.city)
+        context['other_classifieds'] = Classified.objects.exclude(city=self.request.user.city)
+
         return context
 
     def get_queryset(self, **kwargs):
-        return Classified.objects.get_active().filter(city= self.request.user.city)
+        return Classified.objects.get_active().filter(city=self.request.user.city)
 
 
 class ExpiredListView(ClassifiedsListView):
     """Overriding the original implementation to call the expired classifieds
     list."""
+
     def get_queryset(self, **kwargs):
         return Classified.objects.get_expired()
 
@@ -63,40 +152,51 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         validity.
         """
         form = OfficialAdForm(self.request.POST)
-    
+
         if form.is_valid():
-            official_ad = form.save(commit=False)
-            official_ad.user = self.request.user
-            official_ad.save()
-
-            # split one long string of JSON objects into a list of string each for one JSON obj 
-            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
-
-            for image_obj in cloudinary_list:
-                #convert the obj from string into JSON.
-                json_response = json.loads(image_obj)
-
-                #Populate a CloudinaryResource object using the upload response
-                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
-
-                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
-                
-                img = OfficialAdImages(image = str_result)
-                img.official_ad = official_ad
-                img.save()
-            return self.form_valid(form) 
+            return self.form_valid(form)
         else:
-            #ret = dict(errors=form.errors)
-            # print(form.errors)
+            # ret = dict(errors=form.errors)
             return self.form_invalid(form)
-                  
+
     def form_valid(self, form):
         form.instance.user = self.request.user
-        return super(CreateOfficialAdView, self).form_valid(form)
+
+        classified = form.save(commit=False)
+        classified.user = self.request.user
+        classified.save()
+
+        bucket = oss2. Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+        images_json = form.cleaned_data['images']
+
+        # split one long string of images into a list of string each for one JSON obj
+        images_list = images_json.split(",")
+        print(images_list)
+
+        for index, str_result in enumerate(images_list):
+            if index == 0:
+                continue
+            img = ClassifiedImages(image=str_result)
+            img.classified = classified
+
+            d = str(datetime.datetime.now())
+            thumb_name = "Official-ads/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
+            style = 'image/resize,m_fill,h_140,w_140'
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                          oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                              oss2.compat.to_bytes(thumb_name))),
+                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            bucket.process_object(str_result, process)
+            img.image_thumb = thumb_name
+
+            img.save()
+
+        return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = Classified
@@ -107,7 +207,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
-    
+
     def post(self, request, *args, **kwargs):
         """
         Handles POST requests, instantiating a form instance and its inline
@@ -115,40 +215,70 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         validity.
         """
         form = ClassifiedForm(self.request.POST)
-    
+
         if form.is_valid():
-            classified = form.save(commit=False)
-            classified.user = self.request.user
-            classified.save()
-
-            # split one long string of JSON objects into a list of string each for one JSON obj 
-            cloudinary_list = re.findall ( r'\{.*?\}', form.cleaned_data['images'])
-
-            for image_obj in cloudinary_list:
-                #convert the obj from string into JSON.
-                json_response = json.loads(image_obj)
-
-                #Populate a CloudinaryResource object using the upload response
-                result = CloudinaryResource(public_id=json_response['public_id'], type=json_response['type'], resource_type=json_response['resource_type'], version=json_response['version'], format=json_response['format'])
-
-                str_result = result.get_prep_value()  # returns a CloudinaryField string e.g. "image/upload/v123456789/test.png"   
-                
-                img = ClassifiedImages(image = str_result)
-                img.classified = classified
-                img.save()
-            return self.form_valid(form) 
+            return self.form_valid(form)
         else:
-            #ret = dict(errors=form.errors)
-            # print(form.errors)
+            # ret = dict(errors=form.errors) #Handle custom errors here.
             return self.form_invalid(form)
-                  
+
     def form_valid(self, form):
         form.instance.user = self.request.user
+
+        classified = form.save(commit=False)
+        classified.user = self.request.user
+        classified.save()
+
+        bucket = oss2. Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+        images_json = form.cleaned_data['images']
+
+        # split one long string of images into a list of string each for one JSON obj
+        images_list = images_json.split(",")
+        print(images_list)
+
+        for index, str_result in enumerate(images_list):
+            if index == 0:
+                continue
+            img = ClassifiedImages(image=str_result)
+            img.classified = classified
+
+            d = str(datetime.datetime.now())
+            thumb_name = "classifieds/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
+            style = 'image/resize,m_fill,h_140,w_140'
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                          oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                              oss2.compat.to_bytes(thumb_name))),
+                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            bucket.process_object(str_result, process)
+            img.image_thumb = thumb_name
+
+            img.save()
+
         return super(CreateClassifiedView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
+
+@login_required
+@require_http_methods(["GET"])
+def get_oss_auth(request):
+    """AJAX Functional view to recieve just the minimum information, process
+    and create the new message and return the new data to be attached to the
+    conversation stream."""
+    token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
+    key_id = str(token.access_key_id)
+    scrt = str(token.access_key_secret)
+    token_value = str(token.security_token)
+    data = {
+        'region': region,
+        'accessKeyId': key_id,
+        'accessKeySecret': scrt,
+        'SecurityToken': token_value,
+        'bucket': bucket_name
+    }
+    return JsonResponse(data)
 
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
@@ -158,7 +288,7 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_update.html'
 
-    #In this form there is an image that is not saved, deliberately since you can't upload images.
+    # In this form there is an image that is not saved, deliberately since you can't upload images.
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -166,6 +296,7 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
 
 class ReportClassifiedView(LoginRequiredMixin, View):
     """This class has to inherit FormClass model but failed to implement that
@@ -193,6 +324,6 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
+        context['images_no'] = len(context['images'])
+        
         return context
-
-
