@@ -9,13 +9,13 @@ class ClassifiedsModelsTest(TestCase):
         self.other_user = self.make_user("other_test_user")
         self.classified = Classified.objects.create(
             title="A really nice title",
-            content="This is a really good content",
+            details="This is a really good content",
             status="A",
             user=self.user,
         )
         self.not_p_classified = Classified.objects.create(
             title="A really nice to-be title",
-            content="""This is a really good content, just if somebody
+            details="""This is a really good content, just if somebody
             published it, that would be awesome, but no, nobody wants to
             publish it, because they know this is just a test, and you
             know than nobody wants to publish a test, just a test;
