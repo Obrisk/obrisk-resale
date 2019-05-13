@@ -43,11 +43,12 @@ header .navbar-brand {
 }
 
 a {
-  color: #330c04 ;
+  color: white ;
 }
 
 a:hover {
-  color:#8b2100;
+  color:#0aacec;
+  text-decoration:none;
 }
 
 .bg-dark {
@@ -99,7 +100,7 @@ a:hover {
 }
 
 .breadcrumb {
-  background: #6061637a;
+  background: gray;
 }
 
 .card-header {
@@ -113,6 +114,7 @@ a:hover {
 
 .btn-dark {
   background: linear-gradient(45deg, #0aacec ,#0aeee3 );
+  color: black;
 }
 
 .btn-danger {
@@ -128,9 +130,48 @@ a:hover {
 
 .navbar-dark .navbar-brand {
 
+  color: black;
+
+}
+
+.navbar-dark .navbar-nav .nav-link {
+
+  color: rgba(0, 0, 0, 0.5);
+
+}
+
+#notifications {
+
+  font-size: 1.5em;
   color: #000;
 
 }
 
+.card-header {
+  color: white;
+  background: gray;
+}
 
+.navbar-dark .navbar-toggler {
+  color: rgba(255,255,255,.1);
+  border-color: rgba(255,255,255,.1);
+}
+
+.btn {
+  display: inline-block;
+  font-weight: 400;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  padding: .375rem .75rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  border-radius: 2rem;
+  border: 0px;
+  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
 
