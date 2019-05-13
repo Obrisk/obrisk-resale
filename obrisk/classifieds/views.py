@@ -11,34 +11,29 @@ from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse
+from django.db.models import Count
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 from obrisk.helpers import AuthorRequiredMixin
-
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm
 
+# For images
 import json
 import re
 import os
 import base64
 import datetime
 
+import oss2
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 
-import oss2
-
-# For images
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from obrisk.helpers import ajax_required
-
-import oss2
-
 
 # The following code shows the usage of STS, including role-playing to get the temporary user's key and using the temporary user's key to access the OSS.
 
@@ -322,8 +317,17 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
+        
+        classified_tags_ids = self.object.tags.values_list('id', flat=True)
+        similar_classified = Classified.objects.filter(tags__in = classified_tags_ids)\
+                                        .exclude(id=self.object.id)
+
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
+        context['all_images'] = ClassifiedImages.objects.all()
+
         context['images_no'] = len(context['images'])
+        context['similar_classifieds'] = similar_classified.annotate(same_tags = Count('tags'))\
+                                                    .order_by('-same_tags', '-timestamp')[:6]
         
         return context

@@ -107,7 +107,39 @@
       {% endif %}
 
     </div>
-
+    
+    <div class="row">
+      <!-- Classified Entries Column -->
+      <!-- <div class="col-md-8"> -->
+        {% for classified in similar_classifieds %}
+          <!-- Classified ad. -->
+          <div class="card mr-2 mb-3" style="height: 250px; width:156px">  
+              <!--Display image-->
+              <div class="card-img-top img-responsive">
+                <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
+                {% for photo in all_images %}
+                    {% if photo.classified == classified %}
+                      <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
+                {{ "<!--" }}      
+                {% endif %}
+                {% endfor %}
+                {{ "-->" }}
+            </div>
+            
+            <div class="card-body">  
+                <h6 class="card-title" > {{ classified.title}} <h6> 
+                <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
+                <i class="lead fa fa-map-marker"></i>
+                <span class="card-text small "> {{ classified.located_area|safe }}</span>    
+            </div>
+          </a>
+        </div>  
+             
+        {% empty %}
+          <h4 class="no-data">{% trans 'There are no classified ads based on your location.' %}
+           <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>
+        {% endfor %}
+      </div>
 
     <!-- Sidebar Widgets Column -->
     <div class="col-md-4">
@@ -122,6 +154,9 @@
         </div>
       </div>
     </div>
+
+
+
   </div>
 
 </div>

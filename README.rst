@@ -21,34 +21,20 @@ An enterprise oriented social network
 
 :License: MIT
 
-obrisk is an open source **enterprise social network** of open purpose, on which you can build for your own ends.
+A **location based** social network
+The project has 5 apps:
 
-The project has four basic apps:
+Post (A blogging app)
+Stories (A Twitter-like microblog)
+Classifieds (Second-handed selling)
+Question & Answers (A Stack Overflow-like platform)
+Messeger (A basic chat for communication.)
 
-* Stories (A Twitter-like microblog)
-* Classifieds (A collaborative blog)
-* Question & Answers (A Stack Overflow-like platform)
-* Messeger (A basic chat-a-like tool for asynchronous communication.)
 
-Technology Stack
-----------------
-.. _Python: https://www.python.org/
-.. _`Django Web Framework`: https://www.djangoproject.com/
-.. _PostgreSQL: https://www.postgresql.org/
-.. _`Redis 3.2`: https://redis.io/documentation
-.. _Daphne: https://github.com/django/daphne/
-.. _Docker: https://docs.docker.com/
-.. _docker-compose: https://docs.docker.com/compose/
-.. _WhiteNoise: http://whitenoise.evans.io/en/stable/
-.. _`Twitter Bootstrap 4`: https://getbootstrap.com/docs/4.0/getting-started/introduction/
-.. _`jQuery 3`: https://api.jquery.com/
-.. _Django-channels: https://channels.readthedocs.io/en/latest/
-.. _Sentry: https://docs.sentry.io/
-.. _Mailgun: https://www.mailgun.com/
-.. _Cookiecutter: http://cookiecutter-django.readthedocs.io/en/latest/index.html
-
-Basic Commands
+Basic Instructions
 --------------
+
+For the chat app to work please create a superuser as the url will need the kwarg of admin username.
 
 Test coverage
 ^^^^^^^^^^^^^
