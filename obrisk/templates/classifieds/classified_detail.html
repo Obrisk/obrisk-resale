@@ -41,8 +41,6 @@
       <section class="col s12 m12 l10 offset-l1">
         <p class="card-text text-justify">{{ classified.details }}</p>
 
-        <p> {{ images_no }} </p>
-
         <div class="container">
           <div class="slider">
             <!-- Swiper -->
@@ -134,10 +132,6 @@
             </div>
           </a>
         </div>  
-             
-        {% empty %}
-          <h4 class="no-data">{% trans 'There are no classified ads based on your location.' %}
-           <a href="{% url 'classifieds:write_new' %}">{% trans ' be the first one to post' %}!</a></h4>
         {% endfor %}
       </div>
 
