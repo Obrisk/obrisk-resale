@@ -54,14 +54,14 @@
                 {% endfor %}
               </div>
               <!-- Add Arrows -->
-              <div class="swiper-button-next swiper-button-white" style="padding: 25px;background-color: #333333c4;"></div>
-              <div class="swiper-button-prev swiper-button-white" style="padding: 25px;background-color: #333333c4;"></div>
+              <div class="swiper-button-next swiper-button-white" style="padding: 20px;background-color: #333333c4;"></div>
+              <div class="swiper-button-prev swiper-button-white" style="padding: 20px;background-color: #333333c4;"></div>
             </div>
+
             <div class="swiper-container gallery-thumbs">
               <div class="swiper-wrapper">
-              
                 {% for photo in images %}
-                <div class="swiper-slide">
+                <div class="thumbs swiper-slide">
                   <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb}}">
                 </div>
                 {% endfor %}
@@ -78,7 +78,7 @@
       </h3>
 
 
-      <p style="overflow-y: auto;"> <a href="{% url 'users:detail' classified.user.username %}">
+      <p class="lead"> <a href="{% url 'users:detail' classified.user.username %}">
           {% thumbnail classified.user.picture "x35" as im %}
           <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
             class="user-image">
@@ -86,7 +86,7 @@
           <img src="{% static 'img/user.png' %}" class="pull-left" height="35px"
             alt="{% trans 'No Profile Picture' %}" />
           {% endthumbnail %}
-          <strong> {{ classified.user.get_profile_name|title }} </strong> </a>
+          <strong id="classified-user"> {{ classified.user.get_profile_name|title }} </strong> </a>
       </p>
 
       <hr>
@@ -105,6 +105,8 @@
       {% endif %}
 
     </div>
+
+    <div class="container">
     
     <div class="row">
       <!-- Classified Entries Column -->
@@ -128,12 +130,13 @@
                 <h6 class="card-title" > {{ classified.title}} <h6> 
                 <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
                 <i class="lead fa fa-map-marker"></i>
-                <span class="card-text small "> {{ classified.located_area|safe }}</span>    
+                <span class="card-text small "> {{ classified.city|safe }}</span>    
             </div>
           </a>
         </div>  
         {% endfor %}
       </div>
+    </div>
 
     <!-- Sidebar Widgets Column -->
     <div class="col-md-4">

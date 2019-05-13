@@ -55,3 +55,10 @@
 .btn-red:hover {
     color:#0aeee3;
 }
+
+@media (max-width: 600px) {
+    .thumbs > img {
+        width: 60px;
+        height: 60px;
+    }
+  }

@@ -20,10 +20,13 @@ class CustomUserChangeForm(UserChangeForm):
 
 class UserForm(forms.ModelForm):
     bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
+    province_region = forms.CharField (widget=forms.HiddenInput())
+    city = forms.CharField (widget=forms.HiddenInput())
+
     
     class Meta:
         model = User
-        fields = ('picture', 'name', 'job_title', 'city', 'bio', 'instagram_account',
+        fields = ('picture', 'name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
                'linkedin_account', 'facebook_account' )
         help_texts = {
             "instagram_account": "Please copy the link of your profile on the browser.\

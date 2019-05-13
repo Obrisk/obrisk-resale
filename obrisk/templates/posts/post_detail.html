@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static i18n %}
-{% load comments crispy_forms_tags thumbnail humanize %}
+{% load crispy_forms_tags thumbnail humanize %}
 
 {% block title %}{{ post.title|title }}{% endblock %}
 
@@ -59,15 +59,15 @@
         <div class="comment">
             <p class="info">
               <span style="margin: 0px"> {{ comment.body|linebreaks }} </span>  
-              <span class="media mb-4">
-                {% thumbnail comment.user.picture "x30" as im %}
+              <span class="media mb-2">
+                {% thumbnail comment.user.picture "30x30" crop="center" upscale="true" as im %}
                   <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
                 {% empty %}
-                  <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="50px" alt="{% trans 'No Profile Picture' %}" />
+                  <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
                 {% endthumbnail %}
 
                 <span class="media-body">
-                  <small class="mt-0">{{ comment.user.get_profile_name|title }}- </small>
+                  <strong class="mt-0">{{ comment.user.get_profile_name|title }}- </strong>
                   <small> {{ comment.created }} </small>
                 </span>
               </span>

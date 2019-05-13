@@ -21,7 +21,7 @@
   <div class="col-md-6 list-group users-list">
       {% for user, msg in lists %}
         <a href="{% url 'messager:conversation_detail' user  %}"
-           class="list-group-item list-group-item-action">
+        class="list-group-item list-group-item-action">
           {% thumbnail user.picture "40x40" crop="center" upscale="true"  as im %}
             <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
           {% empty %}

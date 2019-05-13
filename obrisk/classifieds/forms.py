@@ -13,8 +13,8 @@ class ClassifiedForm(forms.ModelForm):
         widgets = {'user': forms.HiddenInput()}
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
-            Your city is added by default based on your location.",
-            "contact_info": "Phone number, or wechat-ID or any other contacts info, if necessary."
+            Please don't enter your city it will be added automatically based on your profile",
+            "contact_info": "This field is optional. You can include your phone number, or wechat-ID or other contacts info."
         }
 
 class OfficialAdForm(forms.ModelForm):
@@ -27,8 +27,8 @@ class OfficialAdForm(forms.ModelForm):
         widgets = {'user': forms.HiddenInput()}
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
-            Your city is added by default based on your location.",
-            "contact_info": "Phone number, wechat-ID or e-mail or any other contacts info, if necessary."
+             Please don't enter your city, it will be added automatically based on your profile",
+            "contact_info": "This field is optional. You can include your phone number, or wechat-ID or other contacts info."
         }
            
 # class ClassifiedReportForm(forms.ModelForm):
