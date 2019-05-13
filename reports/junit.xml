@@ -1,20 +1,20 @@
-<testsuite errors="1" failures="3" name="Django Project Tests" skips="0" tests="7" time="0.774"><testcase classname="classifieds.tests.test_models.ClassifiedsModelsTest" name="test_object_instance" time="0.046819" /><testcase classname="classifieds.tests.test_models.ClassifiedsModelsTest" name="test_return_values" time="0.011425"><failure message="" type="builtins.AssertionError">Traceback (most recent call last):
+<testsuite errors="1" failures="3" name="Django Project Tests" skips="0" tests="7" time="0.813"><testcase classname="classifieds.tests.test_models.ClassifiedsModelsTest" name="test_object_instance" time="0.048771" /><testcase classname="classifieds.tests.test_models.ClassifiedsModelsTest" name="test_return_values" time="0.021588"><failure message="" type="builtins.AssertionError">Traceback (most recent call last):
   File "/home/ibrahim/workspace/obdev/obdev2018/obrisk/classifieds/tests/test_models.py", line 34, in test_return_values
     assert self.not_p_classified.status == "E"
 AssertionError
-</failure></testcase><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_create_classified" time="0.253941"><failure message="" type="builtins.AssertionError">Traceback (most recent call last):
+</failure></testcase><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_create_classified" time="0.275346"><failure message="" type="builtins.AssertionError">Traceback (most recent call last):
   File "/usr/local/lib/python3.6/dist-packages/django/test/utils.py", line 367, in inner
     return func(*args, **kwargs)
   File "/home/ibrahim/workspace/obdev/obdev2018/obrisk/classifieds/tests/test_views.py", line 68, in test_create_classified
     assert response.status_code == 302
 AssertionError
-</failure></testcase><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_draft_classified" time="0.131115"><error message="name 'resp' is not defined" type="builtins.NameError">Traceback (most recent call last):
+</failure></testcase><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_draft_classified" time="0.143429"><error message="name 'resp' is not defined" type="builtins.NameError">Traceback (most recent call last):
   File "/usr/local/lib/python3.6/dist-packages/django/test/utils.py", line 367, in inner
     return func(*args, **kwargs)
   File "/home/ibrahim/workspace/obdev/obdev2018/obrisk/classifieds/tests/test_views.py", line 95, in test_draft_classified
     assert resp.status_code == 200
 NameError: name 'resp' is not defined
-</error></testcase><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_error_404" time="0.079940" /><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_index_classifieds" time="0.103245" /><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_single_classified" time="0.140574"><failure message="" type="builtins.AssertionError">Traceback (most recent call last):
+</error></testcase><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_error_404" time="0.077790" /><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_index_classifieds" time="0.099978" /><testcase classname="classifieds.tests.test_views.ClassifiedsViewsTest" name="test_single_classified" time="0.137408"><failure message="" type="builtins.AssertionError">Traceback (most recent call last):
   File "/usr/local/lib/python3.6/dist-packages/django/test/utils.py", line 367, in inner
     return func(*args, **kwargs)
   File "/home/ibrahim/workspace/obdev/obdev2018/obrisk/classifieds/tests/test_views.py", line 83, in test_single_classified
