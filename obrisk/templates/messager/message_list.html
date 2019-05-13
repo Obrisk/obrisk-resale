@@ -24,7 +24,7 @@
               <img src="{% static 'img/user.png' %}"  height="30px" alt="{% trans 'No Profile Picture' %}" />
             {% endthumbnail %} </figure>  {% endcomment %}
 
-            <span class="name"> {{ active}} </span>
+            <span class="name"> {{ active|title}} </span>
             <span class="status"> Offline </span>
         </span>   
     </div>
@@ -37,7 +37,7 @@
               {% include 'messager/single_message.html' with message=message %}
           {% endfor %}
         {% else %}
-          <h4>{% trans 'Hello '  %} {{ request.user.username }}{% trans ' nice to meet you' %}</h4>
+          <h5>{% trans 'Hello '  %} {{ request.user.username }}{% trans ' nice to meet you' %}</h5>
           <p>{% trans "I am " %} {{ active }} {% trans ", Let's talk!" %}</p>
         {% endif %}
         <div class="send-message"> </div>

@@ -6,7 +6,8 @@ html, body, .chat {
 }
 
 body {
-  margin: 0;
+  margin-left: 25px;
+  margin-right: 25px;
 }
 
 #msg-timestamp {
@@ -45,7 +46,7 @@ body {
   flex: 0 1 45px;
   position: relative;
   z-index: 2;
-  background:linear-gradient(45deg,#330c04, #8b2100);
+  background: linear-gradient(45deg, #0aacec ,#0aeee3 );
   color: #fff;
   text-align: left;
   padding: 10px 10px 10px 80px;
@@ -55,6 +56,7 @@ body {
   position: absolute;
   top: 15px;
   left: 20px;
+  color:black;
 }
 .chat-title .name {
   position: absolute;
@@ -166,9 +168,10 @@ body {
   padding: 1px 0;
   border: 0;
   border-radius: 0 2px 2px 0;
-  background:linear-gradient(45deg,#330c04, #8b2100);
+  background:linear-gradient(45deg, #0aacec ,#0aeee3 );
   border-radius: 12px;
   cursor: pointer;
+  color:black;
 }
 
 /* .form {
@@ -345,6 +348,21 @@ body {
   color: #cf0808;
 }
 
+h4{
+  color:white;
+}
 
+.chat-title {
+  color: black;
+  text-align: left;
+}
+
+h5{
+  font-size: 1.5rem;
+}
+
+.status {
+  color:black;
+}
 
 

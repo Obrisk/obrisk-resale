@@ -56,9 +56,37 @@
     color:#0aeee3;
 }
 
+.classified-card {
+    /*140*/
+    height: 250px;
+    width: 156px;
+ }
+ .card-img {
+    width: 100%; /* or any custom size */
+    height: 100%; 
+    object-fit: contain;
+}
+
+ /* iPhone 5, 5C, 5S, iPod Touch 5g */
+ @media (max-width: 330px){
+    .classified-card {
+        /*140*/
+        width: 137px;
+    }
+} 
+
+ /* Classified details swap thumbnails */
 @media (max-width: 600px) {
     .thumbs > img {
         width: 60px;
         height: 60px;
     }
   }
+
+
+
+
+
+
+
+  
