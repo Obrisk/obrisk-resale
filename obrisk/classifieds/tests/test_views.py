@@ -20,6 +20,8 @@ def get_temp_img():
     return open(f.name, mode="rb")
 
 
+
+
 class ClassifiedsViewsTest(TestCase):
     def setUp(self):
         self.user = self.make_user("first_user")
