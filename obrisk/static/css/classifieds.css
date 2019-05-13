@@ -55,3 +55,30 @@
 .btn-red:hover {
     color:#0aeee3;
 }
+
+.classified-card {
+    /*140*/
+    height: 250px;
+    width: 156px;
+ 
+ }
+
+ 
+.card-img {
+    width: 100%; /* or any custom size */
+    height: 100%; 
+    object-fit: contain;
+}
+
+
+ /* iPhone 5, 5C, 5S, iPod Touch 5g */
+@media screen and (device-aspect-ratio: 40/71) {
+    .classified-card {
+        /*140*/
+        height: 250px;
+        max-width: 136px;
+        
+    }
+
+
+}

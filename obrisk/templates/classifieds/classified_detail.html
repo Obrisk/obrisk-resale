@@ -81,7 +81,7 @@
 
 
       <p style="overflow-y: auto;"> <a href="{% url 'users:detail' classified.user.username %}">
-          {% thumbnail classified.user.picture "x35" as im %}
+          {% thumbnail classified.user.picture "35x35" crop="center" upscale="true" as im %}
           <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
             class="user-image">
           {% empty %}
@@ -113,7 +113,7 @@
       <!-- <div class="col-md-8"> -->
         {% for classified in similar_classifieds %}
           <!-- Classified ad. -->
-          <div class="card mr-2 mb-3" style="height: 250px; width:156px">  
+          <div class="card classified-card mr-2 mb-3" >  
               <!--Display image-->
               <div class="card-img-top img-responsive">
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >

@@ -6,7 +6,8 @@ html, body, .chat {
 }
 
 body {
-  margin: 0;
+  margin-left: 25px;
+  margin-right: 25px;
 }
 
 .chat {

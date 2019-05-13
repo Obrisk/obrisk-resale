@@ -6,6 +6,8 @@
 
 {% block head %}
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+
 
 {% endblock head %}
 
@@ -20,18 +22,18 @@
     </ol>
   </nav>
 
-    <div class="row">
+    <div class="row justify-content-center ">
       <!-- Classified Entries Column -->
       <!-- <div class="col-md-8"> -->
         {% for classified in classifieds %}
           <!-- Classified ad. -->
-          <div class="card mr-2 mb-3" style="height: 250px; width:156px">  
+          <div class="card classified-card mr-2 mb-3 justify-content-center" >  
               <!--Display image-->
               <div class="card-img-top img-responsive">
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                 {% for photo in images %}
                     {% if photo.classified == classified %}
-                      <img src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
+                      <img class="card-img" src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
                 {{ "<!--" }}      
                 {% endif %}
                 {% endfor %}
@@ -60,7 +62,7 @@
 
     {% for classified in other_classifieds %}
           <!-- Classified ad. -->
-          <div class="card mr-2 mb-3" style="height: 250px; width:156px">  
+          <div class="card classified-card mr-2 mb-3" >  
               <!--Display image-->
               <div class="card-img-top img-responsive">
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
