@@ -166,7 +166,6 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
-        print(images_list)
 
         for index, str_result in enumerate(images_list):
             if index == 0:
@@ -224,33 +223,42 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified.user = self.request.user
         classified.save()
 
-        bucket = oss2. Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+        bucket = oss2.Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
         images_json = form.cleaned_data['images']
 
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
-        print(images_list)
 
-        for index, str_result in enumerate(images_list):
-            if index == 0:
-                continue
-            img = ClassifiedImages(image=str_result)
-            img.classified = classified
+        try:
+            for index, str_result in enumerate(images_list):
+                if index == 0:
+                    continue
+                img = ClassifiedImages(image=str_result)
+                img.classified = classified
 
-            d = str(datetime.datetime.now())
-            thumb_name = "classifieds/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
-            style = 'image/resize,m_fill,h_140,w_140'
-            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                          oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                              oss2.compat.to_bytes(thumb_name))),
-                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            bucket.process_object(str_result, process)
-            img.image_thumb = thumb_name
+                d = str(datetime.datetime.now())
+                thumb_name = "classifieds/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
+                style = 'image/resize,m_fill,h_140,w_140'
+                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(thumb_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(str_result, process)
+                img.image_thumb = thumb_name
 
-            img.save()
+                img.save()
 
-        return super(CreateClassifiedView, self).form_valid(form)
+            return super(CreateClassifiedView, self).form_valid(form)
 
+        except oss2.exceptions.ServerError as e:
+            messages.error(self.request, "Sorry, the request has expired, \
+            it looks like you took so long to fill in the form and to upload the images for your ad. \
+            If your advertisement doesn't appear on the list below then,\
+            please choose to create a new classified again and don't delay to submit the form. "
+            + 'status={0}, request_id={1}'.format(e.status, e.request_id) )
+            #return self.form_invalid(form)
+            return reverse('classifieds:list')
+        
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')

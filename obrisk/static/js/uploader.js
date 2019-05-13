@@ -5,8 +5,6 @@
 
 
 
-
-
 /**
  * Upload file object
  * fileStats: File statistics
@@ -25,21 +23,6 @@ var Buffer = OSS.Buffer;
 var OSS = OSS.Wrapper;
 var STS = OSS.STS;
 
-
-//Create a new client
-//The front end uploads itself to oss, and does not go through the background to get relevant information. Only do the test, this can't be done in the project!
-
-// var client = new OSS({
-//     region: 'oss-cn-hangzhou',
-//     accessKeyId: 'xxxx',
-//     accessKeySecret: 'xxxx',
-//     bucket: 'xxxxx'
-// });
-// https://help.aliyun.com/document_detail/63401.html?#h3--https-
-//https 上传
-// https://bbs.aliyun.com/read/282088.html
-
-
 //client.options.endpoint.protocol = "https:" 
 var progressBar = 0;
 var progress = '';
@@ -51,9 +34,6 @@ var FOLDER = 'folder';
 var uploadType = ''; //Upload type
 
 
-
-
-
 /**
  * get sts token
  */
@@ -63,7 +43,6 @@ var applyTokenDo = function () {
         url: url,
         async: false,
         success: function (result) {
-            console.log(result)
             client = new OSS({
                 region: result.region,
                 accessKeyId: result.accessKeyId,
@@ -138,7 +117,7 @@ OssUpload.prototype = {
     // Binding event
     bindEvent: function () {
         var _this = this;
-        $('#id_title').on("blur", function () {
+        $('#id_title').on("blur", function () { 
             $("#chooseFile, #addBtn").click(function () {
                 var $this = $(this);
                 uploadType = $this.attr("data-type")
@@ -161,14 +140,22 @@ OssUpload.prototype = {
                 uploader.fileStats.totalFilesNum = uploader.fileList.length;
             });
 
-            $("#startUpload").click(function () {
-                var length = uploader.fileStats.totalFilesNum;
-                var file;
-                $(".start-uploader").css('display', 'none');
-                for (var i = 0; i < length; i++) {
-                    var filename = genKey();
-                    file = uploader.fileList[i];
-                    _this.uploadFile(file, filename);
+            $("#startUpload").click(function (event) {
+                if ($("#id_title").val() == '' || $("#id_details").val()== ''||
+                    $("#id_located_area").val() == '' || $("#id_tags").val() == '' )
+                {
+                    event.preventDefault();
+                    alert("Please fill in all of the information before uploading the images!");
+                }
+                else {
+                    var length = uploader.fileStats.totalFilesNum;
+                    var file;
+                    $(".start-uploader").css('display', 'none');
+                    for (var i = 0; i < length; i++) {
+                        var filename = genKey();
+                        file = uploader.fileList[i];
+                        _this.uploadFile(file, filename);
+                    }
                 }
 
             });
@@ -270,4 +257,23 @@ $(function () {
         downloadFile();
 
     });
+
+   
+    $(".create").click(function (event) {
+        if (!images) {
+            event.preventDefault();
+            alert("Please upload at least one image for your advertisement!")
+        }
+        else {
+            $("input[name='status']").val("A");
+            $("#id_images").val(images);
+            $("#classified-form").submit();
+        }
+    }); 
+    
+    $(".draft").click(function () {
+        $("input[name='status']").val("E");
+        $("#classified-form").submit();
+    });
+    
 });

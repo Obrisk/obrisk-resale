@@ -28,8 +28,8 @@
             <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
           {% endthumbnail %}
           <strong>   {{ user.get_profile_name|title }} </strong>
-          <span class="last-msg small">   </span>
-          <span class="msg-timestamp"> </span>
+          <span  id="last-msg"> {{ msg|truncatechars:50 }} </span>
+          <span id="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </span>
           {%  if msg.unread %}
               <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
           {% endif %}
