@@ -7,7 +7,7 @@ body {
 header .navbar-brand {
   font-size: 1.4em;
   font-weight: 200;
-  font-family: "Audiowide", cursive;
+  font-family: "Audiowide", cursive;  
 }
 
 .markdownx .markdownx-editor {
@@ -51,7 +51,7 @@ a:hover {
 }
 
 .bg-dark {
-  background:linear-gradient(45deg,#330c04, #8b2100);
+  background:linear-gradient(45deg, #0aacec ,#0aeee3); /*45deg,#330c04, #8b2100*/
 }
 
 .alert-debug {
@@ -99,7 +99,7 @@ a:hover {
 }
 
 .breadcrumb {
-  background: linear-gradient(45deg, #0aacec ,#0aeee3 );
+  background: #6061637a;
 }
 
 .card-header {
@@ -124,6 +124,12 @@ a:hover {
   background-color: white ;
   border-color: #8b2100;
   color: #0aacec;
+}
+
+.navbar-dark .navbar-brand {
+
+  color: #000;
+
 }
 
 
