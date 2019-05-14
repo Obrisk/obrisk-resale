@@ -1,3 +1,7 @@
+I have put this file here to remind myself the power of the open source and how it bootkicked obrisk.
+
+
+List of people contributed to the base project.
 Vitor Freitas - vitor@freitas.com
 Sebastian Reyes - sebaslander@gmail.com
 SurajKamble
