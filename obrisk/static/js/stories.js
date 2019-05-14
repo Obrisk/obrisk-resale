@@ -104,7 +104,7 @@ $(function () {
         $.ajax({
             url: '/stories/like/',
             data: { 'stories': stories },
-            type: 'POST',
+            type: 'GET',
             cache: false,
             success: function (data) {
                 $(".like .like-count", li).text(data.likes);

@@ -45,10 +45,9 @@ from obrisk.helpers import ajax_required
 # Note: AccessKeyId and AccessKeySecret are the keys of the sub-users.
 # RoleArn can be viewed in the console under Access Control > Role Management > Administration > Basic Information > Arn.
 #
-# Taking the Hangzhou area as an example, the Endpoint can be:
-#   http://oss-cn-hangzhou.aliyuncs.com
+# Taking the Hangzhou area as an example, the Endpoint can be
 #   https://oss-cn-hangzhou.aliyuncs.com
-# Access by HTTP and HTTPS respectively.
+# Access by HTTPS.
 
 
 access_key_id = os.getenv('OSS_STS_ID')
@@ -238,7 +237,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
                 d = str(datetime.datetime.now())
                 thumb_name = "classifieds/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
-                style = 'image/resize,m_fill,h_140,w_140'
+                style = 'image/resize,m_fill,h_156,w_156'
                 process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(
                                                                 oss2.compat.to_bytes(thumb_name))),

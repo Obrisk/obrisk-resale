@@ -30,7 +30,7 @@
           <strong>   {{ user.get_profile_name|title }} </strong>
           <span  id="last-msg"> {{ msg|truncatechars:50 }} </span>
           <span id="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </span>
-          {%  if msg.unread %}
+          {%  if msg.unread and request.user == msg.recipient %}
               <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
           {% endif %}
         </a>
