@@ -35,6 +35,7 @@ Basic Instructions
 --------------
 
 For the chat app to work please create a superuser as the url will need the kwarg of admin username.
+For development when running manage.py file please pass a flag --settings=config.settings.local to reflect the local changes.
 
 Test coverage
 ^^^^^^^^^^^^^
