@@ -7,19 +7,55 @@
 {% block head %}
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds-list.css' %}" rel="stylesheet">
+
 {% endblock head %}
 
 {% block content %}
 <!-- Page Content -->
-<div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-      <li class="breadcrumb-item active"><a href="{% url 'classifieds:list' %}">{% trans 'Classifieds' %}</a></li>
-    </ol>
-  </nav>
+  <div class="sidebar-overlay"></div>
+<div class="container mt-4">
+  
+<div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3">
 
-    <div class="row justify-content-center ">
+      <div class="toggle-tags d-lg-none">
+        <a href=""></a>
+        <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+      </div>
+      <!-- Write Classified Widget -->
+      {% if request.user.is_authenticated %}
+      <div class="text-center">
+        <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i
+            class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
+
+            {% if request.user.is_seller %}
+            <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
+              title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i>
+              {% trans 'New Classified' %}</a>
+            {% endif %}
+        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+      </div>
+      {% endif %}
+</div>
+
+  <!-- Sidebar Widgets Column -->
+  <div id="sidebar" class="sidebar">
+      <!-- Cloud Tag Widget -->
+      <div class="card">
+      <div class="card-header">
+            <h5>{% trans 'Popular tags' %}</h5>
+      </div>
+
+        <div class="card-body">
+          {% for tag, count in popular_tags %}
+          <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
+          {% endfor %}
+        </div>
+      </div>
+  </div>
+
+
+    <div class="classifieds row justify-content-center ">
       <!-- Classified Entries Column -->
       <!-- <div class="col-md-8"> -->
         {% for classified in classifieds %}
@@ -36,12 +72,20 @@
                 {% endfor %}
                 {{ "-->" }}
             </div>
-            
+                  <div class="divider"></div>
             <div class="card-body">  
-                <h6 class="card-title" > {{ classified.title}} <h6> 
-                <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
-                <i class="lead fa fa-map-marker"></i>
-                <span class="card-text small "> {{ classified.city|safe }}</span>    
+                <h6 class="card-title" > {{ classified.title|truncatechars:20}} </h6> 
+                <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+                <div class="card-meta d-flex justify-content-between">
+                  <div class="location">
+                  <small>📍</small>
+                  <span class="card-text small "> {{ classified.city|safe }}</span> 
+                  </div>
+                  <div class="share-card">
+                      <small>🔗</small>
+                  </div>  
+                </div>
+   
             </div>
           </a>
         </div>  
@@ -55,8 +99,8 @@
         {% endfor %}
       
 
+   
    <!--Will be using ajax in near future.-->
-
     {% for classified in other_classifieds %}
           <!-- Classified ad. -->
           <div class="card classified-card mr-2 mb-3 justify-content-center" >  
@@ -71,7 +115,7 @@
                 {% endfor %}
                 {{ "-->" }}
             </div>
-            
+      
             <div class="card-body">  
                 <h6 class="card-title" > {{ classified.title}} <h6> 
                 <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
@@ -85,68 +129,7 @@
   <!-- End div for row of all classified ads-->
   </div>
 
-  <div class="row">
-    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-      <ol class="carousel-indicators">
-        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-      </ol>
 
-      {# for profile in seller_profile #}
-      {% for ad in official_ads %}
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img class="d-block w-100" src="...">
-          <div class="carousel-caption d-none d-md-block">
-            <h5>...</h5>
-            <p>...</p>
-          </div>
-        </div>
-
-        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-          <span class="sr-only">Previous</span>
-        </a>
-        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-          <span class="carousel-control-next-icon" aria-hidden="true"></span>
-          <span class="sr-only">Next</span>
-        </a>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-
-
-  <div class="row">
-    <!-- Sidebar Widgets Column -->
-    <div class="col-md-4">
-      <!-- Write Classified Widget -->
-      {% if request.user.is_authenticated %}
-      <div class="text-center">
-        <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i
-            class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
-
-            {% if request.user.is_seller %}
-            <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
-              title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i>
-              {% trans 'New Classified' %}</a>
-            {% endif %}
-        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
-      </div>
-      {% endif %}
-
-      <!-- Cloud Tag Widget -->
-      <div class="card my-4">
-        <h5 class="card-header">{% trans 'Popular tags' %}</h5>
-        <div class="card-body">
-          {% for tag, count in popular_tags %}
-          <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-  </div>
 
 
   {% if is_paginated %}
@@ -182,5 +165,32 @@
   <!-- /.row -->
 </div>
 <!-- /.container -->
+<script>
+(function() {
+  var sidebar         = document.getElementById('sidebar');
+  var sidebarOverlay  = document.getElementsByClassName('sidebar-overlay')[0];
+  var container       = document.getElementsByClassName('container')[0];
+  var sidebarBtnOpen  = document.getElementById('sidebarBtnOpen');
+  
+  var openSidebar = function() {
+    sidebarOverlay.style.left = '0';
+    sidebar.style.left = '0';
+    sidebarOverlay.style.top = '0';
+    sidebar.style.display ='block';
+    $( ".classifieds" ).toggleClass( "open-sidebar" );
+  }
+  
+  var closeSidebar = function(e) {
+    e.cancelBubble = true;
+    sidebarOverlay.style.left = '-100%';
+    sidebar.style.left = '-100%';
+    $( ".classifieds" ).toggleClass( "open-sidebar" );
+    
+  }
+  
+  sidebarOverlay.addEventListener('click', closeSidebar);
+  sidebarBtnOpen.addEventListener('click', openSidebar);
+})()
+</script>
 
 {% endblock content %}
