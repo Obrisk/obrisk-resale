@@ -1,0 +1,74 @@
+nav {
+    font-family: 'Montserrat',
+        sans-serif;
+}
+
+.navbar-expand-md>.container,
+.navbar-expand-md>.container-fluid {
+    flex-wrap: wrap;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    font-size: 2em;
+    color: #fff;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    font-weight: 600;
+    font-size: 15px;
+    color: #0B4F6C;
+
+}
+
+#notifications {
+    font-size: 20px;
+    padding: auto;
+    color: #fff
+}
+
+.navbar-right {
+    flex-direction: row;
+}
+
+.navbar-nav a.is-active {
+    color: rgba(255, 255, 255, .75) !important;
+}
+
+/*Larger than mobile*/
+@media screen and (min-width: 768px) {
+
+    .navbar-nav a.is-active:after {
+        content: "";
+        width: 90px;
+        display: block;
+        border-bottom: 5px solid #fff;
+        position: absolute;
+        bottom: 0;
+        border-radius: 9999px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+}
+
+/*Laptop */
+@media screen and (min-width: 1199px) {
+
+    .navbar-nav a.is-active:after {
+        content: "";
+        width: 90px;
+        display: block;
+        border-bottom: 5px solid #fff;
+        position: absolute;
+        bottom: 0;
+        border-radius: 9999px;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .navbar-brand {
+        margin-right: 6rem
+    }
+
+}

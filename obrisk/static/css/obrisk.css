@@ -7,7 +7,7 @@ body {
 header .navbar-brand {
   font-size: 1.4em;
   font-weight: 200;
-  font-family: "Audiowide", cursive;  
+  font-family: "Audiowide", cursive;
 }
 
 .markdownx .markdownx-editor {
@@ -32,27 +32,23 @@ header .navbar-brand {
   padding: 1em 0;
 }
 
-#notifications {
-  font-size: 1.5em;
-  padding: 13px;
-  color: #dddddd;
-}
 
 #notifications.new-notifications {
   color: #0aeee3;
 }
 
 a {
-  color: white ;
+  color: white;
 }
 
 a:hover {
-  color:#0aacec;
-  text-decoration:none;
+  color: #0aacec;
+  text-decoration: none;
 }
 
 .bg-dark {
-  background:linear-gradient(45deg, #0aacec ,#0aeee3); /*45deg,#330c04, #8b2100*/
+  background: linear-gradient(45deg, #0aacec, #0aeee3);
+  /*45deg,#330c04, #8b2100*/
 }
 
 .alert-debug {
@@ -105,7 +101,7 @@ a:hover {
 
 .card-header {
   color: white;
-  background:linear-gradient(45deg,#330c04, #8b2100)
+  background: linear-gradient(45deg, #330c04, #8b2100)
 }
 
 .card {
@@ -113,7 +109,7 @@ a:hover {
 }
 
 .btn-dark {
-  background: linear-gradient(45deg, #0aacec ,#0aeee3 );
+  background: linear-gradient(45deg, #0aacec, #0aeee3);
   color: black;
 }
 
@@ -123,29 +119,14 @@ a:hover {
 }
 
 .btn-danger:hover {
-  background-color: white ;
+  background-color: white;
   border-color: #8b2100;
   color: #0aacec;
 }
 
-.navbar-dark .navbar-brand {
 
-  color: black;
 
-}
 
-.navbar-dark .navbar-nav .nav-link {
-
-  color: rgba(0, 0, 0, 0.5);
-
-}
-
-#notifications {
-
-  font-size: 1.5em;
-  color: #000;
-
-}
 
 .card-header {
   color: white;
@@ -153,8 +134,8 @@ a:hover {
 }
 
 .navbar-dark .navbar-toggler {
-  color: rgba(255,255,255,.1);
-  border-color: rgba(255,255,255,.1);
+  color: rgba(255, 255, 255, .1);
+  border-color: rgba(255, 255, 255, .1);
 }
 
 .btn {
@@ -172,6 +153,5 @@ a:hover {
   line-height: 1.5;
   border-radius: 2rem;
   border: 0px;
-  transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
-
