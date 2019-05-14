@@ -1,0 +1,128 @@
+../../../../../usr/local/lib/python3.6/dist-packages/django/contrib/messages/__init__.py:1: [E] PYFLAKES:'from django.contrib.messages.api import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/contrib/messages/__init__.py:1: [E] PYFLAKES:'django.contrib.messages.api.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/contrib/messages/__init__.py:2: [E] PYFLAKES:'from django.contrib.messages.constants import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/contrib/messages/__init__.py:2: [E] PYFLAKES:'django.contrib.messages.constants.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:5: [E] PYFLAKES:'django.core.exceptions.ValidationError' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:6: [E] PYFLAKES:'from django.forms.boundfield import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:6: [E] PYFLAKES:'django.forms.boundfield.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:7: [E] PYFLAKES:'from django.forms.fields import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:7: [E] PYFLAKES:'django.forms.fields.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:8: [E] PYFLAKES:'from django.forms.forms import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:8: [E] PYFLAKES:'django.forms.forms.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:9: [E] PYFLAKES:'from django.forms.formsets import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:9: [E] PYFLAKES:'django.forms.formsets.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:10: [E] PYFLAKES:'from django.forms.models import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:10: [E] PYFLAKES:'django.forms.models.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:11: [E] PYFLAKES:'from django.forms.widgets import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/__init__.py:11: [E] PYFLAKES:'django.forms.widgets.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/fields.py:18: [E] PYFLAKES:'django.core.validators.EMPTY_VALUES' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/forms.py:10: [E] PYFLAKES:'django.forms.boundfield.BoundField' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django/forms/forms.py:13: [E] PYFLAKES:'django.forms.utils.pretty_name' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/compatibility.py:4: [E] PYFLAKES:undefined name 'basestring'
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/compatibility.py:15: [E] PYFLAKES:undefined name 'unicode'
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/compatibility.py:18: [E] PYFLAKES:undefined name 'long'
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/tests/test_form_helper.py:585: [E] PYFLAKES:redefinition of unused 'test_bootstrap_form_show_errors' from line 557
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/tests/test_form_helper.py:689: [E] PYFLAKES:redefinition of unused 'test_error_and_help_inline' from line 659
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/templatetags/crispy_forms_field.py:146: [E] PYFLAKES:use ==/!= to compare str, bytes, and int literals
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/templatetags/crispy_forms_tags.py:15: [E] PYFLAKES:'from crispy_forms.templatetags.crispy_forms_filters import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/crispy_forms/templatetags/crispy_forms_tags.py:15: [E] PYFLAKES:'crispy_forms.templatetags.crispy_forms_filters.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/compat.py:62: [E] PYFLAKES:undefined name 'unicode'
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/compat.py:64: [E] PYFLAKES:undefined name 'unicode'
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/__init__.py:1: [E] PYFLAKES:'sorl.thumbnail.fields.ImageField' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/__init__.py:2: [E] PYFLAKES:'sorl.thumbnail.shortcuts.get_thumbnail' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/__init__.py:2: [E] PYFLAKES:'sorl.thumbnail.shortcuts.delete' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/__init__.py:3: [E] PYFLAKES:'sorl.__version__' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/admin/__init__.py:1: [E] PYFLAKES:'django.forms.ClearableFileInput' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/templatetags/sorl_thumbnail.py:8: [E] PYFLAKES:'from .thumbnail import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/sorl/thumbnail/templatetags/sorl_thumbnail.py:8: [E] PYFLAKES:'.thumbnail.*' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/phonenumber_field/phonenumber.py:14: [E] PYFLAKES:undefined name 'basestring'
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/compat.py:7: [E] PYFLAKES:'UserDict.UserDict' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/compat.py:12: [E] PYFLAKES:'urlparse.parse_qsl' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/compat.py:12: [E] PYFLAKES:'urlparse.parse_qs' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/compat.py:12: [E] PYFLAKES:'urlparse.urlparse' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/compat.py:12: [E] PYFLAKES:'urlparse.urlunparse' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/compat.py:12: [E] PYFLAKES:'urlparse.urljoin' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/tests.py:20: [E] PYFLAKES:'mock.Mock' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/tests.py:20: [E] PYFLAKES:'mock.patch' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/socialaccount/migrations/0003_extra_data_default_dict.py:4: [E] PYFLAKES:'django.db.models' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/account/signals.py:1: [E] PYFLAKES:'django.contrib.auth.signals.user_logged_out' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/account/signals.py:1: [E] PYFLAKES:'django.contrib.auth.signals.user_logged_out' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/allauth/socialaccount/migrations/0003_extra_data_default_dict.py:4: [E] PYFLAKES:'django.db.models' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/types.py:36: [E] PYFLAKES:undefined name 'Model'
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/types.py:38: [E] PYFLAKES:undefined name 'Type'
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/utils.py:15: [E] PYFLAKES:'django_filters' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:425: [E] PYFLAKES:local variable 'fd' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:544: [E] PYFLAKES:local variable 'r' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:583: [E] PYFLAKES:local variable 'r' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:624: [E] PYFLAKES:local variable 'r' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:690: [E] PYFLAKES:local variable 'r' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:731: [E] PYFLAKES:local variable 'r' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:908: [E] PYFLAKES:local variable 'reporter_1' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:912: [E] PYFLAKES:local variable 'reporter_2' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:971: [E] PYFLAKES:local variable 'reporter_1' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:975: [E] PYFLAKES:local variable 'reporter_2' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_query.py:999: [E] PYFLAKES:local variable 'expected' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_converter.py:86: [E] PYFLAKES:redefinition of unused 'test_should_url_convert_string' from line 70
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/tests/test_converter.py:94: [E] PYFLAKES:redefinition of unused 'test_should_auto_convert_id' from line 90
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/rest_framework/tests/test_field_converter.py:5: [E] PYFLAKES:'graphene.InputObjectType' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/rest_framework/tests/test_mutation.py:148: [E] PYFLAKES:local variable 'result' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/filter/tests/test_fields.py:224: [E] PYFLAKES:local variable 'schema' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/filter/tests/test_fields.py:385: [E] PYFLAKES:redefinition of unused 'test_filter_filterset_related_results' from line 230
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/filter/tests/test_fields.py:395: [E] PYFLAKES:local variable 'r1' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/filter/tests/test_fields.py:398: [E] PYFLAKES:local variable 'r2' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/filter/tests/test_fields.py:403: [E] PYFLAKES:local variable 'r3' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/filter/tests/test_fields.py:571: [E] PYFLAKES:local variable 'r' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/filter/tests/test_fields.py:617: [E] PYFLAKES:local variable 'r' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/forms/__init__.py:1: [E] PYFLAKES:'.forms.GlobalIDFormField' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/forms/__init__.py:1: [E] PYFLAKES:'.forms.GlobalIDMultipleChoiceField' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/graphene_django/forms/tests/test_converter.py:4: [E] PYFLAKES:'graphene' imported but unused
+../../../.local/lib/python3.6/site-packages/star_ratings/migrations/0003_auto_20160721_1127.py:4: [E] PYFLAKES:'django.db.models' imported but unused
+obrisk/users/apps.py:15: [E] PYFLAKES:'users.signals' imported but unused
+obrisk/users/forms.py:5: [E] PYFLAKES:'obrisk.users.models' imported but unused
+obrisk/users/models.py:2: [E] PYFLAKES:'django.contrib.auth.signals.user_logged_in' imported but unused
+obrisk/users/models.py:2: [E] PYFLAKES:'django.contrib.auth.signals.user_logged_out' imported but unused
+obrisk/users/tests/test_admin.py:19: [E] PYFLAKES:local variable 'valid' is assigned to but never used
+obrisk/classifieds/urls.py:2: [E] PYFLAKES:'django.views.generic.TemplateView' imported but unused
+obrisk/classifieds/views.py:3: [E] PYFLAKES:'django.contrib.auth.decorators.permission_required' imported but unused
+obrisk/classifieds/views.py:5: [E] PYFLAKES:'django.views.generic.FormView' imported but unused
+obrisk/classifieds/views.py:6: [E] PYFLAKES:'django.views.generic.edit.BaseFormView' imported but unused
+obrisk/classifieds/views.py:8: [E] PYFLAKES:'django.shortcuts.render' imported but unused
+obrisk/classifieds/views.py:8: [E] PYFLAKES:'django.shortcuts.get_object_or_404' imported but unused
+obrisk/classifieds/views.py:10: [E] PYFLAKES:'django.template.RequestContext' imported but unused
+obrisk/classifieds/views.py:11: [E] PYFLAKES:'django.core.mail.send_mail' imported but unused
+obrisk/classifieds/views.py:12: [E] PYFLAKES:'django.utils.decorators.method_decorator' imported but unused
+obrisk/classifieds/views.py:13: [E] PYFLAKES:'django.http.HttpResponse' imported but unused
+obrisk/classifieds/views.py:14: [E] PYFLAKES:'django.forms' imported but unused
+obrisk/classifieds/views.py:16: [E] PYFLAKES:'django.core.paginator.Paginator' imported but unused
+obrisk/classifieds/views.py:16: [E] PYFLAKES:'django.core.paginator.EmptyPage' imported but unused
+obrisk/classifieds/views.py:16: [E] PYFLAKES:'django.core.paginator.PageNotAnInteger' imported but unused
+obrisk/classifieds/views.py:20: [E] PYFLAKES:'obrisk.classifieds.models.OfficialAdImages' imported but unused
+obrisk/classifieds/views.py:24: [E] PYFLAKES:'re' imported but unused
+obrisk/classifieds/views.py:36: [E] PYFLAKES:'django.views.decorators.csrf.csrf_exempt' imported but unused
+obrisk/classifieds/views.py:38: [E] PYFLAKES:'obrisk.helpers.ajax_required' imported but unused
+obrisk/classifieds/views.py:40: [E] PYFLAKES:redefinition of unused 'oss2' from line 32
+obrisk/classifieds/tests/test_views.py:64: [E] PYFLAKES:local variable 'response' is assigned to but never used
+obrisk/classifieds/tests/test_views.py:74: [E] PYFLAKES:local variable 'current_count' is assigned to but never used
+obrisk/classifieds/tests/test_views.py:75: [E] PYFLAKES:local variable 'response' is assigned to but never used
+obrisk/classifieds/tests/test_views.py:90: [E] PYFLAKES:local variable 'response' is assigned to but never used
+obrisk/classifieds/migrations/0008_officialad_officialadimages.py:6: [E] PYFLAKES:'obrisk.classifieds.models' imported but unused
+obrisk/classifieds/migrations/0001_initial.py:6: [E] PYFLAKES:'obrisk.classifieds.models' imported but unused
+obrisk/messager/tests/test_models.py:34: [E] PYFLAKES:local variable 'conversation' is assigned to but never used
+obrisk/qa/forms.py:5: [E] PYFLAKES:'obrisk.qa.models.Answer' imported but unused
+obrisk/search/tests/test_views.py:65: [E] PYFLAKES:local variable 'response' is assigned to but never used
+obrisk/posts/views.py:8: [E] PYFLAKES:'obrisk.posts.models.Comment' imported but unused
+obrisk/posts/tests/test_views.py:62: [E] PYFLAKES:local variable 'response' is assigned to but never used
+obrisk/posts/tests/test_views.py:72: [E] PYFLAKES:local variable 'current_count' is assigned to but never used
+obrisk/posts/tests/test_views.py:73: [E] PYFLAKES:local variable 'response' is assigned to but never used
+obrisk/posts/tests/test_views.py:88: [E] PYFLAKES:local variable 'response' is assigned to but never used
+../../../../../usr/local/lib/python3.6/dist-packages/debug_toolbar/management/commands/debugsqlshell.py:6: [E] PYFLAKES:'django.core.management.commands.shell.Command' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/debug_toolbar/panels/sql/__init__.py:1: [E] PYFLAKES:'debug_toolbar.panels.sql.panel.SQLPanel' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/debug_toolbar/panels/templates/__init__.py:1: [E] PYFLAKES:'debug_toolbar.panels.templates.panel.TemplatesPanel' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django_extensions/import_subclasses.py:8: [E] PYFLAKES:'typing.Union' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django_extensions/management/utils.py:67: [E] PYFLAKES:'ipdb' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django_extensions/management/utils.py:68: [E] PYFLAKES:'IPython' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/django_extensions/management/commands/runserver_plus.py:323: [E] PYFLAKES:'OpenSSL' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/environ/compat.py:30: [E] PYFLAKES:undefined name 'basestring'
+../../../../../usr/local/lib/python3.6/dist-packages/environ/compat.py:47: [E] PYFLAKES:'json' imported but unused
+../../../../../usr/local/lib/python3.6/dist-packages/environ/__init__.py:1: [E] PYFLAKES:'from .environ import *' used; unable to detect undefined names
+../../../../../usr/local/lib/python3.6/dist-packages/environ/__init__.py:1: [E] PYFLAKES:'.environ.*' imported but unused
