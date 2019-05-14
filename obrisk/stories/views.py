@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView
 
 from obrisk.helpers import ajax_required, AuthorRequiredMixin
@@ -55,21 +55,20 @@ def post_stories(request):
         return HttpResponseBadRequest(
             content=_(f'Text is {lenght} characters longer than accepted.'))
 
-
+@csrf_exempt
 @login_required
 @ajax_required
-@ensure_csrf_cookie
-@require_http_methods(["POST"])
+@require_http_methods(["GET"])
+#The only reason this method is GET is because the server will return 403 on the live site,
+#even when ignoring the csrf with exempt decorator. Need to re-visit this.
 def like(request):
     """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""
-    #X-CSRFToken
-    stories_id = request.POST['stories']
+    stories_id = request.GET['stories']
     stories = Stories.objects.get(pk=stories_id)
     user = request.user
     stories.switch_like(user)
     return JsonResponse({"likes": stories.count_likers()})
-
 
 @login_required
 @ajax_required
