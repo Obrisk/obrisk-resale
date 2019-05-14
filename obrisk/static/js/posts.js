@@ -63,7 +63,6 @@ $(document).ready(function(){
                 $('#comment-notify').html(data);
                 $('#commentForm')[0].reset();
                 location.reload();
-               
             },
             error: function(xhr, desc, err){
                 console.log(err);

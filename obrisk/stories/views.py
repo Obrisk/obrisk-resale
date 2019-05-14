@@ -5,7 +5,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView
 
 from obrisk.helpers import ajax_required, AuthorRequiredMixin
@@ -58,12 +58,11 @@ def post_stories(request):
 
 @login_required
 @ajax_required
-@ensure_csrf_cookie
+@csrf_exempt
 @require_http_methods(["POST"])
 def like(request):
     """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""
-    #X-CSRFToken
     stories_id = request.POST['stories']
     stories = Stories.objects.get(pk=stories_id)
     user = request.user
