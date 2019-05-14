@@ -155,3 +155,9 @@ a:hover {
   border: 0px;
   transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
 }
+
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1250px;
+  }
+}
