@@ -30,7 +30,7 @@
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                 {% for photo in images %}
                     {% if photo.classified == classified %}
-                      <img class="card-img" src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
+                      <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
                 {{ "<!--" }}      
                 {% endif %}
                 {% endfor %}
@@ -65,7 +65,7 @@
                 <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
                 {% for photo in images %}
                     {% if photo.classified == classified %}
-                      <img class="card-img" src="http://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
+                      <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
                 {{ "<!--" }}      
                 {% endif %}
                 {% endfor %}

@@ -82,6 +82,11 @@ AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': f'max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate',
 }
 
+# The endpoint of the bucket, now not useful more info:
+# http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region
+#AWS_S3_ENDPOINT_URL = 'https://s3.ap-northeast-2.amazonaws.com/'
+
+
 # STATIC
 # ------------------------
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
