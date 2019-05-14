@@ -1,8 +1,4 @@
 $(function () {
-    function hide_stream_update() {
-        $(".stream-update").hide();
-    };
-
     function getCookie(name) {
         // Function to get any cookie available in the session.
         var cookieValue = null;
@@ -35,6 +31,11 @@ $(function () {
             }
         }
     });
+
+    function hide_stream_update() {
+        $(".stream-update").hide();
+    };
+
 
     // Focus on the modal input by default.
     $('#storiesFormModal').on('shown.bs.modal', function () {
