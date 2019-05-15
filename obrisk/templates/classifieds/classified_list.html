@@ -141,7 +141,7 @@
         <h5 class="card-header">{% trans 'Popular tags' %}</h5>
         <div class="card-body">
           {% for tag, count in popular_tags %}
-          <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
+          <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
           {% endfor %}
         </div>
       </div>
@@ -152,15 +152,15 @@
   {% if is_paginated %}
   <div class="row">
     <ul class="pagination justify-content-center mb-4">
-      {% if page_obj.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr;
+      {% if page.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">&larr;
           {% trans 'Newer' %}</a></li>
       {% else %}
       <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
       {% endif %}
 
           {% for i in paginator.page_range %}
-              {% if page_obj.number == i %}
+              {% if page.number == i %}
               <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
               </li>
               {% else %}
@@ -168,8 +168,8 @@
               {% endif %}
           {% endfor %}
 
-      {% if page_obj.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Older' %}
+      {% if page.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">{% trans 'Older' %}
           &rarr;</a></li>
       {% else %}
       <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
