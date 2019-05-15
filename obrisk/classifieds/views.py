@@ -15,6 +15,7 @@ from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 
+from taggit.models import Tag
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm
@@ -49,7 +50,6 @@ from obrisk.helpers import ajax_required
 #   https://oss-cn-hangzhou.aliyuncs.com
 # Access by HTTPS.
 
-
 access_key_id = os.getenv('OSS_STS_ID')
 access_key_secret = os.getenv('OSS_STS_KEY')
 bucket_name = os.getenv('OSS_BUCKET')
@@ -65,7 +65,6 @@ class StsToken(object):
     :param str security_token: temporary user token
     :param str request_id: request ID
     """
-
     def __init__(self):
         self.access_key_id = ''
         self.access_key_secret = ''
@@ -102,31 +101,43 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
     return token
 
+@login_required
+@require_http_methods(["GET"])
+def classified_list(request, tag_slug=None):
 
-class ClassifiedsListView(LoginRequiredMixin, ListView):
-    """Basic ListView implementation to call the published classifieds list."""
-    model = Classified
-    paginate_by = 50
-    context_object_name = "classifieds"
+    classifieds_list = Classified.objects.get_active().filter(city=request.user.city)
+    popular_tags= Classified.objects.get_counted_tags()
+    images = ClassifiedImages.objects.all()
+    other_classifieds = Classified.objects.exclude(city=request.user.city)
 
-    def get_context_data(self, *args, **kwargs):
-        context = super(ClassifiedsListView, self).get_context_data(*args, **kwargs)
-        context['popular_tags'] = Classified.objects.get_counted_tags()
-        context['images'] = ClassifiedImages.objects.all()
-        context['other_classifieds'] = Classified.objects.exclude(city=self.request.user.city)
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        classifieds_list = Classified.objects.get_active().filter(tags__in=[tag])
+        other_classifieds = ClassifiedImages.objects.none()
 
-        return context
+    paginator = Paginator(classifieds_list, 30) # 50 classifieds in each page
 
-    def get_queryset(self, **kwargs):
-        return Classified.objects.get_active().filter(city=self.request.user.city)
+    page = request.GET.get('page')
+    try:
+        classifieds = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        classifieds = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range deliver last page of results
+        classifieds = paginator.page(paginator.num_pages)
 
+    return render(request, 'classifieds/classified_list.html',
+                {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds,
+                 'tag': tag, 'images': images, 'popular_tags': popular_tags })
 
-class ExpiredListView(ClassifiedsListView):
-    """Overriding the original implementation to call the expired classifieds
-    list."""
+# class ExpiredListView(ClassifiedsListView):
+#     """Overriding the original implementation to call the expired classifieds
+#     list."""
 
-    def get_queryset(self, **kwargs):
-        return Classified.objects.get_expired()
+#     def get_queryset(self, **kwargs):
+#         return Classified.objects.get_expired()
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
@@ -139,13 +150,13 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         self.object = None
         super().__init__(**kwargs)
     
-    def post(self, request, *args, **kwargs):
+    def Classified(self, request, *args, **kwargs):
         """
-        Handles POST requests, instantiating a form instance and its inline
-        formsets with the passed POST variables and then checking them for
+        Handles Classified requests, instantiating a form instance and its inline
+        formsets with the passed Classified variables and then checking them for
         validity.
         """
-        form = OfficialAdForm(self.request.POST)
+        form = OfficialAdForm(self.request.Classified)
 
         if form.is_valid():
             return self.form_valid(form)
@@ -201,13 +212,13 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         self.object = None
         super().__init__(**kwargs)
 
-    def post(self, request, *args, **kwargs):
+    def Classified(self, request, *args, **kwargs):
         """
-        Handles POST requests, instantiating a form instance and its inline
-        formsets with the passed POST variables and then checking them for
+        Handles Classified requests, instantiating a form instance and its inline
+        formsets with the passed Classified variables and then checking them for
         validity.
         """
-        form = ClassifiedForm(self.request.POST)
+        form = ClassifiedForm(self.request.Classified)
 
         if form.is_valid():
             return self.form_valid(form)
@@ -281,7 +292,6 @@ def get_oss_auth(request):
         'bucket': bucket_name
     }
     return JsonResponse(data)
-
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""

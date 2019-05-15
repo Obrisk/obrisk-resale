@@ -147,7 +147,7 @@
         <h5 class="card-header">{% trans 'tags' %}</h5>
         <div class="card-body">
           {% for tag in classified.tags.all %}
-          <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
+          <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="badge badge-info">{{ tag }}</span></a>
           {% endfor %}
         </div>
       </div>
