@@ -63,33 +63,35 @@ X_FRAME_OPTIONS = 'DENY'
 
 # STORAGES
 # ------------------------------------------------------------------------------
-# https://django-storages.readthedocs.io/en/latest/#installation
-INSTALLED_APPS += ['storages']  # noqa F405
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID')
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME')
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_AUTO_CREATE_BUCKET = True
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_QUERYSTRING_AUTH = False
-# DO NOT change these unless you know what you're doing.
-_AWS_EXPIRY = 60 * 60 * 24 * 7
-# https://django-storages.readthedocs.io/en/latest/backends/amazon-S3.html#settings
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': f'max-age={_AWS_EXPIRY}, s-maxage={_AWS_EXPIRY}, must-revalidate',
-}
+# https://github.com/aliyun/django-oss-storage
+INSTALLED_APPS += ['django_oss_storage']  # noqa F405
+# AliCloud access key ID
+OSS_ACCESS_KEY_ID = env('OSS_STS_ID')
+
+# AliCloud access key secret
+OSS_ACCESS_KEY_SECRET = env('OSS_STS_KEY')
+
+# The name of the bucket to store files in
+OSS_BUCKET_NAME = env('OSS_BUCKET')
+
+# The URL of AliCloud OSS endpoint
+# Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
+OSS_ENDPOINT = env('OSS_ENDPOINT')
+
+# The default location for your files
+MEDIA_URL = '/obdev-media/'
 
 # STATIC
+#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
 # ------------------------
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+# The default location for your static files
+STATIC_URL = '/obdev-static/'
+STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 
 # MEDIA
 # ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-MEDIA_URL = f'https://s3.amazonaws.com/{AWS_STORAGE_BUCKET_NAME}/'
+DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+MEDIA_URL = '/media-obdev/'
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
