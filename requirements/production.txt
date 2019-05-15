@@ -10,5 +10,6 @@ gunicorn>=19.9.0  #https://gunicorn.org/
 # Django
 # ------------------------------------------------------------------------------
 django-anymail>=2.0  # https://github.com/anymail/django-anymail
+django-oss-storage #https://github.com/aliyun/django-oss-storage
 django-storages>=1.6.5  # https://github.com/jschneier/django-storages
 
