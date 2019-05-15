@@ -13,183 +13,195 @@
 
 {% block content %}
 <!-- Page Content -->
-  <div class="sidebar-overlay"></div>
+<div class="sidebar-overlay"></div>
 <div class="container mt-4">
-  
-<div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3">
 
-      <div class="toggle-tags d-lg-none">
-        <a href=""></a>
-        <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-      </div>
-      <!-- Write Classified Widget -->
-      {% if request.user.is_authenticated %}
-      <div class="text-center">
-        <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i
-            class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
+  <div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3">
 
-            {% if request.user.is_seller %}
-            <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
-              title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i>
-              {% trans 'New Classified' %}</a>
-            {% endif %}
-        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
-      </div>
+    <div class="toggle-tags d-lg-none">
+      <a href=""></a>
+      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+    </div>
+    <!-- Write Classified Widget -->
+    {% if request.user.is_authenticated %}
+    <div class="text-center">
+      <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i
+          class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
+
+      {% if request.user.is_seller %}
+      <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
+        title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i>
+        {% trans 'New Classified' %}</a>
       {% endif %}
-</div>
+      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+    </div>
+    {% endif %}
+  </div>
 
   <!-- Sidebar Widgets Column -->
   <div id="sidebar" class="sidebar">
-      <!-- Cloud Tag Widget -->
-      <div class="card">
+    <!-- Cloud Tag Widget -->
+    <div class="card">
       <div class="card-header">
-            <h5>{% trans 'Popular tags' %}</h5>
+        <h5>{% trans 'Popular tags' %}</h5>
       </div>
 
-        <div class="card-body">
-          {% for tag, count in popular_tags %}
-          <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
-          {% endfor %}
-        </div>
-      </div>
-  </div>
-
-
-    <div class="classifieds row justify-content-center ">
-      <!-- Classified Entries Column -->
-      <!-- <div class="col-md-8"> -->
-        {% for classified in classifieds %}
-          <!-- Classified ad. -->
-          <div class="card classified-card mr-2 mb-3 justify-content-center" >  
-              <!--Display image-->
-              <div class="card-img-top img-responsive">
-                <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
-                {% for photo in images %}
-                    {% if photo.classified == classified %}
-                      <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
-                {{ "<!--" }}      
-                {% endif %}
-                {% endfor %}
-                {{ "-->" }}
-            </div>
-                  <div class="divider"></div>
-            <div class="card-body">  
-                <h6 class="card-title" > {{ classified.title|truncatechars:20}} </h6> 
-                <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                <div class="card-meta d-flex justify-content-between">
-                  <div class="location">
-                  <small>📍</small>
-                  <span class="card-text small "> {{ classified.city|safe }}</span> 
-                  </div>
-                  <div class="share-card">
-                      <small>🔗</small>
-                  </div>  
-                </div>
-   
-            </div>
-          </a>
-        </div>  
-             
-        {% empty %}
-          <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }} 
-          {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
-           <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a> 
-           {% trans 'Or check what we have found from other places '%}  </h6>
-           <br />
+      <div class="card-body">
+        {% for tag, count in popular_tags %}
+        <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }}
+            {{ tag }}</span></a>
         {% endfor %}
-      
-
-   
-   <!--Will be using ajax in near future.-->
-    {% for classified in other_classifieds %}
-          <!-- Classified ad. -->
-          <div class="card classified-card mr-2 mb-3 justify-content-center" >  
-              <!--Display image-->
-              <div class="card-img-top img-responsive">
-                <a href="{% url 'classifieds:classified' classified.slug %}"  style="color:black; text-decoration:none; background-color:none" >
-                {% for photo in images %}
-                    {% if photo.classified == classified %}
-                      <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">   
-                {{ "<!--" }}      
-                {% endif %}
-                {% endfor %}
-                {{ "-->" }}
-            </div>
-      
-            <div class="card-body">  
-                <h6 class="card-title" > {{ classified.title}} <h6> 
-                <small class="card-subtitle text-danger"> CNY {{ classified.price|title|truncatechars:20 }} </small> <br>
-                <i class="lead fa fa-map-marker"></i>
-                <span class="card-text small "> {{ classified.city|safe }}</span>    
-            </div>
-          </a>
-        </div>  
-      {% endfor %}
+      </div>
     </div>
-  <!-- End div for row of all classified ads-->
   </div>
 
 
-
-  {% if is_paginated %}
-  <div class="row">
-    <ul class="pagination justify-content-center mb-4">
-      {% if page.has_previous %}
-      <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">&larr;
-          {% trans 'Newer' %}</a></li>
-      {% else %}
-      <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
-      {% endif %}
-
-          {% for i in paginator.page_range %}
-              {% if page.number == i %}
-              <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
-              </li>
-              {% else %}
-              <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-              {% endif %}
+  <div class="classifieds row justify-content-center ">
+    <!-- Classified Entries Column -->
+    <!-- <div class="col-md-8"> -->
+    {% for classified in classifieds %}
+    <!-- Classified ad. -->
+    <div class="card classified-card mr-2 mb-3 justify-content-center">
+      <!--Display image-->
+      <div class="card-img-top img-responsive">
+        <a href="{% url 'classifieds:classified' classified.slug %}"
+          style="color:black; text-decoration:none; background-color:none">
+          {% for photo in images %}
+          {% if photo.classified == classified %}
+          <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
+          {{ "<!--" }}
+          {% endif %}
           {% endfor %}
+          {{ "-->" }}
+      </div>
+      <div class="divider"></div>
+      <div class="card-body">
+        <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
+        <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+        <div class="card-meta d-flex justify-content-between">
+          <div class="location">
+            <small>📍</small>
+            <span class="card-text small "> {{ classified.city|safe }}</span>
+          </div>
+          <div class="share-card">
+            <small>🔗</small>
+          </div>
+        </div>
 
-      {% if page.has_next %}
-      <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">{% trans 'Older' %}
-          &rarr;</a></li>
-      {% else %}
-      <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
-      {% endif %}
-    </ul>
+      </div>
+      </a>
+    </div>
+
+    {% empty %}
+    <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
+      {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
+      <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
+      {% trans 'Or check what we have found from other places '%} </h6>
+    <br />
+    {% endfor %}
+
+
+
+    <!--Will be using ajax in near future.-->
+    {% for classified in other_classifieds %}
+    <!-- Classified ad. -->
+    <div class="card classified-card mr-2 mb-3 justify-content-center">
+      <!--Display image-->
+      <div class="card-img-top img-responsive">
+        <a href="{% url 'classifieds:classified' classified.slug %}"
+          style="color:black; text-decoration:none; background-color:none">
+          {% for photo in images %}
+          {% if photo.classified == classified %}
+          <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
+          {{ "<!--" }}
+          {% endif %}
+          {% endfor %}
+          {{ "-->" }}
+      </div>
+
+      <div class="divider"></div>
+      <div class="card-body">
+        <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
+        <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+        <div class="card-meta d-flex justify-content-between">
+          <div class="location">
+            <small>📍</small>
+            <span class="card-text small "> {{ classified.city|safe }}</span>
+          </div>
+          <div class="share-card">
+            <small>🔗</small>
+          </div>
+        </div>
+
+      </div>
+      </a>
+    </div>
+    {% endfor %}
   </div>
-  {% endif %}
+  <!-- End div for row of all classified ads-->
+</div>
 
 
-  <!-- /.row -->
+
+{% if is_paginated %}
+<div class="row">
+  <ul class="pagination justify-content-center mb-4">
+    {% if page.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">&larr;
+        {% trans 'Newer' %}</a></li>
+    {% else %}
+    <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
+    {% endif %}
+
+    {% for i in paginator.page_range %}
+    {% if page.number == i %}
+    <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+    </li>
+    {% else %}
+    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+    {% endif %}
+    {% endfor %}
+
+    {% if page.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">{% trans 'Older' %}
+        &rarr;</a></li>
+    {% else %}
+    <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+
+<!-- /.row -->
 </div>
 <!-- /.container -->
 <script>
-(function() {
-  var sidebar         = document.getElementById('sidebar');
-  var sidebarOverlay  = document.getElementsByClassName('sidebar-overlay')[0];
-  var container       = document.getElementsByClassName('container')[0];
-  var sidebarBtnOpen  = document.getElementById('sidebarBtnOpen');
-  
-  var openSidebar = function() {
-    sidebarOverlay.style.left = '0';
-    sidebar.style.left = '0';
-    sidebarOverlay.style.top = '0';
-    sidebar.style.display ='block';
-    $( ".classifieds" ).toggleClass( "open-sidebar" );
-  }
-  
-  var closeSidebar = function(e) {
-    e.cancelBubble = true;
-    sidebarOverlay.style.left = '-100%';
-    sidebar.style.left = '-100%';
-    $( ".classifieds" ).toggleClass( "open-sidebar" );
-    
-  }
-  
-  sidebarOverlay.addEventListener('click', closeSidebar);
-  sidebarBtnOpen.addEventListener('click', openSidebar);
-})()
+  (function () {
+    var sidebar = document.getElementById('sidebar');
+    var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
+    var container = document.getElementsByClassName('container')[0];
+    var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
+
+    var openSidebar = function () {
+      sidebarOverlay.style.left = '0';
+      sidebar.style.left = '0';
+      sidebarOverlay.style.top = '0';
+      sidebar.style.display = 'block';
+      $(".classifieds").toggleClass("open-sidebar");
+    }
+
+    var closeSidebar = function (e) {
+      e.cancelBubble = true;
+      sidebarOverlay.style.left = '-100%';
+      sidebar.style.left = '-100%';
+      $(".classifieds").toggleClass("open-sidebar");
+
+    }
+
+    sidebarOverlay.addEventListener('click', closeSidebar);
+    sidebarBtnOpen.addEventListener('click', openSidebar);
+  })()
 </script>
 
 {% endblock content %}
