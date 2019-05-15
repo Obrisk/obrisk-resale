@@ -85,13 +85,14 @@ MEDIA_URL = '/obdev-media/'
 #I serve them in oss bucket when scaling up, don't duplicate static files in every server.
 # ------------------------
 # The default location for your static files
-STATIC_URL = '/obdev-static/'
+STATIC_URL = '/static/'
 STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 
 # MEDIA
 # ------------------------------------------------------------------------------
+MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
-MEDIA_URL = '/media-obdev/'
+
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
