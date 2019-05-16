@@ -38,7 +38,7 @@ header .navbar-brand {
 }
 
 a {
-  color: white;
+  color: #545b62;
 }
 
 a:hover {
@@ -123,7 +123,6 @@ a:hover {
   border-color: #8b2100;
   color: #0aacec;
 }
-
 
 
 
