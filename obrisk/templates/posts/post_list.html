@@ -15,7 +15,8 @@
 <!-- Page Content -->
 <div class="sidebar-overlay"></div>
 <div class="container mt-4">
-  <div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3">
+  <div
+    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
 
     <div class="toggle-tags d-lg-none">
       <a href=""></a>
@@ -24,13 +25,12 @@
     <!-- Write Classified Widget -->
     {% if request.user.is_authenticated %}
     <div class="text-center">
-      <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'New Post' %}"><i class="fa fa-pencil"
-          aria-hidden="true"></i> {% trans 'New Post' %}</a>
+      <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
+        title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
 
       {% if request.user.is_seller %}
-      <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'New Post' %}"><i class="fa fa-pencil"
-          aria-hidden="true"></i>
-        {% trans 'New Post' %}</a>
+      <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
+        title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
       {% endif %}
       <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
     </div>

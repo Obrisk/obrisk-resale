@@ -37,7 +37,7 @@ body,
 
 .list-group {
   overflow-y: scroll;
-  height: auto;
+  height: 80vh;
 }
 
 
