@@ -1,4 +1,4 @@
-import logging
+import logging,os
 
 from .base import *  # noqa
 from .base import env
@@ -61,8 +61,23 @@ SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = 'DENY'
 
+
+# STATIC
+# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
+STATICFILES_DIRS = [
+    str(APPS_DIR.path('static')),
+]
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('/static/'))
+
 # STORAGES
 # ------------------------------------------------------------------------------
+#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
+# ------------------------
+STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
+DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+
 # https://github.com/aliyun/django-oss-storage
 INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 # AliCloud access key ID
@@ -78,20 +93,13 @@ OSS_BUCKET_NAME = env('OSS_BUCKET')
 # Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
 OSS_ENDPOINT = env('OSS_ENDPOINT')
 
-# The default location for your files
-MEDIA_URL = '/obdev-media/'
-
-# STATIC
-#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
-# ------------------------
 # The default location for your static files
-STATIC_URL = '/obdev-static/'
-STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
+STATIC_URL = '/static/'
+
 
 # MEDIA
 # ------------------------------------------------------------------------------
-DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
-MEDIA_URL = '/media-obdev/'
+MEDIA_URL = '/media/'
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
