@@ -17,12 +17,13 @@ class PostForm(forms.ModelForm):
             "title": "Make it short but descriptive, the maximum is 80 characters.",
         }
 
+
 class CommentForm(forms.ModelForm):
 
     class Meta:
         model = Comment
         fields = ('body',)
         widgets = {
-            'body': forms.Textarea(attrs={'rows': 3, 'cols':'auto'}),
+            'body': forms.Textarea(attrs={'rows': 3, 'cols': 'auto'}),
         }
-        labels = { 'body':'',}
+        labels = {'body': '', }

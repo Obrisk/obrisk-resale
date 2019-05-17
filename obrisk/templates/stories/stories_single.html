@@ -2,48 +2,52 @@
 {% load humanize static %}
 {% load thumbnail %}
 
-<li class="infinite-item card" stories-id="{{ stories.uuid_id }}">
+<li class="infinite-item card mb-4" stories-id="{{ stories.uuid_id }}">
   <div class="card-body">
-    <div class="profile-picture">
-      {% thumbnail stories.user.picture "60x60" crop="center" upscale="true"  as im %}
-        <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
-      {% empty %}
-        <img src="{% static 'img/user.png' %}" class="pull-left" height="60px" alt="{% trans 'No Profile Picture' %}" />
-      {% endthumbnail %}
+    <div class="card-top d-flex justify-content-between">
+      <div class="left d-flex">
+        {% thumbnail stories.user.picture "35x35" crop="center" upscale="true"  as im %}
+        <img src="{{ im.url }}" class="user-image pull-left mr-2" width="35px" height="35px" style="border-radius: 50%;"
+          alt="{% trans 'User Image' %}">
+        {% empty %}
+        <img src="{% static 'img/user.png' %}" class="pull-left  mr-2" width="35px" height="35px"
+          alt="{% trans 'No Profile Picture' %}" />
+        {% endthumbnail %}
+        <p>
+          <strong>
+            <a href="{% url 'users:detail' stories.user.username  %}">{{ stories.user.get_profile_name|title }}</a>
+          </strong>
+        </p>
+      </div>
+      {% if stories.user == request.user %}
+      <a href="{% url 'stories:delete_stories' stories.pk %}">
+        <i class="fa fa-times pull-right" aria-hidden="true" title="{% trans 'Click to remove this stories' %}"></i>
+      </a>
+      {% endif %}
     </div>
 
     <div class="post">
-      {% if stories.user == request.user %}
-        <a href="{% url 'stories:delete_stories' stories.pk %}">
-          <i class="fa fa-times pull-right" aria-hidden="true" title="{% trans 'Click to remove this stories' %}"></i>
-        </a>
-      {% endif %}
-      <p>
-        <strong>
-          <a href="{% url 'users:detail' stories.user.username  %}">{{ stories.user.get_profile_name|title }}</a>
-        </strong>
-      </p>
+      <span class="timestamp">{{ stories.timestamp|naturaltime }}</span>
     </div>
 
-      <p class="text-justify" >{{ stories }}</p>
+    <p class="text-justify">{{ stories }}</p>
 
-      {% if stories.image %}
-        <img class="card-img-top" src="{{ stories.image }}" alt="Card image cap">
-      {% endif %}
-    
+    {% if stories.image %}
+    <img class="card-img-top" src="{{ stories.image }}" alt="Card image cap">
+    {% endif %}
+
   </div>
   <div class="interaction" id="interaction">
     <a href="#" class="like" title="{% for i in stories.get_likers %}{{ i }}&#10;{% endfor %}">
       {% if request.user in stories.get_likers %}
-        <i class="heart fa fa-heart" aria-hidden="true"></i>
+      ❤️
       {% else %}
-        <i class="heart fa fa-heart-o" aria-hidden="true"></i>
+      ❤️
       {% endif %}
       <span class="like-count">{{ stories.count_likers }}</span>
     </a>
-    <a href="#" class="comment"><i class="fa fa-comment-o" aria-hidden="true"></i>
+    <a href="#" class="comment">💬
       <span class="comment-count">{{ stories.count_thread }}</span>
     </a>
-    <span class="timestamp">{{ stories.timestamp|naturaltime }}</span>
   </div>
 </li>

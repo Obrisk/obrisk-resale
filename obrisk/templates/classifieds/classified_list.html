@@ -14,9 +14,10 @@
 {% block content %}
 <!-- Page Content -->
 <div class="sidebar-overlay"></div>
-<div class="container mt-4">
+<div class="container mt-4 p-0">
 
-  <div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3">
+  <div
+    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-md-9 ml-auto  mr-auto">
 
     <div class="toggle-tags d-lg-none">
       <a href=""></a>
@@ -25,13 +26,12 @@
     <!-- Write Classified Widget -->
     {% if request.user.is_authenticated %}
     <div class="text-center">
-      <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}" title="{% trans 'Write a new classified' %}"><i
-          class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New Classified' %}</a>
+      <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}"
+        title="{% trans 'Write a new classified' %}">📝{% trans 'New Classified' %}</a>
 
       {% if request.user.is_seller %}
       <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
-        title="{% trans 'Write a new official classified' %}"><i class="fa fa-pencil" aria-hidden="true"></i>
-        {% trans 'New Classified' %}</a>
+        title="{% trans 'Write a new official classified' %}">📝{% trans 'New Classified' %}</a>
       {% endif %}
       <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
     </div>
@@ -55,90 +55,94 @@
     </div>
   </div>
 
+  <div class="row">
+    <div
+      class="classifieds col-12 col-md-9 m-auto d-flex flex-wrap p-0 justify-content-md-start justify-content-center">
+      <!-- Classified Entries Column -->
+      <!-- <div class="col-md-9"> -->
+      {% for classified in classifieds %}
+      <!-- Classified ad. -->
+      <div class="card classified-card mr-2 mb-3 justify-content-center">
+        <!--Display image-->
+        <div class="card-img-top img-responsive">
+          <a href="{% url 'classifieds:classified' classified.slug %}"
+            style="color:black; text-decoration:none; background-color:none">
+            {% for photo in images %}
+            {% if photo.classified == classified %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
+            {{ "<!--" }}
+            {% endif %}
+            {% endfor %}
+            {{ "-->" }}
+        </div>
+        <div class="divider"></div>
+        <div class="card-body">
+          <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
+          <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+          <div class="card-meta d-flex justify-content-between">
+            <div class="location">
+              <small>📍</small>
+              <span class="card-text small "> {{ classified.city|safe }}</span>
+            </div>
+            <div class="share-card">
+              <small>🔗</small>
+            </div>
+          </div>
 
-  <div class="classifieds row justify-content-center ">
-    <!-- Classified Entries Column -->
-    <!-- <div class="col-md-8"> -->
-    {% for classified in classifieds %}
-    <!-- Classified ad. -->
-    <div class="card classified-card mr-2 mb-3 justify-content-center">
-      <!--Display image-->
-      <div class="card-img-top img-responsive">
-        <a href="{% url 'classifieds:classified' classified.slug %}"
-          style="color:black; text-decoration:none; background-color:none">
-          {% for photo in images %}
-          {% if photo.classified == classified %}
-          <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-          {{ "<!--" }}
-          {% endif %}
-          {% endfor %}
-          {{ "-->" }}
+        </div>
+        </a>
       </div>
-      <div class="divider"></div>
-      <div class="card-body">
-        <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-        <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-        <div class="card-meta d-flex justify-content-between">
-          <div class="location">
-            <small>📍</small>
-            <span class="card-text small "> {{ classified.city|safe }}</span>
-          </div>
-          <div class="share-card">
-            <small>🔗</small>
-          </div>
+
+      {% empty %}
+      <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
+        {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
+        <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
+        {% trans 'Or check what we have found from other places '%} </h6>
+      <br />
+      {% endfor %}
+
+
+
+      <!--Will be using ajax in near future.-->
+      {% for classified in other_classifieds %}
+      <!-- Classified ad. -->
+      <div class="card classified-card mr-2 mb-3 justify-content-center">
+        <!--Display image-->
+        <div class="card-img-top img-responsive">
+          <a href="{% url 'classifieds:classified' classified.slug %}"
+            style="color:black; text-decoration:none; background-color:none">
+            {% for photo in images %}
+            {% if photo.classified == classified %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
+            {{ "<!--" }}
+            {% endif %}
+            {% endfor %}
+            {{ "-->" }}
         </div>
 
-      </div>
-      </a>
-    </div>
-
-    {% empty %}
-    <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
-      {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
-      <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
-      {% trans 'Or check what we have found from other places '%} </h6>
-    <br />
-    {% endfor %}
-
-
-
-    <!--Will be using ajax in near future.-->
-    {% for classified in other_classifieds %}
-    <!-- Classified ad. -->
-    <div class="card classified-card mr-2 mb-3 justify-content-center">
-      <!--Display image-->
-      <div class="card-img-top img-responsive">
-        <a href="{% url 'classifieds:classified' classified.slug %}"
-          style="color:black; text-decoration:none; background-color:none">
-          {% for photo in images %}
-          {% if photo.classified == classified %}
-          <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-          {{ "<!--" }}
-          {% endif %}
-          {% endfor %}
-          {{ "-->" }}
-      </div>
-
-      <div class="divider"></div>
-      <div class="card-body">
-        <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-        <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-        <div class="card-meta d-flex justify-content-between">
-          <div class="location">
-            <small>📍</small>
-            <span class="card-text small "> {{ classified.city|safe }}</span>
+        <div class="divider"></div>
+        <div class="card-body">
+          <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
+          <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+          <div class="card-meta d-flex justify-content-between">
+            <div class="location">
+              <small>📍</small>
+              <span class="card-text small "> {{ classified.city|safe }}</span>
+            </div>
+            <div class="share-card">
+              <small>🔗</small>
+            </div>
           </div>
-          <div class="share-card">
-            <small>🔗</small>
-          </div>
+
         </div>
-
+        </a>
       </div>
-      </a>
+      {% endfor %}
     </div>
-    {% endfor %}
+    <!-- End div for row of all classified ads-->
+
   </div>
-  <!-- End div for row of all classified ads-->
+
 </div>
 
 
