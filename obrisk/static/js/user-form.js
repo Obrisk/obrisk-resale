@@ -124,7 +124,7 @@ const geo_data = [{
 	"cities": ["Kunming", "Yuxi", "Qujing", "Pu'er", "Baoshan", "Lijiang", "Linyi", "Zhaotong"]
 }, {
 	"name": "Zhejiang",
-	"cities": ["Hangzhou", "Huzhou", "Shaoxing", "Wenzhou", "Jiaxing", "Ningbo", "Jinhua", "Zhangzhou", "Zhoushan", "Taizhou", "Lishui"]
+	"cities": ["Hangzhou", "Huzhou", "Jiaxing", "Jinhua", "Lishui", "Ningbo", "Shaoxing", "Taizhou", "Wenzhou", "Zhangzhou", "Zhoushan"]
 }]
 
 $(document).ready(function () {
@@ -147,8 +147,14 @@ $(function () {
 		} else {
 			$("input[name='city']").val($("select[name='city']").val());
 			$("input[name='province_region']").val($("select[name='province']").val());
-			console.log("Shout out!");
 			$("#signup_form").submit();
 		}
 	});
+
+	$(".update").click(function() {
+			$("input[name='city']").val($("select[name='city']").val());
+			$("input[name='province_region']").val($("select[name='province']").val());
+			$("#update").submit();
+		}
+	);
 });
