@@ -57,9 +57,7 @@ var applyTokenDo = function () {
 
 var progress = function (p) { //p percentage 0~1
     return function (done) {
-        progressBar = (p * 100).toFixed(2) + '%';
         $totalProgressbar.css('width', progressBar)
-            .html(progressBar);
         done();
     }
 };
@@ -117,7 +115,7 @@ OssUpload.prototype = {
     // Binding event
     bindEvent: function () {
         var _this = this;
-        $('#id_title').on("blur", function () { 
+        $('#id_title').on("blur", function () {
             $("#chooseFile, #addBtn").click(function () {
                 var $this = $(this);
                 uploadType = $this.attr("data-type")
@@ -141,13 +139,11 @@ OssUpload.prototype = {
             });
 
             $("#startUpload").click(function (event) {
-                if ($("#id_title").val() == '' || $("#id_details").val()== ''||
-                    $("#id_located_area").val() == '' || $("#id_tags").val() == '' )
-                {
+                if ($("#id_title").val() == '' || $("#id_details").val() == '' ||
+                    $("#id_located_area").val() == '' || $("#id_tags").val() == '') {
                     event.preventDefault();
-                    alert("Please fill in all of the information before uploading the images!");
-                }
-                else {
+                    bootbox.alert("Please fill in all of the information before uploading the images!");
+                } else {
                     var length = uploader.fileStats.totalFilesNum;
                     var file;
                     $(".start-uploader").css('display', 'none');
@@ -258,22 +254,21 @@ $(function () {
 
     });
 
-   
+
     $(".create").click(function (event) {
         if (!images) {
             event.preventDefault();
-            alert("Please upload at least one image for your advertisement!")
-        }
-        else {
+            bootbox.alert("Please upload at least one image for your advertisement!");
+        } else {
             $("input[name='status']").val("A");
             $("#id_images").val(images);
             $("#classified-form").submit();
         }
-    }); 
-    
+    });
+
     $(".draft").click(function () {
         $("input[name='status']").val("E");
         $("#classified-form").submit();
     });
-    
+
 });

@@ -2,19 +2,15 @@
 {% load static i18n %}
 {% load crispy_forms_tags %}
 
+
 {% block head %}
+<link href="{% static 'css/post-update.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
-
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-      <li class="breadcrumb-item"><a href="{% url 'posts:drafts' %}">{% trans 'Drafts' %}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{% trans 'Update the post' %}</li>
-    </ol>
-  </nav>
-  <form action="{% url 'posts:edit_post' form.instance.pk %}" enctype="multipart/form-data"  id="posts-form" method="post" role="form">
+<div class="col-lg-8 m-auto">
+  <form action="{% url 'posts:edit_post' form.instance.pk %}" enctype="multipart/form-data" id="posts-form"
+    method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
@@ -24,9 +20,11 @@
     </div>
   </form>
   {{ form.media }}
+</div>
+
 
 {% endblock content %}
 
 {% block extra_js %}
-  <script src="{% static 'js/posts.js' %}"></script>
+<script src="{% static 'js/posts.js' %}"></script>
 {% endblock extra_js %}

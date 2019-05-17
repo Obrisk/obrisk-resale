@@ -1,29 +1,28 @@
 {% load humanize i18n static humanize %}
 {% load thumbnail %}
 
-<div class="card questions">
+<div class="mt-4 questions-card">
   <div class="card-body">
     <div>
       <h4 class="card-title">
         <a href="{% url 'qa:question_detail' question.pk %}"> {{ question.title }}</a>
       </h4>
       <a href="{% url 'qa:question_detail' question.pk %}">
-        <p>{{ question.get_markdown|safe|truncatechars:100 }}</p> </a>
-
+        <p>{{ question.get_markdown|safe|truncatechars:100 }}</p>
+      </a>
+      <div class="question-meta">
         <p class="question-info pull-left text-center">
-            <span >{{ question.count_answers }}</span>
-            <small class="text-secondary">{% trans 'Answers' %}</small>
-            <span>{{ question.total_votes }}</span>
-            <small class="text-secondary">{% trans 'Votes' %}</small>
+          <span>{{ question.count_answers }}</span>
+          <small class="text-secondary">{% trans 'Answers' %}</small>
+          <span>{{ question.total_votes }}</span>
+          <small class="text-secondary">{% trans 'Votes' %}</small>
         </p>
-
-      <br>
-
-      <div class="pull-left question-user">
-        <small class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }} {% trans 'by' %}
-        <a href="{% url 'users:detail' question.user.username  %}">{{ question.user.get_profile_name|title }}</a> </small>
+        <div class="question-user">
+          <small class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }} {% trans 'by' %}
+            <a href="{% url 'users:detail' question.user.username  %}">{{ question.user.get_profile_name|title }}</a>
+          </small>
+        </div>
       </div>
-
     </div>
   </div>
 </div>
