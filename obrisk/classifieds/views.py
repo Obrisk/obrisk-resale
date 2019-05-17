@@ -130,7 +130,7 @@ def classified_list(request, tag_slug=None):
 
     return render(request, 'classifieds/classified_list.html',
                 {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds,
-                 'tag': tag, 'images': images, 'popular_tags': popular_tags })
+                 'tag': tag, 'images': images, 'popular_tags': popular_tags, 'base_active': 'classifieds' })
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds

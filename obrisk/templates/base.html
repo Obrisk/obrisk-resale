@@ -42,15 +42,20 @@
               <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
-              <a class="navbar-brand" href="#">Obrisk</a>
+              <a class="navbar-brand" href="{% url 'classifieds:list' %}">Obrisk</a>
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 
                 <ul class="navbar-nav mr-auto">
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link is-active" href="{% url 'posts:list' %}">{% trans 'Published' %} <span class="sr-only">(current)</span></a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'classifieds:list' %}">Classifieds</a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'messager:contacts_list' %}">{% trans 'Chat' %}</a></li>
+                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
+                   href="{% url 'posts:list' %}">{% trans 'Published' %}</a></li>
+                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link {% if base_active == 'classifieds' %} is-active {% endif %}" 
+                  href="{% url 'classifieds:list' %}">Classifieds</a></li>
+                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link {% if base_active == 'stories' %} is-active {% endif %}" 
+                  href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
+                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link {% if base_active == 'q_and_a' %} is-active {% endif %}" 
+                  href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
+                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link {% if base_active == 'chat' %} is-active {% endif %}" 
+                  href="{% url 'messager:contacts_list' %}">{% trans 'Chat' %}</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                   {# if not hide_search #}

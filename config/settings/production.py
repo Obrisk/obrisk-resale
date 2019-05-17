@@ -82,8 +82,9 @@ OSS_BUCKET_NAME = env('OSS_BUCKET')
 # Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
 OSS_ENDPOINT = env('OSS_ENDPOINT')
 
+
 # The expire time to construct signed url for private acl bucket.
-# Can be set by OSS_EXPIRE_TIME as environment variable or as Django settings. 
+# Can be set by OSS_EXPIRE_TIME as environment variable or as Django settings.
 #The default value is 30 days. I took the values from AWS_EXPIRY in sample project
 OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
 
@@ -92,16 +93,17 @@ OSS_STATIC_LOCATION = '/static/'
 
 
 # The default location for your static files
-STATIC_ROOT =  f'{OSS_ENDPOINT}/{OSS_BUCKET_NAME}/static/'
+STATIC_ROOT =  '/static/'
 
-STATIC_URL =  f'{OSS_ENDPOINT}/{OSS_BUCKET_NAME}/static/'
+STATIC_URL =  '/static/'
 
 # MEDIA
 # ------------------------------------------------------------------------------
 # The default location for the media files stored in bucket.
 OSS_MEDIA_LOCATION = '/media/'
 
-MEDIA_URL = f'{OSS_ENDPOINT}/{OSS_BUCKET_NAME}/media/'
+MEDIA_URL = '/media/'
+
 
 # TEMPLATES
 # ------------------------------------------------------------------------------

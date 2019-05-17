@@ -23,6 +23,7 @@ class QuestionsIndexListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(*args, **kwargs)
         context["popular_tags"] = Question.objects.get_counted_tags()
         context["active"] = "all"
+        context["base_active"] = "q_and_a"
         return context
 
 
@@ -35,6 +36,8 @@ class QuestionAnsListView(QuestionsIndexListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["active"] = "answered"
+        context["base_active"] = "q_and_a"
+
         return context
 
 
@@ -47,6 +50,8 @@ class QuestionListView(QuestionsIndexListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["active"] = "unanswered"
+        context["base_active"] = "q_and_a"
+
         return context
 
 
