@@ -2,59 +2,68 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <!--This is to ensure scripts are loaded from my site only!-->
-    <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Obrisk{% endblock title %}</title>
-    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-    <meta name="description" content="A Social Network for foreigners living in China.">
-    <meta name="author" content="Elisha Kingdom">
-    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
+
+<head>
+  <meta charset="utf-8">
+  <!--This is to ensure scripts are loaded from my site only!-->
+  <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Obrisk{% endblock title %}</title>
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <meta name="description" content="A Social Network for foreigners living in China.">
+  <meta name="author" content="Elisha Kingdom">
+  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
     <![endif]-->
-    {% block cdn %}
-    <!-- Latest compiled and minified Bootstrap 4 beta CSS -->
-    <script src="{% static 'js/popper.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
+  {% block cdn %}
+  <!-- Latest compiled and minified Bootstrap 4 beta CSS -->
+  <script src="{% static 'js/popper.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
 
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">    
-    <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">    
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
-    
-    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600" rel="stylesheet">
-    <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
-    {% endblock cdn %}
-    
-    {% block head %}{% endblock head %}
-  </head>
-  <body class="O-bg">
-    {% block body %}
-      <div class="m-b-1">
-        {% if request.user.is_authenticated %}
-          <nav class="navbar fixed-top navbar-expand-md navbar-dark O-bg-blue">
-            <div class="container">
-              <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-              </button>
-              <a class="navbar-brand" href="#">Obrisk</a>
-              <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                
-                <ul class="navbar-nav mr-auto">
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link is-active" href="{% url 'posts:list' %}">{% trans 'Published' %} <span class="sr-only">(current)</span></a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'classifieds:list' %}">Classifieds</a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
-                  <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link" href="{% url 'messager:contacts_list' %}">{% trans 'Chat' %}</a></li>
-                </ul>
-                <ul class="nav navbar-nav navbar-right">
-                  {# if not hide_search #}
-                    <!-- <form class="form-inline navbar-left" role="search" action="{% url 'search:results' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600" rel="stylesheet">
+  <!-- This file stores project-specific CSS -->
+  <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
+  {% endblock cdn %}
+
+  {% block head %}{% endblock head %}
+</head>
+
+<body class="O-bg">
+  {% block body %}
+  <div class="m-b-1">
+    {% if request.user.is_authenticated %}
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
+      <div class="container">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Obrisk</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link is-active"
+                href="{% url 'posts:list' %}">{% trans 'Published' %} <span class="sr-only">(current)</span></a></li>
+            <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link"
+                href="{% url 'classifieds:list' %}">Classifieds</a></li>
+            <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link"
+                href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
+            <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link"
+                href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
+            <li class="nav-item mr-lg-4  mr-md-1"><a class="nav-link"
+                href="{% url 'messager:contacts_list' %}">{% trans 'Chat' %}</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            {# if not hide_search #}
+            <!-- <form class="form-inline navbar-left" role="search" action="{% url 'search:results' %}">
                       <div class="input-group">
                         <input name="query" type="search" id="searchInput" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search">
                         <div class="input-group-append">
@@ -62,77 +71,81 @@
                         </div>
                       </div>
                     </form> -->
-                  {# endif #}
-                  <li class="nav-item">
-                    <a class="btn btn-md" href="#" id="notifications" data-toggle="popover" data-title="{% trans 'Notifications' %}">
-                        <i class="fa fa-bell-o" aria-hidden="true"></i>
-                    </a>
-                  </li>
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                      {% thumbnail request.user.picture "30x30" crop="center" upscale="true" as im %}
-                        <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
-                      {% empty %}
-                        <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-                      {% endthumbnail %}
-                      {{ request.user.username }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="{% url 'users:detail' request.user.username  %}"><i class="fa fa-cogs fa-fw" aria-hidden="true"></i>&nbsp; {% trans 'Profile Settings' %}</a>
-                      <div class="dropdown-divider"></div>
-                      <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fa fa-sign-out fa-fw" aria-hidden="true"></i>&nbsp; {% trans "Log Out" %}</a>
-                    </div>
-                  </li>
-                </ul>
+            {# endif #}
+            <li class="nav-item">
+              <a class="btn btn-md" href="#" id="notifications" data-toggle="popover"
+                data-title="{% trans 'Notifications' %}">
+                <i class="fa fa-bell-o" aria-hidden="true"></i>
+              </a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                {% thumbnail request.user.picture "30x30" crop="center" upscale="true" as im %}
+                <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
+                {% empty %}
+                <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
+                {% endthumbnail %}
+                {{ request.user.username }}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'users:detail' request.user.username  %}"><i
+                    class="fa fa-cogs fa-fw" aria-hidden="true"></i>&nbsp; {% trans 'Profile Settings' %}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fa fa-sign-out fa-fw"
+                    aria-hidden="true"></i>&nbsp; {% trans "Log Out" %}</a>
               </div>
-            </div>
-          </nav>
-        {% endif %}
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="container">
-        {% if messages %}
-          {% for message in messages %}
-            <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-              {{ message }}
-            </div>
-          {% endfor %}
-        {% endif %}
+    </nav>
+    {% endif %}
+  </div>
+  <div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      {{ message }}
+    </div>
+    {% endfor %}
+    {% endif %}
 
-        {% block content %}
-        {% endblock content %}
+    {% block content %}
+    {% endblock content %}
 
-      </div>
-      <!-- /container -->
+  </div>
+  <!-- /container -->
 
-       <!-- ================================================== 
+  <!-- ================================================== 
       Placed at the end of the document so the pages load faster -->
-     
-      
-      <!-- For the chat-app-->
-      {% block extra_js %}{% endblock extra_js %}
 
-       {% block javascript %}
-        <!-- Third-party javascript libraries go here -->
-        <!-- place project specific Javascript in this file -->
-        <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
-        <script type="text/javascript">
-          var currentUser = "{{ request.user.username }}";
-          $ (function() {
-                  source: "{% url 'search:suggestions' %}";
-              });
+
+  <!-- For the chat-app-->
+  {% block extra_js %}{% endblock extra_js %}
+
+  {% block javascript %}
+  <!-- Third-party javascript libraries go here -->
+  <!-- place project specific Javascript in this file -->
+  <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
+  <script type="text/javascript">
+    var currentUser = "{{ request.user.username }}";
+    $(function () {
+      source: "{% url 'search:suggestions' %}";
+    });
 
 
           // Raven.config('{# sentry_dsn #}').install();
           // window.onerror = Raven.process; 
-        </script>
-        <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
+  </script>
+  <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
 
-      {% endblock javascript %}
+  {% endblock javascript %}
 
-    {% endblock body %}
-  </body>
+  {% endblock body %}
+</body>
 
-  <!-- /.container -->
+<!-- /.container -->
+
 </html>
-

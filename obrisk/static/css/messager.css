@@ -299,24 +299,15 @@ body,
 }
 
 .message-box textarea {
-  display: block;
-  box-sizing: padding-box;
-  overflow: hidden;
-  padding: 0px;
-  width: 100%;
-  font-size: 14px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  padding: 0;
   border: 0;
-
-  -webkit-transform-origin: top left;
-  transform-origin: top left;
-  -webkit-transform: scale(0.75);
-  transform: scale(0.75);
-  padding: 5.333333px;
-  border-radius: 6.666667px;
-  border-width: 1.333333px;
-  margin-right: -30%;
-  margin-bottom: -8px;
+  outline: 0;
+  width: 100%;
+  resize: none;
+  overflow-x: hidden;
+  font-size: 1em;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .input-group-append {
@@ -439,4 +430,8 @@ h5 {
 
 .status {
   color: black;
+}
+
+.word-break {
+  word-break: break-all;
 }

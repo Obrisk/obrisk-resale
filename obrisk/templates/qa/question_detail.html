@@ -35,7 +35,7 @@
         </div>
       </div>
 
-      <div class="col-md-11">
+      <div class="col-md-11 word-break">
         <p>{{ question.get_markdown|safe }}</p>
 
         <div class="question-user d-flex flex-row align-items-center">
@@ -67,7 +67,6 @@
   </div>
   <a href="{% url 'qa:propose_answer' question.id %}" class="btn btn-dark"
     role="button">{% trans "Submit an answer" %}</a>
-
   <div class="page-header">
     <h1>{% trans 'Answers' %}</h1>
   </div>
