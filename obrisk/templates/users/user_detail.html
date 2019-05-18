@@ -26,6 +26,7 @@
           {% if request.user.username == object.username %}
       <a class="btn btn-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
     {% endif %}
+    <!--This is else statement. <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
 </div>
 
 
@@ -50,22 +51,22 @@
               <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i>  </a>
             {% endif %}
              
-            <br /> 
+          <br />
+           {% if object.name %}
+            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+            {{ object.name|title  }}
+            {% endif %}
+
+          <br /> 
             {% if object.city %}
               <span class="fa"> <i class="fa-map-marker" aria-hidden="true"> </i> {{ object.city }} </span>   <br />
             {% endif %}
           <br />
-          <!-- <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
-          {% if object.job_title %}
-            <i class="fa fa-briefcase" aria-hidden="true"></i>  {{ object.job_title }} <br />
-          {% endif %}
-          
-          <br>
-          {% if object.name %}
-            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-            {{ object.name|title  }}
-          {% endif %}
+            {% if object.job_title %}
+              <i class="fa fa-briefcase" aria-hidden="true"></i>  {{ object.job_title }} <br />
+            {% endif %}
         </p>
+
         {% if object.bio %}
         <div class="panel-body"  id="objective"><p>{{ object.bio }}</p></div>
         {% endif %}
