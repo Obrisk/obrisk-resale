@@ -51,7 +51,6 @@ class QuestionListView(QuestionsIndexListView):
         context = super().get_context_data(*args, **kwargs)
         context["active"] = "unanswered"
         context["base_active"] = "q_and_a"
-
         return context
 
 

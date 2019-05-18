@@ -174,3 +174,19 @@ ul.swiper-wrapper {
   box-shadow: 2px 2px 0px #3EC4E2 !important;
   background: #fff;
 }
+
+@media screen and (max-width:570px) {
+
+  .ribbon-content {
+    font-size: 16px;
+  }
+
+  .meta-right a {
+    font-size: 12px
+  }
+
+  .meta-left span,
+  small {
+    font-size: 12px;
+  }
+}

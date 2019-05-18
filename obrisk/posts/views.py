@@ -23,6 +23,8 @@ class PostsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context['popular_tags'] = Post.objects.get_counted_tags()
+        context['base_active'] = 'posts'
+
         return context
 
     def get_queryset(self, **kwargs):
