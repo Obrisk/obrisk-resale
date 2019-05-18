@@ -71,7 +71,7 @@
             </div>
 
             <div class="col-12 pl-5 pr-5 pt-4 pb-4">
-              <h3 class="pr-3"> {{ post.title|title|truncatechars:60 }} </h3>
+              <h3 class="word-break pr-3"> {{ post.title|title|truncatechars:60 }} </h3>
               <div class="text-left">
                 <a href="{% url 'users:detail' post.user.username %}">
                   {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
