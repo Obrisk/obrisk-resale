@@ -110,12 +110,14 @@ a:hover {
 
 .btn-dark {
   background: linear-gradient(45deg, #0aacec, #0aeee3);
-  color: black;
+  color: white;
+  border: none
 }
 
 .btn-danger {
   background-color: white;
   color: #8b2100;
+  border: none
 }
 
 .btn-danger:hover {
@@ -153,4 +155,61 @@ a:hover {
   .container {
     max-width: 1250px;
   }
+}
+
+@media (max-width: 767px) {
+  h3 {
+    font-size: 1.3em
+  }
+}
+
+.word-break {
+  word-break: break-all;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+main .notification {
+  position: relative;
+  width: 3em;
+  height: 3em;
+}
+
+main .notification svg {
+  width: 3em;
+  height: 3em;
+}
+
+main .notification svg>path {
+  fill: #FFFFFF;
+}
+
+main .notification--bell {
+  animation: bell 2.2s linear infinite;
+  transform-origin: 50% 0%;
+}
+
+main .notification--bellClapper {
+  animation: bellClapper 2.2s 0.1s linear infinite;
+}
+
+main .notification--num {
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  font-size: 1.25rem;
+  border-radius: 50%;
+  width: 11px;
+  height: 10px;
+  background-color: #FF4C13;
+  border: 4px solid #FF4C13;
+  color: #FFFFFF;
+  text-align: center;
+  animation: notification 2.2s linear;
 }

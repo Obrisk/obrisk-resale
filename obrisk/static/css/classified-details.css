@@ -39,7 +39,9 @@
 }
 
 .btn-action {
-  background: linear-gradient(45deg, #491104, #c03004)
+  background: #fff;
+  border: #3ec4e2;
+  border-style: solid;
 }
 
 .meta-left span {
