@@ -7,6 +7,8 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView, ListView, DetailView
+#from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from obrisk.helpers import ajax_required
 from obrisk.qa.models import Question, Answer
@@ -118,6 +120,7 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
 
 @login_required
 @ajax_required
+@ensure_csrf_cookie
 @require_http_methods(["POST"])
 def question_vote(request):
     """Function view to receive AJAX call, returns the count of votes a given
@@ -145,6 +148,7 @@ def question_vote(request):
 
 @login_required
 @ajax_required
+@ensure_csrf_cookie
 @require_http_methods(["POST"])
 def answer_vote(request):
     """Function view to receive AJAX call, returns the count of votes a given
@@ -172,6 +176,7 @@ def answer_vote(request):
 
 @login_required
 @ajax_required
+@ensure_csrf_cookie
 @require_http_methods(["POST"])
 def accept_answer(request):
     """Function view to receive AJAX call, marks as accepted a given answer for
