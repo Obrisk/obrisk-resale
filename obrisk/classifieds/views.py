@@ -106,7 +106,7 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 def classified_list(request, tag_slug=None):
 
     classifieds_list = Classified.objects.get_active().filter(city=request.user.city)
-    popular_tags= Classified.objects.get_counted_tags()
+    popular_tags = Classified.objects.get_counted_tags()
     images = ClassifiedImages.objects.all()
     other_classifieds = Classified.objects.exclude(city=request.user.city)
 
@@ -130,7 +130,7 @@ def classified_list(request, tag_slug=None):
 
     return render(request, 'classifieds/classified_list.html',
                 {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds,
-                 'tag': tag, 'images': images, 'popular_tags': popular_tags })
+                 'tag': tag, 'images': images, 'popular_tags': popular_tags, 'base_active': 'classifieds' })
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds

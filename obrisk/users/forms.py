@@ -20,9 +20,8 @@ class CustomUserChangeForm(UserChangeForm):
 
 class UserForm(forms.ModelForm):
     bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
-    province_region = forms.CharField (widget=forms.HiddenInput())
-    city = forms.CharField (widget=forms.HiddenInput())
-
+    province_region = forms.CharField (widget=forms.HiddenInput(), required=False)
+    city = forms.CharField (widget=forms.HiddenInput(), required=False)
     
     class Meta:
         model = User

@@ -61,25 +61,14 @@ SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = 'DENY'
 
+# https://github.com/aliyun/django-oss-storage
+INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 
-# STATIC
-# https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-STATICFILES_DIRS = [
-    str(APPS_DIR.path('static')),
-]
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR('/static/'))
-
-# STORAGES
-# ------------------------------------------------------------------------------
 #I serve them in oss bucket when scaling up, don't duplicate static files in every server.
 # ------------------------
 STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
-# https://github.com/aliyun/django-oss-storage
-INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('OSS_STS_ID')
 
@@ -93,13 +82,28 @@ OSS_BUCKET_NAME = env('OSS_BUCKET')
 # Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
 OSS_ENDPOINT = env('OSS_ENDPOINT')
 
-# The default location for your static files
-STATIC_URL = '/static/'
 
+# The expire time to construct signed url for private acl bucket.
+# Can be set by OSS_EXPIRE_TIME as environment variable or as Django settings.
+#The default value is 30 days. I took the values from AWS_EXPIRY in sample project
+OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
+
+# The default location for the static files stored in bucket.
+OSS_STATIC_LOCATION = '/static/'
+
+
+# The default location for your static files
+STATIC_ROOT =  '/static/'
+
+STATIC_URL =  '/static/'
 
 # MEDIA
 # ------------------------------------------------------------------------------
+# The default location for the media files stored in bucket.
+OSS_MEDIA_LOCATION = '/media/'
+
 MEDIA_URL = '/media/'
+
 
 # TEMPLATES
 # ------------------------------------------------------------------------------

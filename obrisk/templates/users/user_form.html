@@ -26,9 +26,10 @@
     </div>
 
     <div class="col-md-8">
-      <form enctype="multipart/form-data" class="form-horizontal" method="post" action="{% url 'users:update' %}">
+      <form enctype="multipart/form-data" class="update form-horizontal" method="post" action="{% url 'users:update' %}">
         {% csrf_token %}
         {{ form|crispy }}
+        <h6> Address </h6>
         <div class="input-group mb-3 mt-4">
 									<div class="input-group-prepend">
 										<label class="input-group-text" for="province">Province</label>
@@ -44,7 +45,7 @@
           </div>
         <div class="control-group">
           <div class="controls">
-            <button type="submit" id="submit" class="btn btn-dark">{% trans 'Update Profile' %}</button>
+            <button type="submit" id="update" class="btn btn-dark">{% trans 'Update Profile' %}</button>
           </div>
         </div>
       </form>

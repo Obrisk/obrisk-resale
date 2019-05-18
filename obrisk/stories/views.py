@@ -17,6 +17,11 @@ class StoriesListView(LoginRequiredMixin, ListView):
     model = Stories
     paginate_by = 15
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(StoriesListView, self).get_context_data(**kwargs)
+        context["base_active"] = "stories"
+        return context
+
     def get_queryset(self, **kwargs):
         return Stories.objects.filter(reply=False)
 

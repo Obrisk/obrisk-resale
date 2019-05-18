@@ -24,12 +24,14 @@ class ClassifiedQuerySet(models.query.QuerySet):
         tag_dict = {}
         query = self.filter(status='A').annotate(
             tagged=Count('tags')).filter(tags__gt=0)
+
+        #return the slugs instead of names.
         for obj in query:
-            for tag in obj.tags.names():
+            for tag in obj.tags.slugs():
                 if tag not in tag_dict:
                     tag_dict[tag] = 1
 
-                else:  # pragma: no cover
+                else: #smart
                     tag_dict[tag] += 1
 
         return tag_dict.items()
