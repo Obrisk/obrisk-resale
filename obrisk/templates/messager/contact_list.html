@@ -32,19 +32,21 @@
       <img class="align-self-baseline" src="{% static 'img/user.png' %}" height="40px"
         alt="{% trans 'No Profile Picture' %}" />
       {% endthumbnail %}
+
       {%  if msg.unread and request.user == msg.recipient %}
       <span class="pull-right -" id="new-msgs" style="margin:0px 10px 0px -10px"> <i class="fa fa-circle"
           aria-hidden="true"></i> </span>
       {% endif %}
-      <strong> {{ user.get_profile_name|title }} </strong>
+
+    <strong> {{ user.get_profile_name|title }} </strong>
     </div>
     <div class="message-content d-flex ml-2 ml-lg-4 flex-column">
       <span class="last-msg word-break"> {{ msg|truncatechars:50 }} </span>
       <small class="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </small>
     </div>
   </a>
-  {% empty %}
 
+  {% empty %}
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item">
