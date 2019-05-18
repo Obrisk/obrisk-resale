@@ -213,3 +213,8 @@ main .notification--num {
   text-align: center;
   animation: notification 2.2s linear;
 }
+
+.main-nav li {
+  width: 101px;
+  flex-basis: calc(25% - -20px);
+}
