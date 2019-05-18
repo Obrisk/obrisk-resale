@@ -16,3 +16,47 @@
 .user-profile ul li {
     list-style: none;
 }
+
+.form-control {
+    background-color: #fff;
+    border: 2px solid #ccc;
+    color: #111;
+    font-family: 'Montserrat',
+        sans-serif;
+    font-weight: 400;
+    padding: 10px;
+    width: 100%;
+}
+
+.col-form-label {
+    font-family: 'Montserrat',
+        sans-serif;
+    font-weight: 600;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #50a1ff;
+    border-color: #50a1ff;
+}
+
+.btn {
+    font-size: 11px;
+    padding: 8px 26px 6px;
+    letter-spacing: 1.7px;
+    text-transform: uppercase;
+    border-radius: 2px;
+    outline: none;
+    -webkit-transition: 0.15s linear;
+    transition: 0.15s linear;
+}
+
+.nav-link.active {
+    background-color: #ccc !important;
+    color: #fff !important
+}
+
+#id_category {
+    height: auto;
+    width: 50%;
+}
