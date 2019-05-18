@@ -4,12 +4,17 @@
 <div class="mt-4 questions-card">
   <div class="card-body">
     <div>
-      <h4 class="card-title">
-        <a href="{% url 'qa:question_detail' question.pk %}"> {{ question.title }}</a>
-      </h4>
-      <a href="{% url 'qa:question_detail' question.pk %}">
-        <p>{{ question.get_markdown|safe|truncatechars:100 }}</p>
-      </a>
+      <div class="question-title h-auto">
+        <h4 class="word-break ">
+          <a href="{% url 'qa:question_detail' question.pk %}"> {{ question.title }}</a>
+        </h4>
+      </div>
+      <div class="question-body word-break h-auto">
+        <a href="{% url 'qa:question_detail' question.pk %}">
+          {{ question.get_markdown|safe|truncatechars:100 }}
+        </a>
+      </div>
+
       <div class="question-meta">
         <p class="question-info pull-left text-center">
           <span>{{ question.count_answers }}</span>

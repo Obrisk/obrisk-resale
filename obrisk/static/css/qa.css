@@ -202,8 +202,8 @@ a {
 
 }
 
-.card-title {
-  height: 40px;
+.word-break {
+  word-break: break-all;
 }
 
 
@@ -306,4 +306,10 @@ a {
 .answer-wrapper {
   background: #ffffff;
   border-radius: 10px;
+}
+
+@media screen and (max-width:575px) {
+  .questions li .nav-link {
+    font-size: 80% !important
+  }
 }

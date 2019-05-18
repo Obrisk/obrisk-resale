@@ -23,13 +23,14 @@
 <div class="col-md-8 m-auto list-group users-list">
 
   {% for user, msg in lists %}
-  <a href="{% url 'messager:conversation_detail' user  %}"
-    class="card p-4 mb-3 d-flex flex-row justify-content-lg-around">
+  <a href="{% url 'messager:conversation_detail' user  %}" class="card p-4 mb-3 d-flex flex-row ">
     {% thumbnail user.picture "40x40" crop="center" upscale="true"  as im %}
     <div class="user d-flex">
-      <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+      <img class="align-self-baseline" src="{{ im.url }}" style="border-radius: 50%;"
+        alt="{% trans 'Picture Profile' %}">
       {% empty %}
-      <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
+      <img class="align-self-baseline" src="{% static 'img/user.png' %}" height="40px"
+        alt="{% trans 'No Profile Picture' %}" />
       {% endthumbnail %}
       {%  if msg.unread and request.user == msg.recipient %}
       <span class="pull-right -" id="new-msgs" style="margin:0px 10px 0px -10px"> <i class="fa fa-circle"
@@ -37,8 +38,10 @@
       {% endif %}
       <strong> {{ user.get_profile_name|title }} </strong>
     </div>
-    <span class="last-msg"> {{ msg|truncatechars:50 }} </span>
-    <span class="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </span>
+    <div class="message-content d-flex ml-2 ml-lg-4 flex-column">
+      <span class="last-msg word-break"> {{ msg|truncatechars:50 }} </span>
+      <small class="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </small>
+    </div>
   </a>
   {% empty %}
 
