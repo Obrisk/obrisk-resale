@@ -111,8 +111,12 @@ ul.swiper-wrapper {
 
 /* responive image */
 .swiper-container img {
-  width: 100%;
-  height: auto;
+  width: auto;
+  height: 350px;
+}
+
+.swiper-container a {
+  display: flex;
 }
 
 

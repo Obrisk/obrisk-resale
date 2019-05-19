@@ -13,8 +13,9 @@
         <!-- Slides -->
         {% for photo in images %}
         <li class="swiper-slide" itemprop="associatedMedia" itemscope itemtype="http://schema.org/ImageObject">
-            <a title="click to zoom-in" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image}}"
-                itemprop="contentUrl" data-size="1200x600">
+            <a title="click to zoom-in" class="justify-content-md-center"
+                href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image}}" itemprop="contentUrl"
+                data-size="1200x600">
                 <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image}}" itemprop="thumbnail"
                     alt="Image description" />
             </a> </li>
@@ -147,7 +148,10 @@
                 if (figureEl.nodeType !== 1) {
                     continue;
                 }
-
+                var img = new Image();
+                img.onload = function () {
+                    alert(this.width + 'x' + this.height);
+                }
                 linkEl = figureEl.children[0]; // <a> element
 
                 size = linkEl.getAttribute("data-size").split("x");
@@ -323,6 +327,25 @@
 
             // Pass data to PhotoSwipe and initialize it
             gallery = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+
+            //Get image size onload 
+            gallery.listen('gettingData', function (index, item) {
+
+                const innerImgEl = item.el.getElementsByTagName('img')[0]
+                if (innerImgEl) {
+                    item.w = innerImgEl.width
+                    item.h = innerImgEl.height
+                }
+
+                const img = new Image()
+                img.onload = function () {
+                    item.w = this.width
+                    item.h = this.height
+                    gallery.updateSize(true)
+                }
+                img.src = item.src
+
+            });
             gallery.init();
 
             /* EXTRA CODE (NOT FROM THE CORE) - UPDATE SWIPER POSITION TO THE CURRENT ZOOM_IN IMAGE (BETTER UI) */
