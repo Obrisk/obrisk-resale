@@ -104,21 +104,14 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 @login_required
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
-
     classifieds_list = Classified.objects.get_active().filter(city=request.user.city)
     popular_tags = Classified.objects.get_counted_tags()
     images = ClassifiedImages.objects.all()
-    other_classifieds = Classified.objects.exclude(city=request.user.city)
-
-    tag = None
-    if tag_slug:
-        tag = get_object_or_404(Tag, slug=tag_slug)
-        classifieds_list = Classified.objects.get_active().filter(tags__in=[tag])
-        other_classifieds = ClassifiedImages.objects.none()
+    other_classifieds = ClassifiedImages.objects.none()
 
     paginator = Paginator(classifieds_list, 30) # 50 classifieds in each page
-
     page = request.GET.get('page')
+
     try:
         classifieds = paginator.page(page)
     except PageNotAnInteger:
@@ -127,6 +120,18 @@ def classified_list(request, tag_slug=None):
     except EmptyPage:
         # If page is out of range deliver last page of results
         classifieds = paginator.page(paginator.num_pages)
+
+    #When the last page user can see only fifty classifieds in other cities. To improve this near future.
+    if page == paginator.num_pages or paginator.num_pages == 1:
+        other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
+
+    #Deal with tags in the end to override other_classifieds.
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        classifieds_list = Classified.objects.get_active().filter(tags__in=[tag])
+        other_classifieds = ClassifiedImages.objects.none()
+
 
     return render(request, 'classifieds/classified_list.html',
                 {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds,
