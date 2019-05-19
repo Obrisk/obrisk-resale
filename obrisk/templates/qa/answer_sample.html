@@ -29,14 +29,19 @@
     </span>
 
     <div class="answer-user question-user d-flex flex-row align-items-center">
-      <a href="{% url 'users:detail' answer.user.username %}" class="username">
-        {% thumbnail answer.user.picture "30x30" crop="center" upscale="true"  as im %}
-        <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
-        {% empty %}
-        <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-        {% endthumbnail %}
-        {{ answer.user.username }}</a>
-      <small class="answered">{% trans "answered" %} {{ answer.timestamp|naturaltime }}</small>
+      <div class="text-secondary d-flex flex-column align-content-center mr-3">
+        <a href="{% url 'users:detail' answer.user.username %}" class="username">
+          {% thumbnail answer.user.picture "30x30" crop="center" upscale="true"  as im %}
+          <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
+          {% empty %}
+          <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
+          {% endthumbnail %}
+          {{ answer.user.username }}</a>
+        <small class="answered">{% trans "answered" %} {{ answer.timestamp|naturaltime }}</small>
+
+      </div>
+
+
     </div>
 
   </span>

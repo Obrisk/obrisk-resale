@@ -39,7 +39,10 @@
         <p>{{ question.get_markdown|safe }}</p>
 
         <div class="question-user d-flex flex-row align-items-center">
+
           <a href="{% url 'users:detail' question.user.username  %}">
+
+
             <div class="text-secondary d-flex flex-row align-content-center mr-3">
               {% thumbnail question.user.picture "30x30" crop="center" upscale="true"  as im %}
               <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
@@ -48,8 +51,8 @@
               {% endthumbnail %}
               {{ question.user.get_profile_name|title }}
             </div>
+            <small class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }}</small>
           </a>
-          <span class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }}</span>
 
 
         </div>
