@@ -13,7 +13,7 @@ from channels.layers import get_channel_layer
 class MessageQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability."""
 
-    def get_conversation(self, sender, recipient):
+    def get_msgs(self, sender, recipient):
         """Returns all the messages sent between two users."""
         qs_one = self.filter(sender=sender, recipient=recipient)
         qs_two = self.filter(sender=recipient, recipient=sender)
@@ -33,8 +33,8 @@ class MessageQuerySet(models.query.QuerySet):
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
 
-    def get_all_conversation(self, recipient):
-        chat_list = [] #Stores conversation list.
+    def get_conversations(self, recipient):
+        chat_list = [] #Stores user's list for checking inside this function.
         msgs_list = [] #Stores messages objects
         try:
             qs_sent = self.filter(sender=recipient)
@@ -51,8 +51,7 @@ class MessageQuerySet(models.query.QuerySet):
                 elif qs.sender not in chat_list:
                     msgs_list.append(qs)
                     chat_list.append(qs.sender)
-
-            return chat_list, msgs_list
+            return msgs_list
 
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
