@@ -63,7 +63,7 @@ $(function () {
               'question': question,
               'value': vote
             },
-            type: 'post',
+            type: 'GET',
             cache: false,
             success: function (data) {
               $('.vote', span).removeClass('voted');
@@ -91,7 +91,7 @@ $(function () {
               'answer': answer,
               'value': vote
             },
-            type: 'post',
+            type: 'GET',
             cache: false,
             success: function (data) {
               $('.vote', span).removeClass('voted');
@@ -112,9 +112,9 @@ $(function () {
             data: {
                 'answer': answer
             },
-            type: 'post',
+            type: '',
             cache: false,
-            success: function (data) {
+            success: function () {
                 $("#acceptAnswer").removeClass("accepted");
                 $("#acceptAnswer").prop("title", "Click to accept the answer");
                 $("#acceptAnswer").addClass("accepted");

@@ -28,8 +28,9 @@
             class="fa fa-chevron-up vote up-vote question-vote{% if request.user in question.get_upvoters %} voted{% endif %}"
             aria-hidden="true" title="{% trans 'Click to up vote; click again to toggle' %}"></i>
           <h5 id="questionVotes">{{ question.total_votes }}</h5>
+
           <i id="questionDownVote"
-            class="fa fa-chevron-down vote down-vote question-vote{% if request.user in question.get_downvoters %} voted{% endif %}"
+            class="fa fa-chevron-down vote down-vote question-vote {% if request.user in question.get_downvoters %} voted{% endif %}"
             aria-hidden="true" title="{% trans 'Click to down vote; click again to toggle' %}"></i>
           <small class="text-secondary">{% trans 'Votes' %}</small>
         </div>

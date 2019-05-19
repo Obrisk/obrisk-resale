@@ -37,8 +37,10 @@
     {% endif %}
   </div>
   <!-- Sidebar Widgets Column -->
+   {% comment %}
   <div id="sidebar" class="sidebar">
     <!-- Cloud Tag Widget -->
+    
     <div class="card">
       <div class="card-header">
         <h5>{% trans 'Popular tags' %}</h5>
@@ -48,9 +50,10 @@
         {% for tag, count in popular_tags %}
         <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
         {% endfor %}
-      </div>
+      </div> 
     </div>
   </div>
+{% endcomment %}
 
   <div class="row">
     <!-- Blog Entries Column -->

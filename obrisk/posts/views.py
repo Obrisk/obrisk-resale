@@ -7,22 +7,22 @@ from django.utils.translation import ugettext_lazy as _
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post, Comment
 from obrisk.posts.forms import PostForm, CommentForm
-#For comments in posts.
+#For comments
 from django.http import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
 
-
 class PostsListView(LoginRequiredMixin, ListView):
     """Basic ListView implementation to call the published Posts list."""
     model = Post
-    paginate_by = 15
+    paginate_by = 10
     context_object_name = "posts"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['popular_tags'] = Post.objects.get_counted_tags()
+        #This query is too slow
+        #context['popular_tags'] = Post.objects.get_counted_tags()
         context['base_active'] = 'posts'
 
         return context

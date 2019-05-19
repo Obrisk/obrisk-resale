@@ -56,7 +56,7 @@ class QuestionQuerySet(models.query.QuerySet):
         tag_dict = {}
         query = self.all().annotate(tagged=Count('tags')).filter(tags__gt=0)
         for obj in query:
-            for tag in obj.tags.names():
+            for tag in obj.tags.slugs():
                 if tag not in tag_dict:
                     tag_dict[tag] = 1
 
