@@ -16,48 +16,52 @@
     </h3>
     <a class="btn btn-dark pull-right" href="{% url 'notifications:mark_all_read' %}">{% trans 'Mark all as read' %}</a>
   </div>
-  <div class="row">
-    <div class="col-md-6 col-10 m-auto">
-      <ul class="list-unstyled p-0 notifications">
-        {% for notification in notification_list %}
-        <li class="notification p-3">
-          <div class="media">
-            <div class="media-left">
-              <div class="media-object">
-                {% thumbnail notification.actor.picture "70x70" crop="center" upscale="true"  as im %}
-                <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}" id="pic">
-                {% empty %}
-                <img src="{% static 'img/user.png' %}" height="70px" alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
-              </div>
-            </div>
-            <div class="media-body">
-              <a class="btn btn-sm pull-right" style="font-size:16px" title="{% trans 'Mark as read' %}"
-                href="{% url 'notifications:mark_as_read' notification.slug %}">✔️</a>
-              <strong class="notification-title">
-                <a
-                  href="{% url 'users:detail' notification.actor.username  %}">{{ notification.actor.get_profile_name|title }}</a>
-              </strong>
-              <p class="notification-desc">
-                {{ notification.get_verb_display }}
-                {% if notification.action_object %}
-                {{ notification.action_object }}
-                {% endif %}
-              </p>
-              <div class="notification-meta">
-                <small class="timestamp">{{ notification.time_since }} ago</small>
-              </div>
+
+
+
+</div>
+<div class="row">
+  <div class="col-md-6 col-10 m-auto">
+    <ul class="list-unstyled p-0 notifications">
+      {% for notification in notification_list %}
+      <li class="notification p-3">
+        <div class="media">
+          <div class="media-left">
+            <div class="media-object">
+              {% thumbnail notification.actor.picture "70x70" crop="center" upscale="true"  as im %}
+              <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}" id="pic">
+              {% empty %}
+              <img src="{% static 'img/user.png' %}" height="70px" alt="{% trans 'No Profile Picture' %}" />
+              {% endthumbnail %}
             </div>
           </div>
-        </li>
-        {% empty %}
+          <div class="media-body">
+            <a class="btn btn-sm pull-right" style="font-size:16px" title="{% trans 'Mark as read' %}"
+              href="{% url 'notifications:mark_as_read' notification.slug %}">✔️</a>
+            <strong class="notification-title">
+              <a
+                href="{% url 'users:detail' notification.actor.username  %}">{{ notification.actor.get_profile_name|title }}</a>
+            </strong>
+            <p class="notification-desc">
+              {{ notification.get_verb_display }}
+              {% if notification.action_object %}
+              {{ notification.action_object }}
+              {% endif %}
+            </p>
+            <div class="notification-meta">
+              <small class="timestamp">{{ notification.time_since }} ago</small>
+            </div>
+          </div>
+        </div>
+      </li>
+      {% empty %}
+      <li class="notification p-3">
         Sorry nothing here
-        {% endfor %}
-      </ul>
-    </div>
+      </li>
+
+      {% endfor %}
+    </ul>
   </div>
-
-
 </div>
 
 
