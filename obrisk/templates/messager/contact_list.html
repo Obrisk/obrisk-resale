@@ -9,19 +9,22 @@
 
 {% block content %}
 <div class="row" style="margin-top: 1em">
-  <div class="col-md-8 m-auto title">
+
+ <div class="col-md-8 m-auto title">
     <h4 style="color: black">{% trans 'Recent Messages' %}</h4>
   </div>
-  <div class="col-md-8 m-auto list-group users-list">
+<div class="col-md-8 m-auto list-group users-list">
 
-    {% for msg in object_list %}
-    <a href="{% url 'messager:conversation_detail' user  %}" class="card p-4 mb-3 d-flex flex-row ">
-      {% thumbnail msg.sender.picture "40x40" crop="center" upscale="true"  as im %}
-      <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+  {% for user, msg in zip_list %}
+  <a href="{% url 'messager:conversation_detail' user  %}" class="card p-4 mb-3 d-flex flex-row ">
+    {% thumbnail user.picture "40x40" crop="center" upscale="true"  as im %} 
+      <img src="{{ im.url }}" style="border-radius: 50%;"
+        alt="{% trans 'Picture Profile' %}">
+
       {% empty %}
       <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
       {% endthumbnail %}
-      <strong> {{ msg.sender.get_profile_name|title }} </strong>
+      <strong> {{ user.get_profile_name|title }} </strong>
       <span id="last-msg"> {{ msg.message|truncatechars:50 }} </span>
       <span id="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </span>
 
