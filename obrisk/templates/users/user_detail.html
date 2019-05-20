@@ -5,76 +5,86 @@
 {% block title %}{{ object.username }}{% endblock %}
 
 {% block head %}
-  <link href="{% static 'css/user_profile.css' %}?v=1" rel="stylesheet">
+<link href="{% static 'css/user_profile.css' %}?v=1" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
-<div class="media profile-header d-flex flex-column flex-md-row">
-    {% thumbnail object.picture "150x150" crop="center" upscale="true"  as im %}
-      <img src="{{ im.url }}"  class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" alt="Picture Profile" id="pic">
-        {% empty %}
-      <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
-    {% endthumbnail %} 
-     <div class="media-body">
-    <h1 class="mt-0">{{ object.username|title }}</h1>
 
-  </div>
-  <div class="profile-points">
-        <div class="point-label"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</div>
-        <div class="points"> {{ object.points }} </div>
-</div>
-          {% if request.user.username == object.username %}
-      <a class="btn btn-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+<div class="col-md-8 m-auto">
+  <div class="media profile-header d-flex flex-column flex-md-row">
+    {% thumbnail object.picture "150x150" crop="center" upscale="true"  as im %}
+    <img src="{{ im.url }}" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+      alt="Picture Profile" id="pic">
+    {% empty %}
+    <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
+    {% endthumbnail %}
+    <div class="media-body">
+      <h1 class="mt-0">{{ object.username|title }}</h1>
+
+    </div>
+    <div class="profile-points">
+      <div class="point-label"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</div>
+      <div class="points"> {{ object.points }} </div>
+    </div>
+    {% if request.user.username == object.username %}
+    <a class="btn btn-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
     {% endif %}
     <!--This is else statement. <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
-</div>
-
-
+  </div>
   <div class="container profile-wrapper">
 
     <div id="contact-info" class="vcard">
 
-         {% if object.is_seller %}
-          
-         {% endif %}
-   
-        <p>
-            {% if object.instagram_account %}
-              <a href="{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Instagram Profile' %}"><i class="fa fa-instagram"></i>  </a>
-            {% endif %}
-        
-            {% if object.linkedin_account %}
-              <a href="{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i>  </a>
-            {% endif %}
-        
-            {% if object.facebook_account %}
-              <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i>  </a>
-            {% endif %}
-             
-          <br />
-           {% if object.name %}
-            <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-            {{ object.name|title  }}
-            {% endif %}
+      {% if object.is_seller %}
 
-          <br /> 
-            {% if object.city %}
-              <span class="fa"> <i class="fa-map-marker" aria-hidden="true"> </i> {{ object.city }} </span>   <br />
-            {% endif %}
-          <br />
-            {% if object.job_title %}
-              <i class="fa fa-briefcase" aria-hidden="true"></i>  {{ object.job_title }} <br />
-            {% endif %}
-        </p>
+      {% endif %}
 
-        {% if object.bio %}
-        <div class="panel-body"  id="objective"><p>{{ object.bio }}</p></div>
+      <p>
+        {% if object.instagram_account %}
+        <a href="{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Instagram Profile' %}"><i
+            class="fa fa-instagram"></i> </a>
         {% endif %}
-        <div class="clear"></div>
+
+        {% if object.linkedin_account %}
+        <a href="{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i
+            class="fa fa-linkedin"></i> </a>
+        {% endif %}
+
+        {% if object.facebook_account %}
+        <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i
+            class="fa fa-facebook"></i> </a>
+        {% endif %}
+
+        <br />
+        {% if object.name %}
+        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
+        {{ object.name|title  }}
+        {% endif %}
+
+        <br />
+        {% if object.city %}
+        <span class="fa"> <i class="fa-map-marker" aria-hidden="true"> </i> {{ object.city }} </span> <br />
+        {% endif %}
+        <br />
+        {% if object.job_title %}
+        <i class="fa fa-briefcase" aria-hidden="true"></i> {{ object.job_title }} <br />
+        {% endif %}
+      </p>
+
+      {% if object.bio %}
+      <div class="panel-body" id="objective">
+        <p>{{ object.bio }}</p>
+      </div>
+      {% endif %}
+      <div class="clear"></div>
     </div>
 
-    
-    
+
+
 
   </div>
+</div>
+
+
+
 {% endblock content %}

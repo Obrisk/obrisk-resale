@@ -60,6 +60,8 @@
                 <strong class="ribbon-content">{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if request.user != classified.user  %}
+              <strong>Seller Info :</strong>
+              {{ classified.contact_info }}
               <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
                 <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with seller' %} </strong></a> <br>
               <br>

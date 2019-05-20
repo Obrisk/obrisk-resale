@@ -8,13 +8,15 @@
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds-list.css' %}" rel="stylesheet">
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.2.0/css/swiper.min.css'>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.2.0/js/swiper.min.js'></script>
 
 {% endblock head %}
 
 {% block content %}
 <!-- Page Content -->
 <div class="sidebar-overlay"></div>
-<div class="container mt-4 p-0">
+<div class="mt-4 p-0 mw-100 w-95">
 
   <div
     class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-md-9 ml-auto  mr-auto">
@@ -55,9 +57,13 @@
     </div>
   </div>
 
+  <!-- Paid Ads -->
+  <div class="right-sidebar d-none d-lg-block">
+    {% include 'classifieds/ads.html' %}
+  </div>
+
   <div class="row">
-    <div
-      class="classifieds col-12 col-md-9 m-auto d-flex flex-wrap p-0 justify-content-md-start justify-content-center">
+    <div class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
       <!-- Classified Entries Column -->
       <!-- <div class="col-md-9"> -->
       {% for classified in classifieds %}
@@ -92,7 +98,11 @@
         </div>
         </a>
       </div>
-
+      {% if forloop.counter == 6 %}
+      <div class="ads d-lg-none">
+        {% include 'classifieds/ads-mobile.html' %}
+      </div>
+      {% endif %}
       {% empty %}
       <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
         {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
@@ -142,6 +152,7 @@
     <!-- End div for row of all classified ads-->
 
   </div>
+
 
 </div>
 
