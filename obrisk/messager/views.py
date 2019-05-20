@@ -24,13 +24,12 @@ class MessagesListView(LoginRequiredMixin, ListView):
             self.request.user
         )
         context['active'] = last_conversation.username
-
         return context
 
     def get_queryset(self):
         active_user = Message.objects.get_most_recent_conversation(
             self.request.user)
-        return Message.objects.get_conversation(active_user, self.request.user)
+        return Message.objects.get_msgs(active_user, self.request.user)
 
 
 class ContactsListView(LoginRequiredMixin, ListView):
@@ -42,21 +41,12 @@ class ContactsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        conversation_list, last_msg = Message.objects.get_all_conversation(
-            self.request.user)
-        context['lists'] = zip(conversation_list, last_msg)
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat' 
-        last_conversation = Message.objects.get_most_recent_conversation(
-            self.request.user
-        )
-        context['active'] = last_conversation.username
         return context
 
     def get_queryset(self):
-        active_user = Message.objects.get_most_recent_conversation(self.request.user)
-        return Message.objects.get_conversation(
-            active_user, self.request.user)
+        return Message.objects.get_conversations(self.request.user)
 
 
 class ConversationListView(MessagesListView):
@@ -73,7 +63,7 @@ class ConversationListView(MessagesListView):
         #Below is called only when the conversation is opened thus mark all msgs as read.
         #In the near future implement it to query only last 100 messages, and update last few images.
         Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)
-        return Message.objects.get_conversation(active_user, self.request.user)
+        return Message.objects.get_msgs(active_user, self.request.user)
 
 
 @login_required

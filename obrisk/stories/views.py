@@ -65,7 +65,7 @@ def post_stories(request):
 @ajax_required
 @require_http_methods(["GET"])
 #The only reason this method is GET is because the server will return 403 on the live site,
-#even when ignoring the csrf with exempt decorator. Need to re-visit this.
+#even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
 def like(request):
     """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""

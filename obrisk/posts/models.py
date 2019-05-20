@@ -28,12 +28,13 @@ class PostQuerySet(models.query.QuerySet):
         """Returns only the items marked as DRAFT in the current queryset."""
         return self.filter(status="D")
 
+    #Improve the performance of this query. It is too slow.
     def get_counted_tags(self):
         tag_dict = {}
         query = self.filter(status='P').annotate(
             tagged=Count('tags')).filter(tags__gt=0)
         for obj in query:
-            for tag in obj.tags.names():
+            for tag in obj.tags.slugs():
                 if tag not in tag_dict:
                     tag_dict[tag] = 1
 
