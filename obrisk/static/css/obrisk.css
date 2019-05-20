@@ -214,6 +214,15 @@ main .notification--num {
   animation: notification 2.2s linear;
 }
 
+h1,
+h2,
+h3,
+h4,
+h5,
+p {
+  word-break: break-all
+}
+
 .main-nav li {
   width: 101px;
   flex-basis: calc(25% - -20px);

@@ -69,7 +69,10 @@
           </div>
 
         </div>
-        {% include 'classifieds/image-swiper.html' with message=message %}
+        <div class="col-9 m-auto h-50">
+          {% include 'classifieds/image-swiper.html' with message=message %}
+
+        </div>
         <div class="card-text text-justify">{{ classified.details }}</div>
       </section>
 
@@ -85,64 +88,64 @@
       </div>
 
       <!-- Navigation buttons -->
-        <div class="m-4">
-            {% if request.user == classified.user%}
-                      <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
-                        title="{% trans 'Edit this classified' %}">
-                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a> 
-            {% else %}
-           
-              <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
-            {% endif %}
-            <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a><br> <br>
+      <div class="m-4">
+        {% if request.user == classified.user%}
+        <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
+          title="{% trans 'Edit this classified' %}">
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+        {% else %}
+
+        <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
+        {% endif %}
+        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a><br> <br>
 
       </div>
     </div>
-    
-    
-  <!-- Similar lassified --> 
-  {% if similar_classifieds %}
-      <div class="col-lg-8 col-md-10 mr-auto ml-auto related-card mt-4 pt-4 mb-4">
-        <div class=" related mt-4 mb-4">
+
+
+    <!-- Similar lassified -->
+    {% if similar_classifieds %}
+    <div class="col-lg-8 col-md-10 mr-auto ml-auto related-card mt-4 pt-4 mb-4">
+      <div class=" related mt-4 mb-4">
         <h5 class="text-left">Related Classifieds</h5>
-          <!-- Classified Entries Column -->
-          <!-- <div class="col-md-8"> -->
-          {% for classified in similar_classifieds %}
-          <!-- Classified ad. -->
-          <div class="card classified-card mr-2 mb-3">
-            <!--Display image-->
-            <div class="card-img-top img-responsive">
-              <a href="{% url 'classifieds:classified' classified.slug %}"
-                style="color:black; text-decoration:none; background-color:none">
-                {% for photo in all_images %}
-                {% if photo.classified == classified %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-                {{ "<!--" }}
-                {% endif %}
-                {% endfor %}
-                {{ "-->" }}
-            </div>
-
-            <div class="card-body">
-              <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-              <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-              <div class="card-meta d-flex justify-content-between">
-                <div class="location">
-                  <small>📍</small>
-                  <span class="card-text small "> {{ classified.city|safe }}</span>
-                </div>
-                <div class="share-card">
-                  <small>🔗</small>
-                </div>
-              </div>
-
-            </div>
-            </a>
+        <!-- Classified Entries Column -->
+        <!-- <div class="col-md-8"> -->
+        {% for classified in similar_classifieds %}
+        <!-- Classified ad. -->
+        <div class="card classified-card mr-2 mb-3">
+          <!--Display image-->
+          <div class="card-img-top img-responsive">
+            <a href="{% url 'classifieds:classified' classified.slug %}"
+              style="color:black; text-decoration:none; background-color:none">
+              {% for photo in all_images %}
+              {% if photo.classified == classified %}
+              <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
+              {{ "<!--" }}
+              {% endif %}
+              {% endfor %}
+              {{ "-->" }}
           </div>
-          {% endfor %}
-        </div>
 
+          <div class="card-body">
+            <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
+            <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+            <div class="card-meta d-flex justify-content-between">
+              <div class="location">
+                <small>📍</small>
+                <span class="card-text small "> {{ classified.city|safe }}</span>
+              </div>
+              <div class="share-card">
+                <small>🔗</small>
+              </div>
+            </div>
+
+          </div>
+          </a>
+        </div>
+        {% endfor %}
       </div>
+
+    </div>
 
   </div>
   {% endif %}
