@@ -1,4 +1,4 @@
-{% load static i18n thumbnail %}
+{% load static i18n thumbnail humanize %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -102,7 +102,7 @@
                 {% empty %}
                 <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
                 {% endthumbnail %}
-                {{ request.user.username }}
+                {{ request.user.username|truncatechars:12}}
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                 <a class="dropdown-item" href="{% url 'users:detail' request.user.username  %}"><i
@@ -155,7 +155,7 @@
   <!-- place project specific Javascript in this file -->
   <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
   <script type="text/javascript">
-    var currentUser = "{{ request.user.username }}";
+    var currentUser = "{{ request.user.username}}";
     $(function () {
       source: "{% url 'search:suggestions' %}";
     });
