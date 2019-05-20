@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -5,31 +6,11 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
+from django.urls import reverse
+from django.shortcuts import redirect
 
 from obrisk.messager.models import Message
 from obrisk.helpers import ajax_required
-
-
-class MessagesListView(LoginRequiredMixin, ListView):
-    """CBV to render the inbox, showing by default the most recent
-    conversation as the active one.
-    """
-    model = Message
-    paginate_by = 50
-    template_name = "messager/message_list.html"
-
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        last_conversation = Message.objects.get_most_recent_conversation(
-            self.request.user
-        )
-        context['active'] = last_conversation.username
-        return context
-
-    def get_queryset(self):
-        active_user = Message.objects.get_most_recent_conversation(
-            self.request.user)
-        return Message.objects.get_msgs(active_user, self.request.user)
 
 
 class ContactsListView(LoginRequiredMixin, ListView):
@@ -41,31 +22,48 @@ class ContactsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        users, msgs = Message.objects.get_conversations(self.request.user)
+        context['zip_list'] = zip(users, msgs)
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
-        context['base_active'] = 'chat' 
+        context['base_active'] = 'chat'
         return context
 
-    def get_queryset(self):
-        return Message.objects.get_conversations(self.request.user)
-
-
-class ConversationListView(MessagesListView):
+class ConversationListView(LoginRequiredMixin, ListView):
     """CBV to render the inbox, showing a specific conversation with a given
     user, who requires to be active too."""
+
+    model = Message
+    paginate_by = 100
+    template_name = "messager/message_list.html"
+
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context['active'] = self.kwargs["username"]
         return context
 
-    def get_queryset(self):
-        active_user = get_user_model().objects.get(
-            username=self.kwargs["username"])
-        #Below is called only when the conversation is opened thus mark all msgs as read.
-        #In the near future implement it to query only last 100 messages, and update last few images.
-        Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)
-        return Message.objects.get_msgs(active_user, self.request.user)
+    def get(self, *args, **kwargs):
+        url = str('/ws/messages/')
+        if self.get_queryset() == url :
+            messages.error(self.request, 
+            "Hello, it looks like you are trying to do something suspicious. \
+            Our system has stopped you from doing so and this information has been recorded.\
+            If similar actions are repeated several times, then your account will be blocked!")
+            return redirect('messager:contacts_list')
+        else:
+            return super(ConversationListView, self).get(*args, **kwargs)
 
 
+    def get_queryset(self):     
+        try:              
+            active_user = get_user_model().objects.get(username=self.kwargs["username"])
+            #Below is called only when the conversation is opened thus mark all msgs as read.
+            #In the near future implement it to query only last 100 messages, and update last few images.
+            Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)
+            return Message.objects.get_msgs(active_user, self.request.user)      
+        except get_user_model().DoesNotExist:
+            return reverse('messager:contacts_list')   
+    
+
+         
 @login_required
 @ajax_required
 @require_http_methods(["POST"])

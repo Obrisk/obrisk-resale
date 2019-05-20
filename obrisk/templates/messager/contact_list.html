@@ -10,13 +10,13 @@
 {% block content %}
 <div class="row" style="margin-top: 1em">
 <div class="col-md-8 m-auto title">
-  <h4>{% trans 'Recent Messages' %}</h4>
+  <h5>{% trans 'Recent Messages' %}</h5>
 </div>
 <div class="col-md-8 m-auto list-group users-list">
 
-  {% for msg in object_list %}
+  {% for user, msg in zip_list %}
   <a href="{% url 'messager:conversation_detail' user  %}" class="card p-4 mb-3 d-flex flex-row ">
-    {% thumbnail msg.sender.picture "40x40" crop="center" upscale="true"  as im %} 
+    {% thumbnail user.picture "40x40" crop="center" upscale="true"  as im %} 
       <img src="{{ im.url }}" style="border-radius: 50%;"
         alt="{% trans 'Picture Profile' %}">
       {% empty %}
