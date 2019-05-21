@@ -8,8 +8,6 @@
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds-list.css' %}" rel="stylesheet">
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.2.0/css/swiper.min.css'>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.2.0/js/swiper.min.js'></script>
 
 {% endblock head %}
 
@@ -99,8 +97,8 @@
         </a>
       </div>
       {% if forloop.counter == 6 %}
-      <div class="ads d-lg-none">
-        {% include 'classifieds/ads-mobile.html' %}
+      <div class="ads d-lg-none" style="height: 250px; width:80%;">
+        <iframe class="h-100 w-100" src="{% url 'classifieds:mobile-ads'%}" frameborder="0"></iframe>
       </div>
       {% endif %}
       {% empty %}
