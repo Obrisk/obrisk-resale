@@ -126,9 +126,14 @@ def classified_list(request, tag_slug=None):
         classifieds = paginator.page(paginator.num_pages)
 
     # When the last page user can see only fifty classifieds in other cities. To improve this near future.
-    if int(page) == paginator.num_pages:
-        other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
-
+    if page:
+        if int(page) == paginator.num_pages:
+            other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
+    else:
+        #If the page is the first one and it is the only one show other_classifieds
+        if paginator.num_pages == 1:
+            other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
+        
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
