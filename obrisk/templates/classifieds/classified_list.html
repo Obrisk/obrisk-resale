@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static i18n %}
 {% load humanize thumbnail %}
-
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
 {% block head %}
@@ -55,10 +54,13 @@
     </div>
   </div>
 
-  <!-- Paid Ads -->
-  <div class="right-sidebar d-none d-lg-block">
-    {% include 'classifieds/ads.html' %}
-  </div>
+
+  <!-- official ads for pc sized-->
+  {% if official_ads %}
+      <div class="right-sidebar d-none d-lg-block">
+        {% include 'classifieds/ads.html' %}
+      </div>
+  {% endif %}
 
   <div class="row">
     <div class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
@@ -96,18 +98,22 @@
         </div>
         </a>
       </div>
-      {% if forloop.counter == 6 %}
+      <!-- official ads for phones-->
+      {% if official_ads %}
+        {% if forloop.counter == 6 %}
       <div class="ads d-lg-none" style="height: 250px; width:80%;">
         <iframe class="h-100 w-100" src="{% url 'classifieds:mobile-ads'%}" frameborder="0"></iframe>
       </div>
+        {% endif %}
       {% endif %}
-      {% empty %}
-      <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
-        {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
-        <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
-        {% trans 'Or check what we have found from other places '%} </h6>
-      <br />
-      {% endfor %}
+
+    {% empty %}
+        <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
+          {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
+          <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
+          {% trans 'Or check what we have found from other places '%} </h6>
+        <br />
+    {% endfor %}
 
 
 
@@ -150,45 +156,20 @@
     <!-- End div for row of all classified ads-->
 
   </div>
-
-
 </div>
 
-
-
-{% if is_paginated %}
-<div class="row">
-  <ul class="pagination justify-content-center mb-4">
-    {% if page.has_previous %}
-    <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">&larr;
-        {% trans 'Newer' %}</a></li>
-    {% else %}
-    <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
-    {% endif %}
-
-    {% for i in paginator.page_range %}
-    {% if page.number == i %}
-    <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
-    </li>
-    {% else %}
-    <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-    {% endif %}
-    {% endfor %}
-
-    {% if page.has_next %}
-    <li class="page-item"><a class="page-link" href="?page={{ page.next_page_number }}">{% trans 'Older' %}
-        &rarr;</a></li>
-    {% else %}
-    <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
-    {% endif %}
-  </ul>
-</div>
-{% endif %}
-
+  <!-- pagination -->
+  {% if classifieds.paginator.num_pages > 1 %}
+  <div class="row">
+      {% include "pagination.html" with page=classifieds %}
+  </div>
+  {% endif %}
 
 <!-- /.row -->
 </div>
 <!-- /.container -->
+
+
 <script>
   (function () {
     var sidebar = document.getElementById('sidebar');

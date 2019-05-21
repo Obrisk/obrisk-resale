@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseNotFound
 from django.shortcuts import render
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
@@ -38,6 +38,7 @@ class ConversationListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
+        context['active'] = self.kwargs["username"]
         return context
 
     def get(self, *args, **kwargs):
@@ -73,7 +74,10 @@ def send_message(request):
     conversation stream."""
     sender = request.user
     recipient_username = request.POST.get('to')
-    recipient = get_user_model().objects.get(username=recipient_username)
+    try:
+        recipient = get_user_model().objects.get(username=recipient_username)
+    except get_user_model().DoesNotExist:
+        return HttpResponseNotFound("The user account appears to not exist or it has been freezed!")
     message = request.POST.get('message')
     if len(message.strip()) == 0:
         return HttpResponse()

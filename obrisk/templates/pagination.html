@@ -1,0 +1,24 @@
+{% load i18n humanize %}
+
+<ul class="pagination justify-content-center mb-4">
+
+    {% if page.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page.previous_page_number }}">&larr;
+        {% trans 'Previous' %}</a></li>
+    {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
+    {% endif %}
+
+    <span class="current">
+        <li class="page-item disabled">
+        <a class="page-link" href="#"> {{ page.number }} of {{ page.paginator.num_pages }}
+        <span class="sr-only">(current)</span></a> </li>  
+    </span> 
+    
+    {% if page.has_next %}
+    <li class="page-item"><a href="?page={{ page.next_page_number }}">{% trans 'Next' %}
+        &rarr;</a></li>
+    {% else %}
+    <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
+    {% endif %}
+</ul>
