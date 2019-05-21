@@ -23,18 +23,15 @@
       <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
     </div>
     <!-- Write Classified Widget -->
-    {% if request.user.is_authenticated %}
+    {% if request.user.is_official%}
     <div class="text-center">
       <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
         title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
-
-      {% if request.user.is_seller %}
-      <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
-        title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
-      {% endif %}
-      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
     </div>
     {% endif %}
+    
   </div>
   <!-- Sidebar Widgets Column -->
    {% comment %}

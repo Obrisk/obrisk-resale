@@ -297,3 +297,8 @@ GRAPHENE = {
 }
 
 ACCOUNT_FORMS = {'signup': 'users.forms.CustomSignupForm'}
+
+#Max data to be uploaded to Django server. This is around 12MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 13000000
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 13000000
