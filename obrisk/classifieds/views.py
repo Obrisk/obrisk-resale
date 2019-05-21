@@ -111,6 +111,7 @@ def classified_list(request, tag_slug=None):
     popular_tags = Classified.objects.get_counted_tags()
     images = ClassifiedImages.objects.all()
     other_classifieds = ClassifiedImages.objects.none()
+    official_ads = OfficialAd.objects.all() 
 
     paginator = Paginator(classifieds_list, 30)  # 50 classifieds in each page
     page = request.GET.get('page')
@@ -136,7 +137,7 @@ def classified_list(request, tag_slug=None):
         other_classifieds = ClassifiedImages.objects.none()
 
     return render(request, 'classifieds/classified_list.html',
-                  {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds,
+                  {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
                    'tag': tag, 'images': images, 'popular_tags': popular_tags, 'base_active': 'classifieds'})
 
 # class ExpiredListView(ClassifiedsListView):
