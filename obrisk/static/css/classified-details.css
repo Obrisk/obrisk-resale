@@ -39,9 +39,14 @@
 }
 
 .btn-action {
-  background: #fff;
-  border: #3ec4e2;
+  background: linear-gradient(45deg, #ee5757, #a10413);
+  color: #fff;
   border-style: solid;
+}
+
+a:hover.btn-action {
+  color: #fff;
+  background: linear-gradient(45deg, #a10413, #ee5757);
 }
 
 .meta-left span {
