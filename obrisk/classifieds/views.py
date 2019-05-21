@@ -110,10 +110,10 @@ def classified_list(request, tag_slug=None):
     classifieds_list = Classified.objects.get_active().filter(city=request.user.city)
     popular_tags = Classified.objects.get_counted_tags()
     images = ClassifiedImages.objects.all()
-    other_classifieds = ClassifiedImages.objects.none()
+    other_classifieds = Classified.objects.none()
     official_ads = OfficialAd.objects.all() 
 
-    paginator = Paginator(classifieds_list, 30)  # 50 classifieds in each page
+    paginator = Paginator(classifieds_list, 30)  # 30 classifieds in each page
     page = request.GET.get('page')
 
     try:
@@ -126,14 +126,14 @@ def classified_list(request, tag_slug=None):
         classifieds = paginator.page(paginator.num_pages)
 
     # When the last page user can see only fifty classifieds in other cities. To improve this near future.
-    if page == paginator.num_pages or paginator.num_pages == 1:
+    if int(page) == paginator.num_pages:
         other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
 
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
-        classifieds_list = Classified.objects.get_active().filter(tags__in=[tag])
+        classifieds = Classified.objects.get_active().filter(tags__in=[tag])
         other_classifieds = ClassifiedImages.objects.none()
 
     return render(request, 'classifieds/classified_list.html',
