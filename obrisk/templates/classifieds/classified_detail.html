@@ -54,14 +54,15 @@
               </div>
             </div>
             <div
-              class="meta-right mt-md-0 mt-4 col-8 d-flex flex-column align-items-baseline align-items-md-end ml-auto mr-auto">
+              class="meta-right mt-md-0 mt-4 col-md-8 d-flex flex-column align-items-baseline align-items-md-end ml-auto mr-auto">
               <!-- Price -->
               <h3 class="O-cl-red price">
-                <strong class="ribbon-content">{% trans 'CNY' %} {{ classified.price }}</strong>
+                <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if request.user != classified.user  %}
-              <strong>Seller Info :</strong>
-              {{ classified.contact_info }}
+              <small><strong>Seller Info :</strong>
+                {{ classified.contact_info }}</small>
+
               <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
                 <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
               <br>
@@ -71,7 +72,7 @@
           </div>
 
         </div>
-        <div class="col-9 m-auto h-50">
+        <div class="col-lg-9 m-auto h-50">
           {% include 'classifieds/image-swiper.html' with message=message %}
 
         </div>

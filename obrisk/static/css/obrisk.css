@@ -2,6 +2,31 @@
 
 body {
   padding-top: 80px;
+
+}
+
+h1 {
+  font-size: calc(29px + (40 - 24) * ((100vw - 300px) / (1600 - 300)));
+}
+
+h2 {
+  font-size: calc(23px + (30 - 23) * ((100vw - 300px) / (1600 - 300)));
+
+}
+
+h3 {
+  font-size: calc(18px + (25 - 18) * ((100vw - 300px) / (1600 - 300)));
+
+}
+
+h4 {
+  font-size: calc(16px + (22 - 16) * ((100vw - 300px) / (1600 - 300)));
+
+}
+
+h5 {
+  font-size: calc(15px + (18 - 15) * ((100vw - 300px) / (1600 - 300)));
+
 }
 
 header .navbar-brand {
@@ -214,14 +239,6 @@ main .notification--num {
   animation: notification 2.2s linear;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-p {
-  word-break: break-all
-}
 
 .main-nav li {
   width: 101px;
