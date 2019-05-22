@@ -3,18 +3,13 @@
 {% load crispy_forms_tags %}
 
 {% block head %}
+<link href="{% static 'css/post-create.css' %}" rel="stylesheet">
+
 {% endblock head %}
 
 {% block content %}
-
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-      <!-- <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'posts' %}</a></li> -->
-      <li class="breadcrumb-item active" aria-current="page">{% trans 'Post new contents' %}</li>
-    </ol>
-  </nav>
-  <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data"  id="posts-form" method="post" role="form">
+<div class="col-lg-8 m-auto">
+  <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data" id="posts-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
@@ -25,8 +20,10 @@
   </form>
   {{ form.media }}
 
+</div>
+
 {% endblock content %}
 
 {% block extra_js %}
-  <script src="{% static 'js/posts.js' %}"></script>
+<script src="{% static 'js/posts.js' %}"></script>
 {% endblock extra_js %}

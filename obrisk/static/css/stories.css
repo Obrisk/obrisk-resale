@@ -30,10 +30,6 @@
   float: left;
 }
 
-.profile-picture img {
-  width: 60px;
-  border-radius: 50%;
-}
 
 .interaction {
   padding-left: 1.5em;
@@ -71,9 +67,12 @@ a {
   color: #202024;
 }
 
-.heart, .comment, .like-count, .fa-times {
+.heart,
+.comment,
+.like-count,
+.fa-times {
   color: #8b2100;
-} 
+}
 
 a:hover {
   color: #424247;
@@ -172,3 +171,8 @@ a:hover {
   color: #333333;
 }
 
+.infinite-item {
+  border: 1px solid #A1DBD2 !important;
+  box-shadow: 2px 2px 0px #3EC4E2 !important;
+  background: #fff;
+}

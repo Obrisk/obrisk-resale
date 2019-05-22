@@ -1,43 +1,203 @@
 .similar-ads {
-    background:  rgb(224, 223, 223);
+  background: rgb(224, 223, 223);
 }
 
 .swiper-container {
-    width: 100%;
-    height: 500px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  width: 100%;
+  height: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
 
-  .swiper-slide {
-    background-size: cover;
-    background-position: center;
-  }
+.swiper-slide {
+  background-size: cover;
+  background-position: center;
+}
 
-  .gallery-top {
-    height: 400px;
-    width: 100%;
-  }
+.gallery-top {
+  height: 400px;
+  width: 100%;
+}
 
-  .gallery-thumbs {
-    height: 140px;
-    box-sizing: border-box;
-    padding: 10px 0;
-  }
+.gallery-thumbs {
+  height: 140px;
+  box-sizing: border-box;
+  padding: 10px 0;
+}
 
-  .gallery-thumbs .swiper-slide {
-    height: 100%;
-    opacity: 0.4;
-  }
+.gallery-thumbs .swiper-slide {
+  height: 100%;
+  opacity: 0.4;
+}
 
-  .gallery-thumbs .swiper-slide-thumb-active {
-    opacity: 1;
-  }
+.gallery-thumbs .swiper-slide-thumb-active {
+  opacity: 1;
+}
 
 #classified-user {
   color: black;
 }
 
 .btn-action {
-    background:linear-gradient(45deg, #491104, #c03004)
-} 
+  background: linear-gradient(45deg, #ee5757, #a10413);
+  color: #fff;
+  border-style: solid;
+}
+
+a:hover.btn-action {
+  color: #fff;
+  background: linear-gradient(45deg, #a10413, #ee5757);
+}
+
+.meta-left span {
+  color: rgba(0, 0, 0, .54) !important;
+}
+
+.classified-wrapper {
+  border: 1px solid #A1DBD2 !important;
+  box-shadow: 2px 2px 0px #3EC4E2 !important;
+  background: #fff;
+}
+
+.price {
+  font-family: 'Montserrat',
+    sans-serif;
+  font-weight: 600;
+}
+
+.divider {
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(267.54deg, #3EC4E2 0%, #A1DBD2 101.73%);
+}
+
+.card-title {
+  height: 40px;
+  white-space: pre-wrap;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+.card-body small,
+.small {
+  font-size: 70%;
+}
+
+.related {
+  overflow-x: scroll;
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
+
+}
+
+.classified-card {
+  display: inline-block;
+}
+
+.related::-webkit-scrollbar {
+  display: none;
+}
+
+ul.swiper-wrapper {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Swiper styles */
+.swiper-container {
+  max-width: 100%;
+}
+
+/* responive image */
+.swiper-container img {
+  width: 100%;
+  height: auto;
+}
+
+.swiper-container a {
+  display: flex;
+}
+
+
+/* Swiper custom pagination */
+.swiper-pagination-bullet {
+  width: 34px;
+  height: 34px;
+  text-align: center;
+  line-height: 34px;
+  font-size: 14px;
+  color: #000;
+  opacity: 1;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.swiper-pagination-bullet-active {
+  color: #fff;
+  background: black;
+}
+
+.swiper-button-next {
+  background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'><path%20d%3D'M27%2C22L27%2C22L5%2C44l-2.1-2.1L22.8%2C22L2.9%2C2.1L5%2C0L27%2C22L27%2C22z'%20fill%3D'%233ec4e2'%2F><%2Fsvg>") !important;
+  ;
+  opacity: 0.6;
+}
+
+.swiper-button-prev {
+  background-image: url("data:image/svg+xml;charset=utf-8,<svg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%2027%2044'><path%20d%3D'M0%2C22L22%2C0l2.1%2C2.1L4.2%2C22l19.9%2C19.9L22%2C44L0%2C22L0%2C22L0%2C22z'%20fill%3D'%233ec4e2'%2F><%2Fsvg>") !important;
+  ;
+  opacity: 0.6;
+}
+
+.swiper-pagination-bullet-active {
+  background: #3EC4E2 !important;
+  color: #3EC4E2;
+}
+
+.swiper-pagination-bullet {
+  opacity: 1 !important;
+  mix-blend-mode: difference
+}
+
+@media screen and (max-width:425px) {
+
+  .ribbon-content {
+    font-size: 20px;
+  }
+
+  .meta-right a {
+    font-size: 12px
+  }
+
+  .meta-left span,
+  small {
+    font-size: 12px;
+  }
+}
+
+.related-card {
+  border: 1px solid #A1DBD2 !important;
+  box-shadow: 2px 2px 0px #3EC4E2 !important;
+  background: #fff;
+}
+
+@media screen and (max-width:570px) {
+
+  .ribbon-content {
+    font-size: 16px;
+  }
+
+  .meta-right a {
+    font-size: 12px
+  }
+
+  .meta-left span,
+  small {
+    font-size: 12px;
+  }
+}

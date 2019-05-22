@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView, ListView, DetailView
+from django.views.decorators.csrf import csrf_exempt
 
 from obrisk.helpers import ajax_required
 from obrisk.qa.models import Question, Answer
@@ -21,8 +22,10 @@ class QuestionsIndexListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["popular_tags"] = Question.objects.get_counted_tags()
+        #This query is too slow
+        #context["popular_tags"] = Question.objects.get_counted_tags()
         context["active"] = "all"
+        context["base_active"] = "q_and_a"
         return context
 
 
@@ -35,6 +38,8 @@ class QuestionAnsListView(QuestionsIndexListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["active"] = "answered"
+        context["base_active"] = "q_and_a"
+
         return context
 
 
@@ -47,6 +52,7 @@ class QuestionListView(QuestionsIndexListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         context["active"] = "unanswered"
+        context["base_active"] = "q_and_a"
         return context
 
 
@@ -114,15 +120,18 @@ class CreateAnswerView(LoginRequiredMixin, CreateView):
 
 @login_required
 @ajax_required
-@require_http_methods(["POST"])
+@csrf_exempt
+@require_http_methods(["GET"])
+#The only reason this method is GET is because the server will return 403 on the live site,
+#even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
 def question_vote(request):
     """Function view to receive AJAX call, returns the count of votes a given
     question has recieved."""
-    question_id = request.POST["question"]
+    question_id = request.GET["question"]
     value = None
-    if request.POST["value"] == "U":
-        value = True
 
+    if request.GET["value"] == "U":
+        value = True
     else:
         value = False
 
@@ -141,13 +150,16 @@ def question_vote(request):
 
 @login_required
 @ajax_required
-@require_http_methods(["POST"])
+@csrf_exempt
+@require_http_methods(["GET"])
+#The only reason this method is GET is because the server will return 403 on the live site,
+#even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
 def answer_vote(request):
     """Function view to receive AJAX call, returns the count of votes a given
     answer has recieved."""
-    answer_id = request.POST["answer"]
+    answer_id = request.GET["answer"]
     value = None
-    if request.POST["value"] == "U":
+    if request.GET["value"] == "U":
         value = True
 
     else:
@@ -168,11 +180,14 @@ def answer_vote(request):
 
 @login_required
 @ajax_required
-@require_http_methods(["POST"])
+@csrf_exempt
+@require_http_methods(["GET"])
+#The only reason this method is GET is because the server will return 403 on the live site,
+#even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
 def accept_answer(request):
     """Function view to receive AJAX call, marks as accepted a given answer for
     an also provided question."""
-    answer_id = request.POST["answer"]
+    answer_id = request.GET["answer"]
     answer = Answer.objects.get(uuid_id=answer_id)
     answer.accept_answer()
     return JsonResponse({'status': 'true'}, status=200)

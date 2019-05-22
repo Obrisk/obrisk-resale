@@ -1,38 +1,49 @@
 {% load i18n humanize %}
 {% load static i18n thumbnail %}
-
+{% block head %}
+<link href="{% static 'css/qa.css' %}" rel="stylesheet">
+{% endblock head %}
 <div class="row answer" answer-id="{{ answer.uuid_id }}">
   {% csrf_token %}
   <span class="col-1 options ">
-    <i class="fa fa-chevron-up vote up-vote answer-vote {% if request.user in answer.get_upvoters %}voted{% endif %}" aria-hidden="true" title="{% trans 'Click to up vote; click again to toggle' %}"></i>
+    <i class="fa fa-chevron-up vote up-vote answer-vote {% if request.user in answer.get_upvoters %}voted{% endif %}"
+      aria-hidden="true" title="{% trans 'Click to up vote; click again to toggle' %}"></i>
     <span id="answerVotes" class="votes">{{ answer.total_votes }}</span>
-    <i class="fa fa-chevron-down vote down-vote answer-vote {% if request.user in answer.get_downvoters %}voted{% endif %}" aria-hidden="true" title="{% trans 'Click to down vote; click again to toggle' %}"></i>
-   
+    <i class="fa fa-chevron-down vote down-vote answer-vote {% if request.user in answer.get_downvoters %}voted{% endif %}"
+      aria-hidden="true" title="{% trans 'Click to down vote; click again to toggle' %}"></i>
+
     {% if answer.is_answer and user == question.user %}
-      <i id="acceptAnswer" class="fa fa-check accept accepted" aria-hidden="true" title="{% trans 'Click to unaccept the answer' %}"></i>
+    <i id="acceptAnswer" class="fa fa-check accept accepted" aria-hidden="true"
+      title="{% trans 'Click to unaccept the answer' %}"></i>
     {% elif answer.is_answer %}
-      <i id="acceptAnswer" class="fa fa-check accept accepted" aria-hidden="true" style="cursor: default"></i>
+    <i id="acceptAnswer" class="fa fa-check accept accepted" aria-hidden="true" style="cursor: default"></i>
     {% elif user == question.user %}
-      <i id="acceptAnswer" class="fa fa-check accept" aria-hidden="true" title="{% trans 'Click to accept the answer' %}"></i>
+    <i id="acceptAnswer" class="fa fa-check accept" aria-hidden="true"
+      title="{% trans 'Click to accept the answer' %}"></i>
     {% endif %}
   </span>
 
-  <span class="col-11">
-      <span class="answer-description">
-          {{ answer.get_markdown|safe }}
-      </span>
+  <span class="col-lg-11 col-8 m-auto answer-wrapper">
+    <span class="answer-description">
+      {{ answer.get_markdown|safe }}
+    </span>
 
-    <div class="answer-user">
-      {% thumbnail answer.user.picture "30x30" crop="center" upscale="true"  as im %}
-        <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
-      {% empty %}
-        <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-      {% endthumbnail %}
-      <a href="{% url 'users:detail' answer.user.username %}" class="username">{{ answer.user.username }}</a>
-      <br>
-      <small class="answered">{% trans "answered" %} {{ answer.timestamp|naturaltime }}</small>
+    <div class="answer-user question-user d-flex flex-row align-items-center">
+      <div class="text-secondary d-flex flex-column align-content-center mr-3">
+        <a href="{% url 'users:detail' answer.user.username %}" class="username">
+          {% thumbnail answer.user.picture "30x30" crop="center" upscale="true"  as im %}
+          <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
+          {% empty %}
+          <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
+          {% endthumbnail %}
+          {{ answer.user.username }}</a>
+        <small class="answered">{% trans "answered" %} {{ answer.timestamp|naturaltime }}</small>
+
+      </div>
+
+
     </div>
-   
+
   </span>
 </div>
 <hr>

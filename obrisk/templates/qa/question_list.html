@@ -4,79 +4,130 @@
 {% block title %}{% trans "Questions" %}{% endblock %}
 
 {% block head %}
-  <link href="{% static 'css/qa.css' %}" rel="stylesheet">
+<link href="{% static 'css/qa.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-      <li class="breadcrumb-item active" aria-current="page">{% trans 'Q.A' %}</li>
-    </ol>
-  </nav>
-  <div class="page-header">
-    <a href="{% url 'qa:ask_question' %}" class="btn btn-dark pull-right">
-      <i class="fa fa-pencil" aria-hidden="true"></i> {% trans "Ask a Question" %}
-    </a>
-    <h1>{% trans "Questions" %}</h1>
-  </div>
-  <div class="card my-4">
-    <h5 class="card-header">{% trans 'Questions by topic' %}</h5>
-    <div class="card-body">
-      {% for tag, count in popular_tags %}
-        <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
-      {% endfor %}
-    </div>
-  </div>
-  <div>
-    <ul class="nav nav-tabs">
-      <li class="nav-item">
-        <a class="nav-link{% if active == 'unanswered' %} active{% endif %}" href="{% url 'qa:index_noans' %}">
-          {% trans "Unanswered" %}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link{% if active == 'answered' %} active{% endif %}" href="{% url 'qa:index_ans' %}">
-          {% trans "Answered" %}
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link{% if active == 'all' %} active{% endif %}" href="{% url 'qa:index_all' %}">
-          {% trans "All Questions" %}
-        </a>
-      </li>
-    </ul>
-    {% for question in questions %}
-      {% include 'qa/question_sample.html' with question=question %}
-    {% empty %}
-      <h4 class="no-data">{% trans "No question to display" %}</h4>
-    {% endfor %}
+<!-- Page Content -->
+<div class="sidebar-overlay"></div>
 
-    {% if is_paginated %}
+<div class="container mt-4 p-0">
+  <div class="col-lg-10 m-auto">
+    <div class="align-items-center d-flex justify-content-end mb-5 mt-3 justify-content-between justify-content-lg-end">
+
+      <div class="toggle-tags d-lg-none">
+        <a href=""></a>
+        <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+      </div>
+      <!-- Write question Widget -->
+      <a href="{% url 'qa:ask_question' %}" class="btn btn-dark pull-right">
+        📝{% trans "Ask a Question" %}
+      </a>
+    </div>
+
+  </div>
+
+
+  <div id="sidebar" class="sidebar">
+    <!-- Cloud Tag Widget -->
+    <div class="card">
+      <div class="card-header">
+        <h5>{% trans 'Popular tags' %}</h5>
+      </div>
+
+      <div class="card-body">
+        {% for tag, count in popular_tags %}
+        <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+
+  </div>
+
+  <div class="row">
+    <div class="questions col-12 col-md-9 m-auto">
+      <ul class="nav nav-tabs justify-content-between">
+        <li class="nav-item">
+          <a class="nav-link{% if active == 'unanswered' %} active{% endif %}" href="{% url 'qa:index_noans' %}">
+            {% trans "Unanswered" %}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if active == 'answered' %} active{% endif %}" href="{% url 'qa:index_ans' %}">
+            {% trans "Answered" %}
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link{% if active == 'all' %} active{% endif %}" href="{% url 'qa:index_all' %}">
+            {% trans "All Questions" %}
+          </a>
+        </li>
+      </ul>
+      {% for question in questions %}
+      {% include 'qa/question_sample.html' with question=question %}
+      {% empty %}
+      <h4 class="no-data">{% trans "No question to display" %}</h4>
+      {% endfor %}
+
+      {% if is_paginated %}
       <ul class="pagination justify-content-center mb-4">
         {% if page_obj.has_previous %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr; {% trans 'Newer' %}</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr;
+            {% trans 'Newer' %}</a></li>
         {% else %}
-          <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
+        <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
         {% endif %}
         {% for i in paginator.page_range %}
-          {% if page_obj.number == i %}
-            <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
-          {% else %}
-            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-          {% endif %}
+        {% if page_obj.number == i %}
+        <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
         {% endfor %}
         {% if page_obj.has_next %}
-          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Older' %} &rarr;</a></li>
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Older' %}
+            &rarr;</a></li>
         {% else %}
-          <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
+        <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
         {% endif %}
       </ul>
-    {% endif %}
+      {% endif %}
+    </div>
   </div>
+
+</div>
+
 {% endblock content %}
 
 
 {% block extra_js %}
-  <script src="{% static 'js/qa.js' %}"></script>
+<script>
+  (function () {
+    var sidebar = document.getElementById('sidebar');
+    var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
+    var container = document.getElementsByClassName('container')[0];
+    var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
+
+    var openSidebar = function () {
+      sidebarOverlay.style.left = '0';
+      sidebar.style.left = '0';
+      sidebarOverlay.style.top = '0';
+      sidebar.style.display = 'block';
+      $(".classifieds").toggleClass("open-sidebar");
+    }
+
+    var closeSidebar = function (e) {
+      e.cancelBubble = true;
+      sidebarOverlay.style.left = '-100%';
+      sidebar.style.left = '-100%';
+      $(".classifieds").toggleClass("open-sidebar");
+
+    }
+
+    sidebarOverlay.addEventListener('click', closeSidebar);
+    sidebarBtnOpen.addEventListener('click', openSidebar);
+  })()
+</script>
+<script src="{% static 'js/qa.js' %}"></script>
 {% endblock extra_js %}

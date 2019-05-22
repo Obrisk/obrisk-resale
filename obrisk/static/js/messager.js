@@ -9,7 +9,7 @@ $(function () {
             if (status === 'online') {
                 elem.attr("class", "btn btn-success btn-circle");
             } else {
-                elem.attr("class", "btn btn-dark btn-circle");
+                elem.attr("class", "btn btn-danger btn-circle");
             };
         };
     };
@@ -86,12 +86,12 @@ $(function () {
         // Commenting this block until I find a better way to manage how to
         // report the user status.
 
-        /* payload = {
+        payload = {
             "type": "recieve",
             "sender": currentUser,
             "set_status": "online"
         };
-        webSocket.send(payload); */
+        webSocket.send(payload);
     };
 
     webSocket.socket.onclose = function () {

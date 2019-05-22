@@ -5,103 +5,159 @@
 {% block title %} {% trans 'Posts' %} {% endblock %}
 
 {% block head %}
-    <link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/post-list.css' %}" rel="stylesheet">
+
 {% endblock head %}
 
 {% block content %}
 
-  <!-- Page Content -->
-  <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Blog posts' %}</a></li>
-        {% comment %} <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Events' %}</a></li>
-        <li class="breadcrumb-item active"><a href="{% url 'posts:list' %}">{% trans 'Jobs' %}</a></li> {% endcomment %}
-      </ol>
-    </nav>
-    <div class="row">
-      <!-- Blog Entries Column -->
-      <div class="col-md-8">
-        {% for post in posts %}
-          <!-- Blog Post -->
-          <div class="card card-cascade mb-4">            
-            <div class="card-body p-3">
-            <!-- Card image -->
-            <div class="row">
-                <div class="col-5">
-                <a href="{% url 'posts:post' post.slug %}"  style="color:black; text-decoration:none; background-color:none" >
-                  {% thumbnail post.image "150x150" as im %}
-                    <img src="{{ im.url }}"   width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class=" card-img-top">
-                  {% endthumbnail %}
-                  </div>
+<!-- Page Content -->
+<div class="sidebar-overlay"></div>
+<div class="container mt-4">
+  <div
+    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
 
-                <div class="col-7"> 
-                    <strong class="card-title small font-weight-bold" > {{ post.title|title|truncatechars:60 }} </strong> 
-                        <div class="text-left">
-                            <i class="lead fa fa-user"></i>
-                            <small> <a style="color:black;" href="{% url 'users:detail' post.user.username %}">
-                              {{ post.user.get_profile_name|title }}</a> </small> 
-                        </div>
-                </a>
-                </div>
-              </div>
-          </div>
-        </div>
-        
-        {% empty %}
-          <h4 class="no-data">{% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}. <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
-        {% endfor %}
-
-        {% if is_paginated %}
-          <ul class="pagination justify-content-center mb-4">
-            {% if page_obj.has_previous %}
-              <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr; {% trans 'Newer' %}</a></li>
-            {% else %}
-              <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
-            {% endif %}
-            {% for i in paginator.page_range %}
-              {% if page_obj.number == i %}
-                <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
-              {% else %}
-                <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
-              {% endif %}
-            {% endfor %}
-            {% if page_obj.has_next %}
-              <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Older' %} &rarr;</a></li>
-            {% else %}
-              <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
-            {% endif %}
-          </ul>
-        {% endif %}
-
+    <div class="toggle-tags d-lg-none">
+      <a href=""></a>
+      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+    </div>
+    <!-- Write Classified Widget -->
+    {% if request.user.is_official%}
+    <div class="text-center">
+      <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
+        title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
+        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+    </div>
+    {% endif %}
+    
+  </div>
+  <!-- Sidebar Widgets Column -->
+   {% comment %}
+  <div id="sidebar" class="sidebar">
+    <!-- Cloud Tag Widget -->
+    
+    <div class="card">
+      <div class="card-header">
+        <h5>{% trans 'Popular tags' %}</h5>
       </div>
 
-      <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
-        <!-- Write post Widget -->
-        {% if request.user.is_authenticated  and request.user.is_official %}
-          <div class="card my-4">
-            <div class="card-body text-center">
-              <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}"><i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
-              {%if request.user == post.user %}
-              <a class="btn btn-dark" href="{% url 'posts:drafts' %}" title="{% trans 'Drafts' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Drafts' %}</a>
-              {% endif %}
+      <div class="card-body">
+        {% for tag, count in popular_tags %}
+        <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
+        {% endfor %}
+      </div> 
+    </div>
+  </div>
+{% endcomment %}
+
+  <div class="row">
+    <!-- Blog Entries Column -->
+    <div class="post-wrapper col-lg-8 m-auto">
+      {% for post in posts %}
+      <!-- Blog Post -->
+      <div class="single-post mb-4">
+        <div class="single-post-body p-0">
+          <!-- Card image -->
+          <div class="row">
+            <div class="col-12">
+              <a href="{% url 'posts:post' post.slug %}"
+                style="color:black; text-decoration:none; background-color:none">
+                {% thumbnail post.image "900x300" as im %}
+                <img src="{{ im.url }}" width="150px" height="auto" alt="{% trans 'Featured Image' %}"
+                  class=" card-img-top">
+                {% endthumbnail %}
+            </div>
+
+            <div class="col-12 pl-5 pr-5 pt-4 pb-4">
+              <h3 class="word-break pr-3"> {{ post.title|title|truncatechars:60 }} </h3>
+              <div class="text-left">
+                <a href="{% url 'users:detail' post.user.username %}">
+                  {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
+                  <img src="{{ im.url }}" class="pull-left mr-2" style="border-radius: 50%;"
+                    alt="{% trans 'User Image' %}" class="user-image">
+                  {% empty %}
+                  <img src="{% static 'img/user.png' %}" class="pull-left mr-2" height="35px"
+                    alt="{% trans 'No Profile Picture' %}" />
+                  {% endthumbnail %}
+                  <div id="classified-user">
+                    <div class="d-flex flex-row mt-2"><strong
+                        class="mr-3">{{ post.user.get_profile_name|title }}</strong>
+                    </div>
+                  </div>
+                </a>
+                <div class="time"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></div>
+
+              </div>
+              </a>
             </div>
           </div>
-        {% endif %}
-        <!-- Cloud Tag Widget -->
-        <div class="card my-4">
-          <h5 class="card-header">{% trans 'Popular tags' %}</h5>
-          <div class="card-body">
-            {% for tag, count in popular_tags %}
-              <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
-            {% endfor %}
-          </div>
         </div>
       </div>
-    </div>
-    <!-- /.row -->
-  </div>
-  <!-- /.container -->
 
+      {% empty %}
+      <h4 class="no-data">
+        {% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}.
+        <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
+      {% endfor %}
+
+      {% if is_paginated %}
+      <ul class="pagination justify-content-center mb-4">
+        {% if page_obj.has_previous %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr;
+            {% trans 'Newer' %}</a></li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
+        {% endif %}
+        {% for i in paginator.page_range %}
+        {% if page_obj.number == i %}
+        <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a>
+        </li>
+        {% else %}
+        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+        {% endif %}
+        {% endfor %}
+        {% if page_obj.has_next %}
+        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Older' %}
+            &rarr;</a></li>
+        {% else %}
+        <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
+        {% endif %}
+      </ul>
+      {% endif %}
+
+    </div>
+
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.container -->
+<script>
+  (function () {
+    var sidebar = document.getElementById('sidebar');
+    var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
+    var container = document.getElementsByClassName('container')[0];
+    var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
+
+    var openSidebar = function () {
+      sidebarOverlay.style.left = '0';
+      sidebar.style.left = '0';
+      sidebarOverlay.style.top = '0';
+      sidebar.style.display = 'block';
+      $(".classifieds").toggleClass("open-sidebar");
+    }
+
+    var closeSidebar = function (e) {
+      e.cancelBubble = true;
+      sidebarOverlay.style.left = '-100%';
+      sidebar.style.left = '-100%';
+      $(".classifieds").toggleClass("open-sidebar");
+
+    }
+
+    sidebarOverlay.addEventListener('click', closeSidebar);
+    sidebarBtnOpen.addEventListener('click', openSidebar);
+  })()
+</script>
 {% endblock content %}

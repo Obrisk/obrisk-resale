@@ -5,98 +5,118 @@
 {% block title %}{{ post.title|title }}{% endblock %}
 
 {% block head %}
-  <link href="{% static 'css/notifications.css' %}" rel="stylesheet">
+<link href="{% static 'css/notifications.css' %}" rel="stylesheet">
+<link href="{% static 'css/post-details.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
-  <!-- Page Content -->
-  <div class="container">
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'Home' %}</a></li>
-        <!-- <li class="breadcrumb-item"><a href="{% url 'posts:list' %}">{% trans 'posts' %}</a></li> -->
-        <li class="breadcrumb-item active" aria-current="page">{{ post.title|title }}</li>
-      </ol>
-    </nav>
-    <div class="row">
-      <!-- Post Content Column -->
-      <div class="col-lg-8">
+<!-- Page Content -->
+<div class="container">
+  <div class="row">
+    <!-- Post Content Column -->
+    <div class="post-wrapper col-lg-8 col-md-10 m-auto">
+      <div class="classified-meta mb-4">
         <!-- Title -->
-        <h4 class="mt-4">{{ post.title|title }}</h4>
-        <!-- Author -->
-        <p class="lead">
-          <a href="{% url 'users:detail' post.user.username %}"> 
-              {% thumbnail classified.user.picture "35x35" crop="center" upscale="true"  as im %}
-                <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
+        <h1 class="mt-4 text-center">{{ post.title|title }}</h1>
+
+        <div class="meta-details mt-4 d-flex justify-content-center">
+
+          <div class="meta-right d-flex flex-column align-items-center">
+            <a href="{% url 'users:detail' post.user.get_profile_name %}">
+              {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
+              <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
+                class="user-image">
               {% empty %}
-                <img src="{% static 'img/user.png' %}" class="pull-left" height="35px" alt="{% trans 'No Profile Picture' %}" />
+              <img src="{% static 'img/user.png' %}" class="pull-left" height="35px"
+                alt="{% trans 'No Profile Picture' %}" />
               {% endthumbnail %}
-              <strong> {{ post.user.get_profile_name|title }} </strong> </a>
-        </p>
-        <hr>
-        <!-- Date/Time -->
-        <p> <i class="fa fa-clock-o" aria-hidden="true"></i> {% trans 'Posted' %} {{ post.timestamp|naturaltime }}  </p>
-        <hr>
-        <!-- Featured Image -->
-        {% thumbnail post.image "900x300" as im %}
-          <img src="{{ im.url }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
-        {% endthumbnail %}
-        <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
-        <hr>
-        <!-- Post Content -->
-        <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
-        <hr>
-
-        <!-- Comments Form  -->
-        {% with comments.count as total_comments %}
-          <h4>
-          {{ total_comments }} comment{{ total_comments|pluralize }}
-          </h4>
-        {% endwith %}
-
-
-        {% for comment in comments %}
-        <div class="comment">
-            <p class="info">
-              <span style="margin: 0px"> {{ comment.body|linebreaks }} </span>  
-              <span class="media mb-2">
-                {% thumbnail comment.user.picture "30x30" crop="center" upscale="true" as im %}
-                  <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
-                {% empty %}
-                  <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
-
-                <span class="media-body">
-                  <strong class="mt-0">{{ comment.user.get_profile_name|title }}- </strong>
-                  <small> {{ comment.created }} </small>
-                </span>
-              </span>
-             </p>
-             <hr>
+            </a>
+            <div class="d-flex flex-column align-items-center">
+              <a href="{% url 'users:detail' post.user.get_profile_name %}"><strong id="classified-user">
+                  {{ post.user.get_profile_name|title }} </strong></a>
+              <!-- Date/Time -->
+              <div class="time"><small>⏲️ </small><span>{{ post.timestamp|naturaltime }} </span></div>
+            </div>
+          </div>
         </div>
 
-        {% empty %}
-          <p>There are no comments yet.</p>
-        {% endfor %}
+      </div>
+      <!-- Featured Image -->
+      {% thumbnail post.image "900x300" as im %}
+      <div class="featured-img"
+        style="background-image:url({{ im.url }}); height: 250px; width: 100%; background-size:cover">
+      </div>
+      {% endthumbnail %}
+      <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
+      <hr>
+      <!-- Post Content -->
+      <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
+      <hr>
+      <!-- Cloud Tag Widget -->
+      <div class="card my-4">
+        <h5 class="card-header">{% trans 'Tags' %}</h5>
+        <div class="card-body">
+          {% for tag in post.tags.all %}
+          <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
+          {% endfor %}
+        </div>
+      </div>
 
-        {% if user.is_authenticated %}
-          {% if new_comment %}
-              <h2>Your comment has been added.</h2>
-          {% else %}
+    </div>
+    <!-- /.row -->
 
-      <div id="comment-notify" class= "notification" > </div>
+    <div class="col-lg-8 col-md-10 mr-auto ml-auto post-comment mt-4 pt-4 mb-4">
+      <!-- Comments Form  -->
+      {% with comments.count as total_comments %}
+      <h4>
+        {{ total_comments }} comment{{ total_comments|pluralize }}
+      </h4>
+      {% endwith %}
+
+
+      {% for comment in comments %}
+      <div class="comment-wrapper d-flex align-items-center p-2 m-4">
+        <div class="autor-avatar">
+          <a href="{% url 'users:detail' post.user.username %}">
+            {% thumbnail comment.user.picture "30x30" crop="center" upscale="true" as im %}
+            <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
+            {% empty %}
+            <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="30px"
+              alt="{% trans 'No Profile Picture' %}" />
+            {% endthumbnail %}</a>
+        </div>
+        <div class="comment-body">
+          <div class="comment-author">
+            <a href="{% url 'users:detail' post.user.username %}" class="">
+              <strong class="mt-0">{{ comment.user.get_profile_name|title }}- </strong>
+            </a>
+            <small> {{ comment.created }} </small>
+          </div>
+          <div class="comment-body"> {{ comment.body|linebreaks }} </div>
+        </div>
+      </div>
+      {% empty %}
+      <p>There are no comments yet.</p>
+      {% endfor %}
+
+      {% if user.is_authenticated %}
+      {% if new_comment %}
+      <h2>Your comment has been added.</h2>
+      {% else %}
+
+      <!-- <div id="comment-notify d-none" class="notification"> </div> -->
 
       <div class="card my-4">
-          <h4 class="card-header">{% trans 'Leave a Comment' %}:</h4>
-          <div class="card-body">
+        <h4 class="card-header">{% trans 'Leave a Comment' %}:</h4>
+        <div class="card-body">
 
-            <form method="post" id="commentForm">
-                {% csrf_token %}
-                {{ comment_form|crispy }}
-                <input class="btn btn-dark comment-btn" type="button" value="Add comment">
-            </form>
-          </div> 
-      </div> 
+          <form method="post" id="commentForm">
+            {% csrf_token %}
+            {{ comment_form|crispy }}
+            <input class="btn btn-dark comment-btn" type="button" value="Add comment">
+          </form>
+        </div>
+      </div>
       {% endif %}
       {% endif %}
 
@@ -104,41 +124,29 @@
       <div class="col-md-4">
 
         <!-- As of now, I don't want to encourage users to write posts thus
-        Don't preview option to write new article unless user was the author -->
+                    Don't preview option to write new article unless user was the author -->
 
         {% if request.user == post.user %}
-          <div class="card my-4">
-            <div class="card-body text-center">
-              <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}">
-                 <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
-              <a class="btn btn-dark" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}">
-                 <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-            </div>
-          </div>
-        {% endif %}
+        <div class="row align-items-center mt-4 mb-4">
 
-        <!-- Cloud Tag Widget -->
-        <div class="card my-4">
-          <h4 class="card-header">{% trans 'Cloud tag' %}</h4>
-          <div class="card-body">
-            {% for tag in post.tags.all %}
-              <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
-            {% endfor %}
-          </div>
+          <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}">
+            <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
+          <a class="btn btn-dark ml-3" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}">
+            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
         </div>
+        {% endif %}
       </div>
     </div>
-    <!-- /.row -->
   </div>
   <!-- /.container -->
-{% endblock content %}
+  {% endblock content %}
 
 
 
-{% block javascript %}
-<script type="text/javascript">
+  {% block javascript %}
+  <script type="text/javascript">
     var url = "{% url 'posts:post' post.slug %}"
-</script>
-<script src="{% static 'js/posts.js' %}"> </script>
+  </script>
+  <script src="{% static 'js/posts.js' %}"> </script>
 
-{% endblock javascript %}
+  {% endblock javascript %}

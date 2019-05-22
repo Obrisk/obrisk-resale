@@ -19,6 +19,11 @@ ALLOWED_HOSTS = [
      '*'
 ]
 
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('staticfiles'))
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = '/static/'
+
 # CACHES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#caches
@@ -73,10 +78,6 @@ if os.environ.get('USE_DOCKER') == 'yes':
 INSTALLED_APPS += ['django_extensions']  # noqa F405
 
 # Your stuff...
-# ------------------------------------------------------------------------------
-CHAT_WS_SERVER_HOST = '192.168.0.105'
-CHAT_WS_SERVER_PORT = 8001
-CHAT_WS_SERVER_PROTOCOL = 'ws'
-DATETIME_FORMAT ='M d H:i'
+
 
 

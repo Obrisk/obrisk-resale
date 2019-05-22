@@ -54,6 +54,7 @@
     cursor: pointer;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
+
 #uploaderPick {
     font-size: 18px;
     line-height: 40px;
@@ -293,7 +294,7 @@
 
 .total-progress {
     height: 16px;
-    width: 300px;
+    width: 80%;
     margin: 20px;
     display: inline-block;
     overflow: hidden;

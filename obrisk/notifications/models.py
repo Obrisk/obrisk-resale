@@ -110,12 +110,12 @@ class Notification(models.Model):
         (SHARED, _('shared')),
         (SIGNUP, _('created an account')),
         (REPLY, _('replied to'))
-        )
+    )
     actor = models.ForeignKey(settings.AUTH_USER_MODEL,
                               related_name="notify_actor",
                               on_delete=models.CASCADE)
     recipient = models.ForeignKey(settings.AUTH_USER_MODEL, blank=False,
-        related_name="notifications", on_delete=models.CASCADE)
+                                  related_name="notifications", on_delete=models.CASCADE)
     unread = models.BooleanField(default=True, db_index=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     uuid_id = models.UUIDField(
@@ -123,8 +123,8 @@ class Notification(models.Model):
     slug = models.SlugField(max_length=210, null=True, blank=True)
     verb = models.CharField(max_length=1, choices=NOTIFICATION_TYPES)
     action_object_content_type = models.ForeignKey(ContentType,
-        blank=True, null=True, related_name="notify_action_object",
-        on_delete=models.CASCADE)
+                                                   blank=True, null=True, related_name="notify_action_object",
+                                                   on_delete=models.CASCADE)
     action_object_object_id = models.CharField(
         max_length=50, blank=True, null=True)
     action_object = GenericForeignKey(
@@ -163,31 +163,31 @@ class Notification(models.Model):
         icon to the verb.
         """
         if self.verb == 'C' or self.verb == 'A' or self.verb == 'K':
-            return 'fa-comment'
+            return '💬'
 
         elif self.verb == 'I' or self.verb == 'U' or self.verb == 'O':
-            return 'fa-users'
+            return '👤'
 
         elif self.verb == 'L':
-            return 'fa-heart'
+            return '❤️'
 
         elif self.verb == 'F':
-            return 'fa-star'
+            return '⭐'
 
         elif self.verb == 'W':
-            return 'fa-check-circle'
+            return '✔️'
 
         elif self.verb == 'E':
-            return 'fa-pencil'
+            return '✍'
 
         elif self.verb == 'V':
-            return 'fa-plus'
+            return '➕'
 
         elif self.verb == 'S':
-            return 'fa-share-alt'
+            return '🔗'
 
         elif self.verb == 'R':
-            return 'fa-reply'
+            return '↩️'
 
     def mark_as_read(self):
         if self.unread:
@@ -267,10 +267,10 @@ def notification_broadcast(actor, key, **kwargs):
     id_value = kwargs.pop('id_value', None)
     recipient = kwargs.pop('recipient', None)
     payload = {
-            'type': 'receive',
-            'key': key,
-            'actor_name': actor.username,
-            'id_value': id_value,
-            'recipient': recipient
-        }
+        'type': 'receive',
+        'key': key,
+        'actor_name': actor.username,
+        'id_value': id_value,
+        'recipient': recipient
+    }
     async_to_sync(channel_layer.group_send)('notifications', payload)

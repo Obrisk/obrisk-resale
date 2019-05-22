@@ -36,7 +36,7 @@ nav {
 }
 
 /*Larger than mobile*/
-@media screen and (min-width: 768px) {
+@media screen and (min-width: 992px) {
 
     .navbar-nav a.is-active:after {
         content: "";

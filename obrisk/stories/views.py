@@ -17,6 +17,11 @@ class StoriesListView(LoginRequiredMixin, ListView):
     model = Stories
     paginate_by = 15
 
+    def get_context_data(self, *args, **kwargs):
+        context = super(StoriesListView, self).get_context_data(**kwargs)
+        context["base_active"] = "stories"
+        return context
+
     def get_queryset(self, **kwargs):
         return Stories.objects.filter(reply=False)
 
@@ -60,7 +65,7 @@ def post_stories(request):
 @ajax_required
 @require_http_methods(["GET"])
 #The only reason this method is GET is because the server will return 403 on the live site,
-#even when ignoring the csrf with exempt decorator. Need to re-visit this.
+#even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
 def like(request):
     """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""

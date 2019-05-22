@@ -33,13 +33,13 @@ $(function () {
             cache: false,
             success: function (data) {
                 if (!data.includes(emptyMessage)) {
-                    $("#notifications").addClass("btn-dark");
+                    $(".is-notify").addClass("notification--num");
                 }
             },
         });
     };
 
-    function update_social_activity (id_value) {
+    function update_social_activity(id_value) {
         let storiesToUpdate = $("[stories-id=" + id_value + "]");
         payload = {
             'id_value': id_value,
@@ -61,7 +61,7 @@ $(function () {
     $('#notifications').popover({
         html: true,
         trigger: 'manual',
-        container: "body" ,
+        container: "body",
         placement: "bottom",
     });
 
@@ -69,8 +69,7 @@ $(function () {
         if ($(".popover").is(":visible")) {
             $("#notifications").popover('hide');
             checkNotifications();
-        }
-        else {
+        } else {
             $("#notifications").popover('dispose');
             $.ajax({
                 url: '/ws/notifications/latest-notifications/',
@@ -79,7 +78,7 @@ $(function () {
                     $("#notifications").popover({
                         html: true,
                         trigger: 'focus',
-                        container: "body" ,
+                        container: "body",
                         placement: "bottom",
                         content: data,
                     });
@@ -91,8 +90,8 @@ $(function () {
         return false;
     });
 
-     
-    
+
+
     // Code block to manage WebSocket connections
     // Try to correctly decide between ws:// and wss://
     let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";

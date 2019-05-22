@@ -1,4 +1,4 @@
-import logging
+import logging,os
 
 from .base import *  # noqa
 from .base import env
@@ -61,10 +61,14 @@ SECURE_BROWSER_XSS_FILTER = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#x-frame-options
 X_FRAME_OPTIONS = 'DENY'
 
-# STORAGES
-# ------------------------------------------------------------------------------
 # https://github.com/aliyun/django-oss-storage
 INSTALLED_APPS += ['django_oss_storage']  # noqa F405
+
+#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
+# ------------------------
+STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
+DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('OSS_STS_ID')
 
@@ -78,20 +82,27 @@ OSS_BUCKET_NAME = env('OSS_BUCKET')
 # Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
 OSS_ENDPOINT = env('OSS_ENDPOINT')
 
-# The default location for your files
-MEDIA_URL = '/obdev-media/'
 
-# STATIC
-#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
-# ------------------------
+# The expire time to construct signed url for private acl bucket.
+# Can be set by OSS_EXPIRE_TIME as environment variable or as Django settings.
+#The default value is 30 days. I took the values from AWS_EXPIRY in sample project
+OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
+
+# The default location for the static files stored in bucket.
+OSS_STATIC_LOCATION = '/static/'
+
+
 # The default location for your static files
-STATIC_URL = '/static/'
-STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
+STATIC_ROOT =  '/static/'
+
+STATIC_URL =  '/static/'
 
 # MEDIA
 # ------------------------------------------------------------------------------
+# The default location for the media files stored in bucket.
+OSS_MEDIA_LOCATION = '/media/'
+
 MEDIA_URL = '/media/'
-DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
 
 # TEMPLATES
