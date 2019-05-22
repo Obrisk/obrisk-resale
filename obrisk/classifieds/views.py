@@ -107,7 +107,7 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 @login_required
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
-    classifieds_list = Classified.objects.get_active().filter(city=request.user.city)
+    classifieds_list = Classified.objects.get_queryset().filter(city=request.user.city)
     popular_tags = Classified.objects.get_counted_tags()
     images = ClassifiedImages.objects.all()
     other_classifieds = ClassifiedImages.objects.none()
@@ -132,7 +132,7 @@ def classified_list(request, tag_slug=None):
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
-        classifieds_list = Classified.objects.get_active().filter(tags__in=[tag])
+        classifieds_list = Classified.objects.get_queryset().filter(tags__in=[tag])
         other_classifieds = ClassifiedImages.objects.none()
 
     return render(request, 'classifieds/classified_list.html',

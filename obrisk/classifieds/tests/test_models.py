@@ -1,6 +1,6 @@
 from test_plus.test import TestCase
 
-from obrisk.classifieds.models import Classified
+from obrisk.classifieds.models import Classified, ClassifiedQuerySet
 
 
 class ClassifiedsModelsTest(TestCase):
@@ -36,3 +36,12 @@ class ClassifiedsModelsTest(TestCase):
         assert self.classified in Classified.objects.get_active()
         #assert Classified.objects.get_active()[0].title == "A really nice title"
         #assert self.not_p_classified in Classified.objects.get_expired()
+
+    def test_get_queryset(self):
+        assert self.classified.status == "A"
+        assert self.classified.title == "A really nice title"
+        assert self.classified.details=="This is a really good content"
+        # assert isinstance(Classified.objects.details) 
+        # assert isinstance(Classified.objects.price)
+        # assert isinstance(Classified.objects.title)
+        # assert isinstance(Classified.objects.city)

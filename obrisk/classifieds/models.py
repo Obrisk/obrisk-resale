@@ -36,6 +36,10 @@ class ClassifiedQuerySet(models.query.QuerySet):
 
         return tag_dict.items()
 
+    def get_queryset(self, request):
+        qs = super(Classified, self).get_queryset(request)
+        qs = qs.only(Classified.objects.title, Classified.objects.city, Classified.objects.price)
+        return qs
 
 class Classified(models.Model):
     EXPIRED = "E"
