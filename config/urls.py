@@ -9,7 +9,6 @@ from graphene_django.views import GraphQLView
 from obrisk.messager import views
 from obrisk.classifieds import views as images_views
 
-from __future__ import unicode_literals
 
 
 urlpatterns = [
