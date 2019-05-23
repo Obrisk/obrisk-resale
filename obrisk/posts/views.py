@@ -11,9 +11,10 @@ from obrisk.posts.forms import PostForm, CommentForm
 from django.http import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
 
 
-class PostsListView(LoginRequiredMixin, ListView):
+class PostsListView(ListView):
     """Basic ListView implementation to call the published Posts list."""
     model = Post
     paginate_by = 10
@@ -72,7 +73,8 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 @method_decorator(csrf_exempt, name='dispatch')
-class DetailPostView(LoginRequiredMixin, DetailView):
+@method_decorator(login_required, name='post')
+class DetailPostView(DetailView):
     """Basic DetailView implementation to call an individual Post."""
     model = Post
 

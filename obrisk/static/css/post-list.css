@@ -43,6 +43,7 @@
 
 .card-title {
     height: 40px;
+    width: auto;
 }
 
 
@@ -66,7 +67,35 @@
 
 }
 
-/* Classified details swap thumbnails */
+.card-side {
+  justify-content: center;
+}
+
+/*  */
+@media (max-width: 410px) {
+    .col-7 {
+        max-width: 100%;
+        flex: 0 0 68%;
+    }
+    .card-side{
+        width: auto;
+        margin-left: -7%;
+        margin-right: -7%;
+    }
+    .time {
+        display: none;
+    }
+  
+    
+}
+@media (max-width: 600px) {
+    .time {
+        font-size: 12px;
+    }
+}
+
+
+/*  */
 @media (max-width: 992px) {
     .sidebar {
         position: absolute;

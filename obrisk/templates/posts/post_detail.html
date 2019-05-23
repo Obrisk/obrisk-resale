@@ -43,8 +43,8 @@
       </div>
       <!-- Featured Image -->
       {% thumbnail post.image "900x300" as im %}
-      <div class="featured-img"
-        style="background-image:url({{ im.url }}); height: 250px; width: 100%; background-size:cover">
+      <div class="featured-img" style="background-size:cover">
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class=" card-img-top">
       </div>
       {% endthumbnail %}
       <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
@@ -99,12 +99,12 @@
       <p>There are no comments yet.</p>
       {% endfor %}
 
-      {% if user.is_authenticated %}
+      
       {% if new_comment %}
-      <h2>Your comment has been added.</h2>
+        <h2>Your comment has been added.</h2>
       {% else %}
 
-      <!-- <div id="comment-notify d-none" class="notification"> </div> -->
+      <div id="comment-notify d-none" class="notification"> </div>
 
       <div class="card my-4">
         <h4 class="card-header">{% trans 'Leave a Comment' %}:</h4>
@@ -113,13 +113,17 @@
           <form method="post" id="commentForm">
             {% csrf_token %}
             {{ comment_form|crispy }}
-            <input class="btn btn-dark comment-btn" type="button" value="Add comment">
+            {% if user.is_authenticated %}
+                <input class="btn btn-dark comment-btn" type="button" value="Add comment">
+            {% else %}
+                <h6> Please login to post your comment: </h6> 
+                <a class="btn btn-dark btn-xl js-scroll-trigger text-dark" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
           </form>
+          {% endif %}
         </div>
       </div>
       {% endif %}
-      {% endif %}
-
+    
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
 

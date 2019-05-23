@@ -86,12 +86,12 @@ $(function () {
         // Commenting this block until I find a better way to manage how to
         // report the user status.
 
-        payload = {
-            "type": "recieve",
-            "sender": currentUser,
-            "set_status": "online"
-        };
-        webSocket.send(payload);
+        // payload = {
+        //     "type": "recieve",
+        //     "sender": currentUser,
+        //     "set_status": "online"
+        // };
+        // webSocket.send(payload);
     };
 
     webSocket.socket.onclose = function () {
