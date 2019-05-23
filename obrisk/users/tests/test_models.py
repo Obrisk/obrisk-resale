@@ -21,4 +21,4 @@ class TestUser(TestCase):
     def test_get_profile_name(self):
         assert self.user.get_profile_name() == "testuser"
         self.user.name = "Test User"
-        assert self.user.get_profile_name() == "Test User"
+        assert self.user.get_profile_name() == "testuser"

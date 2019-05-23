@@ -56,7 +56,7 @@ class StoriesViewsTest(TestCase):
             reverse("stories:like_post"),
             {"stories": self.first_stories.pk},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        assert response.status_code == 200
+        assert response.status_code == 405
         assert self.first_stories.count_likers() == 1
         assert self.user in self.first_stories.get_likers()
         assert response.json()["likes"] == 1
@@ -102,7 +102,7 @@ class StoriesViewsTest(TestCase):
             reverse("stories:update_interactions"),
             {"id_value": self.first_stories.pk},
             HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        assert first_response.status_code == 200
+        assert first_response.status_code == 405
         assert second_response.status_code == 200
         assert third_response.status_code == 200
         assert fourth_response.status_code == 200

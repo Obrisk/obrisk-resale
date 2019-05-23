@@ -38,7 +38,7 @@ class MessagerViewsTests(TestCase):
     def test_user_conversation(self):
         response = self.client.get(
             reverse("messager:conversation_detail",
-                    kwargs={"username": self.user.username}))
+                    kwargs={"username": self.User.username}))
         assert response.status_code == 200
         assert str(response.context["active"]) == "first_user"
 

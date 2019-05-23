@@ -37,7 +37,7 @@ class MessagerModelsTest(TestCase):
 
     def test_recent_conversation(self):
         active_user = Message.objects.get_most_recent_conversation(
-            self.user)
+            self.User)
         assert active_user == self.other_user
 
     def test_single_marking_as_read(self):
