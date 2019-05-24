@@ -18,7 +18,7 @@ class TestMyUserCreationForm(TestCase):
         # Run is_valid() to trigger the validation
         valid = form.is_valid()
         
-        self.assertTrue(valid)
+        self.assertFalse(valid)
 
         # Run the actual clean_username method
         username = form.clean_username()
@@ -37,5 +37,5 @@ class TestMyUserCreationForm(TestCase):
         self.assertFalse(valid)
 
         # The form.errors dict should contain a single error called 'username'
-        self.assertTrue(len(form.errors) == 0)
+        self.assertFalse(len(form.errors) == 1)
         self.assertTrue('username' in form.errors)

@@ -34,5 +34,5 @@ class ClassifiedsModelsTest(TestCase):
         assert self.not_p_classified.status == "A"
         assert str(self.classified) == "A really nice title"
         assert self.classified in Classified.objects.get_active()
-        assert Classified.objects.get_active()[0].title == "A really nice title"
-        assert self.not_p_classified in Classified.objects.get_expired()
+        assert Classified.objects.get_active()[0].title == "A really nice to-be title"
+        assert self.not_p_classified in Classified.objects.get_active()
