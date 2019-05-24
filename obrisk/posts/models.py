@@ -20,6 +20,7 @@ from obrisk.notifications.models import Notification, notification_handler
 class PostQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
+    #this query is the longest.
     def get_active(self):
         """Returns only the published items in the current queryset."""
         return self.filter(status="P")

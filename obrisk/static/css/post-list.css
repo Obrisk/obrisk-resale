@@ -71,29 +71,26 @@
   justify-content: center;
 }
 
-/*  */
-@media (max-width: 410px) {
-    .col-7 {
-        max-width: 100%;
-        flex: 0 0 68%;
-    }
-    .card-side{
-        width: auto;
-        margin-left: -7%;
-        margin-right: -7%;
-    }
-    .time {
-        display: none;
-    }
-  
-    
+.time {
+    font-size: 14px;
+    font-weight: bold;
+
 }
-@media (max-width: 600px) {
+
+
+/*  */
+@media (max-width: 560px) {
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+    }
     .time {
         font-size: 12px;
     }
+    .card-img-top {
+        height: 150px;
 }
-
+}
 
 /*  */
 @media (max-width: 992px) {

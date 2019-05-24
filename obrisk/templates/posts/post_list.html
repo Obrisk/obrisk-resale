@@ -57,44 +57,43 @@
     <div class="post-wrapper col-lg-8 m-auto">
       {% for post in posts %}
       <!-- Blog Post -->
-       <div class="card single-post card-cascade mb-4">            
-            <div class="card-body single-post-body p-3">
-            <!-- Card image -->
-            <div class="row">
-                <div class="col-5">
-                <a href="{% url 'posts:post' post.slug %}"  style="color:black; text-decoration:none; background-color:none" >
-                  {% thumbnail post.image "150x150" as im %}
-                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class=" card-img-top">
-                  {% endthumbnail %}
-                  </div>
+      <div class="single-post mb-4">
+        <div class="single-post-body p-0">
+          <!-- Card image -->
+          <div class="row">
+            <div class="col-12">
+              <a href="{% url 'posts:post' post.slug %}"
+                style="color:black; text-decoration:none; background-color:none">
+                {% thumbnail post.image "700x300" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}" height="{{im.height}}" alt="{% trans 'Featured Image' %}"
+                  class="card-img-top">
+                {% endthumbnail %}
+            </div>
 
-                  <div class="col-7 card-side"> 
-                      <strong class="card-title font-weight-bold " > {{ post.title|title|truncatechars:75 }} </strong> 
-                          <div class="text-left">
-                              <a style="color:black;" href="{% url 'users:detail' post.user.username %}">
-                                    {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
-                                    <img src="{{ im.url }}" class="pull-left mr-2" style="border-radius: 50%;"
-                                      alt="{% trans 'User Image' %}" class="user-image">
-                                    {% empty %}
-                                    <img src="{% static 'img/user.png' %}" class="pull-left mr-2" height="35px"
-                                      alt="{% trans 'No Profile Picture' %}" />
-                                    {% endthumbnail %}
-                                    <div id="classified-user" class="d-flex flex-row mt-2 mr-3">
-                                    {{ post.user.get_profile_name|title }}
-                              </a> 
-                          </div>
-                          <br/>
-                          <div class="time"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></div>
-                
+            <div class="col-12 pl-5 pr-5 pt-4 pb-4">
+              <h3 class="pr-3 title"> {{ post.title|title|truncatechars:60 }} </h3>
+              <div class="text-left">
+                <a href="{% url 'users:detail' post.user.username %}">
+                  {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
+                  <img src="{{ im.url }}" class="pull-left mr-2" style="border-radius: 50%;"
+                    alt="{% trans 'User Image' %}" class="user-image">
+                  {% empty %}
+                  <img src="{% static 'img/user.png' %}" class="pull-left mr-2" height="35px"
+                    alt="{% trans 'No Profile Picture' %}" />
+                  {% endthumbnail %}
+                  <div id="classified-user">
+                    <div class="d-flex flex-row mt-2"><strong
+                        class="mr-3">{{ post.user.get_profile_name|title }}</strong>
+                    </div>
                   </div>
-                </div>
+                </a>
+                <span class="pull-right time"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></span>
+              </div>
               </a>
+            </div>
           </div>
         </div>
-
-      {% comment %} <div class="">
-        <div class=" p-0"> {% endcomment %}
-         
+      </div>
 
       {% empty %}
       <h4 class="no-data">

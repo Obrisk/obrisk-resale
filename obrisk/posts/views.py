@@ -22,14 +22,14 @@ class PostsListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        #This query is too slow
+        #This query could be slowing the posts
         #context['popular_tags'] = Post.objects.get_counted_tags()
         context['base_active'] = 'posts'
 
         return context
 
     def get_queryset(self, **kwargs):
-        return Post.objects.get_active()
+        return Post.objects.all()
 
 
 class DraftsListView(PostsListView):
