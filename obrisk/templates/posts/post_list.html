@@ -12,12 +12,14 @@
 
 {% block content %}
 
+
+
 <!-- Page Content -->
 <div class="sidebar-overlay"></div>
 <div class="container mt-4">
   <div
     class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
-    {% comment %} 
+    {% comment %}
     <div class="toggle-tags d-lg-none">
       <a href=""></a>
       <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
@@ -27,17 +29,17 @@
     <div class="text-center">
       <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
         title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
-        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}">
+      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}">
         <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
     </div>
     {% endif %}
-    
+
   </div>
   <!-- Sidebar Widgets Column -->
-   {% comment %}
+  {% comment %}
   <div id="sidebar" class="sidebar">
     <!-- Cloud Tag Widget -->
-    
+
     <div class="card">
       <div class="card-header">
         <h5>{% trans 'Popular tags' %}</h5>
@@ -47,14 +49,14 @@
         {% for tag, count in popular_tags %}
         <a href="#"><span class="badge badge-info">{{ count }} {{ tag }}</span></a>
         {% endfor %}
-      </div> 
+      </div>
     </div>
   </div>
-{% endcomment %}
+  {% endcomment %}
 
   <div class="row">
     <!-- Blog Entries Column -->
-    <div class="post-wrapper col-lg-8 m-auto">
+    <div class="post-wrapper col-lg-6 m-auto">
       {% for post in posts %}
       <!-- Blog Post -->
       <div class="single-post mb-4">
