@@ -22,22 +22,23 @@
     <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
     {% endblock cdn %}
 
-    
-    </head>
-    
+  {% block head %} {% endblock head %}      
+  </head>
 
 <body>
 
+<body class="O-bg">
+  {% block body %}
+     <div class="m-b-1">
+      <div class="container">
+          {% block content %}
+          {% endblock content %}
+      </div>
+     
+     </div>
 
-{% block content %}
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-    {% block inner %}{% endblock %}
-  </div>
-</div>
-{% endblock %}
-
-
+    
+{% endblock body %}
  </body>
 
   <!-- /.container -->

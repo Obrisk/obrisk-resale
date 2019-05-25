@@ -5,31 +5,23 @@
 {% block title %} {% trans 'Posts' %} {% endblock %}
 
 {% block head %}
-<link href="{% static 'css/listing.css' %}" rel="stylesheet">
-<link href="{% static 'css/post-list.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/listing.css' %}" rel="stylesheet">
+    <link href="{% static 'css/post-list.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
+
 <!-- Page Content -->
+{% comment %}
 <div class="sidebar-overlay"></div>
 <div class="container mt-4">
-  <div
-    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
-    {% comment %} 
+   <div
+    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto"> 
+  
     <div class="toggle-tags d-lg-none">
       <a href=""></a>
       <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-    </div> {% endcomment %}
-    <!-- Write Classified Widget -->
-    {% if request.user.is_official%}
-    <div class="text-center">
-      <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
-        title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
-        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}">
-        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
-    </div>
-    {% endif %}
+    </div> 
     
   </div>
   <!-- Sidebar Widgets Column -->
@@ -131,31 +123,4 @@
   <!-- /.row -->
 </div>
 <!-- /.container -->
-<script>
-  (function () {
-    var sidebar = document.getElementById('sidebar');
-    var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
-    var container = document.getElementsByClassName('container')[0];
-    var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
-
-    var openSidebar = function () {
-      sidebarOverlay.style.left = '0';
-      sidebar.style.left = '0';
-      sidebarOverlay.style.top = '0';
-      sidebar.style.display = 'block';
-      $(".classifieds").toggleClass("open-sidebar");
-    }
-
-    var closeSidebar = function (e) {
-      e.cancelBubble = true;
-      sidebarOverlay.style.left = '-100%';
-      sidebar.style.left = '-100%';
-      $(".classifieds").toggleClass("open-sidebar");
-
-    }
-
-    sidebarOverlay.addEventListener('click', closeSidebar);
-    sidebarBtnOpen.addEventListener('click', openSidebar);
-  })()
-</script>
 {% endblock content %}
