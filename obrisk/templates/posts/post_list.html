@@ -5,12 +5,9 @@
 {% block title %} {% trans 'Posts' %} {% endblock %}
 
 {% block head %}
-<<<<<<< HEAD <link href="{% static 'css/listing.css' %}" rel="stylesheet">
+ <link href="{% static 'css/listing.css' %}" rel="stylesheet">
   <link href="{% static 'css/post-list.css' %}" rel="stylesheet">
-  =======
-  <link href="{% static 'css/listing.css' %}" rel="stylesheet">
-  <link href="{% static 'css/post-list.css' %}" rel="stylesheet">
-  >>>>>>> dec9263b6cd19ef146c85c5a9c3461f60e81b4c8
+
   {% endblock head %}
 
   {% block content %}
@@ -38,31 +35,15 @@
       </div>
       {% endif %}
 
-      <<<<<<< HEAD <div
-        class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
-        =======
-
-    </div>
-    <!-- Sidebar Widgets Column -->
-    {% comment %}
-    <div id="sidebar" class="sidebar">
-      <!-- Cloud Tag Widget -->
-
-      <div class="card">
-        <div class="card-header">
-          <h5>{% trans 'Popular tags' %}</h5>
-        </div>
-        >>>>>>> dec9263b6cd19ef146c85c5a9c3461f60e81b4c8
-
+      {% comment %}
+      <div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
         <div class="toggle-tags d-lg-none">
           <a href=""></a>
           <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
         </div>
-
-
       </div>
       <!-- Sidebar Widgets Column -->
-      {% comment %}
+      
       <div id="sidebar" class="sidebar">
         <!-- Cloud Tag Widget -->
 

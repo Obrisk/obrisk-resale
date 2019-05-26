@@ -25,6 +25,7 @@ def mark_all_as_read(request):
     directed to the actual user."""
     request.user.notifications.mark_all_as_read()
     _next = request.GET.get('next')
+    print(_next)
     messages.add_message(
         request, messages.SUCCESS,
         _(f'All notifications to {request.user.username} have been marked as read.'))
