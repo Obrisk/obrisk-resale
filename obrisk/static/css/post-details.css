@@ -37,6 +37,9 @@
 }
 
 @media screen and (max-width:425px) {
+    .card-img-top {
+        height: 150px;
+    }
 
     .ribbon-content {
         font-size: 20px;

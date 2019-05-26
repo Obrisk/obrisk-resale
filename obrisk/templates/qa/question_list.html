@@ -4,6 +4,7 @@
 {% block title %}{% trans "Questions" %}{% endblock %}
 
 {% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/qa.css' %}" rel="stylesheet">
 {% endblock head %}
 
@@ -102,32 +103,6 @@
 
 
 {% block extra_js %}
-<script>
-  (function () {
-    var sidebar = document.getElementById('sidebar');
-    var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
-    var container = document.getElementsByClassName('container')[0];
-    var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
-
-    var openSidebar = function () {
-      sidebarOverlay.style.left = '0';
-      sidebar.style.left = '0';
-      sidebarOverlay.style.top = '0';
-      sidebar.style.display = 'block';
-      $(".classifieds").toggleClass("open-sidebar");
-    }
-
-    var closeSidebar = function (e) {
-      e.cancelBubble = true;
-      sidebarOverlay.style.left = '-100%';
-      sidebar.style.left = '-100%';
-      $(".classifieds").toggleClass("open-sidebar");
-
-    }
-
-    sidebarOverlay.addEventListener('click', closeSidebar);
-    sidebarBtnOpen.addEventListener('click', openSidebar);
-  })()
-</script>
-<script src="{% static 'js/qa.js' %}"></script>
+    <script src="{% static 'js/listing.js' %}" type="text/javascript"></script>  
+    <script src="{% static 'js/qa.js' %}"></script>
 {% endblock extra_js %}

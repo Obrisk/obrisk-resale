@@ -29,7 +29,7 @@ class PostsListView(ListView):
         return context
 
     def get_queryset(self, **kwargs):
-        return Post.objects.all()
+        return Post.objects.select_related('user')
 
 
 class DraftsListView(PostsListView):

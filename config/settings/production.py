@@ -217,5 +217,10 @@ RAVEN_CONFIG = {
     'DSN': SENTRY_DSN
 }
 
-# Your stuff...
+# Other stuffs...
 # ------------------------------------------------------------------------------
+
+#SESSION
+#Improve performance
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
