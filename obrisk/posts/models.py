@@ -4,15 +4,14 @@ import itertools
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
+from django.forms.fields import DateTimeField
 from django.utils.translation import ugettext_lazy as _
-
-from slugify import slugify
 
 from django_comments.signals import comment_was_posted
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from slugify import slugify
 from taggit.managers import TaggableManager
-
 
 from obrisk.notifications.models import Notification, notification_handler
 
@@ -129,3 +128,28 @@ def notify_comment(**kwargs):
 
 
 comment_was_posted.connect(receiver=notify_comment)
+
+
+#jobs and events
+
+class Jobs(models.Model):
+    title = models.CharField(max_length=80)
+    details = models.TextField()
+    location = models.CharField(max_length=100)
+    requirements = models.CharField(max_length=200)
+    eligibility = models.CharField(max_length=200)
+    deadline = models.DateTimeField()
+    posting_date = models.DateTimeField(auto_now_add=True)
+    contacts = models.TextField()
+
+
+class Events(models.Model):
+    title = models.CharField(max_length=80)
+    address = models.TextField()
+    starting_time = models.DateTimeField()
+    ending_time = models.DateTimeField()
+    description = models.TextField()
+    contacts = models.TextField()
+    posting_time = models.DateTimeField(auto_now_add=True)
+
+
