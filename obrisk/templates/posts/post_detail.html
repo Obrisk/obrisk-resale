@@ -44,7 +44,7 @@
       <!-- Featured Image -->
       {% thumbnail post.image "900x300" as im %}
       <div class="featured-img" style="background-size:cover">
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class=" card-img-top">
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
       </div>
       {% endthumbnail %}
       <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->

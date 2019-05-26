@@ -65,11 +65,11 @@ header .navbar-brand {
 }
 
 a {
-  color: #545b62;
+  color: #0aacec;
 }
 
 a:hover {
-  color: #0aacec;
+  color: #0aeee3;
   text-decoration: none;
 }
 
