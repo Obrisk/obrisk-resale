@@ -8,6 +8,7 @@
   <!--This is to ensure scripts are loaded from my site only!-->
   <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
   <title>{% block title %}Obrisk{% endblock title %}</title>
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   <meta name="description" content="A Social Network for foreigners living in China.">
@@ -117,44 +118,44 @@
       </div>
     </nav>
     {% else%}
-      <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
-        <div class="container">
-          <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-            aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <a class="navbar-brand" href="#">Obrisk</a>
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
+      <div class="container">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
+          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+          aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" href="#">Obrisk</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-            <ul class="main-nav navbar-nav mr-auto">
-              <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                  class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
-                  href="{% url 'posts:list' %}">{% trans 'Published' %} <span class="sr-only">(current)</span></a></li>
-              <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                  class="nav-link {% if base_active == 'classifieds' %} is-active {% endif %} "
-                  href="{% url 'classifieds:list' %}">Classifieds</a></li>
-              <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                  class="nav-link {% if base_active == 'stories' %} is-active {% endif %} "
-                  href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
-              <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                  class="nav-link {% if base_active == 'q_and_a' %} is-active {% endif %} "
-                  href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
-            </ul>
-                      <ul class="nav navbar-nav navbar-right">
+          <ul class="main-nav navbar-nav mr-auto">
+            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
+                class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
+                href="{% url 'posts:list' %}">{% trans 'Published' %} <span class="sr-only">(current)</span></a></li>
+            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
+                class="nav-link {% if base_active == 'classifieds' %} is-active {% endif %} "
+                href="{% url 'classifieds:list' %}">Classifieds</a></li>
+            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
+                class="nav-link {% if base_active == 'stories' %} is-active {% endif %} "
+                href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
+            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
+                class="nav-link {% if base_active == 'q_and_a' %} is-active {% endif %} "
+                href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
 
             <li class="nav-item">
-                <a  class="nav-link" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+              <a class="nav-link" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
             </li>
-                        <li class="nav-item">
-                <a  class="nav-link" href="{% url 'account_signup' %}">{% trans 'Signup' %}</a>
+            <li class="nav-item">
+              <a class="nav-link" href="{% url 'account_signup' %}">{% trans 'Signup' %}</a>
             </li>
 
           </ul>
 
-          </div>
         </div>
-      </nav>
+      </div>
+    </nav>
     {% endif %}
   </div>
   <div class="container">
