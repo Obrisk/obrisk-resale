@@ -1,9 +1,9 @@
-
 var helpers = {
 	province: function (result, dropdown, emptyMessage) {
 		// Remove current options
 		dropdown.html('');
 		// Add the empty option with the empty message
+
 		dropdown.append('<option value="">' + emptyMessage + '</option>');
 		// Check result isnt empty
 		if (result != '') {
@@ -24,7 +24,8 @@ var helpers = {
 		// Check result isnt empty
 		if (result != '') {
 			// Loop through each of the sorted results and append the option to the dropdown
-			$.each(result.sort(), function (index, text) {
+			result = result.sort();
+			$.each(result, function (index, text) {
 
 				dropdown.append('<option value="' + text + '">' + text + '</option>');
 			});
@@ -129,10 +130,24 @@ const geo_data = [{
 }]
 
 $(document).ready(function () {
+	function preselect() {
+		if (!$("input[name='city']").val() && !$("input[name='province_region']").val()) {
+			$("#province option[value='Zhejiang']").attr('selected', 'selected');
+			helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
+			$("#city option[value='Hangzhou']").attr('selected', 'selected');
+		} else {
+			province = "#province option[value=" + $("input[name='province_region']").val() + "]";
+			city = "#city option[value=" + $("input[name = 'city']").val() + "]";
+			$(province).attr('selected', 'selected');
+			helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
+			$(city).attr('selected', 'selected');
+		}
+
+	}
 	$province = $("select[name='province']");
 	$city = $("select[name='city']");
 	helpers.province(geo_data, $province, "Select an option");
-
+	preselect();
 	$province.change(function () {
 		helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
 	});
@@ -144,7 +159,7 @@ $(function () {
 	$("#submit").click(function (event) {
 		if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();
-			alert("Please enter your address!");
+			bootbox.alert("Please enter your address!");
 		} else {
 			$("input[name='city']").val($("select[name='city']").val());
 			$("input[name='province_region']").val($("select[name='province']").val());
@@ -152,10 +167,9 @@ $(function () {
 		}
 	});
 
-	$(".update").click(function() {
-			$("input[name='city']").val($("select[name='city']").val());
-			$("input[name='province_region']").val($("select[name='province']").val());
-			$("#update").submit();
-		}
-	);
+	$(".update").click(function () {
+		$("input[name='city']").val($("select[name='city']").val());
+		$("input[name='province_region']").val($("select[name='province']").val());
+		$("#update").submit();
+	});
 });

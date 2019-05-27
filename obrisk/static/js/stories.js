@@ -22,10 +22,10 @@ $(function () {
         // These HTTP methods do not require CSRF protection
         return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
     }
-  
+
     // This sets up every ajax call with proper headers.
     $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
+        beforeSend: function (xhr, settings) {
             if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
             }
@@ -72,8 +72,8 @@ $(function () {
                 $("#storiesFormModal").modal("hide");
                 hide_stream_update();
             },
-            error : function(data){
-                alert(data.responseText);
+            error: function (data) {
+                bootbox.alert(data.responseText);
             },
         });
     });
@@ -90,8 +90,8 @@ $(function () {
                 $("#storiesThreadModal").modal("hide");
                 location.reload();
             },
-            error: function(data){
-                alert(data.responseText);
+            error: function (data) {
+                bootbox.alert(data.responseText);
             },
         });
     });
@@ -100,10 +100,12 @@ $(function () {
         // Ajax call on action on like button.
         var li = $(this).closest("li");
         var stories = $(li).attr("stories-id");
-       
+
         $.ajax({
             url: '/stories/like/',
-            data: { 'stories': stories },
+            data: {
+                'stories': stories
+            },
             type: 'GET',
             cache: false,
             success: function (data) {
@@ -128,7 +130,9 @@ $(function () {
         $("#storiesThreadModal").modal("show");
         $.ajax({
             url: '/stories/get-thread/',
-            data: {'stories': stories},
+            data: {
+                'stories': stories
+            },
             cache: false,
             beforeSend: function () {
                 $("#threadContent").html("<li class='loadcomment'><img src='/static/img/loading.gif'></li>");
