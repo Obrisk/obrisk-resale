@@ -9,6 +9,8 @@ from graphene_django.views import GraphQLView
 from obrisk.messager import views
 from obrisk.classifieds import views as images_views
 
+
+
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
@@ -43,6 +45,9 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
+    
+    #friendship
+    url(r'^friendship/', include('friendship.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
