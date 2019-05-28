@@ -6,13 +6,10 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 
-
-
 from friendship.exceptions import AlreadyExistsError
 from friendship import models
 from friendship.models import (Block, Follow, Friend,
                                FriendshipRequest)
-from requests_unixsocket import request
 from werkzeug.utils import html
 
 from .forms import UserForm
