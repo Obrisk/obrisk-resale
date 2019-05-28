@@ -18,12 +18,14 @@ class User(AbstractUser):
         _('Job title'), max_length=50, null=True, blank=True)
     personal_url = models.URLField(
         _('Personal URL'), max_length=555, blank=True, null=True)
-    facebook_account = models.URLField(
-        _('Facebook profile'), max_length=255, blank=True, null=True)
-    instagram_account = models.URLField(
-        _('Instagram account'), max_length=255, blank=True, null=True)
-    linkedin_account = models.URLField(
-        _('LinkedIn profile'), max_length=255, blank=True, null=True)
+    facebook_account = models.CharField(
+        _('Facebook a/c profile name'), max_length=255, blank=True, null=True)
+    instagram_account = models.CharField(
+        _('Instagram a/c profile name'), max_length=255, blank=True, null=True)
+    linkedin_account = models.CharField(
+        _('LinkedIn a/c profile name'), max_length=255, blank=True, null=True)
+    snapchat_account = models.CharField(
+        _('Snapchat a/c profile name'), max_length=255, blank=True, null=True)
     short_bio = models.CharField(
         _('Describe yourself'), max_length=60, blank=True, null=True)
     bio = models.CharField(

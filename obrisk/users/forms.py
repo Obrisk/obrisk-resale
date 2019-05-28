@@ -26,15 +26,16 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('picture', 'name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
-               'linkedin_account', 'facebook_account' )
+               'linkedin_account','snapchat_account', 'facebook_account' )
         help_texts = {
-            "instagram_account": "Please copy the link of your profile on the browser.\
-            Don't fill in your username.",
-            "linkedin_account": "Please copy the link of your profile on the browser.\
-            Don't fill in your username.",
-            "facebook_account": "Please copy the link of your profile on the browser.\
-            Don't fill in your username.",
-
+            "instagram_account": "Please fill in your username as it appears on your profile page.\
+                 Make sure it is spelled correctly",
+            "linkedin_account": "Please fill in your username as it appears on your profile page.\
+                 Make sure it is spelled correctly",
+            "facebook_account": "Please fill in your username as it appears on your profile page.\
+                 Make sure it is spelled correctly",
+            "snapchat_account": "Please fill in your username as it appears on your profile page.\
+                 Make sure it is spelled correctly.",
         }
         # widgets = {
         #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
