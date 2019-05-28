@@ -76,7 +76,8 @@
         <div class="card-text text-justify">{{ classified.details }}</div>
 
         {% if classified.contact_info %}
-            <small><strong>Seller contacts :</strong>
+         <br/> 
+            <small class="seller-contacts"><strong>Seller's contacts :</strong>
             {{ classified.contact_info }}</small>
         {% endif %}
       </section>
@@ -87,7 +88,7 @@
         <h5 class="card-header">{% trans 'Tags' %}</h5>
         <div class="card-body">
           {% for tag in classified.tags.all %}
-          <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ tag }}</span></a>
+          <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="badge badge-info">{{ tag }}</span></a>
           {% endfor %}
         </div>
       </div>

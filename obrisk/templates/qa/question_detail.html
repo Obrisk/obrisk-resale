@@ -59,9 +59,10 @@
         </div>
         <div class="tags">
           {% if question.tags.names %}
+          <!--When adding the href, remember the tag url to have tag.slug and not tag itself-->
           <p>
             {% for tag in question.tags.names %}
-            <span class="badge badge-info">{{ tag }}</span>
+            <span class="badge badge-info"> {{ tag }} </span>
             {% endfor %}
           </p>
           {% endif %}
