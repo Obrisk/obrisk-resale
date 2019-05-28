@@ -1,82 +1,76 @@
+{% extends 'account/base-min.html' %}
 {% load i18n %}
 {% load static %}
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>{% trans 'Account Login' %}</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">   
-	<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
-	<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-	<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
-	<script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
+{% block head %}
+<title>{% trans 'Account Signup' %}</title>
+<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+{% endblock head %}
 
-	<script>
-		function disableSubmit() {
-		 document.getElementById("submit").disabled = true;
+{% block content %}
+<script>
+	function disableSubmit() {
+		document.getElementById("submit").disabled = true;
+	}
+
+	function activateButton(element) {
+
+		if (element.checked) {
+			document.getElementById("submit").disabled = false;
 		}
-	 
-		 function activateButton(element) {
-	 
-				 if(element.checked) {
-						document.getElementById("submit").disabled = false;
-					}
-					else  {
-					 document.getElementById("submit").disabled = true;
-				 }
-	 
-		 }
-	 </script>
-</head>
+		else {
+			document.getElementById("submit").disabled = true;
+		}
 
-<body onload="disableSubmit()" >
+	}
+</script>
 
-	<div class="limiter">
-		<div class="container-login100">
-			<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
-        <span class="login100-form-title p-b-32" >{% trans 'Account Creation' %}</span>
-				<span class="txt3">
-            <p>{% blocktrans %}Already have an account? Then please sign in <a href="{{ login_url }}"> here</a>.{% endblocktrans %}</p>
-				</span>
+<div class="limiter">
+	<div class="container-login100">
+		<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+			<span class="login100-form-title p-b-32">{% trans 'Account Creation' %}</span>
+			<span class="txt3">
+				<p>{% blocktrans %}Already have an account? Then please sign in <a href="{{ login_url }}">
+						here</a>.{% endblocktrans %}</p>
+			</span>
 
-        <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-          		{% csrf_token %}
-						<h5 class="text-center mt-3">Please enter your address. </h5>
-						<div class="input-group mb-3 mt-4">
-									<div class="input-group-prepend">
-										<label class="input-group-text" for="province">Province</label>
-									</div>
-									<select class="custom-select" id="province" name="province"></select>
-						</div>
+			<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+				{% csrf_token %}
+				<h5 class="text-center mt-3">Please enter your address. </h5>
+				<div class="input-group mb-3 mt-4">
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="province">Province</label>
+					</div>
+					<select class="custom-select" id="province" name="province"></select>
+				</div>
 
-						<div class="input-group mb-3">
-								<div class="input-group-prepend">
-									<label class="input-group-text" for="city">City</label>
-								</div>
-								<select class="custom-select" id="city" name="city"> </select>
-						</div>
+				<div class="input-group mb-3">
+					<div class="input-group-prepend">
+						<label class="input-group-text" for="city">City</label>
+					</div>
+					<select class="custom-select" id="city" name="city"> </select>
+				</div>
 
-						<small >Please enter a valid email as it will require confirmation</small>
+				<small>Please enter a valid email as it will require confirmation</small>
 
-						{{ form|crispy }}
-						<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
-						I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the laws and regulations of the country residing.</a>
+				{{ form|crispy }}
+				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
+				I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the
+				laws and regulations of the country residing.</a>
 
-						{% if redirect_field_value %}
-								<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-						{% endif %}
-								<div class="form-group container-login100-form-btn">
-									<button type="submit" id="submit" class="login100-form-btn">{% trans 'Sign Up' %} &raquo;</button>
-								</div>
-				</form>
-			</div>
+				{% if redirect_field_value %}
+				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+				{% endif %}
+				<div class="form-group container-login100-form-btn justify-content-center mt-4">
+					<button disabled type="submit" id="submit" class="login100-form-btn">{% trans 'Sign Up' %}
+						&raquo;</button>
+				</div>
+			</form>
 		</div>
 	</div>
+</div>
+<script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
 
-</body>
-</html>
-
+{% endblock content %}

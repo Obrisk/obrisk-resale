@@ -2,46 +2,48 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    {# block title %}{ block head_title %}  {% endblock head_title %}{% endblock title #}
-    <meta charset="utf-8">
-    <!--This is to ensure scripts are loaded from my site only!-->
-    <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title> {% block heading %}Obrisk{% endblock heading %}</title>
+<head>
+  {# block title %}{ block head_title %}  {% endblock head_title %}{% endblock title #}
+  <meta charset="utf-8">
+  <!--This is to ensure scripts are loaded from my site only!-->
+  <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-    <meta name="description" content="A Social Network for foreigners living in China.">
+  <title> {% block heading %}Obrisk{% endblock heading %}</title>
 
-    {% block cdn %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">   
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <meta name="description" content="A Social Network for foreigners living in China.">
 
-    <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
-    {% endblock cdn %}
+  {% block cdn %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
 
-  {% block head %} {% endblock head %}      
-  </head>
+  <!-- This file stores project-specific CSS -->
+  <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
+  {% endblock cdn %}
+
+  {% block head %} {% endblock head %}
+</head>
 
 <body>
 
-<body class="O-bg">
-  {% block body %}
-     <div class="m-b-1">
+  <body class="O-bg">
+    {% block body %}
+    <div class="m-b-1">
       <div class="container">
-      {% block content %}
-      {% endblock content %}
-      {% block inner %}
-      {% endblock inner %}
+        {% block content %}
+        {% endblock content %}
+        {% block inner %}
+        {% endblock inner %}
       </div>
-     
-     </div>
 
-    
-{% endblock body %}
- </body>
+    </div>
+
+
+    {% endblock body %}
+  </body>
 
   <!-- /.container -->
+
 </html>

@@ -163,10 +163,14 @@ OssUpload.prototype = {
                 var len = list.length;
                 for (var i = 0; i < len; i++) {
                     if (uploader.fileList[i].id == id) {
+                        uploader.fileStats.totalFilesSize -= uploader.fileList[i].size; //Statistical file size
                         uploader.fileList.splice(i, 1); //Delete a file from the file list
+                        uploader.fileStats.totalFilesNum = uploader.fileList.length;
+
                         break;
                     }
                 }
+
                 $li.remove();
             });
         });
