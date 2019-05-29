@@ -66,8 +66,13 @@ INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 
 #I serve them in oss bucket when scaling up, don't duplicate static files in every server.
 # ------------------------
-STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
-DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+#For now they are in the server until i solve 404 error!
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# The default location for your static files
+STATIC_ROOT =  str(ROOT_DIR('staticfiles'))
+
+STATIC_URL =  '/static/'
 
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('OSS_STS_ID')
@@ -88,18 +93,11 @@ OSS_ENDPOINT = env('OSS_ENDPOINT')
 #The default value is 30 days. I took the values from AWS_EXPIRY in sample project
 OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
 
-# The default location for the static files stored in bucket.
-OSS_STATIC_LOCATION = '/static/'
-
-
-# The default location for your static files
-STATIC_ROOT =  '/static/'
-
-STATIC_URL =  '/static/'
-
 # MEDIA
 # ------------------------------------------------------------------------------
 # The default location for the media files stored in bucket.
+DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+
 OSS_MEDIA_LOCATION = '/media/'
 
 MEDIA_URL = '/media/'
