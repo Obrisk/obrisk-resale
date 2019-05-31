@@ -53,7 +53,7 @@ $(function () {
                 $('.send-btn').removeAttr("disabled");
                 $(".send-message").before(data);
                 $('#send')[0].reset();
-                $("textarea").text() = "";
+                $("textarea").val("");
                 $("textarea[name='message']").focus();
                 scrollMessages();
             }
@@ -66,7 +66,7 @@ $(function () {
     //This helps the text in the textarea of the message to be send
     //when press enter and go new line with shift + enter!
     $("#sendText").keypress(function (e) {
-        if (e.which == 13 && !e.shiftKey) {
+        if (e.which == 13 && !e.shiftKey && !$('.send-btn').is('[disabled="disabled"]')) {
             $(this).closest("form").submit();
             e.preventDefault();
             return false;
