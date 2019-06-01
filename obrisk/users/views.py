@@ -23,11 +23,6 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 user_model = get_user_model
 
-
-
-
-
-
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     # These next two lines tell the view to index lookups by username
@@ -134,7 +129,7 @@ def friendship_cancel(request, friendship_request_id):
 
 
 
-
+@login_required
 def followers(request, username, template_name='friendship/follow/followers_list.html'):
     """ List this user's followers """
     user = get_object_or_404(user_model, username=username)
@@ -145,7 +140,7 @@ def followers(request, username, template_name='friendship/follow/followers_list
         'friendship_context_object_name': get_friendship_context_object_name()
     })
 
-
+@login_required
 def following(request, username, template_name='friendship/follow/following_list.html'):
     """ List who this user follows """
     user = get_object_or_404(user_model, username=username)
@@ -187,12 +182,14 @@ def follower_remove(request, followee_username, template_name='friendship/follow
     return render(request, template_name, {'followee_username': followee_username})
 
 
+@login_required
 def all_users(request, template_name="friendship/user_actions.html"):
     users = get_user_model().objects.all()
 
     return render(request, template_name, {get_friendship_context_object_list_name(): users})
 
 
+@login_required
 def blocking(request, username, template_name='friendship/block/blockers_list.html'):
     """ List this user's followers """
     user = get_object_or_404(user_model, username=username)
@@ -204,6 +201,7 @@ def blocking(request, username, template_name='friendship/block/blockers_list.ht
     })
 
 
+@login_required
 def blockers(request, username, template_name='friendship/block/blocking_list.html'):
     """ List who this user follows """
     user = get_object_or_404(user_model, username=username)

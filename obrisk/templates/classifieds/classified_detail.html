@@ -60,10 +60,13 @@
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if classified.user != request.user %}
-              <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
-                <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
+              <form method="POST" action="messager:request_friendship">
+                <button type="submit" class="btn btn-action">
+                  <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with the seller' %} </strong> </button> <br>
+              </form>
               <br>
               {% endif %}
+
             </div>
 
           </div>

@@ -12,6 +12,12 @@ from django.shortcuts import redirect
 from obrisk.messager.models import Message
 from obrisk.helpers import ajax_required
 
+from friendship.exceptions import AlreadyExistsError
+from friendship import models
+from friendship.models import (Block, Follow, Friend,
+                            FriendshipRequest)
+
+
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -63,6 +69,30 @@ class ConversationListView(LoginRequiredMixin, ListView):
         except get_user_model().DoesNotExist:
             return reverse('messager:contacts_list')   
     
+
+
+@login_required
+@require_http_methods(["POST"])
+def chat_init(request, to_username):
+    """ Create a FriendshipRequest """
+
+    to_user = get_user_model().objects.get(username=to_username)
+    from_user = request.user
+    try:
+        Friend.objects.add_friend(from_user, to_user)
+        #get the friendship_request_id before accepting in line 87.
+        """ Accept a friendship request """
+        f_request = get_object_or_404(
+            request.user.friendship_requests_received,
+            id=friendship_request_id)
+        f_request.accept()
+    except AlreadyExistsError:
+        return redirect('messager:conversation_detail to_username')
+    
+    return redirect('messager:conversation_detail to_username')
+    
+
+
 
          
 @login_required
