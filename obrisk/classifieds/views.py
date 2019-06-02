@@ -122,17 +122,20 @@ def classified_list(request, tag_slug=None):
         # If page is not an integer deliver the first page
         classifieds = paginator.page(1)
     except EmptyPage:
+        if request.is_ajax():            
+            # If the request is AJAX and the page is out of range
+            # return an empty page            
+            return HttpResponse('')
         # If page is out of range deliver last page of results
-        classifieds = paginator.page(paginator.num_pages)
-
+        classifieds = paginator.page(paginator.num_pages) 
     # When the last page user can see only fifty classifieds in other cities. To improve this near future.
     if page:
         if int(page) == paginator.num_pages:
-            other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
+            other_classifieds = Classified.objects.exclude(city=request.user.city)[:30]
     else:
         #If the page is the first one and it is the only one show other_classifieds
         if paginator.num_pages == 1:
-            other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
+            other_classifieds = Classified.objects.exclude(city=request.user.city)[:30]
         
     # Deal with tags in the end to override other_classifieds.
     tag = None
@@ -140,7 +143,12 @@ def classified_list(request, tag_slug=None):
         tag = get_object_or_404(Tag, slug=tag_slug)
         classifieds = Classified.objects.get_active().filter(tags__in=[tag])
         other_classifieds = ClassifiedImages.objects.none()
-
+    
+    if request.is_ajax():        
+       return render(request,'classifieds/classified_list_ajax.html',
+                    {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
+                   'images': images,'base_active': 'classifieds'})   
+    
     return render(request, 'classifieds/classified_list.html',
                   {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
                    'tag': tag, 'images': images, 'popular_tags': popular_tags, 'base_active': 'classifieds'})
