@@ -57,120 +57,59 @@
 
   <!-- official ads for pc sized-->
   {% if official_ads %}
-      <div class="right-sidebar d-none d-lg-block">
-        {% include 'classifieds/ads.html' %}
-      </div>
+  <div class="right-sidebar d-none d-lg-block">
+    {% include 'classifieds/ads.html' %}
+  </div>
   {% endif %}
 
-  <div class="row">
-    <div class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
-      <!-- Classified Entries Column -->
-      <!-- <div class="col-md-9"> -->
-      {% for classified in classifieds %}
-      <!-- Classified ad. -->
-      <div class="card classified-card mr-2 mb-3 justify-content-center">
-        <!--Display image-->
-        <div class="card-img-top img-responsive">
-          <a href="{% url 'classifieds:classified' classified.slug %}"
-            style="color:black; text-decoration:none; background-color:none">
-            {% for photo in images %}
-            {% if photo.classified == classified %}
-            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-            {{ "<!--" }}
-            {% endif %}
-            {% endfor %}
-            {{ "-->" }}
-        </div>
-        <div class="divider"></div>
-        <div class="card-body">
-          <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-          <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-          <div class="card-meta d-flex justify-content-between">
-            <div class="d-flex location">
-              <small>📍</small>
-              <span class="card-text small "> {{ classified.city|safe }}</span>
-            </div>
-            <div class="share-card">
-              <small>🔗</small>
-            </div>
-          </div>
+  <div class="classifieds-container row">
+    <div id="classifieds"
+      class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
+      {% include "classifieds/classified_list_ajax.html" %}
 
-        </div>
-        </a>
+    </div>
+    <div class="loading classified-card m-auto d-none">
+      <div class="stage">
+        <div class="dot-pulse"></div>
       </div>
-      <!-- official ads for phones-->
-      {% if official_ads %}
-        {% if forloop.counter == 6 %}
-      <div class="ads d-lg-none" style="height: 250px; width:80%;">
-        <iframe class="h-100 w-100" src="{% url 'classifieds:mobile-ads'%}" frameborder="0"></iframe>
-      </div>
-        {% endif %}
-      {% endif %}
-
-    {% empty %}
-        <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
-          {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
-          <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
-          {% trans 'Or check what we have found from other places '%} </h6>
-        <br />
-    {% endfor %}
-
-
-
-      <!--Will be using ajax in near future.-->
-      {% for classified in other_classifieds %}
-      <!-- Classified ad. -->
-      <div class="card classified-card mr-2 mb-3 justify-content-center">
-        <!--Display image-->
-        <div class="card-img-top img-responsive">
-          <a href="{% url 'classifieds:classified' classified.slug %}"
-            style="color:black; text-decoration:none; background-color:none">
-            {% for photo in images %}
-            {% if photo.classified == classified %}
-            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-            {{ "<!--" }}
-            {% endif %}
-            {% endfor %}
-            {{ "-->" }}
-        </div>
-
-        <div class="divider"></div>
-        <div class="card-body">
-          <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-          <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-          <div class="card-meta d-flex justify-content-between">
-            <div class="location">
-              <small>📍</small>
-              <span class="card-text small "> {{ classified.city|safe }}</span>
-            </div>
-            <div class="share-card">
-              <small>🔗</small>
-            </div>
-          </div>
-
-        </div>
-        </a>
-      </div>
-      {% endfor %}
     </div>
     <!-- End div for row of all classified ads-->
-
   </div>
+
 </div>
 
-  <!-- pagination -->
-  {% if classifieds.paginator.num_pages > 1 %}
-  <div class="row">
-      {% include "pagination.html" with page=classifieds %}
-  </div>
-  {% endif %}
+
 
 <!-- /.row -->
 </div>
 <!-- /.container -->
 
+
 {% endblock content %}
 
 {% block extra_js %}
-    <script src="{% static 'js/listing.js' %}" type="text/javascript"></script>  
+<script src="{% static 'js/listing.js' %}" type="text/javascript"></script>
+<script>
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  $(window).scroll(function () {
+    if (empty_page == false && block_request == false) {
+      console.log('loading next page')
+      block_request = true;
+      page += 1;
+      $('.loading').removeClass('d-none')
+      $.get('?page=' + page, function (data) {
+        if (data == '') {
+          empty_page = true;
+          $('.loading').addClass('d-none')
+          $('.classifieds-container').append('<div class="m-auto"> End of Classifieds</div>')
+        } else {
+          $('.loading').addClass('d-none');
+          block_request = false; $('#classifieds').append(data);
+        }
+      });
+    }
+  });
+</script>
 {% endblock extra_js %}
