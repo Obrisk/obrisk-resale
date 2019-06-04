@@ -1,13 +1,13 @@
 from django.contrib import messages
+from django.core.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
-from django.shortcuts import redirect
 
 from obrisk.messager.models import Message
 from obrisk.helpers import ajax_required
@@ -15,7 +15,7 @@ from obrisk.helpers import ajax_required
 from friendship.exceptions import AlreadyExistsError
 from friendship import models
 from friendship.models import (Block, Follow, Friend,
-                            FriendshipRequest)
+                            FriendshipRequest, AlreadyFriendsError)
 
 
 
@@ -48,6 +48,10 @@ class ConversationListView(LoginRequiredMixin, ListView):
         return context
 
     def get(self, *args, **kwargs):
+        """Overriding the CBV of ListView get and try to catch any messages url with the 
+        invalid username as an url keyword argument. The url with invalid username,
+        will be returned by get_queryset() when an exception is raised."""
+
         url = str('/ws/messages/')
         if self.get_queryset() == url :
             messages.error(self.request, 
@@ -66,7 +70,9 @@ class ConversationListView(LoginRequiredMixin, ListView):
             #In the near future implement it to query only last 100 messages, and update last few images.
             Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)
             return Message.objects.get_msgs(active_user, self.request.user)      
+
         except get_user_model().DoesNotExist:
+            #This url in an exception will be catched by the get method and send error to user.
             return reverse('messager:contacts_list')   
     
 
@@ -78,20 +84,32 @@ def chat_init(request, to_username):
 
     to_user = get_user_model().objects.get(username=to_username)
     from_user = request.user
-    try:
-        Friend.objects.add_friend(from_user, to_user)
-        #get the friendship_request_id before accepting in line 87.
-        """ Accept a friendship request """
-        f_request = get_object_or_404(
-            request.user.friendship_requests_received,
-            id=friendship_request_id)
-        f_request.accept()
-    except AlreadyExistsError:
-        return redirect('messager:conversation_detail to_username')
-    
-    return redirect('messager:conversation_detail to_username')
-    
 
+    if Friend.objects.are_friends(request.user, to_user) == True:
+        return redirect("messager:conversation_detail" , to_username)
+    else:
+        try:
+            f_request = Friend.objects.add_friend(from_user, to_user)
+            """ Accept a friendship request """
+            f_request.accept()
+        except ValidationError:
+            messages.error(request, 
+                    "Hello, it looks like you are trying to do something suspicious. \
+                    you can't initiate a classified conversation with yourself!")
+            return redirect('messager:contacts_list')
+        except AlreadyExistsError:
+            return redirect('messager:conversation_detail', to_username)
+        except AlreadyFriendsError:
+            return redirect('messager:conversation_detail', to_username)
+        except:
+            messages.error(request, 
+                    "Hello we are sorry, something wrong just happened! We're on it!")
+            return redirect('messager:contacts_list')
+        else:
+            return redirect('messager:conversation_detail', to_username)
+
+    
+    
 
 
          
