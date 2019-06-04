@@ -1,11 +1,4 @@
 /**
- * Enable upload when title has been entered 
- */
-
-
-
-
-/**
  * Upload file object
  * fileStats: File statistics
  * filename: The address of the uploaded file
@@ -18,7 +11,9 @@ var uploader = {
         uploadFinishedFilesNum: 0,
         curFileSize: 0,
     },
-}; //Upload instance object
+};
+
+//Upload instance object
 var Buffer = OSS.Buffer;
 var OSS = OSS.Wrapper;
 var STS = OSS.STS;
@@ -39,7 +34,7 @@ var uploadType = ''; //Upload type
  */
 var applyTokenDo = function () {
     var url = oss_url; //Request background to obtain authorization address url
-    return $.ajax({
+    results = $.ajax({
         url: url,
         async: false,
         success: function (result) {
@@ -109,71 +104,115 @@ function slugify(string) {
 }
 var client;
 var images;
+var success = false;
 
 OssUpload.prototype = {
     constructor: OssUpload,
     // Binding event
     bindEvent: function () {
         var _this = this;
-        $('#id_title').on("blur", function () {
-            $("#chooseFile, #addBtn").click(function () {
-                var $this = $(this);
-                uploadType = $this.attr("data-type")
-                document.getElementById("image-file").click();
-            });
-            $('#image-file').change(function (e) {
-                var files = e.target.files;
-                var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
-                var length = files.length;
-                var file = null;
-                $('#uploader .placeholder').hide();
-                $("#statusBar").css('display', 'flex');
-                for (var i = 0; i < length; i++) {
-                    file = files[i];
-                    uploader.fileList[curIndex + i] = file;
-                    file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
-                    uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-                    _this.addFile(file); //Add to control view
-                }
-                uploader.fileStats.totalFilesNum = uploader.fileList.length;
-            });
 
-            $("#startUpload").click(function (event) {
-                if ($("#id_title").val() == '' || $("#id_details").val() == '' ||
-                    $("#id_located_area").val() == '' || $("#id_tags").val() == '') {
-                    event.preventDefault();
-                    bootbox.alert("Please fill in all of the information before uploading the images!");
-                } else {
-                    var length = uploader.fileStats.totalFilesNum;
-                    var file;
-                    $(".start-uploader").css('display', 'none');
-                    for (var i = 0; i < length; i++) {
-                        var filename = genKey();
-                        file = uploader.fileList[i];
-                        _this.uploadFile(file, filename);
-                    }
-                }
-
-            });
-            $(".queueList .filelist").delegate('li span.cancel', 'click', function () {
-                var $this = $(this);
-                var $li = $this.parent().parent();
-                var id = $li.attr('id');
-                var list = uploader.fileList;
-                var len = list.length;
-                for (var i = 0; i < len; i++) {
-                    if (uploader.fileList[i].id == id) {
-                        uploader.fileStats.totalFilesSize -= uploader.fileList[i].size; //Statistical file size
-                        uploader.fileList.splice(i, 1); //Delete a file from the file list
-                        uploader.fileStats.totalFilesNum = uploader.fileList.length;
-
-                        break;
-                    }
-                }
-
-                $li.remove();
-            });
+        $("#chooseFile, #addBtn").click(function () {
+            var $this = $(this);
+            uploadType = $this.attr("data-type")
+            document.getElementById("image-file").click();
         });
+
+        $('input[type="file"]').change(function (e) {
+            console.log(e)
+            var files = e.target.files;
+            var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
+            var NumberOfSelectedFiles = files.length;
+            //console.log('total files selected ' + NumberOfSelectedFiles);
+            var file = null;
+            $('#uploader .placeholder').hide();
+            $("#statusBar").css('display', 'flex');
+            var AllowUploadQuantity = 8 - curIndex;
+            //console.log('number of files ' + AllowUploadQuantity)
+
+            //check if the upload quantity has reach max 
+            if (AllowUploadQuantity == 0) {
+                bootbox.alert("Only 8 images are allowed");
+                $('.addBtn').hide();
+            } else if (files.length == 0) {
+                bootbox.alert("No image selected , Please select one or more images");
+            } else {
+
+                //Add only the allow # of files to upload qeue
+                if (NumberOfSelectedFiles <= AllowUploadQuantity && NumberOfSelectedFiles > 0) {
+
+                    for (var i = 0; i < NumberOfSelectedFiles; i++) {
+                        file = files[i];
+                        uploader.fileList[curIndex + i] = file;
+                        file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
+                        uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                        _this.addFile(file); //Add to control view
+
+                    }
+                } else {
+                    for (var i = 0; i < NumberOfSelectedFiles && uploader.fileList.length < 8; i++) {
+                        file = files[i];
+                        uploader.fileList[curIndex + i] = file;
+                        file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
+                        uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                        _this.addFile(file); //Add to control view
+
+                    }
+                    bootbox.alert("Only 8 images are allowed");
+                    $('.addBtn').hide();
+                }
+
+            }
+            uploader.fileStats.totalFilesNum = uploader.fileList.length;
+            console.log("click")
+        });
+
+        $("#startUpload").click(function (event) {
+            if ($("#id_title").val() == '' || $("#id_details").val() == '' ||
+                $("#id_located_area").val() == '' || $("#id_tags").val() == '') {
+                event.preventDefault();
+                bootbox.alert("Please fill in all of the information before uploading the images!");
+            } else if (uploader.fileStats.totalFilesNum == 0) {
+                event.preventDefault();
+                bootbox.alert("Please select images to upload!");
+                $(".start-uploader").css('display', 'block');
+
+            } else {
+                var length = uploader.fileStats.totalFilesNum;
+                var file;
+                $(".start-uploader").css('display', 'none');
+                $totalProgressbar.css('width', 70)
+                    .html('Uploading');
+                for (var i = 0; i < length; i++) {
+                    var filename = genKey();
+                    file = uploader.fileList[i];
+                    _this.uploadFile(file, filename);
+                }
+
+            }
+
+        });
+        $(".queueList .filelist").delegate('li span.cancel', 'click', function () {
+            var $this = $(this);
+            var $li = $this.parent().parent();
+            var id = $li.attr('id');
+            var list = uploader.fileList;
+            var len = list.length;
+            for (var i = 0; i < len; i++) {
+                if (uploader.fileList[i].id == id) {
+                    uploader.fileStats.totalFilesSize -= uploader.fileList[i].size; //Statistical file size
+                    uploader.fileList.splice(i, 1); //Delete a file from the file list
+                    uploader.fileStats.totalFilesNum = uploader.fileList.length;
+                    break;
+                }
+            }
+
+            $li.remove();
+            if (uploader.fileList.length <= 8) {
+                $('.addBtn').show();
+            }
+        });
+
     },
 
     /***
@@ -185,38 +224,58 @@ OssUpload.prototype = {
     uploadFile: function (file, filename) {
 
         var total = 0;
+
         applyTokenDo();
-        client.multipartUpload(filename, file, {
-                progress: progress
-            })
-            .then(function (res) {
 
-                $("#" + file.id).children(".success-span").addClass("success");
-                $("#" + file.id).children(".file-panel").hide();
-                uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                /**
-                 * There is a problem here:
-                 * This is the size of the file in the successful callback, not real-time.
-                 * Give a chestnut, you upload a 100M file, you have to wait until it is all uploaded, you know that it is uploaded, you don't know the progress.
-                 * The uploaded process above looks like [0,1], and you have to calculate the size of the current file multiplied by the current progress to figure out how much the file has been uploaded.
-                 *
-                 */
-                progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+        //make sure we get the sts token
+        if (client !== undefined) {
 
-                if (total == uploader.fileStats.totalFilesNum) {
-                    $("#startUpload").text('Uploaded completed');
+            const upload = async () => {
+                try {
+                    const results = await client.multipartUpload(filename, file, {
+                            progress: progress
+                        })
+                        .then(function (res) {
+                            $("#" + file.id).children(".success-span").addClass("success");
+                            $("#" + file.id).children(".file-panel").hide();
+                            uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                            uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                            progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+
+                            if (progressBar == 0) {
+                                $totalProgressbar.css('width', 5)
+                                    .html('Uploading');
+                            } else if (progressBar == 100) {
+                                $totalProgressbar.css('width', progressBar)
+                                    .html(progressBar);
+                            } else {
+                                $totalProgressbar.css('width', progressBar)
+                                    .html("Uploaded");
+                            }
+
+
+                            images += ',' + res.name;
+                            success = true;
+                        });
+                    return results;
+                } catch (e) {
+                    bootbox.alert("Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com")
+                    $(".start-uploader").css('display', 'block');
+                    //console.log(e);
                 }
-                $totalProgressbar.css('width', progressBar)
-                    .html(progressBar);
+            }
 
-                images += ',' + res.name;
-            });
+            return upload()
+        } else {
+            bootbox.alert("Oops!, it looks like there is a problem with your internet connection, \
+            Please make sure you have an internet connection")
+            $(".start-uploader").css('display', 'block');
+        }
+
     },
 
     /**
-     * TODO is executed when a file is added, responsible for the creation of the view.
-     * Baidu webuploader interface
+     * Add file to preview
      */
     addFile: function (file) {
         var $li = $('<li id="' + file.id + '">' +
@@ -249,16 +308,11 @@ OssUpload.prototype = {
         $li.appendTo($queue);
     },
 }
+
 var ossUpload = '';
 $(function () {
     ossUpload = new OssUpload();
     ossUpload.init();
-    $("#dl-button").click(function () {
-        downloadFile();
-
-    });
-
-
     $(".create").click(function (event) {
         if (!images) {
             event.preventDefault();
