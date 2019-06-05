@@ -11,8 +11,14 @@
   <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
   <title>{% block title %}Obrisk{% endblock title %}</title>
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <meta name="locale" content="en">
+  <meta name="theme-color" content="#3EC4E2">
+  {% block meta %}
   <meta name="description" content="A Social Network for foreigners living in China.">
-  <meta name="author" content="Obrisk team">
+  <meta name="keywords" content="Buy and sell , Classifieds, China , Expart">
+  <meta name="author" content="Obrisk.com">
+  {% endblock meta %}
+
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>

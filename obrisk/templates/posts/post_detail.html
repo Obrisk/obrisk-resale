@@ -7,7 +7,13 @@
 {% block head %}
 <link href="{% static 'css/notifications.css' %}" rel="stylesheet">
 <link href="{% static 'css/post-details.css' %}" rel="stylesheet">
+
 {% endblock head %}
+
+{% block meta %}
+<meta name="author" content="{{  post.user.get_profile_name }}">
+<meta name="keywords" content="{{ post.title|title }} ">
+{% endblock %}
 
 {% block content %}
 <!-- Page Content -->
@@ -44,7 +50,8 @@
       <!-- Featured Image -->
       {% thumbnail post.image "900x300" as im %}
       <div class="featured-img" style="background-size:cover">
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}" class="card-img-top">
+        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}"
+          class="card-img-top">
       </div>
       {% endthumbnail %}
       <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
@@ -99,9 +106,9 @@
       <p>There are no comments yet.</p>
       {% endfor %}
 
-      
+
       {% if new_comment %}
-        <h2>Your comment has been added.</h2>
+      <h2>Your comment has been added.</h2>
       {% else %}
 
       <div id="comment-notify d-none" class="notification"> </div>
@@ -114,16 +121,17 @@
             {% csrf_token %}
             {{ comment_form|crispy }}
             {% if user.is_authenticated %}
-                <input class="btn btn-dark comment-btn" type="button" value="Add comment">
+            <input class="btn btn-dark comment-btn" type="button" value="Add comment">
             {% else %}
-                <h6> Please login to post your comment: </h6> 
-                <a class="btn btn-dark btn-xl js-scroll-trigger text-dark" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+            <h6> Please login to post your comment: </h6>
+            <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+              href="{% url 'account_login' %}">{% trans 'Login' %}</a>
           </form>
           {% endif %}
         </div>
       </div>
       {% endif %}
-    
+
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
 
