@@ -7,6 +7,10 @@
 {% block head %}
 <link href="{% static 'css/qa.css' %}" rel="stylesheet">
 {% endblock head %}
+{% block meta%}
+<meta name="keywords" content="{{ question.title }}">
+<meta name="author" content="{{ question.user.username }}">
+{%endblock meta%}
 
 {% block content %}
 <div class="col-lg-8 m-auto">
