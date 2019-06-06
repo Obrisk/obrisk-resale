@@ -17,7 +17,7 @@ var uploader = {
 var Buffer = OSS.Buffer;
 var OSS = OSS.Wrapper;
 var STS = OSS.STS;
-var FileMaxSize = 5000000
+var FileMaxSize = 13000000
 var TotalFilesMaxSize = 8
 var images; //holds all uploaded images as a string 
 var client;
@@ -33,7 +33,7 @@ OssUpload.prototype = {
         });
 
         $('input[type="file"]').change(function (e) {
-            console.log(e)
+            //console.log(e)
             var files = e.target.files;
             var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
             var NumberOfSelectedFiles = files.length;
@@ -57,14 +57,14 @@ OssUpload.prototype = {
 
                     for (var i = 0; i < NumberOfSelectedFiles; i++) {
                         file = files[i];
-                        //don't upload files with size greater than 5MB
+                        //don't upload files with size greater than 13MB
                         if (file.size <= FileMaxSize) {
                             uploader.fileList[curIndex + i] = file;
                             file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
                             uploader.fileStats.totalFilesSize += file.size; //Statistical file size
                             _this.addFile(file); //Add to control view
                         } else {
-                            bootbox.alert(file.name + ' is larger than 5MB, please select images small than 5MB ')
+                            bootbox.alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
 
                         }
 
@@ -72,7 +72,7 @@ OssUpload.prototype = {
                 } else {
                     for (var i = 0; i < NumberOfSelectedFiles && uploader.fileList.length < TotalFilesMaxSize; i++) {
                         file = files[i];
-                        //don't upload files with size greater than 5MB
+                        //don't upload files with size greater than 13MB
                         if (file.size <= FileMaxSize) {
                             uploader.fileList[curIndex + i] = file;
                             file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
@@ -80,7 +80,7 @@ OssUpload.prototype = {
                             _this.addFile(file); //Add to control view
                         } else {
 
-                            bootbox.alert(file.name + ' is larger than 5MB, please select images small than 5MB ')
+                            bootbox.alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
                         }
 
                     }
@@ -90,7 +90,6 @@ OssUpload.prototype = {
 
             }
             uploader.fileStats.totalFilesNum = uploader.fileList.length;
-            console.log("click")
         });
 
         $("#startUpload").click(function (event) {
@@ -107,8 +106,8 @@ OssUpload.prototype = {
                 var length = uploader.fileStats.totalFilesNum;
                 var file;
                 $(".start-uploader").css('display', 'none');
-                $totalProgressbar.css('width', 70)
-                    .html('Uploading');
+                $totalProgressbar.css('width', '40%')
+                    .html('Upload Started please be patient');
                 for (var i = 0; i < length; i++) {
                     var filename = genKey();
                     file = uploader.fileList[i];
@@ -166,18 +165,18 @@ OssUpload.prototype = {
                             $("#" + file.id).children(".file-panel").hide();
                             uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
                             uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                            progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
                             progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
 
-                            if (progressBar == 0) {
-                                $totalProgressbar.css('width', 5)
-                                    .html('Uploading');
-                            } else if (progressBar == 100) {
+                            if (progressBarNum == 100) {
                                 $totalProgressbar.css('width', progressBar)
-                                    .html(progressBar);
+                                    .html('Upload complete');
                             } else {
                                 $totalProgressbar.css('width', progressBar)
-                                    .html("Uploaded");
+                                    .html(progressBar);
+
                             }
+
 
 
                             images += ',' + res.name;
@@ -186,7 +185,7 @@ OssUpload.prototype = {
                 } catch (e) {
                     bootbox.alert("Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com")
                     $(".start-uploader").css('display', 'block');
-                    console.log(e);
+                    //console.log(e);
                 }
             }
 
@@ -272,7 +271,7 @@ var applyTokenDo = function () {
         },
         error: function (e) {
             bootbox.alert('Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com')
-            console.log(e)
+            //console.log(e)
         }
     });
 };
