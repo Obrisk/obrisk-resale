@@ -33,7 +33,7 @@ OssUpload.prototype = {
         });
 
         $('input[type="file"]').change(function (e) {
-            console.log(e)
+            //console.log(e)
             var files = e.target.files;
             var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
             var NumberOfSelectedFiles = files.length;
@@ -90,7 +90,6 @@ OssUpload.prototype = {
 
             }
             uploader.fileStats.totalFilesNum = uploader.fileList.length;
-            console.log("click")
         });
 
         $("#startUpload").click(function (event) {
@@ -107,7 +106,7 @@ OssUpload.prototype = {
                 var length = uploader.fileStats.totalFilesNum;
                 var file;
                 $(".start-uploader").css('display', 'none');
-                $totalProgressbar.css('width', '100%')
+                $totalProgressbar.css('width', '40%')
                     .html('Upload Started please be patient');
                 for (var i = 0; i < length; i++) {
                     var filename = genKey();
@@ -171,7 +170,7 @@ OssUpload.prototype = {
 
                             if (progressBarNum == 100) {
                                 $totalProgressbar.css('width', progressBar)
-                                    .html('Upload complet');
+                                    .html('Upload complete');
                             } else {
                                 $totalProgressbar.css('width', progressBar)
                                     .html(progressBar);
@@ -186,7 +185,7 @@ OssUpload.prototype = {
                 } catch (e) {
                     bootbox.alert("Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com")
                     $(".start-uploader").css('display', 'block');
-                    console.log(e);
+                    //console.log(e);
                 }
             }
 
@@ -272,7 +271,7 @@ var applyTokenDo = function () {
         },
         error: function (e) {
             bootbox.alert('Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com')
-            console.log(e)
+            //console.log(e)
         }
     });
 };
