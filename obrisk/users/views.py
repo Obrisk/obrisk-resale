@@ -246,3 +246,25 @@ def block_remove(request, blocked_username, template_name='friendship/block/remo
         return redirect('friendship_blocking', username=blocker.username)
 
     return render(request, template_name, {'blocked_username': blocked_username})
+
+@login_required
+def friends_list(request):
+    # List of this user's friends
+    all_friends = Friend.objects.friends(request.user)
+    return render(request, 'friends_list.html', {"all_friends":all_friends})
+
+@login_required
+
+def follower_list(request):
+    
+    # List of this user's followers
+    all_followers = Follow.objects.followers(request.user)
+    return render(request, 'follower_list.html', {"all_followers":all_followers})
+
+@login_required
+
+def following_list(request):
+
+    # List of who this user is following
+    following = Follow.objects.following(request.user)
+    return render(request, 'following_list.html', {"following":following})
