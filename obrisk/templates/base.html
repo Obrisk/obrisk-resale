@@ -15,8 +15,11 @@
   <meta name="theme-color" content="#3EC4E2">
   {% block meta %}
   <meta name="description" content="A Social Network for foreigners living in China.">
-  <meta name="keywords" content="Buy and sell , Classifieds, China , Expart">
+  <meta name="keywords" content="Buy and sell , Classifieds, Expat, foreigners in China, China">
   <meta name="author" content="Obrisk.com">
+  <meta name="apple-mobile-web-app-title" content="obrisk">
+  <meta name="locale" content="en">
+  <meta name="theme-color" content="#3EC4E2">
   {% endblock meta %}
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -32,7 +35,14 @@
   <!-- This file stores project-specific CSS -->
   <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
 
-  <!-- ================================================== 
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
+  <link rel="manifest" href="{% static 'img/site.webmanifest' %}?v=1">
+  <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=1">
+
+  <!--================================================================================
     They should be placed at the end of the document so the pages load faster -->
   <script src="{% static 'js/popper.min.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
@@ -54,7 +64,8 @@
           aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="{% url 'classifieds:list' %}">Obrisk</a>
+        <a class="navbar-brand" href="{% url 'classifieds:list' %}"> 
+        Obrisk </a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
           <ul class="main-nav navbar-nav mr-auto">
