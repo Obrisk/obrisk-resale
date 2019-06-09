@@ -9,7 +9,7 @@ app_name = 'classifieds'
 urlpatterns = [
     url(r'^$', classified_list, name='list'),
     url(r'^write-new-classified/$', CreateClassifiedView.as_view(), name='write_new'),
-    url( r'^tags-autocomplete/$', TagsAutoComplete.as_view(),name='autocomplete'),
+    url( r'^tags-autocomplete/$', TagsAutoComplete.as_view(), name='tags_autocomplete'),
     url(r'^new-official-classified/$', CreateOfficialAdView.as_view(), name='new_official_ad'),
     url(r'^ads-mobile/$', TemplateView.as_view(template_name='classifieds/ads-mobile.html'), name="mobile-ads"),
     #url(r'^expired/$', ExpiredListView.as_view(), name='expired'),

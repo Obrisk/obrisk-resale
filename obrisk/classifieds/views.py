@@ -320,6 +320,7 @@ def get_oss_auth(request):
     return JsonResponse(data)
 
 
+@method_decorator(login_required, name='dispatch')
 class TagsAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = Tag.objects.all()

@@ -13,7 +13,7 @@ class ClassifiedForm(forms.ModelForm):
 
         widgets = {
             'user': forms.HiddenInput(),
-            'tags': autocomplete.ModelSelect2(url='select2_fk')
+            'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
         }
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
