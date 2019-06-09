@@ -36,6 +36,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from obrisk.helpers import ajax_required
 
+from dal import autocomplete
+
 # The following code shows the usage of STS, including role-playing to get the temporary user's key and using the temporary user's key to access the OSS.
 
 # STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
@@ -159,7 +161,6 @@ def classified_list(request, tag_slug=None):
 
 #     def get_queryset(self, **kwargs):
 #         return Classified.objects.get_expired()
-
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
@@ -317,6 +318,17 @@ def get_oss_auth(request):
         'bucket': bucket_name
     }
     return JsonResponse(data)
+
+
+@method_decorator(login_required, name='dispatch')
+class TagsAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Tag.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
+
+        return qs
 
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
