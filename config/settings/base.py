@@ -71,6 +71,8 @@ DJANGO_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'dal',   #Django auto complete has to be before admin
+    'dal_select2',
     'django.contrib.admin',
     'django.forms',
 ]

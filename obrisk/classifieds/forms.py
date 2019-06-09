@@ -1,4 +1,5 @@
 from django import forms
+from dal import autocomplete
 from obrisk.classifieds.models import Classified, OfficialAd
 
 class ClassifiedForm(forms.ModelForm):
@@ -10,7 +11,10 @@ class ClassifiedForm(forms.ModelForm):
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags"]
 
-        widgets = {'user': forms.HiddenInput()}
+        widgets = {
+            'user': forms.HiddenInput(),
+            'tags': autocomplete.ModelSelect2(url='select2_fk')
+        }
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
             Please don't enter your city it will be added automatically based on your profile",
