@@ -10,7 +10,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
+        migrations.AlterField(
             model_name='user',
             name='snapchat_account',
             field=models.CharField(blank=True, max_length=255, null=True, verbose_name='Snapchat profile'),
