@@ -46,42 +46,45 @@
                 <strong id="classified-user"> {{ classified.user.get_profile_name|title }} </strong>
                 <div class="location">
                   <small class="card-subtitle mb-2">📍</small><span class="card-subtitle mb-2">
-                    {{ classified.located_area }} ,{{ classified.city }}</span>
+                    {{ classified.located_area }}, {{ classified.city }}</span>
                 </div>
                 <!-- Date/Time -->
-                <div class="mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
+                <div class="time mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
 
               </div>
             </div>
-            <div class="meta-right">
+            <div
+              class="meta-right mt-md-0 mt-4 col-md-8 d-flex flex-column align-items-baseline align-items-md-end ml-auto mr-auto">
               <!-- Price -->
               <h3 class="O-cl-red price">
-                <strong class="ribbon-content">{% trans 'CNY' %} {{ classified.price }}</strong>
+                <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
-              {% if request.user == classified.user%}
-              <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
-                title="{% trans 'Edit this classified' %}">
-                <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-              <a href="{% url 'classifieds:list' %}" class="btn btn-dark">&larr;{% trans 'Back' %} </a> <br> <br>
-              {% else %}
+              {% if classified.user != request.user %}
               <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
-                <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with seller' %} </strong></a> <br>
+                <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
               <br>
-              <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
               {% endif %}
             </div>
 
           </div>
 
         </div>
-        {% include 'classifieds/image-swiper.html' with message=message %}
-        <div class="card-text text-justify">{{ classified.details }}</div>
-      </section>
-      <!-- Classified more Content -->
-      <div class="m-4">
-        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a>
+        <div class="col-lg-9 m-auto h-50">
+          {% include 'classifieds/image-swiper.html' with images=images %}
+        </div>
 
-      </div>
+        <div class="card-text text-justify">{{ classified.details }}</div>
+
+        {% if classified.contact_info %}
+            <small><strong>Seller contacts :</strong>
+            {{ classified.contact_info }}</small>
+            <a href="{% url 'friendship:friendship_add_friend' classified.user.username  %}" class="btn btn-action">
+                <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' add as a friend' %} </strong></a> <br>
+
+        {% endif %}
+      </section>
+
+
       <!-- Cloud Tag Widget -->
       <div class="card my-4">
         <h5 class="card-header">{% trans 'Tags' %}</h5>
@@ -91,13 +94,27 @@
           {% endfor %}
         </div>
       </div>
+
+      <!-- Navigation buttons -->
+      <div class="m-4">
+        {% if request.user == classified.user%}
+        <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
+          title="{% trans 'Edit this classified' %}">
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+        {% else %}
+        <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
+        {% endif %}
+        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a><br> <br>
+
+      </div>
     </div>
 
 
-
+    <!-- Similar lassified -->
+    {% if similar_classifieds %}
     <div class="col-lg-8 col-md-10 mr-auto ml-auto related-card mt-4 pt-4 mb-4">
-      <h3 class="text-left">Related Classified</h3>
       <div class=" related mt-4 mb-4">
+        <h5 class="text-left">Related Classifieds</h5>
         <!-- Classified Entries Column -->
         <!-- <div class="col-md-8"> -->
         {% for classified in similar_classifieds %}
@@ -115,6 +132,7 @@
               {% endfor %}
               {{ "-->" }}
           </div>
+
           <div class="card-body">
             <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
             <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
@@ -137,6 +155,8 @@
     </div>
 
   </div>
+  {% endif %}
+
 
 </div>
 

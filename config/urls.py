@@ -2,14 +2,14 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from django.views.generic import TemplateView
 
+import friendship
 from graphene_django.views import GraphQLView
-from obrisk.messager import views
+
 from obrisk.classifieds import views as images_views
-
-
+from obrisk.messager import views
 
 urlpatterns = [
     url(r'^$',
@@ -47,7 +47,8 @@ urlpatterns = [
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
     
     #friendship
-    url(r'^friendship/', include('friendship.urls')),
+    url(r'^friendship/', include(('friendship.urls', 'friendship'), namespace='friendship_add_friend')),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
