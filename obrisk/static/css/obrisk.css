@@ -246,3 +246,8 @@ main .notification--num {
   width: 101px;
   flex-basis: calc(25% - -20px);
 }
+
+.list-group-item.active {
+  border-color: #0aeee3 !important;
+  background: linear-gradient(45deg, #0aacec, #0aeee3) !important;
+}

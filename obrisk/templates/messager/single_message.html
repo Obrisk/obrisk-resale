@@ -1,41 +1,40 @@
 {% load static i18n humanize %}
 
 {% load thumbnail %}
-  
-    {% if request.user == message.sender %}
-    <div class="user">
-        <div class="message-container-user">
-            <div class="timestamp d-flex justify-content-end mr-4">{{ message.timestamp|date:'N d G:i' }}</div>
 
-            <div class="message-bubble-user"> {{ message.message }}  </div>
-        </div>
+{% if request.user == message.sender %}
+<div class="user">
+    <div class="message-container-user">
+        <div class="timestamp d-flex justify-content-end mr-4">{{ message.timestamp|date:'N d G:i' }}</div>
 
-        <figure class="avatar-user">
-            {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
-            <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-                {% empty %}
-            <img  src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
-        </figure>
-     
+        <div class="message-bubble-user"> {{ message.message }} </div>
     </div>
 
-    {% else %}
-    <div class="sender">
-        <figure class="avatar-sender">
-            {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
-            <img  src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-                {% empty %}
-            <img  src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
-        </figure>
-        <div class="message-container">
-            <div class="timestamp d-flex justify-content-start ml-4"> {{ message.timestamp|date:'N d G:i' }} </div>
-            <div class="message-bubble"> {{ message.message }}  </div>
-        </div>
+    <figure class="avatar-user">
+        {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
+        <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+        {% empty %}
+        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px"
+            alt="{% trans 'No Profile Picture' %}" />
+        {% endthumbnail %}
+    </figure>
+
+</div>
+
+{% else %}
+<div class="sender">
+    <figure class="avatar-sender">
+        {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
+        <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
+        {% empty %}
+        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px"
+            alt="{% trans 'No Profile Picture' %}" />
+        {% endthumbnail %}
+    </figure>
+    <div class="message-container">
+        <div class="timestamp d-flex justify-content-start ml-4"> {{ message.timestamp|date:'N d G:i' }} </div>
+        <div class="message-bubble"> {{ message.message }} </div>
     </div>
-          
-    {% endif %}
+</div>
 
-
-
+{% endif %}
