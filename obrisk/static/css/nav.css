@@ -74,3 +74,70 @@ nav {
     }
 
 }
+
+#search-btn {
+    padding: 10px 20px;
+    border-radius: 0 5px 5px 0;
+    -moz-border-radius: 0 5px 5px 0;
+    -webkit-border-radius: 0 5px 5px 0;
+    -o-border-radius: 0 5px 5px 0;
+    border: 0 none;
+    font-weight: bold;
+}
+
+#search-box {
+    background: #fff;
+    padding: 10px;
+    border-radius: 5px 0 0 5px;
+    -moz-border-radius: 5px 0 0 5px;
+    -webkit-border-radius: 5px 0 0 5px;
+    -o-border-radius: 5px 0 0 5px;
+    border: 0 none;
+}
+
+.searchbar {
+    margin-bottom: auto;
+    margin-top: auto;
+    height: 50px;
+    background: linear-gradient(45deg, #0aacec, #0aeee3);
+    border-radius: 30px;
+    padding: 10px;
+}
+
+.search_input {
+    color: white;
+    border: 0;
+    outline: 0;
+    background: none;
+    width: 0;
+    caret-color: transparent;
+    line-height: 35px;
+    transition: width 0.1s linear;
+}
+
+.searchbar:hover>.search_input {
+    padding: 0 10px;
+    width: 75%;
+    caret-color: red;
+    transition: width 0.1s linear;
+}
+
+.searchbar:hover>.search_icon {
+    background: white;
+    color: #e74c3c;
+}
+
+.search_icon {
+    height: 30px;
+    width: 30px;
+    float: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: white;
+}
+
+.search-results .badge {
+    font-size: 90% !important;
+}

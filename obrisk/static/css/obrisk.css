@@ -246,3 +246,139 @@ main .notification--num {
   width: 101px;
   flex-basis: calc(25% - -20px);
 }
+
+.list-group-item.active {
+  border-color: #0aeee3 !important;
+  background: linear-gradient(45deg, #0aacec, #0aeee3) !important;
+}
+
+/*
+loading animation from:
+https: //nzbin.github.io/three-dots
+*/
+.snippet {
+  position: relative;
+  background: #fff;
+  padding: 2rem 5%;
+  margin: 1.5rem 0;
+  box-shadow: 0 .4rem .8rem -.1rem rgba(0, 32, 128, .1), 0 0 0 1px #f0f2f7;
+  border-radius: .25rem;
+}
+
+.stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+  margin: 0 -5%;
+  overflow: hidden;
+}
+
+/**
+ * ==============================================
+ * Dot Pulse
+ * ==============================================
+ */
+.dot-pulse {
+  position: relative;
+  left: -9999px;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #3ec4e2;
+  color: #3ec4e2;
+  box-shadow: 9999px 0 0 -5px #3ec4e2;
+  animation: dotPulse 1.5s infinite linear;
+  animation-delay: .25s;
+}
+
+.dot-pulse::before,
+.dot-pulse::after {
+  content: '';
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  background-color: #3ec4e2;
+  color: #3ec4e2;
+}
+
+.dot-pulse::before {
+  box-shadow: 9984px 0 0 -5px #3ec4e2;
+  animation: dotPulseBefore 1.5s infinite linear;
+  animation-delay: 0s;
+}
+
+.dot-pulse::after {
+  box-shadow: 10014px 0 0 -5px #3ec4e2;
+  animation: dotPulseAfter 1.5s infinite linear;
+  animation-delay: .5s;
+}
+
+@keyframes dotPulseBefore {
+  0% {
+    box-shadow: 9984px 0 0 -5px #3ec4e2;
+  }
+
+  30% {
+    box-shadow: 9984px 0 0 2px #3ec4e2;
+  }
+
+  60%,
+  100% {
+    box-shadow: 9984px 0 0 -5px #3ec4e2;
+  }
+}
+
+@keyframes dotPulse {
+  0% {
+    box-shadow: 9999px 0 0 -5px #3ec4e2;
+  }
+
+  30% {
+    box-shadow: 9999px 0 0 2px #3ec4e2;
+  }
+
+  60%,
+  100% {
+    box-shadow: 9999px 0 0 -5px #3ec4e2;
+  }
+}
+
+@keyframes dotPulseAfter {
+  0% {
+    box-shadow: 10014px 0 0 -5px #3ec4e2;
+  }
+
+  30% {
+    box-shadow: 10014px 0 0 2px #3ec4e2;
+  }
+
+  60%,
+  100% {
+    box-shadow: 10014px 0 0 -5px #3ec4e2;
+  }
+}
+
+#toast-container {
+  position: sticky;
+  z-index: 1055;
+  top: 0;
+}
+
+#toast-wrapper {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 5px;
+}
+
+#toast-container>#toast-wrapper>.toast {
+  min-width: 150px;
+}
+
+#toast-container>#toast-wrapper>.toast>.toast-header strong {
+  padding-right: 20px;
+}

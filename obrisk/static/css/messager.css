@@ -4,7 +4,6 @@ html,
 body,
 .chat {
   height: 100%;
-  overflow: hidden;
 }
 
 
@@ -20,6 +19,8 @@ body,
 
 #last-msg {
   position: absolute;
+  height: 18px;
+  overflow: hidden;
   left: 70px;
   top: 60%;
   font-weight: normal;
@@ -34,12 +35,6 @@ body,
   display: flex;
   flex-flow: column wrap;
 }
-
-.list-group {
-  overflow-y: scroll;
-  height: 80vh;
-}
-
 
 .chat-title {
   flex: 0 1 45px;
