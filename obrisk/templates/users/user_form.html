@@ -22,7 +22,7 @@
       <img src="{{ im.url }}" style="border-radius: 50%;" alt="Picture Profile" id="pic">
       {% endthumbnail %}
       {% else %}
-      <img src="{% static 'img/user.png' %}" alt="No Profile Picture" />
+      <img id="avatar" src="{% static 'img/user.png' %}" alt="No Profile Picture" />
       {% endif %}
     </div>
 
@@ -46,9 +46,16 @@
           <select class="custom-select" id="city" name="city"> </select>
         </div>
         <div class="control-group">
-          <div class="controls">
-            <button type="submit" id="update" class="btn btn-dark">{% trans 'Update Profile' %}</button>
+          <div class="form-group d-flex justify-content-center">
+            <div class="controls">
+              <button type="submit" id="update" class="btn btn-dark">{% trans 'Update Profile' %}</button>
+
+            </div>
+            <div class="controls ml-4 ">
+              <a href="/users/{{ user.username}}/" class="btn btn-danger">Cancel</a>
+            </div>
           </div>
+
         </div>
       </form>
     </div>
@@ -63,6 +70,9 @@
   }).setDuration(5000);
   $('#update').on('click', function () {
     toast.show();
+  })
+  $('#avatar').on('change', function ($this) {
+    uploadPreview($this)
   })
 </script>
 {% endblock %}

@@ -41,23 +41,23 @@
 
       <p>
         {% if object.instagram_account %}
-        <a href="https://www.instagram.com/{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Instagram Profile' %}"><i
-            class="fa fa-instagram"></i> </a>
+        <a href="https://www.instagram.com/{{ object.instagram_account }}" style="font-size: 2em"
+          title="{% trans 'Instagram Profile' %}"><i class="fa fa-instagram"></i> </a>
         {% endif %}
 
         {% if object.linkedin_account %}
-        <a href="https://www.linkedin.com/in/{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i
-            class="fa fa-linkedin"></i> </a>
+        <a href="https://www.linkedin.com/in/{{ object.linkedin_account }}" style="font-size: 2em"
+          title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i> </a>
         {% endif %}
 
         {% if object.snapchat_account %}
-        <a href="https://www.snapchat.com/add/{{ object.snapchat_account }}" style="font-size: 2em" title="{% trans 'Snapchat Profile' %}"><i
-            class="fa fa-snapchat"></i> </a>
+        <a href="https://www.snapchat.com/add/{{ object.snapchat_account }}" style="font-size: 2em"
+          title="{% trans 'Snapchat Profile' %}"><i class="fa fa-snapchat"></i> </a>
         {% endif %}
 
         {% if object.facebook_account %}
-        <a href="https://www.facebook.com/{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i
-            class="fa fa-facebook"></i> </a>
+        <a href="https://www.facebook.com/{{ object.facebook_account }}" style="font-size: 2em"
+          title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i> </a>
         {% endif %}
 
         <br />
@@ -73,6 +73,8 @@
         <br />
         {% if object.job_title %}
         <i class="fa fa-briefcase" aria-hidden="true"></i> {{ object.job_title }} <br />
+        {% else %}
+        <p>{{ object.username }} is too lazy, doesn't want to add a job title.</p>
         {% endif %}
       </p>
 
@@ -80,6 +82,8 @@
       <div class="panel-body" id="objective">
         <p>{{ object.bio }}</p>
       </div>
+      {% else %}
+      <p>{{ object.username}} is too lazy, doesn't want to write a short bio.</p>
       {% endif %}
       <div class="clear"></div>
     </div>
