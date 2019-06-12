@@ -4,15 +4,14 @@ import itertools
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
+from django.forms.fields import DateTimeField
 from django.utils.translation import ugettext_lazy as _
-
-from slugify import slugify
 
 from django_comments.signals import comment_was_posted
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from slugify import slugify
 from taggit.managers import TaggableManager
-
 
 from obrisk.notifications.models import Notification, notification_handler
 
@@ -20,6 +19,7 @@ from obrisk.notifications.models import Notification, notification_handler
 class PostQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
+    #this query is the longest.
     def get_active(self):
         """Returns only the published items in the current queryset."""
         return self.filter(status="P")
@@ -28,12 +28,13 @@ class PostQuerySet(models.query.QuerySet):
         """Returns only the items marked as DRAFT in the current queryset."""
         return self.filter(status="D")
 
+    #Improve the performance of this query. It is too slow.
     def get_counted_tags(self):
         tag_dict = {}
         query = self.filter(status='P').annotate(
             tagged=Count('tags')).filter(tags__gt=0)
         for obj in query:
-            for tag in obj.tags.names():
+            for tag in obj.tags.slugs():
                 if tag not in tag_dict:
                     tag_dict[tag] = 1
 
@@ -127,3 +128,28 @@ def notify_comment(**kwargs):
 
 
 comment_was_posted.connect(receiver=notify_comment)
+
+
+#jobs and events
+
+class Jobs(models.Model):
+    title = models.CharField(max_length=80)
+    details = models.TextField()
+    location = models.CharField(max_length=100)
+    requirements = models.CharField(max_length=200)
+    eligibility = models.CharField(max_length=200)
+    deadline = models.DateTimeField()
+    posting_date = models.DateTimeField(auto_now_add=True)
+    contacts = models.TextField()
+
+
+class Events(models.Model):
+    title = models.CharField(max_length=80)
+    address = models.TextField()
+    starting_time = models.DateTimeField()
+    ending_time = models.DateTimeField()
+    description = models.TextField()
+    contacts = models.TextField()
+    posting_time = models.DateTimeField(auto_now_add=True)
+
+

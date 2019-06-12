@@ -9,7 +9,7 @@ $(function () {
             if (status === 'online') {
                 elem.attr("class", "btn btn-success btn-circle");
             } else {
-                elem.attr("class", "btn btn-dark btn-circle");
+                elem.attr("class", "btn btn-danger btn-circle");
             };
         };
     };
@@ -18,45 +18,55 @@ $(function () {
         /* Set focus on the input box from the form, and rolls to show the
             the most recent message.
         */
-        $("input[name='message']").focus();
+        $("textarea[name='message']").focus();
         var d = $('.messages');
         d.scrollTop(d.prop("scrollHeight"));
     }
-    
+
     function addNewMessage(message_id) {
         /* This function calls the respective AJAX view, so it will be able to
         load the received message in a proper way.
          */
         $.ajax({
             url: '/ws/messages/receive-message/',
-            data: {'message_id': message_id},
+            data: {
+                'message_id': message_id
+            },
             cache: false,
             success: function (data) {
                 $(".send-message").before(data);
                 scrollMessages();
             }
         });
-    };   
+    };
 
     $("#send").submit(function () {
+        //disable send button after clicking 
+        $(".send-btn").attr("disabled", true);
         $.ajax({
             url: '/ws/messages/send-message/',
             data: $("#send").serialize(),
             cache: false,
             type: 'POST',
             success: function (data) {
+                //enable send button after message is sent
+                $('.send-btn').removeAttr("disabled");
                 $(".send-message").before(data);
                 $('#send')[0].reset();
+                $("textarea").text() = "";
+                $("textarea[name='message']").focus();
                 scrollMessages();
             }
         });
         return false;
     });
 
+
+
     //This helps the text in the textarea of the message to be send
     //when press enter and go new line with shift + enter!
     $("#sendText").keypress(function (e) {
-        if(e.which == 13 && !e.shiftKey) {        
+        if (e.which == 13 && !e.shiftKey) {
             $(this).closest("form").submit();
             e.preventDefault();
             return false;
@@ -86,12 +96,12 @@ $(function () {
         // Commenting this block until I find a better way to manage how to
         // report the user status.
 
-        /* payload = {
-            "type": "recieve",
-            "sender": currentUser,
-            "set_status": "online"
-        };
-        webSocket.send(payload); */
+        // payload = {
+        //     "type": "recieve",
+        //     "sender": currentUser,
+        //     "set_status": "online"
+        // };
+        // webSocket.send(payload);
     };
 
     webSocket.socket.onclose = function () {
@@ -99,13 +109,15 @@ $(function () {
     };
 
     // onmessage management.
-    webSocket.listen(function(event) {
+    webSocket.listen(function (event) {
         switch (event.key) {
             case "message":
                 if (event.sender === activeUser) {
                     addNewMessage(event.message_id);
                     // I hope there is a more elegant way to work this out.
-                    setTimeout(function(){$("#unread-count").hide()}, 1);
+                    setTimeout(function () {
+                        $("#unread-count").hide()
+                    }, 1);
                 } else {
                     $("#new-message-" + event.sender).show();
                 }

@@ -42,7 +42,7 @@
       {% if request.user in stories.get_likers %}
       ❤️
       {% else %}
-      ❤️
+      <i class="heart fa fa-heart-o" aria-hidden="true"></i>
       {% endif %}
       <span class="like-count">{{ stories.count_likers }}</span>
     </a>

@@ -11,8 +11,8 @@
 {% block content %}
 <!-- Container -->
 <div class="container mt-4">
-  <div class="col-md-8 m-auto d-flex justify-content-around">
-    <h3>{% trans 'Stories arround you' %}</h3>
+  <div class="col-md-8 m-auto d-flex align-items-center flex-column flex-md-row justify-content-around">
+    <h3>{% trans 'Most recent stories' %}</h3>
     <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#storiesFormModal">
       📝 {% trans 'Share something' %}
     </button>
@@ -51,18 +51,18 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
-<script>
-  var infinite = new Waypoint.Infinite({
-    element: $('.infinite-container')[0],
-    onBeforePageLoad: function () {
-      $('.load').show();
-    },
-    onAfterPageLoad: function ($items) {
-      $('.load').hide();
-    }
-  });
-</script>
+    <script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
+    <script>
+      var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+        onBeforePageLoad: function () {
+          $('.load').show();
+        },
+        onAfterPageLoad: function ($items) {
+          $('.load').hide();
+        }
+      });
+    </script>
 {% endblock extra_js %}

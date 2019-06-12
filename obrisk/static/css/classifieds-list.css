@@ -1,17 +1,6 @@
-.card-subtitle {
-    font-size: 14px;
-    font-family: 'Montserrat', sans-serif;
-    font-weight: 600;
-}
-
-.card-body small,
-.small {
-    font-size: 70%;
-}
-
-.sidebar {
-    float: left;
-    width: 280px;
+.right-sidebar {
+    float: right;
+    width: 156px;
     margin: auto;
     text-align: left;
     line-height: 1.35em;
@@ -20,63 +9,7 @@
     z-index: 5;
 }
 
-.sidebar .card-header {
-    background-color: #01baef;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 240 82'%3E%3Cpolygon fill='%23f0fdff' points='957 450 539 900 1396 900'/%3E%3Cpolygon fill='%23139daa' points='957 450 872.9 900 1396 900'/%3E%3Cpolygon fill='%23e0eced' points='-60 900 398 662 816 900'/%3E%3Cpolygon fill='%2333999f' points='337 900 398 662 816 900'/%3E%3Cpolygon fill='%23d0dbdc' points='1203 546 1552 900 876 900'/%3E%3Cpolygon fill='%23459595' points='1203 546 1552 900 1162 900'/%3E%3Cpolygon fill='%23c0cacb' points='641 695 886 900 367 900'/%3E%3Cpolygon fill='%2352918d' points='587 900 641 695 886 900'/%3E%3Cpolygon fill='%23b0b9ba' points='1710 900 1401 632 1096 900'/%3E%3Cpolygon fill='%235d8c86' points='1710 900 1401 632 1365 900'/%3E%3Cpolygon fill='%23a1a9aa' points='1210 900 971 687 725 900'/%3E%3Cpolygon fill='%23658880' points='943 900 1210 900 971 687'/%3E%3C/svg%3E");
-    background-attachment: fixed;
-    background-size: cover;
-    background: linear-gradient(72.29deg, #01BAEF -0.13%, rgba(1, 186, 239, 0) 118.48%);
-    height: 120px
+.w-95 {
+    width: 95%;
 }
 
-.divider {
-    width: 100%;
-    height: 5px;
-    background: linear-gradient(267.54deg, #3EC4E2 0%, #A1DBD2 101.73%);
-}
-
-.toggle-tags {
-    font-size: 30px;
-    color: #01BAEF;
-
-}
-
-.card-title {
-    height: 40px;
-}
-
-
-.sidebar-overlay {
-    background: rgba(54, 25, 25, 0.5);
-    height: 100%;
-    left: -100%;
-    position: absolute;
-    width: 100%;
-    z-index: 1;
-}
-
-
-/* Classified details swap thumbnails */
-@media (max-width: 992px) {
-    .sidebar {
-        position: absolute;
-        display: none;
-        width: 80%;
-        top: 80px;
-        z-index: 2;
-        z-index: 2;
-        -webkit-transition: all 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        -moz-transition: all 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-        transition: all 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
-    }
-
-    .sidebar .card-body {
-        min-height: 480px;
-    }
-}
-
-.open-sidebar {
-    overflow: hidden;
-    overflow-y: hidden;
-    height: 70vh;
-}

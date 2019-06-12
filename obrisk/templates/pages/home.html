@@ -1,11 +1,12 @@
 {% load static i18n %}<!DOCTYPE html>
 <html lang="en">
   <head>
+    <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
     <meta name="description" content="A Location-based social network. In here you will find Classifieds, events, jobs, and many more posts based on your location.">
-    <meta name="author" content="Elshaddae">
+    <meta name="author" content="Obrisk team">
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -24,6 +25,14 @@
   <!-- Masthead -->
   <header class="masthead">
     <div class="container h-100">
+        <!--links-->      
+      <div class="links">
+          <a class="text-faded text-primary mb-5" href="{% url 'posts:list' %}">
+           {% trans 'Blog' %}  </a> <span style="padding: 5px"> </span>
+          <a class="text-faded text-primary mb-5" href="{% url 'qa:index_all' %}">
+           {% trans 'Q&A forum' %} </a>
+      </div>
+
       <div class="row h-100 align-items-center justify-content-center text-center">
         <div class="col-lg-10 align-self-end">
           <h1 class="text-uppercase text-primary font-weight-bold"><strong>{% trans 'Hi! Welcome to Obrisk' %}</strong></h1>

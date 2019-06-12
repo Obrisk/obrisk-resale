@@ -2,6 +2,33 @@
 
 body {
   padding-top: 80px;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+}
+
+h1 {
+  font-size: calc(29px + (40 - 24) * ((100vw - 300px) / (1600 - 300)));
+}
+
+h2 {
+  font-size: calc(23px + (30 - 23) * ((100vw - 300px) / (1600 - 300)));
+
+}
+
+h3 {
+  font-size: calc(18px + (25 - 18) * ((100vw - 300px) / (1600 - 300)));
+
+}
+
+h4 {
+  font-size: calc(16px + (22 - 16) * ((100vw - 300px) / (1600 - 300)));
+
+}
+
+h5 {
+  font-size: calc(15px + (18 - 15) * ((100vw - 300px) / (1600 - 300)));
+
 }
 
 header .navbar-brand {
@@ -38,11 +65,11 @@ header .navbar-brand {
 }
 
 a {
-  color: #545b62;
+  color: #0aacec;
 }
 
 a:hover {
-  color: #0aacec;
+  color: #0aeee3;
   text-decoration: none;
 }
 
@@ -110,12 +137,14 @@ a:hover {
 
 .btn-dark {
   background: linear-gradient(45deg, #0aacec, #0aeee3);
-  color: black;
+  color: white;
+  border: none
 }
 
 .btn-danger {
   background-color: white;
   color: #8b2100;
+  border: none
 }
 
 .btn-danger:hover {
@@ -153,4 +182,67 @@ a:hover {
   .container {
     max-width: 1250px;
   }
+}
+
+@media (max-width: 767px) {
+  h3 {
+    font-size: 1.3em
+  }
+}
+
+.word-break {
+  word-break: break-all;
+}
+
+main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  position: relative;
+}
+
+main .notification {
+  position: relative;
+  width: 3em;
+  height: 3em;
+}
+
+main .notification svg {
+  width: 3em;
+  height: 3em;
+}
+
+main .notification svg>path {
+  fill: #FFFFFF;
+}
+
+main .notification--bell {
+  animation: bell 2.2s linear infinite;
+  transform-origin: 50% 0%;
+}
+
+main .notification--bellClapper {
+  animation: bellClapper 2.2s 0.1s linear infinite;
+}
+
+main .notification--num {
+  position: absolute;
+  top: 10px;
+  left: 30px;
+  font-size: 1.25rem;
+  border-radius: 50%;
+  width: 11px;
+  height: 10px;
+  background-color: #FF4C13;
+  border: 4px solid #FF4C13;
+  color: #FFFFFF;
+  text-align: center;
+  animation: notification 2.2s linear;
+}
+
+
+.main-nav li {
+  width: 101px;
+  flex-basis: calc(25% - -20px);
 }

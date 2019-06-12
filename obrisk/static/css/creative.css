@@ -14,6 +14,12 @@ hr {
   border-color: #0aeee3;
 }
 
+.links {
+   position: absolute;
+   top: 5%;
+   right: 6%;
+}
+
 hr.light {
   border-color: #fff;
 }

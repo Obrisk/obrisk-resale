@@ -1,6 +1,6 @@
 from django import forms
 from markdownx.fields import MarkdownxFormField
-from obrisk.posts.models import Post, Comment
+from obrisk.posts.models import Post, Comment, Jobs, Events
 
 
 class PostForm(forms.ModelForm):
@@ -12,7 +12,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title", "content", "image", "tags", "status", "edited", "category"]
+        fields = ["title", "content", "image", "tags", "status", "edited"]
         help_texts = {
             "title": "Make it short but descriptive, the maximum is 80 characters.",
         }
@@ -27,3 +27,17 @@ class CommentForm(forms.ModelForm):
             'body': forms.Textarea(attrs={'rows': 3, 'cols': 'auto'}),
         }
         labels = {'body': '', }
+
+
+class JobsForm(forms.ModelForm):
+    user =  forms.CharField(widget=forms.HiddenInput())
+    class Meta:
+        model = Jobs
+        fields = ["title", "location", "details", "requirements", "deadline", "contacts"]
+class EventsForm(forms.ModelForm):
+    user = forms.CharField(widget=forms.HiddenInput())
+
+    class Meta:
+        model = Events
+        fields = ["title", "address", "starting_time", "description", "ending_time", "contacts"]
+

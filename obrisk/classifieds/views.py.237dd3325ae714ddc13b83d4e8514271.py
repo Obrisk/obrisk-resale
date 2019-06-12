@@ -57,7 +57,6 @@ endpoint = os.getenv('OSS_ENDPOINT')
 sts_role_arn = os.getenv('OSS_STS_ARN')
 region = os.getenv('OSS_REGION')
 
-
 class StsToken(object):
     """Temporary user key returned by AssumeRole
     :param str access_key_id: access user id of the temporary user
@@ -66,7 +65,6 @@ class StsToken(object):
     :param str security_token: temporary user token
     :param str request_id: request ID
     """
-
     def __init__(self):
         self.access_key_id = ''
         self.access_key_secret = ''
@@ -103,17 +101,15 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
     return token
 
-
 @login_required
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
     classifieds_list = Classified.objects.get_active().filter(city=request.user.city)
     popular_tags = Classified.objects.get_counted_tags()
     images = ClassifiedImages.objects.all()
-    other_classifieds = Classified.objects.none()
-    official_ads = OfficialAd.objects.all() 
+    other_classifieds = ClassifiedImages.objects.none()
 
-    paginator = Paginator(classifieds_list, 30)  # 30 classifieds in each page
+    paginator = Paginator(classifieds_list, 30) # 50 classifieds in each page
     page = request.GET.get('page')
 
     try:
@@ -125,25 +121,21 @@ def classified_list(request, tag_slug=None):
         # If page is out of range deliver last page of results
         classifieds = paginator.page(paginator.num_pages)
 
-    # When the last page user can see only fifty classifieds in other cities. To improve this near future.
-    if page:
-        if int(page) == paginator.num_pages:
-            other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
-    else:
-        #If the page is the first one and it is the only one show other_classifieds
-        if paginator.num_pages == 1:
-            other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
-        
-    # Deal with tags in the end to override other_classifieds.
+    #When the last page user can see only fifty classifieds in other cities. To improve this near future.
+    if page == paginator.num_pages or paginator.num_pages == 1:
+        other_classifieds = Classified.objects.exclude(city=request.user.city)[:50]
+
+    #Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
-        classifieds = Classified.objects.get_active().filter(tags__in=[tag])
+        classifieds_list = Classified.objects.get_active().filter(tags__in=[tag])
         other_classifieds = ClassifiedImages.objects.none()
 
+
     return render(request, 'classifieds/classified_list.html',
-                  {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
-                   'tag': tag, 'images': images, 'popular_tags': popular_tags, 'base_active': 'classifieds'})
+                {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds,
+                 'tag': tag, 'images': images, 'popular_tags': popular_tags, 'base_active': 'classifieds' })
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds
@@ -151,7 +143,6 @@ def classified_list(request, tag_slug=None):
 
 #     def get_queryset(self, **kwargs):
 #         return Classified.objects.get_expired()
-
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
@@ -163,7 +154,7 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
-
+    
     def Classified(self, request, *args, **kwargs):
         """
         Handles Classified requests, instantiating a form instance and its inline
@@ -198,8 +189,7 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
             img.classified = classified
 
             d = str(datetime.datetime.now())
-            thumb_name = "Official-ads/" + str(classified.user) + "/" + \
-                str(classified.title) + "/thumbnails/" + d + str(index)
+            thumb_name = "Official-ads/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_156,w_156'
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
@@ -215,7 +205,6 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
-
 
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
@@ -263,13 +252,12 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 img.classified = classified
 
                 d = str(datetime.datetime.now())
-                thumb_name = "classifieds/" + str(classified.user) + "/" + \
-                    str(classified.title) + "/thumbnails/" + d + str(index)
+                thumb_name = "classifieds/" + str(classified.user) + "/" + str(classified.title) + "/thumbnails/" + d + str(index)
                 style = 'image/resize,m_fill,h_156,w_156'
                 process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                              oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                  oss2.compat.to_bytes(thumb_name))),
-                                                              oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(thumb_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(str_result, process)
                 img.image_thumb = thumb_name
 
@@ -282,10 +270,10 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             it looks like you took so long to fill in the form and to upload the images for your ad. \
             If your advertisement doesn't appear on the list below then,\
             please choose to create a new classified again and don't delay to submit the form. "
-                           + 'status={0}, request_id={1}'.format(e.status, e.request_id))
-            # return self.form_invalid(form)
+            + 'status={0}, request_id={1}'.format(e.status, e.request_id) )
+            #return self.form_invalid(form)
             return reverse('classifieds:list')
-
+        
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
@@ -309,7 +297,6 @@ def get_oss_auth(request):
         'bucket': bucket_name
     }
     return JsonResponse(data)
-
 
 class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""
@@ -352,17 +339,17 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
-
+        
         classified_tags_ids = self.object.tags.values_list('id', flat=True)
-        similar_classified = Classified.objects.filter(tags__in=classified_tags_ids)\
-            .exclude(id=self.object.id)
+        similar_classified = Classified.objects.filter(tags__in = classified_tags_ids)\
+                                        .exclude(id=self.object.id)
 
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
         context['all_images'] = ClassifiedImages.objects.all()
 
         context['images_no'] = len(context['images'])
-        context['similar_classifieds'] = similar_classified.annotate(same_tags=Count('tags'))\
-            .order_by('-same_tags', '-timestamp')[:6]
-
+        context['similar_classifieds'] = similar_classified.annotate(same_tags = Count('tags'))\
+                                                    .order_by('-same_tags', '-timestamp')[:6]
+        
         return context

@@ -435,3 +435,8 @@ h5 {
 .word-break {
   word-break: break-all;
 }
+
+.btn-dark:disabled {
+  color: #cccccc !important;
+  background: gray !important;
+}

@@ -60,10 +60,19 @@
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if classified.user != request.user %}
+<<<<<<< HEAD
               <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
                 <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
+=======
+              <form method="POST" action="{% url 'messager:request_friendship' classified.user %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-action">
+                  <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with the seller' %} </strong> </button> <br>
+              </form>
+>>>>>>> b89b97e26440ee34af1a6c0c2a1d1be2a8a78a59
               <br>
               {% endif %}
+
             </div>
 
           </div>
@@ -78,9 +87,12 @@
         {% if classified.contact_info %}
             <small><strong>Seller contacts :</strong>
             {{ classified.contact_info }}</small>
+<<<<<<< HEAD
             <a href="{% url 'friendship_add_friend' classified.user.username  %}" class="btn btn-action">
                 <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' add as a friend' %} </strong></a> <br>
 
+=======
+>>>>>>> b89b97e26440ee34af1a6c0c2a1d1be2a8a78a59
         {% endif %}
       </section>
 

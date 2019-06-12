@@ -37,6 +37,9 @@
 }
 
 @media screen and (max-width:425px) {
+    .card-img-top {
+        height: 150px;
+    }
 
     .ribbon-content {
         font-size: 20px;
@@ -61,4 +64,9 @@
 .comment-wrapper {
     background: #EEF3F4;
     border-radius: 10px;
+}
+
+p img {
+    max-width: 100%;
+    height: auto;
 }
