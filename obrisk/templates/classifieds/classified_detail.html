@@ -78,7 +78,7 @@
         {% if classified.contact_info %}
             <small><strong>Seller contacts :</strong>
             {{ classified.contact_info }}</small>
-            <a href="{% url 'friendship:friendship_add_friend' classified.user.username  %}" class="btn btn-action">
+            <a href="{% url 'friendship_add_friend' classified.user.username  %}" class="btn btn-action">
                 <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' add as a friend' %} </strong></a> <br>
 
         {% endif %}

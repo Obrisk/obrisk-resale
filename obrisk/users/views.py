@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 
 
-
+#from friendship.views import friendship_request_list
 from friendship.exceptions import AlreadyExistsError
 from friendship import models
 from friendship.models import (Block, Follow, Friend,
@@ -268,3 +268,14 @@ def following_list(request):
     # List of who this user is following
     following = Follow.objects.following(request.user)
     return render(request, 'following_list.html', {"following":following})
+
+@login_required
+def friendship_request_list(
+    request, template_name="friendship/friend/requests_list.html"
+):
+    """ View unread and read friendship requests """
+    friendship_requests = Friend.objects.requests(request.user)
+    # This shows all friendship requests in the database
+    # friendship_requests = FriendshipRequest.objects.filter(rejected__isnull=True)
+
+    return render(request, template_name, {"requests": friendship_requests})

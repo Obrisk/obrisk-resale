@@ -10,6 +10,7 @@ from graphene_django.views import GraphQLView
 
 from obrisk.classifieds import views as images_views
 from obrisk.messager import views
+from obrisk.posts import views as posts_views
 
 urlpatterns = [
     url(r'^$',
@@ -23,6 +24,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
     url(r'^contacts/$',
         TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
+
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
@@ -45,11 +47,13 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
-    
-    #friendship
-    url(r'^friendship/', include(('friendship.urls', 'friendship'), namespace='friendship_add_friend')),
+        #friendship
+    url(r'^friendship/', include(('friendship.urls', 'friendship'), namespace='friend', )),
+    url(r'^friendship/', include('friendship.urls')),
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:
     # This allows the error pages to be debugged during development
