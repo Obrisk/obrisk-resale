@@ -14,8 +14,9 @@ ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com', '54.180.169.125']
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES['default'] = env.db('DATABASE_URL')  # noqa F405
-DATABASES['default']['ATOMIC_REQUESTS'] = True  # noqa F405
-DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)  # noqa F405
+DATABASES['default']['ENGINE'] = 'django_db_geventpool.backends.postgresql_psycopg2'
+DATABASES['default']['ATOMIC_REQUESTS'] = False  # From django-db-geventpool
+DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=0)  # From django-db-geventpool
 
 # CACHES
 # ------------------------------------------------------------------------------
