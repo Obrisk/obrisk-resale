@@ -16,9 +16,22 @@
     </div>
   </li>
   {% endfor %}
-  <a class="btn btn-dark text-center" href="{% url 'notifications:unread' %}">{% trans 'See all' %}</a>
-  <a class="btn btn-light text-center" href="{% url 'notifications:mark_all_read' %}">{% trans 'Mark all as read' %}</a>
   {% else %}
-  <li class="text-center">{% trans 'You have no unread notification' %}</li>
+  <li class="clearfix d-flex align-items-center">{% trans 'You have no unread notification' %}</li>
   {% endif %}
 </ul>
+<style>
+  .modal-header {
+    align-items: center !important;
+  }
+
+  .modal-header .close {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .modal-body {
+    max-height: 500px;
+    overflow-y: scroll;
+  }
+</style>

@@ -382,3 +382,20 @@ https: //nzbin.github.io/three-dots
 #toast-container>#toast-wrapper>.toast>.toast-header strong {
   padding-right: 20px;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 0.5em;
+}
+
+::-webkit-scrollbar-button {
+  background: #eee
+}
+
+::-webkit-scrollbar-track-piece {
+  background: #0aacec
+}
+
+::-webkit-scrollbar-thumb {
+  background: #eee
+}
