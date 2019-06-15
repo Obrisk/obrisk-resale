@@ -28,70 +28,70 @@
     </div> -->
 
 
-    <!-- Write Classified Widget -->
+  <!-- Write Classified Widget -->
 
-    <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
-      <div class="toggle-tags d-lg-none">
-        <a href=""></a>
-        <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-      </div>
-      {% if request.user.is_authenticated %}
-      <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
-        title="{% trans 'Write a new classified' %}">📝{% trans 'New Classified' %}</a>
-
-      {% if request.user.is_seller %}
-      <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new_official' %}"
-        title="{% trans 'Write a new official classified' %}">📝{% trans 'New Classified' %}</a>
-      {% endif %}
-
-      {% endif %}
-      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+  <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
+    <div class="toggle-tags d-lg-none">
+      <a href=""></a>
+      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
     </div>
+    {% if request.user.is_authenticated %}
+    <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
+      title="{% trans 'Write a new classified' %}">📝{% trans 'Create new classified' %}</a>
 
+    {% if request.user.is_seller %}
+    <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new_official' %}"
+      title="{% trans 'Write a new official classified' %}">📝{% trans 'New Classified' %}</a>
+    {% endif %}
+
+    {% endif %}
+    <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
   </div>
-  <!-- <div
+
+</div>
+<!-- <div
     class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-md-9 ml-auto  mr-auto">
 
   </div> -->
 
-  <!-- Sidebar Widgets Column -->
-  <div id="sidebar" class="sidebar mr-4">
-    <!-- Cloud Tag Widget -->
-    <div class="card">
-      <div class="card-header">
-        <h5>{% trans 'Popular tags' %}</h5>
-      </div>
+<!-- Sidebar Widgets Column -->
+<div id="sidebar" class="sidebar mr-4">
+  <!-- Cloud Tag Widget -->
+  <div class="card">
+    <div class="card-header">
+      <h5>{% trans 'Popular tags' %}</h5>
+    </div>
 
-      <div class="card-body">
-        {% for tag, count in popular_tags %}
-        <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }}
-            {{ tag }}</span></a>
-        {% endfor %}
-      </div>
+    <div class="card-body">
+      {% for tag, count in popular_tags %}
+      <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }}
+          {{ tag }}</span></a>
+      {% endfor %}
     </div>
   </div>
+</div>
 
 
-  <!-- official ads for pc sized-->
-  {% if official_ads %}
-  <div class="right-sidebar d-none d-lg-block">
-    {% include 'classifieds/ads.html' %}
+<!-- official ads for pc sized-->
+{% if official_ads %}
+<div class="right-sidebar d-none d-lg-block">
+  {% include 'classifieds/ads.html' %}
+</div>
+{% endif %}
+
+<div class="classifieds-container row">
+  <div id="classifieds"
+    class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
+    {% include "classifieds/classified_list_ajax.html" %}
+
   </div>
-  {% endif %}
-
-  <div class="classifieds-container row">
-    <div id="classifieds"
-      class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
-      {% include "classifieds/classified_list_ajax.html" %}
-
+  <div class="loading classified-card m-auto d-none">
+    <div class="stage">
+      <div class="dot-pulse"></div>
     </div>
-    <div class="loading classified-card m-auto d-none">
-      <div class="stage">
-        <div class="dot-pulse"></div>
-      </div>
-    </div>
-    <!-- End div for row of all classified ads-->
   </div>
+  <!-- End div for row of all classified ads-->
+</div>
 
 </div>
 

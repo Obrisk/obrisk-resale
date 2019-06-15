@@ -46,7 +46,8 @@
               </a>
               <!-- Location -->
               <div class="meta-left d-flex flex-column">
-                <strong id="classified-user"> {{ classified.user.get_profile_name|title }} </strong>
+                <a href="{% url 'users:detail' classified.user.username %}"><strong id="classified-user">
+                    {{ classified.user.get_profile_name|title }} </strong></a>
                 <div class="location">
                   <small class="card-subtitle mb-2">📍</small><span class="card-subtitle mb-2">
                     {{ classified.located_area }}, {{ classified.city }}</span>
