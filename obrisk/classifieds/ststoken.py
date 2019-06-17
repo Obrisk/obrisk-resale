@@ -26,8 +26,8 @@ from obrisk.helpers import ajax_required
 #   https://oss-cn-hangzhou.aliyuncs.com
 # Access by HTTPS.
 
-access_key_id = os.getenv('OSS_STS_ID')
-access_key_secret = os.getenv('OSS_STS_KEY')
+access_key_id = os.getenv('RAM_USER_ID')
+access_key_secret = os.getenv('RAM_USER_S3KT_KEY')
 bucket_name = os.getenv('OSS_BUCKET')
 endpoint = os.getenv('OSS_ENDPOINT')
 sts_role_arn = os.getenv('OSS_STS_ARN')
