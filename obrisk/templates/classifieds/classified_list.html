@@ -37,12 +37,7 @@
     </div>
     {% if request.user.is_authenticated %}
     <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
-      title="{% trans 'Write a new classified' %}">📝{% trans 'Create new classified' %}</a>
-
-    {% if request.user.is_seller %}
-    <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new_official' %}"
-      title="{% trans 'Write a new official classified' %}">📝{% trans 'New Classified' %}</a>
-    {% endif %}
+      title="{% trans 'Write a new classified' %}">📝{% trans 'Create new' %}</a>
 
     {% endif %}
     <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->

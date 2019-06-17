@@ -9,7 +9,7 @@ class ClassifiedForm(forms.ModelForm):
     images = forms.CharField(widget=forms.HiddenInput(), max_length=1500) #100 for each image.
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "located_area", "contact_info", "tags"]
+        fields = ["title", "details", "status", "edited", "price", "contact_info", "tags" , "located_area"]
 
         widgets = {
             'user': forms.HiddenInput(),

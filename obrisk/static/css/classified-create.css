@@ -31,3 +31,8 @@
     -webkit-transition: 0.15s linear;
     transition: 0.15s linear;
 }
+
+.city {
+    font-family: 'Montserrat',sans-serif;
+    font-weight: 600;
+}
