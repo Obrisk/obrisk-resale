@@ -155,7 +155,93 @@ $(document).ready(function () {
 });
 
 
-$(function () {
+
+// adding a crsf tokken
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+var csrftoken = getCookie('csrftoken');
+
+function csrfSafeMethod(method) {
+  // these HTTP methods do not require CSRF protection
+  return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+}
+$.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+        if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        }
+    }
+});
+
+
+$(function () {	
+    $("#send-code").click(function (event) {
+		
+		if( (isNaN($("#phone-no").val())) || ($("#phone-no").val().length != 11) 
+		|| ($("#phone-no").val().charAt(0) != 1) )
+		{
+			event.preventDefault();
+			bootbox.alert("The phone number you specified is not correct. Please don't include the country code!");
+		}
+		else {
+			//disable send button after clicking 
+			$("#send-code").attr("disabled", true);
+			$.ajax({
+				url: '/users/verification-code/',
+				data: $("#phone-no").serialize(),
+				cache: false,
+				type: 'POST',
+				success: function () {
+					// $("#send-code").val("Resend code");				
+					$("#code-notice").val("We have send the verification code, it is valid only for 1 minute!");
+				},
+				error: function(err){
+					console.log(err);
+				}
+			});
+			return false;
+		}
+		
+	});
+	
+	$("#phone-verify-form").submit(function () {
+		//disable send button after clicking 
+		$("input[name='cached_phone']").val($("input[name='phone_number']").val());
+        $(".send-code").attr("disabled", true);
+        $.ajax({
+            url: '/users/phone-verify/',
+            data: $("#phone-verify-form").serialize(),
+            cache: false,
+            type: 'POST',
+            success: function () {
+                //enable send button after message is sent
+                $('.send-btn').removeAttr("disabled");
+				// $("#send-code").val("Resend code");				
+				$("input[name='verified_phone']").val($("input[name='phone_number']").val());
+				$("#phone-verify-form").hide()
+				$("#phone-no").attr("disabled", true);
+			},
+			error: function(error) {
+				bootbox.alert(error)
+			}
+        });
+        return false;
+	});
+	
+
 	$("#submit").click(function (event) {
 		if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();
