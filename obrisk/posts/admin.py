@@ -1,5 +1,5 @@
 from django.contrib import admin
-from obrisk.posts.models import Post, Comment
+from obrisk.posts.models import Post, Comment, Jobs, Events
 
 
 @admin.register(Post)
@@ -12,3 +12,6 @@ class CommentAdmin(admin.ModelAdmin):
     list_display = ('user', 'post', 'created')
     list_filter = ('created', 'updated')
     search_fields = ('user', 'body')
+
+admin.site.register(Jobs)
+admin.site.register(Events)

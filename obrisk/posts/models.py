@@ -6,13 +6,12 @@ from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 
-from slugify import slugify
-
 from django_comments.signals import comment_was_posted
+from jinja2 import meta
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from slugify import slugify
 from taggit.managers import TaggableManager
-
 
 from obrisk.notifications.models import Notification, notification_handler
 
@@ -52,15 +51,7 @@ class Post(models.Model):
         (DRAFT, _("Draft")),
         (PUBLISHED, _("Published")),
     )
-    
-    ARTICLE = "A"
-    EVENT = "E"
-    JOBS = "J"
-    CATEGORY = (
-        (ARTICLE, _("Article")),
-        (EVENT, _("Event")),
-        (JOBS, _("Job")),
-    )
+
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="author",
@@ -72,7 +63,6 @@ class Post(models.Model):
     slug = models.SlugField(max_length=150, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
     content = MarkdownxField()
-    category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
     date = models.DateField(default=datetime.date.today) #Just for slug.
@@ -90,7 +80,7 @@ class Post(models.Model):
         if not self.slug:
             self.slug = first_slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
                                 to_lower=True, max_length=150)
-            
+
             for x in itertools.count(1):
                 if not Post.objects.filter(slug=self.slug).exists():
                     break
@@ -129,3 +119,52 @@ def notify_comment(**kwargs):
 
 
 comment_was_posted.connect(receiver=notify_comment)
+
+JOB_CHOICES =(
+    ('FULLTIME', 'full time'),
+    ('PARTTIME', 'part time'),
+    ('INTERNSHIP', 'internship'),
+    ('OTHERS', 'others'),
+
+)
+class Jobs(models.Model):
+    title = models.CharField(max_length=80)
+    jobs_type = models.CharField(max_length=80, choices=JOB_CHOICES)
+    description = models.TextField()
+    requirements = models.TextField()
+    posted_date = models.DateTimeField(auto_now_add=True)
+    start_date = models.DateField()
+    deadline = models.DateField()
+    #link = models.
+    slug = models.SlugField(max_length=150, null=True, blank=True)
+    contacts = models.CharField(max_length=80)
+
+
+    # def save(self, *args, **kwargs):
+    #     self.slug = self.title()
+
+    class Meta:
+        ordering = ('-posted_date',)
+
+
+class Events(models.Model):
+    title = models.CharField(max_length=80)
+    host = models.CharField(max_length=80)
+    venue = models.CharField(max_length=80)
+    event_image = models.ImageField()
+    details = models.TextField()
+    posted_at = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField()
+    end_time = models.DateTimeField()
+    contacts = models.CharField(max_length=80)
+    sponsors = models.CharField(max_length=80, null=True, blank=True)
+    # def get_absolute_url(self):
+    #     return reverse('')
+    slug = models.SlugField(max_length=150, null=True, blank=True)
+
+    # def save(self, *args, **kwargs):
+    #     self.slug = self.title()
+
+
+    class Meta:
+        ordering = ('-posted_at',)

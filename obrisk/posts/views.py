@@ -1,17 +1,20 @@
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
+#For comments
+from django.http import JsonResponse
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import CreateView, DetailView, ListView, UpdateView
+from django.http import HttpResponseRedirect
+from django.urls import reverse_lazy
+
 
 from obrisk.helpers import AuthorRequiredMixin
-from obrisk.posts.models import Post, Comment
-from obrisk.posts.forms import PostForm, CommentForm
-#For comments
-from django.http import JsonResponse 
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator
-from django.contrib.auth.decorators import login_required
+from obrisk.posts.forms import CommentForm, EventsForm, PostForm, JobsForm
+from obrisk.posts.models import Comment, Post, Jobs, Events
 
 
 class PostsListView(ListView):
@@ -91,7 +94,7 @@ class DetailPostView(DetailView):
         formsets with the passed POST variables and then checking them for
         validity.
         """
-        
+
         comment_form = CommentForm(self.request.POST)
         self.object = self.get_object()
 
@@ -109,14 +112,13 @@ class DetailPostView(DetailView):
             context['comments'] = self.object.comments.all()
             context['new_comment'] = None
             return self.render_to_response(context=context)
-        
+
         else:
             print(comment_form.errors)
             context = super(DetailPostView, self).get_context_data(**kwargs)
             #Return the form with errors.
             context['comment_form'] = comment_form
             return self.render_to_response(context)
-           
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
@@ -126,5 +128,104 @@ class DetailPostView(DetailView):
         context['comments'] = self.object.comments.all()
         context['new_comment'] = None
         return context
-    
 
+
+
+
+
+class DetailJobsView(DetailView):
+    """Basic DetailView implementation to call an individual Post."""
+    model = Jobs
+
+    def render_to_response(self, context, **response_kwargs):
+        """ Allow AJAX requests to be handled more gracefully """
+        if self.request.is_ajax():
+            return JsonResponse('Your comment has been uploaded!',safe=False, **response_kwargs)
+        else:
+            return super(DetailView,self).render_to_response(context, **response_kwargs)
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(Events, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the images
+        data = self.kwargs['name']
+        context['object'] = Jobs.objects.filter(jobs_id=data)
+        return context
+
+
+class JobsCreateView(LoginRequiredMixin, CreateView):
+    """Basic CreateView implementation to create new Posts."""
+    model = Jobs
+    message = _("Your Jobs has been created.")
+    form_class = JobsForm
+    template_name = 'posts/create_jobs.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, self.message)
+        return reverse('list_jobs')
+
+class JobsListView(ListView):
+
+    model = Jobs
+    form_class = JobsForm
+    context_object_name = 'all_jobs'
+    #queryset = Jobs.objects.all()
+    template_name = 'jobs_list.html'
+    success_url = reverse_lazy('list_jobs')
+    def get_queryset(self):
+        qs = super(JobsListView, self).get_queryset()
+        return qs
+
+
+
+
+class EventsListView(ListView):
+
+    model = Events
+    form_class = EventsForm
+    context_object_name = 'all_events'
+    template_name = 'events_list.html'
+    success_url = reverse_lazy('list_events')
+    def get_queryset(self):
+        qs = super(EventsListView, self).get_queryset()
+        return qs
+
+
+
+class CreateEventsView(LoginRequiredMixin, CreateView):
+    """Basic CreateView implementation to create new Posts."""
+    model = Events
+    message = _("Your Event has been created.")
+    form_class = EventsForm
+    template_name = 'posts/create_events.html'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, self.message)
+        return reverse('list_events')
+
+class DetailEventsView(DetailView):
+    """Basic DetailView implementation to call an individual Post."""
+    model = Events
+
+    def render_to_response(self, context, **response_kwargs):
+        """ Allow AJAX requests to be handled more gracefully """
+        if self.request.is_ajax():
+            return JsonResponse('Your comment has been uploaded!',safe=False, **response_kwargs)
+        else:
+            return super(DetailView,self).render_to_response(context, **response_kwargs)
+
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(Events, self).get_context_data(**kwargs)
+        # Add in a QuerySet of all the images
+        data = self.kwargs['name']
+        context['object'] = Events.objects.filter(events_id=data)
+        return context

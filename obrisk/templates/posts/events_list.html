@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load humanize thumbnail %}
+{% block title %} {% trans 'events' %} {% endblock %}
+
+{% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds-list.css' %}" rel="stylesheet">
+
+{% endblock head %}
+
+{% block content %}
+<!-- Page Content -->
+<div class="sidebar-overlay"></div>
+<div class="mt-4 p-0 mw-100 w-95">
+
+
+
+    <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
+      <div class="toggle-tags d-lg-none">
+        <a href=""></a>
+        <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+      </div>
+      {% if request.user.is_authenticated %}
+      <a class="btn btn-dark align-self-center" href="{% url 'create_events' %}"
+        title="{% trans 'Write a new event' %}">📝{% trans 'Add a new event here' %}</a>
+      {% endif %}
+      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- /.row -->
+</div>
+<!-- /.container -->
+<div>
+  {% for events in all_events %}
+    <li>
+      <a href="{% url 'list_events'  %}">{{ events.title }}</a>
+    </li>
+  {% endfor %}
+</div>
+
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/listing.js' %}" type="text/javascript"></script>
+<script>
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  $(window).scroll(function () {
+    if (empty_page == false && block_request == false) {
+      console.log('loading next page')
+      block_request = true;
+      page += 1;
+      $('.loading').removeClass('d-none')
+      $.get('?page=' + page, function (data) {
+        if (data == '') {
+          empty_page = true;
+          $('.loading').addClass('d-none')
+          $('.classifieds-container').append('<div class="m-auto"> </div>')
+        } else {
+          $('.loading').addClass('d-none');
+          block_request = false; $('#classifieds').append(data);
+        }
+      });
+    }
+  });
+</script>
+{% endblock extra_js %}

@@ -8,8 +8,23 @@ from django.views import defaults as default_views
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
 from obrisk.classifieds import views as images_views
+from obrisk.posts import views as posts_views
+from obrisk.posts.views import JobsCreateView, JobsListView, DetailJobsView, EventsListView, CreateEventsView, DetailEventsView
 
 urlpatterns = [
+    url(r'^create-jobs/$', JobsCreateView.as_view(), name='create_jobs'),
+    url(r'^list-jobs/$', JobsListView.as_view(), name='list_jobs'),
+    #url(r'^detail-jobs/$', DetailJobsView .as_view(), name='detail_jobs'),
+    url(r'^create-events/$', CreateEventsView.as_view(), name='create_events'),
+    url(r'^list-events/$', EventsListView.as_view(), name='list_events'),
+    #url(r'^detail-events/$', DetailEventsView.as_view(), name='detail_events'),
+    url(r'^(?P<events_id>\d+)$', DetailEventsView.as_view(), name='detail_events'),
+    url(r'^(?P<events_id>\d+)$', DetailJobsView.as_view(), name='detail_jobs'),
+    # url(r'^detail-events/(?P<events_id>\d+)/(?P<slug>[-\w]+)$', DetailEventsView.as_view()),
+    #url(r'^detail-jobs/(?P<jobs_id>\d+)/(?P<slug>[-\w]+)$', DetailJobsView.as_view()),
+
+
+
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
     url(r'^get-oss-auth/$', images_views.get_oss_auth, name='get_oss_auth'),

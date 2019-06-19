@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load crispy_forms_tags thumbnail humanize %}
+
+{% block title %}{{ jobs.title|title }}{% endblock %}
+{% block head %}
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="{% static 'css/classified-details.css' %}" rel="stylesheet">
+<link href="{% static 'css/colors.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
+<script src="{% static 'js/swiper.min.js' %}"></script>
+{% endblock head %}
+
+{% block meta %}
+<meta name="author" content="{{ jobs.user.get_profile_name|title }}">
+<meta name="keywords" content="{{ jobs.title|title }} ,{{ jobs.location }}, {{ jobs.requirements }}">
+<meta name="description" content="{{ jobs.details }}">
+{% endblock %}
+
+
+{% block content %}
+<!-- Page Content -->
+<div class="container">
+
+  <div class="row">
+    <!-- Post Content Column -->
+
+    <div class="classified-wrapper col-lg-8 col-md-10 m-auto">
+
+      <section class="col">
+        <div class="classified-meta mb-4">
+          <!-- Title -->
+          <h3 class="mt-4 text-left">{{ jobs.title|title }}</h3>
+
+          <div class="meta-details mt-4 d-flex justify-content-between flex-column flex-md-row">
+
+            <div
+              class="meta-right mt-md-0 mt-4 col-md-8 d-flex flex-column align-items-baseline align-items-md-end ml-auto mr-auto">
+              <!-- Price -->
+              {% if classified.user != request.user %}
+              <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
+                <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Contact us ' %} </strong></a> <br>
+              <br>
+              {% endif %}
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+      <!-- Navigation buttons -->
+      <div class="m-4">
+        {% if request.user == jobs.user%}
+        <a class="btn btn-dark" href="{% url 'create_jobs'  %}"
+          title="{% trans 'Add another job' %}">
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Add new jobs' %}</a>
+        {% else %}
+        <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
+        {% endif %}
+        <a href="{% url 'list_jobs' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a><br> <br>
+
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+
+</div>
+
+<script type="text/javascript">
+
+</script>
+{% endblock content %}
