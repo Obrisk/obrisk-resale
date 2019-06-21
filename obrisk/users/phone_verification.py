@@ -1,4 +1,5 @@
 import os
+from django.conf import settings
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.profile import region_provider
 from aliyunsdkcore.request import RpcRequest
@@ -12,8 +13,12 @@ SMS_DOMAIN = os.getenv('SMS_DOMAIN')
 ACCESS_KEY_ID = os.getenv('RAM_USER_ID')
 ACCESS_KEY_SECRET = os.getenv('RAM_USER_S3KT_KEY')
 
-acs_client = AcsClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET, REGION)
-region_provider.modify_point(PRODUCT_NAME, REGION, SMS_DOMAIN)
+if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
+    print("Setting up local env...")
+
+else:
+    acs_client = AcsClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET, REGION)
+    region_provider.modify_point(PRODUCT_NAME, REGION, SMS_DOMAIN)
 
 
 class SendSmsRequest(RpcRequest):
