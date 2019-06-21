@@ -67,7 +67,6 @@ class PhoneSignupForm(UserCreationForm):
         }
         help_texts = {
             'username': "At least 3 characters, no special characters",
-            'password1': "At least 8 character, can't be common or entirely numeric",
         } 
         fields = ( 'username', 'city', 'province_region', 'phone_number', 'password1', 'password2')
 
@@ -77,7 +76,7 @@ class PhoneSignupForm(UserCreationForm):
         super(UserCreationForm, self).__init__(*args, **kwargs)
 
         for fieldname in ['password1']:
-            self.fields[fieldname].help_text = None
+            self.fields[fieldname].help_text = "At least 8 character, can't be too common or entirely numeric"
 
 
 

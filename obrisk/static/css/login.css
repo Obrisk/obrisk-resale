@@ -554,3 +554,10 @@ iframe {
   background: #0aeee3;
   opacity: 0.6;
 }
+
+
+#code:focus {
+    outline: none !important;
+    border:1px solid #0aeee3;
+    box-shadow: 0 0 10px #719ECE;
+}

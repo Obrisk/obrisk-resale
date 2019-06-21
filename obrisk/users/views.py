@@ -10,6 +10,7 @@ from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
+from django.conf import settings
 
 from .forms import UserForm, PhoneSignupForm
 from .models import User
@@ -97,29 +98,34 @@ class UserListView(LoginRequiredMixin, ListView):
 
 @require_http_methods(["GET", "POST"])
 def send_code_sms(request):
-    print("we hit here....")
     if request.method == "POST":
         phone_no = request.POST.get("phone_no")
-        print(phone_no)
         
         if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1':
             
             check_no = "+86" + phone_no
-            print(check_no)
             check_phone = User.objects.filter(phone_number=check_no).exists()
-            print(check_phone)
+          
 
             if check_phone is False:
-                __business_id = uuid.uuid1()
-                
                 random = get_random_string(length=6, allowed_chars='0123456789')
-                params = " {\"code\":\""+ random + "\"} " 
+
+                #if settings.DEBUG=True (default=False)
+                if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
+                    print("Your phone number verification is....")
+                    print(random)
+                    cache.set(str(phone_no), random , 60)
+                    return JsonResponse({'success': True})
+
+                else:
+                    __business_id = uuid.uuid1()
+                    params = " {\"code\":\""+ random + "\"} " 
+                    
+                    # id, phone number, signature name, template name, template variables
+                    send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
                 
-                # id: fixed, mobile phone number receiving the verification code, signature name, template name, verification code
-                #ret = send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
-                print(random)
-                cache.set(str(phone_no), random , 60)
-                return JsonResponse({'success': True})
+                    cache.set(str(phone_no), random , 60)
+                    return JsonResponse({'success': True})
             else:
                 return JsonResponse({'success': False, 'error_message': "This number exists"} )
 
@@ -130,14 +136,10 @@ def send_code_sms(request):
 
 @require_http_methods(["GET", "POST"])
 def phone_verify(request):
-    print("We are verifying....")
     if request.method == "POST":
         code = request.POST.get("code")
-        print(request.POST)
-        
         phone_no = request.POST.get("phone_no")
-        print(phone_no)
-
+        
         if phone_no is not None and code is not None:
             try:
                 if cache.get(str(phone_no)) == code:

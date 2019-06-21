@@ -225,3 +225,5 @@ RAVEN_CONFIG = {
 #Improve performance
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+PHONE_SIGNUP_DEBUG = False
