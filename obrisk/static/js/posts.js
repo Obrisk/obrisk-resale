@@ -53,7 +53,6 @@ $(document).ready(function(){
     $(".comment-btn").click(function(event){
         event.preventDefault();
     
-        console.log($('#commentForm').serialize());
         $.ajax({
             method: 'POST',
             url: url,
@@ -64,7 +63,7 @@ $(document).ready(function(){
                 $('#commentForm')[0].reset();
                 location.reload();
             },
-            error: function(xhr, desc, err){
+            error: function(err){
                 console.log(err);
             }
         });

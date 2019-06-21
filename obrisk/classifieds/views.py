@@ -52,8 +52,8 @@ from dal import autocomplete
 #   https://oss-cn-hangzhou.aliyuncs.com
 # Access by HTTPS.
 
-access_key_id = os.getenv('OSS_STS_ID')
-access_key_secret = os.getenv('OSS_STS_KEY')
+access_key_id = os.getenv('RAM_USER_ID')
+access_key_secret = os.getenv('RAM_USER_S3KT_KEY')
 bucket_name = os.getenv('OSS_BUCKET')
 endpoint = os.getenv('OSS_ENDPOINT')
 sts_role_arn = os.getenv('OSS_STS_ARN')
@@ -236,20 +236,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
-
-    def Classified(self, request, *args, **kwargs):
-        """
-        Handles Classified requests, instantiating a form instance and its inline
-        formsets with the passed Classified variables and then checking them for
-        validity.
-        """
-        form = ClassifiedForm(self.request.Classified)
-
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            # ret = dict(errors=form.errors) #Handle custom errors here.
-            return self.form_invalid(form)
+        
 
     def form_valid(self, form):
         form.instance.user = self.request.user

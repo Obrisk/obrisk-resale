@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from phonenumber_field.modelfields import PhoneNumberField
 
 from obrisk.users.models import User 
 from obrisk.users import models
@@ -10,7 +11,7 @@ class CustomUserCreationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
         model = User
-        fields = ('username', 'email', 'country', 'city')
+        fields = ('username', 'country', 'city')
 
 class CustomUserChangeForm(UserChangeForm):
 
@@ -22,7 +23,7 @@ class UserForm(forms.ModelForm):
     bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
     province_region = forms.CharField (widget=forms.HiddenInput(), required=False)
     city = forms.CharField (widget=forms.HiddenInput(), required=False)
-    
+
     class Meta:
         model = User
         fields = ('picture', 'name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
@@ -51,9 +52,31 @@ class CustomSignupForm(SignupForm):
 def signup(self, request, user): 
     user.province_region = self.cleaned_data['province_region']
     user.city = self.cleaned_data['city']
+    user.phone_number = self.phone_number['city']
     user.save() 
     return user 
 
+
+class PhoneSignupForm(UserCreationForm): 
+
+    class Meta:
+        model = User
+        widgets = {
+            'province_region': forms.HiddenInput(),
+            'city': forms.HiddenInput(),
+        }
+        help_texts = {
+            'username': "At least 3 characters, no special characters",
+        } 
+        fields = ( 'username', 'city', 'province_region', 'phone_number', 'password1', 'password2')
+
+
+
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+
+        for fieldname in ['password1']:
+            self.fields[fieldname].help_text = "At least 8 character, can't be too common or entirely numeric"
 
 
 

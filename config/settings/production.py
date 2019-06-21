@@ -71,10 +71,10 @@ STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
 # AliCloud access key ID
-OSS_ACCESS_KEY_ID = env('OSS_STS_ID')
+OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
 
 # AliCloud access key secret
-OSS_ACCESS_KEY_SECRET = env('OSS_STS_KEY')
+OSS_ACCESS_KEY_SECRET = env('RAM_USER_S3KT_KEY')
 
 # The name of the bucket to store files in
 OSS_BUCKET_NAME = env('OSS_BUCKET')
@@ -225,3 +225,5 @@ RAVEN_CONFIG = {
 #Improve performance
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
+
+PHONE_SIGNUP_DEBUG = False

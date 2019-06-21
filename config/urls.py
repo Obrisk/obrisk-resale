@@ -26,7 +26,8 @@ urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
     # User management
     url(r'^users/', include('obrisk.users.urls', namespace='users')),
-    url(r'^accounts/', include('allauth.urls')),
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^allauth-accounts/', include('allauth.urls')),
     # Third party apps here
     url(r'^comments/', include('django_comments.urls')),
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),

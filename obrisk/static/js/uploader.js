@@ -183,16 +183,17 @@ OssUpload.prototype = {
                         });
                     return results;
                 } catch (e) {
-                    bootbox.alert("Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com")
+                    bootbox.alert("Oops! an error occured during the image upload, \
+                    Please try again later or contact us via support@obrisk.com")
                     $(".start-uploader").css('display', 'block');
-                    //console.log(e);
+                    console.log(e);
                 }
             }
 
             return upload()
         } else {
-            bootbox.alert("Oops!, it looks like there is a problem with your internet connection, \
-            Please make sure you have an internet connection")
+            bootbox.alert("Oops!, it looks like there is a network problem, \
+            Please try again later or contact us at support@obrisk.com")
             $(".start-uploader").css('display', 'block');
         }
 

@@ -111,7 +111,6 @@ class DetailPostView(DetailView):
             return self.render_to_response(context=context)
         
         else:
-            print(comment_form.errors)
             context = super(DetailPostView, self).get_context_data(**kwargs)
             #Return the form with errors.
             context['comment_form'] = comment_form

@@ -86,7 +86,7 @@ li {
 /*---------------------------------------------*/
 input {
   outline: none;
-  border: none;
+  
 }
 
 textarea {
@@ -373,6 +373,7 @@ iframe {
   color: #0aeee3;
 }
 
+
 /*==================================================================
 [ Restyle Checkbox ]*/
 
@@ -551,5 +552,12 @@ iframe {
 
 [disabled] {
   background: #0aeee3;
-  opacity: 0.2;
+  opacity: 0.6;
+}
+
+
+#code:focus {
+    outline: none !important;
+    border:1px solid #0aeee3;
+    box-shadow: 0 0 10px #719ECE;
 }

@@ -3,6 +3,7 @@ from django.contrib.auth.signals import user_logged_in, user_logged_out
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
+import uuid
 
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -36,7 +37,7 @@ class User(AbstractUser):
     city = models.CharField  (  _('City'), max_length=100) 
     points = models.IntegerField(  _('Points'), default=0)
     nationality = models.CharField (_('Nationality'), max_length=100, blank=True, null=True )
-    phone_number = PhoneNumberField (_('Phone number'), default="Unknown_phone_no")  #Needs a country's code 
+    phone_number = PhoneNumberField (_('Phone number'))  #Needs a country's code 
     is_official = models.BooleanField (default=False)      #For the use of published posts
     is_seller = models.BooleanField (default=False)  #For sellers in Classifieds.
     # near future please add unique 12 digit ID to use instead of username for url's especially in chat.
@@ -57,9 +58,9 @@ def broadcast_login(sender, user, request, **kwargs):
     notification_handler(user, "global", Notification.LOGGED_IN)
 
 
-def broadcast_logout(sender, user, request, **kwargs):
-    """Handler to be fired up upon user logout signal to notify all users."""
-    notification_handler(user, "global", Notification.LOGGED_OUT)
+# def broadcast_logout(sender, user, request, **kwargs):
+#     """Handler to be fired up upon user logout signal to notify all users."""
+#     notification_handler(user, "global", Notification.LOGGED_OUT)
 
 
 # user_logged_in.connect(broadcast_login)
