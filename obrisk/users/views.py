@@ -98,8 +98,8 @@ class UserListView(LoginRequiredMixin, ListView):
 
 @require_http_methods(["GET", "POST"])
 def send_code_sms(request):
-    if request.method == "POST":
-        phone_no = request.POST.get("phone_no")
+    if request.method == "GET":
+        phone_no = request.GET.get("phone_no")
         
         if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1':
             
@@ -136,9 +136,9 @@ def send_code_sms(request):
 
 @require_http_methods(["GET", "POST"])
 def phone_verify(request):
-    if request.method == "POST":
-        code = request.POST.get("code")
-        phone_no = request.POST.get("phone_no")
+    if request.method == "GET":
+        code = request.GET.get("code")
+        phone_no = request.GET.get("phone_no")
         
         if phone_no is not None and code is not None:
             try:

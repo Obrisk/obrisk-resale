@@ -210,7 +210,7 @@ $(function () {
 				url: '/users/verification-code/',
 				data: { phone_no : $('#id_phone_number').val() } ,
 				cache: false,
-				type: 'POST',
+				type: 'GET',
 				success: function (data) {
 					if (data.success == false) 
 					{
@@ -254,7 +254,7 @@ $(function () {
 					code : $("input[name='code']").val()
 				},
 				cache: false,
-				type: 'POST',
+				type: 'GET',
 				success: function (data) {
 					//enable send button after message is sent
 					if (data.success == false) 
