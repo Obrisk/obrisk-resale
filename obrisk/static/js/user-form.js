@@ -130,6 +130,10 @@ const geo_data = [{
 }]
 
 $(document).ready(function () {
+	//Hide the verification code form
+	$("#code").hide();
+	
+	//Set the Province and city name defaults.
 	function preselect() {
 		if (!$("input[name='city']").val() && !$("input[name='province_region']").val()) {
 			$("#province option[value='Zhejiang']").attr('selected', 'selected');
@@ -187,26 +191,42 @@ $.ajaxSetup({
 });
 
 
+var verify_counter = 0;
+var code_counter = 0;
+	
 $(function () {	
     $("#send-code").click(function (event) {
 		
-		if( (isNaN($("#phone-no").val())) || ($("#phone-no").val().length != 11) 
-		|| ($("#phone-no").val().charAt(0) != 1) )
+		if( (isNaN($("#id_phone_number").val())) || ($("#id_phone_number").val().length != 11) 
+		|| ($("#id_phone_number").val().charAt(0) != 1) )
 		{
 			event.preventDefault();
-			bootbox.alert("The phone number you specified is not correct. Please don't include the country code!");
+			bootbox.alert("The phone number you entered is not correct. Don't include the country code!");
 		}
 		else {
-			//disable send button after clicking 
-			$("#send-code").attr("disabled", true);
+			//If button is disabled and the verification code is not sent, user can't do anything.
+
 			$.ajax({
 				url: '/users/verification-code/',
-				data: $("#phone-no").serialize(),
+				data: { phone_no : $('#id_phone_number').val() } ,
 				cache: false,
 				type: 'POST',
-				success: function () {
-					// $("#send-code").val("Resend code");				
-					$("#code-notice").val("We have send the verification code, it is valid only for 1 minute!");
+				success: function (data) {
+					if (data.success == false) 
+					{
+						$("#code-notice").empty().append("<p> User with this number exists or number is incorrect! <p>");
+						//$("#send-code").attr("disabled", false);
+					}else {
+						$("#code").show();
+						$("#code-notice").empty().append("<p> We have send the verification code, it is valid for 1 minute! <p>");	
+						verify_counter = verify_counter + 1;	
+						
+						if(verify_counter >= 5){
+							$("#send-code").attr("disabled", true);
+							bootbox.alert("Maximum number of sending code trials has reached, we can't send anymore!");
+
+						}
+					}			
 				},
 				error: function(err){
 					console.log(err);
@@ -217,28 +237,58 @@ $(function () {
 		
 	});
 	
-	$("#phone-verify-form").submit(function () {
-		//disable send button after clicking 
-		$("input[name='cached_phone']").val($("input[name='phone_number']").val());
-        $(".send-code").attr("disabled", true);
-        $.ajax({
-            url: '/users/phone-verify/',
-            data: $("#phone-verify-form").serialize(),
-            cache: false,
-            type: 'POST',
-            success: function () {
-                //enable send button after message is sent
-                $('.send-btn').removeAttr("disabled");
-				// $("#send-code").val("Resend code");				
-				$("input[name='verified_phone']").val($("input[name='phone_number']").val());
-				$("#phone-verify-form").hide()
-				$("#phone-no").attr("disabled", true);
-			},
-			error: function(error) {
-				bootbox.alert(error)
-			}
-        });
-        return false;
+	$("#phone-verify").click(function () {   
+		
+		if( (isNaN($("input[name='code']").val())) || ($("input[name='code']").val().length != 6)  || 
+		(isNaN($("#id_phone_number").val())) || ($("#id_phone_number").val().length != 11) 
+		|| ($("#id_phone_number").val().charAt(0) != 1) )
+		{
+			event.preventDefault();
+			bootbox.alert("The code you entered is wrong!");
+		}
+		else {
+			$.ajax({
+				url: '/users/phone-verify/',
+				data: { 
+					phone_no : $('#id_phone_number').val(), 
+					code : $("input[name='code']").val()
+				},
+				cache: false,
+				type: 'POST',
+				success: function (data) {
+					//enable send button after message is sent
+					if (data.success == false) 
+					{
+						$("#results").empty().append("<p>The verification code is wrong! Please cross-check </p>");
+						$("#send-code").attr("disabled", false);
+						code_counter = code_counter + 1;	
+
+						if(code_counter >= 5){
+							$("#phone-verify").attr("disabled", true);
+							bootbox.alert("Maximum number of code retrial has reached, you can't retry anymore!");
+						}
+					}
+					else {
+						// $('#send-code').removeAttr("disabled");
+						$("#results").empty().append("<p> You have successfully verified your phone number! <p>");
+						$("input[name='phone_number']").val("+86" + $("input[name='phone_number']").val());
+						
+						$("#code-notice").empty()
+						
+						$("#code").hide();
+						$("#send-code").hide();
+						$("#id_phone_number").attr("disabled", true);
+						$("#id_username").attr("disabled", false);
+						$("#id_password1").attr("disabled", false);
+						$("#id_password2").attr("disabled", false);
+					}
+				},
+				error: function(error) {
+					bootbox.alert(error)
+				}
+			});
+			return false;
+		}
 	});
 	
 
@@ -246,7 +296,18 @@ $(function () {
 		if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();
 			bootbox.alert("Please enter your address!");
-		} else {
+		}
+		if (!$("input[name='username']").val() || !$("input[name='password1']") || !$("input[name='password2']")  ) {
+			event.preventDefault();
+			bootbox.alert("Please fill in all of the info. Fill in your phone number first!");
+		} 
+		if ($("input[name='password1']").val() != $("input[name='password2']").val() ) {
+			event.preventDefault();
+			bootbox.alert("Your password's inputs don't match!");
+		}
+		
+		else {
+			$("#id_phone_number").attr("disabled", false);
 			$("input[name='city']").val($("select[name='city']").val());
 			$("input[name='province_region']").val($("select[name='province']").val());
 			$("#signup_form").submit();

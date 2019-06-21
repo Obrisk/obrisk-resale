@@ -373,24 +373,6 @@ iframe {
   color: #0aeee3;
 }
 
-#verify-code-form, #phone-verify-form
-{
-    width:100%;
-    text-align: left;
-}
-
-#verify-code-form.button, #verify-code-form.input, 
-#phone-verify-form.button, #phone-verify-form.input
-{
-    display: inline-block;
-}
-
-#verify-code-form.input, 
-#phone-verify-form.input
-{
-    
-}
-
 
 /*==================================================================
 [ Restyle Checkbox ]*/
