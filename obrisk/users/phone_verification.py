@@ -13,6 +13,8 @@ SMS_DOMAIN = os.getenv('SMS_DOMAIN')
 ACCESS_KEY_ID = os.getenv('RAM_USER_ID')
 ACCESS_KEY_SECRET = os.getenv('RAM_USER_S3KT_KEY')
 
+verify_counter = 0
+
 if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
     print("Setting up local env...")
 

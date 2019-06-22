@@ -214,12 +214,15 @@ $(function () {
 				success: function (data) {
 					if (data.success == false) 
 					{
-						$("#code-notice").empty().append("<p> User with this number exists or number is incorrect! <p>");
+						$("#code-notice").empty().append("<p>" + data.error_message + "</p>");
+						if (data.SMSAPIresponse != null) {
+							console.log(data.SMSAPIresponse);
+						}
 						//$("#send-code").attr("disabled", false);
 					}else {
 						$("#send-code").attr("disabled", true);
 						$("#code").show();
-						$("#code-notice").empty().append("<p> We have send the verification code, it is valid for 1 minute! <p>");	
+						$("#code-notice").empty().append("<p>" + data.message + "<p>");	
 
 						var timeout = 60;						
 					
@@ -238,8 +241,6 @@ $(function () {
 						// after 60 seconds stop
 						setTimeout(() => { clearInterval(timerId); }, 61000);
 
-					
-						
 						
 						verify_counter = verify_counter + 1;	
 						
@@ -281,7 +282,7 @@ $(function () {
 					//enable send button after message is sent
 					if (data.success == false) 
 					{
-						$("#results").empty().append("<p>The verification code is wrong! Please cross-check </p>");
+						$("#results").empty().append("<p class='text-error'>" + data.error_message + "</p>");
 						$("#send-code").attr("disabled", false);
 						code_counter = code_counter + 1;	
 
