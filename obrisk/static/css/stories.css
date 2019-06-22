@@ -176,3 +176,10 @@ a:hover {
   box-shadow: 2px 2px 0px #3EC4E2 !important;
   background: #fff;
 }
+
+.story-modal-header {
+  position: sticky;
+  top: 0px;
+  z-index: 99999;
+  background: #3EC4E2;
+}

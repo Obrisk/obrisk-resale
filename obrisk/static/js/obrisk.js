@@ -75,15 +75,42 @@ $(function () {
                 url: '/ws/notifications/latest-notifications/',
                 cache: false,
                 success: function (data) {
-                    $("#notifications").popover({
-                        html: true,
-                        trigger: 'focus',
-                        container: "body",
-                        placement: "bottom",
-                        content: data,
-                    });
-                    $("#notifications").popover('show');
-                    $("#notifications").removeClass("btn-dark")
+                    var regex = /You have no unread notification/
+                    if (!regex.test(data)) {
+                        var dialog = bootbox.dialog({
+                            title: 'Notifications',
+                            message: data,
+                            backdrop: true,
+                            buttons: {
+                                noclose: {
+                                    label: "View all",
+                                    className: 'btn btn-dark text-center',
+                                    callback: function () {
+                                        window.location = window.location.origin + "/ws/notifications/"
+                                    }
+                                },
+                                ok: {
+                                    label: "Mark all ass read",
+                                    className: 'btn btn-light text-center',
+                                    callback: function () {
+
+                                        $.ajax({
+                                            url: window.location.origin + "/ws/notifications/mark-all-as-read/",
+                                            success: function (data) {
+                                                dialog.modal('hide');
+                                            }
+                                        })
+                                    }
+                                }
+                            }
+                        })
+                    } else {
+                        var dialog = bootbox.dialog({
+                            title: 'Notifications',
+                            message: data,
+                        })
+                    }
+
                 },
             });
         }
