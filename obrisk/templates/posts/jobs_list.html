@@ -54,7 +54,7 @@
 <div>
   {% for jobs in all_jobs %}
     <li>
-      <a href="{% url 'list_jobs'  %}">{{ jobs.title }}</a> {{jobs.deadline}}
+      <a href="{% url 'list_jobs'  %}">{{ jobs.title }}</a>  the deadline to apply is on {{jobs.deadline}}
       <!-- {% if jobs.title %}
       <a href="{% url 'list_jobs'  %}"></a>
       {{jobs.title}}
