@@ -212,15 +212,17 @@ $(function () {
 				cache: false,
 				type: 'GET',
 				success: function (data) {
-					if (data.success == false) {
-						$("#code-notice").empty().append("<p> User with this number exists or number is incorrect! <p>");
+					if (data.success == false)
+					{
+						$("#code-notice").empty().append("<p>" + data.error_message + "</p>");
+						if (data.SMSAPIresponse != null) {
+							console.log(data.SMSAPIresponse);
+						}
 						//$("#send-code").attr("disabled", false);
 					} else {
 						$("#send-code").attr("disabled", true);
 						$("#code").show();
-						$("#code-notice").empty().append("<p> We have send the verification code, it is valid for 1 minute! <p>");
-
-						var timeout = 60;
+						$("#code-notice").empty().append("<p>" + data.message + "<p>");
 
 						function updateSec() {
 							timeout--;
@@ -235,16 +237,12 @@ $(function () {
 						let timerId = setInterval(() => updateSec(), 1000);
 
 						// after 60 seconds stop
-						setTimeout(() => {
-							clearInterval(timerId);
-						}, 61000);
-
-
+						setTimeout(() => { clearInterval(timerId); }, 61000);
 
 
 						verify_counter = verify_counter + 1;
 
-						if (verify_counter >= 5) {
+						if(verify_counter >= 5){
 							$("#send-code").attr("disabled", true);
 							bootbox.alert("Maximum number of sending code trials has reached, we can't send anymore!");
 
@@ -278,8 +276,9 @@ $(function () {
 				type: 'GET',
 				success: function (data) {
 					//enable send button after message is sent
-					if (data.success == false) {
-						$("#results").empty().append("<p>The verification code is wrong! Please cross-check </p>");
+					if (data.success == false)
+					{
+						$("#results").empty().append("<p class='text-error'>" + data.error_message + "</p>");
 						$("#send-code").attr("disabled", false);
 						code_counter = code_counter + 1;
 

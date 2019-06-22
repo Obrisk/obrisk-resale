@@ -11,10 +11,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.conf import settings
+import ast
 
 from .forms import UserForm, PhoneSignupForm
 from .models import User
-from .phone_verification import send_sms
+from .phone_verification import send_sms, verify_counter
 
 
 class SignUp(CreateView):
@@ -37,7 +38,6 @@ class SignUp(CreateView):
             return self.form_valid(form)
         else:
             # ret = dict(errors=form.errors) #Handle custom errors here.
-            print(form.errors)
             return self.form_invalid(form)
 
 
@@ -105,7 +105,6 @@ def send_code_sms(request):
             
             check_no = "+86" + phone_no
             check_phone = User.objects.filter(phone_number=check_no).exists()
-          
 
             if check_phone is False:
                 random = get_random_string(length=6, allowed_chars='0123456789')
@@ -114,25 +113,52 @@ def send_code_sms(request):
                 if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
                     print("Your phone number verification is....")
                     print(random)
-                    cache.set(str(phone_no), random , 60)
-                    return JsonResponse({'success': True})
+                    cache.set(str(phone_no), random , 600)
+                    return JsonResponse({
+                        'success': True,
+                        'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
+                    })
 
                 else:
                     __business_id = uuid.uuid1()
                     params = " {\"code\":\""+ random + "\"} " 
+
+                    # try:
+                    #     verify_counter = cache.get(str(phone_no))
+                    #     if verify_counter is not None:
+                    #         verify_counter += 1
+                    # except:
+                    #     verify_counter = 1
+                    #Only send the sms when the verify_counter is less than 3;
                     
                     # id, phone number, signature name, template name, template variables
-                    send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
-                
-                    cache.set(str(phone_no), random , 60)
-                    return JsonResponse({'success': True})
+                    
+                    ret = send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
+
+                    ret = ret.decode("utf-8")
+                    ret = ast.literal_eval(ret)
+                    
+
+                    if ret["Code"] == "OK":
+                        cache.set(str(phone_no), random , 600)
+                        return JsonResponse({
+                            'success': True,
+                            'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
+                        })
+                        
+                    else:
+                        return JsonResponse({
+                            'success': False,
+                            'error_message': "Sorry we couldn't send the verification code please contact us at support@obrisk.com!", 
+                            'SMSAPIresponse':ret["Message"], 'code':ret["Code"], 'requestid':ret["RequestId"]
+                        })                        
             else:
-                return JsonResponse({'success': False, 'error_message': "This number exists"} )
+                return JsonResponse({'success': False, 'error_message': "This phone number already exists!"} )
 
         else:
-            return JsonResponse({'success': False, 'error_message': "This number is wrong!"} )
+            return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"} )
     else:
-        return JsonResponse({'success': False, 'error_message':"Invalid request"} )
+        return JsonResponse({'success': False, 'error_message':"This request is invalid!"} )
 
 @require_http_methods(["GET", "POST"])
 def phone_verify(request):
@@ -144,13 +170,15 @@ def phone_verify(request):
             try:
                 if cache.get(str(phone_no)) == code:
                     return JsonResponse({'success': True})
+                else:
+                    return JsonResponse({'success': False, 'error_message': "The verification code is not correct!" })                    
             except:
-                return JsonResponse({'success': False, 'error_message':"The verification code is invalid or has expired"})
+                return JsonResponse({'message': "The verification code has expired!" } )
             return JsonResponse({'success': False})
         else:
-            return JsonResponse({'success': False, 'error_message':"The phone number or the code is empty"})
+            return JsonResponse({'success': False, 'error_message': "The phone number or the code is empty!"} )
     else:
-        return JsonResponse({'success': False, 'error_message':"Invalid request"})
+        return JsonResponse({'success': False, 'error_message': "This request is invalid!"} )
     
         
 
