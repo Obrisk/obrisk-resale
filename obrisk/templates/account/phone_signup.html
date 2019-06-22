@@ -61,7 +61,7 @@
 				</div>
 				
 				
-				<div class="form-row">
+				<div class="form-row align-items-center" style="flex-wrap:nowrap">
 					<div class="form-group col-xs-6 mb-0 ">
 						{{ form.phone_number|as_crispy_field }}
 					</div>
@@ -75,8 +75,11 @@
 
 				<div class="form-row" id="code">
 					<label class="mr-2"> Code: </label>
-					<input type="tel" pattern="[0-9]{6}" name="code" id="code">
-					<button class="btn btn-dark ml-2 col-xs-2" type="button" id="phone-verify" > Verify </button>
+					<div class="d-flex">
+						<input class="form-control col-xs-6" type="tel" pattern="[0-9]{6}" name="code" id="code">
+						<button class="btn btn-dark ml-2 col-xs-2" type="button" id="phone-verify" > Verify </button>
+					</div>
+
 				</div>
 				<div id="results"> </div>
 

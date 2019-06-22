@@ -253,7 +253,7 @@ iframe {
   font-family: Raleway-Medium;
   justify-content: center;
   text-align: center;
-  font-size: 26px;
+  font-size: 1.5em;
   color: #555555;
   line-height: 1.2;
   text-transform: uppercase;
@@ -556,8 +556,3 @@ iframe {
 }
 
 
-#code:focus {
-    outline: none !important;
-    border:1px solid #0aeee3;
-    box-shadow: 0 0 10px #719ECE;
-}

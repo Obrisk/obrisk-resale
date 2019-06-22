@@ -217,8 +217,30 @@ $(function () {
 						$("#code-notice").empty().append("<p> User with this number exists or number is incorrect! <p>");
 						//$("#send-code").attr("disabled", false);
 					}else {
+						$("#send-code").attr("disabled", true);
 						$("#code").show();
 						$("#code-notice").empty().append("<p> We have send the verification code, it is valid for 1 minute! <p>");	
+
+						var timeout = 60;						
+					
+						function updateSec() {
+							timeout--;
+							if (timeout>0) {
+								$("#send-code").text(timeout+" S")
+							} else {
+								$("#send-code").text("Get Code")
+								$("#send-code").attr("disabled", false);
+							}
+					}
+						// repeat with the interval of 1 seconds
+						let timerId = setInterval(() => updateSec(), 1000);
+
+						// after 60 seconds stop
+						setTimeout(() => { clearInterval(timerId); }, 61000);
+
+					
+						
+						
 						verify_counter = verify_counter + 1;	
 						
 						if(verify_counter >= 5){
@@ -458,7 +480,6 @@ iqwerty.toast = (function () {
 })();
 
 function uploadPreview(input) {
-	console.log('clicked');
 	if (input.files && input.files[0]) {
 		var reader = new FileReader();
 
