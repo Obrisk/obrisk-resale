@@ -14,15 +14,15 @@
 <div class="col-lg-8 m-auto">
 
   <div class="row profile">
-    <div class="col-md-4 user-profile">
+    <div class="col-md-4 user-profile d-flex flex-column align-items-center">
       <h1>{{ user.username|title }}</h1>
       {% if user.name %}<p class="lead">{{ user.name }}</p>{% endif %}
       {% if user.picture %}
       {% thumbnail user.picture "250x250" crop="center" upscale="true"  as im %}
-      <img src="{{ im.url }}" style="border-radius: 50%;" alt="Picture Profile" id="pic">
+      <img src="{{ im.url }}" style="width:250px;height:250px;border-radius: 50%;" alt="Picture Profile" id="avatar">
       {% endthumbnail %}
       {% else %}
-      <img id="avatar" src="{% static 'img/user.png' %}" alt="No Profile Picture" />
+      <img id="pic" src="{% static 'img/user.png' %}" alt="No Profile Picture" />
       {% endif %}
     </div>
 
