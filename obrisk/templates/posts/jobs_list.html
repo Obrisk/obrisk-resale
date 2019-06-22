@@ -54,20 +54,19 @@
 <div>
   {% for jobs in all_jobs %}
     <li>
-      <a href="{% url 'list_jobs'  %}">{{ jobs.title }}</a> ({{jobs.venue}})
-      {% if jobs.title %}
+      <a href="{% url 'list_jobs'  %}">{{ jobs.title }}</a> {{jobs.deadline}}
+      <!-- {% if jobs.title %}
       <a href="{% url 'list_jobs'  %}"></a>
-      {{jobs.title}
-      {{jobs.venue}}
-      {{jobs.jobs}}
-      {{jobs.details}}
-      {{jobs.posted}}
-      {{jobs.start_time}}
-      {{jobs.end_time}}
+      {{jobs.title}}
       {{jobs.contacts}}
-      {{jobs.sponsors}}
+      {{jobs.jobs_type}}
+      {{jobs.description}}
+      {{jobs.requirements}}
+      {{jobs.posted_date}}
+      {{jobs.start_date}}
+      {{jobs.deadline}}
 
-      {% endif %} }
+      {% endif %} } -->
     </li>
   {% endfor %}
 </div>
