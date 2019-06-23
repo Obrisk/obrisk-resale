@@ -23,7 +23,7 @@ class UserForm(forms.ModelForm):
     bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
     province_region = forms.CharField (widget=forms.HiddenInput(), required=False)
     city = forms.CharField (widget=forms.HiddenInput(), required=False)
-
+    picture = forms.ImageField(widget=forms.FileInput(attrs={'onchange': 'uploadPreview(this)'}))
     class Meta:
         model = User
         fields = ('picture', 'name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
