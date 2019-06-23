@@ -4,6 +4,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from django.shortcuts import redirect
 
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
@@ -24,6 +25,10 @@ urlpatterns = [
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
+    #Temporarly redirect the old accounts url to the new one 
+    url(r'^accounts/login/$',  lambda request: redirect('account_login')), 
+    url(r'^accounts/signup/$', lambda request: redirect('users:signup')),
+
     # User management
     url(r'^users/', include('obrisk.users.urls', namespace='users')),
     url(r'^accounts/', include('django.contrib.auth.urls')),
