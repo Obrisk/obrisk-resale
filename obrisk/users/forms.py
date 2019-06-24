@@ -52,7 +52,6 @@ class CustomSignupForm(SignupForm):
 def signup(self, request, user): 
     user.province_region = self.cleaned_data['province_region']
     user.city = self.cleaned_data['city']
-    user.phone_number = self.phone_number['city']
     user.save() 
     return user 
 

@@ -122,7 +122,6 @@ def send_code_sms(request):
                 else:
                     __business_id = uuid.uuid1()
                     params = " {\"code\":\""+ random + "\"} " 
-                    
                     # try:
                     #     verify_counter = cache.get(str(phone_no))
                     #     if verify_counter is not None:
@@ -148,7 +147,7 @@ def send_code_sms(request):
                     else:
                         return JsonResponse({
                             'success': False,
-                            'error_message': "Sorry we couldn't send the verification code please contact us at support@obrisk.com!", 
+                            'error_message': "Sorry we couldn't send the verification code please signup with your email at the top of the page!", 
                             'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"]
                         })                        
             else:
