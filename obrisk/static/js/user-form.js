@@ -218,8 +218,15 @@ $(function () {
 						if (data.SMSAPIresponse != null) {
 							console.log(data.SMSAPIresponse);
 						}
+						if (data.requestId != null) {
+							console.log(data.requestId);
+						}
+						if (data.returnedCode != null) {
+							console.log(data.returnedCode);
+						} 
 						//$("#send-code").attr("disabled", false);
 					} else {
+						timeout = 60;
 						$("#send-code").attr("disabled", true);
 						$("#code").show();
 						$("#code-notice").empty().append("<p>" + data.message + "<p>");
