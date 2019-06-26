@@ -12,6 +12,7 @@ from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.conf import settings
 import ast
+import boto3
 
 from .forms import UserForm, PhoneSignupForm
 from .models import User
@@ -103,8 +104,8 @@ def send_code_sms(request):
         
         if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1':
             
-            check_no = "+86" + phone_no
-            check_phone = User.objects.filter(phone_number=check_no).exists()
+            full_number = "+86" + phone_no
+            check_phone = User.objects.filter(phone_number=full_number).exists()
 
             if check_phone is False:
                 random = get_random_string(length=6, allowed_chars='0123456789')
@@ -120,24 +121,41 @@ def send_code_sms(request):
                     })
 
                 else:
-                    __business_id = uuid.uuid1()
-                    params = " {\"code\":\""+ random + "\"} " 
-                    # try:
-                    #     verify_counter = cache.get(str(phone_no))
-                    #     if verify_counter is not None:
-                    #         verify_counter += 1
-                    # except:
-                    #     verify_counter = 1
-                    #Only send the sms when the verify_counter is less than 3;
-                    
-                    # id, phone number, signature name, template name, template variables
-                    
-                    ret = send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
+                       # Create an SNS client
+                    client = boto3.client(
+                        "sns",
+                        aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                        aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+                        region_name=os.getenv('AWS_REGION')
+                    )
 
-                    ret = ret.decode("utf-8")
-                    ret = ast.literal_eval(ret)
+                    # Send your sms message.
+                    ret = client.publish(
+                        PhoneNumber=str(full_number),
+                        Message=f"[Obrisk] Welcome, your verification code is {random}. Thank you for signing up!",
+                        MessageAttributes={
+                            'string': {
+                                'DataType': 'String',
+                                'StringValue': 'String',
+                            },
+                            'AWS.SNS.SMS.SenderID': {
+                                    'DataType': 'String',
+                                    'StringValue': os.getenv('AWS_SENDER_ID')
+                                }
+                            }
+                        )
+
+                    #For alibaba.
+                    #params = " {\"code\":\""+ random + "\"} " 
+                    # __business_id = uuid.uuid1()                                        
+                    # ret = send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
+                    #ret = ret.decode("utf-8")
+                    #ret = ast.literal_eval(ret)
+                    #if ret['Code'] == 'OK'
                     
-                    if ret["Code"] == "OK":
+                    response = ret['ResponseMetadata'] 
+
+                    if response['HTTPStatusCode'] == 200:
                         cache.set(str(phone_no), random , 600)
                         return JsonResponse({
                             'success': True,
@@ -148,8 +166,10 @@ def send_code_sms(request):
                         return JsonResponse({
                             'success': False,
                             'error_message': "Sorry we couldn't send the verification code please signup with your email at the top of the page!", 
-                            'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"]
-                        })                        
+                            'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"], 'requestId':response["RequestId"], 
+                            'retries': response["RetryAttempts"]
+                        })  
+                        #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"]                      
             else:
                 return JsonResponse({'success': False, 'error_message': "This phone number already exists!"} )
 

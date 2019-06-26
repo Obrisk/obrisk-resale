@@ -215,15 +215,18 @@ $(function () {
 					if (data.success == false)
 					{
 						$("#code-notice").empty().append("<p>" + data.error_message + "</p>");
-						if (data.SMSAPIresponse != null) {
-							console.log(data.SMSAPIresponse);
+						if (data.messageId != null) {
+							console.log(data.messageId);
 						}
 						if (data.requestId != null) {
 							console.log(data.requestId);
 						}
 						if (data.returnedCode != null) {
 							console.log(data.returnedCode);
-						} 
+						}
+						if (data.retries != null) {
+							console.log(data.retries);
+						}
 						//$("#send-code").attr("disabled", false);
 					} else {
 						timeout = 60;
