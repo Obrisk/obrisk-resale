@@ -82,4 +82,4 @@ INSTALLED_APPS += ['django_extensions']  # noqa F405
 
 # Your stuff...
 # ------------------------------------------------------------------------------
-PHONE_SIGNUP_DEBUG = False
+PHONE_SIGNUP_DEBUG = True

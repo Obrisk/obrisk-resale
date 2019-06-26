@@ -132,7 +132,7 @@ def send_code_sms(request):
                     # Send your sms message.
                     ret = client.publish(
                         PhoneNumber=str(full_number),
-                        Message=f"[Obrisk] Welcome, your verification code is {random}. Thank you!",
+                        Message=f"[Obrisk] Welcome, your verification code is {random}. Thank you for signing up!",
                         MessageAttributes={
                             'string': {
                                 'DataType': 'String',
@@ -145,16 +145,17 @@ def send_code_sms(request):
                             }
                         )
 
-                    print(ret)
-
                     #For alibaba.
                     #params = " {\"code\":\""+ random + "\"} " 
                     # __business_id = uuid.uuid1()                                        
                     # ret = send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
                     #ret = ret.decode("utf-8")
                     #ret = ast.literal_eval(ret)
+                    #if ret['Code'] == 'OK'
                     
-                    if "OK" == "OK":
+                    response = ret['ResponseMetadata'] 
+
+                    if response['HTTPStatusCode'] == 200:
                         cache.set(str(phone_no), random , 600)
                         return JsonResponse({
                             'success': True,
@@ -165,8 +166,10 @@ def send_code_sms(request):
                         return JsonResponse({
                             'success': False,
                             'error_message': "Sorry we couldn't send the verification code please signup with your email at the top of the page!", 
-                            'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"]
-                        })                        
+                            'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"], 'requestId':response["RequestId"], 
+                            'retries': response["RetryAttempts"]
+                        })  
+                        #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"]                      
             else:
                 return JsonResponse({'success': False, 'error_message': "This phone number already exists!"} )
 
