@@ -29,6 +29,17 @@
 <body>
 
   <body class="O-bg">
+  
+  <div class="container">
+    {% if messages %}
+      {% for message in messages %}
+      <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ message }}
+      </div>
+      {% endfor %}
+    {% endif %}
+
     {% block body %}
     <div class="m-b-1">
       <div class="container">

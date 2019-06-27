@@ -3,7 +3,10 @@
 {% block title %}Forbidden (403){% endblock %}
 
 {% block content %}
-<h1>Forbidden (403)</h1>
+<h2>Forbidden (403)</h2>
 
-<p>CSRF verification failed. Request aborted.</p>
+<p>CSRF verification failed. The request has been aborted.</p>
+
+<h5> Please login in again. <h5>
+<a class="btn btn-dark btn-xl js-scroll-trigger text-dark" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
 {% endblock content %}

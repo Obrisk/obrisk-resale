@@ -258,9 +258,10 @@ MANAGERS = ADMINS
 # ------------------------------------------------------------------------------
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ALLOW_REGISTRATION = env.bool('ACCOUNT_ALLOW_REGISTRATION', True)
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
+ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_FORMS = {'signup': 'users.forms.PhoneSignupForm'}
 #ACCOUNT_SIGNUP_FORM_CLASS = ''

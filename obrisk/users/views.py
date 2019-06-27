@@ -11,6 +11,8 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator    
 import ast
 import boto3
 
@@ -18,7 +20,7 @@ from .forms import UserForm, PhoneSignupForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
 
-
+@method_decorator(csrf_exempt, name='dispatch')
 class SignUp(CreateView):
     form_class = PhoneSignupForm
     success_url = reverse_lazy('classifieds:list')
@@ -50,9 +52,13 @@ class SignUp(CreateView):
         try:
             user = authenticate(self.request, username=username, password=raw_password)
             if user is not None:
-                login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-                return redirect ('classifieds:list')
+                if user.is_active:
+                    login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
+                    return redirect ('classifieds:list')
+                else:
+                    return super(SignUp, self).form_valid(form)     
             else:
+                #if the user is not successfully authenticated return the normal form_valid response.
                 return super(SignUp, self).form_valid(form)     
                     
         except:
@@ -165,7 +171,7 @@ def send_code_sms(request):
                     else:
                         return JsonResponse({
                             'success': False,
-                            'error_message': "Sorry we couldn't send the verification code please signup with your email at the top of the page!", 
+                            'error_message': "Sorry we couldn't send the verification code please signup with your email at the bottom of this page!", 
                             'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"], 'requestId':response["RequestId"], 
                             'retries': response["RetryAttempts"]
                         })  
