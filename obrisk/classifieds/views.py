@@ -5,7 +5,7 @@ from django.views import View
 from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView
 from django.views.generic.edit import BaseFormView
 from django.urls import reverse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.template import RequestContext
 from django.core.mail import send_mail
@@ -280,7 +280,13 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             please choose to create a new classified again and don't delay to submit the form. "
                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
             # return self.form_invalid(form)
-            return reverse('classifieds:list')
+            return redirect ('classifieds:list')
+        
+        except:
+            messages.error(self.request, "Sorry, the request has expired, \
+            your classified advertisement was not created successfully. Please try again later")
+            # return self.form_invalid(form)
+            return redirect ('classifieds:list')
 
     def get_success_url(self):
         messages.success(self.request, self.message)
