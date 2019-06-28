@@ -1,10 +1,22 @@
 from django.conf.urls import url
-
+from obrisk.posts import views as posts_views
+from obrisk.posts.views import JobsCreateView, JobsListView, DetailJobsView, EventsListView, CreateEventsView, DetailEventsView
 from obrisk.posts.views import (PostsListView, DraftsListView,
                                      CreatePostView, EditPostView,
                                      DetailPostView)
 app_name = 'posts'
 urlpatterns = [
+    url(r'^create-jobs/$', JobsCreateView.as_view(), name='create_jobs'),
+    url(r'^list-jobs/$', JobsListView.as_view(), name='list_jobs'),
+    #url(r'^detail-jobs/$', DetailJobsView .as_view(), name='detail_jobs'),
+    url(r'^create-events/$', CreateEventsView.as_view(), name='create_events'),
+    url(r'^list-events/$', EventsListView.as_view(), name='list_events'),
+    #url(r'^detail-events/$', DetailEventsView.as_view(), name='detail_events'),
+    url(r'^(?P<events_id>\d+)$', DetailEventsView.as_view(), name='detail_events'),
+    url(r'^(?P<events_id>\d+)$', DetailJobsView.as_view(), name='detail_jobs'),
+    # url(r'^detail-events/(?P<events_id>\d+)/(?P<slug>[-\w]+)$', DetailEventsView.as_view()),
+    #url(r'^detail-jobs/(?P<jobs_id>\d+)/(?P<slug>[-\w]+)$', DetailJobsView.as_view()),
+
     url(r'^$', PostsListView.as_view(), name='list'),
     url(r'^write-new-post/$', CreatePostView.as_view(), name='write_new'),
     url(r'^drafts/$', DraftsListView.as_view(), name='drafts'),

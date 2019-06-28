@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load humanize thumbnail %}
+
+{% block title %} {% trans 'Posts' %} {% endblock %}
+
+{% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/post-list.css' %}" rel="stylesheet">
+
+{% endblock head %}
+
+{% block content %}
+
+
+
+<!-- Page Content -->
+{% comment %}
+<div class="sidebar-overlay"></div>
+<div class="container mt-4">
+  <div
+    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
+    {% comment %}
+    <div class="toggle-tags d-lg-none">
+      <a href=""></a>
+      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+    </div> {% endcomment %}
+    <!-- Write Classified Widget -->
+    {% if request.user.is_official%}
+    <div class="text-center">
+      <a class="btn btn-dark" href="{% url 'posts:list_jobs' %}"
+        title="{% trans 'New job' %}">📝{% trans 'New job' %}</a>
+      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}">
+        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+    </div>
+    {% endif %}
+
+    <div class="row">
+      <!-- Blog Entries Column -->
+      <div class="post-wrapper col-lg-6 m-auto">
+        {% for jobs in all_jobs %}
+        <!-- Blog Post -->
+        <div class="single-post mb-4">
+          <div class="single-post-body p-0">
+            <!-- Card image -->
+            <div class="row">
+              <div class="col-12">
+                <a href="{% url 'list_jobs' %}"
+                  style="color:black; text-decoration:none; background-color:none">
+                  {% thumbnail post.image "700x300" as im %}
+                  <img src="{{ im.url }}" width="{{ im.width }}" height="{{im.height}}"
+                    alt="{% trans 'Featured Image' %}" class="card-img-top">
+                  {% endthumbnail %}
+              </div>
+
+              <div class="col-12 pl-5 pr-5 pt-4 pb-4">
+                <h3 class="pr-3 title"> {{ jobs.title|title|truncatechars:60 }} </h3>
+                <div class="text-left">
+                  <a href="{% url 'users:detail' post.user.username %}">
+                    {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
+                    <img src="{{ im.url }}" class="pull-left mr-2" style="border-radius: 50%;"
+                      alt="{% trans 'User Image' %}" class="user-image">
+                    {% empty %}
+                    <img src="{% static 'img/user.png' %}" class="pull-left mr-2" height="35px"
+                      alt="{% trans 'No Profile Picture' %}" />
+                    {% endthumbnail %}
+                    <div id="classified-user">
+                      <div class="d-flex flex-row mt-2"><strong
+                          class="mr-3">{{ jobs.user.get_profile_name|title }}</strong>
+                      </div>
+                    </div>
+                  </a>
+                  <span class="pull-right time"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></span>
+                </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {% empty %}
+        <h4 class="no-data">
+          {% trans 'There is no published job yet. Do you have any job opportunity that you want to ' %}
+          <a href="{% url 'posts:create_jobs' %}">{% trans 'publish ' %}!</a></h4>
+        {% endfor %}
+
+        {% if is_paginated %}
+        <ul class="pagination justify-content-center mb-4">
+          {% if page_obj.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&larr;
+              {% trans 'Newer' %}</a></li>
+          {% else %}
+          <li class="page-item disabled"><a class="page-link" href="#"><span>&larr;</span></a></li>
+          {% endif %}
+          {% for i in paginator.page_range %}
+          {% if page_obj.number == i %}
+          <li class="page-item disabled"><a class="page-link" href="#">{{ i }} <span
+                class="sr-only">(current)</span></a>
+          </li>
+          {% else %}
+          <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+          {% endif %}
+          {% endfor %}
+          {% if page_obj.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">{% trans 'Older' %}
+              &rarr;</a></li>
+          {% else %}
+          <li class="page-item disabled"><a class="page-link" href="#"><span>&rarr;</span></a></li>
+          {% endif %}
+        </ul>
+        {% endif %}
+
+      </div>
+
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.container -->
+{% endblock content %}
