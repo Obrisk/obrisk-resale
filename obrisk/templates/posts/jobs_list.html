@@ -13,7 +13,10 @@
 {% block content %}
 
 
-
+<div>
+    <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
+    <a href="{% url 'posts:list' %}">{% trans 'published' %}
+</div>
 <!-- Page Content -->
 {% comment %}
 <div class="sidebar-overlay"></div>
@@ -26,14 +29,8 @@
       <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
     </div> {% endcomment %}
     <!-- Write Classified Widget -->
-    {% if request.user.is_official%}
-    <div class="text-center">
-      <a class="btn btn-dark" href="{% url 'posts:list_jobs' %}"
-        title="{% trans 'New job' %}">📝{% trans 'New job' %}</a>
-      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}">
-        <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
-    </div>
-    {% endif %}
+
+
 
     <div class="row">
       <!-- Blog Entries Column -->
@@ -45,8 +42,9 @@
             <!-- Card image -->
             <div class="row">
               <div class="col-12">
-                <a href="{% url 'list_jobs' %}"
-                  style="color:black; text-decoration:none; background-color:none">
+                <a href="{% url 'posts:detail_jobs' jobs_id=jobs.id %}
+
+                  style="color:rgb(115, 216, 20); text-decoration:none; background-color:none">
                   {% thumbnail post.image "700x300" as im %}
                   <img src="{{ im.url }}" width="{{ im.width }}" height="{{im.height}}"
                     alt="{% trans 'Featured Image' %}" class="card-img-top">
@@ -55,23 +53,6 @@
 
               <div class="col-12 pl-5 pr-5 pt-4 pb-4">
                 <h3 class="pr-3 title"> {{ jobs.title|title|truncatechars:60 }} </h3>
-                <div class="text-left">
-                  <a href="{% url 'users:detail' post.user.username %}">
-                    {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
-                    <img src="{{ im.url }}" class="pull-left mr-2" style="border-radius: 50%;"
-                      alt="{% trans 'User Image' %}" class="user-image">
-                    {% empty %}
-                    <img src="{% static 'img/user.png' %}" class="pull-left mr-2" height="35px"
-                      alt="{% trans 'No Profile Picture' %}" />
-                    {% endthumbnail %}
-                    <div id="classified-user">
-                      <div class="d-flex flex-row mt-2"><strong
-                          class="mr-3">{{ jobs.user.get_profile_name|title }}</strong>
-                      </div>
-                    </div>
-                  </a>
-                  <span class="pull-right time"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></span>
-                </div>
                 </a>
               </div>
             </div>
@@ -80,8 +61,12 @@
 
         {% empty %}
         <h4 class="no-data">
-          {% trans 'There is no published job yet. Do you have any job opportunity that you want to ' %}
-          <a href="{% url 'posts:create_jobs' %}">{% trans 'publish ' %}!</a></h4>
+          {% trans 'no job is posted yet. Do you have any job that wanna share! Be the first one to' %}.
+          <a href="{% url 'posts:create_jobs' %}">{% trans 'share a job' %}!</a></h4>
+          <div>
+              <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
+              <a href="{% url 'posts:list' %}">{% trans 'published' %}
+              </div>
         {% endfor %}
 
         {% if is_paginated %}

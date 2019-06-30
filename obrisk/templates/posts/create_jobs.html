@@ -15,7 +15,7 @@
     <div class="form-group">
       <button type="button" class="btn btn-dark publish">{% trans 'Publish' %}</button>
       <button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
-      <a href="{% url 'posts.list_jobs' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+      <a href="{% url 'posts:list_jobs' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
   </form>
   {{ form.media }}

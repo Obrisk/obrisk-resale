@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+<link href="{% static 'css/post-create.css' %}" rel="stylesheet">
+
+{% endblock head %}
+
+{% block content %}
+<div class="col-lg-8 m-auto">
+  <form action="{% url 'posts:create_events' %}" enctype="multipart/form-data" id="posts-form" method="post" role="form">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <div class="form-group">
+      <button type="button" class="btn btn-dark publish">{% trans 'Publish' %}</button>
+      <button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
+      <a href="{% url 'posts:list_events' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+    </div>
+  </form>
+  {{ form.media }}
+
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/posts.js' %}"></script>
+{% endblock extra_js %}

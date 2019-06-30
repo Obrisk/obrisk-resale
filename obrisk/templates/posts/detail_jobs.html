@@ -2,7 +2,7 @@
 {% load static i18n %}
 {% load crispy_forms_tags thumbnail humanize %}
 
-{% block title %}{{ post.title|title }}{% endblock %}
+{% block title %}{{ detail_jobs.title|title }}{% endblock %}
 
 {% block head %}
 <link href="{% static 'css/notifications.css' %}" rel="stylesheet">
@@ -57,80 +57,15 @@
       <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
       <hr>
       <!-- Post Content -->
-      <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
       <hr>
       <!-- Cloud Tag Widget -->
-      <div class="card my-4">
-        <h5 class="card-header">{% trans 'Tags' %}</h5>
-        <div class="card-body">
-          {% for tag in post.tags.all %}
-          <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
-          {% endfor %}
-        </div>
-      </div>
+
 
     </div>
     <!-- /.row -->
 
     <div class="col-lg-8 col-md-10 mr-auto ml-auto post-comment mt-4 pt-4 mb-4">
       <!-- Comments Form  -->
-      {% with comments.count as total_comments %}
-      <h4>
-        {{ total_comments }} comment{{ total_comments|pluralize }}
-      </h4>
-      {% endwith %}
-
-
-      {% for comment in comments %}
-      <div class="comment-wrapper d-flex align-items-center p-2 m-4">
-        <div class="autor-avatar">
-          <a href="{% url 'users:detail' post.user.username %}">
-            {% thumbnail comment.user.picture "30x30" crop="center" upscale="true" as im %}
-            <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
-            {% empty %}
-            <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="30px"
-              alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}</a>
-        </div>
-        <div class="comment-body">
-          <div class="comment-author">
-            <a href="{% url 'users:detail' post.user.username %}" class="">
-              <strong class="mt-0">{{ comment.user.get_profile_name|title }}- </strong>
-            </a>
-            <small> {{ comment.created }} </small>
-          </div>
-          <div class="comment-body"> {{ comment.body|linebreaks }} </div>
-        </div>
-      </div>
-      {% empty %}
-      <p>There are no comments yet.</p>
-      {% endfor %}
-
-
-      {% if new_comment %}
-      <h2>Your comment has been added.</h2>
-      {% else %}
-
-      <div id="comment-notify d-none" class="notification"> </div>
-
-      <div class="card my-4">
-        <h4 class="card-header">{% trans 'Leave a Comment' %}:</h4>
-        <div class="card-body">
-
-          <form method="post" id="commentForm">
-            {% csrf_token %}
-            {{ comment_form|crispy }}
-            {% if user.is_authenticated %}
-            <input class="btn btn-dark comment-btn" type="button" value="Add comment">
-            {% else %}
-            <h6> Please login to post your comment: </h6>
-            <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
-              href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-          </form>
-          {% endif %}
-        </div>
-      </div>
-      {% endif %}
 
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
@@ -141,10 +76,8 @@
         {% if request.user == post.user %}
         <div class="row align-items-center mt-4 mb-4">
 
-          <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}">
+          <a class="btn btn-dark" href="{% url 'posts:create_jobs' %}" title="{% trans 'Write a new job' %}">
             <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
-          <a class="btn btn-dark ml-3" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
         </div>
         {% endif %}
       </div>
@@ -157,7 +90,7 @@
 
   {% block javascript %}
   <script type="text/javascript">
-    var url = "{% url 'posts:post' post.slug %}"
+    var url = "{% url 'posts:detail_jobs'  %}"
   </script>
   <script src="{% static 'js/posts.js' %}"> </script>
 

@@ -140,7 +140,7 @@ class JobsCreateView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('list_jobs')
+        return reverse('posts:list_jobs')
 
 class JobsListView(ListView):
 
@@ -149,7 +149,7 @@ class JobsListView(ListView):
     context_object_name = 'all_jobs'
     #queryset = Jobs.objects.all()
     template_name = 'jobs_list.html'
-    success_url = reverse_lazy('list_jobs')
+    success_url = reverse_lazy('posts:list_jobs')
     def get_queryset(self):
         qs = super(JobsListView, self).get_queryset()
         return qs
@@ -191,7 +191,7 @@ class CreateEventsView(LoginRequiredMixin, CreateView):
 
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('list_events')
+        return reverse('posts:list_events')
 
 class EventsListView(ListView):
 
@@ -199,7 +199,7 @@ class EventsListView(ListView):
     form_class = EventsForm
     context_object_name = 'all_events'
     template_name = 'events_list.html'
-    success_url = reverse_lazy('list_events')
+    success_url = reverse_lazy('posts:list_events')
     def get_queryset(self):
         qs = super(EventsListView, self).get_queryset()
         return qs
