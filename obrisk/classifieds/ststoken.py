@@ -98,3 +98,5 @@ def get_oss_auth(request):
         'bucket': bucket_name
     }
     return JsonResponse(data)
+
+

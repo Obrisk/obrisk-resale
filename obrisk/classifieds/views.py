@@ -245,7 +245,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified.user = self.request.user
         classified.save()
 
-        bucket = oss2.Bucket(oss2. Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+        bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
         images_json = form.cleaned_data['images']
 
         # split one long string of images into a list of string each for one JSON obj
@@ -274,18 +274,19 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             return super(CreateClassifiedView, self).form_valid(form)
 
         except oss2.exceptions.ServerError as e:
-            messages.error(self.request, "Sorry, the request has expired, \
-            it looks like you took so long to fill in the form and to upload the images for your ad. \
-            If your advertisement doesn't appear on the list below then,\
-            please choose to create a new classified again and don't delay to submit the form. "
+            messages.error(self.request, "Oops we are very sorry. \
+            It looks like it took long to upload the images for your ad. \
+            Please ensure your internet connection is stable and try again. "
                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
             # return self.form_invalid(form)
+            classified.update(status="Expired")
             return redirect ('classifieds:list')
         
         except:
-            messages.error(self.request, "Sorry, the request has expired, \
-            your classified advertisement was not created successfully. Please try again later")
+            messages.error(self.request, "Oops we are very sorry! your classified ad \
+            was not created successfully. Please try again later")
             # return self.form_invalid(form)
+            classified.update(status="Expired")
             return redirect ('classifieds:list')
 
     def get_success_url(self):
