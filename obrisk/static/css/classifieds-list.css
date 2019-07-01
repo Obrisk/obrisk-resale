@@ -13,3 +13,16 @@
     width: 95%;
 }
 
+
+.toggle-tags {
+    line-height: 0;
+}
+
+.categories {
+    font-size:14px !important;
+}
+
+.sidebarBtnOpen {
+    display: flex;
+    align-content: center;
+}

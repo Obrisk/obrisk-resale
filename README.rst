@@ -22,6 +22,7 @@ An enterprise oriented social network
 :License: MIT
 
 A **location based** social network
+
 The project has 5 apps:
 
 Post (A blogging app)
@@ -53,15 +54,6 @@ To check the report in console::
 
     $ coverage report -m
 
-Sentry
-^^^^^^
-
-Sentry is an error logging aggregator service. You can `sign up`_ for a free account  or download and host it yourself.
-The system is setup with reasonable defaults, including 404 logging and integration with the WSGI application.
-
-.. _`sign up`: https://sentry.io/signup/?code=cookiecutter
-
-You must set the DSN url in production.
 
 
 Deployment

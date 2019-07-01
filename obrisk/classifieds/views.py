@@ -120,7 +120,6 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         if form.is_valid():
             return self.form_valid(form)
         else:
-            # ret = dict(errors=form.errors)
             return self.form_invalid(form)
 
     def form_valid(self, form):
@@ -145,7 +144,7 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 
             d = str(datetime.datetime.now())
             thumb_name = "Official-ads/" + str(classified.user) + "/" + \
-                slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+            slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_156,w_156'
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
@@ -176,19 +175,22 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         
 
     def form_valid(self, form):
-        form.instance.user = self.request.user
-
-        classified = form.save(commit=False)
-        classified.user = self.request.user
-        classified.save()
-
-        bucket = ststoken.bucket
         images_json = form.cleaned_data['images']
 
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
 
-        try:
+        if (images_list[1] == None):
+            messages.error(self.request, "Sorry, the images were not uploaded successfully. \
+                Please add the images again and submit the form!")
+            return self.form_invalid(form)
+        
+        else:
+            form.instance.user = self.request.user
+            classified = form.save(commit=False)
+            classified.user = self.request.user
+            classified.save()
+
             for index, str_result in enumerate(images_list):
                 if index == 0:
                     continue
@@ -197,34 +199,39 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
                 d = str(datetime.datetime.now())
                 thumb_name = "classifieds/" + str(classified.user) + "/" + \
-                    slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+                slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
                 style = 'image/resize,m_fill,h_156,w_156'
-                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                              oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                  oss2.compat.to_bytes(thumb_name))),
-                                                              oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(ststoken.bucket_name))))
-                bucket.process_object(str_result, process)
-                img.image_thumb = thumb_name
+                
+                try:
+                    bucket = ststoken.bucket
+                    process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                    oss2.compat.to_bytes(thumb_name))),
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(ststoken.bucket_name))))
+                    bucket.process_object(str_result, process)
+                    img.image_thumb = thumb_name
 
-                img.save()
+                    img.save()
 
-            return super(CreateClassifiedView, self).form_valid(form)
+                    return super(CreateClassifiedView, self).form_valid(form)
 
-        except oss2.exceptions.ServerError as e:
-            messages.error(self.request, "Oops we are very sorry. \
-            It looks like it took long to upload the images for your ad. \
-            Please ensure your internet connection is stable and try again. "
-                           + 'status={0}, request_id={1}'.format(e.status, e.request_id))
-            # return self.form_invalid(form)
-            classified.update(status="Expired")
-            return redirect ('classifieds:list')
+                except oss2.exceptions.ServerError as e:
+                    img.save()
+                    messages.error(self.request, "Oops we are very sorry. \
+                    Your images where not uploaded successfully. Please ensure that, \
+                    your internet connection is stable and edit your item to add images. "
+                                + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                    # return self.form_invalid(form)
+                    return redirect ('classifieds:list')
+                
+                except:
+                    img.save()
+                    messages.error(self.request, "Oops we are sorry! Your images \
+                        where not uploaded successfully. Please select your item, then edit, \
+                        and try again to upload the images.")
+                    #return self.form_invalid(form)
+                    return redirect ('classifieds:list')
         
-        except:
-            messages.error(self.request, "Oops we are very sorry! your classified ad \
-            was not created successfully. Please try again later")
-            # return self.form_invalid(form)
-            classified.update(status="Expired")
-            return redirect ('classifieds:list')
 
     def get_success_url(self):
         messages.success(self.request, self.message)
@@ -237,7 +244,7 @@ class TagsAutoComplete(autocomplete.Select2QuerySetView):
         qs = Tag.objects.all()
 
         if self.q:
-            qs = qs.filter(name__istartswith=self.q)
+            qs = qs.filter(name__icontains=self.q)
 
         return qs
 

@@ -18,7 +18,9 @@ class ClassifiedForm(forms.ModelForm):
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
             Please don't enter your city it will be added automatically based on your profile",
-            "contact_info": "This field is optional. You can include your phone number, or wechat-ID or other contacts info."
+            "contact_info": "This field is optional. You can include your phone number, or wechat-ID or other contacts info.",
+            "tags": "Write the categories of your item, can be one or multiple separated by a comma.\
+            e.g phone,electronics. Some categories will appear as you start to type."
         }
 
 class OfficialAdForm(forms.ModelForm):

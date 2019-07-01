@@ -31,13 +31,16 @@
   <!-- Write Classified Widget -->
 
   <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
-    <div class="toggle-tags d-lg-none">
-      <a href=""></a>
-      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+    <div class="toggle-tags d-lg-none" >
+      <div class="d-flex flex-column align-items-center" id="sidebarBtnOpen" >
+        <span><i class="fa fa-hashtag mb-1" ></i></span> <br>
+        <small class="categories" > Categories </small>
+      </div>
     </div>
     {% if request.user.is_authenticated %}
     <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
-      title="{% trans 'Write a new classified' %}">📝{% trans 'Create new' %}</a>
+      title="{% trans 'Write a new classified' %}">➕{% trans 'Add new item' %}</a>
+
 
     {% endif %}
     <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
@@ -107,7 +110,6 @@
   var block_request = false;
   $(window).scroll(function () {
     if (empty_page == false && block_request == false) {
-      console.log('loading next page')
       block_request = true;
       page += 1;
       $('.loading').removeClass('d-none')
