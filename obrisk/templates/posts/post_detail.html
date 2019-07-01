@@ -9,7 +9,11 @@
 <link href="{% static 'css/post-details.css' %}" rel="stylesheet">
 
 {% endblock head %}
-
+<div>
+  <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
+  <a href="{% url 'posts:list_jobs' %}">{% trans 'jobs' %}
+  <a href="{% url 'posts:list' %}">{% trans 'published' %}
+</div>
 {% block meta %}
 <meta name="author" content="{{  post.user.get_profile_name }}">
 <meta name="keywords" content="{{ post.title|title }} ">

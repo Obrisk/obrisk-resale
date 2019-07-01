@@ -2,7 +2,7 @@
 {% load static i18n %}
 {% load crispy_forms_tags thumbnail humanize %}
 
-{% block title %}{{ detail_jobs.title|title }}{% endblock %}
+{% block title %}{{ detail_events.title|title }}{% endblock %}
 
 {% block head %}
 <link href="{% static 'css/notifications.css' %}" rel="stylesheet">
@@ -11,7 +11,7 @@
 {% endblock head %}
 <div>
   <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
-  <a href="{% url 'posts:list_jobs' %}">{% trans 'jobs' %}
+  <a href="{% url 'posts:list_jobs' %}">{% trans 'events' %}
   <a href="{% url 'posts:list' %}">{% trans 'published' %}
 </div>
 
@@ -24,7 +24,7 @@
     <div class="post-wrapper col-lg-8 col-md-10 m-auto">
       <div class="classified-meta mb-4">
         <!-- Title -->
-        <h1 class="mt-4 text-center">{{ detail_jobs.title }}</h1>
+        <h1 class="mt-4 text-center">{{ detail_events.title }}</h1>
 
         </div>
 
@@ -36,9 +36,13 @@
           class="card-img-top">
       </div>
       {% endthumbnail %}
+      <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
+      <!-- Cloud Tag Widget -->
 
     </div>
+    <!-- /.row -->
 
+      <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
 
         <!-- As of now, I don't want to encourage users to write posts thus
@@ -47,7 +51,7 @@
         {% if request.user == post.user %}
         <div class="row align-items-center mt-4 mb-4">
 
-          <a class="btn btn-dark" href="{% url 'posts:create_jobs' %}" title="{% trans 'share a New job' %}">
+          <a class="btn btn-dark" href="{% url 'posts:create_events' %}" title="{% trans 'share a New job' %}">
             <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
         </div>
         {% endif %}
@@ -59,7 +63,7 @@
 
   {% block javascript %}
   <script type="text/javascript">
-    var url = "{% url 'posts:detail_jobs' jobs.id %}"de
+    var url = "{% url 'posts:detail_events' events.id %}"de
   </script>
   <script src="{% static 'js/posts.js' %}"> </script>
 

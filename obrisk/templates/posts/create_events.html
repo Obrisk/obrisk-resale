@@ -6,7 +6,11 @@
 <link href="{% static 'css/post-create.css' %}" rel="stylesheet">
 
 {% endblock head %}
-
+<div>
+  <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
+  <a href="{% url 'posts:list_jobs' %}">{% trans 'jobs' %}
+  <a href="{% url 'posts:list' %}">{% trans 'published' %}
+</div>
 {% block content %}
 <div class="col-lg-8 m-auto">
   <form action="{% url 'posts:create_events' %}" enctype="multipart/form-data" id="posts-form" method="post" role="form">

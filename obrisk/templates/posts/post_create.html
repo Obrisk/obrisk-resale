@@ -4,7 +4,11 @@
 
 {% block head %}
 <link href="{% static 'css/post-create.css' %}" rel="stylesheet">
-
+<div>
+  <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
+  <a href="{% url 'posts:list_jobs' %}">{% trans 'jobs' %}
+  <a href="{% url 'posts:list' %}">{% trans 'published' %}
+</div>
 {% endblock head %}
 
 {% block content %}

@@ -10,9 +10,9 @@ urlpatterns = [
     url(r'^list-jobs/$', JobsListView.as_view(), name='list_jobs'),
     url(r'^create-events/$', CreateEventsView.as_view(), name='create_events'),
     url(r'^list-events/$', EventsListView.as_view(), name='list_events'),
-    url(r'^detail-events/(?P<events_id>\d+)/$', DetailEventsView.as_view(), name='detail_events'),
-    # url(r'^detail-jobs/(?P<jobs_id>\d+)/$', DetailJobsView.as_view(), name='detail_jobs'),
-    # url(r'^detail-jobs/(?P<id>\d+)/$', DetailJobsView.as_view(), name='detail_jobs'),
+    # url(r'^detail-events/(?P<events_id>\d+)/$', DetailEventsView.as_view(), name='detail_events'),
+    url(r'^detail-events/(?P<pk>[0-9]+)/$', DetailEventsView.as_view(), name='detail_events'),
+
     url(r'^detail-jobs/(?P<pk>[0-9]+)/$', DetailJobsView.as_view(), name='detail_jobs'),
 
     url(r'^$', PostsListView.as_view(), name='list'),
