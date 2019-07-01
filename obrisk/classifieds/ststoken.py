@@ -80,6 +80,8 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
     return token
 
 
+bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+
 @login_required
 @require_http_methods(["GET"])
 def get_oss_auth(request):
