@@ -24,34 +24,23 @@
     <div class="post-wrapper col-lg-8 col-md-10 m-auto">
       <div class="classified-meta mb-4">
         <!-- Title -->
-        <h1 class="mt-4 text-center">{{ detail_jobs.title }}</h1>
-
+        <h1 class="mt-4 text-center">{{ jobs.title }}</h1>
+        jobs_type: <p>{{ jobs.jobs_type }}</p>
+        description :<p>{{ jobs.description }}</p>
+        requirements :<p>{{ jobs.requirements }}</p>
+        posted_date :<p>{{ jobs.posted_date }}</p>
+        start_date :<p>{{ jobs.start_date }}</p>
+        deadline :<p>{{ jobs.deadline }}</p>
+        contacts :<p>{{ jobs.contacts }}</p>
         </div>
 
       </div>
       <!-- Featured Image -->
-      {% thumbnail post.image "900x300" as im %}
-      <div class="featured-img" style="background-size:cover">
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}"
-          class="card-img-top">
-      </div>
-      {% endthumbnail %}
+      
 
     </div>
 
-      <div class="col-md-4">
-
-        <!-- As of now, I don't want to encourage users to write posts thus
-                    Don't preview option to write new article unless user was the author -->
-
-        {% if request.user == post.user %}
-        <div class="row align-items-center mt-4 mb-4">
-
-          <a class="btn btn-dark" href="{% url 'posts:create_jobs' %}" title="{% trans 'share a New job' %}">
-            <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
-        </div>
-        {% endif %}
-      </div>
+  
     </div>
   </div>
   <!-- /.container -->
@@ -59,7 +48,7 @@
 
   {% block javascript %}
   <script type="text/javascript">
-    var url = "{% url 'posts:detail_jobs' jobs.id %}"de
+    var url = "{% url 'posts:detail_jobs' jobs.id %}"
   </script>
   <script src="{% static 'js/posts.js' %}"> </script>
 

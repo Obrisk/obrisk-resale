@@ -11,7 +11,7 @@
 {% endblock head %}
 <div>
   <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
-  <a href="{% url 'posts:list_jobs' %}">{% trans 'events' %}
+  <a href="{% url 'posts:list_events' %}">{% trans 'jobs' %}
   <a href="{% url 'posts:list' %}">{% trans 'published' %}
 </div>
 
@@ -24,38 +24,23 @@
     <div class="post-wrapper col-lg-8 col-md-10 m-auto">
       <div class="classified-meta mb-4">
         <!-- Title -->
-        <h1 class="mt-4 text-center">{{ detail_events.title }}</h1>
-
-        </div>
+        <h1 class="mt-4 text-center">{{ events.title }}</h1>
+       host : <p>{{ events.host }}</p>
+       venue : <p>{{ events.venue }}</p>
+       details : <p>{{ events.details}}</p>
+       start_time : <p>{{ events.start_time }}</p>
+       
+       sponsors : <p>{{ events.sponsors }}</p>
+       posted_at : <p>{{ events.posted_at }}</p>
+      </div>
 
       </div>
       <!-- Featured Image -->
-      {% thumbnail post.image "900x300" as im %}
-      <div class="featured-img" style="background-size:cover">
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}"
-          class="card-img-top">
-      </div>
-      {% endthumbnail %}
-      <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
-      <!-- Cloud Tag Widget -->
+      
 
     </div>
-    <!-- /.row -->
 
-      <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
-
-        <!-- As of now, I don't want to encourage users to write posts thus
-                    Don't preview option to write new article unless user was the author -->
-
-        {% if request.user == post.user %}
-        <div class="row align-items-center mt-4 mb-4">
-
-          <a class="btn btn-dark" href="{% url 'posts:create_events' %}" title="{% trans 'share a New job' %}">
-            <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
-        </div>
-        {% endif %}
-      </div>
+  
     </div>
   </div>
   <!-- /.container -->
@@ -63,7 +48,7 @@
 
   {% block javascript %}
   <script type="text/javascript">
-    var url = "{% url 'posts:detail_events' events.id %}"de
+    var url = "{% url 'posts:detail_events' events.id %}"
   </script>
   <script src="{% static 'js/posts.js' %}"> </script>
 

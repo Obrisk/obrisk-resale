@@ -1,6 +1,6 @@
 from test_plus.test import TestCase
 
-from obrisk.posts.models import Post
+from obrisk.posts.models import Post, Jobs, Events, JOB_CHOICES
 
 
 class PostsModelsTest(TestCase):
@@ -36,3 +36,57 @@ class PostsModelsTest(TestCase):
         assert self.post in Post.objects.get_active()
         assert Post.objects.get_active()[0].title == "A really nice title"
         #assert self.not_p_post in Post.objects.get_expired()
+
+
+
+
+from django.test import TestCase
+
+class EventsModelTest(TestCase):
+    @classmethod
+    def setUpTestData(cls):
+
+        Author.objects.create(
+            title='loam',
+		    posted_at='pipod',
+            host='sdeng',
+            venue='uouuog',
+            details='tjtt',
+            start_time='tjtjk',
+            end_time='jtj',
+            contacts='eijojtr',
+            sponsors='erterjlkj',
+            )
+
+    def test_title_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('title').verbose_name
+        self.assertEquals(field_label, 'title')
+    def test_venue_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('venue').verbose_name
+        self.assertEquals(field_label, 'venue')
+    def test_host_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('host').verbose_name
+        self.assertEquals(field_label, 'host')
+
+
+
+    # def test_date_of_death_label(self):
+    #     author=Author.objects.get(id=1)
+    #     field_label = author._meta.get_field('date_of_death').verbose_name
+    #     self.assertEquals(field_label, 'died')
+
+    def test_title_max_length(self):
+        events = Events.objects.get(id=1)
+        max_length = events._meta.get_field('title').max_length
+        self.assertEquals(max_length, 80)
+    def test_host_max_length(self):
+        events = Events.objects.get(id=1)
+        max_length = events._meta.get_field('host').max_length
+        self.assertEquals(max_length, 80)
+    def test_venue_max_length(self):
+        events = Events.objects.get(id=1)
+        max_length = events._meta.get_field('venue').max_length
+        self.assertEquals(max_length, 80)

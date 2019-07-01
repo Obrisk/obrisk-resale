@@ -13,7 +13,7 @@ urlpatterns = [
     # url(r'^detail-events/(?P<events_id>\d+)/$', DetailEventsView.as_view(), name='detail_events'),
     url(r'^detail-events/(?P<pk>[0-9]+)/$', DetailEventsView.as_view(), name='detail_events'),
 
-    url(r'^detail-jobs/(?P<pk>[0-9]+)/$', DetailJobsView.as_view(), name='detail_jobs'),
+    url(r'^detail-jobs/(?P<pk>\d+)/$', DetailJobsView.as_view(), name='detail_jobs'),
 
     url(r'^$', PostsListView.as_view(), name='list'),
     url(r'^write-new-post/$', CreatePostView.as_view(), name='write_new'),
