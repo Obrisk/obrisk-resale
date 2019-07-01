@@ -10,10 +10,7 @@
 
 {% endblock head %}
 
-{% block meta %}
-<meta name="author" content="{{  post.user.get_profile_name }}">
-<meta name="keywords" content="{{ post.title|title }} ">
-{% endblock %}
+
 
 {% block content %}
 <!-- Page Content -->
@@ -23,27 +20,8 @@
     <div class="post-wrapper col-lg-8 col-md-10 m-auto">
       <div class="classified-meta mb-4">
         <!-- Title -->
-        <h1 class="mt-4 text-center">{{ post.title|title }}</h1>
-
-        <div class="meta-details mt-4 d-flex justify-content-center">
-
-          <div class="meta-right d-flex flex-column align-items-center">
-            <a href="{% url 'users:detail' post.user.get_profile_name %}">
-              {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
-              <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
-                class="user-image">
-              {% empty %}
-              <img src="{% static 'img/user.png' %}" class="pull-left" height="35px"
-                alt="{% trans 'No Profile Picture' %}" />
-              {% endthumbnail %}
-            </a>
-            <div class="d-flex flex-column align-items-center">
-              <a href="{% url 'users:detail' post.user.get_profile_name %}"><strong id="classified-user">
-                  {{ post.user.get_profile_name|title }} </strong></a>
-              <!-- Date/Time -->
-              <div class="time"><small>⏲️ </small><span>{{ post.timestamp|naturaltime }} </span></div>
-            </div>
-          </div>
+        <h1 class="mt-4 text-center">{{ detail_jobs.title }}</h1>
+        
         </div>
 
       </div>
@@ -55,17 +33,10 @@
       </div>
       {% endthumbnail %}
       <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
-      <hr>
-      <!-- Post Content -->
-      <hr>
       <!-- Cloud Tag Widget -->
-
 
     </div>
     <!-- /.row -->
-
-    <div class="col-lg-8 col-md-10 mr-auto ml-auto post-comment mt-4 pt-4 mb-4">
-      <!-- Comments Form  -->
 
       <!-- Sidebar Widgets Column -->
       <div class="col-md-4">
@@ -76,7 +47,7 @@
         {% if request.user == post.user %}
         <div class="row align-items-center mt-4 mb-4">
 
-          <a class="btn btn-dark" href="{% url 'posts:create_jobs' %}" title="{% trans 'Write a new job' %}">
+          <a class="btn btn-dark" href="{% url 'posts:create_jobs' %}" title="{% trans 'share a New job' %}">
             <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
         </div>
         {% endif %}
@@ -90,7 +61,7 @@
 
   {% block javascript %}
   <script type="text/javascript">
-    var url = "{% url 'posts:detail_jobs'  %}"
+    var url = "{% url 'posts:detail_jobs' jobs.id %}"de
   </script>
   <script src="{% static 'js/posts.js' %}"> </script>
 

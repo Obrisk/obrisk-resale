@@ -29,7 +29,23 @@
       <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
     </div> {% endcomment %}
     <!-- Write Classified Widget -->
+    <div class="mt-4 p-0 mw-100 w-95">
 
+
+
+      <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
+        <div class="toggle-tags d-lg-none">
+          <a href=""></a>
+          <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+        </div>
+        {% if request.user.is_authenticated %}
+        <a class="btn btn-dark align-self-center" href="{% url 'posts:create_jobs' %}"
+          title="{% trans 'Share a new job' %}">📝{% trans 'Share a new job here' %}</a>
+        {% endif %}
+        <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
+      </div>
+  
+    </div>
 
 
     <div class="row">
@@ -42,13 +58,13 @@
             <!-- Card image -->
             <div class="row">
               <div class="col-12">
-                <a href="{% url 'posts:detail_jobs' jobs_id=jobs.id %}
+                <a href="{% url 'posts:detail_jobs' jobs.id %}">
 
-                  style="color:rgb(115, 216, 20); text-decoration:none; background-color:none">
+                  <!-- style="color:rgb(115, 216, 20); text-decoration:none; background-color:none">
                   {% thumbnail post.image "700x300" as im %}
                   <img src="{{ im.url }}" width="{{ im.width }}" height="{{im.height}}"
                     alt="{% trans 'Featured Image' %}" class="card-img-top">
-                  {% endthumbnail %}
+                  {% endthumbnail %} -->
               </div>
 
               <div class="col-12 pl-5 pr-5 pt-4 pb-4">
@@ -68,6 +84,7 @@
               <a href="{% url 'posts:list' %}">{% trans 'published' %}
               </div>
         {% endfor %}
+
 
         {% if is_paginated %}
         <ul class="pagination justify-content-center mb-4">

@@ -167,12 +167,11 @@ class DetailJobsView(DetailView):
             return super(DetailView,self).render_to_response(context, **response_kwargs)
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        context = super(Events, self).get_context_data(**kwargs)
+        context = super(DetailJobsView, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the images
-        data = self.kwargs['name']
-        context['object'] = Jobs.objects.filter(jobs_id=data)
-        return context
+        context['detail_jobs'] = Jobs.objects.all()
 
+        return context
 
 
 
