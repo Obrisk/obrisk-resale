@@ -101,6 +101,7 @@
 					</div>
 				</div>
 
+				<input type="hidden" name="verified_no" id="verified_no">
 				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
 				I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the
 				laws and regulations of the country residing.</a>
@@ -123,17 +124,13 @@
 <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript">
+	{% comment %} const verify_no_id = "{{ form.phone_number.help_text.auto_id }}";
+	console.log(verify_no_id); {% endcomment %}
+
 	{% if form.errors %}
 		$("#id_phone_number").attr("disabled", true);
 		$("#code").hide();
 		$("#send-code").hide();
-		$("#id_username").attr("disabled", false);
-		$("#id_password1").attr("disabled", false);
-		$("#id_password2").attr("disabled", false); 
-	{% else %}
-		$("#id_username").attr("disabled", true);
-		$("#id_password1").attr("disabled", true);
-		$("#id_password2").attr("disabled", true);
 	{% endif %} 
 
 </script>

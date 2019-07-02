@@ -36,36 +36,42 @@
  
   <!-- Masthead -->
   <header class="masthead">
-    <div class="container h-100">
-        <!--links-->      
-      <div class="links">
-          <a class="text-faded text-primary mb-5" href="{% url 'posts:list' %}">
-           {% trans 'Blog' %}  </a> <span style="padding: 5px"> </span>
-          <a class="text-faded text-primary mb-5" href="{% url 'qa:index_all' %}">
-           {% trans 'Q&A forum' %} </a>
-      </div>
+     <div class="container h-100">
+          <!--links-->      
+        <div class="links">
+            <a class="text-faded text-primary mb-5" href="{% url 'posts:list' %}">
+            {% trans 'Blog' %}  </a> <span style="padding: 5px"> </span>
+            <a class="text-faded text-primary mb-5" href="{% url 'qa:index_all' %}">
+            {% trans 'Q&A forum' %} </a>
+        </div>
 
-      <div class="row h-100 align-items-center justify-content-center text-center">
-        <div class="col-lg-10 align-self-end">
-          <h1 class="text-uppercase text-primary font-weight-bold"><strong>{% trans 'Hi! Welcome to Obrisk' %}</strong></h1>
-          <hr class="divider my-4">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-10 align-self-end">
+              <h1 class="text-uppercase text-primary font-weight-bold"><strong>{% trans 'Hi! Welcome to Obrisk' %}</strong></h1>
+              <hr class="divider my-4">
+            </div>
+
+            <div class="col-lg-8 align-self-baseline">
+              <p class="text-faded text-primary mb-5">{% trans 'In here we make things simple and brisk...' %} </p>
+              <a class="btn btn-dark btn-xl js-scroll-trigger text-dark" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+              <hr class="divider my-4">
+            </div>
+
+            <div class="col-md-8 align-self-baseline">
+                <h5 class="text-center text-primary mt-0"> Are you new here?! </h5>
+                <h4 class="text-center text-secondary h4 mb-2" >
+                  <a class="btn btn-cyan btn-xl js-scroll-trigger text-dark"  href="{% url 'users:signup' %}">{% trans 'Sign up now' %} </a> 
+                </h4>
+            </div>
+
         </div>
-        <div class="col-lg-8 align-self-baseline">
-          <p class="text-faded text-primary mb-5">{% trans 'In here we make things simple and brisk...' %} </p>
-          <a class="btn btn-dark btn-xl js-scroll-trigger text-dark" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-        </div>
-      </div>
-    </div>
+        
+     </div>
   </header>
 
   <!-- Services Section -->
   <section class="page-section" id="services">
     <div class="container">
-      <h2 class="text-center mt-0"> Are you new here?! </h2>
-      <h4 class="text-center text-secondary h4 mb-2" >
-        <a class="btn btn-cyan btn-xl js-scroll-trigger text-dark"  href="{% url 'users:signup' %}">{% trans 'Sign up now' %} </a> 
-         </h4>
-      <hr class="divider my-4">
       <div class="row">
         <div class="col-md-6 text-center">
           <div class="mt-5">

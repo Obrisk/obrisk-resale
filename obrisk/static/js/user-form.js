@@ -301,14 +301,14 @@ $(function () {
 						$("#results").empty().append("<p> You have successfully verified your phone number! <p>");
 						$("input[name='phone_number']").val("+86" + $("input[name='phone_number']").val());
 
-						$("#code-notice").empty()
+						$("input[name='verified_no']").val("YES");
+						//I should hide the phone number label that says don't enter country code
+						
+						$("#code-notice").empty();
 
 						$("#code").hide();
 						$("#send-code").hide();
 						$("#id_phone_number").attr("disabled", true);
-						$("#id_username").attr("disabled", false);
-						$("#id_password1").attr("disabled", false);
-						$("#id_password2").attr("disabled", false);
 					}
 				},
 				error: function (error) {
@@ -321,13 +321,17 @@ $(function () {
 
 
 	$("#submit").click(function (event) {
+		if (!$("input[name='verified_no']").val()) {
+			event.preventDefault();
+			bootbox.alert("Please verify your phone number by verification code, before signing up!");
+		}
 		if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();
 			bootbox.alert("Please enter your address!");
 		}
 		if (!$("input[name='username']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
 			event.preventDefault();
-			bootbox.alert("Please fill in all of the info. Fill in your phone number first!");
+			bootbox.alert("Please fill in all of the info. Also verify your phone number!");
 		}
 		if ($("input[name='password1']").val() != $("input[name='password2']").val()) {
 			event.preventDefault();
