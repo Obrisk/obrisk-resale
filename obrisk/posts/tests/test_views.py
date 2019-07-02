@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from test_plus.test import TestCase
 
-from obrisk.posts.models import Post
+from obrisk.posts.models import Post, Jobs, JOB_CHOICES, Events
 
 
 def get_temp_img():
