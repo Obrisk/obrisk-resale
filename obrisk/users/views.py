@@ -6,11 +6,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import reverse
 
-<<<<<<< HEAD
-
-#from friendship.views import friendship_request_list
-=======
->>>>>>> b89b97e26440ee34af1a6c0c2a1d1be2a8a78a59
 from friendship.exceptions import AlreadyExistsError
 from friendship import models
 from friendship.models import (Block, Follow, Friend,
