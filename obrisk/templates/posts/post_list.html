@@ -14,8 +14,8 @@
 
 
 <div>
-    <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
-    <a href="{% url 'posts:list_jobs' %}">{% trans 'jobs' %}
+  <a class="btn btn-dark" href="{% url 'posts:list_events' %}">{% trans 'events 🎁' %}</a>
+  <a class="btn btn-dark" href="{% url 'posts:list_jobs' %}">{% trans 'jobs 💼' %}</a>
 </div>
 <!-- Page Content -->
 {% comment %}
@@ -114,8 +114,8 @@
           {% trans 'There is no published post yet. Do you have any important info you wanna share! Be the first one to' %}.
           <a href="{% url 'posts:write_new' %}">{% trans 'post one' %}!</a></h4>
           <div>
-              <a href="{% url 'posts:list_events' %}">{% trans 'events' %}
-              <a href="{% url 'posts:list_jobs' %}">{% trans 'jobs' %}
+              <a class="btn btn-dark" href="{% url 'posts:list_events' %}">{% trans 'events 🎁' %}</a><br>
+              <a class="btn btn-dark" href="{% url 'posts:list_jobs' %}">{% trans 'jobs 💼' %}</a><br>
               </div>
         {% endfor %}
 

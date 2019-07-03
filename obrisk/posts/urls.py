@@ -6,7 +6,7 @@ from obrisk.posts.views import (PostsListView, DraftsListView,
                                      DetailPostView)
 app_name = 'posts'
 urlpatterns = [
-    url(r'^create-jobs/$', JobsCreateView.as_view(), name='create_jobs'),   
+    url(r'^create-jobs/$', JobsCreateView.as_view(), name='create_jobs'),
     url(r'^list-jobs/$', JobsListView.as_view(), name='list_jobs'),
     url(r'^create-events/$', CreateEventsView.as_view(), name='create_events'),
     url(r'^list-events/$', EventsListView.as_view(), name='list_events'),
