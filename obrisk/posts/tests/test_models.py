@@ -70,8 +70,26 @@ class EventsModelTest(TestCase):
         events = Events.objects.get(id=1)
         field_label = events._meta.get_field('host').verbose_name
         self.assertEquals(field_label, 'host')
-
-
+    def test_details_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('details').verbose_name
+        self.assertEquals(field_label, 'details')
+    def test_start_time_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('start_time').verbose_name
+        self.assertEquals(field_label, 'start time')
+    def test_end_time_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('end_time').verbose_name
+        self.assertEquals(field_label, 'end time')
+    def test_contacts_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('contacts').verbose_name
+        self.assertEquals(field_label, 'contacts')
+    def test_sponsors_label(self):
+        events = Events.objects.get(id=1)
+        field_label = events._meta.get_field('sponsors').verbose_name
+        self.assertEquals(field_label, 'sponsors')
 
     # def test_date_of_death_label(self):
     #     author=Author.objects.get(id=1)
@@ -89,6 +107,14 @@ class EventsModelTest(TestCase):
     def test_venue_max_length(self):
         events = Events.objects.get(id=1)
         max_length = events._meta.get_field('venue').max_length
+        self.assertEquals(max_length, 80)
+    def test_contacts_max_length(self):
+        events = Events.objects.get(id=1)
+        max_length = events._meta.get_field('contacts').max_length
+        self.assertEquals(max_length, 80)
+    def test_sponsors_max_length(self):
+        events = Events.objects.get(id=1)
+        max_length = events._meta.get_field('sponsors').max_length
         self.assertEquals(max_length, 80)
 
 
@@ -109,24 +135,40 @@ class JobsModelTest(TestCase):
             )
 
     def test_title_label(self):
-        events = Jobs.objects.get(id=1)
-        field_label = events._meta.get_field('title').verbose_name
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('title').verbose_name
         self.assertEquals(field_label, 'title')
     def test_jobs_type_label(self):
-        events = Jobs.objects.get(id=1)
-        field_label = events._meta.get_field('jobs_type').verbose_name
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('jobs_type').verbose_name
         self.assertEquals(field_label, 'jobs type')
     def test_description_label(self):
-        events = Jobs.objects.get(id=1)
-        field_label = events._meta.get_field('description').verbose_name
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('description').verbose_name
         self.assertEquals(field_label, 'description')
+    def test_requirements_label(self):
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('requirements').verbose_name
+        self.assertEquals(field_label, 'requirements')
+    def test_posted_date_label(self):
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('posted_date').verbose_name
+        self.assertEquals(field_label, 'posted date')
+    def test_start_date_label(self):
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('start_date').verbose_name
+        self.assertEquals(field_label, 'start date')
+    def test_deadline_label(self):
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('deadline').verbose_name
+        self.assertEquals(field_label, 'deadline')
 
 
+    def test_contacts_label(self):
+        jobs = Jobs.objects.get(id=1)
+        field_label = jobs._meta.get_field('contacts').verbose_name
+        self.assertEquals(field_label, 'contacts')
 
-    # def test_date_of_death_label(self):
-    #     author=Author.objects.get(id=1)
-    #     field_label = author._meta.get_field('date_of_death').verbose_name
-    #     self.assertEquals(field_label, 'died')
 
     def test_title_max_length(self):
         jobs = Jobs.objects.get(id=1)
