@@ -123,14 +123,13 @@
 <script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
 <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
 
-<script type="text/javascript">
-	{% comment %} const verify_no_id = "{{ form.phone_number.help_text.auto_id }}";
-	console.log(verify_no_id); {% endcomment %}
-
+<script type="text/javascript"> 
 	{% if form.errors %}
 		$("#id_phone_number").attr("disabled", true);
+		$("input[name='verified_no']").val("YES");
 		$("#code").hide();
 		$("#send-code").hide();
+		
 	{% endif %} 
 
 </script>
