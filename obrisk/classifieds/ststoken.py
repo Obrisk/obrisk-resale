@@ -12,6 +12,7 @@ from django.views.decorators.http import require_http_methods
 from obrisk.helpers import ajax_required
 
 
+
 # The following code shows the usage of STS, including role-playing to get the temporary user's key and using the temporary user's key to access the OSS.
 
 # STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
@@ -98,7 +99,7 @@ def get_oss_auth(request):
         'accessKeySecret': scrt,
         'SecurityToken': token_value,
         'bucket': bucket_name
-    }
+    }       
     return JsonResponse(data)
 
 

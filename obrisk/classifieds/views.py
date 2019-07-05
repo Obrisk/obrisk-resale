@@ -176,7 +176,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
-
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
 
@@ -213,8 +212,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
                     img.save()
 
-                    return super(CreateClassifiedView, self).form_valid(form)
-
                 except oss2.exceptions.ServerError as e:
                     img.save()
                     messages.error(self.request, "Oops we are very sorry. \
@@ -231,7 +228,10 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                         and try again to upload the images.")
                     #return self.form_invalid(form)
                     return redirect ('classifieds:list')
-        
+
+            #When the for-loop has ended return the results.        
+            return super(CreateClassifiedView, self).form_valid(form)
+
 
     def get_success_url(self):
         messages.success(self.request, self.message)

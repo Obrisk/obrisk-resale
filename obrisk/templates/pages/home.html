@@ -1,4 +1,7 @@
-{% load static i18n %}<!DOCTYPE html>
+{% load static i18n %}
+{% load thumbnail %}
+
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
@@ -37,21 +40,13 @@
   <!-- Masthead -->
   <header class="masthead">
      <div class="container h-100">
-          <!--links-->      
-        <div class="links">
-            <a class="text-faded text-primary mb-5" href="{% url 'posts:list' %}">
-            {% trans 'Blog' %}  </a> <span style="padding: 5px"> </span>
-            <a class="text-faded text-primary mb-5" href="{% url 'qa:index_all' %}">
-            {% trans 'Q&A forum' %} </a>
-        </div>
-
         <div class="row h-100 align-items-center justify-content-center text-center">
             <div class="col-lg-10 align-self-end">
               <h1 class="text-uppercase text-primary font-weight-bold"><strong>{% trans 'Hi! Welcome to Obrisk' %}</strong></h1>
               <hr class="divider my-4">
             </div>
 
-            <div class="col-lg-8 align-self-baseline">
+            <div class="col-lg-8 align-self-baseline mb-2">
               <p class="text-faded text-primary mb-5">{% trans 'In here we make things simple and brisk...' %} </p>
               <a class="btn btn-dark btn-xl js-scroll-trigger text-dark" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
               <hr class="divider my-4">
@@ -70,30 +65,75 @@
   </header>
 
   <!-- Services Section -->
-  <section class="page-section" id="services">
-    <div class="container">
-      <div class="row">
+  
+  <div class="container" id="services">
+
+  <div class="row">
+      <div class="col-md-6 text-center">
+        <div class="mt-5">
+          <i class="fas fa-4x fa-gem text-primary mb-4"></i>
+          <h3 class="h4 mb-2"> Connect and Share </h3>
+        <p class="text-muted mb-0">Keep up with what is happening in the City.</p>
+        </div>
+      </div>
+
+      <div class="col-md-6 text-center">
+        <div class="mt-5">
+          <i class="fas fa-4x fa-laptop-code text-primary mb-4"></i>
+          <h3 class="h4 mb-2"> Apprise and Broaden </h3>
+          <p class="text-muted mb-0"> Live beyond boundaries.</p>
+        </div>
+      </div>
+
+  </div>
+
+  <div class="row">
+        <div class="col-md-6 text-center">
+            <div class="mt-5">
+              
+              <h5 class="h4 mb-2"> Powerful Secondhand platform </h5>
+            </div>
+
+            {% thumbnail "https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/classifieds.png" "280x280" crop="center" upscale="true"  as im %}
+              <img src="{{ im.url }}" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+              style="height: 280px" alt="{% trans 'Stories Profile' %}">
+            {% endthumbnail %}
+        </div>
+
         <div class="col-md-6 text-center">
           <div class="mt-5">
-            <i class="fas fa-4x fa-gem text-primary mb-4"></i>
-            <h3 class="h4 mb-2"> Connect and Share </h3>
-          <p class="text-muted mb-0">Keep up with what is happening in the City.</p>
+            <h5 class="h4 mb-2"> Get valuable Posts & public chats.  </h5>
           </div>
+
+          {% thumbnail "https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/stories.png" "280x280" crop="center" upscale="true"  as im %}
+            <img src="{{ im.url }}" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+            style="height: 280px" alt="{% trans 'Stories Profile' %}">
+          {% endthumbnail %}
         </div>
-        <div class="col-md-6 text-center">
-          <div class="mt-5">
-            <i class="fas fa-4x fa-laptop-code text-primary mb-4"></i>
-            <h3 class="h4 mb-2"> Apprise and Broaden </h3>
-            <p class="text-muted mb-0"> Live beyond boundaries.</p>
-          </div>
+    
+        <div class="col-md-12 text-center mb-5 mt-5" >
+            <h5 class="h4 mb-2"> And much more... </h5>    
+          <a class="btn btn-cyan btn-xl js-scroll-trigger text-dark mt-4 "  href="{% url 'users:signup' %}">{% trans 'Sign up now' %} </a>     
         </div>
-  </section>
+  </div>
+
+    
+        
+  </div>
+
 
   <!-- Call to Action Section -->
   <section class="page-section bg-dark text-white">
     <div class="container text-center">
       <h6 class="mb-4 text-secondary"> Obrisk is a location-based platform where you will find Classifieds, events, jobs, and many more posts based on your location. It is very easy and convenient to use. </h6>
       
+      <p class=" text-secondary" >  You can view the blog posts and Q&A platform without signing up. </p>
+      <br> <br>
+      <a class="btn btn-cyan text-faded text-dark mb-5" href="{% url 'posts:list' %}">
+      {% trans 'Blog Posts' %}  </a> <span style="padding: 5px"> </span>
+      <a class="btn btn-cyan text-faded text-dark mb-5" href="{% url 'qa:index_all' %}">
+      {% trans 'Q&A Forum' %} </a>
+         
     </div>
   </section>
 
