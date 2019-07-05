@@ -194,6 +194,8 @@ $.ajaxSetup({
 var verify_counter = 0;
 var code_counter = 0;
 
+var phone_no;
+
 $(function () {
 	$("#send-code").click(function (event) {
 
@@ -299,11 +301,11 @@ $(function () {
 					} else {
 						// $('#send-code').removeAttr("disabled");
 						$("#results").empty().append("<p> You have successfully verified your phone number! <p>");
-						$("input[name='phone_number']").val("+86" + $("input[name='phone_number']").val());
-
 						$("input[name='verified_no']").val("YES");
+
 						//I should hide the phone number label that says don't enter country code
-						
+						$("#id_phone_number").val("+86" + $("#id_phone_number").val());
+
 						$("#code-notice").empty();
 
 						$("#code").hide();
@@ -325,15 +327,15 @@ $(function () {
 			event.preventDefault();
 			bootbox.alert("Please verify your phone number by verification code, before signing up!");
 		}
-		if (!$("select[name='city']").val() || !$("select[name='province']")) {
+		else if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();
 			bootbox.alert("Please enter your address!");
 		}
-		if (!$("input[name='username']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
+		else if (!$("input[name='username']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
 			event.preventDefault();
 			bootbox.alert("Please fill in all of the info. Also verify your phone number!");
 		}
-		if ($("input[name='password1']").val() != $("input[name='password2']").val()) {
+		else if ($("input[name='password1']").val() != $("input[name='password2']").val()) {
 			event.preventDefault();
 			bootbox.alert("Your password's inputs don't match!");
 		} else {
