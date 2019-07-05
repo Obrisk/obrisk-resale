@@ -161,14 +161,14 @@ def make_friends(request):
         f_request.accept()
         return redirect('messager:contacts_list')
 
-        if AlreadyExistsError:
-            return redirect('messager:conversation_detail', to_user)
+    if AlreadyExistsError:
+        return redirect('messager:conversation_detail', to_user)
 
-        elif AlreadyFriendsError:
-            return redirect('messager:conversation_detail', to_user)
+    elif AlreadyFriendsError:
+        return redirect('messager:conversation_detail', to_user)
 
-        else:
-            return redirect('messager:conversation_detail', to_user)
+    else:
+        return redirect('messager:conversation_detail', to_user)
 
 
 
