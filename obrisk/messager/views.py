@@ -150,7 +150,7 @@ def receive_message(request):
 @require_http_methods(["POST"])
 def make_friends(request):
     sender = request.user
-    recipient_username = request.POST.get('to') 
+    recipient = request.POST.get('to')
 
     from_user = get_user_model().objects.get(username=sender.username)
     to_user = get_user_model().objects.get(username=recipient.username)
@@ -162,34 +162,35 @@ def make_friends(request):
         return redirect('messager:contacts_list')
 
         if AlreadyExistsError:
-            return redirect('messager:conversation_detail', to_username)
+            return redirect('messager:conversation_detail', to_user)
 
         elif AlreadyFriendsError:
-            return redirect('messager:conversation_detail', to_username)
+            return redirect('messager:conversation_detail', to_user)
 
         else:
-            return redirect('messager:conversation_detail', to_username)
+            return redirect('messager:conversation_detail', to_user)
 
 
 
 # @login_required
-# @ajax_required
-# @require_http_methods(["POST"])  
-# def make_frends(request):
+# @require_http_methods(["POST"])
+# def make_friends(request):
+#     sender = request.user
+#     recipient = request.POST.get('to')
 #     msgs = Message.objects.all()
 #     from_user = msgs.filter(username=sender.username)
 #     to_user = msgs.filter(username=recipient)
 
-#      if Friend.objects.are_friends(request.user, to_user) == False:
-#             f_request = Friend.objects.add_friend(from_user, to_user)
-#             f_request.accept()
-#             return redirect('messager:contacts_list')
+#     if Friend.objects.are_friends(request.user, to_user) == False:
+#         f_request = Friend.objects.add_friend(from_user, to_user)
+#         f_request.accept()
+#         return redirect('messager:contacts_list')
 
-#         except AlreadyExistsError:
-#             return redirect('messager:conversation_detail', to_username)
+#     if AlreadyExistsError:
+#         return redirect('messager:conversation_detail', to_user)
 
-#         except AlreadyFriendsError:
-#             return redirect('messager:conversation_detail', to_username)
+#     elif AlreadyFriendsError:
+#         return redirect('messager:conversation_detail', to_user)
 
-#         else:
-#             return redirect('messager:contact_list', to_username)
+#     else:
+#         return redirect('messager:contact_list', to_user)
