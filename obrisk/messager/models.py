@@ -40,14 +40,14 @@ class MessageQuerySet(models.query.QuerySet):
             qs_sent = self.filter(sender=recipient)
             qs_recieved = self.filter(recipient=recipient)
             queryset = qs_sent.union(qs_recieved).order_by('-timestamp')
-            
+
             #Search for conversations that user was involved
             for qs in queryset:
                 if qs.sender == recipient:
                     if qs.recipient not in user_list:
                         msgs_list.append(qs)
                         user_list.append(qs.recipient)
-                        
+
                 elif qs.sender not in user_list:
                     msgs_list.append(qs)
                     user_list.append(qs.sender)
@@ -102,7 +102,7 @@ class Message(models.Model):
             message=message
         )
         channel_layer = get_channel_layer()
-        
+
         msg_sender = str(sender)
         msg_recip = str(recipient)
         msg = str(new_message.uuid_id)

@@ -146,51 +146,37 @@ def receive_message(request):
                   'messager/single_message.html', {'message': message})
 
 
-@login_required
-@require_http_methods(["POST"])
-def make_friends(request):
-    sender = request.user
-    recipient = request.POST.get('to')
-
-    from_user = get_user_model().objects.get(username=sender.username)
-    to_user = get_user_model().objects.get(username=recipient.username)
-
-
-    if Friend.objects.are_friends(request.user, to_user) == False:
-        f_request = Friend.objects.add_friend(from_user, to_user)
-        f_request.accept()
-        return redirect('messager:contacts_list')
-
-    if AlreadyExistsError:
-        return redirect('messager:conversation_detail', to_user)
-
-    elif AlreadyFriendsError:
-        return redirect('messager:conversation_detail', to_user)
-
-    else:
-        return redirect('messager:conversation_detail', to_user)
-
 
 
 # @login_required
-# @require_http_methods(["POST"])
+# @require_http_methods(["GET"])
+
 # def make_friends(request):
-#     sender = request.user
-#     recipient = request.POST.get('to')
-#     msgs = Message.objects.all()
-#     from_user = msgs.filter(username=sender.username)
-#     to_user = msgs.filter(username=recipient)
 
-#     if Friend.objects.are_friends(request.user, to_user) == False:
-#         f_request = Friend.objects.add_friend(from_user, to_user)
-#         f_request.accept()
-#         return redirect('messager:contacts_list')
+#     message = Message.objects.all()
+#     to_user = message.recipient
+#     for sender in message:
+#         from_user = message.sender
+#         to_user = message.recipient
+#         if Friend.objects.are_friends(request.user, to_user) == False:
+#             f_request = Friend.objects.add_friend(from_user, to_user)
+#             f_request.accept()
+#             return redirect('messager:contacts_list')
 
-#     if AlreadyExistsError:
-#         return redirect('messager:conversation_detail', to_user)
+#         if AlreadyExistsError:
+#             return redirect('messager:conversation_detail', to_user)
 
-#     elif AlreadyFriendsError:
-#         return redirect('messager:conversation_detail', to_user)
+@login_required
+@require_http_methods(["GET"])
+def make_friends(request):
+    messages = Message.objects.all()
+    for message in messages:
+        from_user = message.sender
+        to_user = message.recipient
+        if Friend.objects.are_friends(from_user, to_user) == False:
+            f_request = Friend.objects.add_friend(from_user, to_user)
+            f_request.accept()
+            return redirect('messager:contacts_list')
 
-#     else:
-#         return redirect('messager:contact_list', to_user)
+        if AlreadyExistsError:
+            return redirect('messager:conversation_detail', to_user)
