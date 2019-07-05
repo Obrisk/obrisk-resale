@@ -5,7 +5,6 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from django.shortcuts import redirect
-
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
 from obrisk.classifieds import ststoken as images_views
@@ -22,6 +21,12 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
     url(r'^contacts/$',
         TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
+
+    #friendship
+    url(r'^friendship/', include('friendship.urls')),
+
+    url(r'^friendship/', include(('friendship.urls', 'friendship'), namespace='friendship')),
+
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),

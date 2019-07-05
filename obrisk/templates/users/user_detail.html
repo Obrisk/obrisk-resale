@@ -9,7 +9,17 @@
 {% endblock head %}
 
 {% block content %}
+<div>
+  <!-- changed the user_action html by deleting the following option in the user user_action.html in the friendship app -->
+  {% if  request.user == user %}
+  <a class="btn btn-dark" href="{% url 'friendship:friendship_view_users' %}">{% trans '👬 ➕ 👬' %}</a>
+  <a class="btn btn-dark" href="{% url 'friendship:friendship_request_list' %}">{% trans '🤔friend request🌍' %}</a>
+  <a class="btn btn-dark" href="{% url 'friendship:friendship_view_friends' user %}">{% trans 'my friends🤝' %}</a>
 
+  {% else %}
+  <a class="btn btn-dark" href="{% url 'friendship:friendship_add_friend' user.username %}">{% trans '👬👭👬' %}</a>
+  {% endif %}
+</div>
 <div class="col-md-8 m-auto">
   <div class="media profile-header d-flex flex-column flex-md-row">
     {% thumbnail object.picture "150x150" crop="center" upscale="true"  as im %}

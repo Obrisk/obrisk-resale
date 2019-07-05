@@ -93,6 +93,7 @@ THIRD_PARTY_APPS = [
     'markdownx',
     'taggit',
     'star_ratings',
+    'friendship',
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
