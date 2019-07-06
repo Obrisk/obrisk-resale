@@ -198,75 +198,84 @@ var phone_no;
 
 $(function () {
 	$("#send-code").click(function (event) {
-
-		if ((isNaN($("#id_phone_number").val())) || ($("#id_phone_number").val().length != 11) ||
-			($("#id_phone_number").val().charAt(0) != 1)) {
+		if (!$("#id_phone_number").val()) {
 			event.preventDefault();
-			bootbox.alert("The phone number you entered is not correct. Don't include the country code!");
-		} else {
-			//If button is disabled and the verification code is not sent, user can't do anything.
+			bootbox.alert("It looks like you didn't enter the phone number. Please enter a valid phone number!");
+		} 
+		else {
+			
+			var num = parseInt($("#id_phone_number").val());
+			var str = num.toString() ;
 
-			$.ajax({
-				url: '/users/verification-code/',
-				data: {
-					phone_no: $('#id_phone_number').val()
-				},
-				cache: false,
-				type: 'GET',
-				success: function (data) {
-					if (data.success == false)
-					{
-						$("#code-notice").empty().append("<p>" + data.error_message + "</p>");
-						if (data.messageId != null) {
-							console.log(data.messageId);
-						}
-						if (data.requestId != null) {
-							console.log(data.requestId);
-						}
-						if (data.returnedCode != null) {
-							console.log(data.returnedCode);
-						}
-						if (data.retries != null) {
-							console.log(data.retries);
-						}
-						//$("#send-code").attr("disabled", false);
-					} else {
-						timeout = 60;
-						$("#send-code").attr("disabled", true);
-						$("#phone_label").hide();
-						$("#code").show();
-						$("#code-notice").empty().append("<p>" + data.message + "<p>");
+		
+			if (isNaN(num) || (str.length != 11) || (str.charAt(0) != 1)) {
+				event.preventDefault();
+				bootbox.alert("The phone number you entered is not correct. Please don't include the country code or spaces or any character!");
+			} else {
+				//If button is disabled and the verification code is not sent, user can't do anything.
 
-						function updateSec() {
-							timeout--;
-							if (timeout > 0) {
-								$("#send-code").text(timeout + " S")
-							} else {
-								$("#send-code").text("Get Code")
-								$("#send-code").attr("disabled", false);
+				$.ajax({
+					url: '/users/verification-code/',
+					data: {
+						phone_no: num
+					},
+					cache: false,
+					type: 'GET',
+					success: function (data) {
+						if (data.success == false)
+						{
+							$("#code-notice").empty().append("<p>" + data.error_message + "</p>");
+							if (data.messageId != null) {
+								console.log(data.messageId);
+							}
+							if (data.requestId != null) {
+								console.log(data.requestId);
+							}
+							if (data.returnedCode != null) {
+								console.log(data.returnedCode);
+							}
+							if (data.retries != null) {
+								console.log(data.retries);
+							}
+							//$("#send-code").attr("disabled", false);
+						} else {
+							timeout = 60;
+							$("#send-code").attr("disabled", true);
+							$("#phone_label").hide();
+							$("#code").show();
+							$("#code-notice").empty().append("<p>" + data.message + "<p>");
+
+							function updateSec() {
+								timeout--;
+								if (timeout > 0) {
+									$("#send-code").text(timeout + " S")
+								} else {
+									$("#send-code").text("Get Code")
+									$("#send-code").attr("disabled", false);
+								}
+							}
+							// repeat with the interval of 1 seconds
+							let timerId = setInterval(() => updateSec(), 1000);
+
+							// after 60 seconds stop
+							setTimeout(() => { clearInterval(timerId); }, 61000);
+
+
+							verify_counter = verify_counter + 1;
+
+							if(verify_counter >= 5){
+								$("#send-code").attr("disabled", true);
+								bootbox.alert("Maximum number of sending code trials has reached, we can't send anymore!");
+
 							}
 						}
-						// repeat with the interval of 1 seconds
-						let timerId = setInterval(() => updateSec(), 1000);
-
-						// after 60 seconds stop
-						setTimeout(() => { clearInterval(timerId); }, 61000);
-
-
-						verify_counter = verify_counter + 1;
-
-						if(verify_counter >= 5){
-							$("#send-code").attr("disabled", true);
-							bootbox.alert("Maximum number of sending code trials has reached, we can't send anymore!");
-
-						}
+					},
+					error: function (err) {
+						console.log(err);
 					}
-				},
-				error: function (err) {
-					console.log(err);
-				}
-			});
-			return false;
+				});
+				return false;
+			}
 		}
 
 	});
