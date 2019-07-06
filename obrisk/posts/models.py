@@ -52,17 +52,10 @@ class Post(models.Model):
         (DRAFT, _("Draft")),
         (PUBLISHED, _("Published")),
     )
-    
-    ARTICLE = "A"
-    EVENT = "E"
-    JOBS = "J"
-    CATEGORY = (
-        (ARTICLE, _("Article")),
-        (EVENT, _("Event")),
-        (JOBS, _("Job")),
-    )
 
-    user = models.ForeignKey(
+
+
+    user = models.ForeignKey( #select_related("user")
         settings.AUTH_USER_MODEL, null=True, related_name="author",
         on_delete=models.SET_NULL)
     image = models.ImageField(
@@ -72,7 +65,6 @@ class Post(models.Model):
     slug = models.SlugField(max_length=150, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
     content = MarkdownxField()
-    category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
     date = models.DateField(default=datetime.date.today) #Just for slug.
@@ -90,7 +82,7 @@ class Post(models.Model):
         if not self.slug:
             self.slug = first_slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
                                 to_lower=True, max_length=150)
-            
+
             for x in itertools.count(1):
                 if not Post.objects.filter(slug=self.slug).exists():
                     break
@@ -102,9 +94,9 @@ class Post(models.Model):
         return markdownify(self.content)
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post,
+    post = models.ForeignKey(Post,#select_related("post")
         on_delete=models.CASCADE, related_name='comments')
-    user =models.ForeignKey(
+    user =models.ForeignKey(#select_related("user")
         settings.AUTH_USER_MODEL, null=True, related_name="commentor",
         on_delete=models.SET_NULL)
     body = models.TextField(max_length=280)

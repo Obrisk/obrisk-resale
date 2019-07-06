@@ -8,7 +8,7 @@ from obrisk.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post, Comment
 from obrisk.posts.forms import PostForm, CommentForm
 #For comments
-from django.http import JsonResponse 
+from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required

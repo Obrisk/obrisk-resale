@@ -176,7 +176,8 @@ def make_friends(request):
         if Friend.objects.are_friends(from_user, to_user) == False:
             f_request = Friend.objects.add_friend(from_user, to_user)
             f_request.accept()
-            return redirect('messager:contacts_list')
 
-        if AlreadyExistsError:
-            return redirect('messager:conversation_detail', to_user)
+        elif AlreadyExistsError:
+            continue
+
+    return redirect('messager:contacts_list')
