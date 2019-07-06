@@ -70,6 +70,8 @@ INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
+#solving thumbnails
+
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
 
