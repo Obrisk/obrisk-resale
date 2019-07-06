@@ -233,6 +233,7 @@ $(function () {
 					} else {
 						timeout = 60;
 						$("#send-code").attr("disabled", true);
+						$("#phone_label").hide();
 						$("#code").show();
 						$("#code-notice").empty().append("<p>" + data.message + "<p>");
 
@@ -305,6 +306,8 @@ $(function () {
 
 						//I should hide the phone number label that says don't enter country code
 						$("#id_phone_number").val("+86" + $("#id_phone_number").val());
+
+						$("#phone_label").hide();
 
 						$("#code-notice").empty();
 

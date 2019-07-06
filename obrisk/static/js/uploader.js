@@ -177,8 +177,6 @@ OssUpload.prototype = {
 
                             }
 
-
-
                             images += ',' + res.name;
                         });
                     return results;

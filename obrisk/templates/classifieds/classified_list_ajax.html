@@ -52,9 +52,9 @@
 
 {% empty %}
 <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
-  {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
-  <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
-  {% trans 'Or check what we have found from other places '%} </h6>
+  {% trans 'you are welcome😃. Mmh🤔! It looks like there are no classifieds items near you😥.' %}
+  <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first one to post😃' %}!</a>
+  {% trans 'Or you can navigate to other sections of the website by the menu on the top⬆️, or check what we have found from other places😊. '%} </h6>
 <br />
 {% endfor %}
 
