@@ -66,7 +66,6 @@ class PhoneSignupForm(UserCreationForm):
         }
         help_texts = {
             'username': "At least 3 characters, no special characters",
-            'phone_number': "Don't include country code!",
         } 
         fields = ( 'username', 'city', 'province_region', 'phone_number', 'password1', 'password2')
 
