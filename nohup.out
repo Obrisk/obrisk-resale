@@ -1,0 +1,10 @@
+/home/obrisk/venv_obrisk/lib/python3.6/site-packages/daphne/server.py:13: UserWarning: Something has already installed a non-asyncio Twisted reactor. Attempting to uninstall it; you can fix this warning by importing daphne.server early in your codebase or finding the package that imports Twisted and importing it later on.
+  UserWarning,
+/home/obrisk/venv_obrisk/lib/python3.6/site-packages/psycopg2/__init__.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use "pip install psycopg2-binary" instead. For details see: <http://initd.org/psycopg/docs/install.html#binary-install-from-pypi>.
+  """)
+DEBUG 2019-05-29 23:48:03,622 base 17657 139924398966592 Configuring Raven for host: https://sentry.io
+/home/obrisk/venv_obrisk/lib/python3.6/site-packages/daphne/server.py:13: UserWarning: Something has already installed a non-asyncio Twisted reactor. Attempting to uninstall it; you can fix this warning by importing daphne.server early in your codebase or finding the package that imports Twisted and importing it later on.
+  UserWarning,
+/home/obrisk/venv_obrisk/lib/python3.6/site-packages/psycopg2/__init__.py:144: UserWarning: The psycopg2 wheel package will be renamed from release 2.8; in order to keep installing from binary please use "pip install psycopg2-binary" instead. For details see: <http://initd.org/psycopg/docs/install.html#binary-install-from-pypi>.
+  """)
+DEBUG 2019-05-29 23:48:04,560 base 17660 140018040436544 Configuring Raven for host: https://sentry.io

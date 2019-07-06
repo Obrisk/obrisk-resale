@@ -70,13 +70,6 @@ INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
-#Thumbnails 
-#https://sorl-thumbnail.readthedocs.io/en/latest/reference/settings.html
-THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.redis_kvstore.KVStore'
-THUMBNAIL_REDIS_DB = '3'
-THUMBNAIL_URL_TIMEOUT=5
-#https://github.com/SmileyChris/easy-thumbnails/issues/283
-THUMBNAIL_DEFAULT_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
