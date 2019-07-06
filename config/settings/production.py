@@ -204,11 +204,6 @@ LOGGING = {
             'handlers': ['console'],
             'propagate': False,
         },
-        'sorl.thumbnail': {
-                'handlers': ['stream','console','sentry' ],
-                'level': 'DEBUG',
-                'propagate': True,
-        },
         'django.security.DisallowedHost': {
             'level': 'ERROR',
             'handlers': ['console', 'sentry'],
