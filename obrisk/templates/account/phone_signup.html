@@ -11,16 +11,16 @@
 {% block content %}
 <script>
 	function disableSubmit() {
-		document.getElementById("submit").disabled = true;
+		document.getElementById("phone-signup-submit").disabled = true;
 	}
 
 	function activateButton(element) {
 
 		if (element.checked) {
-			document.getElementById("submit").disabled = false;
+			document.getElementById("phone-signup-submit").disabled = false;
 		}
 		else {
-			document.getElementById("submit").disabled = true;
+			document.getElementById("phone-signup-submit").disabled = true;
 		}
 
 	}
@@ -111,7 +111,7 @@
 					<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
 				{% endif %}
 				<div class="form-group container-login100-form-btn justify-content-center mt-4">
-					<button disabled type="submit" id="submit" class="login100-form-btn">{% trans 'Sign Up' %}
+					<button disabled type="submit" id="phone-signup-submit" class="login100-form-btn">{% trans 'Sign Up' %}
 						&raquo;</button>
 				</div>
 			</form>

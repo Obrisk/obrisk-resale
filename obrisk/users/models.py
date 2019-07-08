@@ -13,8 +13,8 @@ from obrisk.notifications.models import Notification, notification_handler
 class User(AbstractUser):
     # First Name and Last Name do not cover name patterns around the globe.
     name = models.CharField(_("Full name"), blank=True, max_length=255)
-    picture = models.ImageField(
-        _('Profile picture'), upload_to='profile_pics/', null=True, blank=True)
+    picture = models.CharField(max_length=150, null=True, blank=True)
+    thumbnail = models.CharField(max_length=150, null=True, blank=True)
     job_title = models.CharField(
         _('Job title'), max_length=50, null=True, blank=True)
     personal_url = models.URLField(

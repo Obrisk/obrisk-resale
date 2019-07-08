@@ -4,6 +4,7 @@ from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
+from django.shortcuts import redirect
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post, Comment
 from obrisk.posts.forms import PostForm, CommentForm
@@ -107,8 +108,8 @@ class CreatePostView(LoginRequiredMixin, CreateView):
                 #I am not returning form errors because this is our problem and not user's
                 return redirect ('posts:list')
 
-        #When the for-loop has ended return the results.        
-        return super(CreatePostView, self).form_valid(form)
+            #When the for-loop has ended return the results.        
+            return super(CreatePostView, self).form_valid(form)
 
 
 

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% load static i18n %}
-{% load crispy_forms_tags thumbnail humanize %}
+{% load crispy_forms_tags humanize %}
 
 {% block title %}{{ post.title|title }}{% endblock %}
 
@@ -29,13 +29,13 @@
 
           <div class="meta-right d-flex flex-column align-items-center">
             <a href="{% url 'users:detail' post.user.get_profile_name %}">
-              {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
-              <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
-                class="user-image">
-              {% empty %}
-              <img src="{% static 'img/user.png' %}" class="pull-left" height="35px"
-                alt="{% trans 'No Profile Picture' %}" />
-              {% endthumbnail %}
+              {% if post.user.thumbnail %}
+                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
+                  style="width:30px;height:30px;border-radius: 50%;"
+                  class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              {% else %}
+                  <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+              {% endif %}
             </a>
             <div class="d-flex flex-column align-items-center">
               <a href="{% url 'users:detail' post.user.get_profile_name %}"><strong id="classified-user">
@@ -48,12 +48,18 @@
 
       </div>
       <!-- Featured Image -->
-      {% thumbnail post.image "900x300" as im %}
+      {% if post.image %}
       <div class="featured-img" style="background-size:cover">
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="{% trans 'Featured Image' %}"
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="900" height="300" alt="{% trans 'Featured Image' %}"
           class="card-img-top">
       </div>
-      {% endthumbnail %}
+      {% else %}
+      <div class="featured-img" style="background-size:cover">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default" width="900" height="300" alt="{% trans 'Featured Image' %}"
+          class="card-img-top">
+      </div>
+
+      {% endif %}
       <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
       <hr>
       <!-- Post Content -->
@@ -85,12 +91,13 @@
       <div class="comment-wrapper d-flex align-items-center p-2 m-4">
         <div class="autor-avatar">
           <a href="{% url 'users:detail' post.user.username %}">
-            {% thumbnail comment.user.picture "30x30" crop="center" upscale="true" as im %}
-            <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
-            {% empty %}
-            <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="30px"
-              alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}</a>
+            {% if comment.user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{comment.user.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+                <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+            {% endif %} 
         </div>
         <div class="comment-body">
           <div class="comment-author">

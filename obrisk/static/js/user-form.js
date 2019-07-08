@@ -334,7 +334,7 @@ $(function () {
 	});
 
 
-	$("#submit").click(function (event) {
+	$("#phone-signup-submit").click(function (event) {
 		if (!$("input[name='verified_no']").val()) {
 			event.preventDefault();
 			bootbox.alert("Please verify your phone number by verification code, before signing up!");
@@ -358,33 +358,31 @@ $(function () {
 		}
 	});
 
-	$(".update").click(function () {
-		$("input[name='city']").val($("select[name='city']").val());
-		$("input[name='province_region']").val($("select[name='province']").val());
-		$("#update").submit();
+	$("#email-signup-submit").click(function (event) {
+
+		if (!$("select[name='city']").val() || !$("select[name='province']")) {
+			event.preventDefault();
+			bootbox.alert("Please enter your address!");
+		}
+		else if (!$("input[name='username']").val() || !$("input[name='email']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
+			event.preventDefault();
+			bootbox.alert("Please fill in all of the infomation");
+		}
+		else if ($("input[name='password1']").val() != $("input[name='password2']").val()) {
+			event.preventDefault();
+			bootbox.alert("Your password's inputs don't match!");
+		} else {
+			$("#id_phone_number").attr("disabled", false);
+			$("input[name='city']").val($("select[name='city']").val());
+			$("input[name='province_region']").val($("select[name='province']").val());
+			$("#signup_form").submit();
+		}
 	});
 });
 
-/**
- * Allow users preview upload profile picture
- */
-
-function uploadPreview(input) {
-	if (input.files && input.files[0]) {
-		var reader = new FileReader();
-
-		reader.onload = function (e) {
-			$('#avatar')
-				.attr('src', e.target.result);
-		};
-
-		reader.readAsDataURL(input.files[0]);
-	}
-}
-
 
 /**
- * reponsible for creating a toast message when user update thier profiles
+ * reponsible for creating a toast message when user update their profiles
  */
 "use strict";
 var iqwerty = iqwerty || {};

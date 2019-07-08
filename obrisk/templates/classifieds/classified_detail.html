@@ -36,13 +36,13 @@
 
             <div class="meta-right d-flex">
               <a href="{% url 'users:detail' classified.user.username %}">
-                {% thumbnail classified.user.picture "30x30" crop="center" upscale="true" as im %}
-                <img src="{{ im.url }}" class="pull-left mr-4" style="border-radius: 50%;"
-                  alt="{% trans 'User Image' %}" class="user-image">
-                {% empty %}
-                <img src="{% static 'img/user.png' %}" class="pull-left mr-4" height="35px"
-                  alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
+              {% if classified.user.thumbnail %}
+                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}" alt="Picture Profile"
+                    style="width:35px;height:35px;border-radius: 50%;"
+                    class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              {% else %}
+                    <img class="pull-right" src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
+              {% endif %}
               </a>
               <!-- Location -->
               <div class="meta-left d-flex flex-column">

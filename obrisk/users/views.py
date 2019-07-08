@@ -13,9 +13,17 @@ from django.contrib.auth import login, authenticate
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator    
+from django.shortcuts import redirect
+from django.contrib import messages
+
+import os
+import base64
+import datetime
+import oss2
 import ast
 import boto3
 
+from obrisk.helpers import bucket, bucket_name
 from .forms import UserForm, PhoneSignupForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
@@ -85,6 +93,66 @@ class UserRedirectView(LoginRequiredMixin, RedirectView):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserForm
     model = User
+
+    def __init__(self, **kwargs):
+        self.object = None
+        super().__init__(**kwargs)
+        
+
+    def form_valid(self, form):
+        picture = form.cleaned_data['oss_image']
+        print(picture)
+        
+
+        if (not picture):
+            messages.error(self.request, "Sorry, the profile picture was not uploaded successfully. \
+                Please add the profile picture again and submit the form!")
+            return self.form_invalid(form)
+        
+        else:
+            form.instance.user = self.request.user
+            profile = form.save(commit=False)
+            profile.picture = picture
+            profile.user = self.request.user
+
+            d = str(datetime.datetime.now())
+            thumb_name = "profile-pics/" + str(profile.user) + "/thumbnails/" + d 
+            style = 'image/crop,r_100'
+            
+            try:
+                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(thumb_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                res = bucket.process_object(picture, process)
+                print (res)
+                profile.thumbnail = thumb_name
+
+                profile.save()
+
+            except oss2.exceptions.ServerError as e:
+                profile.save()
+                messages.error(self.request, "Oops we are very sorry. \
+                Your profile picture was not uploaded successfully. Please ensure that, \
+                your internet connection is stable and update your profile picture again!. "
+                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                # return self.form_invalid(form)
+                #I am not returning form errors because this is our problem and not user's
+                return redirect ('users:detail', username=self.request.user.username)
+            
+            except:
+                profile.save()
+                messages.error(self.request, "Oops we are sorry! Your image \
+                    was not uploaded successfully. Please select your item, then edit, \
+                    and try again to upload the images.")
+                #return self.form_invalid(form)
+                #I am not returning form errors because this is our problem and not user's
+                return redirect ('users:detail', username=self.request.user.username)
+
+            #When the for-loop has ended return the results.        
+            return super(UserUpdateView, self).form_valid(form)
+
+
 
     # send the user back to their own page after a successful update
     def get_success_url(self):

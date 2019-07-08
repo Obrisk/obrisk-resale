@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% load thumbnail %}
 {% block title %}{% trans 'Contacts' %}{% endblock %}
 
 {% block head %}
@@ -16,21 +15,22 @@
 
   <div class="col-md-8 col-10 m-auto list-group users-list " style="overflow: scroll!important">
     {% for user, msg in zip_list %}
-    <a href="{% url 'messager:conversation_detail' user  %}" class="card p-4 mb-3 d-flex flex-row ">
-      {% thumbnail user.picture "40x40" crop="center" upscale="true"  as im %}
-      <img src="{{ im.url }}" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
-        style="height: 40px" alt="{% trans 'Picture Profile' %}">
+        <a href="{% url 'messager:conversation_detail' user  %}" class="card p-4 mb-3 d-flex flex-row ">
+            {% if user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.thumbnail}}" alt="Picture Profile"
+                style="width:40px;height:40px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+                <img class="pull-right" src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
+            {% endif %}
+      
+          <strong> {{ user.get_profile_name|title }} </strong>
+          <span id="last-msg"> {{ msg.message|truncatechars:50 }} </span>
+          <span id="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </span>
 
-      {% empty %}
-      <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-      {% endthumbnail %}
-      <strong> {{ user.get_profile_name|title }} </strong>
-      <span id="last-msg"> {{ msg.message|truncatechars:50 }} </span>
-      <span id="msg-timestamp"> {{ msg.timestamp|date:'N d G:i' }} </span>
-
-      {%  if msg.unread and request.user == msg.recipient %}
-      <span class="pull-right ml-2" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-      {% endif %}
+          {%  if msg.unread and request.user == msg.recipient %}
+          <span class="pull-right ml-2" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+          {% endif %}
     </a>
 
     {% empty %}
@@ -48,12 +48,13 @@
 
     <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
       class="list-group-item list-group-item-action ">
-      {% thumbnail super_users.first.picture "40x40" crop="center" upscale="true"  as im %}
-      <img src="{{ im.url }}" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
-        alt="{% trans 'Picture Profile' %}">
-      {% empty %}
-      <img src="{% static 'img/user.png' %}" height="40px" alt="{% trans 'No Profile Picture' %}" />
-      {% endthumbnail %}
+      {% if super_users.first.thumbnail %}
+          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{super_users.first.thumbnail}}" alt="Picture Profile"
+          style="width:40px;height:40px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+      {% else %}
+          <img class="pull-right" src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
+      {% endif %}
       <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>
   </div>
   {% endfor %}

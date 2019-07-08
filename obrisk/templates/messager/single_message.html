@@ -1,6 +1,5 @@
 {% load static i18n humanize %}
 
-{% load thumbnail %}
 
 {% if request.user == message.sender %}
 <div class="user">
@@ -11,12 +10,13 @@
     </div>
 
     <figure class="avatar-user">
-        {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
-        <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-        {% empty %}
-        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px"
-            alt="{% trans 'No Profile Picture' %}" />
-        {% endthumbnail %}
+        {% if message.sender.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+                <img class="pull-right" src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" alt="No Profile Picture" />
+            {% endif %}
     </figure>
 
 </div>
@@ -24,12 +24,13 @@
 {% else %}
 <div class="sender">
     <figure class="avatar-sender">
-        {% thumbnail message.sender.picture "30x30" crop="center" upscale="true"  as im %}
-        <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-        {% empty %}
-        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px"
-            alt="{% trans 'No Profile Picture' %}" />
-        {% endthumbnail %}
+        {% if message.sender.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+                <img class="pull-right" src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" alt="No Profile Picture" />
+            {% endif %}
     </figure>
     <div class="message-container">
         <div class="timestamp d-flex justify-content-start ml-4"> {{ message.timestamp|date:'N d G:i' }} </div>

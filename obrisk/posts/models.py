@@ -65,8 +65,8 @@ class Post(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="author",
         on_delete=models.SET_NULL)
-    image = models.ImageField(
-        _('Featured image'), upload_to='posts_pictures/%Y/%m/%d/')
+    image = models.CharField(max_length=150, null=True, blank=True)
+    img_small = models.CharField(max_length=150, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=80, null=False, unique=True)
     slug = models.SlugField(max_length=150, null=True, blank=True)
