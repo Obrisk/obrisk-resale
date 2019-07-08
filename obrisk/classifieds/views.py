@@ -20,7 +20,7 @@ from taggit.models import Tag
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm
-from obrisk.classifieds import ststoken
+from obrisk.helpers import bucket, bucket_name
 
 # For images
 import json
@@ -129,7 +129,6 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         classified.user = self.request.user
         classified.save()
 
-        bucket = ststoken.bucket
         images_json = form.cleaned_data['images']
 
         # split one long string of images into a list of string each for one JSON obj
@@ -149,7 +148,7 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                           oss2.compat.to_string(base64.urlsafe_b64encode(
                                                               oss2.compat.to_bytes(thumb_name))),
-                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(ststoken.bucket_name))))
+                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
             bucket.process_object(str_result, process)
             img.image_thumb = thumb_name
 
@@ -202,11 +201,10 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 style = 'image/resize,m_fill,h_156,w_156'
                 
                 try:
-                    bucket = ststoken.bucket
                     process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                                 oss2.compat.to_string(base64.urlsafe_b64encode(
                                                                     oss2.compat.to_bytes(thumb_name))),
-                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(ststoken.bucket_name))))
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
                     bucket.process_object(str_result, process)
                     img.image_thumb = thumb_name
 
@@ -215,7 +213,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 except oss2.exceptions.ServerError as e:
                     img.save()
                     messages.error(self.request, "Oops we are very sorry. \
-                    Your images where not uploaded successfully. Please ensure that, \
+                    Your images were not uploaded successfully. Please ensure that, \
                     your internet connection is stable and edit your item to add images. "
                                 + 'status={0}, request_id={1}'.format(e.status, e.request_id))
                     # return self.form_invalid(form)
@@ -224,7 +222,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 except:
                     img.save()
                     messages.error(self.request, "Oops we are sorry! Your images \
-                        where not uploaded successfully. Please select your item, then edit, \
+                        were not uploaded successfully. Please select your item, then edit, \
                         and try again to upload the images.")
                     #return self.form_invalid(form)
                     return redirect ('classifieds:list')

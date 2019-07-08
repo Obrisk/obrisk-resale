@@ -8,12 +8,12 @@ from django.shortcuts import redirect
 
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
-from obrisk.classifieds import ststoken as images_views
+from obrisk.helpers import get_oss_auth
 
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
-    url(r'^get-oss-auth/$', images_views.get_oss_auth, name='get_oss_auth'),
+    url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth'),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name='about'),
     url(r'^terms-and-conditions/$',
