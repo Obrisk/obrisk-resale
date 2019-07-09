@@ -88,13 +88,24 @@ OssUpload.prototype = {
 
             const upload = async () => {
                 try {
-                    console.log("here")
                     const results = await client.multipartUpload(filename, file , {
                         progress: progress
                     }).then(function (res) {
                             uploader.uploadFinishedFilesNum++;
                             uploader.curFileSize += file.size;
+                            
+                            progressBarNum = (1).toFixed(2) * 100;
+                            progressBar = (1).toFixed(2) * 100 + '%';
 
+                            if (progressBarNum == 100) {
+                                $totalProgressbar.css('width', progressBar)
+                                .html('Upload complete. Save the changes at the bottom of the page!');
+                                $("#startUpload").hide();
+                            } else {
+                                $totalProgressbar.css('width', progressBar)
+                                    .html(progressBar);
+
+                            }
                             image = res.name;
                         });
                     return results;
@@ -198,8 +209,8 @@ function OssUpload() {
  */
 
 function genKey() {
-    return "profile-pics/" + user + '/' +
-        '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    return "profile-pics/" + user + '/pics/' 
+         + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0,
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);

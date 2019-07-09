@@ -101,31 +101,29 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         picture = form.cleaned_data['oss_image']
-        print(picture)
-        
 
-        if (not picture):
-            messages.error(self.request, "Sorry, the profile picture was not uploaded successfully. \
-                Please add the profile picture again and submit the form!")
-            return self.form_invalid(form)
-        
-        else:
-            form.instance.user = self.request.user
-            profile = form.save(commit=False)
+        form.instance.user = self.request.user
+        profile = form.save(commit=False)
+        profile.user = self.request.user
+
+        if not picture:
+            profile.save()
+            return super(UserUpdateView, self).form_valid(form)
+
+        else:    
             profile.picture = picture
-            profile.user = self.request.user
 
             d = str(datetime.datetime.now())
-            thumb_name = "profile-pics/" + str(profile.user) + "/thumbnails/" + d 
-            style = 'image/crop,r_100'
-            
+            thumb_name = "profile-pics/" + str(profile.user) + "/thumbnails/" + "thumb-" + d 
+            style = 'image/resize,m_fill,h_60,w_60'
             try:
+
                 process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(
                                                                 oss2.compat.to_bytes(thumb_name))),
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                res = bucket.process_object(picture, process)
-                print (res)
+                bucket.process_object(picture, process)
+
                 profile.thumbnail = thumb_name
 
                 profile.save()

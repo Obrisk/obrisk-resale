@@ -11,9 +11,9 @@
 {% block content %}
 
 <div class="col-md-8 m-auto">
-  <div class="media profile-header d-flex flex-column flex-md-row">
-    {% if object.thumbnail %}
-      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.thumbnail}}" alt="Picture Profile"
+  <div class="media user-profile profile-header d-flex flex-column flex-md-row">
+    {% if object.picture %}
+      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
       style="width:250px;height:250px;border-radius: 50%;"
       class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
     {% else %}

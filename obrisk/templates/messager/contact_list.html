@@ -21,7 +21,7 @@
                 style="width:40px;height:40px;border-radius: 50%;"
                 class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
             {% else %}
-                <img class="pull-right" src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
+                <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
             {% endif %}
       
           <strong> {{ user.get_profile_name|title }} </strong>
@@ -53,7 +53,7 @@
           style="width:40px;height:40px;border-radius: 50%;"
           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
       {% else %}
-          <img class="pull-right" src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
+          <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
       {% endif %}
       <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>
   </div>

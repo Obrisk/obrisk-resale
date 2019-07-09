@@ -76,8 +76,8 @@
                 <a href="{% url 'posts:post' post.slug %}"
                   style="color:black; text-decoration:none; background-color:none">
                   {% if post.image %}
-                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="700" height="300"
-                    alt="{% trans 'Featured Image' %}" class="card-img-top">
+                      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="700" height="300"
+                      alt="{% trans 'Featured Image' %}" class="card-img-top">
                   {% else %}
                     <div class="featured-img" style="background-size:cover">
                       <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default" width="700" height="300" alt="{% trans 'Featured Image' %}"
