@@ -114,7 +114,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
             profile.picture = picture
 
             d = str(datetime.datetime.now())
-            thumb_name = "profile-pics/" + str(profile.user) + "/thumbnails/" + "thumb-" + d 
+            thumb_name = "media/profile_pics/" + str(profile.user) + "/thumbnails/" + "thumb-" + d 
             style = 'image/resize,m_fill,h_60,w_60'
             try:
 
