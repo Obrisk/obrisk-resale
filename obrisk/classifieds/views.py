@@ -57,6 +57,7 @@ def classified_list(request, tag_slug=None):
     )
 
     popular_tags = Classified.objects.get_counted_tags()
+    print(popular_tags)
     other_classifieds = Classified.objects.none()
     official_ads = OfficialAd.objects.all() 
 

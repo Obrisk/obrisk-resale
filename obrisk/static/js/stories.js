@@ -85,10 +85,10 @@ $(function () {
             data: $("#replyStoriesForm").serialize(),
             type: 'POST',
             cache: false,
-            success: function (data) {
+            success: function () {
                 $("#replyInput").val("");
                 $("#storiesThreadModal").modal("hide");
-                location.reload();
+                $('.comment-count').html(parseInt($('.comment-count').html(), 10)+1);
             },
             error: function (data) {
                 bootbox.alert(data.responseText);
