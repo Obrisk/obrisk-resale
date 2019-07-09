@@ -57,7 +57,6 @@ def classified_list(request, tag_slug=None):
     )
 
     popular_tags = Classified.objects.get_counted_tags()
-    print(popular_tags)
     other_classifieds = Classified.objects.none()
     official_ads = OfficialAd.objects.all() 
 
@@ -104,8 +103,17 @@ def classified_list(request, tag_slug=None):
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
+
         tag = get_object_or_404(Tag, slug=tag_slug)
-        classifieds = Classified.objects.get_active().filter(tags__in=[tag])
+        classifieds = Classified.objects.get_active().filter(tags__in=[tag]).annotate (
+            image_thumb = Subquery (
+                ClassifiedImages.objects.filter(
+                    classified=OuterRef('pk'),
+                ).values(
+                    'image_thumb'
+                )[:1]
+            )
+        )
         other_classifieds = Classified.objects.none()
     
     if request.is_ajax():        
