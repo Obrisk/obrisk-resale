@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% load thumbnail %}
 {% block title %}{% trans 'Notifications' %}{% endblock %}
 
 {% block head %}
@@ -28,11 +27,15 @@
         <div class="media">
           <div class="media-left">
             <div class="media-object">
-              {% thumbnail notification.actor.picture "70x70" crop="center" upscale="true"  as im %}
-              <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}" id="pic">
-              {% empty %}
-              <img src="{% static 'img/user.png' %}" height="70px" alt="{% trans 'No Profile Picture' %}" />
-              {% endthumbnail %}
+            
+            {% if notification.actor.thumbnail %}
+                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{notification.actor.thumbnail}}" alt="Picture Profile"
+                  style="width:70px;height:70px;border-radius: 50%;"
+                  class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+                  <img src="{% static 'img/user.png' %}" class="pull-left" height="70px" alt="No Profile Picture" />
+            {% endif %}
+
             </div>
           </div>
           <div class="media-body">

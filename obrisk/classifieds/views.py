@@ -14,6 +14,7 @@ from django.http import HttpResponse
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
+from django.db.models import OuterRef, Subquery
 from slugify import slugify
 
 from taggit.models import Tag
@@ -45,9 +46,17 @@ from dal import autocomplete
 @login_required
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
-    classifieds_list = Classified.objects.get_active().filter(city=request.user.city)
+    classifieds_list = Classified.objects.get_active().filter(city=request.user.city).annotate (
+        image_thumb = Subquery (
+            ClassifiedImages.objects.filter(
+                classified=OuterRef('pk'),
+            ).values(
+                'image_thumb'
+            )[:1]
+        )
+    )
+
     popular_tags = Classified.objects.get_counted_tags()
-    images = ClassifiedImages.objects.all()
     other_classifieds = Classified.objects.none()
     official_ads = OfficialAd.objects.all() 
 
@@ -69,27 +78,43 @@ def classified_list(request, tag_slug=None):
     # When the last page user can see only fifty classifieds in other cities. To improve this near future.
     if page:
         if int(page) == paginator.num_pages:
-            other_classifieds = Classified.objects.exclude(city=request.user.city)[:30]
+            other_classifieds = Classified.objects.exclude(city=request.user.city).annotate (
+                image_thumb = Subquery (
+                    ClassifiedImages.objects.filter(
+                        classified=OuterRef('pk'),
+                    ).values(
+                        'image_thumb'
+                    )[:1]
+                )
+            )[:30]
     else:
         #If the page is the first one and it is the only one show other_classifieds
         if paginator.num_pages == 1:
-            other_classifieds = Classified.objects.exclude(city=request.user.city)[:30]
+            other_classifieds = Classified.objects.exclude(city=request.user.city).annotate (
+                image_thumb = Subquery (
+                    ClassifiedImages.objects.filter(
+                        classified=OuterRef('pk'),
+                    ).values(
+                        'image_thumb'
+                    )[:1]
+                )
+            )[:30]
         
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
         tag = get_object_or_404(Tag, slug=tag_slug)
         classifieds = Classified.objects.get_active().filter(tags__in=[tag])
-        other_classifieds = ClassifiedImages.objects.none()
+        other_classifieds = Classified.objects.none()
     
     if request.is_ajax():        
        return render(request,'classifieds/classified_list_ajax.html',
                     {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
-                   'images': images,'base_active': 'classifieds'})   
+                   'base_active': 'classifieds'})   
     
     return render(request, 'classifieds/classified_list.html',
                   {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
-                   'tag': tag, 'images': images, 'popular_tags': popular_tags, 'base_active': 'classifieds'})
+                   'tag': tag, 'popular_tags': popular_tags, 'base_active': 'classifieds'})
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds
@@ -290,15 +315,22 @@ class DetailClassifiedView(LoginRequiredMixin, DetailView):
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
 
         classified_tags_ids = self.object.tags.values_list('id', flat=True)
-        similar_classified = Classified.objects.filter(tags__in=classified_tags_ids)\
-            .exclude(id=self.object.id)
+        similar_classifieds = Classified.objects.filter(tags__in=classified_tags_ids)\
+            .exclude(id=self.object.id).annotate (
+                image_thumb = Subquery (
+                    ClassifiedImages.objects.filter(
+                        classified=OuterRef('pk'),
+                    ).values(
+                        'image_thumb'
+                    )[:1]
+                )
+            )
 
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
-        context['all_images'] = ClassifiedImages.objects.all()
 
         context['images_no'] = len(context['images'])
-        context['similar_classifieds'] = similar_classified.annotate(same_tags=Count('tags'))\
+        context['similar_classifieds'] = similar_classifieds.annotate(same_tags=Count('tags'))\
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context

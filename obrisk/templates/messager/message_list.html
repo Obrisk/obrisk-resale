@@ -18,11 +18,8 @@
     <a class="back-btn" href="{% url 'messager:contacts_list' %}"> <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
     <figure class="title-avatar">
-      {% comment %} {% thumbnail active.picture "x30" as im %}
-      <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'Picture Profile' %}">
-      {% empty %}
-      <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-      {% endthumbnail %} </figure> {% endcomment %}
+    <!--Add image -->
+     </figure> 
 
     <span class="name"> {{ active|title}} </span>
     <span class="status"> Offline </span>

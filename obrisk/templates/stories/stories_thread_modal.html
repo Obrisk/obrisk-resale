@@ -1,5 +1,4 @@
-{% load i18n static %}
-{% load thumbnail %}
+{% load i18n static %} 
 
 <div class="modal fade" id="storiesThreadModal" tabindex="-1" role="dialog" aria-labelledby="storiesThreadModalLabel"
   aria-hidden="true">
@@ -17,13 +16,14 @@
           <li class="card">
             <div class="card-body">
               <div class="profile-picture">
-                {% thumbnail request.user.picture "30x30" crop="center" upscale="true"  as im %}
-                <img src="{{ im.url }}" class="pull-left" height="35px" style="border-radius: 50%;"
-                  alt="{% trans 'User Image' %}" class="user-image">
-                {% empty %}
-                <img src="{% static 'img/user.png' %}" class="pull-left" height="35px"
-                  alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
+              {% if request.user.picture %}
+                      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.picture}}" alt="Picture Profile"
+                      style="width:30px;height:30px;border-radius: 50%;"
+                      class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                {% else %}
+                      <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="No Profile Picture" />
+                {% endif %}
+
               </div>
               <div class="post">
                 <form id="replyStoriesForm" role="form" method="post" action="#" onsubmit="return false">
