@@ -60,17 +60,31 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
     :param role_arn: Arn of the STS role
     :return StsToken: temporary user key
     """
-    clt = client.AcsClient(access_key_id, access_key_secret, 'cn-hangzhou')
+
+    try:        
+        #Default timeout is 5 secs, but the server is far from alibaba data centers so increase it.
+        clt = client.AcsClient(access_key_id, access_key_secret,
+                                'cn-hangzhou', timeout=30, max_retry_time=3)
+
+        
+    except:
+        #Retry again to get client authorization on different Alibaba data center (Tokyo)
+        clt = client.AcsClient(access_key_id, access_key_secret,
+                                    'ap-northeast-1', timeout=30, max_retry_time=3)
+    
+    #converting the clt results to json
     req = AssumeRoleRequest.AssumeRoleRequest()
 
     req.set_accept_format('json')
     req.set_RoleArn(role_arn)
-    req.set_RoleSessionName('oss-python-sdk-example')
+    req.set_RoleSessionName('obriskdev-1330-oss-sts')
 
     body = clt.do_action_with_exception(req)
+    print(body)
 
     j = json.loads(oss2.to_unicode(body))
 
+    #Using the clt results to create an STSToken
     token = StsToken()
 
     token.access_key_id = j['Credentials']['AccessKeyId']
