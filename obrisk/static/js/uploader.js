@@ -22,6 +22,102 @@ var TotalFilesMaxSize = 8
 var images; //holds all uploaded images as a string 
 var client;
 var ossUpload = '';
+
+/**
+ * get sts token
+ * The sts token is requested for each and every file. This is bad.
+ * TODO needs improvment to make ajax call only when token has expired
+ */
+const applyTokenDo = function (func, refreshSts) {
+    const refresh = typeof (refreshSts) !== 'undefined' ? refreshSts : true;
+    if (refresh) {
+      const url = url;
+      return $.ajax({
+        url
+      }).then((result) => {
+        const creds = result;
+        const client = new OSS({
+          region: creds.region,
+          accessKeyId: creds.AccessKeyId,
+          accessKeySecret: creds.AccessKeySecret,
+          stsToken: creds.SecurityToken,
+          bucket: result.bucket
+        });
+  
+        console.log(OSS.version);
+        return func(client);
+      });
+    }
+    return func();
+};
+
+
+let currentCheckpoint;
+
+const progress = async function progress(p, checkpoint) {
+    currentCheckpoint = checkpoint;
+    const bar = document.getElementById('progress-bar');
+    bar.style.width = `${Math.floor(p * 100)}%`;
+    bar.innerHTML = `${Math.floor(p * 100)}%`;
+};
+
+
+
+let uploadFileClient;
+
+let retryCount = 0;
+const retryCountMax = 3;
+
+
+const uploadFile = function uploadFile(client) {
+    if (!uploadFileClient || Object.keys(uploadFileClient).length === 0) {
+      uploadFileClient = client;
+    }
+  
+    const file = document.getElementById('file').files[0];
+    const key = document.getElementById('object-key-file').value.trim() || 'object';
+  
+    console.log(`${file.name} => ${key}`);
+
+    const options = {
+        progress,
+        partSize: 500 * 1024,
+        meta: {
+            year: 2017,
+            people: 'test'
+        },
+        timeout: 60000
+    };
+
+
+    if (currentCheckpoint) {
+      options.checkpoint = currentCheckpoint;
+    }
+    return uploadFileClient.multipartUpload(key, file, options).then((res) => {
+        console.log('upload success: %j', res);
+        currentCheckpoint = null;
+        uploadFileClient = null;
+    }).catch((err) => {
+        if (uploadFileClient && uploadFileClient.isCancel()) {
+            console.log('stop-upload!');
+        } else {
+            console.error(err);
+            console.log(`err.name : ${err.name}`);
+            console.log(`err.message : ${err.message}`);
+            if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
+                // timeout retry
+                if (retryCount < retryCountMax) {
+                    retryCount++;
+                    console.error(`retryCount : ${retryCount}`);
+                    uploadFile('');
+                }
+            }
+        }
+    });
+};
+  
+
+
 OssUpload.prototype = {
     constructor: OssUpload,
     // Binding event
@@ -249,31 +345,6 @@ var progress = function (p) { //p percentage 0~1
     }
 };
 
-/**
- * get sts token
- * 
- * TODO neeeds improvment to make ajax call ony when token has expired
- */
-var applyTokenDo = function () {
-    var url = oss_url; //Request background to obtain authorization address url
-    $.ajax({
-        url: url,
-        async: false,
-        success: function (result) {
-            client = new OSS({
-                region: result.region,
-                accessKeyId: result.accessKeyId,
-                accessKeySecret: result.accessKeySecret,
-                stsToken: result.SecurityToken,
-                bucket: result.bucket
-            });
-        },
-        error: function (e) {
-            bootbox.alert('Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com')
-            //console.log(e)
-        }
-    });
-};
 
 //File upload initializer 
 function OssUpload() {
