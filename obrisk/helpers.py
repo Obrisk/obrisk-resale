@@ -80,7 +80,8 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
     req.set_RoleSessionName('obriskdev-1330-oss-sts')
 
     body = clt.do_action_with_exception(req)
-    print(body)
+    #print(body)
+    #if body.SecurityToken is not Null, success.
 
     j = json.loads(oss2.to_unicode(body))
 
