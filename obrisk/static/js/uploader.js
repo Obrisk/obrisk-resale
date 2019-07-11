@@ -22,6 +22,11 @@ var TotalFilesMaxSize = 8
 var images; //holds all uploaded images as a string 
 var client;
 var ossUpload = '';
+
+let retryCount = 0;
+const retryCountMax = 5;
+
+
 OssUpload.prototype = {
     constructor: OssUpload,
     // Binding event
@@ -148,8 +153,6 @@ OssUpload.prototype = {
      */
     uploadFile: function (file, filename) {
 
-        var total = 0;
-
         applyTokenDo();
 
         //make sure we get the sts token
@@ -158,7 +161,9 @@ OssUpload.prototype = {
             const upload = async () => {
                 try {
                     const results = await client.multipartUpload(filename, file, {
-                            progress: progress
+                            progress: progress,
+                            partSize: 200 * 1024,      //Minimum is 100*1024
+                            timeout: 120000          // 2 minutes timeout
                         })
                         .then(function (res) {
                             $("#" + file.id).children(".success-span").addClass("success");
@@ -178,6 +183,24 @@ OssUpload.prototype = {
                             }
 
                             images += ',' + res.name;
+
+                        }).catch((err) => {
+                            if (client && client.isCancel()) {
+                              console.log('stoped upload!');
+                            } else {
+                                console.error(err);
+                                console.log(`err.name : ${err.name}`);
+                                console.log(`err.message : ${err.message}`);
+
+                                if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
+                                    // timeout retry
+                                    if (retryCount < retryCountMax) {
+                                        retryCount++;
+                                        console.error(`retryCount : ${retryCount}`);
+                                        uploadFile('');
+                                    }
+                                }
+                            }
                         });
                     return results;
                 } catch (e) {
