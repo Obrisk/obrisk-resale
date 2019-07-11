@@ -20,6 +20,11 @@ var TotalFilesMaxSize = 1
 var image; //holds all uploaded images as a string 
 var client;
 var ossUpload = '';
+
+let retryCount = 0;
+const retryCountMax = 5;
+
+
 OssUpload.prototype = {
     constructor: OssUpload,
     // Binding event
@@ -30,7 +35,7 @@ OssUpload.prototype = {
         $('input[type="file"]').change(function (e) {
             //console.log(e)
             var file = e.target.files[0];
-            console.log(file);
+          
             //console.log('total files selected ' + NumberOfSelectedFiles);
             $('#uploader .placeholder').hide();
             $("#statusBar").css('display', 'flex');
@@ -89,7 +94,9 @@ OssUpload.prototype = {
             const upload = async () => {
                 try {
                     const results = await client.multipartUpload(filename, file , {
-                        progress: progress
+                        progress: progress,
+                        partSize: 200 * 1024,      //Minimum is 100*1024
+                        timeout: 120000          // 2 minutes timeout
                     }).then(function (res) {
                             uploader.uploadFinishedFilesNum++;
                             uploader.curFileSize += file.size;
@@ -107,7 +114,24 @@ OssUpload.prototype = {
 
                             }
                             image = res.name;
-                        });
+                        }).catch((err) => {
+                            if (client && client.isCancel()) {
+                              console.log('stoped upload!');
+                            } else {
+                                console.error(err);
+                                console.log(`err.name : ${err.name}`);
+                                console.log(`err.message : ${err.message}`);
+
+                                if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
+                                    // timeout retry
+                                    if (retryCount < retryCountMax) {
+                                        retryCount++;
+                                        console.error(`retryCount : ${retryCount}`);
+                                        uploadFile('');
+                                    }
+                                }
+                            }
+                        });;
                     return results;
                 } catch (e) {
                     bootbox.alert("Oops! an error occured during the image upload, \

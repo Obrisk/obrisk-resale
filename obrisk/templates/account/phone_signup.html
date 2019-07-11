@@ -67,10 +67,10 @@
 					</div>
 
 					<div class="col-xs-6 mt-4 mb-0">
-						<button class="btn btn-dark" id="send-code" type="button"> Get code</button> 
+						<button class="btn code-btn btn-dark" id="send-code" type="button"> Get code</button> 
       				</div>
 				</div>
-				<small class="text-muted phone_label" id="phone_label"> Don't the include country code!</small>
+				<small class="text-muted phone_label" id="phone_label"> Don't include the country code!</small>
 
 				<div id="code-notice"></div>
 
@@ -78,54 +78,60 @@
 					<label class="mr-2"> Code: </label>
 					<div class="d-flex">
 						<input class="form-control col-xs-6" type="tel" pattern="[0-9]{6}" name="code" id="code">
-						<button class="btn btn-dark ml-2 col-xs-2" type="button" id="phone-verify" > Verify </button>
+						<button class="btn btn-dark code-btn ml-2 col-xs-2" type="button" id="phone-verify" > Verify </button>
 					</div>
 
 				</div>
 				<div id="results"> </div>
 
-				<div class="form-row mt-3">
-					<div class="form-group col-md-12 mb-0">
-						{{ form.username|as_crispy_field }}
+				<div class="name_and_psword" id="name_and_psword">
+					<div class="form-row mt-3">
+						<div class="form-group col-md-12 mb-0">
+							{{ form.username|as_crispy_field }}
+						</div>
 					</div>
-				</div>
-					
-				<div class="form-row">
-					<div class="form-group col-md-12 mb-0">
-						{{ form.password1|as_crispy_field }}
+						
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-0">
+							{{ form.password1|as_crispy_field }}
+						</div>
 					</div>
-				</div>
 
-				<div class="form-row">
-					<div class="form-group col-md-12 mb-0">
-						{{ form.password2|as_crispy_field }}
+					<div class="form-row">
+						<div class="form-group col-md-12 mb-0">
+							{{ form.password2|as_crispy_field }}
+						</div>
 					</div>
-				</div>
 
-				<input type="hidden" name="verified_no" id="verified_no">
-				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
-				I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the
-				laws and regulations of the country residing.</a>
+					<input type="hidden" name="verified_no" id="verified_no">
+					<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
+					I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the
+					laws and regulations of the country residing.</a>
 
-				{% if redirect_field_value %}
-					<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-				{% endif %}
-				<div class="form-group container-login100-form-btn justify-content-center mt-4">
-					<button disabled type="submit" id="phone-signup-submit" class="login100-form-btn">{% trans 'Sign Up' %}
-						&raquo;</button>
-				</div>
+					{% if redirect_field_value %}
+						<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+					{% endif %}
+					<div class="form-group container-login100-form-btn justify-content-center mt-4">
+						<button disabled type="submit" id="phone-signup-submit" class="login100-form-btn">{% trans 'Sign Up' %}
+							&raquo;</button>
+					</div>
+				</div>	
+
 			</form>
 
-			<p> <a href=" {% url 'account_signup' %} "> Request to signup with your email </a> </p>
+			<small class="mt-5" id="email-request"> <a href=" {% url 'account_signup' %} "> Request to signup with your email </a> </small>
 
 		</div>
 	</div>
 </div>
-<script src="{% static 'js/user-form.js' %}?v=19" type="text/javascript"> </script>
+<script src="{% static 'js/user-form.js' %}?v=20" type="text/javascript"> </script>
 <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript"> 
+	var errors = false;
+
 	{% if form.errors %}
+		errors = true;
 		{% if "phone_number" in form.errors %}
 			$("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
 		{% else %}

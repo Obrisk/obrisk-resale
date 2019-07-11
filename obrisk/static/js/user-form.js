@@ -132,6 +132,11 @@ const geo_data = [{
 $(document).ready(function () {
 	//Hide the verification code form
 	$("#code").hide();
+	$("#email-request").hide();
+
+	if (!errors) {
+		$("#name_and_psword").hide();
+	} 
 
 	//Set the Province and city name defaults.
 	function preselect() {
@@ -200,7 +205,7 @@ $(function () {
 	$("#send-code").click(function (event) {
 		if (!$("#id_phone_number").val()) {
 			event.preventDefault();
-			bootbox.alert("It looks like you didn't enter the phone number. Please enter a valid phone number!");
+			bootbox.alert("It looks like you didn't enter your phone number. Please enter a valid phone number!");
 		} 
 		else {
 			
@@ -243,6 +248,7 @@ $(function () {
 							$("#send-code").attr("disabled", true);
 							$("#phone_label").hide();
 							$("#code").show();
+							$("#email-request").show();
 							$("#code-notice").empty().append("<p>" + data.message + "<p>");
 
 							function updateSec() {
@@ -322,7 +328,9 @@ $(function () {
 
 						$("#code").hide();
 						$("#send-code").hide();
+						$("#email-request").hide();
 						$("#id_phone_number").attr("disabled", true);
+						$("#name_and_psword").show();
 					}
 				},
 				error: function (error) {
@@ -337,7 +345,7 @@ $(function () {
 	$("#phone-signup-submit").click(function (event) {
 		if (!$("input[name='verified_no']").val()) {
 			event.preventDefault();
-			bootbox.alert("Please verify your phone number by verification code, before signing up!");
+			bootbox.alert("Please verify your phone number by requesting the verification code, before signing up!");
 		}
 		else if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();

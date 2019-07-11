@@ -19,14 +19,14 @@
       {% if user.name %}<p class="lead">{{ user.name }}</p>{% endif %}
       {% if object.picture %}
           <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
-          style="width:250px;height:250px;border-radius: 50%;" id="avatar">
+          style="width:250px;height:250px;border-radius: 50%;" id="avatar" class="mr-4">
       {% else %}
-          <img id="avatar" src="{% static 'img/user.png' %}" height="250px"
+          <img id="avatar" src="{% static 'img/user.png' %}" height="250px" class="mr-4"
           style="width:250px;height:250px;border-radius: 50%;" alt="No Profile Picture" />
       {% endif %}
       
       <p class="mt-3"> <button class="btn btn-dark" id="startUpload" type="button"> Upload pic</button> </p>
-      <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none; background-color: #01baef;">
+      <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none; background-color: #01baef; padding: 5%;">
           <div class="total-progress">
             <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
               aria-valuemax="100">
@@ -98,5 +98,5 @@ const user = "{{ request.user.username }}";
 {% endif %}
 
 </script>
-<script src="{% static 'js/image_uploader.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/image_uploader.js' %}?v=21" type="text/javascript"></script>
 {% endblock %}

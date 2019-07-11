@@ -15,7 +15,7 @@ from obrisk.stories.models import Stories
 class StoriesListView(LoginRequiredMixin, ListView):
     """A really simple ListView, with some JS magic on the UI."""
     model = Stories
-    paginate_by = 15
+    paginate_by = 20
 
     def get_context_data(self, *args, **kwargs):
         context = super(StoriesListView, self).get_context_data(**kwargs)

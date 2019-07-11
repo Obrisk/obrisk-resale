@@ -463,6 +463,12 @@ iframe {
   transition: all 0.4s;
 }
 
+.code-btn {
+  border: none;
+  color: black;
+  background-color: #0aeee3;
+}
+
 .login100-form-btn:hover {
   background-color: #0aeee3;
 }
