@@ -315,7 +315,7 @@ class ReportClassifiedView(LoginRequiredMixin, View):
         return reverse('classifieds:list')
 
 
-class DetailClassifiedView(LoginRequiredMixin, DetailView):
+class DetailClassifiedView(DetailView):
     """Basic DetailView implementation to call an individual classified."""
     model = Classified
 

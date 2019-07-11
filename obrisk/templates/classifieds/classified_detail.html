@@ -81,8 +81,15 @@
 
         {% if classified.contact_info %}
         <br />
-        <small class="seller-contacts"><strong>Seller's contacts :</strong>
-          {{ classified.contact_info }}</small>
+            {% if user.is_authenticated %}
+                <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
+                {{ classified.contact_info }}</small>
+            {% else %} 
+                 <h6> Please login to view seller's contacts: </h6>
+                  <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+                  href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+            {% endif %}
+
         {% endif %}
       </section>
 
@@ -106,7 +113,7 @@
         {% else %}
         <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
         {% endif %}
-        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a><br> <br>
+        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a><br> <br>
 
       </div>
     </div>

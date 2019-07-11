@@ -64,20 +64,18 @@
 
         <br />
         {% if object.name %}
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-        {{ object.name|title  }}
+            👤{{ object.name|title  }}
         {% endif %}
 
         <br />
         {% if object.city %}
-        <span class="fa"> <i class="fa-map-marker" aria-hidden="true"> </i> {{ object.city }} </span> <br />
+        <span class="fa"> 📍{{ object.city }} </span> <br />
         {% endif %}
         <br />
         {% if object.job_title %}
-        <i class="fa fa-briefcase" aria-hidden="true"></i> {{ object.job_title }} <br />
+        💼{{ object.job_title }} <br />
         {% else %}
-        <p> <i class="fa fa-bed" aria-hidden="true"></i>
-        {{ object.username }} is too lazy, doesn't want to add a job title.</p>
+        <p>🛌 {{ object.username }} is too lazy, doesn't want to add a job title.</p>
         {% endif %}
       </p>
 
@@ -86,8 +84,7 @@
         <p>{{ object.bio }}</p>
       </div>
       {% else %}
-      <p><i class="fa fa-bed" aria-hidden="true"></i> 
-      {{ object.username}} is too lazy, doesn't want to write a short bio.</p>
+      <p> 🛌{{ object.username}} is too lazy, doesn't want to write a short bio.</p>
       {% endif %}
       <div class="clear"></div>
     </div>
