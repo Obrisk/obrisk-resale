@@ -90,6 +90,10 @@
     uploadPreview($this)
   })
 
+//This var is used only on the signup form, but they share js files with this one
+//In the near future please separate them.
+var errors = false;
+
 const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
 const user = "{{ request.user.username }}";
 

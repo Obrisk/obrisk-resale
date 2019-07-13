@@ -19,11 +19,13 @@
           </strong>
         </p>
       </div>
-      {% if stories.user == request.user %}
+
+      {% comment %} {% if stories.user == request.user %}
       <a href="{% url 'stories:delete_stories' stories.pk %}">
         <i class="fa fa-times pull-right" aria-hidden="true" title="{% trans 'Click to remove this stories' %}"></i>
       </a>
-      {% endif %}
+      {% endif %} {% endcomment %}
+
     </div>
 
     <div class="post">

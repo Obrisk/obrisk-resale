@@ -29,18 +29,14 @@ OssUpload.prototype = {
     constructor: OssUpload,
     // Binding event
     bindEvent: function () {
-        console.log("here");
         var _this = this;
 
         $('input[type="file"]').change(function (e) {
-            //console.log(e)
             var file = e.target.files[0];
           
-            //console.log('total files selected ' + NumberOfSelectedFiles);
             $('#uploader .placeholder').hide();
             $("#statusBar").css('display', 'flex');
-            //console.log('number of files ' + AllowUploadQuantity)
-
+            
             //check if the upload quantity has reach max 
             if (!file) {
                 bootbox.alert("No image selected , Please select one or more images");
