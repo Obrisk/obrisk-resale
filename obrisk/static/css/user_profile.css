@@ -89,3 +89,17 @@
     letter-spacing: .3px;
   }
 }
+
+#pic {
+    width:250px;
+    height:250px;
+    border-radius: 50%;
+}
+
+@media screen and (max-width: 400px) {
+  #pic {
+    width : 175px;
+    height : 175px;
+}
+
+}

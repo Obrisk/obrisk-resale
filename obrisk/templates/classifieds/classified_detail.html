@@ -4,8 +4,8 @@
 
 {% block title %}{{ classified.title|title }}{% endblock %}
 {% block head %}
-<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="{% static 'css/classified-details.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}?v=20" rel="stylesheet">
+<link href="{% static 'css/classified-details.css' %}?v=20 " rel="stylesheet">
 <link href="{% static 'css/colors.css' %}" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
 <script src="{% static 'js/swiper.min.js' %}"></script>
@@ -39,7 +39,7 @@
               {% if classified.user.thumbnail %}
                     <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}" alt="Picture Profile"
                     style="width:35px;height:35px;border-radius: 50%;"
-                    class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                    class="rounded-circle  mb-3 mb-md-0 mr-5 md-3 profile-header-avatar img-fluid" id="pic">
               {% else %}
                     <img src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
               {% endif %}

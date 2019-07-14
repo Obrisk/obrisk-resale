@@ -20,7 +20,7 @@ from slugify import slugify
 from taggit.models import Tag
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
-from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm
+from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
 from obrisk.helpers import bucket, bucket_name
 
 # For images
@@ -285,7 +285,7 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""
     model = Classified
     message = _("Your classified has been updated.")
-    form_class = ClassifiedForm
+    form_class = ClassifiedEditForm
     template_name = 'classifieds/classified_update.html'
 
     # In this form there is an image that is not saved, deliberately since you can't upload images.
