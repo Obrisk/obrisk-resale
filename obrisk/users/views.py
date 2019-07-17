@@ -8,22 +8,34 @@ from django.views.decorators.http import require_http_methods
 from django.urls import reverse_lazy
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect, get_object_or_404
+# from django.shortcuts import redirect, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator    
 import ast
+from friendship.models import Friend, Follow, FriendshipRequest, Block
+from django.shortcuts import render, get_object_or_404, redirect
 
-from friendship.exceptions import AlreadyExistsError
-
+from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
 get_friendship_context_object_name = lambda: getattr(settings, 'FRIENDSHIP_CONTEXT_OBJECT_NAME', 'user')
 get_friendship_context_object_list_name = lambda: getattr(settings, 'FRIENDSHIP_CONTEXT_OBJECT_LIST_NAME', 'users')
 
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import get_user_model
-user_model = get_user_model
+# from django.contrib.auth import get_user_model
+# user_model = get_user_model
+
+
+try:
+    from django.contrib.auth import get_user_model
+
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
+    user_model = User
+
 
 
 from .forms import UserForm, PhoneSignupForm
@@ -216,30 +228,35 @@ def phone_verify(request):
     
         
 
-def view_friends(request, username, template_name='friendship/friend/user_list.html'):
+#FRIENDSHIP
+def view_friends(request, username, template_name="users/friends.html"):
     """ View the friends of a user """
     user = get_object_or_404(user_model, username=username)
     friends = Friend.objects.friends(user)
     return render(request, template_name, {
         get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name()
+        'friendship_context_object_name': get_friendship_context_object_name(),
+        'friends': friends,
     })
 
 
 @login_required
-def friendship_add_friend(request, to_username, template_name='friendship/friend/add.html'):
+def friendship_add_friend(
+    request, to_username, template_name="users/add_friends.html"
+):
     """ Create a FriendshipRequest """
-    ctx = {'to_username': to_username}
+    ctx = {"to_username": to_username}
 
-    if request.method == 'POST':
-        to_user =get_user_model().objects.get(username=to_username)
+    if request.method == "POST":
+        to_user = user_model.objects.get(username=to_username)
         from_user = request.user
         try:
             Friend.objects.add_friend(from_user, to_user)
-        except AlreadyExistsError as e:
-            ctx['errors'] = ["%s" % e]
+        except AlreadyFriendsError :
+            return view_friends(request, to_user)
+            
         else:
-            return redirect('friendship_request_list')
+            return redirect("users:friendship_request_list")
 
     return render(request, template_name, ctx)
 
@@ -247,154 +264,204 @@ def friendship_add_friend(request, to_username, template_name='friendship/friend
 @login_required
 def friendship_accept(request, friendship_request_id):
     """ Accept a friendship request """
-    if request.method == 'POST':
+    if request.method == "POST":
         f_request = get_object_or_404(
-            request.user.friendship_requests_received,
-            id=friendship_request_id)
+            request.user.friendship_requests_received, id=friendship_request_id
+        )
         f_request.accept()
-        return redirect('friendship_view_friends', username=request.user.username)
+        return redirect("users:friendship_view_friends", username=request.user.username)
 
-    return redirect('friendship_requests_detail', friendship_request_id=friendship_request_id)
+    return redirect(
+        "users:friendship_requests_detail", friendship_request_id=friendship_request_id
+    )
 
 
 @login_required
 def friendship_reject(request, friendship_request_id):
     """ Reject a friendship request """
-    if request.method == 'POST':
+    if request.method == "POST":
         f_request = get_object_or_404(
-            request.user.friendship_requests_received,
-            id=friendship_request_id)
+            request.user.friendship_requests_received, id=friendship_request_id
+        )
         f_request.reject()
-        return redirect('friendship_request_list')
+        return redirect("users:friendship_request_list")
 
-    return redirect('friendship_requests_detail', friendship_request_id=friendship_request_id)
+    return redirect(
+        "users:friendship_requests_detail", friendship_request_id=friendship_request_id
+    )
 
 
 @login_required
 def friendship_cancel(request, friendship_request_id):
     """ Cancel a previously created friendship_request_id """
-    if request.method == 'POST':
+    if request.method == "POST":
         f_request = get_object_or_404(
-            request.user.friendship_requests_sent,
-            id=friendship_request_id)
+            request.user.friendship_requests_sent, id=friendship_request_id
+        )
         f_request.cancel()
-        return redirect('friendship_request_list')
+        return redirect("users:friendship_request_list")
 
-    return redirect('friendship_requests_detail', friendship_request_id=friendship_request_id)
-
+    return redirect(
+        "users:friendship_requests_detail", friendship_request_id=friendship_request_id
+    )
 
 
 @login_required
-def followers(request, username, template_name='friendship/follow/followers_list.html'):
+def friendship_request_list(
+    request, template_name="users/friend_requests_list.html"
+):
+    """ View unread and read friendship requests """
+    friendship_requests = Friend.objects.requests(request.user)
+    # This shows all friendship requests in the database
+    # friendship_requests = FriendshipRequest.objects.filter(rejected__isnull=True)
+
+    return render(request, template_name, {"requests": friendship_requests})
+
+
+@login_required
+def friendship_request_list_rejected(
+    request, template_name="users/requests_list.html"
+):
+    """ View rejected friendship requests """
+    # friendship_requests = Friend.objects.rejected_requests(request.user)
+    friendship_requests = FriendshipRequest.objects.filter(rejected__isnull=False)
+
+    return render(request, template_name, {"requests": friendship_requests})
+
+
+@login_required
+def friendship_requests_detail(
+    request, friendship_request_id, template_name="users/request.html"
+):
+    """ View a particular friendship request """
+    f_request = get_object_or_404(FriendshipRequest, id=friendship_request_id)
+
+    return render(request, template_name, {"friendship_request": f_request})
+
+
+def followers(request, username, template_name="users/followers.html"):
     """ List this user's followers """
     user = get_object_or_404(user_model, username=username)
     followers = Follow.objects.followers(user)
-
     return render(request, template_name, {
         get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name()
+        'friendship_context_object_name': get_friendship_context_object_name(),
+        'followers': followers,
     })
 
-@login_required
-def following(request, username, template_name='friendship/follow/following_list.html'):
+
+def following(request, username, template_name="users/following.html"):
     """ List who this user follows """
     user = get_object_or_404(user_model, username=username)
     following = Follow.objects.following(user)
-
     return render(request, template_name, {
         get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name()
+        'friendship_context_object_name': get_friendship_context_object_name(),
+        'following': following,
     })
 
 
 @login_required
-def follower_add(request, followee_username, template_name='friendship/follow/add.html'):
+def follower_add(
+    request, followee_username, template_name="users/add_follower.html"
+):
     """ Create a following relationship """
-    ctx = {'followee_username': followee_username}
+    ctx = {"followee_username": followee_username}
 
-    if request.method == 'POST':
-        followee = get_user_model().objects.get(username=followee_username)
+    if request.method == "POST":
+        followee = user_model.objects.get(username=followee_username)
         follower = request.user
         try:
             Follow.objects.add_follower(follower, followee)
-        except AlreadyExistsError as e:
-            ctx['errors'] = ["%s" % e]
+        except AlreadyExistsError :
+            return following(request, followee)
         else:
-            return redirect('friendship_following', username=follower.username)
+            return redirect("users:friendship_following", username=follower.username)
 
     return render(request, template_name, ctx)
 
 
 @login_required
-def follower_remove(request, followee_username, template_name='friendship/follow/remove.html'):
+def follower_remove(
+    request, followee_username, template_name="users/remove_follower.html"
+):
     """ Remove a following relationship """
-    if request.method == 'POST':
-        followee = get_user_model().objects.get(username=followee_username)
+    if request.method == "POST":
+        followee = user_model.objects.get(username=followee_username)
         follower = request.user
         Follow.objects.remove_follower(follower, followee)
-        return redirect('friendship_following', username=follower.username)
+        return redirect("users:friendship_following", username=follower.username)
 
-    return render(request, template_name, {'followee_username': followee_username})
+    return render(request, template_name, {"followee_username": followee_username})
 
 
-@login_required
 def all_users(request, template_name="friendship/user_actions.html"):
-    users = get_user_model().objects.all()
+    users = user_model.objects.all()
 
-    return render(request, template_name, {get_friendship_context_object_list_name(): users})
+    return render(
+        request, template_name, {get_friendship_context_object_list_name(): users}
+    )
 
 
-@login_required
-def blocking(request, username, template_name='friendship/block/blockers_list.html'):
+def blocking(request, username, template_name="users/blockers.html"):
     """ List this user's followers """
     user = get_object_or_404(user_model, username=username)
     blockers = Block.objects.blocked(user)
 
-    return render(request, template_name, {
-        get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name()
-    })
+    return render(
+        request,
+        template_name,
+        {
+            get_friendship_context_object_name(): user,
+            "friendship_context_object_name": get_friendship_context_object_name(),
+        },
+    )
 
 
-@login_required
-def blockers(request, username, template_name='friendship/block/blocking_list.html'):
+def blockers(request, username, template_name="users/blocking_list.html"):
     """ List who this user follows """
     user = get_object_or_404(user_model, username=username)
     blocking = Block.objects.blocking(user)
 
-    return render(request, template_name, {
-        get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name()
-    })
+    return render(
+        request,
+        template_name,
+        {
+            get_friendship_context_object_name(): user,
+            "friendship_context_object_name": get_friendship_context_object_name(),
+        },
+    )
 
 
 @login_required
-def block_add(request, blocked_username, template_name='friendship/block/add.html'):
+def block_add(request, blocked_username, template_name="friendship/block/add.html"):
     """ Create a following relationship """
-    ctx = {'blocked_username': blocked_username}
+    ctx = {"blocked_username": blocked_username}
 
-    if request.method == 'POST':
-        blocked = get_user_model().objects.get(username=blocked_username)
+    if request.method == "POST":
+        blocked = user_model.objects.get(username=blocked_username)
         blocker = request.user
         try:
             Block.objects.add_block(blocker, blocked)
         except AlreadyExistsError as e:
-            ctx['errors'] = ["%s" % e]
+            ctx["errors"] = ["%s" % e]
         else:
-            return redirect('friendship_blocking', username=blocker.username)
+            return redirect("friendship_blocking", username=blocker.username)
 
     return render(request, template_name, ctx)
 
 
 @login_required
-def block_remove(request, blocked_username, template_name='friendship/block/remove.html'):
+def block_remove(
+    request, blocked_username, template_name="friendship/block/remove.html"
+):
     """ Remove a following relationship """
-    if request.method == 'POST':
-        blocked = get_user_model().objects.get(username=blocked_username)
+    if request.method == "POST":
+        blocked = user_model.objects.get(username=blocked_username)
         blocker = request.user
         Block.objects.remove_block(blocker, blocked)
-        return redirect('friendship_blocking', username=blocker.username)
+        return redirect("users:friendship_blocking", username=blocker.username)
 
-    return render(request, template_name, {'blocked_username': blocked_username})
+    return render(request, template_name, {"blocked_username": blocked_username})
 
 

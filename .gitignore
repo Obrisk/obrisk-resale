@@ -61,7 +61,7 @@ media/
 .env
 .env.prod
 
-venv_obrisk/
+venv_obdev/
 staticfiles
 .idea
 

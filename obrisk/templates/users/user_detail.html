@@ -10,15 +10,32 @@
 
 {% block content %}
 <div>
-  <!-- changed the user_action html by deleting the following option in the user user_action.html in the friendship app -->
-  {% if  request.user == user %}
-  <a class="btn btn-dark" href="{% url 'friendship:friendship_view_users' %}">{% trans '👬 ➕ 👬' %}</a>
-  <a class="btn btn-dark" href="{% url 'friendship:friendship_request_list' %}">{% trans '🤔friend request🌍' %}</a>
-  <a class="btn btn-dark" href="{% url 'friendship:friendship_view_friends' user %}">{% trans 'my friends🤝' %}</a>
 
+
+  {% if  request.user == user %}
+
+  <a class="btn btn-dark" href="{% url 'users:friendship_request_list' %}">{% trans '🤔friend request🌍' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_view_friends' user %}">{% trans 'my friends🤝' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_blocking' user %}">{% trans 'friendship_blocking' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_following' user %}">{% trans 'friendship_following' %}</a>
+    {% if object.is_official %}
+            
+      <a class="btn btn-dark" href="{% url 'users:friendship_followers' user %}">{% trans 'my followers🤝' %}</a>
+      <a class="btn btn-dark" href="{% url 'users:follower_remove' user %}">{% trans 'follower_remove' %}</a>
+
+    {% endif %}
   {% else %}
-  <a class="btn btn-dark" href="{% url 'friendship:friendship_add_friend' user.username %}">{% trans '👬👭👬' %}</a>
-  {% endif %}
+  <a class="btn btn-dark" href="{% url 'users:friendship_add_friend' user.username %}">{% trans '👬👭👬' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:block_add' user %}">{% trans 'block_add' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:block_remove' user %}">{% trans 'block_remove' %}</a>
+    {% if object.is_official %}
+     <a class="btn btn-dark" href="{% url 'users:follower_add' user %}">{% trans 'follower_add' %}</a>
+     <a class="btn btn-dark" href="{% url 'users:follower_remove' user %}">{% trans 'follower_remove' %}</a>
+    
+    {% endif %}
+
+  {% endif %}  
+
 </div>
 <div class="col-md-8 m-auto">
   <div class="media profile-header d-flex flex-column flex-md-row">
