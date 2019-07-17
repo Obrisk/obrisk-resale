@@ -366,6 +366,9 @@ $(function () {
 		}
 	});
 
+	//update-profile submit event is on the image-uploader.js file
+	//In the near future please reorganise the files.
+
 	$("#email-signup-submit").click(function (event) {
 
 		if (!$("select[name='city']").val() || !$("select[name='province']")) {

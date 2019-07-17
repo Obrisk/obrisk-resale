@@ -4,7 +4,7 @@
 {% block title %}{{ object.username }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/user_profile.css' %}?v=1" rel="stylesheet">
+<link href="{% static 'css/user_profile.css' %}?v=21" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
@@ -80,7 +80,7 @@
 
       {% if object.bio %}
       <div class="panel-body" id="objective">
-      📇 <p>{{ object.bio }}</p>
+       <p>📇{{ object.bio }}</p>
       </div>
       {% else %}
       <p> 🛌{{ object.username}} is too lazy to write a short bio.</p>
@@ -88,12 +88,7 @@
       <div class="clear"></div>
     </div>
 
-
-
-
   </div>
 </div>
-
-
 
 {% endblock content %}

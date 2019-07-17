@@ -54,6 +54,13 @@ header .navbar-brand {
   font-size: 2em;
 }
 
+@media screen and (max-width: 400px) {
+  .empty-ad {
+    margin-top: -7%;
+  }
+}
+
+
 .no-data {
   text-align: center;
   padding: 1em 0;

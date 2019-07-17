@@ -51,20 +51,10 @@ OssUpload.prototype = {
                     uploader.totalFilesSize = file.size;
                 } else {
                     bootbox.alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
-                }             
-
-                
+                }              
             }
             uploader.totalFilesNum = 1;
         });
-
-        function sleep(ms) {
-            return new Promise(resolve => setTimeout(resolve, ms));
-        }
-
-        async function demo () {
-            await sleep(5000);
-        }
 
         $("#startUpload").click(function (event) {
             if (uploader.totalFilesNum == 0) {
@@ -75,12 +65,10 @@ OssUpload.prototype = {
                 var filename = genKey();
                 var file = uploader.file;
                 $totalProgressbar.html('Upload has started, please wait...');
+                $("#startUpload").hide();
                 _this.uploadFile(file, filename);   
-           }
-            
-            
+           } 
         });
-
     },
 
     /***
@@ -113,11 +101,7 @@ OssUpload.prototype = {
                                 $totalProgressbar.css('width', progressBar)
                                 .html('Upload has completed. Please save the changes at the bottom of the page!');
                                 $("#startUpload").hide();
-                            } else {
-                                $totalProgressbar.css('width', progressBar)
-                                    .html(progressBar);
-
-                            }
+                            } 
                             image = res.name;
                         }).catch((err) => {
                             if (client && client.isCancel()) {
@@ -187,7 +171,7 @@ var $wrap = $('#uploader'),
 
 var progress = function (p) { //p percentage 0~1
     return function (done) {
-        $totalProgressbar.css('width', progressBar)
+        $totalProgressbar.html('Upload has started, please wait...');
         done();
     }
 };
@@ -230,7 +214,6 @@ function OssUpload() {
     };
 }
 
-
 /**
  * generate file name using uuid
  *
@@ -243,7 +226,7 @@ function genKey() {
             var r = Math.random() * 16 | 0,
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
-        });
+    });
 }
 
 /**
@@ -266,9 +249,6 @@ function slugify(string) {
         .replace(/^-+/, '') // Trim - from start of text
         .replace(/-+$/, '') // Trim - from end of text
 }
-
-
-
 
 $(function () {
 
@@ -304,11 +284,18 @@ $(function () {
         $("#classified-form").submit();
     });
 
-    $("#update-profile").click(function () {
-        $("#id_oss_image").val(image);
-		$("input[name='city']").val($("select[name='city']").val());
-		$("input[name='province_region']").val($("select[name='province']").val());
-		$("#update").submit();
+    $("#update-profile").click(function (event) {
+        
+		if (!$("select[name='city']").val() || !$("select[name='province']")) {
+			event.preventDefault();
+			bootbox.alert("Please enter your address!");
+        }
+        else {
+            $("#id_oss_image").val(image);
+		    $("input[name='city']").val($("select[name='city']").val());
+		    $("input[name='province_region']").val($("select[name='province']").val());
+		    $("#update").submit();
+        }
 	});
 
 });

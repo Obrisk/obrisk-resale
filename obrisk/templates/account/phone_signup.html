@@ -72,7 +72,7 @@
 				</div>
 				<small class="text-muted phone_label" id="phone_label"> Don't include the country code!</small>
 
-				<div id="code-notice"></div>
+				<div id="code-notice" style="font-weight:bold;"></div>
 
 				<div class="form-row" id="code">
 					<label class="mr-2"> Code: </label>
@@ -82,7 +82,7 @@
 					</div>
 
 				</div>
-				<div id="results"> </div>
+				<div id="results" style="font-weight:bold;"> </div>
 
 				<div class="name_and_psword" id="name_and_psword">
 					<div class="form-row mt-3">
@@ -118,7 +118,8 @@
 				</div>	
 
 			</form>
-
+			<div> <small class="mt-5" id="support"> If you have any problem with signing up, Please 
+			<a href="mailto:support@obrisk.com" > click here </a> to contact us (email: support@obrisk.com). </small>  </div>
 			<small class="mt-5" id="email-request"> <a href=" {% url 'account_signup' %} "> Request to signup with your email </a> </small>
 
 		</div>
