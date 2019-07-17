@@ -47,14 +47,13 @@
 {% endif %}
 
 {% empty %}
-<h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
-  {% trans 'you are welcome😃. Mmh🤔! It looks like there are no classifieds items near you😥.' %}
-  <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first one to post😃' %}!</a>
-  {% trans 'Or you can navigate to other sections of the website by the menu on the top⬆️, or check what we have found from other places😊. '%} </h6>
+<small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
+  {% trans 'It looks like there are no items near you😥.' %} 
+ <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a> </small>
+<h6 class="no-data" >  
+{% trans 'You can navigate to other sections by the menu on the top⬆️ or check what we found from other places😊. '%}  </h6>
 <br />
 {% endfor %}
-
-
 
 <!--Will be using ajax in near future.-->
 {% for classified in other_classifieds %}
