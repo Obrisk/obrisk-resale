@@ -16,7 +16,7 @@
       class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
     {% else %}
       <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
-      <p class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</p>
+      <small> {{ object.username }} is too lazy to upload the profile pic.</small>
     {% endif %}
 
     <div class="media-body">
@@ -74,16 +74,16 @@
         {% if object.job_title %}
         💼{{ object.job_title }} <br />
         {% else %}
-        <p>🛌 {{ object.username }} is too lazy, doesn't want to add a job title.</p>
+        <p>🛌 {{ object.username }} is too lazy to add a job title.</p>
         {% endif %}
       </p>
 
       {% if object.bio %}
       <div class="panel-body" id="objective">
-        <p>{{ object.bio }}</p>
+      📇 <p>{{ object.bio }}</p>
       </div>
       {% else %}
-      <p> 🛌{{ object.username}} is too lazy, doesn't want to write a short bio.</p>
+      <p> 🛌{{ object.username}} is too lazy to write a short bio.</p>
       {% endif %}
       <div class="clear"></div>
     </div>

@@ -2,15 +2,6 @@
   clear: both;
 }
 
-.lazy-img {
-  position: absolute;
-  top: 40%;
-  right: 60%;
-  color: black;
-  font-size: 12px;
-  letter-spacing: 1px;
-}
-
 .fa-instagram {
   color: #cf153d;
 }

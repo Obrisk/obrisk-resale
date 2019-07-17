@@ -23,20 +23,19 @@ class UserForm(forms.ModelForm):
     bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
     province_region = forms.CharField (widget=forms.HiddenInput(), required=False)
     city = forms.CharField (widget=forms.HiddenInput(), required=False)
-    picture = forms.ImageField(widget=forms.FileInput(attrs={'onchange': 'uploadPreview(this)'}), required=False)
     oss_image = forms.CharField (widget=forms.HiddenInput(), required=False)
     class Meta:
         model = User
-        fields = ('picture', 'name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
+        fields = ('name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
                'linkedin_account','snapchat_account', 'facebook_account' )
         help_texts = {
-            "instagram_account": "Please fill in your username as it appears on your profile page.\
+            "instagram_account": "(Optional) Please fill in your instagram username as it appears on your instagram profile page.\
                  Make sure it is spelled correctly",
-            "linkedin_account": "Please fill in your username as it appears on your profile page.\
+            "linkedin_account": "(Optional) Please fill in your linkedin username as it appears on your linkedin profile page.\
                  Make sure it is spelled correctly",
-            "facebook_account": "Please fill in your username as it appears on your profile page.\
+            "facebook_account": "(Optional) Please fill in your facebook username as it appears on your facebook profile page.\
                  Make sure it is spelled correctly",
-            "snapchat_account": "Please fill in your username as it appears on your profile page.\
+            "snapchat_account": "(Optional) Please fill in your snapchat username as it appears on your snapchat profile page.\
                  Make sure it is spelled correctly.",
         }
         # widgets = {

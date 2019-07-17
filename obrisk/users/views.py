@@ -101,54 +101,63 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def form_valid(self, form):
         picture = form.cleaned_data['oss_image']
-
         form.instance.user = self.request.user
         profile = form.save(commit=False)
         profile.user = self.request.user
 
         if not picture:
+            profile.picture = None
             profile.save()
             return super(UserUpdateView, self).form_valid(form)
 
-        else:    
-            profile.picture = picture
-
-            d = str(datetime.datetime.now())
-            thumb_name = "media/profile_pics/" + str(profile.user) + "/thumbnails/" + "thumb-" + d 
-            style = 'image/resize,m_fill,h_60,w_60'
-            try:
-
-                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(thumb_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                bucket.process_object(picture, process)
-
-                profile.thumbnail = thumb_name
-
+        else:
+            if picture.startswith('media/profile_pics/') == False:
+                profile.picture = None
                 profile.save()
-
-            except oss2.exceptions.ServerError as e:
-                profile.save()
-                messages.error(self.request, "Oops we are very sorry. \
-                Your profile picture was not uploaded successfully. Please ensure that, \
-                your internet connection is stable and update your profile picture again!. "
-                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
-                # return self.form_invalid(form)
-                #I am not returning form errors because this is our problem and not user's
-                return redirect ('users:detail', username=self.request.user.username)
+                messages.error(self.request, "Oops! your profile picture, \
+                wasn't uploaded successfully, please upload again!")
+                return super(UserUpdateView, self).form_valid(form)   
             
-            except:
-                profile.save()
-                messages.error(self.request, "Oops we are sorry! Your image \
-                    was not uploaded successfully. Please select your item, then edit, \
-                    and try again to upload the images.")
-                #return self.form_invalid(form)
-                #I am not returning form errors because this is our problem and not user's
-                return redirect ('users:detail', username=self.request.user.username)
+            else:
+                profile.picture = picture
 
-            #When the for-loop has ended return the results.        
-            return super(UserUpdateView, self).form_valid(form)
+                d = str(datetime.datetime.now())
+                thumb_name = "media/profile_pics/" + str(profile.user) + "/thumbnails/" + "thumb-" + d 
+                style = 'image/resize,m_fill,h_60,w_60'
+
+                try:
+
+                    process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                    oss2.compat.to_bytes(thumb_name))),
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                    bucket.process_object(picture, process)
+
+                    profile.thumbnail = thumb_name
+
+                    profile.save()
+
+                except oss2.exceptions.NoSuchKey as e:
+                    messages.error(self.request, "Oops we are sorry. \
+                    Your profile picture was not uploaded successfully. Please ensure that, \
+                    your internet connection is stable and update your profile picture again!. "
+                                + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                    return self.form_invalid(form)
+                 
+                except:
+                    #Since the image exists just save the profile, it is our problem. 
+                    #I must find a better way to handle thumbnails in this failure case.
+                    profile.picture = None
+                    profile.save()
+                    messages.error(self.request, "Oops we are sorry! Your image \
+                        was not uploaded successfully. Please select your item, then edit, \
+                        and try again to upload the images.")
+                    #return self.form_invalid(form)
+                    #I am not returning form errors because this is our problem and not user's
+                    return redirect ('users:detail', username=self.request.user.username)
+
+                #When the for-loop has ended return the results.        
+                return super(UserUpdateView, self).form_valid(form)
 
 
 

@@ -58,14 +58,23 @@ OssUpload.prototype = {
             uploader.totalFilesNum = 1;
         });
 
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function demo () {
+            await sleep(5000);
+        }
+
         $("#startUpload").click(function (event) {
             if (uploader.totalFilesNum == 0) {
                 event.preventDefault();
-                bootbox.alert("Please select the image to upload by clicking the browse option!");
+                bootbox.alert("Please select the image to upload first by clicking the choose pic button!");
 
            } else {
                 var filename = genKey();
                 var file = uploader.file;
+                $totalProgressbar.html('Upload has started, please wait...');
                 _this.uploadFile(file, filename);   
            }
             
@@ -102,7 +111,7 @@ OssUpload.prototype = {
 
                             if (progressBarNum == 100) {
                                 $totalProgressbar.css('width', progressBar)
-                                .html('Upload complete. Save the changes at the bottom of the page!');
+                                .html('Upload has completed. Please save the changes at the bottom of the page!');
                                 $("#startUpload").hide();
                             } else {
                                 $totalProgressbar.css('width', progressBar)
