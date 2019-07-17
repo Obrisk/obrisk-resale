@@ -101,10 +101,6 @@ var errors = false;
 const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
 const user = "{{ request.user.username }}";
 
-{% if object.picture %}
-    image = "{{object.picture}}";
-{% endif %}
-
 </script>
-<script src="{% static 'js/image_uploader.js' %}?v=22" type="text/javascript"></script>
+<script src="{% static 'js/image_uploader.js' %}?v=23" type="text/javascript"></script>
 {% endblock %}

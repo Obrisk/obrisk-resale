@@ -122,7 +122,7 @@
                 {% if request.user.thumbnail %}
                       <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
                       style="width:30px;height:30px;border-radius: 50%;"
-                      class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 profile-header-avatar img-fluid" id="pic" />
+                      class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
                 {% else %}
                       <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
                 {% endif %}
