@@ -6,6 +6,7 @@ from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 import json
 import re
 import os
+import time
 
 import oss2
 from aliyunsdkcore import client
@@ -63,27 +64,40 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
     try:        
         #Default timeout is 5 secs, but the server is far from alibaba data centers so increase it.
-        clt = client.AcsClient(access_key_id, access_key_secret,
-                                'cn-hangzhou', timeout=30, max_retry_time=3)
-
+        #This is Tokyo data center.
+        clt = client.AcsClient(access_key_id, access_key_secret, 'ap-northeast-1',
+                             timeout=30, max_retry_time=3)
         
     except:
-        #Retry again to get client authorization on different Alibaba data center (Tokyo)
-        clt = client.AcsClient(access_key_id, access_key_secret,
-                                    'ap-northeast-1', timeout=30, max_retry_time=3)
-    
-    #converting the clt results to json
-    req = AssumeRoleRequest.AssumeRoleRequest()
+        try:
+            #Retry again to get client authorization on different Alibaba data center (Hangzhou)
+            clt = client.AcsClient(access_key_id, access_key_secret, 'cn-hangzhou',
+                                timeout=30, max_retry_time=3)
+        except:
+            return False
 
-    req.set_accept_format('json')
-    req.set_RoleArn(role_arn)
-    req.set_RoleSessionName('obriskdev-1330-oss-sts')
+    try:
+        #converting the clt results to json
+        req = AssumeRoleRequest.AssumeRoleRequest()
 
-    body = clt.do_action_with_exception(req)
-    #print(body)
-    #if body.SecurityToken is not Null, success.
+        req.set_accept_format('json')
+        req.set_RoleArn(role_arn)
+        req.set_RoleSessionName('obriskdev-1330-oss-sts')
+        body = clt.do_action_with_exception(req)
+        j = json.loads(oss2.to_unicode(body))
+    except:
+        try:
+            time.sleep(2)
 
-    j = json.loads(oss2.to_unicode(body))
+            req = AssumeRoleRequest.AssumeRoleRequest()
+            req.set_accept_format('json')
+            req.set_RoleArn(role_arn)
+            req.set_RoleSessionName('obriskdev-1330-oss-sts')
+
+            body = clt.do_action_with_exception(req)
+            j = json.loads(oss2.to_unicode(body))
+        except:
+            return False
 
     #Using the clt results to create an STSToken
     token = StsToken()
@@ -106,17 +120,34 @@ def get_oss_auth(request):
     and create the new message and return the new data to be attached to the
     conversation stream."""
     token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
-    key_id = str(token.access_key_id)
-    scrt = str(token.access_key_secret)
-    token_value = str(token.security_token)
-    data = {
-        'region': region,
-        'accessKeyId': key_id,
-        'accessKeySecret': scrt,
-        'SecurityToken': token_value,
-        'bucket': bucket_name
-    }       
-    return JsonResponse(data)
+    
+    if token == False:
+        #This is very bad, but we'll do it until we move the servers to China.
+        #No one will try to hunt our code in this beginning.
+        key_id = str(access_key_id)
+        scrt = str(access_key_secret)
+
+        data = {
+            'direct': "true",
+            'region': region,
+            'accessKeyId': key_id,
+            'accessKeySecret': scrt,
+            'bucket': bucket_name
+        }
+        return JsonResponse(data)
+
+    else:
+        key_id = str(token.access_key_id)
+        scrt = str(token.access_key_secret)
+        token_value = str(token.security_token)
+        data = {
+            'region': region,
+            'accessKeyId': key_id,
+            'accessKeySecret': scrt,
+            'SecurityToken': token_value,
+            'bucket': bucket_name
+        }       
+        return JsonResponse(data)
 
 
 def paginate_data(qs, page_size, page, paginated_type, **kwargs):

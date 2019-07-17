@@ -283,13 +283,24 @@ var applyTokenDo = function () {
         url: url,
         async: false,
         success: function (result) {
-            client = new OSS({
-                region: result.region,
-                accessKeyId: result.accessKeyId,
-                accessKeySecret: result.accessKeySecret,
-                stsToken: result.SecurityToken,
-                bucket: result.bucket
-            });
+            if (result.direct) {
+                client = new OSS({
+                    region: result.region,
+                    accessKeyId: result.accessKeyId,
+                    accessKeySecret: result.accessKeySecret,
+                    bucket: result.bucket
+                });
+            }
+            else {
+                client = new OSS({
+                    region: result.region,
+                    accessKeyId: result.accessKeyId,
+                    accessKeySecret: result.accessKeySecret,
+                    stsToken: result.SecurityToken,
+                    bucket: result.bucket
+                });
+            }
+        
         },
         error: function (e) {
             bootbox.alert('Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com')
