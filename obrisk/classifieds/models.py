@@ -70,7 +70,6 @@ class Classified(models.Model):
     class Meta:
         verbose_name = _("Classified")
         verbose_name_plural = _("Classifieds")
-        ordering = ("-timestamp",)
 
     def __str__(self):
         return self.title
