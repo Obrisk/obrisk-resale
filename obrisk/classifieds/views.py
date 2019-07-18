@@ -14,7 +14,7 @@ from django.http import HttpResponse
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
-from django.db.models import OuterRef, Subquery
+from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 from slugify import slugify
 
 from taggit.models import Tag
@@ -46,7 +46,13 @@ from dal import autocomplete
 @login_required
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
-    classifieds_list = Classified.objects.get_active().filter(city=request.user.city).annotate (
+    classifieds_list = Classified.objects.get_active().annotate(
+        order = Case (
+            When(city=request.user.city, then=Value(1)),
+            default=Value(2),
+            output_field=IntegerField(),
+        )
+    ).annotate (
         image_thumb = Subquery (
             ClassifiedImages.objects.filter(
                 classified=OuterRef('pk'),
@@ -54,11 +60,10 @@ def classified_list(request, tag_slug=None):
                 'image_thumb'
             )[:1]
         )
-    )
+    ).order_by('order')
 
     popular_tags = Classified.objects.get_counted_tags()
-    other_classifieds = Classified.objects.none()
-    official_ads = OfficialAd.objects.all() 
+    #official_ads = OfficialAd.objects.all() 
 
     paginator = Paginator(classifieds_list, 30)  # 30 classifieds in each page
     page = request.GET.get('page')
@@ -74,31 +79,7 @@ def classified_list(request, tag_slug=None):
             # return an empty page            
             return HttpResponse('')
         # If page is out of range deliver last page of results
-        classifieds = paginator.page(paginator.num_pages) 
-    # When the last page user can see only fifty classifieds in other cities. To improve this near future.
-    if page:
-        if int(page) == paginator.num_pages:
-            other_classifieds = Classified.objects.exclude(city=request.user.city).annotate (
-                image_thumb = Subquery (
-                    ClassifiedImages.objects.filter(
-                        classified=OuterRef('pk'),
-                    ).values(
-                        'image_thumb'
-                    )[:1]
-                )
-            )[:30]
-    else:
-        #If the page is the first one and it is the only one show other_classifieds
-        if paginator.num_pages == 1:
-            other_classifieds = Classified.objects.exclude(city=request.user.city).annotate (
-                image_thumb = Subquery (
-                    ClassifiedImages.objects.filter(
-                        classified=OuterRef('pk'),
-                    ).values(
-                        'image_thumb'
-                    )[:1]
-                )
-            )[:30]
+        classifieds = paginator.page(paginator.num_pages)     
         
     # Deal with tags in the end to override other_classifieds.
     tag = None
@@ -114,16 +95,14 @@ def classified_list(request, tag_slug=None):
                 )[:1]
             )
         )
-        other_classifieds = Classified.objects.none()
     
     if request.is_ajax():        
        return render(request,'classifieds/classified_list_ajax.html',
-                    {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
-                   'base_active': 'classifieds'})   
+                    {'page': page, 'classifieds': classifieds, 'base_active': 'classifieds'})   
     
     return render(request, 'classifieds/classified_list.html',
-                  {'page': page, 'classifieds': classifieds, 'other_classifieds': other_classifieds, 'official_ads': official_ads,
-                   'tag': tag, 'popular_tags': popular_tags, 'base_active': 'classifieds'})
+                {'page': page, 'classifieds': classifieds,'tag': tag,
+                 'popular_tags': popular_tags, 'base_active': 'classifieds'})
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds
