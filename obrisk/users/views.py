@@ -253,8 +253,9 @@ def friendship_add_friend(
         try:
             Friend.objects.add_friend(from_user, to_user)
         except AlreadyFriendsError :
-            return view_friends(request, to_user)
-            
+            return view_friends(request, from_user)
+        except AlreadyExistsError : 
+            return view_friends(request, from_user)
         else:
             return redirect("users:friendship_request_list")
 
@@ -343,11 +344,8 @@ def followers(request, username, template_name="users/followers.html"):
     """ List this user's followers """
     user = get_object_or_404(user_model, username=username)
     followers = Follow.objects.followers(user)
-    return render(request, template_name, {
-        get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name(),
-        'followers': followers,
-    })
+    ctx = {"followers": followers}
+    return render(request, template_name, ctx)
 
 
 def following(request, username, template_name="users/following.html"):
@@ -403,7 +401,7 @@ def all_users(request, template_name="friendship/user_actions.html"):
     )
 
 
-def blocking(request, username, template_name="users/blockers.html"):
+def blockers(request, username, template_name="users/blockers.html"):
     """ List this user's followers """
     user = get_object_or_404(user_model, username=username)
     blockers = Block.objects.blocked(user)
@@ -418,7 +416,7 @@ def blocking(request, username, template_name="users/blockers.html"):
     )
 
 
-def blockers(request, username, template_name="users/blocking_list.html"):
+def blocking(request, username, template_name="users/blocking.html"):
     """ List who this user follows """
     user = get_object_or_404(user_model, username=username)
     blocking = Block.objects.blocking(user)
@@ -434,7 +432,7 @@ def blockers(request, username, template_name="users/blocking_list.html"):
 
 
 @login_required
-def block_add(request, blocked_username, template_name="friendship/block/add.html"):
+def block_add(request, blocked_username, template_name="users/add_block.html"):
     """ Create a following relationship """
     ctx = {"blocked_username": blocked_username}
 
@@ -443,17 +441,17 @@ def block_add(request, blocked_username, template_name="friendship/block/add.htm
         blocker = request.user
         try:
             Block.objects.add_block(blocker, blocked)
-        except AlreadyExistsError as e:
-            ctx["errors"] = ["%s" % e]
+        except AlreadyExistsError :
+            return blocking(request, blocking)
         else:
-            return redirect("friendship_blocking", username=blocker.username)
+            return redirect("users:friendship_blocking", username=blocker.username)
 
     return render(request, template_name, ctx)
 
 
 @login_required
 def block_remove(
-    request, blocked_username, template_name="friendship/block/remove.html"
+    request, blocked_username, template_name="users/remove_block.html"
 ):
     """ Remove a following relationship """
     if request.method == "POST":

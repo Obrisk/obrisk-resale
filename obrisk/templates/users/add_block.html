@@ -7,16 +7,14 @@
 {% endblock head %}
 
 {% block content %}
-<div>
 {% if not followee_username == request.user.username %}
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
 <form method="post">
 {% csrf_token %}
-<input type="hidden" name="followee_username" value="{{ followee_username }}" />
-<input type="submit" value="start following {{ followee_username }}" />
+<input type="hidden" name="blocked_username" value="{{ blocked_username }}" />
+<input type="submit" value="⛔block {{ blocked_username }}" />
 </form>
 {% endif %}
-</div>
 
 {% endblock content %}
 

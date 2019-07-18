@@ -148,23 +148,6 @@ def receive_message(request):
 
 
 
-# @login_required
-# @require_http_methods(["GET"])
-
-# def make_friends(request):
-
-#     message = Message.objects.all()
-#     to_user = message.recipient
-#     for sender in message:
-#         from_user = message.sender
-#         to_user = message.recipient
-#         if Friend.objects.are_friends(request.user, to_user) == False:
-#             f_request = Friend.objects.add_friend(from_user, to_user)
-#             f_request.accept()
-#             return redirect('messager:contacts_list')
-
-#         if AlreadyExistsError:
-#             return redirect('messager:conversation_detail', to_user)
 
 @login_required
 @require_http_methods(["GET"])

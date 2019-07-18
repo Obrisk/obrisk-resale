@@ -7,20 +7,22 @@
 {% endblock head %}
 
 {% block content %}
+
 <div>{{ friendship_request.from_user }} wants to be friends with {{ friendship_request.to_user }}</div>
 
 <form method="post" action="{% url 'users:friendship_accept' friendship_request.pk %}">
 {% csrf_token %}
-<input type="submit" value="👍accept" />
+<input type="submit" value="✔️✅accept" />
 </form>
 
 <form method="post" action="{% url 'users:friendship_reject' friendship_request.pk %}">
 {% csrf_token %}
-<input type="submit" value="👎reject" />
+<input type="submit" value="❌reject" />
 </form>
 
-    
-
+<div>
+  <a href="{% url 'users:detail' request.user.username%}"> back </a>
+</div>
 {% endblock content %}
 
 {% block extra_js %}

@@ -13,17 +13,12 @@
             <li>{{ friendship_request.from_user }} to {{ friendship_request.to_user }} <a href="{% url 'users:friendship_requests_detail' friendship_request.id %}">view</a></li>
         {% empty %}
         </ul>
-        <div>no requests :(</div>
+        <div>no requests 😕 sent to you so far</div>
         {% endfor %}
-</div>
-<div class="row" style="margin-top: 1em" style="overflow: scroll!important">
-
-  <div class="col-md-8 m-auto title">
-  </div>
-  <div class="col-md-8 col-10 m-auto list-group users-list " style="overflow: scroll!important">
         
-   
-
+</div>
+<div>
+  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
 </div>
 {% endblock content %}
 

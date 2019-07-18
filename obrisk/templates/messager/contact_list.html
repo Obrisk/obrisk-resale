@@ -10,7 +10,7 @@
 
 {% block content %}
 <div>
-    <a class="btn btn-dark "  href="{% url 'friendship:friendship_view_friends' user %}">{% trans 'my friends🤝' %}</a>
+    <a href="{% url 'users:friendship_view_friends' user %}">{% trans 'my friends🤝' %}</a>
 </div>
 <div class="row" style="margin-top: 1em" style="overflow: scroll!important">
 

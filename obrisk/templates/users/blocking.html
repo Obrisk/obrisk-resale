@@ -7,19 +7,12 @@
 {% endblock head %}
 
 {% block content %}
-
-<div class="row" style="margin-top: 1em" style="overflow: scroll!important">
-
-  
+{% load friendshiptags %}
+<h1>Blocking⛔</h1>
+{% get_by_name friendship_context_object_name as var %}
+{% blocking var %}
 <div>
-    
-</div>
-  <div class="col-md-8 col-10 m-auto list-group users-list " style="overflow: scroll!important">
-        
-
-
-   
-
+  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
 </div>
 {% endblock content %}
 

@@ -7,23 +7,15 @@
 {% endblock head %}
 
 {% block content %}
+{% load friendshiptags %}
+<h1><div>
+  <a href="{% url 'users:detail' request.user.username%}"> back </a>
+</div>Blockers</h1>
+{% get_by_name friendship_context_object_name as var %}
+{% blockers var %}
 
-<div class="row" style="margin-top: 1em" style="overflow: scroll!important">
-
-  <div class="col-md-8 m-auto title">
-    <h4 style="color: black; font-weight: bold;">{% trans 'Recent----' %}</h4>
-  </div>
 <div>
-    
-</div>
-  <div class="col-md-8 col-10 m-auto list-group users-list " style="overflow: scroll!important">
-        
-
-    
-    
-
-   
-
+  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
 </div>
 {% endblock content %}
 

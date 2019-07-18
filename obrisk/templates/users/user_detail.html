@@ -11,26 +11,24 @@
 {% block content %}
 <div>
 
+  {% if request.user.username == object.username %}
 
-  {% if  request.user == user %}
-
-  <a class="btn btn-dark" href="{% url 'users:friendship_request_list' %}">{% trans '🤔friend request🌍' %}</a>
-  <a class="btn btn-dark" href="{% url 'users:friendship_view_friends' user %}">{% trans 'my friends🤝' %}</a>
-  <a class="btn btn-dark" href="{% url 'users:friendship_blocking' user %}">{% trans 'friendship_blocking' %}</a>
-  <a class="btn btn-dark" href="{% url 'users:friendship_following' user %}">{% trans 'friendship_following' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_request_list'   %}">{% trans '🤔friend request🌍' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_view_friends' object.username   %}">{% trans 'my friends🤝' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_blocking'  object.username  %}">{% trans '⛔blocked' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_following'  object.username  %}">{% trans 'following' %}</a>
     {% if object.is_official %}
             
-      <a class="btn btn-dark" href="{% url 'users:friendship_followers' user %}">{% trans 'my followers🤝' %}</a>
-      <a class="btn btn-dark" href="{% url 'users:follower_remove' user %}">{% trans 'follower_remove' %}</a>
+      <a class="btn btn-dark" href="{% url 'users:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
 
     {% endif %}
   {% else %}
-  <a class="btn btn-dark" href="{% url 'users:friendship_add_friend' user.username %}">{% trans '👬👭👬' %}</a>
-  <a class="btn btn-dark" href="{% url 'users:block_add' user %}">{% trans 'block_add' %}</a>
-  <a class="btn btn-dark" href="{% url 'users:block_remove' user %}">{% trans 'block_remove' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:friendship_add_friend' object.username  %}">{% trans '➕add friends' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:block_add'  object.username  %}">{% trans 'block' %}</a>
+  <a class="btn btn-dark" href="{% url 'users:block_remove'  object.username  %}">{% trans '🏁 unblock' %}</a>
     {% if object.is_official %}
-     <a class="btn btn-dark" href="{% url 'users:follower_add' user %}">{% trans 'follower_add' %}</a>
-     <a class="btn btn-dark" href="{% url 'users:follower_remove' user %}">{% trans 'follower_remove' %}</a>
+     <a class="btn btn-dark" href="{% url 'users:follower_add'   object.username %}">{% trans 'follow' %}</a>
+     <a class="btn btn-dark" href="{% url 'users:follower_remove'  object.username  %}">{% trans 'unfollow' %}</a>
     
     {% endif %}
 
