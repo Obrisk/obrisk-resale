@@ -1,5 +1,6 @@
 import datetime
 import itertools
+import operator
 from django.conf import settings
 from django.db import models
 from django.db.models import Count
@@ -34,7 +35,7 @@ class ClassifiedQuerySet(models.query.QuerySet):
                 else: #smart
                     tag_dict[tag] += 1
 
-        return tag_dict.items()
+        return sorted(tag_dict.items(), key=operator.itemgetter(1), reverse=True)
 
 
 class Classified(models.Model):

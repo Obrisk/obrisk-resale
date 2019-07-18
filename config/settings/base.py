@@ -223,6 +223,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'obrisk.classifieds.context_processors.cached_queries',
             ],
         },
     },

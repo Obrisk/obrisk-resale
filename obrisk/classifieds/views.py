@@ -37,10 +37,17 @@ from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.core.cache import cache
 from obrisk.helpers import ajax_required
 
 from dal import autocomplete
 
+def set_popular_tags(request):
+    popular_tags = Classified.objects.get_counted_tags()
+
+    cache.set('popular_tags', list(popular_tags))
+
+    return HttpResponse("Successfully sorted the popular tags!", content_type='text/plain')
 
 
 @login_required
@@ -62,7 +69,6 @@ def classified_list(request, tag_slug=None):
         )
     ).order_by('order')
 
-    popular_tags = Classified.objects.get_counted_tags()
     #official_ads = OfficialAd.objects.all() 
 
     paginator = Paginator(classifieds_list, 30)  # 30 classifieds in each page
@@ -101,8 +107,7 @@ def classified_list(request, tag_slug=None):
                     {'page': page, 'classifieds': classifieds, 'base_active': 'classifieds'})   
     
     return render(request, 'classifieds/classified_list.html',
-                {'page': page, 'classifieds': classifieds,'tag': tag,
-                 'popular_tags': popular_tags, 'base_active': 'classifieds'})
+                {'page': page, 'classifieds': classifieds,'tag': tag, 'base_active': 'classifieds'})
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds
@@ -172,7 +177,6 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
-
 
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
