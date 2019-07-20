@@ -20,6 +20,10 @@
     </div>
   </form>
 
+    <a href="{% url 'classifieds:delete_classified' classified.pk %}">
+        <span class="pull-right" aria-hidden="true" title="{% trans 'Click to delete this classified post' %}"> 🗑️ </span>
+    </a>
+
 </div>
 
 {{ form.media }}

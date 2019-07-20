@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+
+{# block head_title %}{% trans "Delete stories" %}{% endblock #}
+
+{% block content %}
+<h1>{% trans "Delete a classified post" %}</h1>
+
+<p>{% trans 'Are you sure you want to continue? If you do this you will delete this classified post!' %}</p>
+
+<form method="post" action="{% url 'classifieds:delete_classified' classified.pk %}">
+  {% csrf_token %}
+  <button class="btn btn-dark" type="submit">{% trans 'Delete' %}</button>
+  <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-dark">Cancel</a>
+
+</form>
+
+
+
+{% endblock %}

@@ -93,13 +93,13 @@
                       {% if post.user.thumbnail %}
                           <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
-                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                          class="rounded-circle  mb-0 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
                       {% else %}
                           <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
                       {% endif %}
-                    <div id="classified-user">
-                      <div class="d-flex flex-row mt-2"><strong
-                          class="mr-3">{{ post.user.get_profile_name|title }}</strong>
+                    <div id="post-user">
+                      <div class="d-flex flex-row mt-2">
+                      <strong class="ml-0 mr-3">{{ post.user.get_profile_name|title }}</strong>
                       </div>
                     </div>
                   </a>

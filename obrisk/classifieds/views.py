@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views import View
-from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView
+from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView, DeleteView
 from django.views.generic.edit import BaseFormView
 from django.urls import reverse
 from django.shortcuts import render, redirect, get_object_or_404
@@ -15,6 +15,7 @@ from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
+from django.urls import reverse_lazy
 from slugify import slugify
 
 from taggit.models import Tag
@@ -115,6 +116,8 @@ def classified_list(request, tag_slug=None):
 
 #     def get_queryset(self, **kwargs):
 #         return Classified.objects.get_expired()
+
+
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
@@ -331,6 +334,15 @@ class ReportClassifiedView(LoginRequiredMixin, View):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
+
+
+class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
+    """Implementation of the DeleteView overriding the delete method to
+    allow a no-redirect response to use with AJAX call."""
+    model = Classified
+    success_url = reverse_lazy("classifieds:list")
+
 
 
 class DetailClassifiedView(DetailView):

@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 
 from obrisk.classifieds.views import (classified_list, set_popular_tags, CreateOfficialAdView, TagsAutoComplete,
-                                      CreateClassifiedView, EditClassifiedView,
+                                      CreateClassifiedView, EditClassifiedView, ClassifiedDeleteView,
                                       ReportClassifiedView, DetailClassifiedView)
 app_name = 'classifieds'
 urlpatterns = [
@@ -17,6 +17,7 @@ urlpatterns = [
     url(r'^tag/([-\w]+)/$', classified_list, name='list_by_tag'),
     url(r'^report/(?P<pk>\d+)/$', ReportClassifiedView.as_view(), name='report_classified'),
     url(r'^edit/(?P<pk>\d+)/$', EditClassifiedView.as_view(), name='edit_classified'),
+    url(r'^delete/(?P<pk>[-\w]+)/$', ClassifiedDeleteView.as_view(), name='delete_classified'),
     url(r'^(?P<slug>[-\w]+)/$', DetailClassifiedView.as_view(), name='classified'),
 
 ]

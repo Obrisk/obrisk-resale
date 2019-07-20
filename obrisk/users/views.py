@@ -195,7 +195,7 @@ def send_code_sms(request):
                     # Send your sms message.
                     ret = client.publish(
                         PhoneNumber=str(full_number),
-                        Message=f"[Obrisk] Welcome, your verification code is {random}. Thank you for signing up!",
+                        Message=f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!",
                         MessageAttributes={
                             'string': {
                                 'DataType': 'String',
