@@ -16,10 +16,11 @@
   <div class="col-lg-10 m-auto">
     <div class="align-items-center d-flex justify-content-end mb-5 mt-3 justify-content-between justify-content-lg-end">
 
-      <div class="toggle-tags d-lg-none">
+      <!--tags-->
+      {% comment %} <div class="toggle-tags d-lg-none">
         <a href=""></a>
         <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-      </div>
+      </div> {% endcomment %}
       <!-- Write question Widget -->
       <a href="{% url 'qa:ask_question' %}" class="btn btn-dark pull-right">
         📝{% trans "Ask a Question" %}
@@ -29,8 +30,7 @@
   </div>
 
 
-  <div id="sidebar" class="sidebar mr-4">
-    <!-- Cloud Tag Widget -->
+  <!-- div id="sidebar" class="sidebar mr-4">
     <div class="card">
       <div class="card-header">
         <h5>{% trans 'Popular tags' %}</h5>
@@ -43,7 +43,7 @@
       </div>
     </div>
 
-  </div>
+  </div> -->
 
   <div class="row">
     <div class="questions col-12 col-md-9 m-auto">

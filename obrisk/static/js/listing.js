@@ -20,6 +20,6 @@
 
     }
 
-    sidebarOverlay.addEventListener('click', closeSidebar);
-    sidebarBtnOpen.addEventListener('click', openSidebar);
+    //sidebarOverlay.addEventListener('click', closeSidebar);
+    //sidebarBtnOpen.addEventListener('click', openSidebar);
   })()
