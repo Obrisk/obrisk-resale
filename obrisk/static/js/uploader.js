@@ -118,9 +118,7 @@ OssUpload.prototype = {
                     file = uploader.fileList[i];
                     _this.uploadFile(file, filename);
                 }
-
             }
-
         });
         $(".queueList .filelist").delegate('li span.cancel', 'click', function () {
             var $this = $(this);
@@ -179,7 +177,6 @@ OssUpload.prototype = {
                             } else {
                                 $totalProgressbar.css('width', progressBar)
                                     .html(progressBar);
-
                             }
 
                             images += ',' + res.name;
@@ -204,7 +201,7 @@ OssUpload.prototype = {
                         });
                     return results;
                 } catch (e) {
-                    bootbox.alert("Oops! an error occured during the image upload, \
+                    bootbox.alert("Oops! an error occured when uploading your image(s), \
                     Please try again later or contact us via support@obrisk.com")
                     $(".start-uploader").css('display', 'block');
                     console.log(e);
@@ -217,7 +214,6 @@ OssUpload.prototype = {
             Please try again later or contact us at support@obrisk.com")
             $(".start-uploader").css('display', 'block');
         }
-
     },
 
     /**
@@ -303,8 +299,8 @@ var applyTokenDo = function () {
         
         },
         error: function (e) {
-            bootbox.alert('Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com')
-            //console.log(e)
+            bootbox.alert('Oops! an error occured during the upload initialization, Please try again later or contact us via support@obrisk.com')
+            console.log(e)
         }
     });
 };
