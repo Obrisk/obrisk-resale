@@ -202,7 +202,7 @@ OssUpload.prototype = {
                     return results;
                 } catch (e) {
                     bootbox.alert("Oops! an error occured when uploading your image(s), \
-                    Please try again later or contact us via support@obrisk.com")
+                    Please try again later or contact us via support@obrisk.com. " + e);
                     $(".start-uploader").css('display', 'block');
                     console.log(e);
                 }
