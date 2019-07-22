@@ -93,11 +93,17 @@ THIRD_PARTY_APPS = [
     'markdownx',
     'taggit',
     'star_ratings',
+<<<<<<< HEAD
     'pwa_webpush',
+=======
+    'friendship',
+    
+>>>>>>> implmented frienship and followship features
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
     # Your stuff: custom apps go here
+    'obrisk.friend.apps.FriendConfig',        
     'obrisk.classifieds.apps.ClassifiedsConfig',
     'obrisk.messager.apps.MessagerConfig',
     'obrisk.stories.apps.StoriesConfig',

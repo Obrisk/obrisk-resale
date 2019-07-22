@@ -10,6 +10,13 @@ from django.urls import reverse
 
 from obrisk.messager.models import Message
 from obrisk.helpers import ajax_required
+from django.core.exceptions import ValidationError
+
+from friendship.exceptions import AlreadyExistsError
+from friendship import models
+from friendship.models import (Block, Follow, Friend,
+                            FriendshipRequest, AlreadyFriendsError)
+
 
 
 class ContactsListView(LoginRequiredMixin, ListView):
@@ -63,7 +70,41 @@ class ConversationListView(LoginRequiredMixin, ListView):
             return reverse('messager:contacts_list')   
     
 
-         
+
+@login_required
+@require_http_methods(["POST"])
+def chat_init(request, to_username):
+    """ Create a FriendshipRequest """
+
+    to_user = get_user_model().objects.get(username=to_username)
+    from_user = request.user
+
+    if Friend.objects.are_friends(request.user, to_user) == True:
+        return redirect("messager:conversation_detail" , to_username)
+    else:
+        try:
+            f_request = Friend.objects.add_friend(from_user, to_user)
+            """ Accept a friendship request """
+            f_request.accept()
+        except ValidationError:
+            messages.error(request,
+                    "Hello, it looks like you are trying to do something suspicious. \
+                    you can't initiate a classified conversation with yourself!")
+            return redirect('messager:contacts_list')
+        except AlreadyExistsError:
+            return redirect('messager:conversation_detail', to_username)
+        except AlreadyFriendsError:
+            return redirect('messager:conversation_detail', to_username)
+        except:
+            messages.error(request,
+                    "Hello we are sorry, something wrong just happened! We're on it!")
+            return redirect('messager:contacts_list')
+        else:
+            return redirect('messager:conversation_detail', to_username)
+
+
+
+
 @login_required
 @ajax_required
 @require_http_methods(["POST"])
@@ -98,3 +139,21 @@ def receive_message(request):
     message = Message.objects.get(pk=message_id)
     return render(request,
                   'messager/single_message.html', {'message': message})
+
+
+
+@login_required
+@require_http_methods(["GET"])
+def make_friends(request):
+    messages = Message.objects.all()
+    for message in messages:
+        from_user = message.sender
+        to_user = message.recipient
+        if Friend.objects.are_friends(from_user, to_user) == False:
+            f_request = Friend.objects.add_friend(from_user, to_user)
+            f_request.accept()
+
+        elif AlreadyExistsError:
+            continue
+
+    return redirect('messager:contacts_list')

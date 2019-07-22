@@ -38,11 +38,30 @@ from .forms import UserForm, EmailSignupForm, PhoneResetPasswordForm, PhoneSignu
 from .models import User
 from .phone_verification import send_sms, verify_counter
 
+<<<<<<< HEAD
     
 #There is no need to override this view. By default All-auth directly login users when they signup.
 class EmailSignUp(SignupView):
     form_class = EmailSignupForm
     template_name = 'account/email_signup.html'
+=======
+from friendship.models import Friend, Follow, FriendshipRequest, Block
+try:
+    from django.contrib.auth import get_user_model
+
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
+    user_model = User
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class SignUp(CreateView):
+    form_class = PhoneSignupForm
+    success_url = reverse_lazy('classifieds:list')
+    template_name = 'account/phone_signup.html'
+>>>>>>> implmented frienship and followship features
 
 
 def send_code(full_number, theme):
@@ -153,6 +172,23 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        # pk = kwargs.get('pk')pk=self.object.pk
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        """
+        this prints the other user
+        user = get_object_or_404(user_model, pk=self.object.pk)
+        """
+        user = self.request.user
+        #print(user)
+        friends = Friend.objects.friends(user)
+        following = Follow.objects.following(user)
+        followers = Follow.objects.followers(user)
+        context['friends'] = friends
+        context['followers'] = followers
+        context['following'] = following
+        return context
 
 class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False

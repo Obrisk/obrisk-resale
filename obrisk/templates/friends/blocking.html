@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans 'Contacts' %}{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/messager.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block content %}
+{% load friendshiptags %}
+<h1>Blocking⛔</h1>
+{% get_by_name friendship_context_object_name as var %}
+{% blocking var %}
+<div>
+  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+{% endblock extra_js %}

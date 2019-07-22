@@ -12,6 +12,8 @@ from obrisk.users.views import PasswordResetFromKeyView
 from obrisk.helpers import get_oss_auth
 
 urlpatterns = [
+
+    
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
     url(r'^download-pwa/$', 
@@ -36,10 +38,17 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts-authorization/', include('allauth.urls')),
     # Third party apps here
+
     url(r'^comments/', include('django_comments.urls')),
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
     url(r'^markdownx/', include('markdownx.urls')),
     # Local apps here
+    
+    #url(r'^friendship/', include('friendship.urls')),
+    url(r'^friends/', include('obrisk.friend.urls', namespace='friends')),
+
+    
+    
     url(r'^ws/notifications/',
         include('obrisk.notifications.urls', namespace='notifications')),
     url(r'^classifieds/',

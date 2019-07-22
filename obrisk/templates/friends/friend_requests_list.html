@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans 'Contacts' %}{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/messager.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block content %}
+<div>
+    <ul>
+        {% for friendship_request in requests %}
+            <li>{{ friendship_request.from_user }}
+               <a class="btn btn-outline-primary" href="{% url 'friends:friendship_requests_detail' friendship_request.id %}">view</a></li>
+        {% empty %}
+        </ul>
+        <div>no requests 😕 sent to you so far</div>
+        {% endfor %}
+        
+</div>
+<div>
+  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+{% endblock extra_js %}

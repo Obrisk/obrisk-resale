@@ -10,6 +10,44 @@
 {% block content %}
 <a href="{% url 'classifieds:list' %}" class="d-sm-block d-md-none btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 
+<div>
+
+{% if request.user.username == object.username %}
+
+  <a class="btn btn-outline-primary" href="{% url 'friends:friendship_request_list'   %}">{% trans '🤔friend request🌍' %}</a>
+  <a class="btn btn-outline-primary" href="{% url 'friends:friendship_view_friends' object.username %}">{% trans 'my friends🤝' %}</a>
+  <a class="btn btn-outline-primary" href="{% url 'friends:friendship_following'  object.username  %}">{% trans 'following' %}</a>
+    {% if object.is_official %}
+            
+      <a class="btn btn-outline-primary" href="{% url 'friends:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
+
+    {% endif %}
+
+{% else %}
+
+    {% if object in friends %}     
+      
+       
+      <a class="btn btn-outline-primary" href="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬chat' %}</a>
+      
+    {% else %}
+       <a class="btn btn-outline-primary" href="{% url 'friends:friendship_add_friend' object.username  %}">{% trans '➕add friends' %}</a>
+    {% endif %}
+    {% if object in following %}
+      {% for following in following %}
+        <a class="btn btn-outline-primary" href="{% url 'friends:follower_remove'  object.username  %}">{% trans 'unfollow' %}</a>
+      {% endfor %}
+    {% else %}
+      {% if object.is_official %}
+      <a class="btn btn-outline-primary" href="{% url 'friends:follower_add'   object.username %}">{% trans 'follow' %}</a>
+      {% endif %}
+    {% endif %}
+    
+  {% endif %}    
+</div>
+    
+
+
 <div class="col-md-8 m-auto">
   <div class="media user-profile profile-header d-flex flex-column">
     {% if object.picture %}

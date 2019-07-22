@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans 'Contacts' %}{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/messager.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block content %}
+
+<div>{{ friendship_request.from_user }} wants to be friends with {{ friendship_request.to_user }}</div>
+
+<form method="post" action="{% url 'friends:friendship_accept' friendship_request.pk %}">
+{% csrf_token %}
+<input type="submit" class="btn btn-outline-primary" value="✔️accept" />
+</form>
+
+<form method="post" action="{% url 'friends:friendship_reject' friendship_request.pk %}">
+{% csrf_token %}
+<input type="submit" class="btn btn-outline-primary" value="❌reject" />
+</form>
+
+<div>
+  <a href="{% url 'users:detail' request.user.username%}"> back </a>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+{% endblock extra_js %}
