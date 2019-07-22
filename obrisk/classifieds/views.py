@@ -341,6 +341,7 @@ class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     """Implementation of the DeleteView overriding the delete method to
     allow a no-redirect response to use with AJAX call."""
     model = Classified
+    message = _("Your classified post has been deleted successfully!")
     success_url = reverse_lazy("classifieds:list")
 
 

@@ -182,22 +182,19 @@ OssUpload.prototype = {
                             images += ',' + res.name;
 
                         }).catch((err) => {
-                            if (client && client.isCancel()) {
-                              console.log('stoped upload!');
-                            } else {
-                                console.error(err);
-                                console.log(`err.name : ${err.name}`);
-                                console.log(`err.message : ${err.message}`);
+                            console.error(err);
+                            console.log(`err.name : ${err.name}`);
+                            console.log(`err.message : ${err.message}`);
 
-                                if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
-                                    // timeout retry
-                                    if (retryCount < retryCountMax) {
-                                        retryCount++;
-                                        console.error(`retryCount : ${retryCount}`);
-                                        uploadFile('');
-                                    }
+                            if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
+                                // timeout retry
+                                if (retryCount < retryCountMax) {
+                                    retryCount++;
+                                    console.error(`retryCount : ${retryCount}`);
+                                    uploadFile('');
                                 }
                             }
+                            
                         });
                     return results;
                 } catch (e) {
