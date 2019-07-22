@@ -114,15 +114,26 @@ OssUpload.prototype = {
                                 if (retryCount < retryCountMax) {
                                     retryCount++;
                                     console.error(`retryCount : ${retryCount}`);
-                                    uploadFile('');
+                                    upload();
                                 }
+                                else {
+                                    //We have retried to the max and there is nothing we can do
+                                    //Allow the users to submit the form atleast with default image.
+                                    $totalProgressbar.css('width', '80%')
+                                    .html("Upload facing errors!");                                    
+                                }
+                            } else {
+                                //Not timeout out error and there is nothing we can do
+                                //Allow the users to submit the form atleast with default image.
+                                $totalProgressbar.css('width', '80%')
+                                    .html("Upload facing error!");
                             }
                         
-                        });;
+                        });
                     return results;
                 } catch (e) {
                     bootbox.alert("Oops! an error occured during the image upload, \
-                    Please try again later or contact us via support@obrisk.com")
+                    Please try again later or contact us via support@obrisk.com" + e);
                     $(".start-uploader").css('display', 'block');
                     console.log(e);
                 }
@@ -185,15 +196,7 @@ var applyTokenDo = function () {
         url: url,
         async: false,
         success: function (result) {
-            if (result.direct) {
-                client = new OSS({
-                    region: result.region,
-                    accessKeyId: result.accessKeyId,
-                    accessKeySecret: result.accessKeySecret,
-                    bucket: result.bucket
-                });
-            }
-            else {
+            if (!result.direct) {
                 client = new OSS({
                     region: result.region,
                     accessKeyId: result.accessKeyId,
@@ -202,10 +205,18 @@ var applyTokenDo = function () {
                     bucket: result.bucket
                 });
             }
+            else {
+                client = new OSS({
+                    region: result.region,
+                    accessKeyId: result.accessId,
+                    accessKeySecret: result.stsTokenKey,
+                    bucket: result.bucket
+                });
+            }
         },
         error: function (e) {
-            bootbox.alert('Oops! an error occured during the upload, Please try again later or contact us via support@obrisk.com')
-            //console.log(e)
+            bootbox.alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
+            console.log(e)
         }
     });
 };

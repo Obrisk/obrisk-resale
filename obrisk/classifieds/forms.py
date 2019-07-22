@@ -7,6 +7,7 @@ class ClassifiedForm(forms.ModelForm):
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
     details = forms.CharField(widget=forms.Textarea)
     images = forms.CharField(widget=forms.HiddenInput(), max_length=1500) #100 for each image.
+    img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) #Store images error for later debugging.
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "contact_info", "tags" , "located_area"]

@@ -195,6 +195,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
+        img_errors = form.cleaned_data['img_error']
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
 
@@ -217,7 +218,11 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 classified.user = self.request.user
                 classified.save()
 
-                #from here you return form invalid then you have to prior delete the classified, classified.delete()
+                if img_errors:
+                    #In the near future, send a message like sentry to our mailbox to notify about the error!
+                    print('ERRORS ON IMAGE UPLOADING...')
+                    print(img_errors)
+                #from here if you return form invalid then you have to prior delete the classified, classified.delete()
                 #The current implementation will sucessfully create classified even when there are error on images
                 #This is just to help to increase the classifieds post on the website. The user shouldn't be discourage with errors
                 #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
@@ -257,7 +262,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                             if index+1 == tot_imgs:
                                 messages.error(self.request, "Oops we are sorry. It looks like some of your images, \
                                     were not uploaded successfully. Please edit your item to add images. "
-                                    + '{0} not found: http_status={1}, request_id={2}'.format(key, e.status, e.request_id))
+                                    + '{0} not found: http_status={1}, request_id={2}'.format(e.status, e.request_id))
                     
                                 for tag in form.cleaned_data['tags']:
                                     classified.tags.add(tag)

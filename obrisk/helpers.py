@@ -131,8 +131,8 @@ def get_oss_auth(request):
         data = {
             'direct': "true",
             'region': region,
-            'accessKeyId': key_id,
-            'accessKeySecret': scrt,
+            'accessId': key_id,
+            'stsTokenKey': scrt,
             'bucket': bucket_name
         }
         return JsonResponse(data)
