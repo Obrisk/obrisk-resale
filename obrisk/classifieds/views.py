@@ -21,7 +21,7 @@ from slugify import slugify
 from taggit.models import Tag
 from obrisk.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
-from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
+from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm, ClassifiedTestForm
 from obrisk.helpers import bucket, bucket_name
 
 # For images
@@ -180,6 +180,111 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
+
+class UploadTest(CreateView):
+    """Basic CreateView implementation to create new classifieds."""
+    model = Classified
+    message = _("Your classified has been created.")
+    form_class = ClassifiedTestForm
+    template_name = 'classifieds/upload_test.html'
+
+    def __init__(self, **kwargs):
+        self.object = None
+        super().__init__(**kwargs)
+        
+
+    def form_valid(self, form):
+        images_json = form.cleaned_data['images']
+        img_errors = form.cleaned_data['img_error']
+        # split one long string of images into a list of string each for one JSON obj
+        images_list = images_json.split(",")
+
+        #The code from here onwards assume the first element of images list is undefined.
+        tot_imgs = len(images_list)
+
+        if tot_imgs < 2:
+            messages.error(self.request, "Sorry, it looks like the images were not uploaded successfully. \
+                or you've done something wrong. Please add the images again and submit the form!")
+            return self.form_invalid(form)
+        else:
+            if (images_list[1] == None or img_errors or images_list[1].startswith('classifieds/') == False):
+                messages.error(self.request, "Sorry, the images were not uploaded successfully. \
+                    Please add the images again and submit the form!")
+                return self.form_invalid(form)
+            
+            else:
+                form.instance.user = self.request.user
+                classified = form.save(commit=False)
+                classified.user = self.request.user
+                classified.price = 12.00
+                classified.status = "E"
+                classified.save()
+
+                #from here if you return form invalid then you have to prior delete the classified, classified.delete()
+                #The current implementation will sucessfully create classified even when there are error on images
+                #This is just to help to increase the classifieds post on the website. The user shouldn't be discourage with errors
+                #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
+                for index, str_result in enumerate(images_list):
+                    if index == 0:
+                        continue
+
+                    if str_result.startswith('classifieds/') == False:
+                        messages.error(self.request, "Hello! It looks like some of the images you uploaded, \
+                            were corrupted, or you've done something wrong. Please edit your post, \
+                            and upload the images again.")
+                        return redirect ('upload_test')
+                    
+                    else:
+                        img = ClassifiedImages(image=str_result)
+                        img.classified = classified
+
+                        d = str(datetime.datetime.now())
+                        thumb_name = "classifieds/" + str(classified.user) + "/" + \
+                        slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+                        style = 'image/resize,m_fill,h_156,w_156'
+                        
+                        try:
+                            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                            oss2.compat.to_bytes(thumb_name))),
+                                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                            bucket.process_object(str_result, process)
+
+                            img.image_thumb = thumb_name
+                            img.save()
+                        
+                        except oss2.exceptions.NoSuchKey as e:
+                            #If the image doesn't exit, don't save the image just save the tags.
+                            if index+1 == tot_imgs:
+                                messages.error(self.request, "Oops we are sorry. It looks like some of your images, \
+                                    were not uploaded successfully. Please edit your item to add images. "
+                                    + '{0} not found: http_status={1}, request_id={2}'.format(e.status, e.request_id))
+                    
+                                return redirect ('upload_test')
+                            else:
+                                continue
+                            
+                        except oss2.exceptions.ServerError as e:
+                            #If we can't create a thumbnail, then there is something wrong with the image.
+                            #Since object exists on the bucket, then save the image, and the tags. the problem is ours.
+                            #In the future retry the process to generate thumbnails.
+                            if index+1 == tot_imgs:
+                                messages.error(self.request, "Oops we are very sorry. \
+                                Your images were not uploaded successfully. Please ensure that, \
+                                your internet connection is stable and edit your item to add images. "
+                                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                    
+                                return redirect ('upload_test')
+                            else:
+                                img.save()
+                                continue
+                    
+                #When the for-loop has ended return the results.        
+                return  redirect('classifieds:classified',  slug=classified.slug)
+
+
+
 
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""

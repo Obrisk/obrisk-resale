@@ -113,7 +113,7 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
 bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
 
-@login_required
+#@login_required
 @require_http_methods(["GET"])
 def get_oss_auth(request):
     """AJAX Functional view to recieve just the minimum information, process
