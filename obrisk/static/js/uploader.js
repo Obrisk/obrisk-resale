@@ -152,9 +152,7 @@ OssUpload.prototype = {
      */
     uploadFile: function (file, filename) {
 
-        $totalProgressbar.css('width', '30%')
-                            
-                    .html('Uploading...');
+        $totalProgressbar.css('width', '30%').html('Uploading...');
         applyTokenDo();
 
         //make sure we get the sts token
@@ -210,6 +208,8 @@ OssUpload.prototype = {
                                     
                                     if (!images) {
                                         images = 'undef,classifieds/error-img.jpg';
+                                        bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                            But you can submit this form without images and edit your post later to add images");
                                     }
                                 }
                             } else {
@@ -222,6 +222,8 @@ OssUpload.prototype = {
 
                                 if (!images) {
                                     images = 'undef,classifieds/error-img.jpg';
+                                    bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                            But you can submit this form without images and edit your post later to add images");
                                 }
                             }
                             
@@ -302,6 +304,7 @@ var progress = function (p) { //p percentage 0~1
  */
 var applyTokenDo = function () {
     var url = oss_url; //Request background to obtain authorization address url
+    $totalProgressbar.css('width', '30%').html('Uploading...');
     $.ajax({
         url: url,
         async: false,

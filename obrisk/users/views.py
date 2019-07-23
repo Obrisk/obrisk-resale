@@ -1,7 +1,7 @@
 import uuid, os
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
-from django.views.generic import CreateView,DetailView, ListView, RedirectView, UpdateView
+from django.views.generic import CreateView,DetailView, ListView, RedirectView, UpdateView, FormView
 from django.utils.crypto import get_random_string
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -72,6 +72,8 @@ class SignUp(CreateView):
         except:
             return super(SignUp, self).form_valid(form)     
 
+class PhonePasswordResetView(FormView):
+    pass
 
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
@@ -152,6 +154,9 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         # Only get the User record for the user making the request
         return User.objects.get(username=self.request.user.username)
 
+
+
+    
 
 class UserListView(LoginRequiredMixin, ListView):
     model = User
