@@ -34,9 +34,9 @@
        <a class="btn btn-outline-primary" href="{% url 'friends:friendship_add_friend' object.username  %}">{% trans '➕add friends' %}</a>
     {% endif %}
     {% if object in following %}
-      {% for following in following %}
+     
         <a class="btn btn-outline-primary" href="{% url 'friends:follower_remove'  object.username  %}">{% trans 'unfollow' %}</a>
-      {% endfor %}
+      
     {% else %}
       {% if object.is_official %}
       <a class="btn btn-outline-primary" href="{% url 'friends:follower_add'   object.username %}">{% trans 'follow' %}</a>
