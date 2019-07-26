@@ -93,12 +93,8 @@ THIRD_PARTY_APPS = [
     'markdownx',
     'taggit',
     'star_ratings',
-<<<<<<< HEAD
-    'pwa_webpush',
-=======
     'friendship',
     
->>>>>>> implmented frienship and followship features
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',

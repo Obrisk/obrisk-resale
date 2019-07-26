@@ -8,46 +8,9 @@
 {% endblock head %}
 
 {% block content %}
+<<<<<<< HEAD
 <a href="{% url 'classifieds:list' %}" class="d-sm-block d-md-none btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
-
-<div>
-
-{% if request.user.username == object.username %}
-
-  <a class="btn btn-outline-primary" href="{% url 'friends:friendship_request_list'   %}">{% trans '🤔friend request🌍' %}</a>
-  <a class="btn btn-outline-primary" href="{% url 'friends:friendship_view_friends' object.username %}">{% trans 'my friends🤝' %}</a>
-  <a class="btn btn-outline-primary" href="{% url 'friends:friendship_following'  object.username  %}">{% trans 'following' %}</a>
-    {% if object.is_official %}
-            
-      <a class="btn btn-outline-primary" href="{% url 'friends:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
-
-    {% endif %}
-
-{% else %}
-
-    {% if object in friends %}     
-      
-       
-      <a class="btn btn-outline-primary" href="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬chat' %}</a>
-      
-    {% else %}
-       <a class="btn btn-outline-primary" href="{% url 'friends:friendship_add_friend' object.username  %}">{% trans '➕add friends' %}</a>
-    {% endif %}
-    {% if object in following %}
-     
-        <a class="btn btn-outline-primary" href="{% url 'friends:follower_remove'  object.username  %}">{% trans 'unfollow' %}</a>
-      
-    {% else %}
-      {% if object.is_official %}
-      <a class="btn btn-outline-primary" href="{% url 'friends:follower_add'   object.username %}">{% trans 'follow' %}</a>
-      {% endif %}
-    {% endif %}
-    
-  {% endif %}    
-</div>
-    
-
-
+=======
 <div class="col-md-8 m-auto">
   <div class="media user-profile profile-header d-flex flex-column">
     {% if object.picture %}
@@ -57,6 +20,7 @@
       <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
       <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
     {% endif %}
+>>>>>>>  making adjustments for the buttons
 
     <div class="media-body">
       <h1 class="mt-0">{{ object.username|title }}</h1>
@@ -67,8 +31,37 @@
       <div class="points"> {{ object.points }} </div>
     </div>
     {% if request.user.username == object.username %}
-    <a class="btn btn-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+    <a class="btn btn-outline-dark" href="{% url 'friends:friendship_request_list'   %}">{% trans '🤔friend request🌍' %}</a>
+    <a class="btn btn-outline-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+    <a class="btn btn-outline-dark" href="{% url 'friends:friendship_view_friends' object.username %}">{% trans 'my friends🤝' %}</a>
+    <a class="btn btn-outline-dark" href="{% url 'friends:friendship_following'  object.username  %}">{% trans 'following' %}</a>
+    {% if object.is_official %}
+            
+      <a class="btn btn-outline-dark" href="{% url 'friends:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
+
     {% endif %}
+
+{% else %}
+
+    {% if object in friends %}     
+      
+       
+      <a class="btn btn-outline-dark" href="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬chat' %}</a>
+      
+    {% else %}
+       <a class="btn btn-outline-dark" href="{% url 'friends:friendship_add_friend' object.username  %}">{% trans '➕add friends' %}</a>
+    {% endif %}
+    {% if object in following %}
+     
+        <a class="btn btn-outline-danger" href="{% url 'friends:follower_remove'  object.username  %}">{% trans 'unfollow' %}</a>
+      
+    {% else %}
+      {% if object.is_official %}
+      <a class="btn btn-outline-dark" href="{% url 'friends:follower_add'   object.username %}">{% trans 'follow' %}</a>
+      {% endif %}
+    {% endif %}
+    
+  {% endif %}    
     <!--This is else statement. <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
   </div>
   <div class="container profile-wrapper">

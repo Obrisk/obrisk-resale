@@ -38,13 +38,6 @@ from .forms import UserForm, EmailSignupForm, PhoneResetPasswordForm, PhoneSignu
 from .models import User
 from .phone_verification import send_sms, verify_counter
 
-<<<<<<< HEAD
-    
-#There is no need to override this view. By default All-auth directly login users when they signup.
-class EmailSignUp(SignupView):
-    form_class = EmailSignupForm
-    template_name = 'account/email_signup.html'
-=======
 from friendship.models import Friend, Follow, FriendshipRequest, Block
 try:
     from django.contrib.auth import get_user_model
@@ -61,7 +54,6 @@ class SignUp(CreateView):
     form_class = PhoneSignupForm
     success_url = reverse_lazy('classifieds:list')
     template_name = 'account/phone_signup.html'
->>>>>>> implmented frienship and followship features
 
 
 def send_code(full_number, theme):
