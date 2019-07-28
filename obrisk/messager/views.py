@@ -31,8 +31,18 @@ class ContactsListView(LoginRequiredMixin, ListView):
         users, msgs = Message.objects.get_conversations(self.request.user)
         context['zip_list'] = zip(users, msgs)
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
+        
         context['base_active'] = 'chat'
+
+        user = self.request.user
+        friends = Friend.objects.friends(user)
+        following = Follow.objects.following(user)
+        followers = Follow.objects.followers(user)
+        context['friends'] = friends
+        context['followers'] = followers
+        context['following'] = following
         return context
+
 
 class ConversationListView(LoginRequiredMixin, ListView):
     """CBV to render the inbox, showing a specific conversation with a given

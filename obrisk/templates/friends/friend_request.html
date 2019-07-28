@@ -7,7 +7,9 @@
 {% endblock head %}
 
 {% block content %}
-<div>{{ friendship_request.from_user }} wants to be friends with {{ friendship_request.to_user }}</div>
+{% include "chats.html" %}
+
+<div>{{ friendship_request.from_user }} wants to be friends with you</div>
 
 <form method="post" action="{% url 'friends:friendship_accept' friendship_request.pk %}">
 {% csrf_token %}

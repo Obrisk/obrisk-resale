@@ -12,8 +12,9 @@
 {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
 <form method="post">
 {% csrf_token %}
+<b><i>Do you want to send a friend request to {{ to_username }}  </i></b>
 <input type="hidden" name="to_username" value="{{ to_username }}" />
-<input type="submit" value="add {{ to_username }} as a friend" />
+ <input type="submit" value=" send" />❔ 
 </form>
 {% endif %}
 </div>

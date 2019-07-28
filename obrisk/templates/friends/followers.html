@@ -7,11 +7,18 @@
 {% endblock head %}
 
 {% block content %}
+{% include "chats.html" %}
+
 {% for f in followers %}
-   {{ f.username }} 
+<h1><b>request.user.username }}'s Followers</b></h1>
+  {{ f.username }} 
+{% empty %}
+  Sorry {{ request.user.username }}, you do not have any followers right now 😞
+  
 {% endfor %}
 <div>
-  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
+  <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 my profile </a>
+
 </div>
 </div>
 {% endblock content %}

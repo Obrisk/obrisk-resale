@@ -7,6 +7,14 @@
 {% endblock head %}
 
 {% block content %}
+{% include "chats.html" %}
+
+    {% if object.is_official %}
+            
+      <a class="btn btn-outline-dark" href="{% url 'friends:friendship_followers'  user  %}">{% trans 'my followers🤝' %}</a>
+
+    {% endif %}
+    <div class="row" style="margin-top: 1em" style="overflow: scroll!important"></div>
 <div class="row" style="margin-top: 1em" style="overflow: scroll!important">
 
   <div class="col-md-8 m-auto title">

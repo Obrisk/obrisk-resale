@@ -7,12 +7,22 @@
 {% endblock head %}
 
 {% block content %}
+{% include "chats.html" %}
+
 {% load friendshiptags %}
-<h1>Following</h1>
-{% get_by_name friendship_context_object_name as var %}
-{% following var %}
+
+<h2><b>{{ request.user.username }}'s Following list</b></h2>
+{% for f in following %}
+<h1><b>request.user.username }}'s Following list</b></h1>
+{{ f.username }}
+{% empty %}
+Sorry {{ request.user.username }}, you do not follow any official account right now 😞
+
+{% endfor %}
+  
 <div>
-  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
+  <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 my profile </a>
+
 </div>
 </div>
 {% endblock content %}

@@ -7,6 +7,8 @@
 {% endblock head %}
 
 {% block content %}
+{% include "chats.html" %}
+
 <div>
     <ul>
         {% for friendship_request in requests %}
@@ -14,12 +16,13 @@
                <a class="btn btn-outline-primary" href="{% url 'friends:friendship_requests_detail' friendship_request.id %}">view</a></li>
         {% empty %}
         </ul>
-        <div>no requests 😕 sent to you so far</div>
+        <div>You have recieved no friend requests  for now 😕 .</div>
         {% endfor %}
         
 </div>
 <div>
-  <a href="{% url 'users:detail' request.user.username%}"> ⏪back </a>
+  <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 my profile </a>
+
 </div>
 {% endblock content %}
 

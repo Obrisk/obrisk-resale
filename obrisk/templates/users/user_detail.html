@@ -31,10 +31,7 @@
       <div class="points"> {{ object.points }} </div>
     </div>
     {% if request.user.username == object.username %}
-    <a class="btn btn-outline-dark" href="{% url 'friends:friendship_request_list'   %}">{% trans '🤔friend request🌍' %}</a>
     <a class="btn btn-outline-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
-    <a class="btn btn-outline-dark" href="{% url 'friends:friendship_view_friends' object.username %}">{% trans 'my friends🤝' %}</a>
-    <a class="btn btn-outline-dark" href="{% url 'friends:friendship_following'  object.username  %}">{% trans 'following' %}</a>
     {% if object.is_official %}
             
       <a class="btn btn-outline-dark" href="{% url 'friends:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
