@@ -16,7 +16,11 @@
                <a class="btn btn-outline-primary" href="{% url 'friends:friendship_requests_detail' friendship_request.id %}">view</a></li>
         {% empty %}
         </ul>
-        <div>You have recieved no friend requests  for now 😕 .</div>
+        <div>
+          <p>You have recieved no friend requests  for now 😕 .</p><br>
+          <p>chat with sellers in <a href="{% url 'classifieds:list' %}">{% trans 'classifieds' %}</a> to add other obriskers as friends </p><br>
+
+        </div>
         {% endfor %}
         
 </div>

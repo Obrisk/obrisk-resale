@@ -10,7 +10,6 @@
 {% include "chats.html" %}
 
 {% for f in followers %}
-<h1><b>request.user.username }}'s Followers</b></h1>
   {{ f.username }} 
 {% empty %}
   Sorry {{ request.user.username }}, you do not have any followers right now 😞
