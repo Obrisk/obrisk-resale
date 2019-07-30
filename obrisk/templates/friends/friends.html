@@ -12,20 +12,29 @@
 <div>
     {% include "chats.html" %}
 
-  {% for f in friends %}
-</b></h2>
-  <p>{{ f.username }}      <a class="btn btn-outline-dark" href="{% url 'messager:conversation_detail' f.username  %}">{% trans '💬chat' %}</a></p>
+{% for f in friends %}
+     {% if f.thumbnail %}
+      <a href="{% url 'users:detail' f.username %}">
+         <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}" alt="Picture Profile"
+          style="width:40px;height:40px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
+      {% else %}
+            <a href="{% url 'users:detail' f.username %}">
+            <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
+      {% endif %}
+          
+      <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
+      <a class="btn btn-outline-dark" href="{% url 'messager:conversation_detail' f.username  %}">{% trans '💬chat' %}</a></strong>
+      <br>
   {% empty %}
     <p>Sorry {{ request.user.username }}, you have no friends right now 😞</p><br>
-    <p>chat with sellers in <a href="{% url 'classifieds:list' %}">{% trans 'classifieds' %}</a> to add other obriskers as friends </p><br>
-
   {% endfor %}
   
 
   
 </div>
 <div>
-Back to my <a href="{% url 'users:detail' request.user.username%}">profile 👤</a>
+<a href="{% url 'users:detail' request.user.username%}" class="btn btn-dark"> Back </a>
 <!-- back to <a class="btn btn-outline-dark" href="{% url 'messager:contacts_list'  %}"> chat</a> -->
 
 </div>
