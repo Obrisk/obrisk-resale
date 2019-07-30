@@ -16,6 +16,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 from django.urls import reverse_lazy
+from django.core.mail import send_mail
 from slugify import slugify
 
 from taggit.models import Tag
@@ -108,7 +109,7 @@ def classified_list(request, tag_slug=None):
                     {'page': page, 'classifieds': classifieds, 'base_active': 'classifieds'})   
     
     return render(request, 'classifieds/classified_list.html',
-                {'page': page, 'classifieds': classifieds,'tag': tag, 'base_active': 'classifieds'})
+                {'page': page, 'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds
@@ -196,6 +197,19 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
         img_errors = form.cleaned_data['img_error']
+
+        form.instance.user = self.request.user
+        classified = form.save(commit=False)
+        classified.user = self.request.user
+        classified.save()
+        
+        if img_errors:
+            #In the near future, send a message like sentry to our mailbox to notify about the error!
+            send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
+        
+        if not images_json:
+            return super(CreateClassifiedView, self).form_valid(form)
+
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
 
@@ -211,17 +225,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                 messages.error(self.request, "Sorry, the images were not uploaded successfully. \
                     Please add the images again and submit the form!")
                 return self.form_invalid(form)
-            
-            else:
-                form.instance.user = self.request.user
-                classified = form.save(commit=False)
-                classified.user = self.request.user
-                classified.save()
 
-                if img_errors:
-                    #In the near future, send a message like sentry to our mailbox to notify about the error!
-                    print('ERRORS ON IMAGE UPLOADING...')
-                    print(img_errors)
                 #from here if you return form invalid then you have to prior delete the classified, classified.delete()
                 #The current implementation will sucessfully create classified even when there are error on images
                 #This is just to help to increase the classifieds post on the website. The user shouldn't be discourage with errors
@@ -234,59 +238,56 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                         messages.error(self.request, "Hello! It looks like some of the images you uploaded, \
                             were corrupted, or you've done something wrong. Please edit your post, \
                             and upload the images again.")
-                        for tag in form.cleaned_data['tags']:
-                            classified.tags.add(tag)
-                        return redirect ('classifieds:list')
+                        classified.delete()
+                        return self.form_invalid(form)
                     
                     else:
-                        img = ClassifiedImages(image=str_result)
-                        img.classified = classified
-
                         d = str(datetime.datetime.now())
                         thumb_name = "classifieds/" + str(classified.user) + "/" + \
                         slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
                         style = 'image/resize,m_fill,h_156,w_156'
                         
+                        img = ClassifiedImages(image=str_result)
+                        img.classified = classified
+
                         try:
                             process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
                                                                         oss2.compat.to_string(base64.urlsafe_b64encode(
                                                                             oss2.compat.to_bytes(thumb_name))),
                                                                         oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
                             bucket.process_object(str_result, process)
-
-                            img.image_thumb = thumb_name
-                            img.save()
                         
-                        except oss2.exceptions.NoSuchKey as e:
-                            #If the image doesn't exit, don't save the image just save the tags.
+                        except oss2.exceptions.OssError as e:
+                            #Most likely this is our problem so save the image without the thumbnail:
                             if index+1 == tot_imgs:
                                 messages.error(self.request, "Oops we are sorry. It looks like some of your images, \
                                     were not uploaded successfully. Please edit your item to add images. "
-                                    + '{0} not found: http_status={1}, request_id={2}'.format(e.status, e.request_id))
+                                    + 'status={0}, request_id={1}'.format(e.status, e.request_id))
                     
-                                for tag in form.cleaned_data['tags']:
-                                    classified.tags.add(tag)
-                                return redirect ('classifieds:list')
-                            else:
-                                continue
-                            
-                        except oss2.exceptions.ServerError as e:
-                            #If we can't create a thumbnail, then there is something wrong with the image.
-                            #Since object exists on the bucket, then save the image, and the tags. the problem is ours.
-                            #In the future retry the process to generate thumbnails.
-                            if index+1 == tot_imgs:
-                                messages.error(self.request, "Oops we are very sorry. \
-                                Your images were not uploaded successfully. Please ensure that, \
-                                your internet connection is stable and edit your item to add images. "
-                                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
-                    
+                                img.save()
                                 for tag in form.cleaned_data['tags']:
                                     classified.tags.add(tag)
                                 return redirect ('classifieds:list')
                             else:
                                 img.save()
-                                continue
+                                continue   
+
+                        except:
+                            #If there is a problem with the thumbnail generation, don't save the image just save the tags.
+                            if index+1 == tot_imgs:
+                                messages.error(self.request, "Oops we are sorry. It looks like some of your images, \
+                                    were not uploaded successfully. Please edit your item to add images. "
+                                    + 'status={0}, request_id={1}'.format(e.status, e.request_id))
                     
+                                for tag in form.cleaned_data['tags']:
+                                    classified.tags.add(tag)
+                                return redirect ('classifieds:list')
+                            else:
+                                continue   
+                        else:
+                            img.image_thumb = thumb_name
+                            img.save()
+
                 #When the for-loop has ended return the results.        
                 return super(CreateClassifiedView, self).form_valid(form)
 

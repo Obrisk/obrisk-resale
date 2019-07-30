@@ -1,5 +1,5 @@
+//localStorage.debug = 'ali-oss';
 /**
- * Upload file object
  * fileStats: File statistics
  * filename: The address of the uploaded file
  * * */
@@ -15,13 +15,13 @@ var uploader = {
 
 //Upload instance object
 var Buffer = OSS.Buffer;
-var OSS = OSS.Wrapper;
 var STS = OSS.STS;
 var FileMaxSize = 13000000
 var TotalFilesMaxSize = 8
 var images; 
 var img_error; //Records the errors happened during upload.
 var client;
+var imgClient;  //If we'll  be checking the file size.
 var ossUpload = '';
 
 let retryCount = 0;
@@ -163,31 +163,42 @@ OssUpload.prototype = {
                     const results = await client.multipartUpload(filename, file, {
                             progress: progress,
                             partSize: 200 * 1024,      //Minimum is 100*1024
-                            timeout: 60000          // 1 minute timeout
+                            timeout: 120000,          // 2 minutes timeout
+                            
                         })
                         .then(function (res) {
-                        
-                            $("#" + file.id).children(".success-span").addClass("success");
-                            $("#" + file.id).children(".file-panel").hide();
-                            uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                            uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                            progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
-                            progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+                            //https://github.com/forsigner/browser-md5-file
+                            //check md5 or file size meta if possible
+                            //const fileInfo = client.head(filename);
+                            //const ossMD5 = fileInfo.res.headers['content-md5'];
                             
-                            if (progressBarNum == 100) {
-                                $totalProgressbar.css('width', progressBar)
-                                    .html('Upload complete');
-                            } else {
-                                $totalProgressbar.css('width', progressBar)
-                                    .html(progressBar);
-                            }
+                            //Or https://github.com/ali-sdk/ali-oss#imgclientgetinfoname-options
+                            //imgClient.getInfo(filename);
+                            
+                            //if (file on the server is okay) {
+                                $("#" + file.id).children(".success-span").addClass("success");
+                                $("#" + file.id).children(".file-panel").hide();
+                                uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                                uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                                progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
+                                progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+                                
+                                if (progressBarNum == 100) {
+                                    $totalProgressbar.css('width', progressBar)
+                                        .html('Upload complete');
+                                } else {
+                                    $totalProgressbar.css('width', progressBar)
+                                        .html(progressBar);
+                                }
 
-                            images += ',' + res.name;
+                                images += ',' + res.name; 
+                            //} else (retry)
 
                         }).catch((err) => {
                             console.error(err);
                             console.log(`err.name : ${err.name}`);
                             console.log(`err.message : ${err.message}`);
+                            console.log(`err.request : ${err.requestId}`);
 
                             $totalProgressbar.css('width', '40%')
                                     .html("Retrying...");
@@ -204,7 +215,7 @@ OssUpload.prototype = {
                                     $totalProgressbar.css('width', '94%')
                                     .html("Completed with minor errors!");
                                     
-                                    img_error = err.name + " Message: " + err.message;
+                                    img_error = err.name +", Message: "+ err.message +", RequestID: "+ err.requestId;
                                     
                                     if (!images) {
                                         images = 'undef,classifieds/error-img.jpg';
@@ -218,7 +229,7 @@ OssUpload.prototype = {
                                 $totalProgressbar.css('width', '94%')
                                     .html("Completed with minor errors!");
                                 
-                                img_error = err.name + " Message: " + err.message;
+                                img_error = err.name +", Message: "+ err.message +", RequestID: "+ err.requestId;
 
                                 if (!images) {
                                     images = 'undef,classifieds/error-img.jpg';
@@ -236,7 +247,6 @@ OssUpload.prototype = {
                     console.log(e);
                 }
             }
-
             return upload()
         } else {
             bootbox.alert("Oops!, it looks like there is a network problem, \
@@ -395,15 +405,10 @@ $(function () {
 
 
     $(".create").click(function (event) {
-        if (!images) {
-            event.preventDefault();
-            bootbox.alert("Please upload at least one image for your advertisement!");
-        } else {
             $("input[name='status']").val("A");
             $("#id_images").val(images);
             $("#id_img_error").val(img_error);
             $("#classified-form").submit();
-        }
     });
 
     $(".draft").click(function () {
