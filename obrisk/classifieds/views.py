@@ -39,15 +39,20 @@ from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
+from django.conf import settings
 from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from obrisk.helpers import ajax_required
 
 from dal import autocomplete
 
+TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
+
+
 def set_popular_tags(request):
     popular_tags = Classified.objects.get_counted_tags()
 
-    cache.set('popular_tags', list(popular_tags))
+    cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
     return HttpResponse("Successfully sorted the popular tags!", content_type='text/plain')
 
@@ -202,7 +207,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified = form.save(commit=False)
         classified.user = self.request.user
         classified.save()
-        
+
         if img_errors:
             #In the near future, send a message like sentry to our mailbox to notify about the error!
             send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
