@@ -38,6 +38,7 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600" rel="stylesheet">
+
   <!-- This file stores project-specific CSS -->
   <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
 
@@ -224,16 +225,28 @@
   <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
   {% endif %}
 
-
-  <script>
-    //Hide nav bar on click outside
+<script type="text/javascript">
+    function registerServiceWorker() {
+        // register sw script in supporting browsers
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
+            console.log('Service Worker registered successfully.');
+          }).catch(error => {
+            console.log('Service Worker registration failed:', error);
+          });
+        }
+      }
+    
+     //Hide nav bar on click outside
 
     $(document).on('click', function () {
       $('.collapse').collapse('hide');
     })
-  </script>
-  <!-- bootbox for alert-->
-  <script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
+
+</script>
+
+<!-- bootbox for alert-->
+<script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
 
   {% endblock javascript %}
 

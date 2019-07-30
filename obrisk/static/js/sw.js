@@ -7,15 +7,15 @@ self.addEventListener('install', e => {
      // add all URLs of resources we want to cache
      return cache.addAll([
        '/',
-       '/phone_signup.html',
-       '/login.html',
-       '/classified_list.html',
-       '/stories_list.html',
-       '/question_list.html',
-       '/contact_list.html',
-       '/images/doggo.jpg',
-       '/styles/obrisk.css',
-       '/scripts/obrisk.js',
+       '../../templates/account/phone_signup.html',
+       '../../templates/account/login.html',
+       '../../templates/classifieds/classified_list.html',
+       '../../templates/stories/stories_list.html',
+       '../../templates/qa/question_list.html',
+       '../../templates/messager/contact_list.html',
+       '../img/.jpg',
+       '../css/obrisk.css',
+       './obrisk.js',
      ]);
    })
  );
