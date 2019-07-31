@@ -1,9 +1,11 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from phonenumber_field.modelfields import PhoneNumberField
 
-from obrisk.users.models import User 
 from obrisk.users import models
+
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 from allauth.account.forms import SignupForm
 
@@ -77,5 +79,12 @@ class PhoneSignupForm(UserCreationForm):
         for fieldname in ['password1']:
             self.fields[fieldname].help_text = "At least 8 character, can't be too common or entirely numeric"
 
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(
+                label="Phone or Email or Username", 
+                error_messages={'incomplete': 'Please enter a correct username or phone number or email',
+                                 'invalid':"Wrong Phone number or Email or Username"
+                                }
+            )
 
 

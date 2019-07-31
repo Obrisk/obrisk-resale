@@ -9,6 +9,7 @@ from django.shortcuts import redirect
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
 from obrisk.helpers import get_oss_auth
+from obrisk.users.views import CustomLoginView
 
 urlpatterns = [
     url(r'^$',
@@ -22,6 +23,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
     url(r'^contacts/$',
         TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
+    url(r'^accounts-authorization/login/', CustomLoginView.as_view(), name='login'),
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),

@@ -1,5 +1,6 @@
 import uuid, os
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import LoginView
 from django.urls import reverse
 from django.views.generic import CreateView,DetailView, ListView, RedirectView, UpdateView, FormView
 from django.utils.crypto import get_random_string
@@ -24,7 +25,7 @@ import ast
 import boto3
 
 from obrisk.helpers import bucket, bucket_name
-from .forms import UserForm, PhoneSignupForm
+from .forms import UserForm, PhoneSignupForm, CustomLoginForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
 
@@ -71,6 +72,10 @@ class SignUp(CreateView):
                     
         except:
             return super(SignUp, self).form_valid(form)     
+
+class CustomLoginView(LoginView):
+    authentication_form = CustomLoginForm
+    template_name = "account/login.html"
 
 class PhonePasswordResetView(FormView):
     pass
