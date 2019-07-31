@@ -11,7 +11,6 @@
 
 {% load friendshiptags %}
 
-<h2><b>{{ request.user.username }}'s Following list</b></h2>
 {% for f in following %}
 {{ f.username }}
 {% empty %}
