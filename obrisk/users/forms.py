@@ -81,9 +81,9 @@ class PhoneSignupForm(UserCreationForm):
 
 class CustomLoginForm(AuthenticationForm):
     username = forms.CharField(
-                label="Phone no/Email/Username", 
+                label="Phone or Email or Username", 
                 error_messages={'incomplete': 'Please enter a correct username or phone number or email',
-                                 'invalid':"Wrong Phone number/Email/Username"
+                                 'invalid':"Wrong Phone number or Email or Username"
                                 }
             )
 

@@ -13,7 +13,6 @@ var uploader = {
 
 //Upload instance object
 var Buffer = OSS.Buffer;
-var OSS = OSS.Wrapper;
 var STS = OSS.STS;
 var FileMaxSize = 13000000
 var TotalFilesMaxSize = 1
@@ -91,18 +90,27 @@ OssUpload.prototype = {
                         partSize: 200 * 1024,      //Minimum is 100*1024
                         timeout: 120000          // 2 minutes timeout
                     }).then(function (res) {
-                            uploader.uploadFinishedFilesNum++;
-                            uploader.curFileSize += file.size;
+                            //https://github.com/forsigner/browser-md5-file
+                            //check md5 or file size meta if possible
+                            //const fileInfo = client.head(filename);
+                            //const ossMD5 = fileInfo.res.headers['content-md5'];
                             
-                            progressBarNum = (1).toFixed(2) * 100;
-                            progressBar = (1).toFixed(2) * 100 + '%';
+                            //Or https://github.com/ali-sdk/ali-oss#imgclientgetinfoname-options
+                            //imgClient.getInfo(filename);
+                            
+                            //if (file on the server is okay) {
+                                uploader.uploadFinishedFilesNum++;
+                                uploader.curFileSize += file.size;
+                                
+                                progressBarNum = (1).toFixed(2) * 100;
+                                progressBar = (1).toFixed(2) * 100 + '%';
 
-                            if (progressBarNum == 100) {
-                                $totalProgressbar.css('width', progressBar)
-                                .html('Upload has completed. Please save the changes at the bottom of the page!');
-                                $("#startUpload").hide();
-                            } 
-                            image = res.name;
+                                if (progressBarNum == 100) {
+                                    $totalProgressbar.css('width', progressBar)
+                                    .html('Upload has completed. Please save the changes at the bottom of the page!');
+                                    $("#startUpload").hide();
+                                } 
+                                image = res.name;
                         }).catch((err) => {
                            
                             console.error(err);
