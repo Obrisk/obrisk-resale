@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 
-from allauth.account.forms import SignupForm, LoginForm
+from allauth.account.forms import SignupForm, LoginForm, ResetPasswordForm
 from phonenumber_field.modelfields import PhoneNumberField
 from obrisk.users import models
 
@@ -103,3 +103,13 @@ class CustomLoginForm(LoginForm):
                 )
 
 
+class PhoneResetPasswordForm (forms.Form):
+    phone_number = forms.IntegerField(
+        label=_("Phone number"),
+        required=True,
+        widget=forms.TextInput(attrs={
+            "type": "tel",
+            "size": "30",
+            "placeholder": _("Phone number you registered with"),
+        })
+    )
