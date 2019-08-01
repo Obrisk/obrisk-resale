@@ -1,13 +1,14 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
-from phonenumber_field.modelfields import PhoneNumberField
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
 
+from allauth.account.forms import SignupForm, LoginForm
+from phonenumber_field.modelfields import PhoneNumberField
 from obrisk.users import models
 
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
-from allauth.account.forms import SignupForm
 
 class CustomUserCreationForm(UserCreationForm):
 
@@ -43,7 +44,8 @@ class UserForm(forms.ModelForm):
         # widgets = {
         #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
         # }
-    
+
+#This form inherits Allauth Signup Form 
 class CustomSignupForm(SignupForm): 
     province_region = forms.CharField (widget=forms.HiddenInput())
     city = forms.CharField (widget=forms.HiddenInput())
@@ -57,9 +59,8 @@ def signup(self, request, user):
     user.save() 
     return user 
 
-
+#This form inherits Django Signup Form and not all-auth. 
 class PhoneSignupForm(UserCreationForm): 
-
     class Meta:
         model = User
         widgets = {
@@ -74,17 +75,31 @@ class PhoneSignupForm(UserCreationForm):
 
 
     def __init__(self, *args, **kwargs):
-        super(UserCreationForm, self).__init__(*args, **kwargs)
+        super(PhoneSignupForm, self).__init__(*args, **kwargs)
 
         for fieldname in ['password1']:
             self.fields[fieldname].help_text = "At least 8 character, can't be too common or entirely numeric"
 
-class CustomLoginForm(AuthenticationForm):
-    username = forms.CharField(
-                label="Phone or Email or Username", 
-                error_messages={'incomplete': 'Please enter a correct username or phone number or email',
-                                 'invalid':"Wrong Phone number or Email or Username"
-                                }
-            )
+class CustomLoginForm(LoginForm):
+    error_messages = {
+        'account_inactive':
+        _("This account is currently inactive."),
+
+        'username_password_mismatch':
+        _("The login input and/or password you specified are not correct."),
+    }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(CustomLoginForm, self).__init__(*args, **kwargs)
+
+        self.fields["login"] = forms.CharField(widget=forms.TextInput(attrs={'placeholder':
+                                                    _('Username or Phone or Email'),
+                                                    'autofocus': 'autofocus'}),
+                    label="Login", 
+                    error_messages={'incomplete': 'Please enter a correct username or phone number or email',
+                                    'invalid':"Wrong Phone number or Email or Username"
+                                    }
+                )
 
 

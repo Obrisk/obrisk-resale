@@ -133,7 +133,7 @@ LOGIN_REDIRECT_URL = 'classifieds:list'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = 'account_login'
 
-
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 40 #40 Days.
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -262,7 +262,7 @@ MANAGERS = ADMINS
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ALLOW_REGISTRATION = env.bool('ACCOUNT_ALLOW_REGISTRATION', True)
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
