@@ -1,8 +1,15 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
+from django.conf import settings
 
 from allauth.account.forms import SignupForm, LoginForm, ResetPasswordForm
+from allauth.utils import (
+    build_absolute_uri,
+    get_username_max_length,
+    set_form_field_order,
+)
+from allauth.account import app_settings
 from phonenumber_field.modelfields import PhoneNumberField
 from obrisk.users import models
 
@@ -92,16 +99,39 @@ class CustomLoginForm(LoginForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(CustomLoginForm, self).__init__(*args, **kwargs)
-
-        self.fields["login"] = forms.CharField(widget=forms.TextInput(attrs={'placeholder':
+        
+        if settings.ACCOUNT_AUTHENTICATION_METHOD == 'email':
+            login_widget = forms.TextInput(attrs={'type': 'email',
+                                                  'placeholder':
+                                                  _('E-mail address'),
+                                                  'autofocus': 'autofocus'})
+            login_field = forms.EmailField(label=_("E-mail"),
+                                           widget=login_widget)
+        elif settings.ACCOUNT_AUTHENTICATION_METHOD \
+                == 'username':
+            login_widget = forms.TextInput(attrs={'placeholder':
+                                                  _('Username'),
+                                                  'autofocus': 'autofocus'})
+            login_field = forms.CharField(
+                label=_("Username"),
+                widget=login_widget,
+                max_length=get_username_max_length())
+        else:
+            assert settings.ACCOUNT_AUTHENTICATION_METHOD \
+                == 'username_email'
+            login_widget = forms.TextInput(attrs={'placeholder':
                                                     _('Username or Phone or Email'),
-                                                    'autofocus': 'autofocus'}),
-                    label="Login", 
-                    error_messages={'incomplete': 'Please enter a correct username or phone number or email',
-                                    'invalid':"Wrong Phone number or Email or Username"
-                                    }
-                )
+                                                    'autofocus': 'autofocus'})
+        
+            login_field = forms.CharField(label="Login", widget=login_widget)
 
+        self.fields["login"] = login_field
+        set_form_field_order(self, ["login", "password", "remember"])
+        if settings.SESSION_REMEMBER is not None:
+            del self.fields['remember']
+
+
+        
 
 class PhoneResetPasswordForm (forms.Form):
     phone_number = forms.IntegerField(

@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 from django.views.generic import CreateView,DetailView, ListView, RedirectView, UpdateView, FormView
 from django.utils.crypto import get_random_string
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from django.urls import reverse_lazy
 from django.core.cache import cache
@@ -14,6 +14,8 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator    
 from django.contrib import messages
+from django.contrib.auth.tokens import default_token_generator
+from django.contrib.auth import get_user_model
 
 import os
 import base64
@@ -21,6 +23,7 @@ import datetime
 import oss2
 import ast
 import boto3
+import json
 
 from allauth.account.views import LoginView, PasswordResetView 
 from obrisk.helpers import bucket, bucket_name
@@ -142,14 +145,23 @@ def send_code(full_number):
             #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"] 
 
 
+def get_users(full_number):
+    """Given an phone number, return matching user(s) who should receive a reset.
+    This allows subclasses to more easily customize the default policies
+    that prevent inactive users and users with unusable passwords from
+    resetting their password.
+    """
+    return get_user_model().objects.get(phone_number=full_number,is_active=True)
+     
+
 @require_http_methods(["GET", "POST"])
 def phone_password_reset(request):
     if request.method == "POST":
-        phone_number = request.POST.get("phone_number")
+        phone_number = request.POST.get("phone_no")
 
-        if phone is not None and len(phone) == 11 and phone[0] == '1':
+        if phone_number is not None and len(phone_number) == 11 and phone_number[0] == '1':
             
-            full_number = "+86" + phone
+            full_number = "+86" + phone_number
             check_phone = User.objects.filter(phone_number=full_number).exists()
 
             if check_phone is True:
@@ -286,12 +298,29 @@ def phone_verify(request):
         
         if phone_no is not None and code is not None:
             try:
-                if cache.get(str(full_number)) == code:
-                    return JsonResponse({'success': True})
+                saved_code = cache.get(str(full_number))
+            except:
+                return JsonResponse({'error_message': "The verification code has expired!" } )
+            else:
+                if saved_code == code:
+                    if str(request.META.get('HTTP_REFERER')).endswith("/users/phone-password-reset/") == True:
+                        try:
+                            user = get_users(full_number)
+                        except:
+                            return JsonResponse({'success': False, 'error_message': "The user registered with this phone number is not found!"})
+                        else:
+                            if user:
+                                token = default_token_generator.make_token(user)
+                                url = f"https://www.obrisk.com/accounts-authorization/password/reset/key/{token}" 
+
+                                return JsonResponse({'success': True, 'url':url })
+                            else:
+                                return JsonResponse({'success': False, 'error_message': "The user registered with this phone number is not found!"})
+                    else:
+                        return JsonResponse({'success': True})
+                
                 else:
                     return JsonResponse({'success': False, 'error_message': "The verification code is not correct!" })                    
-            except:
-                return JsonResponse({'message': "The verification code has expired!" } )
             return JsonResponse({'success': False})
         else:
             return JsonResponse({'success': False, 'error_message': "The phone number or the code is empty!"} )

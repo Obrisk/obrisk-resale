@@ -4,19 +4,22 @@ User = get_user_model()
 
 class PhoneAuthBackend(object):
     """
-    Authenticate using an e-mail address.
+    Authenticate using a phone number.
     """
     def authenticate(self, request, username=None, password=None):
-        try:
-            #This code only works for Chinese phone numbers.
-            if str(username).startswith("+86") == False:
-                username = "+86" + username
-            user = User.objects.get(phone_number=username)
-            if user.check_password(password):
-                return user
+        if str(username).isalpha():
             return None
-        except User.DoesNotExist:
-            return None
+        else:
+            try:
+                #This code only works for Chinese phone numbers.
+                if str(username).startswith("+86") == False:
+                    username = "+86" + username
+                user = User.objects.get(phone_number=username)
+                if user.check_password(password):
+                    return user
+                return None
+            except User.DoesNotExist:
+                return None
 
     def get_user(self, user_id):
         try:
