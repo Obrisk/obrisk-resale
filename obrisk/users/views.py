@@ -27,14 +27,15 @@ import json
 
 from allauth.account.views import LoginView, PasswordResetView 
 from obrisk.helpers import bucket, bucket_name
-from .forms import UserForm, PhoneSignupForm, CustomLoginForm, PhoneResetPasswordForm
+from .forms import UserForm, EmailSignupForm,  PhoneResetPasswordForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
 
-
+    
+#There is no need to override this view. By default All-auth auto login users without password
 @method_decorator(csrf_exempt, name='dispatch')
-class SignUp(CreateView):
-    form_class = PhoneSignupForm
+class EmailSignUp(CreateView):
+    form_class = EmailSignupForm
     success_url = reverse_lazy('classifieds:list')
     template_name = 'account/phone_signup.html'
 
@@ -47,7 +48,7 @@ class SignUp(CreateView):
         Handles User requests, instantiating a form instance and
         User variables and then checking them for validity."""
 
-        form = PhoneSignupForm(self.request.POST)
+        form = EmailSignupForm(self.request.POST)
 
         if form.is_valid():
             return self.form_valid(form)
@@ -76,8 +77,7 @@ class SignUp(CreateView):
         except:
             return super(SignUp, self).form_valid(form)     
 
-class CustomLoginView(LoginView):
-    form_class = CustomLoginForm
+
 
 
 def send_code(full_number):

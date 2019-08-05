@@ -1,3 +1,4 @@
+#This adapter file is just for reference but it is never used.
 from django.conf import settings
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
@@ -6,6 +7,7 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 class AccountAdapter(DefaultAccountAdapter):
     def save_user(self, request, user, form, commit=True):
         data = form.cleaned_data
+        print(data)
         user.email = data['email']
         user.username = data['username']
         user.province_region = data['province_region']
