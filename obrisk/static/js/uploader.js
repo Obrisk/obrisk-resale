@@ -183,32 +183,36 @@ OssUpload.prototype = {
 
                             })
                             .then(function (res) {
-                                //https://github.com/forsigner/browser-md5-file
-                                //check md5 or file size meta if possible
-                                //const fileInfo = client.head(filename);
-                                //const ossMD5 = fileInfo.res.headers['content-md5'];
 
-                                //Or https://github.com/ali-sdk/ali-oss#imgclientgetinfoname-options
-                                //imgClient.getInfo(filename);
+                                obrisk_urls = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
 
-                                //if (file on the server is okay) {
-                                $("#" + file.id).children(".success-span").addClass("success");
-                                $("#" + file.id).children(".file-panel").hide();
-                                uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                                uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                                progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
-                                progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+                                //Try to get the dominat color from the uploaded image, if it fails it means the image
+                                //was corrupted during upload
+                                $.ajax({
+                                    url: obrisk_urls + res.name + "?x-oss-process=image/average-hue",
+                                    success: function (result) {
+                                        $("#" + file.id).children(".success-span").addClass("success");
+                                        $("#" + file.id).children(".file-panel").hide();
+                                        uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                                        uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                                        progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
+                                        progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
 
-                                if (progressBarNum == 100) {
-                                    $totalProgressbar.css('width', progressBar)
-                                        .html('Upload complete');
-                                } else {
-                                    $totalProgressbar.css('width', progressBar)
-                                        .html(progressBar);
-                                }
+                                        if (progressBarNum == 100) {
+                                            $totalProgressbar.css('width', progressBar)
+                                                .html('Upload complete');
+                                        } else {
+                                            $totalProgressbar.css('width', progressBar)
+                                                .html(progressBar);
+                                        }
 
-                                images += ',' + res.name;
-                                //} else (retry)
+                                        images += ',' + res.name;
+                                    },
+                                    error: function (e) {
+                                        bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                            But you can submit this form without images and edit your post later to add images");
+                                    }
+                                });
 
                             }).catch((err) => {
                                 console.error(err);
