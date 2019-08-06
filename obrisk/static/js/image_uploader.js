@@ -13,7 +13,6 @@ var uploader = {
 
 //Upload instance object
 var Buffer = OSS.Buffer;
-var OSS = OSS.Wrapper;
 var STS = OSS.STS;
 var FileMaxSize = 13000000
 var TotalFilesMaxSize = 1
@@ -33,10 +32,10 @@ OssUpload.prototype = {
 
         $('input[type="file"]').change(function (e) {
             var file = e.target.files[0];
-          
+
             $('#uploader .placeholder').hide();
             $("#statusBar").css('display', 'flex');
-            
+
             //check if the upload quantity has reach max 
             if (!file) {
                 bootbox.alert("No image selected , Please select one or more images");
@@ -51,7 +50,7 @@ OssUpload.prototype = {
                     uploader.totalFilesSize = file.size;
                 } else {
                     bootbox.alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
-                }              
+                }
             }
             uploader.totalFilesNum = 1;
         });
@@ -61,13 +60,13 @@ OssUpload.prototype = {
                 event.preventDefault();
                 bootbox.alert("Please select the image to upload first by clicking the choose pic button!");
 
-           } else {
+            } else {
                 var filename = genKey();
                 var file = uploader.file;
                 $totalProgressbar.html('Upload has started, please wait...');
                 $("#startUpload").hide();
-                _this.uploadFile(file, filename);   
-           } 
+                _this.uploadFile(file, filename);
+            }
         });
     },
 
@@ -86,50 +85,49 @@ OssUpload.prototype = {
 
             const upload = async () => {
                 try {
-                    const results = await client.multipartUpload(filename, file , {
+                    const results = await client.multipartUpload(filename, file, {
                         progress: progress,
-                        partSize: 200 * 1024,      //Minimum is 100*1024
-                        timeout: 120000          // 2 minutes timeout
+                        partSize: 200 * 1024, //Minimum is 100*1024
+                        timeout: 120000 // 2 minutes timeout
                     }).then(function (res) {
-                            uploader.uploadFinishedFilesNum++;
-                            uploader.curFileSize += file.size;
-                            
-                            progressBarNum = (1).toFixed(2) * 100;
-                            progressBar = (1).toFixed(2) * 100 + '%';
+                        uploader.uploadFinishedFilesNum++;
+                        uploader.curFileSize += file.size;
 
-                            if (progressBarNum == 100) {
-                                $totalProgressbar.css('width', progressBar)
+                        progressBarNum = (1).toFixed(2) * 100;
+                        progressBar = (1).toFixed(2) * 100 + '%';
+
+                        if (progressBarNum == 100) {
+                            $totalProgressbar.css('width', progressBar)
                                 .html('Upload has completed. Please save the changes at the bottom of the page!');
-                                $("#startUpload").hide();
-                            } 
-                            image = res.name;
-                        }).catch((err) => {
-                           
-                            console.error(err);
-                            console.log(`err.name : ${err.name}`);
-                            console.log(`err.message : ${err.message}`);
+                            $("#startUpload").hide();
+                        }
+                        image = res.name;
+                    }).catch((err) => {
 
-                            if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
-                                // timeout retry
-                                if (retryCount < retryCountMax) {
-                                    retryCount++;
-                                    console.error(`retryCount : ${retryCount}`);
-                                    upload();
-                                }
-                                else {
-                                    //We have retried to the max and there is nothing we can do
-                                    //Allow the users to submit the form atleast with default image.
-                                    $totalProgressbar.css('width', '80%')
-                                    .html("Upload facing errors!");                                    
-                                }
+                        console.error(err);
+                        console.log(`err.name : ${err.name}`);
+                        console.log(`err.message : ${err.message}`);
+
+                        if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
+                            // timeout retry
+                            if (retryCount < retryCountMax) {
+                                retryCount++;
+                                console.error(`retryCount : ${retryCount}`);
+                                upload();
                             } else {
-                                //Not timeout out error and there is nothing we can do
+                                //We have retried to the max and there is nothing we can do
                                 //Allow the users to submit the form atleast with default image.
                                 $totalProgressbar.css('width', '80%')
-                                    .html("Upload facing error!");
+                                    .html("Upload facing errors!");
                             }
-                        
-                        });
+                        } else {
+                            //Not timeout out error and there is nothing we can do
+                            //Allow the users to submit the form atleast with default image.
+                            $totalProgressbar.css('width', '80%')
+                                .html("Upload facing error!");
+                        }
+
+                    });
                     return results;
                 } catch (e) {
                     bootbox.alert("Oops! an error occured during the image upload, \
@@ -156,16 +154,16 @@ OssUpload.prototype = {
  */
 
 function uploadPreview(input) {
-	if (input.files && input.files[0]) {
-		var reader = new FileReader();
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
 
-		reader.onload = function (e) {
-			$('#avatar')
-				.attr('src', e.target.result);
-		};
+        reader.onload = function (e) {
+            $('#avatar')
+                .attr('src', e.target.result);
+        };
 
-		reader.readAsDataURL(input.files[0]);
-	}
+        reader.readAsDataURL(input.files[0]);
+    }
 }
 
 /**
@@ -204,8 +202,7 @@ var applyTokenDo = function () {
                     stsToken: result.SecurityToken,
                     bucket: result.bucket
                 });
-            }
-            else {
+            } else {
                 client = new OSS({
                     region: result.region,
                     accessKeyId: result.accessId,
@@ -240,12 +237,12 @@ function OssUpload() {
  */
 
 function genKey() {
-    return "media/profile_pics/" + user + '/pics/' 
-         + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    return "media/profile_pics/" + user + '/pics/' +
+        'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0,
                 v = c == 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
-    });
+        });
 }
 
 /**
@@ -276,7 +273,7 @@ $(function () {
     ossUpload.init();
 
 
-    $("#post-submit").click(function (event) {    
+    $("#post-submit").click(function (event) {
         if ($("#id_title").val() == '' || $("#id_details").val() == '' ||
             $("#id_tags").val() == '') {
             event.preventDefault();
@@ -304,17 +301,16 @@ $(function () {
     });
 
     $("#update-profile").click(function (event) {
-        
-		if (!$("select[name='city']").val() || !$("select[name='province']")) {
-			event.preventDefault();
-			bootbox.alert("Please enter your address!");
-        }
-        else {
+
+        if (!$("select[name='city']").val() || !$("select[name='province']")) {
+            event.preventDefault();
+            bootbox.alert("Please enter your address!");
+        } else {
             $("#id_oss_image").val(image);
-		    $("input[name='city']").val($("select[name='city']").val());
-		    $("input[name='province_region']").val($("select[name='province']").val());
-		    $("#update").submit();
+            $("input[name='city']").val($("select[name='city']").val());
+            $("input[name='province_region']").val($("select[name='province']").val());
+            $("#update").submit();
         }
-	});
+    });
 
 });

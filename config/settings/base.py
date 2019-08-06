@@ -1,7 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
-import environ
+import environ, os
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path('obrisk')
@@ -93,6 +93,7 @@ THIRD_PARTY_APPS = [
     'markdownx',
     'taggit',
     'star_ratings',
+    'pwa_webpush',
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -312,3 +313,47 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 13000000
 FILE_UPLOAD_MAX_MEMORY_SIZE = 13000000
 
 TAGS_CACHE_TIMEOUT = 60 * 60 * 24 * 7 #7 days. 
+
+PWA_APP_NAME = 'Obrisk'
+PWA_APP_DESCRIPTION = 'A location based social network for foreigners in China'
+PWA_APP_THEME_COLOR = '#3ec4e2'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = "/"
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = '/'
+PWA_APP_ICONS = [    {
+        "src": "static/img/android-chrome-192x192.png",
+        "sizes": "192x192",
+    }, {
+        "src": "static/img/android-chrome-512x512.png",
+        "sizes": "512x512",
+    }
+    , {
+        "src": "static/img/mstile-310x310.png",
+        "sizes": "310x310",
+    }, {
+        "src": "static/img/mstile-310x150.png",
+        "sizes": "310x150",
+    }, {
+        "src": "static/img/mstile-150x150.png",
+        "sizes": "150x150",
+    }, {
+        "src": "static/img/mstile-144x144.png",
+        "sizes": "144x144",
+    }
+    , {
+        "src": "static/img/mstile-70x70.png",
+        "sizes": "70x70",
+    }]
+ 
+
+PWA_APP_SPLASH_SCREEN = [
+    {
+        'src': 'static/img/android-chrome-192x192.png',
+        'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
+    }
+]
+PWA_APP_DIR = ''
+PWA_APP_LANG = 'en-US'
+PWA_SERVICE_WORKER_PATH = APPS_DIR.path('templates/serviceworker.js')

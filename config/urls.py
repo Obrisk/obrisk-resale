@@ -49,6 +49,7 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
+    url(r'', include('pwa_webpush.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

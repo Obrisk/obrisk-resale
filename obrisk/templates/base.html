@@ -1,22 +1,24 @@
 {% load static i18n humanize %}
+{% load pwa_webpush %}
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+  {% progressive_web_app_meta %}
   <meta charset="utf-8">
   <!--This is to ensure scripts are loaded from my site only!-->
   <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />  
+  <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
   <title>{% block title %}Obrisk{% endblock title %}</title>
-  
-  <link rel="manifest" href="{% static 'js/site.webmanifest' %}?v=3">
+
+  <!-- <link rel="manifest" href="{% static 'js/site.webmanifest' %}?v=3"> -->
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png?v=3' %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png?v=3' %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png?v=3' %}">
   <link rel="shortcut icon" href="{% static 'img/favicon.ico?v=3' %}">
-  
+
   {% block meta %}
   <meta name="locale" content="en">
   <meta name="theme-color" content="#3EC4E2">
@@ -124,11 +126,11 @@
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
                 aria-haspopup="true" aria-expanded="false">
                 {% if request.user.thumbnail %}
-                      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
-                      style="width:30px;height:30px;border-radius: 50%;"
-                      class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
+                  style="width:30px;height:30px;border-radius: 50%;"
+                  class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
                 {% else %}
-                      <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+                <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
                 {% endif %}
                 {{ request.user.username|truncatechars:12}}
               </a>
@@ -225,28 +227,28 @@
   <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
   {% endif %}
 
-<script type="text/javascript">
+  <script type="text/javascript">
     function registerServiceWorker() {
-        // register sw script in supporting browsers
-        if ('serviceWorker' in navigator) {
-          navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
-            console.log('Service Worker registered successfully.');
-          }).catch(error => {
-            console.log('Service Worker registration failed:', error);
-          });
-        }
+      // register sw script in supporting browsers
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
+          console.log('Service Worker registered successfully.');
+        }).catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
       }
-    
-     //Hide nav bar on click outside
+    }
+
+    //Hide nav bar on click outside
 
     $(document).on('click', function () {
       $('.collapse').collapse('hide');
     })
 
-</script>
+  </script>
 
-<!-- bootbox for alert-->
-<script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
+  <!-- bootbox for alert-->
+  <script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
 
   {% endblock javascript %}
 
