@@ -59,7 +59,7 @@
       <h5>{% trans 'Popular tags' %}</h5>
     </div>
 
-    <div class="card-body">
+    <div class="card-body" style="overflow:auto;max-height:400px">
       {% for tag, count in popular_tags %}
       <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }}
           {{ tag }}</span></a>
