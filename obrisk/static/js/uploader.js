@@ -1,4 +1,4 @@
-//localStorage.debug = 'ali-oss';
+localStorage.debug = 'ali-oss';
 /**
  * fileStats: File statistics
  * filename: The address of the uploaded file
@@ -191,6 +191,7 @@ OssUpload.prototype = {
                                 $.ajax({
                                     url: obrisk_urls + res.name + "?x-oss-process=image/average-hue",
                                     success: function (result) {
+
                                         $("#" + file.id).children(".success-span").addClass("success");
                                         $("#" + file.id).children(".file-panel").hide();
                                         uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
@@ -209,10 +210,42 @@ OssUpload.prototype = {
                                         images += ',' + res.name;
                                     },
                                     error: function (e) {
-                                        bootbox.alert("Oops! an error occured when uploading your image(s). \
+
+                                        // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
+                                        if (retryCount < retryCountMax) {
+                                            retryCount++;
+                                            console.error(`retryCount : ${retryCount}`);
+                                            upload();
+                                        } else {
+                                            //We have retried to the max and there is nothing we can do
+                                            //Allow the users to submit the form atleast with default image.
+
+                                            $("#" + file.id).children(".success-span").addClass("fail");
+                                            $("#" + file.id).children(".file-panel").hide();
+                                            uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                                            uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                                            progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
+                                            progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+
+                                            if (progressBarNum == 100) {
+                                                $totalProgressbar.css('width', progressBar)
+                                                    .html('Upload complete');
+                                            } else {
+                                                $totalProgressbar.css('width', progressBar)
+                                                    .html(progressBar);
+                                            }
+                                            img_error = res.name + ", Message: " + "Corrupted image" + ", RequestID: " + res.name;
+                                            if (!images) {
+                                                images = 'undef,classifieds/error-img.jpg';
+                                                bootbox.alert("Oops! an error occured when uploading your image(s). \
                                             But you can submit this form without images and edit your post later to add images");
+                                            }
+                                        }
                                     }
+
+
                                 });
+
 
                             }).catch((err) => {
                                 console.error(err);
@@ -233,7 +266,7 @@ OssUpload.prototype = {
                                         //Allow the users to submit the form atleast with default image.
                                         $totalProgressbar.css('width', '94%')
                                             .html("Completed with minor errors!");
-
+                                        $("ul.filelist li").children(".success-span").addClass("fail");
                                         img_error = err.name + ", Message: " + err.message + ", RequestID: " + err.requestId;
 
                                         if (!images) {
