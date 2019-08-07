@@ -123,8 +123,8 @@ MIGRATION_MODULES = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
-    'users.phone_authentication.PhoneAuthBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    'users.phone_authentication.PhoneAuthBackend',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = 'users.User'
@@ -260,6 +260,9 @@ MANAGERS = ADMINS
 # django-allauth
 # ------------------------------------------------------------------------------
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
+# django-allauth
+# ------------------------------------------------------------------------------
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ALLOW_REGISTRATION = env.bool('ACCOUNT_ALLOW_REGISTRATION', True)
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
 #This is because of overiding login forms on users.forms
@@ -268,12 +271,17 @@ SESSION_REMEMBER = None
 
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+ACCOUNT_PRESERVE_USERNAME_CASING = True
 
-ACCOUNT_FORMS = {'signup': 'users.forms.PhoneSignupForm'}
-#ACCOUNT_SIGNUP_FORM_CLASS = ''
+USERNAME_MIN_LENGTH = 3
+
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.PhoneSignupForm', 
+    'login': 'users.forms.CustomLoginForm'
+}
 
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
+#ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 
@@ -308,8 +316,6 @@ CHANNEL_LAYERS = {
 GRAPHENE = {
     'SCHEMA': 'obrisk.schema.schema'
 }
-
-ACCOUNT_FORMS = {'signup': 'users.forms.CustomSignupForm'}
 
 #Max data to be uploaded to Django server. This is around 12MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 13000000

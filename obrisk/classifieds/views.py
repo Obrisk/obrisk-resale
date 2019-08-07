@@ -181,11 +181,12 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 
             img.save()
 
-        return super(CreateClassifiedView, self).form_valid(form)
+        return super(CreateOfficialAdView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('classifieds:list')
+
 
 class CreateClassifiedView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
@@ -217,20 +218,23 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
 
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
-
+    
         #The code from here onwards assume the first element of images list is undefined.
         tot_imgs = len(images_list)
 
         if tot_imgs < 2:
             messages.error(self.request, "Sorry, it looks like the images were not uploaded successfully. \
                 or you've done something wrong. Please add the images again and submit the form!")
+            classified.delete()
             return self.form_invalid(form)
         else:
             if (images_list[1] == None or images_list[1].startswith('classifieds/') == False):
                 messages.error(self.request, "Sorry, the images were not uploaded successfully. \
                     Please add the images again and submit the form!")
+                classified.delete()
                 return self.form_invalid(form)
-
+            
+            else:
                 #from here if you return form invalid then you have to prior delete the classified, classified.delete()
                 #The current implementation will sucessfully create classified even when there are error on images
                 #This is just to help to increase the classifieds post on the website. The user shouldn't be discourage with errors

@@ -42,20 +42,26 @@
 
   <!-- Masthead -->
   <header class="masthead">
-    <div class="container h-100">
-      <div class="row h-100 align-items-center justify-content-center text-center">
-        <div class="col-lg-10 align-self-end">
-          <h1 class="text-uppercase text-primary font-weight-bold"><strong>{% trans 'Hi! Welcome to Obrisk' %}</strong>
-          </h1>
-          <hr class="divider my-4">
-        </div>
 
-        <div class="col-lg-8 align-self-baseline mb-2">
-          <p class="text-faded text-primary mb-5">{% trans 'In here we make things simple and brisk...' %} </p>
-          <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
-            href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-          <hr class="divider my-4">
-        </div>
+     <div class="container h-100">
+        <div class="row h-100 align-items-center justify-content-center text-center">
+            <div class="col-lg-10 align-self-end">
+              <h1 class="text-uppercase text-primary font-weight-bold"><strong>{% trans 'Hi! Welcome to Obrisk' %}</strong></h1>
+              <hr class="divider my-4">
+            </div>
+
+            <div class="col-lg-8 align-self-baseline mb-2">
+              <p class="text-faded text-primary mb-5">{% trans 'In here we make things simple and brisk...' %} </p>
+              <a class="btn btn-dark btn-xl js-scroll-trigger text-dark" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+              <hr class="divider my-4">
+            </div>
+
+            <div class="col-md-8 align-self-baseline">
+                <h5 class="text-center text-primary mt-0"> Are you new here?! </h5>
+                <h4 class="text-center text-secondary h4 mb-2" >
+                  <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark"  href="{% url 'account_signup' %}">{% trans 'Sign up now' %} </a> 
+                </h4>
+            </div>
 
         <div class="col-md-8 align-self-baseline">
           <h5 class="text-center text-primary mt-0"> Are you new here?! </h5>
@@ -113,9 +119,19 @@
           alt="{% trans 'Stories Profile' %}">
       </div>
 
-      <div class="col-md-4 text-center">
-        <div class="mt-5">
-          <h5 class="h4 mb-2"> Valuable Posts & public chats. </h5>
+
+        <div class="col-md-4 text-center">
+          <div class="mt-5">
+            <h5 class="h4 mb-2"> Valuable Posts & public chats.  </h5>
+          </div>
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/stories.png" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+            style="height: 270px" alt="{% trans 'Stories Profile' %}">
+        </div>
+    
+        <div class="col-md-12 text-center mb-5 mt-5" >
+            <h5 class="h4 mb-2"> And much more... </h5>    
+          <a class="btn btn-cyan btn-xl js-scroll-trigger text-dark mt-4 "  href="{% url 'account_signup' %}">{% trans 'Sign up now' %} </a>     
+
         </div>
         <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/stories.png"
           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" style="height: 270px"

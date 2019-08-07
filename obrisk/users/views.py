@@ -25,59 +25,18 @@ import ast
 import boto3
 import json
 
-from allauth.account.views import LoginView, PasswordResetView 
+from allauth.account.views import SignupView, LoginView, PasswordResetView 
+from allauth.account.forms import  SignupForm
 from obrisk.helpers import bucket, bucket_name
-from .forms import UserForm, PhoneSignupForm, CustomLoginForm, PhoneResetPasswordForm
+from .forms import UserForm, EmailSignupForm,  PhoneResetPasswordForm, PhoneSignupForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
 
-
-@method_decorator(csrf_exempt, name='dispatch')
-class SignUp(CreateView):
-    form_class = PhoneSignupForm
-    success_url = reverse_lazy('classifieds:list')
-    template_name = 'account/phone_signup.html'
-
-    def __init__(self, **kwargs):
-        self.object = None
-        super().__init__(**kwargs)
-
-    def post(self, request, *args, **kwargs):
-        """
-        Handles User requests, instantiating a form instance and
-        User variables and then checking them for validity."""
-
-        form = PhoneSignupForm(self.request.POST)
-
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            # ret = dict(errors=form.errors) #Handle custom errors here.
-            return self.form_invalid(form)
-
-
-    def form_valid(self, form):
-        form.save()
-        
-        username = form.cleaned_data.get('username')
-        raw_password = form.cleaned_data.get('password1')  
-        try:
-            user = authenticate(self.request, username=username, password=raw_password)
-            if user is not None:
-                if user.is_active:
-                    login(self.request, user, backend='django.contrib.auth.backends.ModelBackend')
-                    return redirect ('classifieds:list')
-                else:
-                    return super(SignUp, self).form_valid(form)     
-            else:
-                #if the user is not successfully authenticated return the normal form_valid response.
-                return super(SignUp, self).form_valid(form)     
-                    
-        except:
-            return super(SignUp, self).form_valid(form)     
-
-class CustomLoginView(LoginView):
-    form_class = CustomLoginForm
+    
+#There is no need to override this view. By default All-auth directly login users when they signup.
+class EmailSignUp(SignupView):
+    form_class = EmailSignupForm
+    template_name = 'account/email_signup.html'
 
 
 def send_code(full_number):
@@ -161,10 +120,8 @@ def phone_password_reset(request):
 
         if phone_number is not None and len(phone_number) == 11 and phone_number[0] == '1':
             
-            full_number = "+86" + phone_number
-            check_phone = User.objects.filter(phone_number=full_number).exists()
-
-            if check_phone is True:
+            full_number = "+86" + phone_number           
+            if User.objects.filter(phone_number=full_number).exists():
                 return send_code(full_number)
 
             else:
@@ -268,6 +225,7 @@ class UserListView(LoginRequiredMixin, ListView):
     slug_url_kwarg = 'username'
 
 
+
 @require_http_methods(["GET", "POST"])
 def send_code_sms(request):
     if request.method == "GET":
@@ -288,6 +246,8 @@ def send_code_sms(request):
             return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"})
     else:
         return JsonResponse({'success': False, 'error_message':"This request is invalid!"} )
+
+
 
 @require_http_methods(["GET", "POST"])
 def phone_verify(request):
@@ -310,7 +270,7 @@ def phone_verify(request):
                             return JsonResponse({'success': False, 'error_message': "The user registered with this phone number is not found!"})
                         else:
                             if user:
-                                token = default_token_generator.make_token(user)
+                                token = default_token_generator.make_token(user) #58n-94e561aced8f400c352a
                                 url = f"https://www.obrisk.com/accounts-authorization/password/reset/key/{token}" 
 
                                 return JsonResponse({'success': True, 'url':url })

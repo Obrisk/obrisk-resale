@@ -65,14 +65,14 @@ $(function () {
 				//If button is disabled and the verification code is not sent, user can't do anything.
 				var url, req;
 				
-				if (current_url == '/users/signup/') {
+				if (current_url == '/accounts-authorization/signup/') {
 					url = '/users/verification-code/';
 					req = 'GET';
 				}else if (current_url == '/users/phone-password-reset/') {
 					url = '/users/phone-password-reset/';
 					req = 'POST';
 				}else {
-					bootbox.alert("We are so sorry, we can't handle users registration right now!");
+					bootbox.alert("We are sorry, we can't handle users registration at the moment. Please try again later");
 				}
 
 				$.ajax({
@@ -173,8 +173,6 @@ $(function () {
 							$("input[name='verified_no']").val("YES");
 
 							//I should hide the phone number label that says don't enter country code
-							$("#id_phone_number").val("+86" + $("#id_phone_number").val());
-
 							$("#phone_label").hide();
 
 							$("#code-notice").empty();
@@ -224,6 +222,10 @@ $(function () {
 			bootbox.alert("Your password's inputs don't match!");
 		} else {
 			$("#id_phone_number").attr("disabled", false);
+
+			if ($("#id_phone_number").val().toString().startsWith("+86") == false ) {
+				$("#id_phone_number").val("+86" + $("#id_phone_number").val());
+			}
 			$("input[name='city']").val($("select[name='city']").val());
 			$("input[name='province_region']").val($("select[name='province']").val());
 			$("#signup_form").submit();
