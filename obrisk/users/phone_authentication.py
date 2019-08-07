@@ -7,14 +7,22 @@ class PhoneAuthBackend(object):
     Authenticate using a phone number.
     """
     def authenticate(self, request, username=None, password=None):
-        if str(username).isalpha():
+        #This is a forgiving code, allow users to login with country code.
+        phone = str(username)
+        if phone.isalpha() and phone.startswith("+86") == False:
+            return None
+        if len(phone) == 11 and phone[0] != '1':
             return None
         else:
             try:
                 #This code only works for Chinese phone numbers.
-                if str(username).startswith("+86") == False:
+                if phone.startswith("+86") == False:
                     username = "+86" + username
-                user = User.objects.get(phone_number=username)
+                try:
+                    user = User.objects.get(phone_number=username)
+                except:
+                    #This is not a right return value on this failure. To improve more in the near future.
+                    return None
                 if user.check_password(password):
                     return user
                 return None

@@ -7,8 +7,7 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 class AccountAdapter(DefaultAccountAdapter):
     def save_user(self, request, user, form, commit=True):
         data = form.cleaned_data
-        print(data)
-        user.email = data['email']
+        #user.email = data['email']
         user.username = data['username']
         user.province_region = data['province_region']
         user.city = data['city']

@@ -10,7 +10,7 @@ from allauth.utils import (
     set_form_field_order,
 )
 from allauth.account import app_settings
-from phonenumber_field.modelfields import PhoneNumberField
+from phonenumber_field.formfields import PhoneNumberField
 from obrisk.users import models
 
 from django.contrib.auth import get_user_model
@@ -48,9 +48,7 @@ class UserForm(forms.ModelForm):
             "snapchat_account": "(Optional) Please fill in your snapchat username as it appears on your snapchat profile page.\
                  Make sure it is spelled correctly.",
         }
-        # widgets = {
-        #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
-        # }
+    
 
 #This form inherits Allauth Signup Form 
 class CustomSignupForm(SignupForm): 
@@ -67,15 +65,12 @@ def signup(self, request, user):
     return user 
 
 #This form inherits all-auth. 
-
 class PhoneSignupForm(SignupForm): 
     province_region = forms.CharField (widget=forms.HiddenInput())
     city = forms.CharField (widget=forms.HiddenInput())
-    phone_number = forms.CharField(label=_("Phone number"),
-                                    min_length=settings.USERNAME_MIN_LENGTH,
+    phone_number = PhoneNumberField(label=_("Phone number"),
                                     widget=forms.TextInput(
-                                    attrs={'placeholder': _('No country code'),
-                                          "type": "tel",
+                                    attrs={'placeholder': _('e.g 13299887766'),
                                           'autofocus': 'autofocus'})
                             )
 
@@ -83,12 +78,12 @@ class PhoneSignupForm(SignupForm):
         model = User
         help_texts = {
             'username': "At least 3 characters, no special characters",
-        } 
+        }
+        fields = ( 'username', 'city', 'province_region', 'phone_number', 'password1', 'password2') 
 
     def __init__(self, *args, **kwargs):
         super(PhoneSignupForm, self).__init__(*args, **kwargs)
         self.fields['password1'] = PasswordField(label=_("Password"))
-        self.fields['email'] = forms.CharField (widget=forms.HiddenInput())
 
         if getattr(settings, 'SIGNUP_PASSWORD_ENTER_TWICE', True):
             self.fields['password2'] = PasswordField(
@@ -120,9 +115,6 @@ class EmailSignupForm(SignupForm):
 
     class Meta:
         model = User
-        widgets = {
-            
-        }
         help_texts = {
             'username': "At least 3 characters, no special characters",
         } 
@@ -131,6 +123,14 @@ class EmailSignupForm(SignupForm):
 
     def __init__(self, *args, **kwargs):
         super(EmailSignupForm, self).__init__(*args, **kwargs)
+        self.fields['email'] = forms.EmailField(
+                                        label=_("E-mail"),required=True,
+                                        widget=forms.TextInput(
+                                            attrs={"type": "email",
+                                                "size": "30",
+                                                "placeholder": _('E-mail address')}
+                                            )
+                                        )
         self.fields['password1'] = PasswordField(label=_("Password"))
 
         if getattr(settings, 'SIGNUP_PASSWORD_ENTER_TWICE', True):
@@ -214,7 +214,6 @@ class PhoneResetPasswordForm (forms.Form):
         required=True,
         widget=forms.TextInput(attrs={
             "type": "tel",
-            "size": "30",
             "placeholder": _("Phone number you registered with"),
         })
     )
