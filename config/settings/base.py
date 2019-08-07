@@ -123,6 +123,7 @@ MIGRATION_MODULES = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+    'users.phone_authentication.PhoneAuthBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
@@ -132,7 +133,7 @@ LOGIN_REDIRECT_URL = 'classifieds:list'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = 'account_login'
 
-
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 40 #40 Days.
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -260,8 +261,11 @@ MANAGERS = ADMINS
 # ------------------------------------------------------------------------------
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ALLOW_REGISTRATION = env.bool('ACCOUNT_ALLOW_REGISTRATION', True)
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+#This is because of overiding login forms on users.forms
+#options are False and True for the remember me box
+SESSION_REMEMBER = None
+
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
 
