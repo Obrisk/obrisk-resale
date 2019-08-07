@@ -165,6 +165,17 @@
     background: url(/static/img/success.png) no-repeat right bottom;
 }
 
+#uploader .filelist li .fail {
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 40px;
+    width: 100%;
+    z-index: 200;
+    background: url(/static/img/fail.png) no-repeat right bottom;
+}
+
 @-webkit-keyframes progressmove {
     0% {
         background-position: 0 0;

@@ -1,4 +1,4 @@
-//localStorage.debug = 'ali-oss';
+localStorage.debug = 'ali-oss';
 /**
  * fileStats: File statistics
  * filename: The address of the uploaded file
@@ -18,10 +18,10 @@ var Buffer = OSS.Buffer;
 var STS = OSS.STS;
 var FileMaxSize = 13000000
 var TotalFilesMaxSize = 8
-var images; 
+var images;
 var img_error; //Records the errors happened during upload.
 var client;
-var imgClient;  //If we'll  be checking the file size.
+var imgClient; //If we'll  be checking the file size.
 var ossUpload = '';
 
 let retryCount = 0;
@@ -153,106 +153,162 @@ OssUpload.prototype = {
     uploadFile: function (file, filename) {
 
         $totalProgressbar.css('width', '30%').html('Uploading...');
-        applyTokenDo();
+        applyTokenDo().then(result => {
+            if (!result.direct) {
+                client = new OSS({
+                    region: result.region,
+                    accessKeyId: result.accessKeyId,
+                    accessKeySecret: result.accessKeySecret,
+                    stsToken: result.SecurityToken,
+                    bucket: result.bucket
+                });
+            } else {
+                client = new OSS({
+                    region: result.region,
+                    accessKeyId: result.accessId,
+                    accessKeySecret: result.stsTokenKey,
+                    bucket: result.bucket
+                });
+            }
 
-        //make sure we get the sts token
-        if (client !== undefined) {
+            //make sure we get the sts token
+            if (client !== undefined) {
 
-            const upload = async () => {
-                try {
-                    const results = await client.multipartUpload(filename, file, {
-                            progress: progress,
-                            partSize: 200 * 1024,      //Minimum is 100*1024
-                            timeout: 120000,          // 2 minutes timeout
-                            
-                        })
-                        .then(function (res) {
-                            //https://github.com/forsigner/browser-md5-file
-                            //check md5 or file size meta if possible
-                            //const fileInfo = client.head(filename);
-                            //const ossMD5 = fileInfo.res.headers['content-md5'];
-                            
-                            //Or https://github.com/ali-sdk/ali-oss#imgclientgetinfoname-options
-                            //imgClient.getInfo(filename);
-                            
-                            //if (file on the server is okay) {
-                                $("#" + file.id).children(".success-span").addClass("success");
-                                $("#" + file.id).children(".file-panel").hide();
-                                uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                                uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                                progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
-                                progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
-                                
-                                if (progressBarNum == 100) {
-                                    $totalProgressbar.css('width', progressBar)
-                                        .html('Upload complete');
-                                } else {
-                                    $totalProgressbar.css('width', progressBar)
-                                        .html(progressBar);
-                                }
+                const upload = async () => {
+                    try {
+                        const results = await client.multipartUpload(filename, file, {
+                                progress: progress,
+                                partSize: 200 * 1024, //Minimum is 100*1024
+                                timeout: 120000, // 2 minutes timeout
 
-                                images += ',' + res.name; 
-                            //} else (retry)
+                            })
+                            .then(function (res) {
 
-                        }).catch((err) => {
-                            console.error(err);
-                            console.log(`err.name : ${err.name}`);
-                            console.log(`err.message : ${err.message}`);
-                            console.log(`err.request : ${err.requestId}`);
+                                obrisk_urls = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
 
-                            $totalProgressbar.css('width', '40%')
+                                //Try to get the dominat color from the uploaded image, if it fails it means the image
+                                //was corrupted during upload
+                                $.ajax({
+                                    url: obrisk_urls + res.name + "?x-oss-process=image/average-hue",
+                                    success: function (result) {
+
+                                        $("#" + file.id).children(".success-span").addClass("success");
+                                        $("#" + file.id).children(".file-panel").hide();
+                                        uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                                        uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                                        progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
+                                        progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+
+                                        if (progressBarNum == 100) {
+                                            $totalProgressbar.css('width', progressBar)
+                                                .html('Upload complete');
+                                        } else {
+                                            $totalProgressbar.css('width', progressBar)
+                                                .html(progressBar);
+                                        }
+
+                                        images += ',' + res.name;
+                                    },
+                                    error: function (e) {
+
+                                        // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
+                                        if (retryCount < retryCountMax) {
+                                            retryCount++;
+                                            console.error(`retryCount : ${retryCount}`);
+                                            upload();
+                                        } else {
+                                            //We have retried to the max and there is nothing we can do
+                                            //Allow the users to submit the form atleast with default image.
+
+                                            $("#" + file.id).children(".success-span").addClass("fail");
+                                            $("#" + file.id).children(".file-panel").hide();
+                                            uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                                            uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                                            progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
+                                            progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+
+                                            if (progressBarNum == 100) {
+                                                $totalProgressbar.css('width', progressBar)
+                                                    .html('Upload complete');
+                                            } else {
+                                                $totalProgressbar.css('width', progressBar)
+                                                    .html(progressBar);
+                                            }
+                                            img_error = res.name + ", Message: " + "Corrupted image" + ", RequestID: " + res.name;
+                                            if (!images) {
+                                                images = 'undef,classifieds/error-img.jpg';
+                                                bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                            But you can submit this form without images and edit your post later to add images");
+                                            }
+                                        }
+                                    }
+
+
+                                });
+
+
+                            }).catch((err) => {
+                                console.error(err);
+                                console.log(`err.name : ${err.name}`);
+                                console.log(`err.message : ${err.message}`);
+                                console.log(`err.request : ${err.requestId}`);
+
+                                $totalProgressbar.css('width', '40%')
                                     .html("Retrying...");
 
-                            if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
-                                if (retryCount < retryCountMax) {
-                                    retryCount++;
-                                    console.error(`retryCount : ${retryCount}`);
-                                    upload();
-                                }
-                                else {
-                                    //We have retried to the max and there is nothing we can do
+                                if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
+                                    if (retryCount < retryCountMax) {
+                                        retryCount++;
+                                        console.error(`retryCount : ${retryCount}`);
+                                        upload();
+                                    } else {
+                                        //We have retried to the max and there is nothing we can do
+                                        //Allow the users to submit the form atleast with default image.
+                                        $totalProgressbar.css('width', '94%')
+                                            .html("Completed with minor errors!");
+                                        $("ul.filelist li").children(".success-span").addClass("fail");
+                                        img_error = err.name + ", Message: " + err.message + ", RequestID: " + err.requestId;
+
+                                        if (!images) {
+                                            images = 'undef,classifieds/error-img.jpg';
+                                            bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                            But you can submit this form without images and edit your post later to add images");
+                                        }
+                                    }
+                                } else {
+                                    //Not timeout out error and there is nothing we can do
                                     //Allow the users to submit the form atleast with default image.
                                     $totalProgressbar.css('width', '94%')
-                                    .html("Completed with minor errors!");
-                                    
-                                    img_error = err.name +", Message: "+ err.message +", RequestID: "+ err.requestId;
-                                    
+                                        .html("Completed with minor errors!");
+
+                                    img_error = err.name + ", Message: " + err.message + ", RequestID: " + err.requestId;
+
                                     if (!images) {
                                         images = 'undef,classifieds/error-img.jpg';
                                         bootbox.alert("Oops! an error occured when uploading your image(s). \
                                             But you can submit this form without images and edit your post later to add images");
                                     }
                                 }
-                            } else {
-                                //Not timeout out error and there is nothing we can do
-                                //Allow the users to submit the form atleast with default image.
-                                $totalProgressbar.css('width', '94%')
-                                    .html("Completed with minor errors!");
-                                
-                                img_error = err.name +", Message: "+ err.message +", RequestID: "+ err.requestId;
 
-                                if (!images) {
-                                    images = 'undef,classifieds/error-img.jpg';
-                                    bootbox.alert("Oops! an error occured when uploading your image(s). \
-                                            But you can submit this form without images and edit your post later to add images");
-                                }
-                            }
-                            
-                        });
-                    return results;
-                } catch (e) {
-                    bootbox.alert("Oops! an error occured when uploading your image(s), \
+                            });
+                        return results;
+                    } catch (e) {
+                        bootbox.alert("Oops! an error occured when uploading your image(s), \
                     Please try again later or contact us via support@obrisk.com. " + e);
-                    $(".start-uploader").css('display', 'block');
-                    console.log(e);
+                        $(".start-uploader").css('display', 'block');
+                        console.log(e);
+                    }
                 }
-            }
-            return upload()
-        } else {
-            bootbox.alert("Oops!, it looks like there is a network problem, \
+                return upload()
+            } else {
+                bootbox.alert("Oops!, it looks like there is a network problem, \
             Please try again later or contact us at support@obrisk.com")
-            $(".start-uploader").css('display', 'block');
-        }
+                $(".start-uploader").css('display', 'block');
+            }
+        }).catch(e => {
+            bootbox.alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
+            console.log(e)
+        })
     },
 
     /**
@@ -315,34 +371,18 @@ var progress = function (p) { //p percentage 0~1
  */
 var applyTokenDo = function () {
     var url = oss_url; //Request background to obtain authorization address url
-    $totalProgressbar.css('width', '30%').html('Uploading...');
-    $.ajax({
-        url: url,
-        async: false,
-        success: function (result) {
-            if (!result.direct) {
-                client = new OSS({
-                    region: result.region,
-                    accessKeyId: result.accessKeyId,
-                    accessKeySecret: result.accessKeySecret,
-                    stsToken: result.SecurityToken,
-                    bucket: result.bucket
-                });
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            success: function (result) {
+                resolve(result)
+            },
+            error: function (e) {
+                reject(e);
             }
-            else {
-                client = new OSS({
-                    region: result.region,
-                    accessKeyId: result.accessId,
-                    accessKeySecret: result.stsTokenKey,
-                    bucket: result.bucket
-                });
-            }
-        },
-        error: function (e) {
-            bootbox.alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
-            console.log(e)
-        }
+        });
     });
+
 };
 
 //File upload initializer 
@@ -405,10 +445,10 @@ $(function () {
 
 
     $(".create").click(function (event) {
-            $("input[name='status']").val("A");
-            $("#id_images").val(images);
-            $("#id_img_error").val(img_error);
-            $("#classified-form").submit();
+        $("input[name='status']").val("A");
+        $("#id_images").val(images);
+        $("#id_img_error").val(img_error);
+        $("#classified-form").submit();
     });
 
     $(".draft").click(function () {
