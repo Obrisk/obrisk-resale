@@ -321,7 +321,7 @@ PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'
 PWA_APP_SCOPE = "/"
 PWA_APP_ORIENTATION = 'any'
-PWA_APP_START_URL = '/'
+PWA_APP_START_URL = "/"
 PWA_APP_ICONS = [    {
         "src": "static/img/android-chrome-192x192.png",
         "sizes": "192x192",
@@ -354,6 +354,6 @@ PWA_APP_SPLASH_SCREEN = [
         'media': '(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)'
     }
 ]
-PWA_APP_DIR = ''
+PWA_APP_DIR = '/'
 PWA_APP_LANG = 'en-US'
 PWA_SERVICE_WORKER_PATH = APPS_DIR.path('templates/serviceworker.js')
