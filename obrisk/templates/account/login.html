@@ -43,7 +43,7 @@
         </div>
         <div class="form-group container-login100-form-btn">
           <a href="{% url 'users:signup' %}" class="btn btn-link">{% trans 'Or sign up for obrisk' %}</a>
-          <a href="{% url 'account_reset_password' %}"
+          <a href="{% url 'users:phone_password_reset' %}"
             class="btn btn-link pull-right">{% trans 'Forgot your password?' %}</a>
         </div>
       </form>

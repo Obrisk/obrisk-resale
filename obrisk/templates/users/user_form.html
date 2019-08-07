@@ -5,8 +5,10 @@
 {% block title %}{{ user.username|title }}{% endblock %}
 
 {% block head %}
-<script src="{% static 'js/user-form.js' %}?v=21" type="text/javascript"> </script>
-<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/user-form.js' %}?v=0208191" type="text/javascript"> </script>
+<script src="{% static 'js/location.js' %}?v=0208191" type="text/javascript"> </script>
+<script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>
+<script src="{% static 'js/aliyun-oss.min.js' %}?v=3107191" type="text/javascript"></script>
 <link href="{% static 'css/user_form.css' %}?v=21" rel="stylesheet">
 {% endblock head %}
 
@@ -102,5 +104,5 @@ const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
 const user = "{{ request.user.username }}";
 
 </script>
-<script src="{% static 'js/image_uploader.js' %}?v=2207192" type="text/javascript"></script>
+<script src="{% static 'js/image_uploader.js' %}?v=3107191" type="text/javascript"></script>
 {% endblock %}

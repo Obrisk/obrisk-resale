@@ -3,11 +3,10 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
-from django.shortcuts import redirect
 
 from obrisk.messager.models import Message
 from obrisk.helpers import ajax_required

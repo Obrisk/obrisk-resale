@@ -90,6 +90,7 @@ OssUpload.prototype = {
                         partSize: 200 * 1024, //Minimum is 100*1024
                         timeout: 120000 // 2 minutes timeout
                     }).then(function (res) {
+
                         uploader.uploadFinishedFilesNum++;
                         uploader.curFileSize += file.size;
 

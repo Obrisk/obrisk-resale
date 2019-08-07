@@ -1,11 +1,21 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from phonenumber_field.modelfields import PhoneNumberField
+from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
+from django.conf import settings
 
-from obrisk.users.models import User 
+from allauth.account.forms import SignupForm, LoginForm, ResetPasswordForm
+from allauth.utils import (
+    build_absolute_uri,
+    get_username_max_length,
+    set_form_field_order,
+)
+from allauth.account import app_settings
+from phonenumber_field.modelfields import PhoneNumberField
 from obrisk.users import models
 
-from allauth.account.forms import SignupForm
+from django.contrib.auth import get_user_model
+User = get_user_model()
+
 
 class CustomUserCreationForm(UserCreationForm):
 
@@ -41,7 +51,8 @@ class UserForm(forms.ModelForm):
         # widgets = {
         #     'picture': forms.ImageField(attrs={'class': 'btn, btn-dark'}),
         # }
-    
+
+#This form inherits Allauth Signup Form 
 class CustomSignupForm(SignupForm): 
     province_region = forms.CharField (widget=forms.HiddenInput())
     city = forms.CharField (widget=forms.HiddenInput())
@@ -55,9 +66,8 @@ def signup(self, request, user):
     user.save() 
     return user 
 
-
+#This form inherits Django Signup Form and not all-auth. 
 class PhoneSignupForm(UserCreationForm): 
-
     class Meta:
         model = User
         widgets = {
@@ -72,10 +82,64 @@ class PhoneSignupForm(UserCreationForm):
 
 
     def __init__(self, *args, **kwargs):
-        super(UserCreationForm, self).__init__(*args, **kwargs)
+        super(PhoneSignupForm, self).__init__(*args, **kwargs)
 
         for fieldname in ['password1']:
             self.fields[fieldname].help_text = "At least 8 character, can't be too common or entirely numeric"
 
+class CustomLoginForm(LoginForm):
+    error_messages = {
+        'account_inactive':
+        _("This account is currently inactive."),
+
+        'username_password_mismatch':
+        _("The login input and/or password you specified are not correct."),
+    }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(CustomLoginForm, self).__init__(*args, **kwargs)
+        
+        if settings.ACCOUNT_AUTHENTICATION_METHOD == 'email':
+            login_widget = forms.TextInput(attrs={'type': 'email',
+                                                  'placeholder':
+                                                  _('E-mail address'),
+                                                  'autofocus': 'autofocus'})
+            login_field = forms.EmailField(label=_("E-mail"),
+                                           widget=login_widget)
+        elif settings.ACCOUNT_AUTHENTICATION_METHOD \
+                == 'username':
+            login_widget = forms.TextInput(attrs={'placeholder':
+                                                  _('Username'),
+                                                  'autofocus': 'autofocus'})
+            login_field = forms.CharField(
+                label=_("Username"),
+                widget=login_widget,
+                max_length=get_username_max_length())
+        else:
+            assert settings.ACCOUNT_AUTHENTICATION_METHOD \
+                == 'username_email'
+            login_widget = forms.TextInput(attrs={'placeholder':
+                                                    _('Username or Phone or Email'),
+                                                    'autofocus': 'autofocus'})
+        
+            login_field = forms.CharField(label="Login", widget=login_widget)
+
+        self.fields["login"] = login_field
+        set_form_field_order(self, ["login", "password", "remember"])
+        if settings.SESSION_REMEMBER is not None:
+            del self.fields['remember']
 
 
+        
+
+class PhoneResetPasswordForm (forms.Form):
+    phone_number = forms.IntegerField(
+        label=_("Phone number"),
+        required=True,
+        widget=forms.TextInput(attrs={
+            "type": "tel",
+            "size": "30",
+            "placeholder": _("Phone number you registered with"),
+        })
+    )
