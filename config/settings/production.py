@@ -65,9 +65,21 @@ X_FRAME_OPTIONS = 'DENY'
 # https://github.com/aliyun/django-oss-storage
 INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 
+
+# STATIC
+# ----------------------------------------------------------------------------
+#Static files are still handled by whitenoise to serve PWA service workers, as they
+#don't accept the static files from the bucket. This means collect static will still be manual.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# WhiteNoise
+# ------------------------------------------------------------------------------
+# http://whitenoise.evans.io/en/latest/django.html#enable-whitenoise
+MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE  # noqa F405
+
+
 #I serve them in oss bucket when scaling up, don't duplicate static files in every server.
 # ------------------------
-STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
 
@@ -93,9 +105,8 @@ OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
 # The default location for the static files stored in bucket.
 OSS_STATIC_LOCATION = '/static/'
 
-
-# The default location for your static files
-STATIC_ROOT =  '/static/'
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
 STATIC_URL =  '/static/'
 
@@ -147,12 +158,6 @@ ANYMAIL = {
     'MAILGUN_API_KEY': env('MAILGUN_API_KEY'),
     'MAILGUN_SENDER_DOMAIN': env('MAILGUN_SENDER_DOMAIN')
 }
-
-# WhiteNoise
-# ------------------------------------------------------------------------------
-# http://whitenoise.evans.io/en/latest/django.html#enable-whitenoise
-MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE  # noqa F405
-
 
 # raven
 # ------------------------------------------------------------------------------
