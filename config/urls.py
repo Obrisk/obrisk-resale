@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
+from obrisk.users.views import PasswordResetFromKeyView
 from obrisk.helpers import get_oss_auth
 
 
@@ -26,6 +27,7 @@ urlpatterns = [
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
+    url(r'^accounts-authorization/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$', PasswordResetFromKeyView.as_view(), name="account_reset_password_from_key"),
     #Temporarly redirect the old accounts url to the new one 
     url(r'^accounts/login/$',  lambda request: redirect('account_login')), 
     url(r'^accounts/signup/$', lambda request: redirect('users:signup')),

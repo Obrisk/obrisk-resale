@@ -17,6 +17,7 @@ from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 
+
 import os
 import base64
 import datetime
@@ -25,8 +26,8 @@ import ast
 import boto3
 import json
 
-from allauth.account.views import SignupView, LoginView, PasswordResetView 
-from allauth.account.forms import  SignupForm
+from allauth.account.views import SignupView, LoginView, PasswordResetView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView
+from allauth.account.forms import  UserTokenForm
 from obrisk.helpers import bucket, bucket_name
 from .forms import UserForm, EmailSignupForm,  PhoneResetPasswordForm, PhoneSignupForm
 from .models import User
@@ -260,7 +261,7 @@ def phone_verify(request):
             try:
                 saved_code = cache.get(str(full_number))
             except:
-                return JsonResponse({'error_message': "The verification code has expired!" } )
+                return JsonResponse({'error_message': "The verification code has expired or it is invalid!" } )
             else:
                 if saved_code == code:
                     if str(request.META.get('HTTP_REFERER')).endswith("/users/phone-password-reset/") == True:
@@ -271,7 +272,7 @@ def phone_verify(request):
                         else:
                             if user:
                                 token = default_token_generator.make_token(user) #58n-94e561aced8f400c352a
-                                url = f"https://www.obrisk.com/accounts-authorization/password/reset/key/{token}" 
+                                url = f"/accounts-authorization/password/reset/key/{token}" 
 
                                 return JsonResponse({'success': True, 'url':url })
                             else:
@@ -286,6 +287,34 @@ def phone_verify(request):
             return JsonResponse({'success': False, 'error_message': "The phone number or the code is empty!"} )
     else:
         return JsonResponse({'success': False, 'error_message': "This request is invalid!"} )
+
+
+class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
+
+    def dispatch(self, request, uidb36, key, **kwargs):
+        self.request = request
+        self.key = key
+        token_form = UserTokenForm(
+            data={'uidb36': uidb36, 'key': self.key})
+        if token_form.is_valid():
+            # Store the key in the session and redirect to the
+            # password reset form at a URL without the key. That
+            # avoids the possibility of leaking the key in the
+            # HTTP Referer header.
+            # (Ab)using forms here to be able to handle errors in XHR #890
+            print("valid1")
+            token_form = UserTokenForm(
+                data={'uidb36': uidb36, 'key': self.key})
+            if token_form.is_valid():
+                self.reset_user = token_form.reset_user
+                print("valid2")
+                return super(PasswordResetFromKeyView, self).dispatch(request, uidb36, self.key, **kwargs)
+        self.reset_user = None
+        response = self.render_to_response(
+            self.get_context_data(token_fail=True)
+        )
+
+        return _ajax_response(self.request, response, form=token_form)
     
         
 
