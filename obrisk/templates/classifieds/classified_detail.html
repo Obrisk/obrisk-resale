@@ -36,13 +36,13 @@
 
             <div class="meta-right d-flex">
               <a href="{% url 'users:detail' classified.user.username %}">
-              {% if classified.user.thumbnail %}
-                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}" alt="Picture Profile"
-                    style="width:35px;height:35px;border-radius: 50%;"
-                    class="rounded-circle  mb-3 mb-md-0 mr-5 md-3 profile-header-avatar img-fluid" id="pic">
-              {% else %}
-                    <img src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
-              {% endif %}
+                {% if classified.user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+                  alt="Picture Profile" style="height:35px;border-radius: 50%;"
+                  class="rounded-circle  mb-3 mb-md-0 mr-5 md-3 profile-header-avatar img-fluid" id="pic">
+                {% else %}
+                <img src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
+                {% endif %}
               </a>
               <!-- Location -->
               <div class="meta-left d-flex flex-column">
@@ -58,7 +58,7 @@
               </div>
             </div>
             <div
-              class="meta-right mt-md-0 mt-4 col-md-8 d-flex flex-column align-items-baseline align-items-md-end ml-auto mr-auto">
+              class="meta-right mt-md-0 mt-4 d-flex flex-column align-items-baseline align-items-md-end ml-auto mr-auto">
               <!-- Price -->
               <h3 class="O-cl-red price">
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
@@ -81,14 +81,14 @@
 
         {% if classified.contact_info %}
         <br />
-            {% if user.is_authenticated %}
-                <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
-                {{ classified.contact_info }}</small>
-            {% else %} 
-                 <h6> Please login to view seller's contacts: </h6>
-                  <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
-                  href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-            {% endif %}
+        {% if user.is_authenticated %}
+        <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
+          {{ classified.contact_info }}</small>
+        {% else %}
+        <h6> Please login to view seller's contacts: </h6>
+        <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+          href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+        {% endif %}
 
         {% endif %}
       </section>
@@ -133,10 +133,10 @@
           <div class="card-img-top img-responsive">
             <a href="{% url 'classifieds:classified' classified.slug %}"
               style="color:black; text-decoration:none; background-color:none">
-               {% if classified.image_thumb != "" %}
-                  <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+              {% if classified.image_thumb != "" %}
+              <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
               {% else %}
-                  <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+              <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
               {% endif %}
           </div>
 
