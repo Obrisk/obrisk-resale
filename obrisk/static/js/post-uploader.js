@@ -311,18 +311,4 @@ $(function () {
         $("#classified-form").submit();
     });
 
-    $("#update-profile").click(function (event) {
-        
-		if (!$("select[name='city']").val() || !$("select[name='province']")) {
-			event.preventDefault();
-			bootbox.alert("Please enter your address!");
-        }
-        else {
-            $("#id_oss_image").val(image);
-		    $("input[name='city']").val($("select[name='city']").val());
-		    $("input[name='province_region']").val($("select[name='province']").val());
-		    $("#update").submit();
-        }
-	});
-
 });

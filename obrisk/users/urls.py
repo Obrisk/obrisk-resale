@@ -9,6 +9,7 @@ urlpatterns = [
     url(regex=r'^verification-code/$', view=views.send_code_sms, name='verification_code'),
     url(regex=r'^phone-verify/$', view=views.phone_verify, name='phone_verify'),
     url(regex=r'^phone-password-reset/$', view=views.phone_password_reset, name='phone_password_reset'),
+    url(regex=r'^update-profile-pic/$', view=views.update_profile_pic, name='update_profile_pic'),
     url(regex=r'^~redirect/$', view=views.UserRedirectView.as_view(), name='redirect'),
     url(regex=r'^~update/$', view=views.UserUpdateView.as_view(), name='update'),
     url(regex=r'^(?P<username>[\w.@+-]+)/$', view=views.UserDetailView.as_view(), name='detail'),

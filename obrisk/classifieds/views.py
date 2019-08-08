@@ -48,7 +48,8 @@ from dal import autocomplete
 
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
-
+@login_required
+@require_http_methods(["GET"])
 def set_popular_tags(request):
     popular_tags = Classified.objects.get_counted_tags()
 
@@ -252,7 +253,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                     
                     else:
                         d = str(datetime.datetime.now())
-                        thumb_name = "classifieds/" + str(classified.user) + "/" + \
+                        thumb_name = "classifieds/" + slugify(str(classified.user)) + "/" + \
                         slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
                         style = 'image/resize,m_fill,h_156,w_156'
                         

@@ -16,7 +16,9 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
-
+from obrisk.helpers import ajax_required
+from django.contrib.auth.decorators import login_required, permission_required
+from slugify import slugify
 
 import os
 import base64
@@ -113,7 +115,7 @@ def get_users(full_number):
     """
     return get_user_model().objects.get(phone_number=full_number,is_active=True)
      
-
+@ajax_required
 @require_http_methods(["GET", "POST"])
 def phone_password_reset(request):
     if request.method == "POST":
@@ -155,57 +157,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserForm
     model = User
 
-    def __init__(self, **kwargs):
-        self.object = None
-        super().__init__(**kwargs)
-        
-
-    def form_valid(self, form):
-        picture = form.cleaned_data['oss_image']
-        form.instance.user = self.request.user
-        profile = form.save(commit=False)
-        profile.user = self.request.user
-
-        if not picture:
-            profile.save()
-            return super(UserUpdateView, self).form_valid(form)
-
-        else:
-            if picture.startswith('media/profile_pics/') == False:
-                profile.save()                
-                messages.error(self.request, "Oops! your profile picture, \
-                wasn't uploaded successfully, please upload again!")
-                return super(UserUpdateView, self).form_valid(form)   
-            
-            else:
-                d = str(datetime.datetime.now())
-                thumb_name = "media/profile_pics/" + str(profile.user) + "/thumbnails/" + "thumb-" + d 
-                style = 'image/resize,m_fill,h_60,w_60'
-
-                try:
-                    process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                                oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                    oss2.compat.to_bytes(thumb_name))),
-                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                    bucket.process_object(picture, process)
-                except:
-                    #Since the image exists just save the profile, it is our problem. 
-                    profile.save()
-                    messages.error(self.request, "Oops we are sorry! Your image \
-                            was not uploaded successfully. please upload again!.")
-                    #return self.form_invalid(form)
-                    #I am not returning form errors because this is our problem and not user's
-                    return redirect ('users:detail', username=self.request.user.username)
-
-                #Only save the new image when you have the thumbnail.
-                profile.thumbnail = thumb_name
-                profile.picture = picture
-                profile.save()
-                       
-                return super(UserUpdateView, self).form_valid(form)
-
-
-
     # send the user back to their own page after a successful update
     def get_success_url(self):
         return reverse('users:detail',
@@ -215,9 +166,44 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
         # Only get the User record for the user making the request
         return User.objects.get(username=self.request.user.username)
 
-
-
+@ajax_required
+@login_required
+@require_http_methods(["POST"])
+def update_profile_pic(request):
+    picture = request.POST.get("profile_pic")
     
+    if not picture:
+        return JsonResponse({'success': False, 'error_message': "No profile picture submitted!"} )
+
+    else:
+        if picture.startswith('media/profile_pics/') == False:                
+            return JsonResponse({'success': False, 
+                                'error_message': "Oops! your profile picture, wasn't uploaded successfully, please upload again!"})
+
+        else:
+            d = str(datetime.datetime.now())
+            thumb_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails/" + "thumb-" + d 
+            style = 'image/resize,m_fill,h_60,w_60'
+
+            try:
+                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(thumb_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(picture, process)
+            except:
+                #Since the image exists just save the profile, it is our problem. 
+                return JsonResponse({'success': False,
+                                'error_message': "Oops we are sorry! Your image was not uploaded successfully. please upload again!."})
+
+            #Only save the new image when you have the thumbnail.
+            profile = get_user_model().objects.get(username=request.user)
+            profile.thumbnail = thumb_name
+            profile.picture = picture
+            profile.save()
+                    
+            return JsonResponse({'success': True})
+
 
 class UserListView(LoginRequiredMixin, ListView):
     model = User
@@ -226,7 +212,7 @@ class UserListView(LoginRequiredMixin, ListView):
     slug_url_kwarg = 'username'
 
 
-
+@ajax_required
 @require_http_methods(["GET", "POST"])
 def send_code_sms(request):
     if request.method == "GET":
@@ -249,7 +235,7 @@ def send_code_sms(request):
         return JsonResponse({'success': False, 'error_message':"This request is invalid!"} )
 
 
-
+@ajax_required
 @require_http_methods(["GET", "POST"])
 def phone_verify(request):
     if request.method == "GET":

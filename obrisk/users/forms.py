@@ -33,7 +33,6 @@ class UserForm(forms.ModelForm):
     bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
     province_region = forms.CharField (widget=forms.HiddenInput())
     city = forms.CharField (widget=forms.HiddenInput())
-    oss_image = forms.CharField (widget=forms.HiddenInput(), required=False)
     class Meta:
         model = User
         fields = ('name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
