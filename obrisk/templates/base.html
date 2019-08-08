@@ -41,6 +41,7 @@
 
   <!-- This file stores project-specific CSS -->
   <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
+  <link href="{% static 'css/account.css' %}?v=1" rel="stylesheet">
 
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
@@ -153,7 +154,8 @@
           aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <a class="navbar-brand" href="#">Obrisk</a>
+        <a class="navbar-brand" href="{% url 'classifieds:list' %}">
+          <img src="{% static 'img/full-logo.png' %}" style="width: 120px" alt="Obrisk"></a>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
           <ul class="main-nav navbar-nav mr-auto">

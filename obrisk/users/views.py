@@ -18,6 +18,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from obrisk.helpers import ajax_required
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.sites.shortcuts import get_current_site
 from slugify import slugify
 
 import os
@@ -30,6 +31,8 @@ import json
 
 from allauth.account.views import SignupView, LoginView, PasswordResetView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView
 from allauth.account.forms import  UserTokenForm
+from allauth.account.utils import user_pk_to_url_str
+from allauth.utils import build_absolute_uri
 from obrisk.helpers import bucket, bucket_name
 from .forms import UserForm, EmailSignupForm,  PhoneResetPasswordForm, PhoneSignupForm
 from .models import User
@@ -115,7 +118,8 @@ def get_users(full_number):
     """
     return get_user_model().objects.get(phone_number=full_number,is_active=True)
      
-@ajax_required
+
+
 @require_http_methods(["GET", "POST"])
 def phone_password_reset(request):
     if request.method == "POST":
@@ -257,9 +261,17 @@ def phone_verify(request):
                             return JsonResponse({'success': False, 'error_message': "The user registered with this phone number is not found!"})
                         else:
                             if user:
-                                token = default_token_generator.make_token(user) #58n-94e561aced8f400c352a
-                                url = f"/accounts-authorization/password/reset/key/{token}" 
+                                token = default_token_generator.make_token(user)
+                                #current_site = get_current_site(request)
+                                # save it to the password reset model
+                                # password_reset = PasswordReset(user=user, temp_key=temp_key)
+                                # password_reset.save()
 
+                                # send the password reset email
+                                path = reverse("account_reset_password_from_key",
+                                            kwargs=dict(uidb36=user_pk_to_url_str(user),
+                                                        key=token))
+                                url = build_absolute_uri(request, path)
                                 return JsonResponse({'success': True, 'url':url })
                             else:
                                 return JsonResponse({'success': False, 'error_message': "The user registered with this phone number is not found!"})
@@ -281,26 +293,32 @@ class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
         self.request = request
         self.key = key
         token_form = UserTokenForm(
-            data={'uidb36': uidb36, 'key': self.key})
+            data={'uidb36': uidb36, 'key': self.key})    
+            
         if token_form.is_valid():
             # Store the key in the session and redirect to the
             # password reset form at a URL without the key. That
             # avoids the possibility of leaking the key in the
             # HTTP Referer header.
             # (Ab)using forms here to be able to handle errors in XHR #890
-            print("valid1")
             token_form = UserTokenForm(
                 data={'uidb36': uidb36, 'key': self.key})
             if token_form.is_valid():
                 self.reset_user = token_form.reset_user
-                print("valid2")
-                return super(PasswordResetFromKeyView, self).dispatch(request, uidb36, self.key, **kwargs)
-        self.reset_user = None
-        response = self.render_to_response(
-            self.get_context_data(token_fail=True)
-        )
+                #The super must be called with FormView or the link will be invalid. Ignore the linter
+                return super(FormView, self).dispatch(request, uidb36, self.key, **kwargs)
 
-        return _ajax_response(self.request, response, form=token_form)
+        else:
+            if str(request.META.get('HTTP_REFERER')).endswith("/users/phone-password-reset/"):
+                self.reset_user = token_form.reset_user
+                return super(FormView, self).dispatch(request, uidb36, self.key, **kwargs)
+
+            self.reset_user = None
+            response = self.render_to_response(
+                self.get_context_data(token_fail=True)
+            )
+
+            return _ajax_response(self.request, response, form=token_form)
     
         
 
