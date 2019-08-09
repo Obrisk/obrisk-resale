@@ -70,9 +70,6 @@ INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 # ----------------------------------------------------------------------------
 STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 
-# http://whitenoise.evans.io/en/latest/django.html#enable-whitenoise
-#MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE  # noqa F405
-
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
 
@@ -94,6 +91,10 @@ OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
 
 # The default location for the static files stored in bucket.
 OSS_STATIC_LOCATION = '/static/'
+
+#OSS_COVERAGE_IF_FILE_EXIST = True
+
+#OSS_FILE_SAVE_AS_URL = False
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR('staticfiles'))

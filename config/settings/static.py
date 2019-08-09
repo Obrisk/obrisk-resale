@@ -47,26 +47,13 @@ EMAIL_PORT = 1025
 
 #For running collectstatic local and reduce noise to the server!
 
+# http://whitenoise.evans.io/en/latest/django.html#enable-whitenoise
+MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE  # noqa F405
+
 #Static files are still handled by whitenoise to serve PWA service workers, as they
 #don't accept the static files from the bucket. This means collect static will still be manual.
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# AliCloud access key ID
-OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
-
-# AliCloud access key secret
-OSS_ACCESS_KEY_SECRET = env('RAM_USER_S3KT_KEY')
-
-# The name of the bucket to store files in
-OSS_BUCKET_NAME = env('OSS_BUCKET')
-
-# The URL of AliCloud OSS endpoint
-# Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
-OSS_ENDPOINT = env('OSS_ENDPOINT')
-
-OSS_COVERAGE_IF_FILE_EXIST = True
-
-OSS_FILE_SAVE_AS_URL = False
 
 # The expire time to construct signed url for private acl bucket.
 # Can be set by OSS_EXPIRE_TIME as environment variable or as Django settings.
@@ -76,10 +63,9 @@ OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
 # The default location for the static files stored in bucket.
 OSS_STATIC_LOCATION = '/static/'
 
-# The default location for your static files
-STATIC_ROOT =  '/static/'
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
 STATIC_URL =  '/static/'
-
 
 
