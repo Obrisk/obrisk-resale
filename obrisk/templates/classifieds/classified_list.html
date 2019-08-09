@@ -41,6 +41,9 @@
     {% if request.user.is_authenticated %}
     <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
       title="{% trans 'Write a new classified' %}">➕{% trans 'Add new item' %}</a>
+    
+    {% else %}
+    <small > 📍<a href="{% url 'account_login' %}"> Login </a> to filter posts location</small>
 
     {% endif %}
   </div>

@@ -260,17 +260,19 @@ MANAGERS = ADMINS
 # django-allauth
 # ------------------------------------------------------------------------------
 # https://django-allauth.readthedocs.io/en/latest/configuration.html
-# django-allauth
-# ------------------------------------------------------------------------------
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ALLOW_REGISTRATION = env.bool('ACCOUNT_ALLOW_REGISTRATION', True)
+
 ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
 #This is because of overiding login forms on users.forms
 #options are False and True for the remember me box
 SESSION_REMEMBER = None
 
 ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
 SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+#This will avoid the duplicates in usernames with diff casing
 ACCOUNT_PRESERVE_USERNAME_CASING = True
 
 USERNAME_MIN_LENGTH = 3
@@ -280,10 +282,12 @@ ACCOUNT_FORMS = {
     'login': 'users.forms.CustomLoginForm'
 }
 
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-#ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
+ACCOUNT_USERNAME_BLACKLIST = ['AnonymousUser', 'admin', 'obrisk']
+
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
+#ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 
 
 # SOCIALACCOUNT_PROVIDERS = {

@@ -64,7 +64,7 @@ class Post(models.Model):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="author",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     image = models.CharField(max_length=150, null=True, blank=True)
     img_small = models.CharField(max_length=150, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -106,7 +106,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE, related_name='comments')
     user =models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="commentor",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     body = models.TextField(max_length=280)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)

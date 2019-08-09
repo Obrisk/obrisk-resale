@@ -51,7 +51,7 @@ TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 @login_required
 @require_http_methods(["GET"])
 def set_popular_tags(request):
-    popular_tags = Classified.objects.get_counted_tags()[:10]
+    popular_tags = Classified.objects.get_counted_tags()[:20]
 
     cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
@@ -61,9 +61,14 @@ def set_popular_tags(request):
 #People can view without login
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
+    if request.user.is_authenticated:
+        city = request.user.city
+    else:
+        city = "Hangzhou"
+    
     classifieds_list = Classified.objects.get_active().annotate(
         order = Case (
-            When(city=request.user.city, then=Value(1)),
+            When(city=city, then=Value(1)),
             default=Value(2),
             output_field=IntegerField(),
         )

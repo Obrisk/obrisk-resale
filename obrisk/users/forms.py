@@ -196,7 +196,7 @@ class CustomLoginForm(LoginForm):
                                                     _('Username or Phone or Email'),
                                                     'autofocus': 'autofocus' })
         
-            login_field = forms.CharField(label="Login", widget=login_widget)
+            login_field = forms.CharField(label="Username or Phone or Email", widget=login_widget)
 
         self.fields["login"] = login_field
         set_form_field_order(self, ["login", "password", "remember"])
