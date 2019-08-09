@@ -51,14 +51,14 @@ TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 @login_required
 @require_http_methods(["GET"])
 def set_popular_tags(request):
-    popular_tags = Classified.objects.get_counted_tags()
+    popular_tags = Classified.objects.get_counted_tags()[:10]
 
     cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
     return HttpResponse("Successfully sorted the popular tags!", content_type='text/plain')
 
 
-@login_required
+#People can view without login
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
     classifieds_list = Classified.objects.get_active().annotate(

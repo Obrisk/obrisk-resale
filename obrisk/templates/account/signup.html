@@ -139,11 +139,11 @@
 		</div>
 	</div>
 </div>
-<script src="{% static 'js/user-form.js' %}?v=0908191" type="text/javascript"> </script>
-<script src="{% static 'js/location.js' %}?v=0208191" type="text/javascript"> </script>
+
 <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
 
 <script type="text/javascript"> 
+	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 	var current_url = "{{ request.path }}"; 
 	var errors = false;
 
@@ -164,5 +164,8 @@
 	{% endif %} 
 
 </script>
+<script src="{% static 'js/user-form.js' %}?v=0908192" type="text/javascript"> </script>
+<script src="{% static 'js/location.js' %}?v=0208191" type="text/javascript"> </script>
+
 
 {% endblock content %}
