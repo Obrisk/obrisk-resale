@@ -5,7 +5,7 @@
 {% block title %}{{ user.username|title }}{% endblock %}
 
 {% block head %}
-<script src="{% static 'js/user-form.js' %}?v=0808191" type="text/javascript"> </script>
+<script src="{% static 'js/user-form.js' %}?v=0908192" type="text/javascript"> </script>
 <script src="{% static 'js/location.js' %}?v=0208191" type="text/javascript"> </script>
 <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>
 <script src="{% static 'js/aliyun-oss.min.js' %}?v=3107191" type="text/javascript"></script>
@@ -13,7 +13,7 @@
 {% endblock head %}
 
 {% block content %}
-<button type="button" class="btn btn-dark" onclick="javascript:history.back()"> <i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+<a href="{% url 'users:detail' request.user.username %}" class="btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 
 <div class="col-lg-8 m-auto">
   <div class="row profile">
@@ -47,6 +47,7 @@
     <div class="col-md-8">
       <form enctype="multipart/form-data" class="update form-horizontal" method="post"
         action="{% url 'users:update' %}">
+        <small> <strong> All fields are optional </strong> </small> 
         {% csrf_token %}
         {{ form|crispy }}
         <h6> Address </h6>
@@ -106,5 +107,5 @@ const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
 const user = "{{ request.user.username }}";
 
 </script>
-<script src="{% static 'js/profile-uploader.js' %}?v=0908192" type="text/javascript"></script>
+<script src="{% static 'js/profile-uploader.js' %}?v=0908193" type="text/javascript"></script>
 {% endblock %}

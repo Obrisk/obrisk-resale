@@ -7,22 +7,21 @@ $(document).ready(function () {
 	if (!errors) {
 		$("#name_and_psword").hide();
 	}
-
-});
-
-// adding a crsf token
-function csrfSafeMethod(method) {
-	// these HTTP methods do not require CSRF protection
-	return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
-}
-$.ajaxSetup({
-	beforeSend: function (xhr, settings) {
-		if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-			xhr.setRequestHeader("X-CSRFToken", csrftoken);
-		}
+	
+	// adding a crsf token
+	function csrfSafeMethod(method) {
+		// these HTTP methods do not require CSRF protection
+		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 	}
-});
+	$.ajaxSetup({
+		beforeSend: function (xhr, settings) {
+			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		}
+	});
 
+});
 
 var verify_counter = 0;
 var code_counter = 0;

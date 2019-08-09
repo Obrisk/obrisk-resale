@@ -38,13 +38,13 @@ class UserForm(forms.ModelForm):
         fields = ('name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
                'linkedin_account','snapchat_account', 'facebook_account' )
         help_texts = {
-            "instagram_account": "(Optional) Please fill in your instagram username as it appears on your instagram profile page.\
+            "instagram_account": "Your instagram username as it appears on your instagram profile page.\
                  Make sure it is spelled correctly",
-            "linkedin_account": "(Optional) Please fill in your linkedin username as it appears on your linkedin profile page.\
+            "linkedin_account": "Your linkedin username as it appears on your linkedin profile page.\
                  Make sure it is spelled correctly",
-            "facebook_account": "(Optional) Please fill in your facebook username as it appears on your facebook profile page.\
+            "facebook_account": "Your facebook username as it appears on your facebook profile page.\
                  Make sure it is spelled correctly",
-            "snapchat_account": "(Optional) Please fill in your snapchat username as it appears on your snapchat profile page.\
+            "snapchat_account": "Your snapchat username as it appears on your snapchat profile page.\
                  Make sure it is spelled correctly.",
         }
     

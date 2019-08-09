@@ -45,7 +45,7 @@ class EmailSignUp(SignupView):
     template_name = 'account/email_signup.html'
 
 
-def send_code(full_number):
+def send_code(full_number, theme):
     random = get_random_string(length=6, allowed_chars='0123456789')
 
     #if settings.DEBUG=True (default=False)
@@ -67,10 +67,15 @@ def send_code(full_number):
             region_name=os.getenv('AWS_REGION')
         )
 
+        if theme == "signup":
+            msg = f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!"
+        else:
+            msg = f"[Obrisk] Your verification code is {random}, valid for 10 minutes!"
+
         # Send your sms message.
         ret = client.publish(
             PhoneNumber=str(full_number),
-            Message=f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!",
+            Message=msg,
             MessageAttributes={
                 'string': {
                     'DataType': 'String',
@@ -129,7 +134,7 @@ def phone_password_reset(request):
             
             full_number = "+86" + phone_number           
             if User.objects.filter(phone_number=full_number).exists():
-                return send_code(full_number)
+                return send_code(full_number, "password-reset")
 
             else:
                 return JsonResponse({'success': False, 'error_message': "This phone number doesn't exist!"})
@@ -187,23 +192,31 @@ def update_profile_pic(request):
         else:
             d = str(datetime.datetime.now())
             thumb_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails/" + "thumb-" + d 
-            style = 'image/resize,m_fill,h_60,w_60'
+            pic_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails" + "dp-" + d 
+            style1 = 'image/resize,m_fill,h_60,w_60'
+            style2 = 'image/resize,m_fill,h_250,w_250'
 
             try:
-                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                process1 = "{0}|sys/saveas,o_{1},b_{2}".format(style1,
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(
                                                                 oss2.compat.to_bytes(thumb_name))),
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                bucket.process_object(picture, process)
+                process2 = "{0}|sys/saveas,o_{1},b_{2}".format(style2,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(pic_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(picture, process1)
+                bucket.process_object(picture, process2)
             except:
                 #Since the image exists just save the profile, it is our problem. 
                 return JsonResponse({'success': False,
-                                'error_message': "Oops we are sorry! Your image was not uploaded successfully. please upload again!."})
+                                'error_message': "Oops we are sorry! Your image was not uploaded successfully. Try again later!."})
 
             #Only save the new image when you have the thumbnail.
             profile = get_user_model().objects.get(username=request.user)
             profile.thumbnail = thumb_name
-            profile.picture = picture
+            profile.picture = pic_name
+            profile.org_picture = picture
             profile.save()
                     
             return JsonResponse({'success': True})
@@ -228,7 +241,7 @@ def send_code_sms(request):
             check_phone = User.objects.filter(phone_number=full_number).exists()
 
             if check_phone is False:
-                return send_code(full_number)
+                return send_code(full_number, "signup")
 
             else:
                 return JsonResponse({'success': False, 'error_message': "This phone number already exists!"} )

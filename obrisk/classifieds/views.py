@@ -51,7 +51,7 @@ TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 @login_required
 @require_http_methods(["GET"])
 def set_popular_tags(request):
-    popular_tags = Classified.objects.get_counted_tags()[:20]
+    popular_tags = Classified.objects.get_counted_tags()[:30]
 
     cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
@@ -113,7 +113,7 @@ def classified_list(request, tag_slug=None):
                     'image_thumb'
                 )[:1]
             )
-        )
+        ).order_by('-timestamp')
     
     if request.is_ajax():        
        return render(request,'classifieds/classified_list_ajax.html',

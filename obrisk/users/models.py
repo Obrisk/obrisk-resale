@@ -13,6 +13,7 @@ from obrisk.notifications.models import Notification, notification_handler
 class User(AbstractUser):
     # First Name and Last Name do not cover name patterns around the globe.
     name = models.CharField(_("Full name"), blank=True, max_length=255)
+    org_picture = models.CharField(max_length=150, null=True, blank=True)
     picture = models.CharField(max_length=150, null=True, blank=True)
     thumbnail = models.CharField(max_length=150, null=True, blank=True)
     job_title = models.CharField(

@@ -63,7 +63,7 @@ OssUpload.prototype = {
            } else {
                 var filename = genKey();
                 var file = uploader.file;
-                $totalProgressbar.html('Upload has started, please wait...');
+                $totalProgressbar.css('width', "100%").html('Upload started...');
                 $("#startUpload").hide();
                 _this.uploadFile(file, filename);   
            } 
@@ -78,7 +78,23 @@ OssUpload.prototype = {
      */
     uploadFile: function (file, filename) {
 
-        applyTokenDo();
+        applyTokenDo().then(result => {
+            if (!result.direct) {
+                client = new OSS({
+                    region: result.region,
+                    accessKeyId: result.accessKeyId,
+                    accessKeySecret: result.accessKeySecret,
+                    stsToken: result.SecurityToken,
+                    bucket: result.bucket
+                });
+            } else {
+                client = new OSS({
+                    region: result.region,
+                    accessKeyId: result.accessId,
+                    accessKeySecret: result.stsTokenKey,
+                    bucket: result.bucket
+                });
+            }
 
         //make sure we get the sts token
         if (client !== undefined) {
@@ -106,7 +122,6 @@ OssUpload.prototype = {
                                 $.ajax({
                                     url: obrisk_oss_url + res.name + "?x-oss-process=image/average-hue",
                                     success: function () {
-
                                         $.ajax({
                                             url: "/users/update-profile-pic/",
                                             data: {
@@ -144,31 +159,10 @@ OssUpload.prototype = {
                                         } else {
                                             //We have retried to the max and there is nothing we can do
                                             //Allow the users to submit the form atleast with default image.
-
-                                            $("#" + file.id).children(".success-span").addClass("fail");
-                                            $("#" + file.id).children(".file-panel").hide();
-                                            uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                                            uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                                            progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
-                                            progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
-
-                                            if (progressBarNum == 100) {
-                                                $totalProgressbar.css('width', progressBar)
-                                                    .html('Upload complete');
-                                            } else {
-                                                $totalProgressbar.css('width', progressBar)
-                                                    .html(progressBar);
-                                            }
-                                            img_error = res.name + ", Message: " + "Corrupted image" + ", RequestID: " + res.name;
-                                            if (!images) {
-                                                images = 'undef,classifieds/error-img.jpg';
-                                                bootbox.alert("Oops! an error occured when uploading your image(s). \
-                                                But you can submit this form without images and edit your post later to add images");
-                                            }
+                                            bootbox.alert("Oops! an error occured when uploading your image, please try again later!");
+                                            $("#startUpload").show();
                                         }
                                     }
-
-
                                 }); //End of outer ajax call
 
                             }//End of the if progress bar == 100
@@ -188,14 +182,14 @@ OssUpload.prototype = {
                                 else {
                                     //We have retried to the max and there is nothing we can do
                                     //Allow the users to submit the form atleast with default image.
-                                    $totalProgressbar.css('width', '80%')
-                                    .html("Upload facing errors!");                                    
+                                    $totalProgressbar.css('width', '100%')
+                                    .html("Upload failed!");                                    
                                 }
                             } else {
                                 //Not timeout out error and there is nothing we can do
                                 //Allow the users to submit the form atleast with default image.
-                                $totalProgressbar.css('width', '80%')
-                                    .html("Upload facing error!");
+                                $totalProgressbar.css('width', '100%')
+                                    .html("Upload failed!");
                             }
                         
                         });
@@ -215,7 +209,11 @@ OssUpload.prototype = {
             $(".start-uploader").css('display', 'block');
         }
 
-    }
+    }).catch(e => {
+        bootbox.alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
+        console.log(e)
+    })
+},
 
 }
 
@@ -233,7 +231,11 @@ function uploadPreview(input) {
 				.attr('src', e.target.result);
 		};
 
-		reader.readAsDataURL(input.files[0]);
+        reader.readAsDataURL(input.files[0]);
+
+        $totalProgressbar.css('width', "100%");
+        $("#startUpload").show();
+        
 	}
 }
 
@@ -249,7 +251,7 @@ var $wrap = $('#uploader'),
 
 var progress = function (p) { //p percentage 0~1
     return function (done) {
-        $totalProgressbar.html('Upload has started, please wait...');
+        $totalProgressbar.css('width', "100%").html('Upload started, please wait...');
         done();
     }
 };
@@ -261,33 +263,18 @@ var progress = function (p) { //p percentage 0~1
  */
 var applyTokenDo = function () {
     var url = oss_url; //Request background to obtain authorization address url
-    $.ajax({
-        url: url,
-        async: false,
-        success: function (result) {
-            if (!result.direct) {
-                client = new OSS({
-                    region: result.region,
-                    accessKeyId: result.accessKeyId,
-                    accessKeySecret: result.accessKeySecret,
-                    stsToken: result.SecurityToken,
-                    bucket: result.bucket
-                });
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: url,
+            success: function (result) {
+                resolve(result)
+            },
+            error: function (e) {
+                reject(e);
             }
-            else {
-                client = new OSS({
-                    region: result.region,
-                    accessKeyId: result.accessId,
-                    accessKeySecret: result.stsTokenKey,
-                    bucket: result.bucket
-                });
-            }
-        },
-        error: function (e) {
-            bootbox.alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
-            console.log(e)
-        }
+        });
     });
+
 };
 
 //File upload initializer 
