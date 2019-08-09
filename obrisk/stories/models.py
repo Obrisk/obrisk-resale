@@ -17,7 +17,7 @@ class Stories(models.Model):
     Twitter does."""
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="publisher",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     parent = models.ForeignKey("self", blank=True,
         null=True, on_delete=models.CASCADE, related_name="thread")
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -91,7 +91,7 @@ class Stories(models.Model):
 
     def get_thread(self):
         parent = self.get_parent()
-        return parent.thread.all()
+        return parent.thread.all().order_by('timestamp')
 
     def count_thread(self):
         return self.get_thread().count()

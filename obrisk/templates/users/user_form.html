@@ -13,8 +13,9 @@
 {% endblock head %}
 
 {% block content %}
-<div class="col-lg-8 m-auto">
+<button type="button" class="btn btn-dark" onclick="javascript:history.back()"> <i class="fa fa-chevron-left" aria-hidden="true"></i></button>
 
+<div class="col-lg-8 m-auto">
   <div class="row profile">
     <div class="col-md-4 user-profile d-flex flex-column align-items-center">
       <h1>{{ user.username|title }}</h1>

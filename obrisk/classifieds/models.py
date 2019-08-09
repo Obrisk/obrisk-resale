@@ -48,7 +48,7 @@ class Classified(models.Model):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     title = models.CharField(max_length=80)
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
     slug = models.SlugField(max_length=300, null=True, blank=True, unique=True, editable=False)
@@ -115,7 +115,7 @@ class ClassifiedImages(models.Model):
 class OfficialAd(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="official_user",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     title = models.CharField(max_length=80)
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
     details = models.CharField(max_length=2000)

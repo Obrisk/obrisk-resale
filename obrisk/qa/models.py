@@ -172,7 +172,7 @@ class Answer(models.Model):
         return [vote.user for vote in self.votes.filter(value=False)]
 
     def accept_answer(self):
-        answer_set = Answer.objects.filter(question=self.question)
+        answer_set = Answer.objects.filter(question=self.question).order_by('timestamp')
         answer_set.update(is_answer=False)
         self.is_answer = True
         self.save()
