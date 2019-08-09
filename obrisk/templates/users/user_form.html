@@ -79,10 +79,13 @@
     </div>
   </div>
 </div>
-
-
+{% csrf_token %}
 
 <script>
+
+// using jQuery
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
   var toast = new iqwerty.toast.Toast();
   toast.setText('Updating Profile').stylize({
     background: '#3EC4E2',

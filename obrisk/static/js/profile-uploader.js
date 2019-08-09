@@ -22,7 +22,7 @@ var ossUpload = '';
 
 let retryCount = 0;
 const retryCountMax = 5;
-
+var obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
 
 OssUpload.prototype = {
     constructor: OssUpload,
@@ -100,36 +100,78 @@ OssUpload.prototype = {
                             if (progressBarNum == 100) {
                                 $totalProgressbar.css('width', "100%")
                                 .html('Processing....');
-                                
-                            
+
+                                //Try to edit the uploaded image, if it fails it means the image
+                                //was corrupted during upload
                                 $.ajax({
-                                    url: "/users/update-profile-pic/",
-                                    data: {
-                                        profile_pic: res.name
-                                    },
-                                    cache: false,
-                                    type: 'POST',
-                                    success: function (result) {
-                                        if (result.success) {
-                                            $totalProgressbar.css('width', "100%")
-                                            .html('New pic is saved successfully!');
-                                            $("#startUpload").hide();
-                                        }
-                                        else {
-                                            $totalProgressbar.css('width', "100%")
-                                            .html("<p>" + result.error_message + "</p>");
-                                            $("#startUpload").show();
-                                        }
+                                    url: obrisk_oss_url + res.name + "?x-oss-process=image/average-hue",
+                                    success: function () {
+
+                                        $.ajax({
+                                            url: "/users/update-profile-pic/",
+                                            data: {
+                                                profile_pic: res.name
+                                            },
+                                            cache: false,
+                                            type: 'POST',
+                                            success: function (result) {
+                                                if (result.success) {
+                                                    $totalProgressbar.css('width', "100%")
+                                                    .html('New pic is saved successfully!');
+                                                    $("#startUpload").hide();
+                                                }
+                                                else {
+                                                    $totalProgressbar.css('width', "100%")
+                                                    .html("<p>" + result.error_message + "</p>");
+                                                    $("#startUpload").show();
+                                                }
+                                            },
+                                            error: function (e) {
+                                                $totalProgressbar.css('width', "100%")
+                                                    .html("<p> Upload failed </p>");
+                                                console.log(e)
+                                                $("#startUpload").show();
+                                            }
+                                        });  
                                     },
                                     error: function (e) {
-                                        $totalProgressbar.css('width', "100%")
-                                            .html("<p> Upload failed </p>");
-                                        console.log(e)
-                                        $("#startUpload").show();
-                                    }
-                                }); 
 
-                            }
+                                        // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
+                                        if (retryCount < retryCountMax) {
+                                            retryCount++;
+                                            console.error(`retryCount : ${retryCount}`);
+                                            upload();
+                                        } else {
+                                            //We have retried to the max and there is nothing we can do
+                                            //Allow the users to submit the form atleast with default image.
+
+                                            $("#" + file.id).children(".success-span").addClass("fail");
+                                            $("#" + file.id).children(".file-panel").hide();
+                                            uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                                            uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                                            progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
+                                            progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
+
+                                            if (progressBarNum == 100) {
+                                                $totalProgressbar.css('width', progressBar)
+                                                    .html('Upload complete');
+                                            } else {
+                                                $totalProgressbar.css('width', progressBar)
+                                                    .html(progressBar);
+                                            }
+                                            img_error = res.name + ", Message: " + "Corrupted image" + ", RequestID: " + res.name;
+                                            if (!images) {
+                                                images = 'undef,classifieds/error-img.jpg';
+                                                bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                                But you can submit this form without images and edit your post later to add images");
+                                            }
+                                        }
+                                    }
+
+
+                                }); //End of outer ajax call
+
+                            }//End of the if progress bar == 100
                         }).catch((err) => {
                            
                             console.error(err);

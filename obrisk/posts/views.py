@@ -139,7 +139,6 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 
-@method_decorator(csrf_exempt, name='dispatch')
 @method_decorator(login_required, name='post')
 class DetailPostView(DetailView):
     """Basic DetailView implementation to call an individual Post."""

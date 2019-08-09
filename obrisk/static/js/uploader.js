@@ -243,7 +243,7 @@ OssUpload.prototype = {
                                     }
 
 
-                                });
+                                }); //End of ajax function
 
                             }).catch((err) => {
                                 console.error(err);

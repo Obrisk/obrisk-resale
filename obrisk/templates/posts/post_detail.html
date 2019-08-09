@@ -164,6 +164,8 @@
 
   {% block javascript %}
   <script type="text/javascript">
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    
     var url = "{% url 'posts:post' post.slug %}"
   </script>
   <script src="{% static 'js/posts.js' %}"> </script>
