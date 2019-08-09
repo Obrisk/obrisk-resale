@@ -16,12 +16,7 @@ DEBUG = env.bool('DEBUG', default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env('SECRET_KEY', default='fOqtAorZrVqWYbuMPOcZnTzw2D5bKeHGpXUwCaNBnvFUmO1njCQZGz05x1BhDG0E')
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = [
-    #"localhost",
-    #"0.0.0.0",
-	#"127.0.0.1",
-     '*'
-]
+ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -50,18 +45,11 @@ EMAIL_HOST = 'localhost'
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
 EMAIL_PORT = 1025
 
-
-# ------------------------------------------------------------------------------
-# https://django-extensions.readthedocs.io/en/latest/installation_instructions.html#configuration  # noqa F405
-# https://github.com/aliyun/django-oss-storage
-INSTALLED_APPS += ['django_oss_storage']  # noqa F405
-
-
 #For running collectstatic local and reduce noise to the server!
 
-#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
-# ------------------------
-STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
+#Static files are still handled by whitenoise to serve PWA service workers, as they
+#don't accept the static files from the bucket. This means collect static will still be manual.
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('RAM_USER_ID')

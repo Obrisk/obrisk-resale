@@ -23,6 +23,7 @@ var img_error; //Records the errors happened during upload.
 var client;
 var imgClient; //If we'll  be checking the file size.
 var ossUpload = '';
+var obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
 
 let retryCount = 0;
 const retryCountMax = 5;
@@ -184,13 +185,11 @@ OssUpload.prototype = {
                             })
                             .then(function (res) {
 
-                                obrisk_urls = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
-
                                 //Try to get the dominat color from the uploaded image, if it fails it means the image
                                 //was corrupted during upload
                                 $.ajax({
-                                    url: obrisk_urls + res.name + "?x-oss-process=image/average-hue",
-                                    success: function (result) {
+                                    url: obrisk_oss_url + res.name + "?x-oss-process=image/average-hue",
+                                    success: function () {
 
                                         $("#" + file.id).children(".success-span").addClass("success");
                                         $("#" + file.id).children(".file-panel").hide();
@@ -238,14 +237,13 @@ OssUpload.prototype = {
                                             if (!images) {
                                                 images = 'undef,classifieds/error-img.jpg';
                                                 bootbox.alert("Oops! an error occured when uploading your image(s). \
-                                            But you can submit this form without images and edit your post later to add images");
+                                                But you can submit this form without images and edit your post later to add images");
                                             }
                                         }
                                     }
 
 
                                 });
-
 
                             }).catch((err) => {
                                 console.error(err);

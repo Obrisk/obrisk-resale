@@ -9,7 +9,7 @@ from .base import env
 SECRET_KEY = env('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com', '54.180.169.125']
+ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -68,20 +68,10 @@ INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 
 # STATIC
 # ----------------------------------------------------------------------------
-#Static files are still handled by whitenoise to serve PWA service workers, as they
-#don't accept the static files from the bucket. This means collect static will still be manual.
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 
-# WhiteNoise
-# ------------------------------------------------------------------------------
 # http://whitenoise.evans.io/en/latest/django.html#enable-whitenoise
-MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE  # noqa F405
-
-
-#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
-# ------------------------
-DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
-
+#MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE  # noqa F405
 
 # AliCloud access key ID
 OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
@@ -113,6 +103,11 @@ STATIC_URL =  '/static/'
 # MEDIA
 # ------------------------------------------------------------------------------
 # The default location for the media files stored in bucket.
+
+#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
+# ------------------------
+DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+
 OSS_MEDIA_LOCATION = '/media/'
 
 MEDIA_URL = '/media/'

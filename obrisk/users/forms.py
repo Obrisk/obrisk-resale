@@ -162,7 +162,7 @@ class CustomLoginForm(LoginForm):
         _("This account is currently inactive."),
 
         'username_password_mismatch':
-        _("The username and/or password you specified are not correct."),
+        _("The username or phone number or password you specified are not correct."),
 
         'email_password_mismatch':
         _("The e-mail address and/or password you specified are not correct."),
@@ -194,7 +194,7 @@ class CustomLoginForm(LoginForm):
                 == 'username_email'
             login_widget = forms.TextInput(attrs={'placeholder':
                                                     _('Username or Phone or Email'),
-                                                    'autofocus': 'autofocus'})
+                                                    'autofocus': 'autofocus' })
         
             login_field = forms.CharField(label="Login", widget=login_widget)
 
