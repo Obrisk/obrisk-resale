@@ -108,7 +108,7 @@ def send_code(full_number, theme):
         else:
             return JsonResponse({
                 'success': False,
-                'error_message': "Sorry we couldn't send the verification code please signup with your email at the bottom of this page!", 
+                'error_message': "Sorry we couldn't send the verification code please try again later!", 
                 'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"], 'requestId':response["RequestId"], 
                 'retries': response["RetryAttempts"]
             })  
@@ -271,7 +271,9 @@ def phone_verify(request):
                         try:
                             user = get_users(full_number)
                         except:
-                            return JsonResponse({'success': False, 'error_message': "The user registered with this phone number is not found!"})
+                            return JsonResponse({'success': False, 
+                                                'error_message': "Sorry there is a problem with this account. Please contact us!",
+                                                'phone_no': full_number })
                         else:
                             if user:
                                 token = default_token_generator.make_token(user)
@@ -287,7 +289,7 @@ def phone_verify(request):
                                 url = build_absolute_uri(request, path)
                                 return JsonResponse({'success': True, 'url':url })
                             else:
-                                return JsonResponse({'success': False, 'error_message': "The user registered with this phone number is not found!"})
+                                return JsonResponse({'success': False, 'error_message': "Sorry there is a problem with this account. Please contact us!"})
                     else:
                         return JsonResponse({'success': True})
                 

@@ -9,6 +9,7 @@ from .base import env
 SECRET_KEY = env('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+#https://stackoverflow.com/questions/16676314/should-server-ip-address-be-in-allowed-hosts-django-setting
 ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
 
 # DATABASES
