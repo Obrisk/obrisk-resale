@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans 'Contacts' %}{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/messager.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block content %}
+<div>
+    <p>hello {{ request.user.username }},</p>
+your request is on pending,
+please wait for the other user to accept your request
+
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+{% endblock extra_js %}

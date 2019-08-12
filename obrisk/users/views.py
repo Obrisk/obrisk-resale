@@ -173,7 +173,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         user = get_object_or_404(user_model, pk=self.object.pk)
         """
         user = self.request.user
-        #print(user)
         friends = Friend.objects.friends(user)
         following = Follow.objects.following(user)
         followers = Follow.objects.followers(user)

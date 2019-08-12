@@ -35,15 +35,18 @@ def friendship_add_friend(
     if request.method == "POST":
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
-
-        try:
-            Friend.objects.add_friend(from_user, to_user)
-        except AlreadyFriendsError :
-            return view_friends(request, from_user)
-        except AlreadyExistsError : 
-            return view_friends(request, from_user)
+        if Friend.objects.can_request_send(from_user, to_user) == True:
+            return render(request, 'friends/pending_request.html', ctx)
         else:
-            return redirect("friends:friendship_request_list")
+
+            try:
+                Friend.objects.add_friend(from_user, to_user)
+            except AlreadyFriendsError :
+                return view_friends(request, from_user)
+            except AlreadyExistsError : 
+                return view_friends(request, from_user)
+            else:
+                return redirect("messager:contacts_list")
 
     return render(request, template_name, ctx)
 
