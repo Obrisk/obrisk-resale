@@ -12,7 +12,17 @@
 {% load friendshiptags %}
 
 {% for f in following %}
-{{ f.username }}
+{% if f.thumbnail %}
+      <a href="{% url 'users:detail' f.username %}">
+         <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}" alt="Picture Profile"
+          style="width:40px;height:40px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
+      {% else %}
+            <a href="{% url 'users:detail' f.username %}">
+            <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
+      {% endif %}
+          
+      <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
 {% empty %}
 Sorry {{ request.user.username }}, you do not follow any official account right now 😞
 

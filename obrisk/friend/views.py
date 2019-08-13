@@ -92,6 +92,16 @@ def friendship_cancel(request, friendship_request_id):
         "friends:friendship_requests_detail", friendship_request_id=friendship_request_id
     )
 
+@login_required
+def friendship_requested_list(
+    request, template_name="friends/friend_requested_list.html"
+):
+    """ View unread and read friendship requests """
+    sent_requests = FriendshipRequest.objects.filter(from_user=request.user)
+        
+    return render(request, template_name, {"sent_requests": sent_requests})
+
+
 
 @login_required
 def friendship_request_list(
@@ -101,7 +111,7 @@ def friendship_request_list(
     friendship_requests = Friend.objects.requests(request.user)
     # This shows all friendship requests in the database
     # friendship_requests = FriendshipRequest.objects.filter(rejected__isnull=True)
-
+    
     return render(request, template_name, {"requests": friendship_requests})
 
 

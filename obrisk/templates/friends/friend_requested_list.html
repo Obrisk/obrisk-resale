@@ -9,27 +9,32 @@
 {% block content %}
 {% include "chats.html" %}
 
-{% for f in followers %}
-{% if f.thumbnail %}
-      <a href="{% url 'users:detail' f.username %}">
-         <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}" alt="Picture Profile"
+<div>
+    <ul>
+        {% for friendship_request in sent_requests %}
+        {% if friendship_request.thumbnail %}
+      <a href="{% url 'users:detail' friendship_request.to_user %}">
+         <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{friendship_request.thumbnail}}" alt="Picture Profile"
           style="width:40px;height:40px;border-radius: 50%;"
           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
       {% else %}
-            <a href="{% url 'users:detail' f.username %}">
+            <a href="{% url 'users:detail' friendship_request.to_user %}">
             <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
       {% endif %}
-          
-      <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
-  {{ f.username }} 
-{% empty %}
-  Sorry {{ request.user.username }}, you do not have any followers right now 😞
-  
-{% endfor %}
+      <strong> <a href="{% url 'users:detail' friendship_request.to_user %}"> {{ friendship_request.to_user | title}} </a>
+        <br>
+        {% empty %}
+        </ul>
+        <div>
+          <p>No sent requests</p><br>
+
+        </div>
+        {% endfor %}
+        
+</div>
 <div>
   <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 my profile </a>
 
-</div>
 </div>
 {% endblock content %}
 

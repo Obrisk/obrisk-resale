@@ -10,6 +10,7 @@ from obrisk.friend.views import (
     friendship_reject,
     friendship_cancel,
     friendship_request_list,
+    friendship_requested_list,
     friendship_request_list_rejected,
     friendship_requests_detail,
     followers,
@@ -57,6 +58,11 @@ urlpatterns = [
         regex=r"^friend/requests/$",
         view=friendship_request_list,
         name="friendship_request_list",
+    ),
+    url(
+        regex=r"^friend/sent-requests/$",
+        view=friendship_requested_list,
+        name="friendship_requested_list",
     ),
     url(
         regex=r"^friend/requests/rejected/$",
