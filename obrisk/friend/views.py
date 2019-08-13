@@ -97,8 +97,10 @@ def friendship_requested_list(
     request, template_name="friends/friend_requested_list.html"
 ):
     """ View unread and read friendship requests """
+    to_user = get_object_or_404(user_model, pk=6)
+
     sent_requests = FriendshipRequest.objects.filter(from_user=request.user)
-        
+    
     return render(request, template_name, {"sent_requests": sent_requests})
 
 

@@ -8,21 +8,20 @@
 
 {% block content %}
 <div>
-    <p>hello {{ request.user.username  }},</p>
+        <strong><p>
+        {% if request.user.thumbnail %}
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
+         style="width:40px;height:40px;border-radius: 50%;"
+         class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
+     {% else %}
+           <a href="{% url 'users:detail' request.to_user %}">
+           <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
+     {% endif %}
+      <a href="{% url 'users:detail' request.user  %}"> {{ request.user.username | title}} </a>Hello
+    </p>
 your request is on pending,
 please wait for the other user to accept your request
-{% if friendship_request.thumbnail %}
-         <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.thumbnail}}" alt="Picture Profile"
-          style="width:40px;height:40px;border-radius: 50%;"
-          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
-      {% else %}
-            <a href="{% url 'users:detail' request.to_user %}">
-            <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
-      {% endif %}
-      <strong> <a href="{% url 'users:detail' .to_user %}"> {{ friendship_request.to_user | title}} </a>
-        <br>
-        {% empty %}
-        </ul>
+</strong>
 </div>
 
 {% endblock content %}
