@@ -1,9 +1,8 @@
+//https://https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/js/workbox-sw.js
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js');
-
 
 var staticCacheName = "obrisk-pwa-v" + new Date().getTime();
 var filesToCache = [
-  '/',
   '/static/js/aliyun-oss.min.js',
   '/static/js/bootbox.min.js',
   '/static/js/bootstrap.min.js',
@@ -114,6 +113,8 @@ self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
       console.log('activating pwa')
+      
+      caches.delete('/');
       return Promise.all(
         cacheNames
         .filter(cacheName => (cacheName.startsWith("obrisk-pwa-v")))
