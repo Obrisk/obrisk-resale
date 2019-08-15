@@ -337,27 +337,27 @@ PWA_APP_SCOPE = "/"
 PWA_APP_ORIENTATION = 'any'
 PWA_APP_START_URL = "/"
 PWA_APP_ICONS = [    {
-        "src": "static/img/android-chrome-192x192.png",
+        "src": "/static/img/android-chrome-192x192.png",
         "sizes": "192x192",
     }, {
-        "src": "static/img/android-chrome-512x512.png",
+        "src": "/static/img/android-chrome-512x512.png",
         "sizes": "512x512",
     }
     , {
-        "src": "static/img/mstile-310x310.png",
+        "src": "/static/img/mstile-310x310.png",
         "sizes": "310x310",
     }, {
-        "src": "static/img/mstile-310x150.png",
+        "src": "/static/img/mstile-310x150.png",
         "sizes": "310x150",
     }, {
-        "src": "static/img/mstile-150x150.png",
+        "src": "/static/img/mstile-150x150.png",
         "sizes": "150x150",
     }, {
-        "src": "static/img/mstile-144x144.png",
+        "src": "/static/img/mstile-144x144.png",
         "sizes": "144x144",
     }
     , {
-        "src": "static/img/mstile-70x70.png",
+        "src": "/static/img/mstile-70x70.png",
         "sizes": "70x70",
     }]
  
