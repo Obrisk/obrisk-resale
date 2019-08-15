@@ -10,7 +10,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
@@ -364,6 +364,18 @@ class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     model = Classified
     message = _("Your classified post has been deleted successfully!")
     success_url = reverse_lazy("classifieds:list")
+
+
+    def delete(self, request, *args, **kwargs):
+        """
+        Call the delete() method on the fetched object and then redirect to the
+        success URL. This method is called by post.
+        """
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        self.object.status="E"
+        self.object.save()
+        return HttpResponseRedirect(success_url)
 
 
 
