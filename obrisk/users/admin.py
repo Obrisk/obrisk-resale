@@ -44,5 +44,5 @@ class MyUserAdmin(AuthUserAdmin):
                     )
                 }),
     ) + AuthUserAdmin.fieldsets
-    list_display = ('username', 'is_superuser', 'is_official', 'is_seller', 'city','province_region', 'points')
-    search_fields = ['username', 'phone_number']
+    list_display = ('username', 'is_seller', 'city','province_region', 'points')
+    search_fields = ['username', 'phone_number', 'email']

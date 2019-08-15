@@ -50,7 +50,7 @@ class Classified(models.Model):
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.CASCADE)
     title = models.CharField(max_length=80)
-    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=300, null=True, blank=True, unique=True, editable=False)
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
     details = models.CharField(max_length=2000)
@@ -64,6 +64,8 @@ class Classified(models.Model):
     total_responses = models.IntegerField(default=0)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
+    priority = models.IntegerField(default=0)
+    #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)
     objects = ClassifiedQuerySet.as_manager()
 
