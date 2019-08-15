@@ -442,11 +442,18 @@ $(function () {
     ossUpload.init();
 
 
+
     $(".create").click(function (event) {
-        $("input[name='status']").val("A");
-        $("#id_images").val(images);
-        $("#id_img_error").val(img_error);
-        $("#classified-form").submit();
+
+        if (!images) {
+            event.preventDefault();
+            bootbox.alert("Please upload at least one image for your advertisement!");
+        } else {
+            $("input[name='status']").val("A");
+            $("#id_images").val(images);
+            $("#id_img_error").val(img_error);
+            $("#classified-form").submit();
+        }
     });
 
     $(".draft").click(function () {

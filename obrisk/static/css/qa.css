@@ -2,6 +2,10 @@ a {
   color: black;
 }
 
+.question {
+  width: 100%;
+}
+
 .questions .pagination {
   margin: 0;
 }
@@ -106,6 +110,9 @@ a {
   font-size: 12px;
 }
 
+.asked {
+   display: block;
+}
 
 .favorite {
   cursor: pointer;
@@ -248,13 +255,30 @@ a {
   color: #fff !important
 }
 
+.question-wrapper {
+  background: #ffffff;
+  border-radius: 10px;
+  margin-left: 12%;
+}
+
 .answer-wrapper {
   background: #ffffff;
   border-radius: 10px;
 }
 
+
+
 @media screen and (max-width:575px) {
   .questions li .nav-link {
     font-size: 80% !important
+  }
+
+  .question-wrapper {
+      margin-left: 22%;
+  }
+  
+  .answer-wrapper {
+    margin-left: 12%;
+  
   }
 }

@@ -1,7 +1,7 @@
 {% load i18n humanize %}
 {% load static i18n %}
 {% block head %}
-<link href="{% static 'css/qa.css' %}" rel="stylesheet">
+<link href="{% static 'css/qa.css' %}?v=1508191" rel="stylesheet">
 {% endblock head %}
 <div class="row answer" answer-id="{{ answer.uuid_id }}">
   {% csrf_token %}
@@ -23,8 +23,8 @@
     {% endif %}
   </span>
 
-  <span class="col-lg-11 col-8 m-auto answer-wrapper">
-    <span class="answer-description">
+  <span class="col-lg-11 col-8 answer-wrapper">
+    <span class="answer-description m-auto">
       {{ answer.get_markdown|safe }}
     </span>
 
@@ -38,12 +38,11 @@
             {% else %}
                 <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
             {% endif %}
-          {{ answer.user.username }}</a>
-        <small class="answered">{% trans "answered" %} {{ answer.timestamp|naturaltime }}</small>
+          {{ answer.user.username }}
+        </a>
+        <small class="answered"> {{ answer.timestamp|naturaltime }}</small>
 
       </div>
-
-
     </div>
 
   </span>

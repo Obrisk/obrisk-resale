@@ -38,7 +38,7 @@
               <a href="{% url 'users:detail' classified.user.username %}">
                 {% if classified.user.thumbnail %}
                 <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
-                  alt="Picture Profile" style="height:35px;border-radius: 50%;" id="pic">
+                  alt="Picture Profile" style="height:35px; width:35px; border-radius: 50%;" id="pic">
                 {% else %}
                 <img src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
                 {% endif %}
