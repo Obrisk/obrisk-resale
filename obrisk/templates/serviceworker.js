@@ -106,6 +106,11 @@ workbox.precaching.precacheAndRoute([
 self.addEventListener("install", e => {
   self.skipWaiting();
 });
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
+});
 
 // This will cache only the images loaded from https://obrisks.com/ all other images handle using CDN caching
 // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
@@ -161,7 +166,7 @@ workbox.routing.registerRoute(
 
 //CDN image cache
 workbox.routing.registerRoute(
-  new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img"),
+  new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/"),
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: "CDN-img-cache"
   })
