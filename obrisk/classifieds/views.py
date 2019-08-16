@@ -80,7 +80,7 @@ def classified_list(request, tag_slug=None):
                 'image_thumb'
             )[:1]
         )
-    ).order_by('order', 'priority', '-timestamp')
+    ).order_by('order', '-priority', '-timestamp')
 
     #official_ads = OfficialAd.objects.all() 
 
