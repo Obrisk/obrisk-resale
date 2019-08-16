@@ -1,15 +1,19 @@
-//https://https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/js/workbox-sw.js
 importScripts(
   "https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js"
 );
 
-var staticCacheName = "obrisk-pwa-v" + new Date().getTime();
-var filesToCache = [
+//Show debug logs in console
+workbox.setConfig({
+  debug: true
+});
+
+//Urls to prefetch
+workbox.precaching.precacheAndRoute([
   "/static/js/aliyun-oss.min.js",
   "/static/js/bootbox.min.js",
   "/static/js/bootstrap.min.js",
   "/static/js/html5shiv.min.js",
-  "/static/js/image_uploader.js",
+  "/static/js/post-uploader.js",
   "/static/js/infinite.min.js",
   "/static/js/jquery.min.js",
   "/static/js/jquery.waypoints.min.js",
@@ -26,6 +30,7 @@ var filesToCache = [
   "/static/js/uploader.js",
   "/static/js/user-form.js",
   "/static/js/websocketbridge.js",
+  "/static/js/profile-uploader.js",
 
   ///CSS cache
   "/static/css/bootstrap.css.map",
@@ -95,42 +100,74 @@ var filesToCache = [
   "/static/img/stories.png",
   "/static/img/success.png",
   "/static/img/user.png"
-];
+]);
 
-// Cache on install
-self.addEventListener("install", event => {
-  this.skipWaiting();
-  console.log("installing pwa");
-  event.waitUntil(
-    caches.open(staticCacheName).then(cache => {
-      return cache.addAll(filesToCache);
-    })
-  );
+//To be able to skip and use the new service worker no matter what
+self.addEventListener("install", e => {
+  self.skipWaiting();
+});
+self.addEventListener("message", event => {
+  if (event.data && event.data.type === "SKIP_WAITING") {
+    self.skipWaiting();
+  }
 });
 
-// Clear cache on activate
-self.addEventListener("activate", event => {
-  event.waitUntil(
-    caches.keys().then(cacheNames => {
-      console.log("activating pwa");
+// This will cache only the images loaded from https://obrisks.com/ all other images handle using CDN caching
+// https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
+// https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
+workbox.routing.registerRoute(
+  /\.(?:jpeg|webp|png|gif|jpg|svg)$/,
+  // Whenever the app requests images, the service worker checks the
+  // cache first for the resource before going to the network.
+  new workbox.strategies.CacheFirst({
+    cacheName: "obrisk-images-cache",
+    // A maximum of 60 entries will be kept (automatically removing older
+    // images) and these files will expire in 30 days.
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 60,
+        maxAgeSeconds: 30 * 24 * 60 * 60 // 30 days
+      })
+    ]
+  })
+);
 
-      caches.delete("/");
-      return Promise.all(
-        cacheNames
-          .filter(cacheName => cacheName.startsWith("obrisk-pwa-v"))
-          .filter(cacheName => cacheName !== staticCacheName)
-          .map(cacheName => caches.delete(cacheName))
-      );
-    })
-  );
-});
+// JS files cache only the JS files loaded from https://obrisks.com/ all other images handle using CDN Caching
+// https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
+// https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
+workbox.routing.registerRoute(
+  /\.(?:js)$/,
+  new workbox.strategies.CacheFirst({
+    cacheName: "obrisk-js-cache",
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 60,
+        maxAgeSeconds: 24 * 60 * 60 // 24 hours
+      })
+    ]
+  })
+);
 
-// Serve from Cache
-self.addEventListener("fetch", function(e) {
-  console.log("served from cache " + e.request.url);
-  e.respondWith(
-    caches.match(e.request).then(function(response) {
-      return response || fetch(e.request);
-    })
-  );
-});
+// CSS files cache only the CSS files loaded from https://obrisks.com/ all other images handle using CDN Caching
+// https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
+// https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
+workbox.routing.registerRoute(
+  /\.(?:css)$/,
+  new workbox.strategies.CacheFirst({
+    cacheName: "obrisk-css-cache",
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 60,
+        maxAgeSeconds: 24 * 60 * 60 // 24 hours
+      })
+    ]
+  })
+);
+
+//CDN image cache
+workbox.routing.registerRoute(
+  new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "CDN-img-cache"
+  })
+);
