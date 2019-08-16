@@ -119,7 +119,7 @@ workbox.routing.registerRoute(
   /\.(?:jpeg|webp|png|gif|jpg|svg)$/,
   // Whenever the app requests images, the service worker checks the
   // cache first for the resource before going to the network.
-  workbox.strategies.cacheFirst({
+  new workbox.strategies.CacheFirst({
     cacheName: "obrisk-images-cache",
     // A maximum of 60 entries will be kept (automatically removing older
     // images) and these files will expire in 30 days.
@@ -137,7 +137,7 @@ workbox.routing.registerRoute(
 // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
 workbox.routing.registerRoute(
   /\.(?:js)$/,
-  workbox.strategies.cacheFirst({
+  new workbox.strategies.CacheFirst({
     cacheName: "obrisk-js-cache",
     plugins: [
       new workbox.expiration.Plugin({
@@ -153,7 +153,7 @@ workbox.routing.registerRoute(
 // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
 workbox.routing.registerRoute(
   /\.(?:css)$/,
-  workbox.strategies.cacheFirst({
+  new workbox.strategies.CacheFirst({
     cacheName: "obrisk-css-cache",
     plugins: [
       new workbox.expiration.Plugin({
