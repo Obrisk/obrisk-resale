@@ -220,11 +220,13 @@
         // Define iOS User-Agent variable
         var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
         var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+        var isWXwork = /wxwork/gi.test(window.navigator.userAgent);
+        var isWeixin = /MicroMessenger/gi.test(window.navigator.userAgent)
         // Define standalone mode variable
         var standalone =
           "standalone" in window.navigator && window.navigator.standalone;
         // Check localStorage before render a2hs container
-        if (iOS && !standalone && isSafari && !window.localStorage.a2hs_message) {
+        if (iOS && !standalone && isSafari && !isWX && !isWeixin && !window.localStorage.a2hs_message) {
           // Define container variable
           var div = document.createElement("div");
           // Define style variable
