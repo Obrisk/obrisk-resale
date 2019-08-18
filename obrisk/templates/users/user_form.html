@@ -13,7 +13,7 @@
 {% endblock head %}
 
 {% block content %}
-<a href="{% url 'users:detail' request.user.username %}" class="btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
+<button onclick="window.history.go(-1); return false;" class="btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></button>
 
 <div class="col-lg-8 m-auto">
   <div class="row profile">
