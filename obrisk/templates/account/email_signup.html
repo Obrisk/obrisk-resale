@@ -1,11 +1,13 @@
-{% extends 'account/base-min.html' %}
+{% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
 {% load account socialaccount %}
 {% load crispy_forms_tags %}
 {% block head %}
 <title>{% trans 'Account Signup' %}</title>
-<script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}?v=1908191">
 {% endblock head %}
 
 {% block content %}
@@ -15,18 +17,17 @@
 	}
 
 	function activateButton(element) {
-
 		if (element.checked) {
 			document.getElementById("email-signup-submit").disabled = false;
 		}
 		else {
 			document.getElementById("email-signup-submit").disabled = true;
 		}
-
 	}
 </script>
 
 <div class="limiter">
+	<button onclick="window.history.go(-1); return false;" class="btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></button>
 	<div class="container-login100">
 		<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
 			<span class="login100-form-title p-b-32">{% trans 'Account Creation' %}</span>

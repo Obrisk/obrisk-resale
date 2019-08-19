@@ -34,7 +34,7 @@ from allauth.account.forms import  UserTokenForm
 from allauth.account.utils import user_pk_to_url_str
 from allauth.utils import build_absolute_uri
 from obrisk.helpers import bucket, bucket_name
-from .forms import UserForm, EmailSignupForm,  PhoneResetPasswordForm, PhoneSignupForm
+from .forms import UserForm, EmailSignupForm, PhoneResetPasswordForm, PhoneSignupForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
 

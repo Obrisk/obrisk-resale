@@ -49,20 +49,6 @@ class UserForm(forms.ModelForm):
         }
     
 
-#This form inherits Allauth Signup Form 
-class CustomSignupForm(SignupForm): 
-    province_region = forms.CharField (widget=forms.HiddenInput())
-    city = forms.CharField (widget=forms.HiddenInput())
-
-    class Meta:
-        model = User
-
-def signup(self, request, user): 
-    user.province_region = self.cleaned_data['province_region']
-    user.city = self.cleaned_data['city']
-    user.save() 
-    return user 
-
 #This form inherits all-auth. 
 class PhoneSignupForm(SignupForm): 
     province_region = forms.CharField (widget=forms.HiddenInput())
@@ -106,7 +92,6 @@ class PhoneSignupForm(SignupForm):
 
         # You must return the original result.
         return user
-
 
 class EmailSignupForm(SignupForm): 
     province_region = forms.CharField (widget=forms.HiddenInput())

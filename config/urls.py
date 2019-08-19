@@ -11,10 +11,11 @@ from obrisk.messager import views
 from obrisk.users.views import PasswordResetFromKeyView
 from obrisk.helpers import get_oss_auth
 
-
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
+    url(r'^download-pwa/$', 
+        TemplateView.as_view(template_name='pages/download.html'), name='download'),
     url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth'),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name='about'),
@@ -28,12 +29,10 @@ urlpatterns = [
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
     url(r'^accounts-authorization/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$', PasswordResetFromKeyView.as_view(), name="account_reset_password_from_key"),
-    #Temporarly redirect the old accounts url to the new one 
-    url(r'^accounts/login/$',  lambda request: redirect('account_login')), 
-    url(r'^accounts/signup/$', lambda request: redirect('users:signup')),
 
     # User management
     url(r'^users/', include('obrisk.users.urls', namespace='users')),
+    #This accounts/ url is  for django and soon should be deprecated and use only allauth.
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts-authorization/', include('allauth.urls')),
     # Third party apps here
