@@ -26,3 +26,9 @@
     display: flex;
     align-content: center;
 }
+
+.fa-times {
+    font-size: 1.3rem;
+    color: #0ae6ee;
+}
+

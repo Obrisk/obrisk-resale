@@ -6,7 +6,7 @@
 {% block head %}
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}?v=21" rel="stylesheet">
-<link href="{% static 'css/classifieds-list.css' %}?v=19" rel="stylesheet">
+<link href="{% static 'css/classifieds-list.css' %}?v=1908191" rel="stylesheet">
 
 {% endblock head %}
 
@@ -58,8 +58,9 @@
 <div id="sidebar" class="sidebar mr-4">
   <!-- Cloud Tag Widget -->
   <div class="card">
-    <div class="card-header">
+    <div class="card-header d-flex justify-content-between">
       <h5>{% trans 'Popular tags' %}</h5>
+      <span class="d-sm-block d-md-none" id="sidebarBtnClose"> <i class="fa fa-times pull-right" aria-hidden="true"> </i> </span>
     </div>
 
     <div class="card-body" style="overflow:auto;max-height:400px">
@@ -105,7 +106,7 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script src="{% static 'js/listing.js' %}?v=0808191" type="text/javascript"></script>
+<script src="{% static 'js/listing.js' %}?v=1908191" type="text/javascript"></script>
 <script>
   var page = 1;
   var empty_page = false;
