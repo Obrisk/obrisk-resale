@@ -46,7 +46,7 @@
             {{ question.get_markdown|safe }} 
         </span>
 
-        <div class="question-user d-flex flex-row align-items-center">
+        <div class="question-user d-flex flex-row align-items-center justify-content-between">
             <a href="{% url 'users:detail' question.user.username  %}">
                 <div class="text-secondary d-flex flex-row align-content-center mr-3 text-nowrap">
                 {% if question.user.thumbnail %}
@@ -57,7 +57,7 @@
                     <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
                 {% endif %}
 
-                {{ question.user.get_profile_name|title }}
+                {{ question.user.get_profile_name|title|truncatechars:15 }}
                 </div>
             </a>
 

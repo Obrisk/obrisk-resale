@@ -28,7 +28,7 @@
       {{ answer.get_markdown|safe }}
     </span>
 
-    <div class="answer-user question-user d-flex flex-row align-items-center">
+    <div class="answer-user question-user d-flex flex-row align-items-center justify-content-between">
       <div class="text-secondary d-flex flex-column align-content-center mr-3">
         <a href="{% url 'users:detail' answer.user.username %}" class="username">
           {% if answer.user.thumbnail %}
@@ -38,7 +38,7 @@
             {% else %}
                 <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
             {% endif %}
-          {{ answer.user.username }}
+          {{ answer.user.username|title|truncatechars:15 }}
         </a>
         <small class="answered"> {{ answer.timestamp|naturaltime }}</small>
 
