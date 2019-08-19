@@ -4,7 +4,7 @@ importScripts(
 
 //Show debug logs in console
 workbox.setConfig({
-  debug: true
+  debug: false
 });
 
 //Urls to prefetch
