@@ -22,13 +22,11 @@
 		<p>
 			Please tap on the top right corner<img src="//gw.alicdn.com/tfs/TB1xwiUNpXXXXaIXXXXXXXXXXXX-55-55.png" class="icon-safari"/> to open this app on Safari Browser
 		</p>
-		<p>
-		Then you can install it on your homescreen
-		</p>
 	</div>
 	<a class="app-download-btn" id="BtnClick" href="https://www.obrisk.com/"> Click here to continue</a>
 	<script>
 		var url = 'https://www.obrisk.com/classifieds';//Targeted address.
+
 		document.querySelector('body').addEventListener('touchmove', function (event) {
 			event.preventDefault();
 		});
@@ -47,9 +45,9 @@
 				isQQ: /QQ/gi.test(UA)
 			};
 		})(window, document);
+
 		if(mobileUtil.isWeixin){
 			if(mobileUtil.isIOS){
-				url = "https://t.asczwa.com/taobao?backurl=" + encodeURIComponent(url);
 				document.getElementById('BtnClick').href=url;
 			}else if(mobileUtil.isAndroid){
 				url = '?open=1';
@@ -66,3 +64,4 @@
 	//setTimeout('WeixinJSBridge.invoke("closeWindow", {}, function(e) {})', 2000); </script>
 </body>
 </html>
+
