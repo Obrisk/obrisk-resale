@@ -14,7 +14,9 @@ from obrisk.helpers import get_oss_auth, redirect_browser
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
-    url(r'^pwa-download/$', redirect_browser, name='pwa_download'),
+    url(r'^download-pwa/$', redirect_browser, name='download_pwa'),
+    url(r'^ios-download/$',
+        TemplateView.as_view(template_name='pages/download.html'), name='ios_download'),
     url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth'),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name='about'),
