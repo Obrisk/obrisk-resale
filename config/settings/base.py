@@ -94,6 +94,7 @@ THIRD_PARTY_APPS = [
     'taggit',
     'star_ratings',
     'pwa_webpush',
+    'django_user_agents', 
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -174,6 +175,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 # STATIC
@@ -371,3 +373,8 @@ PWA_APP_SPLASH_SCREEN = [
 PWA_APP_DIR = '/'
 PWA_APP_LANG = 'en-US'
 PWA_SERVICE_WORKER_PATH = APPS_DIR.path('templates/serviceworker.js')
+
+
+# Name of cache backend to cache user agents. If it not specified default
+# cache alias will be used. Set to `None` to disable caching.
+USER_AGENTS_CACHE = 'default'

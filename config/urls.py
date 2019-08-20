@@ -9,13 +9,14 @@ from django.shortcuts import redirect
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
 from obrisk.users.views import PasswordResetFromKeyView
-from obrisk.helpers import get_oss_auth
+from obrisk.helpers import get_oss_auth, redirect_browser
 
 urlpatterns = [
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
-    url(r'^download-pwa/$', 
-        TemplateView.as_view(template_name='pages/download.html'), name='download'),
+    url(r'^download-pwa/$', redirect_browser, name='download_pwa'),
+    url(r'^ios-download/$',
+        TemplateView.as_view(template_name='pages/download.html'), name='ios_download'),
     url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth'),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name='about'),

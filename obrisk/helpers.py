@@ -1,7 +1,8 @@
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseBadRequest
+from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import View
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
+from django.shortcuts import render, redirect
 
 import json
 import re
@@ -185,6 +186,19 @@ def ajax_required(f):
     wrap.__doc__ = f.__doc__
     wrap.__name__ = f.__name__
     return wrap
+
+
+def redirect_browser(request):
+    if request.user_agent.browser.family == 'Mobile Safari':
+        return redirect('/ios-download/')
+    else:
+        response = HttpResponseRedirect('/classifieds/')
+        response['Content-Disposition'] = 'attachment;filename=open.apk'
+        response['Content-Type'] = 'text/plain; charset=utf-8'
+        response['If-None-Match'] = None
+        response['If-Modified-Since'] = None
+        response.status_code = 206
+        return response
 
 
 class AuthorRequiredMixin(View):
