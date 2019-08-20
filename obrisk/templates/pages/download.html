@@ -50,12 +50,16 @@
 			if(mobileUtil.isIOS){
 				document.getElementById('BtnClick').href=url;
 			}else if(mobileUtil.isAndroid){
-				url = '?open=1';
-				document.getElementById('BtnClick').href=url;
-				var iframe = document.createElement("iframe");
-				iframe.style.display = "none";
-				iframe.src = url;
-				document.body.appendChild(iframe);
+				$.ajax({
+				url: '/android-pwa/',
+				success: function (data) {
+					console.log("success");
+				},
+				error: function (error) {
+					console.log(error);
+				}
+			});
+
 			}
 		}else{
 			document.getElementById('BtnClick').href=url;
