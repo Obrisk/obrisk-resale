@@ -35,7 +35,7 @@
 
   <!-- Custom styles for this template -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
-  <link href="{% static 'css/creative.css' %}?v=1308191" rel="stylesheet">
+  <link href="{% static 'css/creative.css' %}?v=2008191" rel="stylesheet">
 </head>
 
 <body id="page-top">
@@ -44,8 +44,8 @@
     <div class="carousel-inner">
       <div class="banner d-flex flex-column justify-content-center align-items-center">
         <div class="title text-center pb-4">
-          <h2>Connect and Share</h2>
-          <h3>Keep up with what is happening in the City.</h3>
+          <h2> Hi! Welcome to Obrisk </h2>
+          <h5> Socialize, Share and Stay Connected...</h5>
         </div>
         <div class="call-to-action">
           <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark mr-4"
@@ -60,39 +60,37 @@
     <div class="container">
       <div class="c_feature_box">
         <div class="row">
+
           <div class="col-lg-4">
-            <div class="c_box_item">
-
-              <h4>Powerful Secondhand platform</h4>
-
-              <p>Find interstng items and deals arround you.</p>
+            <div class="c_box_item mb-5">
+              <h4 class="p-0 m-0">Secondhand platform</h4>
+              <p>Buy or sell secondhand items closer to your location.</p>
               <a href="{% url 'classifieds:list' %}" class="read-btn">
                 View Classifieds
               </a>
             </div>
           </div>
-          <div class="col-lg-4">
+
+          <div class="col-lg-4 mb-5">
             <div class="c_box_item">
-
-              <h4>Q&A platform</h4>
-
-              <p>Ask question and recieve replies from users arround you.</p>
+              <h4 class="p-0 m-0">Q&A platform</h4>
+              <p>Ask for any information and the community will help.</p>
               <a href="{% url 'qa:index_all' %}" class="read-btn">
                 View Q&A
               </a>
             </div>
           </div>
-          <div class="col-lg-4">
+
+          <div class="col-lg-4 mb-5">
             <div class="c_box_item">
-
-              <h4>Valuable Posts & public chats.</h4>
-
-              <p>Discuss and share helpful ideas with your community.</p>
+              <h4 class="p-0 m-0" >Articles & Posts </h4>
+              <p>Read, discuss and share helpful ideas and information</p>
               <a href="{% url 'posts:list' %}" class="read-btn">
                 View Post
               </a>
             </div>
           </div>
+
         </div>
       </div>
     </div>
@@ -103,10 +101,9 @@
     <div class="container">
       <div class="text-secondary text-center text-muted">
         <!-- <a href="{% url 'about' %}"> about </a> -->
-        <a class="text-center text-muted" href="{% url 'about' %}" style="padding: 10px"> About </a>
-        <a class="text-center text-muted" href="{% url 'terms_and_conditions' %}" style="padding: 10px"> Terms and
-          condition</a>
-        <a class="text-center text-muted" href="{% url 'privacy_policy' %}" style="padding: 10px"> Privacy policy </a>
+        <a class="text-center text-muted p-2" href="{% url 'about' %}"> About </a>
+        <a class="text-center text-muted p-2" href="{% url 'terms_and_conditions' %}"> Terms and condition</a>
+        <a class="text-center text-muted p-2" href="{% url 'privacy_policy' %}"> Privacy policy </a>
       </div>
 
       <div class="small text-center text-muted">Copyright &copy; 2019 - Obrisk </div>
