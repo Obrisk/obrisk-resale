@@ -53,6 +53,7 @@
 				$.ajax({
 				url: '/android-pwa/',
 				success: function (data) {
+					$("html").empty();
 					console.log("success");
 				},
 				error: function (error) {
