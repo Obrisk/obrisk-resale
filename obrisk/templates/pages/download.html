@@ -61,11 +61,11 @@
 <body>
 	<div class="top-bar-guidance">
 		<p>
-			Please tap on the top right corner<img src="//gw.alicdn.com/tfs/TB1xwiUNpXXXXaIXXXXXXXXXXXX-55-55.png"
-				class="icon-safari" /> to open this app on Safari Browser
+			Please tap on the top right corner then open this app using Safari Browser <img src="//gw.alicdn.com/tfs/TB1xwiUNpXXXXaIXXXXXXXXXXXX-55-55.png"
+			class="icon-safari" />. From there, you can install this app on your device. 
 		</p>
 	</div>
-	<a class="app-download-btn" id="BtnClick" href="https://www.obrisk.com/"> Click here to continue</a>
+	<a class="app-download-btn" id="BtnClick" href="https://www.obrisk.com/"> Or click here to remain on wechat...</a>
 	<script>
 		var url = 'https://www.obrisk.com/classifieds';//Targeted address.
 
@@ -92,7 +92,7 @@
 			if (mobileUtil.isIOS) {
 				document.getElementById('BtnClick').href = url;
 			} else if (mobileUtil.isAndroid) {
-				window.location.href = "/android-pwa/"
+				window.location.href = "/android-pwa/";
 			}
 		} else {
 			document.getElementById('BtnClick').href = url;
