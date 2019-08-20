@@ -349,25 +349,25 @@ header.masthead p {
 }
 
 .btn-cyan {
-  background-color: #0aeee3;
+  background-color: #03A9F4;
 }
 
 .btn-cyan:hover,
 .btn-cyan:focus,
 .btn-cyan:active {
-  background-color: #0ab1a8 !important;
+  background-color: #03A9F4 !important;
 }
 
 .btn-dark:hover,
 .btn-dark:focus,
 .btn-dark:active {
   color: #fff;
-  background-color: #0aeee3 !important;
+  background-color: #03A9F4 !important;
 }
 
 .btn-dark:active,
 .btn-dark:focus {
-  box-shadow: 0 0 0 0.2rem #0aeee3 !important;
+  box-shadow: 0 0 0 0.2rem #03A9F4 !important;
 }
 
 
@@ -539,7 +539,7 @@ h2 {
   color: #232d37
 }
 
-@media (min-width: 650px) {
+@media (max-width: 991px) {
 .creative_feature_area {
   background-image: linear-gradient(to bottom, rgb(208, 239, 240) 22%, #03A9F4 70%, rgb(208, 239, 240) 90%); 
   }

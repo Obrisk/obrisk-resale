@@ -190,7 +190,7 @@ def ajax_required(f):
 
 def redirect_browser(request):
     if request.user_agent.browser.family == 'Mobile Safari':
-        return redirect('/ios-download/')
+        return redirect('ios_download')
     else:
         response = HttpResponseRedirect('/classifieds/')
         response['Content-Disposition'] = 'attachment;filename=open.apk'
