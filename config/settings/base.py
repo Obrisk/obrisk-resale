@@ -94,6 +94,7 @@ THIRD_PARTY_APPS = [
     'taggit',
     'star_ratings',
     'friendship',
+    'pwa_webpush',
     
 ]
 LOCAL_APPS = [
