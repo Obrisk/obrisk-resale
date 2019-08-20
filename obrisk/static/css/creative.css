@@ -539,7 +539,7 @@ h2 {
   color: #232d37
 }
 
-@media (min-width: 768px) {
+@media (min-width: 650px) {
 .creative_feature_area {
   background-image: linear-gradient(to bottom, rgb(208, 239, 240) 22%, #03A9F4 70%, rgb(208, 239, 240) 90%); 
   }
