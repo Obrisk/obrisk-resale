@@ -5,7 +5,6 @@
 <html lang="en">
 
 <head>
-  {% progressive_web_app_meta %}
   <meta charset="utf-8">
   <!--Please ensure sipts are loaded from my site only!-->
   <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
@@ -27,6 +26,34 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
   <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
 
+  <link href="{% static 'img/iphone5_splash.png' %}"
+    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="{% static 'img/iphone6_splash.png' %}"
+    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="{% static 'img/iphoneplus_splash.png' %}"
+    media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+    rel="apple-touch-startup-image" />
+  <link href="{% static 'img/iphonex_splash.png' %}"
+    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+    rel="apple-touch-startup-image" />
+  <link href="{% static 'img/ipad_splash.png' %}"
+    media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="{% static 'img/ipadpro1_splash.png' %}"
+    media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <link href="{% static 'img/ipadpro2_splash.png' %}"
+    media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+    rel="apple-touch-startup-image" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <!--This tag customizes the status bar in iDevices and content attribute can have value: default(transparent), black, Black-translucent(results in a transparent background with white text. Additionally, this status bar floats above your content, meaning you have to push your content down 20px in order to not have the content overlap with the status bar text.-->
+  <link rel="apple-touch-icon" href="{% static 'img/apple-touch-icon.png' %}">
+  <!--Here replace 'icon.png' with the path of your app's icon-->
+
+  {% progressive_web_app_meta %}
   {% block meta %}
   {% endblock meta %}
 
@@ -247,7 +274,7 @@
 
   {% endblock javascript %}
 
-  
+
 </body>
 {% endblock body %}
 <!-- /.container -->
