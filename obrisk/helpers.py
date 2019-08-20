@@ -189,7 +189,9 @@ def ajax_required(f):
 
 
 def redirect_browser(request):
-    if request.user_agent.browser.family != 'Mobile Safari':
+    if request.user_agent.browser.family == 'Mobile Safari':
+        return redirect('/ios-download/')
+    else:
         response = HttpResponseRedirect('/classifieds/')
         response['Content-Disposition'] = 'attachment;filename=open.apk'
         response['Content-Type'] = 'text/plain; charset=utf-8'
@@ -197,8 +199,6 @@ def redirect_browser(request):
         response['If-Modified-Since'] = None
         response.status_code = 206
         return response
-    else:
-        return render(request, "pages/download.html")
 
 
 class AuthorRequiredMixin(View):
