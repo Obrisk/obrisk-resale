@@ -345,29 +345,20 @@ header.masthead p {
 
 .btn-dark {
   background-color: white;
-  border-color: white;
+  color: #000;
 }
 
-.btn-cyan {
-  background-color: #03A9F4;
-}
-
-.btn-cyan:hover,
-.btn-cyan:focus,
-.btn-cyan:active {
-  background-color: #03A9F4 !important;
-}
 
 .btn-dark:hover,
 .btn-dark:focus,
 .btn-dark:active {
-  color: #fff;
-  background-color: #03A9F4 !important;
+  color: #fff !important;
+  background-color: #3EC4E2 !important;
 }
 
 .btn-dark:active,
 .btn-dark:focus {
-  box-shadow: 0 0 0 0.2rem #03A9F4 !important;
+  box-shadow: 0 0 0 0.2rem #3EC4E2 !important;
 }
 
 
@@ -400,8 +391,8 @@ header.masthead p {
   .title h2 {
     font-size: 32px;
   }
-  
-  .title h5 { 
+
+  .title h5 {
     font-size: 16px;
   }
 }
@@ -508,7 +499,7 @@ h2 {
   background-image: -webkit-gradient(linear, left top, right top, from(#744fff), color-stop(51%, #21d397), to(#744fff));
   background-image: -webkit-linear-gradient(left, #744fff 0%, #21d397 51%, #744fff 100%);
   background-image: -o-linear-gradient(left, #744fff 0%, #21d397 51%, #744fff 100%);
-  background-image: linear-gradient(to right, #03A9F4 0%, #03A9F4 51%, #2196F3 100%);
+  background-image: linear-gradient(to right, #3EC4E2 0%, #3EC4E2 51%, #2196F3 100%);
   text-align: center;
   position: relative;
   background-size: 200% auto;
@@ -540,7 +531,7 @@ h2 {
 }
 
 @media (max-width: 991px) {
-.creative_feature_area {
-  background-image: linear-gradient(to bottom, rgb(208, 239, 240) 22%, #03A9F4 70%, rgb(208, 239, 240) 90%); 
+  .creative_feature_area {
+    background-image: linear-gradient(to bottom, rgb(208, 239, 240) 22%, #3EC4E2 70%, rgb(208, 239, 240) 90%);
   }
 }
