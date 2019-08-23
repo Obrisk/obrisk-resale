@@ -401,7 +401,7 @@ class DetailClassifiedView(DetailView):
 
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
-
+        
         context['images_no'] = len(context['images'])
         context['similar_classifieds'] = similar_classifieds.annotate(same_tags=Count('tags'))\
             .order_by('-same_tags', '-timestamp')[:6]

@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-  {% progressive_web_app_meta %}
+
   <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -17,12 +17,15 @@
   <meta name="theme-color" content="#3EC4E2">
 
   <!-- <link rel="manifest" href="{% static 'js/site.webmanifest' %}?v=3"> -->
+  {% block icon %}
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
   <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
+  {% endblock icon %}
+
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -36,6 +39,11 @@
   <!-- Custom styles for this template -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
   <link href="{% static 'css/creative.css' %}?v=2008192" rel="stylesheet">
+
+  <!-- pwa settings -->
+  {% progressive_web_app_meta %}
+
+
 </head>
 
 <body id="page-top">
@@ -83,7 +91,7 @@
 
           <div class="col-lg-4 mb-5">
             <div class="c_box_item">
-              <h4 class="p-0 m-0" >Articles & Posts </h4>
+              <h4 class="p-0 m-0">Articles & Posts </h4>
               <p>Read, discuss and share helpful ideas and information</p>
               <a href="{% url 'posts:list' %}" class="read-btn">
                 View Post

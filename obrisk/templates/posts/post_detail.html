@@ -2,12 +2,10 @@
 {% load static i18n %}
 {% load crispy_forms_tags humanize %}
 
-{% block title %}{{ post.title|title }}{% endblock %}
-
 {% block head %}
 <link href="{% static 'css/notifications.css' %}" rel="stylesheet">
 <link href="{% static 'css/post-details.css' %}" rel="stylesheet">
-
+<title>{{ post.title|title }}</title>
 {% endblock head %}
 
 {% block meta %}
@@ -18,8 +16,6 @@
 {% block content %}
 <!-- Page Content -->
 <div class="container">
-  <button type="button" class="btn btn-dark" onclick="javascript:history.back()"> <i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-  
   <div class="row">
     <!-- Post Content Column -->
     <div class="post-wrapper col-lg-8 col-md-10 m-auto">
@@ -32,11 +28,11 @@
           <div class="meta-right d-flex flex-column align-items-center">
             <a href="{% url 'users:detail' post.user.get_profile_name %}">
               {% if post.user.thumbnail %}
-                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
-                  style="width:30px;height:30px;border-radius: 50%;"
-                  class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
               {% else %}
-                  <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+              <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
               {% endif %}
             </a>
             <div class="d-flex flex-column align-items-center">
@@ -52,13 +48,13 @@
       <!-- Featured Image -->
       {% if post.image %}
       <div class="featured-img" style="background-size:cover">
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="900" height="300" alt="{% trans 'Featured Image' %}"
-          class="card-img-top">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="900" height="300"
+          alt="{% trans 'Featured Image' %}" class="card-img-top">
       </div>
       {% else %}
       <div class="featured-img" style="background-size:cover">
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default" width="900" height="300" alt="{% trans 'Featured Image' %}"
-          class="card-img-top">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default" width="900" height="300"
+          alt="{% trans 'Featured Image' %}" class="card-img-top">
       </div>
 
       {% endif %}
@@ -67,6 +63,13 @@
       <!-- Post Content -->
       <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
       <hr>
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i class="fa fa-chevron-left"
+            aria-hidden="true"></i> BACK</button>
+        <a href="#" class="share btn btn-dark"
+          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+          🔗{% trans 'share' %} </a>
+      </div>
       <!-- Cloud Tag Widget -->
       <div class="card my-4">
         <h5 class="card-header">{% trans 'Tags' %}</h5>
@@ -94,12 +97,12 @@
         <div class="autor-avatar">
           <a href="{% url 'users:detail' post.user.username %}">
             {% if comment.user.thumbnail %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{comment.user.thumbnail}}" alt="Picture Profile"
-                style="width:30px;height:30px;border-radius: 50%;"
-                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{comment.user.thumbnail}}" alt="Picture Profile"
+              style="width:30px;height:30px;border-radius: 50%;"
+              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
             {% else %}
-                <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
-            {% endif %} 
+            <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+            {% endif %}
         </div>
         <div class="comment-body">
           <div class="comment-author">
@@ -158,18 +161,81 @@
         {% endif %}
       </div>
     </div>
+
   </div>
-  <!-- /.container -->
-  {% endblock content %}
+</div>
+<!-- /.container -->
+{% endblock content %}
 
 
 
-  {% block javascript %}
-  <script type="text/javascript">
-    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+{% block javascript %}
+<script type="text/javascript">
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
-    var url = "{% url 'posts:post' post.slug %}"
-  </script>
-  <script src="{% static 'js/posts.js' %}"> </script>
+  var url = "{% url 'posts:post' post.slug %}"
+</script>
+<script src="{% static 'js/posts.js' %}"> </script>
+<script src="{% static 'js/bootbox.min.js' %}"> </script>
 
-  {% endblock javascript %}
+
+<!-- Need to fix issues parsing markdown to plain text to use here for articlebody and others -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ post.title|title }}",
+    {% if post.image %}
+    "image": "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}",
+    {% else %}
+    "image": "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}",
+    {% endif %}
+    "url": "{% url 'posts:post' post.slug %}",
+    "datePublished": "{{ post.timestamp }}",
+    "dateCreated": "{{ post.timestamp }}",
+    "dateModified": "{{ post.timestamp }}",
+    "description": "{{ post.title|title }}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ post.user.get_profile_name|title }}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Obrisk",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://obrisk.com/static/img/favicon.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{% url 'posts:post' post.slug %}"
+    }
+  }
+</script>
+<script type="text/javascript">
+  function share(title, text) {
+    url = location.href
+    if (window.navigator.share) {
+      window.navigator.share({
+        title: title,
+        text: text,
+        url: url
+      }).
+
+        then(function () {
+          return console.log('Successful share');
+        })["catch"](function (error) {
+          return console.log('Error sharing', error);
+        });
+    } else {
+      window.navigator.clipboard.writeText(url);
+      bootbox.alert("copied to clipboard");
+
+    }
+  }
+  jQuery('.share').click(function (e) {
+    e.preventDefault();
+  })
+</script>
+{% endblock javascript %}
