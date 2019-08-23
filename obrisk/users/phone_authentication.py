@@ -17,9 +17,9 @@ class PhoneAuthBackend(object):
             try:
                 #This code only works for Chinese phone numbers.
                 if phone.startswith("+86") == False:
-                    username = "+86" + username
+                    phone = "+86" + phone
                 try:
-                    user = User.objects.get(phone_number=username)
+                    user = User.objects.get(phone_number=phone)
                 except:
                     #This is not a right return value on this failure. To improve more in the near future.
                     return None

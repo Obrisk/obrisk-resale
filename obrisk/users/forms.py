@@ -147,10 +147,10 @@ class CustomLoginForm(LoginForm):
         _("This account is currently inactive."),
 
         'username_password_mismatch':
-        _("The username or phone number or password you specified are not correct."),
+        _("The username or password you specified are not correct."),
 
         'email_password_mismatch':
-        _("The e-mail address and/or password you specified are not correct."),
+        _("The e-mail address or password you specified are not correct."),
 
     }
 
@@ -178,10 +178,10 @@ class CustomLoginForm(LoginForm):
             assert settings.ACCOUNT_AUTHENTICATION_METHOD \
                 == 'username_email'
             login_widget = forms.TextInput(attrs={'placeholder':
-                                                    _('Username or Phone or Email'),
+                                                    _('Username'),
                                                     'autofocus': 'autofocus' })
         
-            login_field = forms.CharField(label="Username or Phone or Email", widget=login_widget)
+            login_field = forms.CharField(label="Username", widget=login_widget)
 
         self.fields["login"] = login_field
         set_form_field_order(self, ["login", "password", "remember"])

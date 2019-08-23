@@ -121,14 +121,15 @@ MIGRATION_MODULES = {
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
+AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    'users.phone_authentication.PhoneAuthBackend',
+    #'users.phone_authentication.PhoneAuthBackend',
 ]
-# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = 'users.User'
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = 'classifieds:list'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
