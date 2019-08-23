@@ -1,10 +1,9 @@
 {% extends 'base.html' %}
 {% load i18n static humanize %}
 
-{% block title %}{{ question.title }}{% endblock %}
-
 {% block head %}
 <link href="{% static 'css/qa.css' %}?v=1508191" rel="stylesheet">
+<title>{{ question.title }}</title>
 {% endblock head %}
 {% block meta%}
 <meta name="keywords" content="{{ question.title }}">
@@ -41,29 +40,29 @@
 
 
       <div class="col-lg-11 col-8  question-wrapper">
-        
+
         <span class="m-auto">
-            {{ question.get_markdown|safe }} 
+          {{ question.get_markdown|safe }}
         </span>
 
         <div class="question-user d-flex flex-row align-items-center justify-content-between">
-            <a href="{% url 'users:detail' question.user.username  %}">
-                <div class="text-secondary d-flex flex-row align-content-center mr-3 text-nowrap">
-                {% if question.user.thumbnail %}
-                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{question.user.thumbnail}}" alt="Picture Profile"
-                    style="width:30px;height:30px;border-radius: 50%;"
-                    class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                {% else %}
-                    <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
-                {% endif %}
+          <a href="{% url 'users:detail' question.user.username  %}">
+            <div class="text-secondary d-flex flex-row align-content-center mr-3 text-nowrap">
+              {% if question.user.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{question.user.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              {% else %}
+              <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+              {% endif %}
 
-                {{ question.user.get_profile_name|title|truncatechars:15 }}
-                </div>
-            </a>
+              {{ question.user.get_profile_name|title|truncatechars:15 }}
+            </div>
+          </a>
 
           <small class="text-secondary asked"> {{ question.timestamp|naturaltime }}</small>
         </div>
-        
+
 
 
 

@@ -14,7 +14,6 @@
 
 
 {% block icon %}
-
 <link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
 <link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
 <link rel="apple-touch-icon" sizes="180x180"
@@ -61,8 +60,11 @@
               </a>
               <!-- Location -->
               <div class="meta-left d-flex flex-column">
-                <a href="{% url 'users:detail' classified.user.username %}"><strong id="classified-user">
-                    {{ classified.user.get_profile_name|title }} </strong></a>
+                <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                  href="{% url 'users:detail' classified.user.username %}">
+                  <strong itemprop="name" id="classified-user">
+                    {{ classified.user.get_profile_name|title }} </strong>
+                </a>
                 <div class="location">
                   <small class="card-subtitle mb-2">📍</small><span class="card-subtitle mb-2">
                     {{ classified.located_area }}, {{ classified.city }}</span>
@@ -72,6 +74,7 @@
 
               </div>
             </div>
+
             <div
               class="align-items-baseline align-items-md-end d-flex flex-column meta-right ml-xl-0 mr-xl-0 mt-4 mt-md-0 ml-0 mr-0">
               <!-- Price -->
@@ -130,7 +133,7 @@
         {% endif %}
         <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
         <a href="#" class="share btn btn-dark"
-          onclick="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')">
+          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
           🔗{% trans 'share' %} </a>
       </div>
     </div>
@@ -185,23 +188,37 @@
 </div>
 <script type="application/ld+json">
 {
-  "@context" : "http://schema.org",
-  "@type" : "Product",
-  "name" : "{{ classified.title|title }}",
-  {% for photo in images %}
-  "image" : "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image}}",
-  {% endfor %}
-  "description" : "{{ classified.details }}",
-  "offers" : {
-    "@type" : "Offer",
-    "price" : "{{ classified.price }}"
-  }
+   "@context":"http://schema.org/",
+   "@type":"Product",
+   "name":"{{ classified.title|title }}",
+   "description":"{{ classified.details }}",
+   "image":[
+      "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}"
+   ],
+   "brand":"",
+   "offers":{
+      "@type":"Offer",
+      "priceCurrency":"CNY",
+      "price":{{ classified.price }},
+      "availability":"http://schema.org/InStock",
+      "itemCondition":"http://schema.org/UsedCondition",
+      "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}",
+      "seller":{
+         "@type":"Person",
+         "name":"{{ classified.user.get_profile_name }}",
+         {% if classified.user.thumbnail %}
+         "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+         {% else %}
+        "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+         {% endif %}
+         
+      }
+   }
 }
 </script>
 <script type="text/javascript">
-  function share(title, text, url) {
-    url = window.location.host + url
-    console.log(url)
+  function share(title, text) {
+    url = location.href
     if (window.navigator.share) {
       window.navigator.share({
         title: title,

@@ -6,13 +6,13 @@
     <div class="card-top d-flex justify-content-between">
       <div class="left d-flex">
         {% if stories.user.thumbnail %}
-            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.user.thumbnail}}" alt="Picture Profile"
-            style="width:35px;height:35px;border-radius: 50%;"
-            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.user.thumbnail}}" alt="Picture Profile"
+          style="width:35px;height:35px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
         {% else %}
-            <img class="pull-left mr-2"  src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
+        <img class="pull-left mr-2" src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
         {% endif %}
-        
+
         <p>
           <strong>
             <a href="{% url 'users:detail' stories.user.username  %}">{{ stories.user.get_profile_name|title }}</a>
@@ -53,3 +53,4 @@
     </a>
   </div>
 </li>
+<!-- Todo: Create json ld for stories -->

@@ -159,24 +159,3 @@ $(function () {
     //     };
     // });
 });
-
-function share(title, text, url) {
-
-    if (navigator.share) {
-        navigator.share({
-            title: title,
-            text: text,
-            url: url
-        }).
-
-        then(function () {
-            return console.log('Successful share');
-        })["catch"](function (error) {
-            return console.log('Error sharing', error);
-        });
-    } else {
-        navigator.clipboard.writeText(url);
-        bootbox.alert("copied to clipboard");
-
-    }
-}
