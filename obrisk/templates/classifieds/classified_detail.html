@@ -2,14 +2,30 @@
 {% load static i18n %}
 {% load crispy_forms_tags thumbnail humanize %}
 
-{% block title %}{{ classified.title|title }}{% endblock %}
 {% block head %}
 <link href="{% static 'css/classifieds.css' %}?v=20" rel="stylesheet">
 <link href="{% static 'css/classified-details.css' %}?v=20 " rel="stylesheet">
 <link href="{% static 'css/colors.css' %}" rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
 <script src="{% static 'js/swiper.min.js' %}"></script>
+<title>{{ classified.title|title }}</title>
+
 {% endblock head %}
+
+
+{% block icon %}
+
+<link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="apple-touch-icon" sizes="180x180"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="icon" type="image/png" sizes="32x32"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="icon" type="image/png" sizes="16x16"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="mask-icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}" color="#5bbad5">
+{% endblock %}
+
 
 {% block meta %}
 <meta name="author" content="{{ classified.user.get_profile_name }}">
@@ -167,7 +183,21 @@
 
 
 </div>
-
+<script type="application/ld+json">
+{
+  "@context" : "http://schema.org",
+  "@type" : "Product",
+  "name" : "{{ classified.title|title }}",
+  {% for photo in images %}
+  "image" : "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image}}",
+  {% endfor %}
+  "description" : "{{ classified.details }}",
+  "offers" : {
+    "@type" : "Offer",
+    "price" : "{{ classified.price }}"
+  }
+}
+</script>
 <script type="text/javascript">
   function share(title, text, url) {
     url = window.location.host + url

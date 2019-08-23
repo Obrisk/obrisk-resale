@@ -17,12 +17,15 @@
   <meta name="theme-color" content="#3EC4E2">
 
   <!-- <link rel="manifest" href="{% static 'js/site.webmanifest' %}?v=3"> -->
+  {% block icon %}
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
   <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
+  {% endblock icon %}
+
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>

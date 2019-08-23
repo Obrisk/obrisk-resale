@@ -18,6 +18,9 @@
   <meta name="locale" content="en">
   <meta name="theme-color" content="#3EC4E2">
 
+
+  {% block icon %}
+
   <!-- <link rel="manifest" href="{% static 'js/site.webmanifest' %}?v=3"> -->
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=1">
@@ -25,6 +28,8 @@
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
   <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
+  {% endblock %}
+
 
   <!-- pwa settings -->
   {% progressive_web_app_meta %}
