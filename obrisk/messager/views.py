@@ -8,6 +8,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
 
+from slugify import slugify
 from obrisk.messager.models import Message
 from obrisk.helpers import ajax_required
 
@@ -82,6 +83,10 @@ def send_message(request):
         return HttpResponse()
 
     if sender != recipient:
+        #Django-channels doesn't accept group names that are chinese characters
+        #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
+        recipient.username = slugify(recipient_username)
+        sender.username = slugify(request.user.username)
         msg = Message.send_message(sender, recipient, message)
         return render(request, 'messager/single_message.html',
                       {'message': msg})

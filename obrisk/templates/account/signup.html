@@ -34,13 +34,11 @@
 			
 			<span class="login100-form-title p-b-32">{% trans 'Account Creation' %}</span>
 
-			{% for field in form %}
-				{% for error in field.errors %}
-					<div class="alert alert-error">
-						<strong>{{ error|escape }}</strong>
-					</div>
-				{% endfor %}
-			{% endfor %}
+			{% if form.errors %}
+				<div class="alert alert-error">
+					<strong>Your form is having invalid input(s)</strong>
+				</div>
+			{% endif %}
 
 			<span class="txt3">
 				<p>Already have an account? Then please sign in <a href="{% url 'account_login' %}">
