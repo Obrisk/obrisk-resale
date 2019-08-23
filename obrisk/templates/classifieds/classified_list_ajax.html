@@ -30,12 +30,33 @@
           <span class="card-text small "> {{ classified.city|safe }}</span>
         </div>
         <div class="share-card">
-          <small id="classified-{{forloop.counter}}" class="share" data-url="" data-title="" data-text="">🔗</small>
+          <small class="share"
+            onclick="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')">🔗</small>
         </div>
       </div>
 
     </div>
   </a>
+  <script type="application/ld+json">
+  {
+     "@context":"http://schema.org/",
+     "@type":"Product",
+     "name":"{{ classified.title}}",
+     "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
+     "image":[
+        "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+     ],
+     "brand":"",
+     "offers":{
+        "@type":"Offer",
+        "priceCurrency":"CNY",
+        "price":{{ classified.price|title }},
+        "availability":"http://schema.org/InStock",
+        "itemCondition":"http://schema.org/UsedCondition",
+        "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}"
+     }
+  }
+  </script>
 </div>
 <!-- official ads for phones-->
 {% if official_ads %}

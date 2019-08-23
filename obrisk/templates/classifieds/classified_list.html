@@ -7,7 +7,7 @@
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}?v=21" rel="stylesheet">
 <link href="{% static 'css/classifieds-list.css' %}?v=1908191" rel="stylesheet">
-
+<title>Obrisk Classifieds </title>
 {% endblock head %}
 
 {% block content %}
@@ -60,7 +60,8 @@
   <div class="card">
     <div class="card-header d-flex justify-content-between">
       <h5>{% trans 'Popular tags' %}</h5>
-      <span class="d-sm-block d-md-none" id="sidebarBtnClose"> <i class="fa fa-times pull-right" aria-hidden="true"> </i> </span>
+      <span class="d-sm-block d-md-none" id="sidebarBtnClose"> <i class="fa fa-times pull-right" aria-hidden="true">
+        </i> </span>
     </div>
 
     <div class="card-body" style="overflow:auto;max-height:400px">

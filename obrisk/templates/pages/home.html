@@ -17,12 +17,15 @@
   <meta name="theme-color" content="#3EC4E2">
 
   <!-- <link rel="manifest" href="{% static 'js/site.webmanifest' %}?v=3"> -->
+  {% block icon %}
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
   <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=1">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
   <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
+  {% endblock icon %}
+
 
   <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
   <!--[if lt IE 9]>
@@ -36,39 +39,6 @@
   <!-- Custom styles for this template -->
   <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
   <link href="{% static 'css/creative.css' %}?v=2008192" rel="stylesheet">
-
-  <!-- ios splash screen -->
-
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/iphone5_splash.png"
-    media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/iphone6_splash.png"
-    media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/iphoneplus_splash.png"
-    media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/iphonex_splash.png"
-    media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/iphonexr_splash.png"
-    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/iphonexsmax_splash.png"
-    media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/ipad_splash.png"
-    media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/ipadpro1_splash.png"
-    media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/ipadpro3_splash.png"
-    media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
-    rel="apple-touch-startup-image" />
-  <link href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/splashscreens/ipadpro2_splash.png"
-    media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
-    rel="apple-touch-startup-image" />
 
   <!-- pwa settings -->
   {% progressive_web_app_meta %}
