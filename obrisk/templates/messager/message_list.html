@@ -32,6 +32,7 @@
         {% if classified %}
             <p> {{ classified.title }}  <p>
             <p> {{ classified.price }}<p>
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
         {% endif %}
         {% for message in message_list %}
             {% include 'messager/single_message.html' with message=message %}
@@ -43,6 +44,7 @@
           {% if classified %}
               <p> {{ classified.title }}  <p>
               <p> {{ classified.price }}<p>
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
           {% endif %}
 
       {% endif %}

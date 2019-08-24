@@ -11,9 +11,10 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
 from django.db.models import Q
+from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 
 from slugify import slugify
-from obrisk.classifieds.models import Classified
+from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
 from obrisk.helpers import ajax_required
 
@@ -41,23 +42,39 @@ class MessagesListView(LoginRequiredMixin, ListView):
     paginate_by = 100
     template_name = "messager/message_list.html"
 
-    
+    def get(self, *args, **kwargs):
+        url = str('/ws/messages/')
+        if self.get_queryset() == url :
+            messages.error(self.request, 
+            f"Hello, It looks like you are trying to do something bad. \
+            Your account {self.request.user.username}, has been flagged. \
+            If similar actions happen again, this account will be blocked!")
+            return redirect('messager:contacts_list')
+        else:
+            return super(MessagesListView, self).get(*args, **kwargs)
 
-    def get_context_data(self, *args, **kwargs):
-        username=self.kwargs["username"] 
+
+    def get_context_data(self, *args, **kwargs): 
         context = super().get_context_data(*args, **kwargs)
-        context['active'] = username
+        context['active'] = self.kwargs["username"]
 
         try:
-            active_user = get_user_model().objects.get(username=username)
+            active_user = get_user_model().objects.get(username=self.kwargs["username"])
         except get_user_model().DoesNotExist:
-            messages.error(self.request, f"Sorry, The user {username}, doesn't exist!")
-            return reverse('messager:contacts_list')    
+            return context    
         
         classified = Conversation.objects.get_conv_classified(self.request.user, active_user)
         if classified:
             try:
-                classified = Classified.objects.get(id=classified[0])
+                classified = Classified.objects.annotate (
+                    image_thumb = Subquery (
+                        ClassifiedImages.objects.filter(
+                            classified=OuterRef('pk'),
+                        ).values(
+                            'image_thumb'
+                        )[:1]
+                    )
+                ).get(id=classified[0])
             except Classified.DoesNotExist:
                 return context
             else: 
@@ -78,8 +95,6 @@ class MessagesListView(LoginRequiredMixin, ListView):
             return Message.objects.get_msgs(active_user, self.request.user)      
             
         except get_user_model().DoesNotExist:
-            messages.error(self.request, f"Hey you there, it looks like you're trying to do something bad. \
-                Your account {self.request.user.username}, has been flagged, and if this happens again, you will be blocked!")
             return reverse('messager:contacts_list')   
 
          
