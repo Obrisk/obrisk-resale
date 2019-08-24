@@ -71,7 +71,7 @@ def send_code(full_number, theme, user=None):
             msg = f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!"
 
         elif theme == "password-reset" and user:
-            msg = f"[Obrisk] Your username is {user} and the verification code is {random}."
+            msg = f"[Obrisk] Verification code:{random} and Username:{user}"
         else:
             msg = f"[Obrisk] Your verification code is {random}, valid for 10 minutes!"
 
