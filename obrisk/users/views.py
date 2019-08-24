@@ -45,7 +45,7 @@ class EmailSignUp(SignupView):
     template_name = 'account/email_signup.html'
 
 
-def send_code(full_number, theme):
+def send_code(full_number, theme, user=None):
     random = get_random_string(length=6, allowed_chars='0123456789')
 
     #if settings.DEBUG=True (default=False)
@@ -69,6 +69,9 @@ def send_code(full_number, theme):
 
         if theme == "signup":
             msg = f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!"
+
+        elif theme == "password_reset" and user:
+            msg = f"[Obrisk] Your username is {user} and the verification code is {random}."
         else:
             msg = f"[Obrisk] Your verification code is {random}, valid for 10 minutes!"
 
@@ -100,6 +103,12 @@ def send_code(full_number, theme):
 
         if response['HTTPStatusCode'] == 200:
             cache.set(str(full_number), random , 600)
+
+            if user:
+                return JsonResponse({
+                    'success': True,
+                    'message': "The SMS is sent. Enter the code only if you want to reset your password, it is valid for 10 minutes"
+                })
             return JsonResponse({
                 'success': True,
                 'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
@@ -121,8 +130,11 @@ def get_users(full_number):
     that prevent inactive users and users with unusable passwords from
     resetting their password.
     """
-    return get_user_model().objects.get(phone_number=full_number,is_active=True)
-     
+    try:
+        return get_user_model().objects.get(phone_number=full_number,is_active=True)
+    except get_user_model().DoesNotExist:
+        return None
+
 
 
 @require_http_methods(["GET", "POST"])
@@ -133,8 +145,9 @@ def phone_password_reset(request):
         if phone_number is not None and len(phone_number) == 11 and phone_number[0] == '1':
             
             full_number = "+86" + phone_number           
-            if User.objects.filter(phone_number=full_number).exists():
-                return send_code(full_number, "password-reset")
+            user = get_users(full_number)
+            if user:
+                return send_code(full_number, "password-reset", user=user)
 
             else:
                 return JsonResponse({'success': False, 'error_message': "This phone number doesn't exist!"})
