@@ -29,49 +29,73 @@
     <div class="messages-content">
 
       {% if message_list %}
-      {% if classified %}
-      <div class="card classified-card mr-2 mb-3 justify-content-center d-flex p-2 " style="max-width: 295px">
-        <a href="{% url 'classifieds:classified' classified.slug %}"
-          style="color:black; text-decoration:none; background-color:none" class="d-flex">
-          <div class="card-img-top img-responsive" style="max-width: 70px">
+          {% if classified %}
+          <div class="card classified-card mr-2 mb-3 justify-content-center d-flex p-2 " style="max-width: 295px">
+            <a href="{% url 'classifieds:classified' classified.slug %}"
+              style="color:black; text-decoration:none; background-color:none" class="d-flex">
+              <div class="card-img-top img-responsive" style="max-width: 70px">
 
-            {% if classified.image_thumb %}
-            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
-            {% else %}
-            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
-            {% endif %}
+                {% if classified.image_thumb %}
+                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+                {% else %}
+                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+                {% endif %}
 
-          </div>
-          <div class="divider"></div>
-          <div class="ml-4">
-            <h6 class="card-title"> {{ classified.title}} </h6>
-            <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-            <div class="card-meta d-flex justify-content-between">
-              <div class="d-flex location">
-                <small>📍</small>
-                <span class="card-text small "> {{ classified.city|safe }}</span>
               </div>
-            </div>
+              <div class="divider"></div>
+              <div class="ml-4">
+                <h6 class="card-title"> {{ classified.title|truncatechars:60}} </h6>
+                <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+                <div class="card-meta d-flex justify-content-between">
+                  <div class="d-flex location">
+                    <small>📍</small>
+                    <span class="card-text small "> {{ classified.city|safe }}</span>
+                  </div>
+                </div>
 
+              </div>
+            </a>
           </div>
-        </a>
-      </div>
       {% endif %}
-      {% for message in message_list %}
-      {% include 'messager/single_message.html' with message=message %}
-      {% endfor %}
+
+          {% for message in message_list %}
+              {% include 'messager/single_message.html' with message=message %}
+          {% endfor %}
 
       {% else %}
       <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
       <p>{% trans "I am " %} {{ active }} {% trans ", Let's talk!" %}</p>
-      {% if classified %}
-      <p> {{ classified.title }} <p>
-          <p> {{ classified.price }}<p>
-              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
-              {% endif %}
-
-              {% endif %}
-              <div class="send-message"> </div>
+          {% if classified %}
+              <div class="card classified-card mr-2 mb-3 justify-content-center d-flex p-2 " style="max-width: 295px">
+                <a href="{% url 'classifieds:classified' classified.slug %}"
+                  style="color:black; text-decoration:none; background-color:none" class="d-flex">
+                  <div class="card-img-top img-responsive" style="max-width: 70px">
+        
+                    {% if classified.image_thumb %}
+                    <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+                    {% else %}
+                    <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+                    {% endif %}
+        
+                  </div>
+                  <div class="divider"></div>
+                  <div class="ml-4">
+                  <h6 class="card-title"> {{ classified.title|truncatechars:60 }}
+                    }} </h6>
+                  <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+                  <div class="card-meta d-flex justify-content-between">
+                    <div class="d-flex location">
+                      <small>📍</small>
+                      <span class="card-text small "> {{ classified.city|safe }}</span>
+                    </div>
+                  </div>
+        
+                  </div>
+                </a>
+              </div>
+          {% endif %}
+      {% endif %}
+      <div class="send-message"> </div>
     </div>
   </div>
 
