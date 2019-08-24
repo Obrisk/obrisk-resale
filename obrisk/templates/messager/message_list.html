@@ -27,13 +27,24 @@
   </div>
   <div class="messages">
     <div class="messages-content">
+
       {% if message_list %}
-      {% for message in message_list %}
-      {% include 'messager/single_message.html' with message=message %}
-      {% endfor %}
+        {% if classified %}
+            <p> {{ classified.title }}  <p>
+            <p> {{ classified.price }}<p>
+        {% endif %}
+        {% for message in message_list %}
+            {% include 'messager/single_message.html' with message=message %}
+        {% endfor %}
+     
       {% else %}
-      <h5>{% trans 'Hello '  %} {{ request.user.username }}{% trans ' nice to meet you' %}</h5>
-      <p>{% trans "I am " %} {{ active }} {% trans ", Let's talk!" %}</p>
+          <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
+          <p>{% trans "I am " %} {{ active }} {% trans ", Let's talk!" %}</p>
+          {% if classified %}
+              <p> {{ classified.title }}  <p>
+              <p> {{ classified.price }}<p>
+          {% endif %}
+
       {% endif %}
       <div class="send-message"> </div>
     </div>

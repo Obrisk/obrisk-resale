@@ -7,6 +7,8 @@ urlpatterns = [
     url(r'^$', views.ContactsListView.as_view(), name='contacts_list'),
     url(r'^send-message/$', views.send_message, name='send_message'),
     url(r'^receive-message/$', views.receive_message, name='receive_message'),
-    url(r'^(?P<username>[\w.@+-]+)/$', views.ConversationListView.as_view(),
+    url(r'^make-conversations/$', views.make_conversations, name='make_conversations'),    
+    url(r'^classified-chat/(?P<to>[-\w]+)/(?P<classified>[-\w]+)/$', views.classified_chat, name='classified_chat'),
+    url(r'^(?P<username>[\w.@+-]+)/$', views.MessagesListView.as_view(),
         name='conversation_detail'),
 ]

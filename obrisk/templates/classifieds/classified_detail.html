@@ -82,7 +82,7 @@
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if classified.user != request.user %}
-              <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
+              <a href="{% url 'messager:classified_chat' classified.user classified.id %}" class="btn btn-action">
                 🗪 <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
               <br>
               {% endif %}

@@ -1,3 +1,6 @@
+#Please ignore pylint hint on Classified.DoesNotExist
+#This code is valid
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -7,9 +10,11 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
+from django.db.models import Q
 
 from slugify import slugify
-from obrisk.messager.models import Message
+from obrisk.classifieds.models import Classified
+from obrisk.messager.models import Message, Conversation
 from obrisk.helpers import ajax_required
 
 
@@ -28,7 +33,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
         context['base_active'] = 'chat'
         return context
 
-class ConversationListView(LoginRequiredMixin, ListView):
+class MessagesListView(LoginRequiredMixin, ListView):
     """CBV to render the inbox, showing a specific conversation with a given
     user, who requires to be active too."""
 
@@ -36,33 +41,46 @@ class ConversationListView(LoginRequiredMixin, ListView):
     paginate_by = 100
     template_name = "messager/message_list.html"
 
+    
+
     def get_context_data(self, *args, **kwargs):
+        username=self.kwargs["username"] 
         context = super().get_context_data(*args, **kwargs)
-        context['active'] = self.kwargs["username"]
+        context['active'] = username
+
+        try:
+            active_user = get_user_model().objects.get(username=username)
+        except get_user_model().DoesNotExist:
+            messages.error(self.request, f"Sorry, The user {username}, doesn't exist!")
+            return reverse('messager:contacts_list')    
+        
+        classified = Conversation.objects.get_conv_classified(self.request.user, active_user)
+        if classified:
+            try:
+                classified = Classified.objects.get(id=classified[0])
+            except Classified.DoesNotExist:
+                return context
+            else: 
+                context['classified'] = classified
         return context
 
-    def get(self, *args, **kwargs):
-        url = str('/ws/messages/')
-        if self.get_queryset() == url :
-            messages.error(self.request, 
-            "Hello, it looks like you are trying to do something suspicious. \
-            Our system has stopped you from doing so and this information has been recorded.\
-            If similar actions are repeated several times, then your account will be blocked!")
-            return redirect('messager:contacts_list')
-        else:
-            return super(ConversationListView, self).get(*args, **kwargs)
 
-
-    def get_queryset(self):     
-        try:              
+    def get_queryset(self):    
+        try:               
             active_user = get_user_model().objects.get(username=self.kwargs["username"])
+            
+            #When I have fully migrated to the conversation model design this condition becomes important
+            #if Conversation.objects.conversation_exists(self.request.user, active_user):
+            
             #Below is called only when the conversation is opened thus mark all msgs as read.
             #In the near future implement it to query only last 100 messages, and update last few images.
-            Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)
+            Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)         
             return Message.objects.get_msgs(active_user, self.request.user)      
+            
         except get_user_model().DoesNotExist:
+            messages.error(self.request, f"Hey you there, it looks like you're trying to do something bad. \
+                Your account {self.request.user.username}, has been flagged, and if this happens again, you will be blocked!")
             return reverse('messager:contacts_list')   
-    
 
          
 @login_required
@@ -103,3 +121,59 @@ def receive_message(request):
     message = Message.objects.get(pk=message_id)
     return render(request,
                   'messager/single_message.html', {'message': message})
+
+
+@login_required
+@require_http_methods(["GET"])
+def classified_chat(request, to, classified):
+    """ Create a Conversation object btn 2 users """
+    try:
+        to_user = get_user_model().objects.get(username=to)
+        from_user = request.user
+    except get_user_model().DoesNotExist:
+        messages.error(request, f"Sorry, The user {to}, doesn't exist!")
+        return redirect('messager:contacts_list')
+
+    if Conversation.objects.conversation_exists(from_user, to_user):
+        return redirect("messager:conversation_detail" , to)
+    else:
+        try:
+            classified = Classified.objects.get(id=classified)
+        except Classified.DoesNotExist:
+            #This error message assumes that the classifieds items are never deleted completely.
+            #If the user reaches here then he/she was playing with url parameters.
+            messages.error(request, f"Hey you there, it looks like you're trying to do something bad. \
+                Your account { from_user}, has been flagged, and if this happens again, you will be blocked!")
+            return redirect('messager:contacts_list')  
+        
+        else:  
+            #This condition assumes classified parameter should never be null.
+            if classified.user == to_user:
+                conv = Conversation(first_user=from_user, second_user=to_user, classified=classified)
+                conv.save()
+                return redirect('messager:conversation_detail', to)
+            else:
+                messages.error(request, f"Hey you there, it looks like you're trying to do something bad. \
+                    Your account { from_user}, has been flagged, and if this happens again, you will be blocked!")
+                return redirect('messager:contacts_list')
+            
+
+
+@login_required
+@require_http_methods(["GET"])
+def make_conversations(request):
+    """ A temporally view to create Conversations to users already chatted
+    before Convervation model was created."""
+    messages = Message.objects.all()
+    for message in messages:
+        from_user = message.sender
+        to_user = message.recipient
+
+        if Conversation.objects.conversation_exists(from_user, to_user):
+            continue            
+        else:
+            conv = Conversation(first_user=from_user, second_user=to_user)
+            conv.save()
+
+    return redirect('messager:contacts_list')
+
