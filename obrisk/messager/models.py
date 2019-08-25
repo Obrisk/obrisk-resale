@@ -6,8 +6,41 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from asgiref.sync import async_to_sync
-
 from channels.layers import get_channel_layer
+
+from obrisk.classifieds.models import Classified
+
+
+
+class ConversationQuerySet(models.query.QuerySet):
+    """ Simply the queries in the views that check the conversations btn users """
+    #https://docs.djangoproject.com/en/2.1/ref/models/querysets/#operators-that-return-new-querysets
+    
+    def get_conversations(self, user):
+        """ Check if these 2 users had conversation before """
+        return self.filter(first_user=user) | self.filter(second_user=user)
+
+    def conversation_exists(self, user1, user2):
+        qs = self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1) 
+
+        if qs:
+            return True
+        return False
+
+    def get_conv_classified(self, user1, user2):
+        qs = self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1) 
+        return qs.values_list('classified', flat=True)
+    
+class Conversation(models.Model):
+    """Conversation information btn 2 users is stored here."""
+    first_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='first_conv_user', null=True, on_delete=models.CASCADE)
+    second_user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='second_conv_user', null=True, blank=True, on_delete=models.CASCADE)
+    classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='conversaction', null=True, blank=True)
+    objects = ConversationQuerySet.as_manager()
+    #messages = Defined in the Message class as a foreign key.
+
 
 
 class MessageQuerySet(models.query.QuerySet):
@@ -61,6 +94,11 @@ class Message(models.Model):
     """A private message sent between users."""
     uuid_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
+    #In the near future enforce all messages to belong to a specific conversation,
+    #this will improve the query speed on the conversation list. (null=False)
+    conversation = models.ForeignKey(
+        settings.AUTH_USER_MODEL, related_name='messages', null=True,
+        blank=True,  on_delete=models.CASCADE)
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='sent_messages',
         verbose_name=_("Sender"), null=True, on_delete=models.CASCADE)
@@ -68,8 +106,12 @@ class Message(models.Model):
         settings.AUTH_USER_MODEL, related_name='received_messages', null=True,
         blank=True, verbose_name=_("Recipient"), on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
-    message = models.TextField(max_length=1000, blank=True)
+    message = models.TextField(max_length=1000, blank=True, null=True)
     unread = models.BooleanField(default=True, db_index=True)
+    image = models.CharField(max_length=300, blank=True, null=True)
+    img_preview = models.CharField(max_length=300, blank=True, null=True)  
+    attachment = models.CharField(max_length=300, blank=True, null=True)
+    has_link = models.BooleanField(default=False)  
     objects = MessageQuerySet.as_manager()
 
     class Meta:

@@ -82,7 +82,7 @@
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if classified.user != request.user %}
-              <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
+              <a href="{% url 'messager:classified_chat' classified.user classified.id %}" class="btn btn-action">
                 🗪 <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
               <br>
               {% endif %}
@@ -123,19 +123,21 @@
       </div>
 
       <!-- Navigation buttons -->
-      <div class="m-4 d-flex justify-content-between">
-        {% if request.user == classified.user%}
+      {% if request.user == classified.user%}
+      <div class = "m-3">
         <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
           title="{% trans 'Edit this classified' %}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+      </div>      
         {% else %}
         <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
         {% endif %}
-        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
-        <a href="#" class="share btn btn-dark"
-          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
-          🔗{% trans 'share' %} </a>
-      </div>
+        <div class="m-3 d-flex justify-content-between">
+            <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
+            <a href="#" class="share btn btn-dark"
+              onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+              🔗{% trans 'share' %} </a>
+        </div>
     </div>
 
 
