@@ -12,12 +12,16 @@
 <form method="post" action="{% url 'account_logout' %}">
   {% csrf_token %}
   {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
   {% endif %}
-  <button class="btn btn-dark" type="submit">{% trans 'Sign Out' %}</button>
-  <button class="btn btn-danger" > <a href="{% url 'posts:list' %}"> {% trans 'Cancel' %} </a> </button>
+  <button id="confirmlogout" class="btn btn-dark" type="submit">{% trans 'Sign Out' %}</button>
+  <button class="btn btn-danger"> <a href="{% url 'posts:list' %}"> {% trans 'Cancel' %} </a> </button>
 </form>
 
+<script>
+  $("#confirmlogout").click(function () {
+    localStorage.setItem('auth', "");
+  })
+</script>
 
 {% endblock %}
-

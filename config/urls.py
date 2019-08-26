@@ -16,6 +16,8 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
     url(r'^download-pwa/$', 
         TemplateView.as_view(template_name='pages/download.html'), name='download_pwa'),
+    url(r'^offline/$',
+        TemplateView.as_view(template_name='offline.html'), name='offline'),
     url(r'^android-pwa/$', redirect_browser , name='android_pwa'),
     url(r'^ios-download/$',
         TemplateView.as_view(template_name='pages/download.html'), name='ios_pwa'),

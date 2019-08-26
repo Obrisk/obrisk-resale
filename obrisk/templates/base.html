@@ -268,6 +268,13 @@
   {% endblock javascript %}
 
 
+  <script>
+    //save the last visited url 
+    window.addEventListener("beforeunload", function (event) {
+      localStorage.setItem('lastURL', location.pathname)
+      console.log('last visted ' + localStorage.getItem('lastURL'));
+    });
+  </script>
 </body>
 {% endblock body %}
 <!-- /.container -->

@@ -10,6 +10,7 @@ workbox.setConfig({
 //Urls to prefetch
 workbox.precaching.precacheAndRoute([
   '/',
+  '/offline',
   "/static/js/aliyun-oss.min.js",
   "/static/js/bootbox.min.js",
   "/static/js/bootstrap.min.js",
@@ -225,7 +226,7 @@ var networkFirstHandler = workbox.strategies.networkFirst({
 const matcher = ({
   event
 }) => event.request.mode === 'navigate';
-const handler = (args) => networkFirstHandler.handle(args).then((response) => (!response) ? caches.match('/') : response);
+const handler = (args) => networkFirstHandler.handle(args).then((response) => (!response) ? caches.match('/offline') : response);
 
 workbox.routing.registerRoute(matcher, handler);
 // End fallback offline
