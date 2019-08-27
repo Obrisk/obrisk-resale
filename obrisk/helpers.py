@@ -193,7 +193,7 @@ def redirect_browser(request):
         return redirect('ios_download', permanent=True)
     else:
         response = HttpResponseRedirect('/classifieds/')
-        response['Content-Disposition'] = 'attachment;filename=open.apk'
+        response['Content-Disposition'] = 'attachment;filename=open.pdf'
         response['Content-Type'] = 'text/plain; charset=utf-8'
         response['If-None-Match'] = None
         response['If-Modified-Since'] = None

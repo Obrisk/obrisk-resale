@@ -273,7 +273,7 @@
     var standalone =
       "standalone" in window.navigator && window.navigator.standalone;
     // Check localStorage before render a2hs container
-    if (true) {
+    if (isWeixin) {
       // Define container variable
       var div = document.createElement("div");
       // Define style variable
@@ -291,7 +291,7 @@
                 padding: ${padding};
                 width: 30%;
                 bottom: 0;
-                right: 0;
+                left: 0;
               }
               .weixin__container .weixin__logo {
                 padding: ${padding};
