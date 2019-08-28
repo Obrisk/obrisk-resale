@@ -65,7 +65,7 @@
 
 <script>
 
-var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
   window.mobileUtil = (function (win, doc) {
     var UA = navigator.userAgent,
@@ -85,7 +85,7 @@ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   const isInStandaloneMode = () =>
     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
 
-  if (mobileUtil.isWeixin || (mobileUtil.isIOS  && isInStandaloneMode)) {
+  if (mobileUtil.isWeixin || (mobileUtil.isIOS && isInStandaloneMode)) {
     if (!localStorage.getItem('auth')) {
       //get form value and save when user clicks on login 
       $('.login100-form-btn').click(function () {
@@ -108,7 +108,9 @@ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
       var auth = JSON.parse(localStorage.getItem('auth'));
       var ajax = new XMLHttpRequest();
       ajax.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
+        alert('ajax call');
+        if (this.readyState == 4 && this.status == 302) {
+          alert('ajax success');
           if (localStorage.getItem('lastURL')) {
             location.replace(localStorage.getItem('lastURL'))
           } else if (localStorage.getItem('lastURL') = "/" || null) {
@@ -117,8 +119,6 @@ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         }
       }
       var auth = JSON.parse(localStorage.getItem('auth'));
-    
-
       ajax.open("POST", "/accounts-authorization/login/");
       ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
