@@ -8,8 +8,8 @@ from django.shortcuts import redirect
 
 from graphene_django.views import GraphQLView
 from obrisk.messager import views
-from obrisk.users.views import PasswordResetFromKeyView
-from obrisk.helpers import get_oss_auth, redirect_browser
+from obrisk.users.views import PasswordResetFromKeyView, AutoLoginView
+from obrisk.helpers import get_oss_auth
 
 urlpatterns = [
     url(r'^$',
@@ -18,9 +18,6 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/download.html'), name='download_pwa'),
     url(r'^offline/$',
         TemplateView.as_view(template_name='offline.html'), name='offline'),
-    url(r'^android-pwa/$', redirect_browser , name='android_pwa'),
-    url(r'^ios-pwa/$',
-        TemplateView.as_view(template_name='pages/download.html'), name='ios_pwa'),
     url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth'),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name='about'),
@@ -40,6 +37,7 @@ urlpatterns = [
     #This accounts/ url is  for django and soon should be deprecated and use only allauth.
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts-authorization/', include('allauth.urls')),
+    url(r'^auto-login-obdev2018-wsguatpotlfwccdi/', AutoLoginView.as_view(), name="auto_login"),
     # Third party apps here
     url(r'^comments/', include('django_comments.urls')),
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
