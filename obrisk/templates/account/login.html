@@ -87,7 +87,7 @@
 
 
 
-  if (true) {
+  if (mobileUtil.isWeixin || (mobileUtil.isIOS && isInStandaloneMode)) {
     if (!localStorage.getItem('auth')) {
 
 
@@ -108,12 +108,8 @@
               }
               localStorage.setItem('autologintry', false);
               localStorage.setItem('auth', JSON.stringify(auth))
-              if (localStorage.getItem('lastURL') == "/" || null || undefined) {
-                location.replace('/classifieds')
-              } else {
-                location.replace(localStorage.getItem('lastURL'))
+              location.replace('/classifieds')
 
-              }
             } else {
               alert('Login failed, please check your username and password!');
             }
@@ -143,11 +139,9 @@
           if (this.readyState == 4 && this.status == 200) {
             console.log('autologin');
             if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
-              if (localStorage.getItem('lastURL') == "/" || null || undefined) {
-                location.replace('/classifieds')
-              } else {
-                location.replace(localStorage.getItem('lastURL'))
-              }
+
+              location.replace('/classifieds')
+
             } else {
               //try auto login only once
               localStorage.setItem('autologintry', true);
