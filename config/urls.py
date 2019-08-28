@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^offline/$',
         TemplateView.as_view(template_name='offline.html'), name='offline'),
     url(r'^android-pwa/$', redirect_browser , name='android_pwa'),
-    url(r'^ios-download/$',
+    url(r'^ios-pwa/$',
         TemplateView.as_view(template_name='pages/download.html'), name='ios_pwa'),
     url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth'),
     url(r'^about/$',

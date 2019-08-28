@@ -190,16 +190,9 @@ def ajax_required(f):
 
 def redirect_browser(request):
     if request.user_agent.browser.family == 'Mobile Safari':
-        return redirect('ios_download', permanent=True)
+        return redirect('ios_pwa', permanent=True)
     else:
-        response = HttpResponseRedirect('/classifieds/')
-        response['Content-Disposition'] = 'attachment;filename=open.pdf'
-        response['Content-Type'] = 'text/plain; charset=utf-8'
-        response['If-None-Match'] = None
-        response['If-Modified-Since'] = None
-        response.status_code = 206
-        return response
-
+        return redirect('android_pwa', permanent=True)
 
 class AuthorRequiredMixin(View):
     """Mixin to validate than the loggedin user is the creator of the object
