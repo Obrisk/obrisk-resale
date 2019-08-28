@@ -100,21 +100,24 @@
 
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function () {
-          if (this.readyState == 4 && /classifieds/gi.test(this.responseURL)) {
-            var auth = {
-              username: username,
-              password: pass
-            }
-            localStorage.setItem('autologintry', false);
-            localStorage.setItem('auth', JSON.stringify(auth))
-            if (localStorage.getItem('lastURL') == "/" || null || undefined) {
-              location.replace('/classifieds')
-            } else {
-              location.replace(localStorage.getItem('lastURL'))
+          if (this.readyState == 4 && this.status == 200) {
+            if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+              var auth = {
+                username: username,
+                password: pass
+              }
+              localStorage.setItem('autologintry', false);
+              localStorage.setItem('auth', JSON.stringify(auth))
+              if (localStorage.getItem('lastURL') == "/" || null || undefined) {
+                location.replace('/classifieds')
+              } else {
+                location.replace(localStorage.getItem('lastURL'))
 
+              }
+            } else {
+              alert('Login failed, please check your username and password!');
             }
-          } else {
-            alert('Login failed, please check your username and password!');
+
           }
         }
         ajax.open("POST", "/accounts-authorization/login/");
@@ -137,20 +140,22 @@
         var auth = JSON.parse(localStorage.getItem('auth'));
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function () {
-          if (this.readyState == 4 && /classifieds/gi.test(this.responseURL)) {
-            if (localStorage.getItem('lastURL') == "/" || null || undefined) {
-              location.replace('/classifieds')
+          if (this.readyState == 4 && this.status == 200) {
+            console.log('autologin');
+            if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+              if (localStorage.getItem('lastURL') == "/" || null || undefined) {
+                location.replace('/classifieds')
+              } else {
+                location.replace(localStorage.getItem('lastURL'))
+              }
             } else {
-              location.replace(localStorage.getItem('lastURL'))
+              //try auto login only once
+              localStorage.setItem('autologintry', true);
+              alert('Autologin failed please try manual login');
+              location.replace('/accounts-authorization/login/');
             }
-          } else {
-            //try auto login only once
-            localStorage.setItem('autologintry', true);
-            alert('Autologin failed please try manual login');
-            location.replace('/accounts-authorization/login/');
           }
         }
-
         var auth = JSON.parse(localStorage.getItem('auth'));
         ajax.open("POST", "/accounts-authorization/login/");
         ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
