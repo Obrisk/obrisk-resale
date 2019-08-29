@@ -55,7 +55,7 @@ class PhoneSignupForm(SignupForm):
     city = forms.CharField (widget=forms.HiddenInput())
     phone_number = PhoneNumberField(label=_("Phone number"),
                                     widget=forms.TextInput(
-                                    attrs={'placeholder': _('e.g 13299887766'),
+                                    attrs={'placeholder': _('e.g 13200001111'),
                                           'autofocus': 'autofocus'})
                             )
 
