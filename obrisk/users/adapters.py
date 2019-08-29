@@ -2,24 +2,14 @@
 from django.conf import settings
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
+from django.forms import ValidationError
 
 
 class AccountAdapter(DefaultAccountAdapter):
-    def save_user(self, request, user, form, commit=True):
-        data = form.cleaned_data
-        #user.email = data['email']
-        user.username = data['username']
-        user.province_region = data['province_region']
-        user.city = data['city']
-       
-        if 'password1' in data:
-            user.set_password(data['password1'])
-        else:
-            user.set_unusable_password()
-        self.populate_username(request, user)
-        if commit:
-            user.save()
-        return user
+    def clean_username(self, username):
+        if len(username) > 16:
+            raise ValidationError('The username length must be less than 16 characters')
+        return DefaultAccountAdapter.clean_username(self,username) # For other default validations.
 
         
 class SocialAccountAdapter(DefaultSocialAccountAdapter):

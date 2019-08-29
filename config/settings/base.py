@@ -137,6 +137,8 @@ LOGIN_URL = 'account_login'
 
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 40 #40 Days.
 
+
+
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
@@ -289,10 +291,9 @@ ACCOUNT_USERNAME_BLACKLIST = ['AnonymousUser', 'admin', 'obrisk']
 
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
-SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
-#ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
+ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 
-
+#SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 # SOCIALACCOUNT_PROVIDERS = {
 #     'weixin': {
 #         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
