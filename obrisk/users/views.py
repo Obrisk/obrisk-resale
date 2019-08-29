@@ -351,4 +351,6 @@ class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
         
 
 
+class AutoLoginView(LoginView):
+    pass
 

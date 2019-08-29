@@ -16,10 +16,13 @@
 
 .toggle-tags {
     line-height: 0;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+    background: #fff;
+    padding: 8px;
 }
 
 .categories {
-    font-size:14px !important;
+    font-size: 14px !important;
 }
 
 .sidebarBtnOpen {
@@ -31,4 +34,3 @@
     font-size: 1.3rem;
     color: #0ae6ee;
 }
-

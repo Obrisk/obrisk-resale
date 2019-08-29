@@ -9,6 +9,8 @@ workbox.setConfig({
 
 //Urls to prefetch
 workbox.precaching.precacheAndRoute([
+  '/',
+  '/offline',
   "/static/js/aliyun-oss.min.js",
   "/static/js/bootbox.min.js",
   "/static/js/bootstrap.min.js",
@@ -33,6 +35,7 @@ workbox.precaching.precacheAndRoute([
   "/static/js/profile-uploader.js",
 
   ///CSS cache
+  "/static/css/account.css",
   "/static/css/bootstrap.css.map",
   "/static/css/bootstrap.min.css",
   "/static/css/bootstrap-grid.min.css",
@@ -65,6 +68,7 @@ workbox.precaching.precacheAndRoute([
   "/static/css/user_list.css",
   "/static/css/user_profile.css",
   "/static/css/util.css",
+
 
   //Image cache
   "/static/img/ajax-loader.gif",
@@ -116,7 +120,7 @@ self.addEventListener("message", event => {
 // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
 // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
 workbox.routing.registerRoute(
-  /\.(?:jpeg|webp|png|gif|jpg|svg)$/,
+  /\.(?:jpeg|webp|png|gif|jpg|svg)/,
   // Whenever the app requests images, the service worker checks the
   // cache first for the resource before going to the network.
   new workbox.strategies.CacheFirst({
@@ -136,7 +140,7 @@ workbox.routing.registerRoute(
 // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
 // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
 workbox.routing.registerRoute(
-  /\.(?:js)$/,
+  /\.(?:js)/,
   new workbox.strategies.CacheFirst({
     cacheName: "obrisk-js-cache",
     plugins: [
@@ -152,7 +156,7 @@ workbox.routing.registerRoute(
 // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
 // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
 workbox.routing.registerRoute(
-  /\.(?:css)$/,
+  /\.(?:css)/,
   new workbox.strategies.CacheFirst({
     cacheName: "obrisk-css-cache",
     plugins: [
@@ -164,6 +168,28 @@ workbox.routing.registerRoute(
   })
 );
 
+// Font files cache only the fonts files loaded from https://obrisks.com/ all other images handle using CDN Caching
+// https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
+// https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
+workbox.routing.registerRoute(
+  /\.(?:woff2|ttf)/,
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "obrisk-font-cache",
+    plugins: [
+      new workbox.expiration.Plugin({
+        maxEntries: 60,
+        maxAgeSeconds: 24 * 60 * 60 // 24 hours
+      })
+    ]
+  })
+);
+workbox.routing.registerRoute(
+  new RegExp("^https://fonts.googleapis.com/"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "obrisk-font-cache"
+  })
+);
+
 //CDN image cache
 workbox.routing.registerRoute(
   new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/"),
@@ -171,3 +197,36 @@ workbox.routing.registerRoute(
     cacheName: "CDN-img-cache"
   })
 );
+workbox.routing.registerRoute(
+  new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "CDN-img-cache"
+  })
+);
+workbox.routing.registerRoute(
+  new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/media/profile_pics"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "CDN-img-cache"
+  })
+);
+
+// Fallback to offline page if nothing is found in cache
+var networkFirstHandler = workbox.strategies.networkFirst({
+  cacheName: 'default',
+  plugins: [
+    new workbox.expiration.Plugin({
+      maxEntries: 100
+    }),
+    new workbox.cacheableResponse.Plugin({
+      statuses: [200]
+    })
+  ]
+});
+
+const matcher = ({
+  event
+}) => event.request.mode === 'navigate';
+const handler = (args) => networkFirstHandler.handle(args).then((response) => (!response) ? caches.match('/offline') : response);
+
+workbox.routing.registerRoute(matcher, handler);
+// End fallback offline

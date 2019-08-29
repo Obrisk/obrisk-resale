@@ -189,17 +189,18 @@ def ajax_required(f):
 
 
 def redirect_browser(request):
+    """This function is here for reference but is never called in any urls in obrisk.
+    It was pushing the user out of wechat browser for android users."""
     if request.user_agent.browser.family == 'Mobile Safari':
         return redirect('ios_download', permanent=True)
     else:
         response = HttpResponseRedirect('/classifieds/')
-        response['Content-Disposition'] = 'attachment;filename=open.apk'
+        response['Content-Disposition'] = 'attachment;filename=open.pdf'
         response['Content-Type'] = 'text/plain; charset=utf-8'
         response['If-None-Match'] = None
         response['If-Modified-Since'] = None
         response.status_code = 206
         return response
-
 
 class AuthorRequiredMixin(View):
     """Mixin to validate than the loggedin user is the creator of the object

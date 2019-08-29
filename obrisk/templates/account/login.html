@@ -9,6 +9,8 @@
 <link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}?v=1908191">
+<script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
+
 {% endblock head %}
 
 {% block content %}
@@ -60,4 +62,102 @@
     </div>
   </div>
 </div>
+
+<script>
+
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+  window.mobileUtil = (function (win, doc) {
+    var UA = navigator.userAgent,
+      isAndroid = /android|adr/gi.test(UA),
+      isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
+      isBlackBerry = /BlackBerry/i.test(UA),
+      isWindowPhone = /IEMobile/i.test(UA),
+      isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
+    return {
+      isAndroid: isAndroid,
+      isIOS: isIOS,
+      isMobile: isMobile,
+      isWeixin: /MicroMessenger/gi.test(UA),
+      isQQ: /QQ/gi.test(UA)
+    };
+  })(window, document);
+  const isInStandaloneMode = () =>
+    (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
+
+
+
+  if (mobileUtil.isWeixin || mobileUtil.isIOS) {
+    if (!localStorage.getItem('auth')) {
+
+
+      //When user click on login save the auth details only after successfull ajax login then redirect
+      //else allow user to retry login
+      $('.login100-form-btn').click(function (event) {
+        event.preventDefault();
+        var username = $('[name="login"]').val();
+        var pass = $('[name="password"]').val();
+
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+              var auth = {
+                username: username,
+                password: pass
+              }
+              localStorage.setItem('autologintry', false);
+              localStorage.setItem('auth', JSON.stringify(auth))
+              location.replace('/classifieds')
+
+            } else {
+              alert('Login failed, please check your username and password!');
+            }
+
+          }
+        }
+        ajax.open("POST", "/accounts-authorization/login/");
+        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
+
+      })
+
+    }
+    else {
+
+      //auto login if we have auth save in localStorage
+      if (!localStorage.getItem('autologintry') || localStorage.getItem('autologintry') == false) {
+
+        var dialog = bootbox.dialog({
+          message: '<p class="text-center mb-0"><i class="fa fa-spin fa-cog"></i> Autologin</p>',
+          closeButton: false
+        });
+
+        var auth = JSON.parse(localStorage.getItem('auth'));
+        var ajax = new XMLHttpRequest();
+        ajax.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            console.log('autologin');
+            if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+
+              location.replace('/classifieds')
+
+            } else {
+              //try auto login only once
+              localStorage.setItem('autologintry', true);
+              alert('Autologin failed please try manual login');
+              location.replace('/accounts-authorization/login/');
+            }
+          }
+        }
+        var auth = JSON.parse(localStorage.getItem('auth'));
+        ajax.open("POST", "/accounts-authorization/login/");
+        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
+      }
+    }
+  }
+
+</script>
+
 {% endblock content %}
