@@ -87,7 +87,7 @@
 
 
 
-  if (mobileUtil.isWeixin || (mobileUtil.isIOS && isInStandaloneMode)) {
+  if (mobileUtil.isWeixin || mobileUtil.isIOS) {
     if (!localStorage.getItem('auth')) {
 
 
