@@ -15,7 +15,7 @@
     {% csrf_token %}
     {{ form|crispy }}
 
-    <p class="city"> <strong> City*:  </strong>  {{request.user.city}} </p>
+    <p class="city"> <strong> City*: </strong> {{request.user.city}} </p>
 
 
     <div id="wrapper" class="mb-4">
@@ -83,6 +83,7 @@
     </div>
   </div>
 </div>
+
 
 {% endblock content %}
 

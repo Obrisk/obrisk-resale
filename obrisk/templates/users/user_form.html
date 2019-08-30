@@ -7,13 +7,13 @@
 {% block head %}
 <script src="{% static 'js/user-form.js' %}?v=0908192" type="text/javascript"> </script>
 <script src="{% static 'js/location.js' %}?v=0208191" type="text/javascript"> </script>
-<script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>
 <script src="{% static 'js/aliyun-oss.min.js' %}?v=3107191" type="text/javascript"></script>
 <link href="{% static 'css/user_form.css' %}?v=21" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
-<button onclick="window.history.go(-1); return false;" class="d-sm-block d-md-none btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></button>
+<button onclick="window.history.go(-1); return false;" class="d-sm-block d-md-none btn btn-dark"> <i
+    class="fa fa-chevron-left" aria-hidden="true"></i></button>
 
 <div class="col-lg-8 m-auto">
   <div class="row profile">
@@ -21,25 +21,26 @@
       <h1>{{ user.username|title }}</h1>
       {% if user.name %}<p class="lead">{{ user.name }}</p>{% endif %}
       {% if object.picture %}
-          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
-          style="width:250px;height:250px;border-radius: 50%;" id="avatar" class="mr-4">
+      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
+        style="width:250px;height:250px;border-radius: 50%;" id="avatar" class="mr-4">
       {% else %}
-          <img id="avatar" src="{% static 'img/user.png' %}" height="250px" class="mr-4"
-          style="width:250px;height:250px;border-radius: 50%;" alt="No Profile Picture" />
+      <img id="avatar" src="{% static 'img/user.png' %}" height="250px" class="mr-4"
+        style="width:250px;height:250px;border-radius: 50%;" alt="No Profile Picture" />
       {% endif %}
 
-      <input type="file" name="temp_pic" onchange="uploadPreview(this)" accept="image/*" id="temp_pic"> 
-      <p class="mt-3"> 
-      <button class="btn btn-dark" onclick="document.getElementById('temp_pic').click();"> Choose pic </button>
-      </p>      
+      <input type="file" name="temp_pic" onchange="uploadPreview(this)" accept="image/*" id="temp_pic">
+      <p class="mt-3">
+        <button class="btn btn-dark" onclick="document.getElementById('temp_pic').click();"> Choose pic </button>
+      </p>
       <p class="mt-2"> <button class="btn btn-dark" id="startUpload" type="button"> Save pic</button> </p>
-      
-      <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none; font-size:14px; font-weight:bold;">
-          <div class="total-progress">
-            <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-              aria-valuemax="100">
-            </div>
+
+      <div id="statusBar" class="statusBar  flex-column align-items-center"
+        style="display:none; font-size:14px; font-weight:bold;">
+        <div class="total-progress">
+          <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+            aria-valuemax="100">
           </div>
+        </div>
       </div>
 
     </div>
@@ -47,7 +48,7 @@
     <div class="col-md-8">
       <form enctype="multipart/form-data" class="update form-horizontal" method="post"
         action="{% url 'users:update' %}">
-        <small> <strong> All fields are optional </strong> </small> 
+        <small> <strong> All fields are optional </strong> </small>
         {% csrf_token %}
         {{ form|crispy }}
         <h6> Address </h6>
@@ -84,7 +85,7 @@
 {% csrf_token %}
 
 <script>
-var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
   var toast = new iqwerty.toast.Toast();
   toast.setText('Updating Profile').stylize({
@@ -99,12 +100,12 @@ var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
     uploadPreview($this)
   })
 
-//This var is used only on the signup form, but they share js files with this one
-//In the near future please separate them.
-var errors = false;
+  //This var is used only on the signup form, but they share js files with this one
+  //In the near future please separate them.
+  var errors = false;
 
-const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
-const user = "{{ request.user.username }}";
+  const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
+  const user = "{{ request.user.username }}";
 
 </script>
 <script src="{% static 'js/profile-uploader.js' %}?v=0908193" type="text/javascript"></script>

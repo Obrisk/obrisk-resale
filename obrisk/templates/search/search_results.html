@@ -18,12 +18,13 @@
 <div class="container search-results">
   <!-- This search bar should be displayed with pre-filled in values that user searched for. -->
   <!-- currently it is not doing so -->
-  <div class="col-md-12 mt-4 mb-5">
+  <div class="col-md-3 mb-5 mt-5">
     <div class="justify-content-end ml-auto d-flex flex-row">
       <form class="searchbar" id="classifiedsearch" action="{% url 'search:results' %}" style="display:inline;">
-        <input class="search_input" type="text" name="query" placeholder="Search...">
-        <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
+        <input type="text" name="query" placeholder="Search...">
+        <div class="search"></div>
       </form>
+
     </div>
   </div>
 
