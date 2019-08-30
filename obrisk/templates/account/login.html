@@ -88,6 +88,8 @@
 
 
   if (mobileUtil.isWeixin || mobileUtil.isIOS) {
+
+
     if (!localStorage.getItem('auth')) {
 
 
@@ -124,38 +126,36 @@
 
     }
     else {
-      alert("Trying autologin");
-      //auto login if we have auth save in localStorage
-      if (!localStorage.getItem('autologintry') || localStorage.getItem('autologintry') == false) {
 
-        var dialog = bootbox.dialog({
-          message: '<p class="text-center mb-0"><i class="fa fa-spin fa-cog"></i> Autologin</p>',
-          closeButton: false
-        });
 
-        var auth = JSON.parse(localStorage.getItem('auth'));
-        var ajax = new XMLHttpRequest();
-        ajax.onreadystatechange = function () {
-          if (this.readyState == 4 && this.status == 200) {
-            console.log('autologin');
-            if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+      var dialog = bootbox.dialog({
+        message: '<p class="text-center mb-0"><i class="fa fa-spin fa-cog"></i> Autologin</p>',
+        closeButton: false
+      });
 
-              location.replace('/classifieds')
+      var auth = JSON.parse(localStorage.getItem('auth'));
+      var ajax = new XMLHttpRequest();
+      ajax.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log('autologin');
+          if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
 
-            } else {
-              //try auto login only once
-              localStorage.setItem('autologintry', true);
-              alert('Autologin failed please try manual login');
-              location.replace('/accounts-authorization/login/');
-            }
+            location.replace('/classifieds')
+
+          } else {
+            //try auto login only once
+            localStorage.setItem('autologintry', true);
+            alert('Autologin failed please try manual login');
+            location.replace('/accounts-authorization/login/');
           }
         }
-        var auth = JSON.parse(localStorage.getItem('auth'));
-        ajax.open("POST", "/accounts-authorization/login/");
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
       }
+      var auth = JSON.parse(localStorage.getItem('auth'));
+      ajax.open("POST", "/accounts-authorization/login/");
+      ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
     }
+
   }
 
 </script>
