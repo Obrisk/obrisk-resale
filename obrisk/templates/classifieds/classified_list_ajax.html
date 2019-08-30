@@ -31,7 +31,8 @@
         </div>
         <div class="share-card">
           <small class="share"
-            onclick="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')">🔗</small>
+            onclick="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')"
+            ontouchstart="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')">🔗</small>
         </div>
       </div>
 
