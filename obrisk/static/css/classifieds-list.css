@@ -34,3 +34,15 @@
     font-size: 1.3rem;
     color: #0ae6ee;
 }
+
+.priority {
+    background: #3ec4e2;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    position: absolute;
+    width: 100%;
+    bottom: 0px;
+    border-radius: 0px 0px 0.3em 0.3em;
+    height: 12px;
+}
