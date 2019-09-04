@@ -39,7 +39,6 @@ urlpatterns = [
     url(r'^accounts-authorization/', include('allauth.urls')),
     url(r'^auto-login-obdev2018-wsguatpotlfwccdi/', AutoLoginView.as_view(), name="auto_login"),
     # Third party apps here
-    url(r'^comments/', include('django_comments.urls')),
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
     url(r'^markdownx/', include('markdownx.urls')),
     # Local apps here

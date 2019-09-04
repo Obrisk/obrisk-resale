@@ -127,4 +127,3 @@ def notify_comment(**kwargs):
         )
 
 
-comment_was_posted.connect(receiver=notify_comment)
