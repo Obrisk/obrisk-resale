@@ -28,6 +28,7 @@ phonenumbers>=p8.10.4  #https://github.com/stefanfoulis/django-phonenumber-field
 django-star-ratings>=0.7.0 #https://github.com/wildfish/django-star-ratings
 django-autocomplete-light>=3.3.5 #https://github.com/yourlabs/django-autocomplete-light/
 django-pwa-webpush>=1.0.0 #https://pypi.org/project/django-pwa-webpush/
+django_user_agents>=0.4.0 #https://github.com/selwin/django-user_agents
 
 
 # Channels
