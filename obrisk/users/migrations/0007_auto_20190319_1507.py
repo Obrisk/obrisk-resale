@@ -29,7 +29,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='user',
             name='phone_number',
-            field=phonenumber_field.modelfields.PhoneNumberField(default='Unknown_phone_no', max_length=128, verbose_name='Phone number'),
+            field=phonenumber_field.modelfields.PhoneNumberField(default='+8613300000000', max_length=128, verbose_name='Phone number'),
         ),
         migrations.AlterField(
             model_name='user',
