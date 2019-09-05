@@ -94,7 +94,6 @@ THIRD_PARTY_APPS = [
     'taggit',
     'star_ratings',
     'pwa_webpush',
-    'django_user_agents', 
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -178,7 +177,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 # STATIC

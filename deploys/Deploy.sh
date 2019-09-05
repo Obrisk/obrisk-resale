@@ -21,7 +21,9 @@ python manage.py migrate
 python manage.py collectstatic --settings=config.settings.static #Pass the settings parameter only when django-storages is not working
 
 sudo mkdir /tmp/logs
-sudo touch /tmp/logs/gunicorn-access.log /tmp/logs/gunicorn-error.log /tmp/logs/nginx-access.log /tmp/logs/nginx-error.log  
+sudo chmod 664 -R /tmp/logs
+sudo touch /tmp/logs/gunicorn-access.log /tmp/logs/gunicorn-error.log /tmp/logs/nginx-access.log /tmp/logs/nginx-error.log 
+
 
 sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
@@ -36,6 +38,7 @@ curl --unix-socket /run/uvicorn.sock localhost
 
 sudo cp deploys/obrisk /etc/nginx/sites-available 
 sudo ln -s /etc/nginx/sites-available/obrisk /etc/nginx/sites-enabled
+sudo nginx -t && sudo systemctl restart nginx
 sudo ufw allow 'Nginx Full'
 sudo ufw allow 22
 sudo ufw enable -y
@@ -43,7 +46,15 @@ sudo ufw enable -y
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
 sudo apt-get install python-certbot-nginx -y
+
+#If you want to change the IP of the server to a static one for quick provision
+#then you have to logout the ssh mode before performing the next step.
+#only after having the right IP for Obrisk.com the following can be valid
+#When the IP of instance is changed reset the ssh by 
+#ssh-keygen -R <the-ip-address> 
 sudo certbot --nginx  #interactive step
+
+
 
 
 
