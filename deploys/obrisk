@@ -14,18 +14,12 @@ upstream websocket_server {
 
 server {
     listen 80;
-
-    if ($host = obrisk.com) {
-        return 301 https://$host$request_uri;
-    }
-
     return 444; #This is a default server and it blocks all disallowed hosts
 }
 
 
-
 server {
-    server_name www.obrisk.com;  # here can also be the IP address of the server
+    server_name obrisk.com www.obrisk.com; 
 
     keepalive_timeout 5;
     client_max_body_size 4G;

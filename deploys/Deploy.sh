@@ -45,7 +45,8 @@ sudo ufw enable -y
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
 sudo apt-get install python-certbot-nginx -y
-sudo certbot --nginx
+sudo certbot --nginx  #interactive step
+
 
 
 
