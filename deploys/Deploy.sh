@@ -20,10 +20,27 @@ vim .env #Add all the settings parameters.
 python manage.py migrate
 python manage.py collectstatic --settings=config.settings.static #Pass the settings parameter only when django-storages is not working
 
+sudo mkdir /home/obdev-user/logs /tmp/logs
+sudo touch /home/obdev-user/logs/gunicorn-access.log /home/obdev-user/logs/gunicorn-error.log \
+/home/obdev-user/logs/nginx-access.log /home/obdev-user/logs/nginx-error.log  
+
 sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
 sudo cp deploys/uvicorn.socket /etc/systemd/system
 sudo cp deploys/uvicorn.service /etc/systemd/system
+
+sudo systemctl start gunicorn.socket
+sudo systemctl enable gunicorn.socket
+sudo systemctl start uvicorn.socket
+sudo systemctl enable uvicorn.socket
+
+
+
+
+
+
+
+
 
 
 
