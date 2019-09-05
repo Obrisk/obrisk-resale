@@ -15,8 +15,8 @@ workers = 6
 #If trying to catch some errors and warnings then it is info
 #if everything settle down then change to critical
 loglevel = 'critical'
-errorlog = '/tmp/logs/gunicorn-error.log'
-accesslog = '/tmp/logs/gunicorn-acess.log'
+#errorlog = '/tmp/logs/gunicorn-error.log'
+#accesslog = '/tmp/logs/gunicorn-acess.log'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
 bind = 'unix:/run/gunicorn.sock'
