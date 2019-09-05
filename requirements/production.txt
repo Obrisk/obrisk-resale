@@ -6,6 +6,7 @@ boto3>=1.6.2  # pyup: update minor  # https://github.com/boto/boto3
 gevent>=1.2.2  # https://github.com/gevent/gevent
 raven>=6.6.0  # https://github.com/getsentry/raven-python
 gunicorn>=19.9.0  #https://gunicorn.org/
+uvicorn>=0.6.1 #https://github.com/encode/uvicorn
 
 #https://serverfault.com/questions/635100/django-conn-max-age-persists-connections-but-doesnt-reuse-them-with-postgresq
 django-db-geventpool>=3.1.0   #https://github.com/jneight/django-db-geventpool
