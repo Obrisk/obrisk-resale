@@ -13,7 +13,7 @@ upstream websocket_server {
 }
 
 server {
-    listen 80 default_server;
+    listen 80;
 
     if ($host = obrisk.com) {
         return 301 https://$host$request_uri;
