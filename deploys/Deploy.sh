@@ -2,7 +2,7 @@
 sudo apt-get update
 sudo apt-get -y upgrade
 
-sudo apt install python3-pip python3-dev libpq-dev nginx curl redis-server software-properties-common -y
+sudo apt install python3-pip python3-dev libpq-dev nginx curl redis-server -y
 #sudo apt install postgresql if you will want to access DB with psql
 sudo vim /etc/redis/redis.conf #Then change line 147 from 'supervised no' to supervised 'systemd'
 sudo -H pip3 install --upgrade pip
@@ -40,13 +40,12 @@ curl --unix-socket /run/uvicorn.sock localhost
 sudo cp deploys/obrisk /etc/nginx/sites-available 
 sudo ln -s /etc/nginx/sites-available/obrisk /etc/nginx/sites-enabled
 sudo ufw allow 'Nginx Full'
-sudo ufw enable
+sudo ufw enable -y
 
 sudo add-apt-repository ppa:certbot/certbot
 sudo apt-get update
-sudo apt-get install python-certbot-nginx
+sudo apt-get install python-certbot-nginx -y
 sudo certbot --nginx
-sudo crontab -e   #Then add this in the eof: 0 4 * * * /usr/bin/certbot renew --quiet
 
 
 

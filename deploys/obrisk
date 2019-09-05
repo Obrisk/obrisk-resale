@@ -12,34 +12,16 @@ upstream websocket_server {
 
 }
 
-
 server {
     listen 80 default_server;
 
     if ($host = obrisk.com) {
         return 301 https://$host$request_uri;
-    } # managed by Certbot
+    }
 
     return 444; #This is a default server and it blocks all disallowed hosts
 }
 
-
-server {
-    if ($host = www.obrisk.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    if ($host = obrisk.com) {
-        return 301 https://$host$request_uri;
-    } # managed by Certbot
-
-
-    listen 80;
-    server_name www.obrisk.com;
-    return 404; # managed by Certbot
-
-}
 
 
 server {
@@ -48,13 +30,13 @@ server {
     keepalive_timeout 5;
     client_max_body_size 4G;
 
-    access_log /home/obrisk/logs/nginx-access.log;
-    error_log /home/obrisk/logs/nginx-error.log;
+    access_log /tmp/logs/nginx-access.log;
+    error_log /tmp/logs/nginx-error.log;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
         autoindex on;
-        alias /home/obrisk/obdev2018/staticfiles/;
+        alias /home/obdev-user/obdev2018/staticfiles/;
         expires 1M;
         access_log off;
         add_header Cache-Control "public";
@@ -95,14 +77,6 @@ server {
     location /ws/ {
           try_files $uri @proxy_to_ws;
     }
-
-
-    listen 443 ssl; # managed by Certbot
-    ssl_certificate /etc/letsencrypt/live/obrisk.com/fullchain.pem; # managed by Certbot
-    ssl_certificate_key /etc/letsencrypt/live/obrisk.com/privkey.pem; # managed by Certbot
-    include /etc/letsencrypt/options-ssl-nginx.conf; # managed by Certbot
-    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem; # managed by Certbot
-
 
 }
 
