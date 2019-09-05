@@ -11,7 +11,7 @@ WorkingDirectory=/home/obdev-user/obdev2018
 Environment="DJANGO_SETTINGS_MODULE=config.settings.production"
 ExecStart=/home/obdev-user/venv_obrisk/bin/gunicorn \
           -k uvicorn.workers.UvicornWorker \
-          --workers 4 \
+          --workers 6 \
           --bind unix:/run/gunicorn.sock \
           --log-level critical \
           config.asgi:application

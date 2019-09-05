@@ -8,8 +8,8 @@
 timeout = 300
 
 #Depending on the number of cpu, also remember uvicorn is running
-#This number is for 1 vCPU
-workers = 4
+#This number is for 2 vCPU instance. I have to deploy same instances for easy managing.
+workers = 6
 
 #logs
 #If trying to catch some errors and warnings then it is info
