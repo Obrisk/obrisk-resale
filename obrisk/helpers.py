@@ -189,7 +189,7 @@ def ajax_required(f):
 
 
 def redirect_browser(request):
-    """This function is here for reference but is never called in any urls in obrisk.
+    """This function is here for reference but is never called by any urls in obrisk.
     It was pushing the user out of wechat browser for android users."""
     if request.user_agent.browser.family == 'Mobile Safari':
         return redirect('ios_download', permanent=True)
