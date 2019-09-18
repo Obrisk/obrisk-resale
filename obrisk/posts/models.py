@@ -2,6 +2,7 @@ import datetime
 import itertools
 
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
@@ -84,6 +85,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('posts:post', args=[self.slug])
 
     def save(self, *args, **kwargs):
         if not self.slug:

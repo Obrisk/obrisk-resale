@@ -2,12 +2,12 @@ import datetime
 import itertools
 import operator
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 
 from slugify import slugify
-
 from taggit.managers import TaggableManager
 
 class ClassifiedQuerySet(models.query.QuerySet):
@@ -70,11 +70,16 @@ class Classified(models.Model):
     objects = ClassifiedQuerySet.as_manager()
 
     class Meta:
+        ordering = ("-timestamp",)
         verbose_name = _("Classified")
         verbose_name_plural = _("Classifieds")
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('classifieds:classified', args=[self.slug])
+
 
     def save(self, *args, **kwargs):
         
