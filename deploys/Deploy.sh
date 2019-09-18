@@ -49,10 +49,13 @@ sudo apt-get install python-certbot-nginx -y
 
 #If you want to change the IP of the server to a static one for quick provision
 #then you have to logout the ssh mode before performing the next step.
-#only after having the right IP for Obrisk.com the following can be valid
+#only after having the right IP for Obrisk.com (54.180.169.125) the following can be valid
 #When the IP of instance is changed reset the ssh by 
 #ssh-keygen -R <the-ip-address> 
 sudo certbot --nginx  #interactive step
+
+#pg_dump -C -h localhost -U obrisk -P obrisk_db | psql -h ls-475c8c9aa913ef145c97aecda604ec8b6ae7a92f.ccyq1xb49cwb.ap-northeast-2.rds.amazonaws.com -U dbobdevuser2018 obrisk_db
+
 
 
 
