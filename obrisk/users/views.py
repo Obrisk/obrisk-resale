@@ -1,11 +1,10 @@
 import uuid, os
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView,DetailView, ListView, RedirectView, UpdateView, FormView
 from django.utils.crypto import get_random_string
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
-from django.urls import reverse_lazy
 from django.core.cache import cache
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, get_object_or_404, render
@@ -20,6 +19,7 @@ from obrisk.helpers import ajax_required
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.shortcuts import get_current_site
 from slugify import slugify
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 import os
 import base64
@@ -31,10 +31,10 @@ import json
 
 from allauth.account.views import SignupView, LoginView, PasswordResetView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView
 from allauth.account.forms import  UserTokenForm
-from allauth.account.utils import user_pk_to_url_str
+from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
 from obrisk.helpers import bucket, bucket_name
-from .forms import UserForm, EmailSignupForm, PhoneResetPasswordForm, PhoneSignupForm
+from .forms import UserForm, EmailSignupForm, PhoneRequestPasswordForm, PhoneSignupForm, PhoneResetPasswordForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
 
@@ -156,7 +156,7 @@ def phone_password_reset(request):
             return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"} )
     
     else:
-        form = PhoneResetPasswordForm()
+        form = PhoneRequestPasswordForm()
         return render(request, 'account/phone_password_reset.html', {'form': form})
         
 
@@ -296,7 +296,7 @@ def phone_verify(request):
                                 # password_reset.save()
 
                                 # send the password reset email
-                                path = reverse("account_reset_password_from_key",
+                                path = reverse("users:phone_ps_reset_confirm",
                                             kwargs=dict(uidb36=user_pk_to_url_str(user),
                                                         key=token))
                                 url = build_absolute_uri(request, path)
@@ -347,9 +347,45 @@ class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
             )
 
             return _ajax_response(self.request, response, form=token_form)
+
+
+
+class PhonePasswordResetConfirmView(FormView):
+    template_name = "account/phone_ps_reset_confirm.html"
+    form_class = PhoneResetPasswordForm
+    success_url = reverse_lazy("classifieds:list")
+
+    def post(self, request, uidb36=None, key=None, *arg, **kwargs):
+        """
+        View that checks the hash in a password reset link and presents a
+        form for entering a new password.
+        """
+        UserModel = get_user_model()
+        form = self.form_class(request.POST)
+        assert uidb36 is not None and key is not None  # checked by URLconf
+        try:
+            uid = url_str_to_user_pk(uidb36)
+            user = UserModel._default_manager.get(pk=uid)
+        except (TypeError, ValueError, OverflowError, UserModel.DoesNotExist):
+            user = None
+
+        if user is not None and default_token_generator.check_token(user, key):
+            if form.is_valid():
+                new_password= form.cleaned_data['new_password2']
+                user.set_password(new_password)
+                user.save()
+                messages.success(request, 'Password has been updated!')
+                login(request, user, backend='allauth.account.auth_backends.AuthenticationBackend')
+                return self.form_valid(form)
+
+            else:
+                messages.error(request, 'Password reset has not been unsuccessful.')
+                return self.form_invalid(form)
+        else:
+            messages.error(request,'The reset password link is no longer valid.')
+            return self.form_invalid(form)
     
         
-
 
 class AutoLoginView(LoginView):
     pass
