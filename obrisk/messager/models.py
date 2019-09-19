@@ -40,10 +40,13 @@ class Conversation(models.Model):
         settings.AUTH_USER_MODEL, related_name='second_conv_user', null=True, blank=True, on_delete=models.CASCADE)
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='conversaction', null=True, blank=True)
     objects = ConversationQuerySet.as_manager()
-    #messages = Defined in the Message class as a foreign key.
-
+    is_empty = models.BooleanField(default=True)
+    #timestamp to rule whether is_empty conversations should be deleted.
+    timestamp = models.DateTimeField(auto_now_add=True)
+    #The default on key should be unique but put there just in case.
     key = models.CharField(max_length=64, unique=True, default="0000")
-    #The default should be unique but put there just in case.
+    #messages = Defined in the Message class as a foreign key.
+    
 
     def save(self, *args, **kwargs):
         if not self.key:
@@ -137,21 +140,24 @@ class Message(models.Model):
             self.save()
     
     def save(self, *args, **kwargs):
+        """ Override to add conversation in the msg obj whenever a new message
+        is sent btn users and update the empty conversation check.
+        This operation is only done here on model level."""   
         if not self.conversation:
             key = "{}.{}".format(*sorted([self.sender.pk, self.recipient.pk]))
             try:
-                self.conversation = Conversation.objects.get(key=key)
+                conv = Conversation.objects.get(key=key)
+                conv.is_empty = False
+                conv.save()
+                self.conversation = conv
             except:
-                print("ISSUE...")
-                print("ISSUE...")
-                print("ISSUE...")
                 conv = Conversation(first_user=self.sender,
                                 second_user=self.recipient,
-                                key=key
+                                key=key,
+                                is_empty=False
                         )
                 conv.save()
                 self.conversation = conv
-
         super().save(*args, **kwargs)
 
 
