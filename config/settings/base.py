@@ -138,7 +138,6 @@ LOGIN_URL = 'account_login'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 40 #40 Days.
 
 
-
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers

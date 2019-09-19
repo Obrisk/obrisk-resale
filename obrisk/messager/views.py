@@ -117,7 +117,8 @@ def send_message(request):
 
     if sender != recipient:
         #Django-channels doesn't accept group names that are chinese characters
-        #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
+        #This is a trivial workaround to avoid an error to happen
+        # in case the name of user is in chinese characters
         recipient.username = slugify(recipient_username)
         sender.username = slugify(request.user.username)
         msg = Message.send_message(sender, recipient, message)
@@ -164,7 +165,11 @@ def classified_chat(request, to, classified):
         else:  
             #This condition assumes classified parameter should never be null.
             if classified.user == to_user:
-                conv = Conversation(first_user=from_user, second_user=to_user, classified=classified)
+                key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+                conv = Conversation(first_user=from_user,
+                                second_user=to_user,
+                                key=key,
+                                classified=classified)
                 conv.save()
                 return redirect('messager:conversation_detail', to)
             else:
@@ -187,8 +192,11 @@ def make_conversations(request):
         if Conversation.objects.conversation_exists(from_user, to_user):
             continue            
         else:
-            conv = Conversation(first_user=from_user, second_user=to_user)
+        
+            key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+            conv = Conversation(first_user=from_user, second_user=to_user, key=key)
             conv.save()
 
     return redirect('messager:contacts_list')
+
 

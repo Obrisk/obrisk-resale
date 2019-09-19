@@ -1,4 +1,5 @@
 import uuid
+import datetime
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -41,6 +42,13 @@ class Conversation(models.Model):
     objects = ConversationQuerySet.as_manager()
     #messages = Defined in the Message class as a foreign key.
 
+    key = models.CharField(max_length=64, unique=True, default="0000")
+    #The default should be unique but put there just in case.
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            self.key = "{}.{}".format(*sorted([self.first_user.pk, self.second_user.pk]))
+        super(Conversation, self).save(*args, **kwargs)
 
 
 class MessageQuerySet(models.query.QuerySet):
@@ -97,7 +105,7 @@ class Message(models.Model):
     #In the near future enforce all messages to belong to a specific conversation,
     #this will improve the query speed on the conversation list. (null=False)
     conversation = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='messages', null=True,
+        Conversation, related_name='messages', null=True,
         blank=True,  on_delete=models.CASCADE)
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='sent_messages',
@@ -127,6 +135,25 @@ class Message(models.Model):
         if self.unread:
             self.unread = False
             self.save()
+    
+    def save(self, *args, **kwargs):
+        if not self.conversation:
+            key = "{}.{}".format(*sorted([self.sender.pk, self.recipient.pk]))
+            try:
+                self.conversation = Conversation.objects.get(key=key)
+            except:
+                print("ISSUE...")
+                print("ISSUE...")
+                print("ISSUE...")
+                conv = Conversation(first_user=self.sender,
+                                second_user=self.recipient,
+                                key=key
+                        )
+                conv.save()
+                self.conversation = conv
+
+        super().save(*args, **kwargs)
+
 
     @staticmethod
     def send_message(sender, recipient, message):
