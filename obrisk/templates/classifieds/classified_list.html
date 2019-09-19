@@ -14,30 +14,94 @@
 <!-- Page Content -->
 <div class="sidebar-overlay"></div>
 <div class="mt-4 p-0 mw-100 w-95">
+  <style>
+    .searchbox {
+      position: relative;
+      min-width: 30px;
+      width: 0%;
+      height: 30px;
+      float: left;
+      overflow: hidden;
 
-  <div class="col-md-3 mb-5 mt-5">
-    <div class="justify-content-end ml-auto d-flex flex-row">
-      <form class="searchbar" id="classifiedsearch" action="{% url 'search:results' %}" style="display:inline;">
-        <input type="text" name="query" placeholder="Search...">
-        <div class="search"></div>
-      </form>
+      -webkit-transition: width 0.3s;
+      -moz-transition: width 0.3s;
+      -ms-transition: width 0.3s;
+      -o-transition: width 0.3s;
+      transition: width 0.3s;
+    }
 
-    </div>
-  </div>
+    .searchbox-input {
+      top: 0;
+      right: 0;
+      border: 0;
+      outline: 0;
+      background: #fff;
+      width: 100%;
+      height: 30px;
+      margin: 0;
+      padding: 0px 55px 0px 20px;
+      font-size: 12px;
+      color: #3EC4E2;
+    }
 
+    .searchbox-input::-webkit-input-placeholder {
+      color: #3EC4E2;
+    }
 
+    .searchbox-input:-moz-placeholder {
+      color: #3EC4E2;
+    }
+
+    .searchbox-input::-moz-placeholder {
+      color: #3EC4E2;
+    }
+
+    .searchbox-input:-ms-input-placeholder {
+      color: #3EC4E2;
+    }
+
+    .searchbox-icon,
+    .searchbox-submit {
+      width: 30px;
+      height: 30px;
+      display: block;
+      position: absolute;
+      top: 0;
+      font-family: verdana;
+      right: 0;
+      padding: 0;
+      margin: 0;
+      border: 0;
+      outline: 0;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+      color: #FFFFFF;
+      background: #3EC4E2;
+    }
+
+    .searchbox-open {
+      width: 100%;
+    }
+  </style>
 
   <!-- Write Classified Widget -->
 
-  <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
-    <div class="toggle-tags d-lg-none">
-      <div class="d-flex flex-column align-items-center" id="sidebarBtnOpen">
-        <span><i class="fa fa-hashtag mb-1"></i></span> <br>
-      </div>
+  <div class="justify-content-between justify-content-between ml-auto d-flex mt-3 mb-4">
+    <div class="d-flex">
+      <form class="searchbox">
+        <input type="search" placeholder="Search......" name="search" class="searchbox-input" onkeyup="buttonUp();"
+          required>
+        <input type="submit" class="searchbox-submit">
+        <span class="searchbox-icon"><i class="fa fa-search" aria-hidden="true"></i></span>
+      </form>
+
     </div>
 
-    <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
+    <a class="d-none d-md-block btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
       title="{% trans 'Write a new classified' %}">➕{% trans 'Add new item' %}</a>
+    <a class="d-md-none btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
+      title="{% trans 'Write a new classified' %}">➕</a>
 
   </div>
 
@@ -324,6 +388,45 @@
     color: "white"
 
   });
+  $(document).ready(function () {
+    var submitIcon = $('.searchbox-icon');
+    var inputBox = $('.searchbox-input');
+    var searchBox = $('.searchbox');
+    var isOpen = false;
+    submitIcon.click(function () {
+      if (isOpen == false) {
+        searchBox.addClass('searchbox-open');
+        inputBox.focus();
+        isOpen = true;
+      } else {
+        searchBox.removeClass('searchbox-open');
+        inputBox.focusout();
+        isOpen = false;
+      }
+    });
+    submitIcon.mouseup(function () {
+      return false;
+    });
+    searchBox.mouseup(function () {
+      return false;
+    });
+    $(document).mouseup(function () {
+      if (isOpen == true) {
+        $('.searchbox-icon').css('display', 'block');
+        submitIcon.click();
+      }
+    });
+  });
+  function buttonUp() {
+    var inputVal = $('.searchbox-input').val();
+    inputVal = $.trim(inputVal).length;
+    if (inputVal !== 0) {
+
+    } else {
+      $('.searchbox-input').val('');
+      $('.searchbox-icon').css('display', 'block');
+    }
+  }
 
 </script>
 {% endblock extra_js %}

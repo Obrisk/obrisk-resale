@@ -4,12 +4,14 @@ $(function () {
         /* This function enables the client to switch the user connection
         status, allowing to show if an user is connected or not.
         */
-        var elem = $("online-stat-" + username);
+        var elem = $(".online-stat");
         if (elem) {
             if (status === 'online') {
-                elem.attr("class", "btn btn-success btn-circle");
+                $(".status-light").css('color', "#28a745");
+                elem.text('online')
             } else {
-                elem.attr("class", "btn btn-danger btn-circle");
+                $(".status-light").css('color', "#ffc107");
+                elem.text('offline')
             };
         };
     };
@@ -83,9 +85,10 @@ $(function () {
     window.onbeforeunload = function () {
         // Small function to run instruction just before closing the session.
         payload = {
-            "type": "recieve",
-            "sender": currentUser,
-            "set_status": "offline"
+            type: "recieve",
+            sender: currentUser,
+            set_status: "offline",
+            key: "set_status"
         };
         webSocket.send(payload);
     }
@@ -97,10 +100,12 @@ $(function () {
         // report the user status.
 
         payload = {
-            "type": "recieve",
-            "sender": currentUser,
-            "set_status": "online"
+            type: "recieve",
+            sender: currentUser,
+            set_status: "online",
+            key: "set_status"
         };
+
         webSocket.send(payload);
     };
 
@@ -110,6 +115,7 @@ $(function () {
 
     // onmessage management.
     webSocket.listen(function (event) {
+        event = JSON.parse(event);
         switch (event.key) {
             case "message":
                 if (event.sender === activeUser) {
@@ -124,12 +130,10 @@ $(function () {
                 break;
 
             case "set_status":
-                setUserOnlineOffline(event.sender, event.status);
+                setUserOnlineOffline(event.sender, event.set_status);
                 break;
 
             default:
-                // console.log('error: ', event);
-                // console.log(typeof(event))
                 break;
         }
     });

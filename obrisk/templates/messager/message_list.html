@@ -14,85 +14,102 @@
 
 {% block content %}
 <div class="chat">
+
   <div class="chat-title">
     <a class="back-btn" href="{% url 'messager:contacts_list' %}"> <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
-    <figure class="title-avatar">
-      <!--Add image -->
-    </figure>
+    <div class="d-flex w-100 justify-content-between">
+      <div class="title-avatar d-flex">
+        <!--Add image -->
+        {% if message.sender.thumbnail %}
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+          style="width:30px;height:30px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+        {% else %}
+        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" alt="No Profile Picture" />
+        {% endif %}
+        <span class="user-name"> {{ active|title}} </span>
+      </div>
+      <div class="d-flex">
+      </div>
 
-    <span class="name"> {{ active|title}} </span>
-    <span class="status"> Offline </span>
+
+      <div><i class="status-light fa fa-circle" aria-hidden="true"></i>
+        <small class="online-stat"> Offline </small></div>
+
+
+    </div>
+
 
   </div>
   <div class="messages">
     <div class="messages-content">
 
       {% if message_list %}
-          {% if classified %}
-          <div class="card classified-card mr-2 mb-3 justify-content-center d-flex p-2 " style="max-width: 295px">
-            <a href="{% url 'classifieds:classified' classified.slug %}"
-              style="color:black; text-decoration:none; background-color:none" class="d-flex">
-              <div class="card-img-top img-responsive" style="max-width: 70px">
+      {% if classified %}
+      <div class="card classified-card mr-2 mb-3 justify-content-center d-flex p-2 " style="max-width: 295px">
+        <a href="{% url 'classifieds:classified' classified.slug %}"
+          style="color:black; text-decoration:none; background-color:none" class="d-flex">
+          <div class="card-img-top img-responsive" style="max-width: 70px">
 
-                {% if classified.image_thumb %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
-                {% else %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
-                {% endif %}
+            {% if classified.image_thumb %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+            {% else %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+            {% endif %}
 
-              </div>
-              <div class="divider"></div>
-              <div class="ml-4">
-                <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
-                <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                <div class="card-meta d-flex justify-content-between">
-                  <div class="d-flex location">
-                    <small>📍</small>
-                    <span class="card-text small "> {{ classified.city|safe }}</span>
-                  </div>
-                </div>
-
-              </div>
-            </a>
           </div>
+          <div class="divider"></div>
+          <div class="ml-4">
+            <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
+            <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+            <div class="card-meta d-flex justify-content-between">
+              <div class="d-flex location">
+                <small>📍</small>
+                <span class="card-text small "> {{ classified.city|safe }}</span>
+              </div>
+            </div>
+
+          </div>
+        </a>
+      </div>
       {% endif %}
 
-          {% for message in message_list %}
-              {% include 'messager/single_message.html' with message=message %}
-          {% endfor %}
+      {% for message in message_list %}
+      {% include 'messager/single_message.html' with message=message %}
+      {% endfor %}
 
       {% else %}
       <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
       <p>{% trans "I am " %} {{ active }} {% trans ", Let's talk!" %}</p>
-          {% if classified %}
-              <div class="card classified-card mr-2 mb-3 justify-content-center d-flex p-2 " style="max-width: 295px">
-                <a href="{% url 'classifieds:classified' classified.slug %}"
-                  style="color:black; text-decoration:none; background-color:none" class="d-flex">
-                  <div class="card-img-top img-responsive" style="max-width: 70px">
-        
-                    {% if classified.image_thumb %}
-                    <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
-                    {% else %}
-                    <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
-                    {% endif %}
-        
-                  </div>
-                  <div class="divider"></div>
-                  <div class="ml-4">
-                  <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
-                  <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                  <div class="card-meta d-flex justify-content-between">
-                    <div class="d-flex location">
-                      <small>📍</small>
-                      <span class="card-text small "> {{ classified.city|safe }}</span>
-                    </div>
-                  </div>
-        
-                  </div>
-                </a>
+      {% if classified %}
+      <div class="card classified-card mr-2 mb-3 justify-content-center d-flex p-2 " style="max-width: 295px">
+        <a href="{% url 'classifieds:classified' classified.slug %}"
+          style="color:black; text-decoration:none; background-color:none" class="d-flex">
+          <div class="card-img-top img-responsive" style="max-width: 70px">
+
+            {% if classified.image_thumb %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+            {% else %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+            {% endif %}
+
+          </div>
+          <div class="divider"></div>
+          <div class="ml-4">
+            <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
+            <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+            <div class="card-meta d-flex justify-content-between">
+              <div class="d-flex location">
+                <small>📍</small>
+                <span class="card-text small "> {{ classified.city|safe }}</span>
               </div>
-          {% endif %}
+            </div>
+
+          </div>
+        </a>
+      </div>
+      {% endif %}
       {% endif %}
       <div class="send-message"> </div>
     </div>
@@ -103,14 +120,14 @@
       <div class="d-flex message-scroll">
         {% csrf_token %}
         <input type="hidden" name="to" value="{{ active }}">
-        <textarea class="form-control mr-2" id="sendText" name="message" placeholder="{% trans 'Write a message...' %}"
-          maxlength="1000" autofocus autocomplete="off">
-        </textarea>
-        <button class="btn btn-dark send-btn " type="submit"> <i class="fa fa-paper-plane-o"
-            aria-hidden="true"></i></button>
+        <textarea class="form-control mr-2" autocomplete="off" maxlength="1000" id="sendText"
+          placeholder="{% trans 'Write a message...' %}" name="message" autofocus rows="2" cols="2"></textarea>
+
+        <button class="btn send-btn  btn-dark text-white" type="submit"> <small><strong>Send</strong></small> </button>
       </div>
+
+    </form>
   </div>
-  </form>
 </div>
 <!-- card end-->
 </div>
