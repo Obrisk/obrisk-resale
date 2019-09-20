@@ -129,7 +129,8 @@ class Message(models.Model):
             self.save()
 
     @staticmethod
-    def send_message(sender, recipient, message):
+    def send_message(sender, recipient, message,
+                    image=None, img_preview=None, attachment=None):
         """Method to create a new message in a conversation.
         :requires:
 
@@ -141,7 +142,10 @@ class Message(models.Model):
         new_message = Message.objects.create(
             sender=sender,
             recipient=recipient,
-            message=message
+            message=message,
+            image=image, 
+            img_preview=img_preview, 
+            attachment=attachment
         )
         channel_layer = get_channel_layer()
         
@@ -153,7 +157,10 @@ class Message(models.Model):
                 'key': 'message',
                 'message_id': msg,
                 'sender': msg_sender,
-                'recipient':  msg_recip
+                'recipient':  msg_recip,
+                'image': image, 
+                'img_preview': img_preview, 
+                'attachment': attachment
             }
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
         return new_message

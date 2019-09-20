@@ -13,10 +13,15 @@ from django.urls import reverse
 from django.db.models import Q
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 
+import os
+import base64
+import datetime
+import oss2
+
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
-from obrisk.helpers import ajax_required
+from obrisk.helpers import ajax_required, bucket, bucket_name
 
 
 class ContactsListView(LoginRequiredMixin, ListView):
@@ -111,16 +116,43 @@ def send_message(request):
         recipient = get_user_model().objects.get(username=recipient_username)
     except get_user_model().DoesNotExist:
         return HttpResponseNotFound("The user account appears to not exist or it has been freezed!")
+
+    #Django-channels doesn't accept group names that are chinese characters
+    #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
+    recipient.username = slugify(recipient_username)
+    sender.username = slugify(request.user.username)
+
     message = request.POST.get('message')
-    if len(message.strip()) == 0:
+    image = request.POST.get('image')
+    attachment = request.POST.get('attachment')
+    img_preview=None
+    
+    if image:
+        if image.startswith(f'messages/{sender.username}/{recipient.username}') == False:                
+            image = None
+
+        else:
+            d = str(datetime.datetime.now())
+            img_preview = "messages/" + slugify(str(request.user.username)) + slugify(str(recipient_username)) + "/preview/" + "prv-" + d 
+            style1 = 'image/resize,m_fill,h_250,w_250'
+
+            try:
+                process1 = "{0}|sys/saveas,o_{1},b_{2}".format(style1,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(img_preview))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(image, process1)
+            except:
+                image = None
+                img_preview = None
+        
+    if len(message.strip()) == 0 and image == None and attachment == None:
         return HttpResponse()
 
     if sender != recipient:
-        #Django-channels doesn't accept group names that are chinese characters
-        #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
-        recipient.username = slugify(recipient_username)
-        sender.username = slugify(request.user.username)
-        msg = Message.send_message(sender, recipient, message)
+        msg = Message.send_message(sender, recipient, message,
+                            image=image, img_preview=img_preview, attachment=attachment)
+        
         return render(request, 'messager/single_message.html',
                       {'message': msg})
 
