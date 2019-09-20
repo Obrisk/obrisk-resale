@@ -124,6 +124,13 @@
           placeholder="{% trans 'Write a message...' %}" name="message" autofocus rows="2" cols="2"></textarea>
 
         <button class="btn send-btn  btn-dark text-white" type="submit"> <small><strong>Send</strong></small> </button>
+
+        <form id="form">
+          <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+        </form>
+        <a id="chooseFile" href="javascript:void(0);" class="p-2">
+          <i class="fa fa-paperclip" style="font-size: 1.2em"></i>
+        </a>
       </div>
 
     </form>
@@ -164,6 +171,7 @@
 
   var currentUser = "{{ request.user.username }}";
   var activeUser = "{{ active }}";
+  const oss_url = "{% url 'get_oss_auth' %}";
   //This scrolls the div #messages only to the bottom
   var d = $('.messages');
   d.scrollTop(d.prop("scrollHeight"));
@@ -182,7 +190,11 @@
       ta.style.cssText = 'height:' + height + 'px';
     }, 0);
   }
+
 </script>
+
 <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>
 <script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}
