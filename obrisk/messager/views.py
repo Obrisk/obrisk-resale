@@ -28,8 +28,32 @@ class ContactsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        users, msgs = Message.objects.get_conversations(self.request.user)
-        context['zip_list'] = zip(users, msgs)
+        
+        context['convs'] = Conversation.objects.get_conversations(self.request.user).annotate(
+                    time = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('timestamp')[:1]
+                    ), 
+                    last_msg = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('message')[:1]
+                    ),
+                    unread = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('unread')[:1]
+                    ),
+                    recipient = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('recipient')[:1]
+                    )
+                ).order_by('-time')
+
+        #users, msgs = Message.objects.get_conversations(self.request.user)
+        #context['zip_list'] = zip(users, msgs) 
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
         return context
@@ -189,14 +213,22 @@ def make_conversations(request):
         from_user = message.sender
         to_user = message.recipient
 
+
+        if message.conversation:
+            continue
         if Conversation.objects.conversation_exists(from_user, to_user):
+            key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+            message.conversation = Conversation.objects.get(key=key)
+            message.save()
             continue            
         else:
-        
             key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
             conv = Conversation(first_user=from_user, second_user=to_user, key=key)
             conv.save()
 
+            message.conversation = conv
+            message.save()
+        
     return redirect('messager:contacts_list')
 
 

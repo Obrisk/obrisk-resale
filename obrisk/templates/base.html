@@ -80,6 +80,9 @@
   {% block body %}
   <div class="m-b-1">
     {% if request.user.is_authenticated %}
+    {% if new_msgs %}
+        
+    {% endif %}
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
       <div class="container">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"

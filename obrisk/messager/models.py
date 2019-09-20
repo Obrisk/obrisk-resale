@@ -46,6 +46,11 @@ class Conversation(models.Model):
     #The default on key should be unique but put there just in case.
     key = models.CharField(max_length=64, unique=True, default="0000")
     #messages = Defined in the Message class as a foreign key.
+
+    class Meta:
+        verbose_name = _("Conversation")
+        verbose_name_plural = _("Conversations")
+        ordering = ("-timestamp", )
     
 
     def save(self, *args, **kwargs):
