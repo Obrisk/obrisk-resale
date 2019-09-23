@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='conversation',
             name='key',
-            field=models.CharField(max_length=64, unique=True),
+            field=models.CharField(max_length=64, null=True, unique=True),
         ),
     ]
