@@ -44,7 +44,7 @@ class Conversation(models.Model):
     #timestamp to rule whether is_empty conversations should be deleted.
     timestamp = models.DateTimeField(auto_now_add=True)
     #The default on key should be unique but put there just in case.
-    key = models.CharField(max_length=64, unique=True, default="0000")
+    key = models.CharField(max_length=64, unique=True)
     #messages = Defined in the Message class as a foreign key.
 
     class Meta:
