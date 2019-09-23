@@ -136,7 +136,14 @@ class Message(models.Model):
         ordering = ("-timestamp", )
 
     def __str__(self):
-        return self.message
+        if self.message:
+            return self.message
+        elif self.image:
+            return self.image
+        elif self.attachment:
+            return self.attachment
+        else:
+            return "No valid string representation for this message"
 
     def mark_as_read(self):
         """Method to mark a message as read."""
