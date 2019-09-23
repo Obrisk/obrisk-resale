@@ -218,6 +218,10 @@ def make_conversations(request):
             continue
         if Conversation.objects.conversation_exists(from_user, to_user):
             key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+            #I have deliberately not used try catch because at this step I assume
+            #that every conversation must have a key. And also this method can not
+            #be invoked by the normal users. So if fails, the programmer should fix
+            #the undelying problem of why the conversation had no key
             message.conversation = Conversation.objects.get(key=key)
             message.save()
             continue            

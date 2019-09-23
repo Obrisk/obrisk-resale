@@ -24,9 +24,10 @@ def cached_queries(request):
 
     new_msgs = None
 
-    for con in convs:
-        if request.user.id == con.recipient and con.unread:
-            new_msgs = True
-            break
+    if convs.exists():
+        for con in convs:
+            if request.user.id == con.recipient and con.unread:
+                new_msgs = True
+                break
 
     return {'popular_tags': popular_tags, 'new_msgs': new_msgs}
