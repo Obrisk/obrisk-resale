@@ -2,7 +2,7 @@
   var sidebar = document.getElementById('sidebar');
   var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
   var container = document.getElementsByClassName('container')[0];
-  var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
+  //var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
   var sidebarBtnClose = document.getElementById('sidebarBtnClose');
 
   var openSidebar = function () {
@@ -21,7 +21,7 @@
   }
 
   sidebarOverlay.addEventListener('click', closeSidebar);
-  sidebarBtnOpen.addEventListener('click', openSidebar);
+  //sidebarBtnOpen.addEventListener('click', openSidebar);
   sidebarBtnClose.addEventListener('click', closeSidebar);
 })()
 
