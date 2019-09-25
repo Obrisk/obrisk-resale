@@ -8,6 +8,7 @@ from django.shortcuts import redirect
 from django.contrib.sitemaps.views import sitemap
 
 from graphene_django.views import GraphQLView
+from pwa_webpush.views import save_info
 from obrisk.messager import views
 from obrisk.users.views import PasswordResetFromKeyView, AutoLoginView
 from obrisk.helpers import get_oss_auth
@@ -41,6 +42,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
     url(r'^contacts/$',
         TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
+    url(r'^webpush/save_information', save_info, name='save_push_info' ),
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),

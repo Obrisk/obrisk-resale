@@ -412,6 +412,13 @@ PWA_APP_LANG = 'en-US'
 PWA_SERVICE_WORKER_PATH = APPS_DIR.path('templates/serviceworker.js')
 
 
+WEBPUSH_SETTINGS = {
+   "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY'),
+   "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
+   "VAPID_ADMIN_EMAIL": env('VAPID_EMAIL')
+}
+
+
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
 #USER_AGENTS_CACHE = 'default'

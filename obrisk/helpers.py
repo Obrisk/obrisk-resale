@@ -2,7 +2,12 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseBadRequest, HttpResponseRedirect
 from django.views.generic import View
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http.response import JsonResponse, HttpResponse
+from django.views.decorators.http import require_GET, require_POST
+from django.contrib.auth.decorators import login_required, permission_required
+from django.views.decorators.http import require_http_methods
+from django.conf import settings
 
 import json
 import re
@@ -12,10 +17,9 @@ import time
 import oss2
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
+from pwa_webpush.utils import send_notification_to_user
 
-from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required, permission_required
-from django.views.decorators.http import require_http_methods
+User = settings.AUTH_USER_MODEL
 
 
 # STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
@@ -202,6 +206,7 @@ def redirect_browser(request):
         response.status_code = 206
         return response
 
+
 class AuthorRequiredMixin(View):
     """Mixin to validate than the loggedin user is the creator of the object
     to be edited or updated."""
@@ -212,5 +217,25 @@ class AuthorRequiredMixin(View):
 
         return super().dispatch(request, *args, **kwargs)
 
+
+def send_push_notif(recipient_id, title, body, notif_type='Message'):
+    try:
+        user = get_object_or_404(User, pk=recipient_id)
+        
+        url = "https://www.obrisk.com/"
+        if user and notif_type == 'Message':
+            url =  "https://www.obrisk.com/ws/messages/"
+
+        payload = { 'head': title,
+                    'body': body,
+                    'icon': 'https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/favicon.png',
+                    'url': url
+                }
+                
+        send_notification_to_user(user=user, payload=payload, ttl=1000)
+
+        return {"status": "200", "message": "Web push successful"}
+    except TypeError:
+        return {"status": "500", "message": "Web push failed"}
 
 

@@ -16,7 +16,7 @@ from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
-from obrisk.helpers import ajax_required
+from obrisk.helpers import ajax_required, send_push_notif
 
 
 class ContactsListView(LoginRequiredMixin, ListView):
@@ -146,6 +146,14 @@ def send_message(request):
         recipient.username = slugify(recipient_username)
         sender.username = slugify(request.user.username)
         msg = Message.send_message(sender, recipient, message)
+
+        
+        if message:
+            push_msg = message[:15]
+        else:
+            push_msg = "Open Obrisk to view"
+
+        send_push_notif(recipient.id, f'New message from {sender.username}', push_msg)
         return render(request, 'messager/single_message.html',
                       {'message': msg})
 
