@@ -2,39 +2,51 @@
 
 
 {% if request.user == message.sender %}
-<div class="user">
+<div class="user align-items-center mt-1 mb-1">
     <div class="message-container-user">
-        <div class="timestamp d-flex justify-content-end mr-4">{{ message.timestamp|date:'N d G:i' }}</div>
-
+        <div class="timestamp d-flex justify-content-end">{{ message.timestamp|date:'M. d G:i' }}</div>
+        {% if message.message %}
         <div class="message-bubble-user"> {{ message.message }} </div>
+        {% endif %}
+        {% if message.img_preview %}
+        <a data-fancybox="gallery" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}"><img
+                src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}" /></a>
+        {% endif %}
     </div>
 
     <figure class="avatar-user">
         {% if message.sender.thumbnail %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
-                style="width:30px;height:30px;border-radius: 50%;"
-                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-            {% else %}
-                <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" alt="No Profile Picture" />
-            {% endif %}
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+            style="width:30px;height:30px;border-radius: 50%;"
+            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+        {% else %}
+        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" alt="No Profile Picture" />
+        {% endif %}
     </figure>
 
 </div>
 
 {% else %}
-<div class="sender">
+<div class="sender align-items-center mt-1 mb-1">
     <figure class="avatar-sender">
         {% if message.sender.thumbnail %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
-                style="width:30px;height:30px;border-radius: 50%;"
-                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-            {% else %}
-                <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" alt="No Profile Picture" />
-            {% endif %}
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+            style="width:30px;height:30px;border-radius: 50%;"
+            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+        {% else %}
+        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" alt="No Profile Picture" />
+        {% endif %}
     </figure>
     <div class="message-container">
-        <div class="timestamp d-flex justify-content-start ml-4"> {{ message.timestamp|date:'N d G:i' }} </div>
+        <div class="timestamp d-flex justify-content-start"> {{ message.timestamp|date:'N d G:i' }} </div>
+        {% if message.message %}
         <div class="message-bubble"> {{ message.message }} </div>
+        {% endif %}
+        {% if message.img_preview %}
+        <a data-fancybox="gallery" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}"><img
+                src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}" /></a>
+        {% endif %}
+
     </div>
 </div>
 

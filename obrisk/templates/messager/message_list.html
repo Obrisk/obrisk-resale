@@ -10,6 +10,8 @@
 <link href="{% static 'css/messager.css' %}" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+<link rel="stylesheet" href="{% static 'css/fancybox.css' %}" />
+<script src="{% static 'js/fancybox.min.js' %}"></script>
 {% endblock head %}
 
 {% block content %}
@@ -125,14 +127,18 @@
 
         <button class="btn send-btn  btn-dark text-white" type="submit"> <small><strong>Send</strong></small> </button>
 
-        <form id="form">
-          <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
-        </form>
-        <a id="chooseFile" href="javascript:void(0);" class="p-2">
+
+        <a id="chooseFile" href="#" class="p-2">
           <i class="fa fa-paperclip" style="font-size: 1.2em"></i>
         </a>
       </div>
 
+    </form>
+    <form id="upload">
+      {% csrf_token %}
+      <input type="hidden" name="to" value="{{ active }}">
+      <input id="image" type="hidden" name="image">
+      <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
     </form>
   </div>
 </div>
@@ -172,11 +178,18 @@
   var currentUser = "{{ request.user.username }}";
   var activeUser = "{{ active }}";
   const oss_url = "{% url 'get_oss_auth' %}";
+
+  {% if message.sender.thumbnail %}
+  var user_thumb = https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}
+    {% else %}
+  var user_thumb = "{% static 'img/user.png' %}"
+  {% endif %}
+
   //This scrolls the div #messages only to the bottom
   var d = $('.messages');
   d.scrollTop(d.prop("scrollHeight"));
 
-  //scroll when on textarea 
+  //scroll when on textarea
   var div = document.querySelector('.message-scroll');
   var ta = document.querySelector('textarea');
 
@@ -197,4 +210,5 @@
 <script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>
 <script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/moment.min.js' %}"></script>
 {% endblock extra_js %}

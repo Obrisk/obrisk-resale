@@ -4,7 +4,7 @@ importScripts(
 
 //Show debug logs in console
 workbox.setConfig({
-  debug: false
+  debug: true
 });
 
 //Urls to prefetch
@@ -211,7 +211,7 @@ workbox.routing.registerRoute(
 );
 
 // Fallback to offline page if nothing is found in cache
-var networkFirstHandler = workbox.strategies.networkFirst({
+var networkFirstHandler = workbox.strategies.NetworkFirst({
   cacheName: 'default',
   plugins: [
     new workbox.expiration.Plugin({

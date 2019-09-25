@@ -1,5 +1,13 @@
 let audio = new Audio('/static/sound/chime.mp3');
 
+function scrollMessages() {
+    /* Set focus on the input box from the form, and rolls to show the
+        the most recent message.
+    */
+    $("textarea[name='message']").focus();
+    var d = $('.messages');
+    d.scrollTop(d.prop("scrollHeight"));
+}
 $(function () {
 
     function setUserOnlineOffline(username, status) {
@@ -8,7 +16,7 @@ $(function () {
         */
         var elem = $(".online-stat");
         if (elem) {
-            if (status === 'online') {
+            if (status === 'online' && username === activeUser) {
                 $(".status-light").css('color', "#28a745");
                 elem.text('online')
             } else {
@@ -20,14 +28,7 @@ $(function () {
 
 
 
-    function scrollMessages() {
-        /* Set focus on the input box from the form, and rolls to show the
-            the most recent message.
-        */
-        $("textarea[name='message']").focus();
-        var d = $('.messages');
-        d.scrollTop(d.prop("scrollHeight"));
-    }
+
 
     function addNewMessage(message_id) {
         /* This function calls the respective AJAX view, so it will be able to
@@ -46,25 +47,35 @@ $(function () {
         });
     };
 
-    $("#send").submit(function () {
-        //disable send button after clicking 
-        $(".send-btn").attr("disabled", true);
-        $.ajax({
-            url: '/ws/messages/send-message/',
-            data: $("#send").serialize(),
-            cache: false,
-            type: 'POST',
-            success: function (data) {
-                //enable send button after message is sent
-                $('.send-btn').removeAttr("disabled");
-                $(".send-message").before(data);
-                $('#send')[0].reset();
-                $("textarea").val("");
-                $("textarea[name='message']").focus();
 
-                scrollMessages();
-            }
-        });
+    $("#send").submit(function () {
+        //make sure the textarea isn't empty before submitting the form
+        if ($("textarea").val() != "") {
+            $(".send-message").html(`<div class="user align-items-center mt-1 mb-1"><div class="message-container-user"><div class = "timestamp d-flex justify-content-end">` + moment().format('MMM. Do h:mm') + `</div><div class = "message-bubble-user" > ` + $("#sendText").val() + `</div></div><figure class="avatar-user"><img src="` + user_thumb + `" style="border-radius: 50%;" height="30px"/></figure></div>`);
+            $(".send-message").addClass("user align-items-center mt-1 mb-1");
+            $(".send-message").removeClass("send-message")
+            $(".messages-content").append('<div class="send-message"> </div>')
+
+            $.ajax({
+                url: '/ws/messages/send-message/',
+                data: $("#send").serialize(),
+                cache: false,
+                type: 'POST',
+                success: function (data) {
+                    //enable send button after message is sent
+                    //$('.send-btn').removeAttr("disabled");
+                    $('#send')[0].reset();
+                    $("textarea").val("");
+                    $("textarea[name='message']").focus();
+                    scrollMessages();
+                },
+                fail: function () {
+                    console.log('test')
+                }
+            });
+
+        }
+
         return false;
     });
 
@@ -118,23 +129,10 @@ $(function () {
         // console.log("Disconnected from inbox stream");
     };
 
-
-    // function sendPong() {
-    //     webSocket.send({
-    //         'pong': 'pong'
-    //     });
-    // }
-
-    // setInterval(function () {
-    //     webSocket.send({
-    //         'ping': 'ping'
-    //     });
-    // }, 5000);
-    // onmessage management.
     webSocket.listen(function (event) {
         if (event.key === undefined)
             event = JSON.parse(event);
-        audio.play();
+
         switch (event.key) {
             case "message":
 
@@ -146,19 +144,20 @@ $(function () {
                     }, 1);
                 } else {
                     $("#new-message-" + event.sender).show();
-                    audio.play();
+                    console.log(event.sender)
                 }
                 break;
 
             case "set_status":
+                console.log(event.set_status + " " +
+                    event.sender)
                 setUserOnlineOffline(event.sender, event.set_status);
                 break;
-                // case "ping":
-                //     sendPong();
-                //     break;
             default:
                 break;
         }
+        var d = $('.messages');
+        d.scrollTop(d.prop("scrollHeight"));
     });
 
 
@@ -184,7 +183,6 @@ var uploader = {
 var Buffer = OSS.Buffer;
 var STS = OSS.STS;
 var FileMaxSize = 13000000
-var TotalFilesMaxSize = 8
 var images;
 var img_error; //Records the errors happened during upload.
 var client;
@@ -215,58 +213,34 @@ OssUpload.prototype = {
             var file = null;
             $('#uploader .placeholder').hide();
             $("#statusBar").css('display', 'flex');
-            var AllowUploadQuantity = TotalFilesMaxSize - curIndex;
-            console.log('number of files ' + AllowUploadQuantity)
 
-            //check if the upload quantity has reach max 
-            if (AllowUploadQuantity == 0) {
-                bootbox.alert("Only " + TotalFilesMaxSize + " images are allowed");
-                $('.addBtn').hide();
-            } else if (files.length == 0) {
-                bootbox.alert("No image selected , Please select one or more images");
+
+            if (files.length == 0) {
+                alert("No image selected , Please select one or more images");
             } else {
 
-                //Add only the allow # of files to upload qeue
-                if (NumberOfSelectedFiles <= AllowUploadQuantity && NumberOfSelectedFiles > 0) {
 
-                    for (var i = 0; i < NumberOfSelectedFiles; i++) {
-                        file = files[i];
-                        //don't upload files with size greater than 13MB
-                        if (file.size <= FileMaxSize) {
-                            uploader.fileList[curIndex + i] = file;
-                            file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
-                            uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-                            _this.addFile(file); //Add to control view
-                        } else {
-                            bootbox.alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
-
-                        }
-
+                for (var i = 0; i < NumberOfSelectedFiles; i++) {
+                    file = files[i];
+                    //don't upload files with size greater than 13MB
+                    if (file.size <= FileMaxSize) {
+                        uploader.fileList[curIndex + i] = file;
+                        file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
+                        uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                        _this.addFile(file); //Add to control view
+                    } else {
+                        alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
                     }
-                } else {
-                    for (var i = 0; i < NumberOfSelectedFiles && uploader.fileList.length < TotalFilesMaxSize; i++) {
-                        file = files[i];
-                        //don't upload files with size greater than 13MB
-                        if (file.size <= FileMaxSize) {
-                            uploader.fileList[curIndex + i] = file;
-                            file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
-                            uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-                            _this.addFile(file); //Add to control view
-                        } else {
 
-                            bootbox.alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
-                        }
-
-                    }
-                    bootbox.alert("Only " + TotalFilesMaxSize + " images are allowed");
-                    $('.addBtn').hide();
                 }
+                $('.addBtn').hide();
+
 
             }
             uploader.fileStats.totalFilesNum = uploader.fileList.length;
             if (uploader.fileStats.totalFilesNum == 0) {
                 event.preventDefault();
-                bootbox.alert("Please select images to upload!");
+                alert("Please select images to upload!");
                 $(".start-uploader").css('display', 'block');
 
             } else {
@@ -278,7 +252,18 @@ OssUpload.prototype = {
                     var filename = genKey();
                     file = uploader.fileList[i];
                     _this.uploadFile(file, filename);
+
                 }
+                uploader = {
+                    fileList: [],
+                    fileStats: {
+                        totalFilesNum: 0,
+                        totalFilesSize: 0,
+                        uploadFinishedFilesNum: 0,
+                        curFileSize: 0,
+                    },
+                };
+
             }
         });
 
@@ -326,6 +311,8 @@ OssUpload.prototype = {
 
                                 //Try to get the dominat color from the uploaded image, if it fails it means the image
                                 //was corrupted during upload
+
+                                //
                                 $.ajax({
                                     url: obrisk_oss_url + res.name + "?x-oss-process=image/average-hue",
                                     success: function () {
@@ -345,21 +332,22 @@ OssUpload.prototype = {
                                                 .html(progressBar);
                                         }
 
-                                        bootbox.prompt({
-                                            title: "This is a prompt with a set of checkbox inputs!",
-                                            value: ['1', '3'],
-                                            inputType: 'checkbox',
-                                            inputOptions: [{
-                                                    text: 'Image description',
-                                                    value: '',
-                                                },
 
-                                            ],
-                                            callback: function (result) {
-                                                console.log(result);
+                                        $("#image").val(res.name);
+                                        //Send image to chat
+
+                                        $.ajax({
+                                            url: '/ws/messages/send-message/',
+                                            data: $("#upload").serialize(),
+                                            cache: false,
+                                            type: 'POST',
+                                            success: function (data) {
+                                                $('#image').val('')
+                                                $(".send-message").before(data);
+
                                             }
                                         });
-                                        console.log(res)
+
 
                                     },
                                     error: function (e) {
@@ -390,7 +378,7 @@ OssUpload.prototype = {
                                             img_error = res.name + ", Message: " + "Corrupted image" + ", RequestID: " + res.name;
                                             if (!images) {
                                                 images = 'undef,classifieds/error-img.jpg';
-                                                bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                                alert("Oops! an error occured when uploading your image(s). \
                                                 But you can submit this form without images and edit your post later to add images");
                                             }
                                         }
@@ -423,7 +411,7 @@ OssUpload.prototype = {
 
                                         if (!images) {
                                             images = 'undef,classifieds/error-img.jpg';
-                                            bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                            alert("Oops! an error occured when uploading your image(s). \
                                             But you can submit this form without images and edit your post later to add images");
                                         }
                                     }
@@ -437,7 +425,7 @@ OssUpload.prototype = {
 
                                     if (!images) {
                                         images = 'undef,classifieds/error-img.jpg';
-                                        bootbox.alert("Oops! an error occured when uploading your image(s). \
+                                        alert("Oops! an error occured when uploading your image(s). \
                                             But you can submit this form without images and edit your post later to add images");
                                     }
                                 }
@@ -445,7 +433,7 @@ OssUpload.prototype = {
                             });
                         return results;
                     } catch (e) {
-                        bootbox.alert("Oops! an error occured when uploading your image(s), \
+                        alert("Oops! an error occured when uploading your image(s), \
                     Please try again later or contact us via support@obrisk.com. " + e);
                         $(".start-uploader").css('display', 'block');
                         console.log(e);
@@ -453,12 +441,12 @@ OssUpload.prototype = {
                 }
                 return upload()
             } else {
-                bootbox.alert("Oops!, it looks like there is a network problem, \
+                alert("Oops!, it looks like there is a network problem, \
             Please try again later or contact us at support@obrisk.com")
                 $(".start-uploader").css('display', 'block');
             }
         }).catch(e => {
-            bootbox.alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
+            alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
             console.log(e)
         })
     },
@@ -557,7 +545,7 @@ function OssUpload() {
  */
 
 function genKey() {
-    return "chat/" + activeUser + '/' + currentUser +
+    return "messages/" + currentUser + '/' + activeUser +
         '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
             var r = Math.random() * 16 | 0,
                 v = c == 'x' ? r : (r & 0x3 | 0x8);

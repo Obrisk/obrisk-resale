@@ -128,7 +128,10 @@ def send_message(request):
     img_preview=None
     
     if image:
-        if image.startswith(f'messages/{sender.username}/{recipient.username}') == False:                
+        if image.startswith(f'messages/{sender.username}/{recipient.username}') == False:
+            print(f'messages/{sender.username}/{recipient.username}')
+            print("error")                
+            print(image)                
             image = None
 
         else:
@@ -143,11 +146,18 @@ def send_message(request):
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(image, process1)
             except:
+                print("exception")                
+                print(image)                
+
                 image = None
                 img_preview = None
         
-    if len(message.strip()) == 0 and image == None and attachment == None:
-        return HttpResponse()
+        if image == None and attachment == None:
+            return HttpResponse()
+    
+    if message:
+        if len(message.strip()) == 0:
+            return HttpResponse()
 
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
