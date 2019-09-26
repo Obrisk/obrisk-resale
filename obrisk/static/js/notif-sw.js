@@ -1,4 +1,4 @@
-const registerSw = async () => {
+const swSubReg = async () => {
     if ('serviceWorker' in navigator) {
         const reg = await navigator.serviceWorker.register('/serviceworker.js');
         initialiseState(reg)
@@ -25,9 +25,7 @@ const initialiseState = (reg) => {
 }
 
 const showNotAllowed = (message) => {
-    const button = document.querySelector('form>button');
-    button.innerHTML = `${message}`;
-    button.setAttribute('disabled', 'true');
+    console.log("show not allowed");
 };
 
 
@@ -88,4 +86,4 @@ const handleResponse = (res) => {
     console.log(res.status);
 };
 
-registerSw();
+swSubReg();

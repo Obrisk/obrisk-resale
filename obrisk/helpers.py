@@ -7,7 +7,7 @@ from django.http.response import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET, require_POST
 from django.contrib.auth.decorators import login_required, permission_required
 from django.views.decorators.http import require_http_methods
-from django.conf import settings
+from django.contrib.auth import get_user_model
 
 import json
 import re
@@ -18,8 +18,6 @@ import oss2
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from pwa_webpush.utils import send_notification_to_user
-
-User = settings.AUTH_USER_MODEL
 
 
 # STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
@@ -220,7 +218,7 @@ class AuthorRequiredMixin(View):
 
 def send_push_notif(recipient_id, title, body, notif_type='Message'):
     try:
-        user = get_object_or_404(User, pk=recipient_id)
+        user = get_object_or_404(get_user_model(), pk=recipient_id)
         
         url = "https://www.obrisk.com/"
         if user and notif_type == 'Message':

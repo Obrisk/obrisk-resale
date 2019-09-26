@@ -12,6 +12,7 @@ from django.views.generic import ListView
 from django.urls import reverse
 from django.db.models import Q
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
+import time
 
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
@@ -165,8 +166,13 @@ def send_message(request):
 def receive_message(request):
     """Simple AJAX functional view to return a rendered single message on the
     receiver side providing realtime connections."""
-    message_id = request.GET.get('message_id')
-    message = Message.objects.get(pk=message_id)
+    try:
+        message_id = request.GET.get('message_id')
+        message = Message.objects.get(pk=message_id)
+    except:
+        time.sleep(5)
+        message_id = request.GET.get('message_id')
+        message = Message.objects.get(pk=message_id)
     return render(request,
                   'messager/single_message.html', {'message': message})
 
