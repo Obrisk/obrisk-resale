@@ -12,11 +12,12 @@ from django.views.generic import ListView
 from django.urls import reverse
 from django.db.models import Q
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
+import time
 
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
-from obrisk.helpers import ajax_required
+from obrisk.helpers import ajax_required, send_push_notif
 
 
 class ContactsListView(LoginRequiredMixin, ListView):
@@ -28,8 +29,32 @@ class ContactsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        users, msgs = Message.objects.get_conversations(self.request.user)
-        context['zip_list'] = zip(users, msgs)
+        
+        context['convs'] = Conversation.objects.get_conversations(self.request.user).annotate(
+                    time = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('timestamp')[:1]
+                    ), 
+                    last_msg = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('message')[:1]
+                    ),
+                    unread = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('unread')[:1]
+                    ),
+                    recipient = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('recipient')[:1]
+                    )
+                ).order_by('-time')
+
+        #users, msgs = Message.objects.get_conversations(self.request.user)
+        #context['zip_list'] = zip(users, msgs) 
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
         return context
@@ -117,10 +142,19 @@ def send_message(request):
 
     if sender != recipient:
         #Django-channels doesn't accept group names that are chinese characters
-        #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
+        #This is a trivial workaround to avoid an error to happen
+        # in case the name of user is in chinese characters
         recipient.username = slugify(recipient_username)
         sender.username = slugify(request.user.username)
         msg = Message.send_message(sender, recipient, message)
+
+        
+        if message:
+            push_msg = message[:15]
+        else:
+            push_msg = "Open Obrisk to view"
+
+        send_push_notif(recipient.id, f'New message from {sender.username}', push_msg)
         return render(request, 'messager/single_message.html',
                       {'message': msg})
 
@@ -132,8 +166,13 @@ def send_message(request):
 def receive_message(request):
     """Simple AJAX functional view to return a rendered single message on the
     receiver side providing realtime connections."""
-    message_id = request.GET.get('message_id')
-    message = Message.objects.get(pk=message_id)
+    try:
+        message_id = request.GET.get('message_id')
+        message = Message.objects.get(pk=message_id)
+    except:
+        time.sleep(5)
+        message_id = request.GET.get('message_id')
+        message = Message.objects.get(pk=message_id)
     return render(request,
                   'messager/single_message.html', {'message': message})
 
@@ -164,7 +203,11 @@ def classified_chat(request, to, classified):
         else:  
             #This condition assumes classified parameter should never be null.
             if classified.user == to_user:
-                conv = Conversation(first_user=from_user, second_user=to_user, classified=classified)
+                key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+                conv = Conversation(first_user=from_user,
+                                second_user=to_user,
+                                key=key,
+                                classified=classified)
                 conv.save()
                 return redirect('messager:conversation_detail', to)
             else:
@@ -184,11 +227,26 @@ def make_conversations(request):
         from_user = message.sender
         to_user = message.recipient
 
+
+        if message.conversation:
+            continue
         if Conversation.objects.conversation_exists(from_user, to_user):
+            key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+            #I have deliberately not used try catch because at this step I assume
+            #that every conversation must have a key. And also this method can not
+            #be invoked by the normal users. So if fails, the programmer should fix
+            #the undelying problem of why the conversation had no key
+            message.conversation = Conversation.objects.get(key=key)
+            message.save()
             continue            
         else:
-            conv = Conversation(first_user=from_user, second_user=to_user)
+            key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+            conv = Conversation(first_user=from_user, second_user=to_user, key=key)
             conv.save()
 
+            message.conversation = conv
+            message.save()
+        
     return redirect('messager:contacts_list')
+
 
