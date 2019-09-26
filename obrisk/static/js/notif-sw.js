@@ -1,6 +1,6 @@
 const registerSw = async () => {
     if ('serviceWorker' in navigator) {
-        const reg = await navigator.serviceWorker.register('serviceworker.js');
+        const reg = await navigator.serviceWorker.register('/serviceworker.js');
         initialiseState(reg)
 
     } else {
