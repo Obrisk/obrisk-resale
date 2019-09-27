@@ -21,7 +21,7 @@
   }
 
   sidebarOverlay.addEventListener('click', closeSidebar);
-  //sidebarBtnOpen.addEventListener('click', openSidebar);
+  sidebarBtnOpen.addEventListener('click', openSidebar);
   sidebarBtnClose.addEventListener('click', closeSidebar);
 })()
 
