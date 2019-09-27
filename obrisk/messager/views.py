@@ -151,12 +151,13 @@ def send_message(request):
     image = request.POST.get('image')
     attachment = request.POST.get('attachment')
     img_preview=None
+
+    if not message and not image and not attachment:
+        return HttpResponse()
     
     if image:
         if image.startswith(f'messages/{sender.username}/{recipient.username}') == False:
-            print(f'messages/{sender.username}/{recipient.username}')
-            print("error")                
-            print(image)                
+            print(f'messages/{sender.username}/{recipient.username}')             
             image = None
 
         else:
@@ -171,25 +172,18 @@ def send_message(request):
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(image, process1)
             except:
-                print("exception")                
-                print(image)                
-
                 image = None
                 img_preview = None
-        
-        if image == None and attachment == None:
-            return HttpResponse()
     
     if message:
         if len(message.strip()) == 0:
             return HttpResponse()
-
+  
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
         
-        return render(request, 'messager/single_message.html',
-                      {'message': msg})
+        return render(request, 'messager/single_message.html', {'message': msg})
 
     return HttpResponse()
 
