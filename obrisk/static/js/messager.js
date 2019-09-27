@@ -150,7 +150,7 @@ $(function () {
                     console.log(event.sender)
                 }
                 break;
-
+            
             case "set_status":
                 console.log(event.set_status + " " +
                     event.sender)
