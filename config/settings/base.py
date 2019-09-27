@@ -68,6 +68,7 @@ DJANGO_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
@@ -94,7 +95,6 @@ THIRD_PARTY_APPS = [
     'taggit',
     'star_ratings',
     'pwa_webpush',
-    'django_user_agents', 
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -138,7 +138,6 @@ LOGIN_URL = 'account_login'
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 40 #40 Days.
 
 
-
 # PASSWORDS
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#password-hashers
@@ -178,7 +177,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 # STATIC
@@ -414,6 +412,13 @@ PWA_APP_LANG = 'en-US'
 PWA_SERVICE_WORKER_PATH = APPS_DIR.path('templates/serviceworker.js')
 
 
+WEBPUSH_SETTINGS = {
+   "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY'),
+   "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
+   "VAPID_ADMIN_EMAIL": env('VAPID_EMAIL')
+}
+
+
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
-USER_AGENTS_CACHE = 'default'
+#USER_AGENTS_CACHE = 'default'

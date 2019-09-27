@@ -17,6 +17,12 @@
   <meta name="apple-mobile-web-app-title" content="Obrisk">
   <meta name="locale" content="en">
   <meta name="theme-color" content="#3EC4E2">
+  <meta name="vapid-key" content="{{ vapid_key }}">
+  {% if request.user.is_authenticated %}
+      {% webpush_header %}
+      <meta name="user_id" content="{{ request.user.id }}">
+
+  {% endif %}
 
 
   <!-- Icon can be replace to show icon on share -->
@@ -80,6 +86,9 @@
   {% block body %}
   <div class="m-b-1">
     {% if request.user.is_authenticated %}
+    {% if new_msgs %}
+        
+    {% endif %}
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
       <div class="container">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
@@ -204,15 +213,7 @@
     {% endif %}
   </div>
   <div class="container">
-    {% if messages %}
-    {% for message in messages %}
-    <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      {{ message }}
-    </div>
-    {% endfor %}
-    {% endif %}
-
+  
     {% block content %}
     {% endblock content %}
 
@@ -239,6 +240,7 @@
       // Raven.config('{# sentry_dsn #}').install();
       // window.onerror = Raven.process; 
   </script>
+  <script src="{% static 'js/notif-sw.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
   {% endif %}
 

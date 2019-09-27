@@ -2,13 +2,13 @@ import datetime
 import itertools
 
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 
 from slugify import slugify
 
-from django_comments.signals import comment_was_posted
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 from taggit.managers import TaggableManager
@@ -86,6 +86,9 @@ class Post(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('posts:post', args=[self.slug])
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = first_slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
@@ -128,4 +131,3 @@ def notify_comment(**kwargs):
         )
 
 
-comment_was_posted.connect(receiver=notify_comment)

@@ -62,9 +62,10 @@ media/
 .env.prod
 
 venv_obrisk/
-staticfiles
+staticfiles/
 .idea
 
 CODEOWNERS
 
 frontend/node_modules/
+

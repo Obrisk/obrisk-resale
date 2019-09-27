@@ -1,4 +1,5 @@
 import uuid
+import datetime
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
@@ -39,8 +40,23 @@ class Conversation(models.Model):
         settings.AUTH_USER_MODEL, related_name='second_conv_user', null=True, blank=True, on_delete=models.CASCADE)
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='conversaction', null=True, blank=True)
     objects = ConversationQuerySet.as_manager()
+    is_empty = models.BooleanField(default=True)
+    #timestamp to rule whether is_empty conversations should be deleted.
+    timestamp = models.DateTimeField(auto_now_add=True)
+    #The default on key should be unique but put there just in case.
+    key = models.CharField(max_length=64, unique=True, null=True)
     #messages = Defined in the Message class as a foreign key.
 
+    class Meta:
+        verbose_name = _("Conversation")
+        verbose_name_plural = _("Conversations")
+        ordering = ("-timestamp", )
+    
+
+    def save(self, *args, **kwargs):
+        if not self.key:
+            self.key = "{}.{}".format(*sorted([self.first_user.pk, self.second_user.pk]))
+        super(Conversation, self).save(*args, **kwargs)
 
 
 class MessageQuerySet(models.query.QuerySet):
@@ -97,7 +113,7 @@ class Message(models.Model):
     #In the near future enforce all messages to belong to a specific conversation,
     #this will improve the query speed on the conversation list. (null=False)
     conversation = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='messages', null=True,
+        Conversation, related_name='messages', null=True,
         blank=True,  on_delete=models.CASCADE)
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='sent_messages',
@@ -132,6 +148,28 @@ class Message(models.Model):
         if self.unread:
             self.unread = False
             self.save()
+    
+    def save(self, *args, **kwargs):
+        """ Override to add conversation in the msg obj whenever a new message
+        is sent btn users and update the empty conversation check.
+        This operation is only done here on model level."""   
+        if not self.conversation:
+            key = "{}.{}".format(*sorted([self.sender.pk, self.recipient.pk]))
+            try:
+                conv = Conversation.objects.get(key=key)
+                conv.is_empty = False
+                conv.save()
+                self.conversation = conv
+            except:
+                conv = Conversation(first_user=self.sender,
+                                second_user=self.recipient,
+                                key=key,
+                                is_empty=False
+                        )
+                conv.save()
+                self.conversation = conv
+        super().save(*args, **kwargs)
+
 
     @staticmethod
     def send_message(sender, recipient, message,
