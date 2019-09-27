@@ -32,8 +32,7 @@ $(function () {
 
     function addNewMessage(message_id) {
         /* This function calls the respective AJAX view, so it will be able to
-        load the received message in a proper way.
-         */
+        load the received message in a proper way.*/
         $.ajax({
             url: '/ws/messages/receive-message/',
             data: {
@@ -42,9 +41,13 @@ $(function () {
             cache: false,
             success: function (data) {
                 $(".send-message").before(data);
-                scrollMessages();
+                setTimeout(function () {
+                    scrollMessages()
+                }, 1000);
+
             }
         });
+        scrollMessages();
     };
 
 
@@ -344,7 +347,9 @@ OssUpload.prototype = {
                                             success: function (data) {
                                                 $('#image').val('')
                                                 $(".send-message").before(data);
-
+                                                setTimeout(function () {
+                                                    scrollMessages();
+                                                }, 1000);
                                             }
                                         });
 
@@ -501,7 +506,9 @@ var progress = function (p) { //p percentage 0~1
     return function (done) {
         $totalProgressbar.css('width', progressBar)
         done();
+
     }
+
 };
 
 /**
