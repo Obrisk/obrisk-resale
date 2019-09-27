@@ -138,12 +138,10 @@ class Message(models.Model):
     def __str__(self):
         if self.message:
             return self.message
-        elif self.image:
+        if self.image: 
             return self.image
-        elif self.attachment:
-            return self.attachment
         else:
-            return "No valid string representation for this message"
+            return str(self.uuid_id)
 
     def mark_as_read(self):
         """Method to mark a message as read."""
@@ -174,7 +172,8 @@ class Message(models.Model):
 
 
     @staticmethod
-    def send_message(sender, recipient, message):
+    def send_message(sender, recipient, message,
+                    image=None, img_preview=None, attachment=None):
         """Method to create a new message in a conversation.
         :requires:
 
@@ -186,7 +185,10 @@ class Message(models.Model):
         new_message = Message.objects.create(
             sender=sender,
             recipient=recipient,
-            message=message
+            message=message,
+            image=image, 
+            img_preview=img_preview, 
+            attachment=attachment
         )
         channel_layer = get_channel_layer()
         
@@ -198,7 +200,10 @@ class Message(models.Model):
                 'key': 'message',
                 'message_id': msg,
                 'sender': msg_sender,
-                'recipient':  msg_recip
+                'recipient':  msg_recip,
+                'image': image, 
+                'img_preview': img_preview, 
+                'attachment': attachment
             }
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
         return new_message

@@ -7,7 +7,7 @@
 {% block head %}
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="{% static 'css/classifieds-list.css' %}?v=1908191" rel="stylesheet">
+<link href="{% static 'css/classifieds-list.css' %}?v=1908301" rel="stylesheet">
 <link href="{% static 'css/stories.css' %}?v=1" rel="stylesheet">
 <link href="{% static 'css/qa.css' %}" rel="stylesheet">
 {% endblock head %}
@@ -18,12 +18,13 @@
 <div class="container search-results">
   <!-- This search bar should be displayed with pre-filled in values that user searched for. -->
   <!-- currently it is not doing so -->
-  <div class="col-md-12 mt-4 mb-5">
+  <div class="col-md-3 mb-5 mt-5">
     <div class="justify-content-end ml-auto d-flex flex-row">
       <form class="searchbar" id="classifiedsearch" action="{% url 'search:results' %}" style="display:inline;">
-        <input class="search_input" type="text" name="query" placeholder="Search...">
-        <a href="#" class="search_icon"><i class="fa fa-search"></i></a>
+        <input type="text" name="query" placeholder="Search...">
+        <div class="search"></div>
       </form>
+
     </div>
   </div>
 
@@ -45,7 +46,7 @@
             class="badge btn-dark pull-right">{{ tags_count }}</span></a>
       </div>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9 p-0">
       <div class="tab-content" id="nav-tabContent">
         <div class="tab-pane fade my-4 show active" id="list-classifieds" role="tabpanel"
           aria-labelledby="list-classifieds-list">

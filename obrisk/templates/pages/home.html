@@ -24,6 +24,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
   <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
+
   {% endblock icon %}
 
 
@@ -40,6 +41,20 @@
   <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
   <link href="{% static 'css/creative.css' %}?v=2008192" rel="stylesheet">
 
+  <script>
+    // Initialize the service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/serviceworker.js', {
+        scope: '/'
+      }).then(function (registration) {
+        // Registration was successful
+        console.log(': ServiceWorker registration successful with scope: ', registration.scope);
+      }, function (err) {
+        // registration failed :(
+        console.log(': ServiceWorker registration failed: ', err);
+      });
+    }
+  </script>
   <!-- pwa settings -->
   {% progressive_web_app_meta %}
 

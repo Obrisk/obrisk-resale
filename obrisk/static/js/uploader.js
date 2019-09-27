@@ -449,6 +449,8 @@ $(function () {
             event.preventDefault();
             bootbox.alert("Please upload at least one image for your advertisement!");
         } else {
+            $(".loading-modal").removeClass('d-none');
+            $('#create-btn').attr("disabled", true);
             $("input[name='status']").val("A");
             $("#id_images").val(images);
             $("#id_img_error").val(img_error);

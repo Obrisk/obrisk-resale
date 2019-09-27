@@ -31,11 +31,18 @@
         </div>
         <div class="share-card">
           <small class="share"
-            onclick="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')">🔗</small>
+            onclick="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')"
+            ontouchstart="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')">🔗</small>
         </div>
       </div>
 
     </div>
+    {% if classified.priority > 0 %}
+    <div class="priority text-center pb-2">
+      Featured
+    </div>
+    {% endif %}
+
   </a>
   <script type="application/ld+json">
   {

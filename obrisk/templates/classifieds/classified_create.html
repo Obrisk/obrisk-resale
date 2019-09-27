@@ -15,7 +15,7 @@
     {% csrf_token %}
     {{ form|crispy }}
 
-    <p class="city"> <strong> City*:  </strong>  {{request.user.city}} </p>
+    <p class="city"> <strong> City*: </strong> {{request.user.city}} </p>
 
 
     <div id="wrapper" class="mb-4">
@@ -62,7 +62,7 @@
 
 
     <div class="form-group d-flex justify-content-center"> <br>
-      <button type="button" class="btn btn-dark create">{% trans 'Submit' %}</button>
+      <button id="create-btn" type="button" class="btn btn-dark create">{% trans 'Submit' %}</button>
       <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
       <a href="{% url 'classifieds:list' %}" class="ml-4 btn btn-danger">{% trans 'Cancel' %}</a>
     </div>
@@ -83,6 +83,7 @@
     </div>
   </div>
 </div>
+
 
 {% endblock content %}
 
