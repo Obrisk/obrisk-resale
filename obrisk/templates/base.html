@@ -19,8 +19,8 @@
   <meta name="theme-color" content="#3EC4E2">
   <meta name="vapid-key" content="{{ vapid_key }}">
   {% if request.user.is_authenticated %}
-      {% webpush_header %}
-      <meta name="user_id" content="{{ request.user.id }}">
+  {% webpush_header %}
+  <meta name="user_id" content="{{ request.user.id }}">
 
   {% endif %}
 
@@ -87,16 +87,15 @@
   <div class="m-b-1">
     {% if request.user.is_authenticated %}
     {% if new_msgs %}
-        
+
     {% endif %}
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
       <div class="container">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-        
           data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
           aria-label="Toggle navigation">
           {% if new_msgs %}
-            <i class=" fa fa-envelope d-md-none" style="color: #dc3545;position: absolute;font-size: 15px;"></i>
+          <i class=" fa fa-envelope d-md-none" style="color: #dc3545;position: absolute;font-size: 15px;"></i>
           {% endif %}
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -121,10 +120,11 @@
                 class="nav-link {% if base_active == 'chat' %} is-active {% endif %} "
                 href="{% url 'messager:contacts_list' %}">
                 {% if new_msgs %}
-                  <i class=" fa fa-envelope d-sm-none d-md-block" style="color: #dc3545;position: absolute;font-size: 15px;"></i>
+                <i class=" fa fa-envelope d-none d-md-block"
+                  style="color: #dc3545;position: absolute;font-size: 15px;"></i>
                 {% endif %}
                 {% trans 'Chat' %}</a>
-              </li>
+            </li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             {# if not hide_search #}
@@ -222,7 +222,7 @@
     {% endif %}
   </div>
   <div class="container">
-  
+
     {% block content %}
     {% endblock content %}
 
@@ -285,7 +285,7 @@
     toast.setText('<p>Loading...</p>').stylize({
       background: '#3EC4E2',
       color: '#fff',
-      width:100,
+      width: 100,
       'box-shadow': '0 0 25px rgba(0, 0, 0, .7)'
     }).setDuration(10000);
     $(window).on("beforeunload", () => {
