@@ -62,6 +62,11 @@ class ContactsListView(LoginRequiredMixin, ListView):
         #context['zip_list'] = zip(users, msgs) 
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
+
+        if context['convs'][0].first_user == self.request.user:
+            context['active'] = context['convs'][0].second_user.username
+        else:
+            context['active'] = context['convs'][0].first_user.username
         return context
 
 class MessagesListView(LoginRequiredMixin, ListView):

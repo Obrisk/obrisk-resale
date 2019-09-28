@@ -138,10 +138,12 @@ class Message(models.Model):
     def __str__(self):
         if self.message:
             return self.message
-        if self.image: 
+        elif self.image: 
             return self.image
+        elif self.attachment:
+            return self.attachment
         else:
-            return str(self.uuid_id)
+            return "This message has no string representation"
 
     def mark_as_read(self):
         """Method to mark a message as read."""

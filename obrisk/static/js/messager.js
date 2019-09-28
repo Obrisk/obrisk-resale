@@ -138,16 +138,17 @@ $(function () {
 
         switch (event.key) {
             case "message":
-
-                if (event.sender === activeUser) {
-                    addNewMessage(event.message_id);
-                    // I hope there is a more elegant way to work this out.
-                    setTimeout(function () {
-                        $("#unread-count").hide()
-                    }, 1);
-                } else {
-                    $("#new-message-" + event.sender).show();
-                    console.log(event.sender)
+                if (activeUser != "" && activeUser != undefined ) {   
+                    if (event.sender === activeUser) {
+                        addNewMessage(event.message_id);
+                        // I hope there is a more elegant way to work this out.
+                        setTimeout(function () {
+                            $("#unread-count").hide()
+                        }, 1);
+                    } else {
+                        $("#new-message-" + event.sender).show();
+                        console.log(event.sender)
+                    }
                 }
                 break;
             
