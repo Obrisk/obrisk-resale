@@ -1,4 +1,4 @@
-localStorage.debug = 'ali-oss';
+//localStorage.debug = 'ali-oss';
 /**
  * fileStats: File statistics
  * filename: The address of the uploaded file
