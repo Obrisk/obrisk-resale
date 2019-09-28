@@ -10,18 +10,17 @@ class ClassifiedForm(forms.ModelForm):
     img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) #Store images error for later debugging.
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "contact_info", "tags" , "located_area"]
+        fields = ["title", "details", "status", "edited", "price", "contact_info", "located_area"]
 
         widgets = {
             'user': forms.HiddenInput(),
-            'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
+            #'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
         }
         help_texts = {
             "located_area": "It can be a street name, address or other description.\
             Please don't enter your city it will be added automatically based on your profile",
             "contact_info": "This field is optional. You can include your phone number, or wechat-ID or other contacts info.",
-            "tags": "Write the categories of your item, can be one or multiple separated by a comma.\
-            e.g phone,electronics. Some categories will appear as you start to type."
+            "details": "Please provide enough information about your item"
         }
 
 class ClassifiedEditForm(forms.ModelForm):

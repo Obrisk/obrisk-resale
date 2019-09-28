@@ -113,6 +113,7 @@
 
 
       <!-- Cloud Tag Widget -->
+      {% if classified.tags.all %}
       <div class="card my-4">
         <h5 class="card-header">{% trans 'Tags' %}</h5>
         <div class="card-body">
@@ -121,6 +122,7 @@
           {% endfor %}
         </div>
       </div>
+      {% endif %}
 
       <!-- Navigation buttons -->
       {% if request.user == classified.user%}
