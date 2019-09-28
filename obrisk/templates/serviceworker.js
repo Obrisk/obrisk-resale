@@ -357,7 +357,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "95cf0de906425032b20a53036a4be48b"
+    "revision": "cdecacb4a541188e92ecbb0990174981"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -413,7 +413,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/uploader.js",
-    "revision": "77b7d8dc7a72c5569742698e836f4308"
+    "revision": "d0e32381f9e3a23f11554ca0ecb358b3"
   },
   {
     "url": "/static/js/user-form.js",
