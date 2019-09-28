@@ -384,8 +384,7 @@ OssUpload.prototype = {
                                             img_error = res.name + ", Message: " + "Corrupted image" + ", RequestID: " + res.name;
                                             if (!images) {
                                                 images = 'undef,classifieds/error-img.jpg';
-                                                alert("Oops! an error occured when uploading your image(s). \
-                                                But you can submit this form without images and edit your post later to add images");
+                                                alert("Oops! an error occured when uploading your image(s). Please try again later");
                                             }
                                         }
                                     }
@@ -430,8 +429,7 @@ OssUpload.prototype = {
 
                                     if (!images) {
                                         images = 'undef,classifieds/error-img.jpg';
-                                        alert("Oops! an error occured when uploading your image(s). \
-                                            But you can submit this form without images and edit your post later to add images");
+                                        alert("Oops! an error occured when uploading your image(s). Please try again later");
                                     }
                                 }
 
