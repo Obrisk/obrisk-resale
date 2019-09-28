@@ -1,4 +1,5 @@
 let audio = new Audio('/static/sound/chime.mp3');
+var message;
 
 function scrollMessages() {
     /* Set focus on the input box from the form, and rolls to show the
@@ -8,6 +9,7 @@ function scrollMessages() {
     var d = $('.messages');
     d.scrollTop(d.prop("scrollHeight"));
 }
+
 $(function () {
 
     function setUserOnlineOffline(username, status) {
@@ -54,35 +56,38 @@ $(function () {
     $("#send").submit(function () {
         //make sure the textarea isn't empty before submitting the form
         if ($("textarea").val() != "") {
-            $(".send-message").html(`<div class="user align-items-center mt-1 mb-1"><div class="message-container-user"><div class = "timestamp d-flex justify-content-end">` + moment().format('MMM. Do h:mm') + `</div><div class = "message-bubble-user" > ` + $("#sendText").val() + `</div></div><figure class="avatar-user"><img src="` + user_thumb + `" style="border-radius: 50%;" height="30px"/></figure></div>`);
+            $(".send-message").html(`<div class="user align-items-center mt-1 mb-1"><div class="message-container-user"><div class = "timestamp d-flex justify-content-end">` + moment().format('MMM. D h:mm') + `</div><div class = "message-bubble-user" > ` + $("#sendText").val() + `</div><img class="sending-gif" style="-webkit-user-select: none;margin: auto;cursor: zoom-in;position:;" src=` + loading_gif + ` width="20" height="20"><img class="resend d-none" id="resend" style="-webkit-user-select: none;margin: auto;cursor: zoom-in;position:;" src=` + resend + ` width="20" height="20"></div><figure class="avatar-user"><img src="` + user_thumb + `" style="border-radius: 50%;" height="30px"/></figure></div>`);
             $(".send-message").addClass("user align-items-center mt-1 mb-1");
-            $(".send-message").removeClass("send-message")
-            $(".messages-content").append('<div class="send-message"> </div>')
-
+            $(".send-message").removeClass("send-message");
+            $(".messages-content").append('<div class="send-message"> </div>');
+            scrollMessages();
+            message = $("#send").serialize();
+            $('#send')[0].reset();
+            $("textarea").val("");
+            $("textarea[name='message']").focus();
             $.ajax({
                 url: '/ws/messages/send-message/',
-                data: $("#send").serialize(),
+                data: message,
                 cache: false,
                 type: 'POST',
                 success: function (data) {
-                    //enable send button after message is sent
-                    //$('.send-btn').removeAttr("disabled");
-                    $('#send')[0].reset();
-                    $("textarea").val("");
-                    $("textarea[name='message']").focus();
-                    scrollMessages();
+                    $('.sending-gif').hide();
                 },
-                fail: function () {
-                    console.log('test')
+                error: function () {
+                    $('#resend').toggleClass('d-none');
+                    $('.sending-gif').hide();
                 }
             });
 
         }
 
+
         return false;
     });
 
+    $("#resend").click(function () {
 
+    });
 
     //This helps the text in the textarea of the message to be send
     //when press enter and go new line with shift + enter!
@@ -114,7 +119,7 @@ $(function () {
 
     // Helpful debugging
     webSocket.socket.onopen = function () {
-        // console.log("Connected to inbox stream");
+        // //console.log("Connected to inbox stream");
         // Commenting this block until I find a better way to manage how to
         // report the user status.
 
@@ -129,7 +134,7 @@ $(function () {
     };
 
     webSocket.socket.onclose = function () {
-        // console.log("Disconnected from inbox stream");
+        // //console.log("Disconnected from inbox stream");
     };
 
     webSocket.listen(function (event) {
@@ -147,13 +152,12 @@ $(function () {
                     }, 1);
                 } else {
                     $("#new-message-" + event.sender).show();
-                    console.log(event.sender)
+                    //console.log(event.sender)
                 }
                 break;
-            
+
             case "set_status":
-                console.log(event.set_status + " " +
-                    event.sender)
+                //console.log(event.set_status + " " + event.sender)
                 setUserOnlineOffline(event.sender, event.set_status);
                 break;
             default:
@@ -167,7 +171,7 @@ $(function () {
 
 });
 
-localStorage.debug = 'ali-oss';
+//localStorage.debug = 'ali-oss';
 /**
  * fileStats: File statistics
  * filename: The address of the uploaded file
@@ -212,7 +216,7 @@ OssUpload.prototype = {
             var files = e.target.files;
             var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
             var NumberOfSelectedFiles = files.length;
-            console.log('total files selected ' + NumberOfSelectedFiles);
+            //console.log('total files selected ' + NumberOfSelectedFiles);
             var file = null;
             $('#uploader .placeholder').hide();
             $("#statusBar").css('display', 'flex');
@@ -230,7 +234,6 @@ OssUpload.prototype = {
                         uploader.fileList[curIndex + i] = file;
                         file.id = uploader.fileList[curIndex + i].id = "image" + (curIndex + i + 1); //Add id to each file
                         uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-                        _this.addFile(file); //Add to control view
                     } else {
                         alert(file.name + ' is larger than 13MB, please select images small than 13MB ')
                     }
@@ -249,23 +252,16 @@ OssUpload.prototype = {
             } else {
                 var length = uploader.fileStats.totalFilesNum;
                 var file;
-                console.log('uploading')
-
+                //console.log('uploading')
+                $('.total-progress').toggleClass('d-none');
+                $totalProgressbar.css('width', '40%')
+                    .html('Upload Started please wait...');
                 for (var i = 0; i < length; i++) {
                     var filename = genKey();
                     file = uploader.fileList[i];
                     _this.uploadFile(file, filename);
 
                 }
-                uploader = {
-                    fileList: [],
-                    fileStats: {
-                        totalFilesNum: 0,
-                        totalFilesSize: 0,
-                        uploadFinishedFilesNum: 0,
-                        curFileSize: 0,
-                    },
-                };
 
             }
         });
@@ -320,8 +316,6 @@ OssUpload.prototype = {
                                     url: obrisk_oss_url + res.name + "?x-oss-process=image/average-hue",
                                     success: function () {
 
-                                        $("#" + file.id).children(".success-span").addClass("success");
-                                        $("#" + file.id).children(".file-panel").hide();
                                         uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
                                         uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
                                         progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
@@ -334,6 +328,7 @@ OssUpload.prototype = {
                                             $totalProgressbar.css('width', progressBar)
                                                 .html(progressBar);
                                         }
+
 
 
                                         $("#image").val(res.name);
@@ -349,11 +344,22 @@ OssUpload.prototype = {
                                                 $(".send-message").before(data);
                                                 setTimeout(function () {
                                                     scrollMessages();
+                                                    $('.total-progress').toggleClass('d-none');
                                                 }, 1000);
+                                                progressBar = 0;
+
                                             }
                                         });
 
-
+                                        uploader = {
+                                            fileList: [],
+                                            fileStats: {
+                                                totalFilesNum: 0,
+                                                totalFilesSize: 0,
+                                                uploadFinishedFilesNum: 0,
+                                                curFileSize: 0,
+                                            },
+                                        };
                                     },
                                     error: function (e) {
 
@@ -394,9 +400,9 @@ OssUpload.prototype = {
 
                             }).catch((err) => {
                                 console.error(err);
-                                console.log(`err.name : ${err.name}`);
-                                console.log(`err.message : ${err.message}`);
-                                console.log(`err.request : ${err.requestId}`);
+                                //console.log(`err.name : ${err.name}`);
+                                //console.log(`err.message : ${err.message}`);
+                                //console.log(`err.request : ${err.requestId}`);
 
                                 $totalProgressbar.css('width', '40%')
                                     .html("Retrying...");
@@ -441,7 +447,7 @@ OssUpload.prototype = {
                         alert("Oops! an error occured when uploading your image(s), \
                     Please try again later or contact us via support@obrisk.com. " + e);
                         $(".start-uploader").css('display', 'block');
-                        console.log(e);
+                        //console.log(e);
                     }
                 }
                 return upload()
@@ -452,43 +458,11 @@ OssUpload.prototype = {
             }
         }).catch(e => {
             alert('Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com' + e);
-            console.log(e)
+            //console.log(e)
         })
     },
 
-    /**
-     * Add file to preview
-     */
-    addFile: function (file) {
-        var $li = $('<li id="' + file.id + '">' +
-                '<p class="title">' + file.name + '</p>' +
-                '<p class="imgWrap"></p>' +
-                '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
-                '</li>'),
-            $btns = $('<div class="file-panel">' +
-                '<span class="cancel">cancel</span>' +
-                '</div>').appendTo($li),
-            $prgress = $li.find('p.upload-state span'),
-            $wrap = $li.find('p.imgWrap'),
-            $info = $('<p class="error"></p>');
-        var imageType = /^image\//;
-        if (imageType.test(file.type)) {
-            var img = document.createElement("img");
-            img.classList.add("obj");
-            img.file = file;
-            img.style.width = "100%";
-            img.style.height = "100%";
-            $wrap.empty().append($(img));
-            var reader = new FileReader();
-            reader.onload = (function (aImg) {
-                return function (e) {
-                    aImg.src = e.target.result;
-                };
-            })(img);
-            reader.readAsDataURL(file);
-        }
-        $li.appendTo($queue);
-    },
+
 }
 
 /**
@@ -497,12 +471,10 @@ OssUpload.prototype = {
 var progressBar = 0;
 var progress = '';
 var $wrap = $('#uploader'),
-    // Picture container
-    $queue = $('<ul class="filelist"></ul>').appendTo($wrap.find('.queueList')),
     $totalProgressbar = $("#totalProgressBar");
 
 var progress = function (p) { //p percentage 0~1
-    console.log(p);
+    //console.log(p);
     return function (done) {
         $totalProgressbar.css('width', progressBar)
         done();
@@ -589,5 +561,8 @@ $(function () {
     //create and initialize upload object 
     ossUpload = new OssUpload();
     ossUpload.init();
+
+    //scroll to bottom
+    scrollMessages();
 
 });

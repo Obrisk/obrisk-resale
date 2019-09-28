@@ -5,7 +5,7 @@ workbox.setConfig({
 });
 //Show debug logs in console
 workbox.setConfig({
-  debug: true
+  debug: false
 });
 
 workbox.core.skipWaiting();
@@ -69,7 +69,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/messager.css",
-    "revision": "148b565c52f4e4ef3dd1f781e649b764"
+    "revision": "f080928f8c6819671f837faf293087e9"
   },
   {
     "url": "/static/css/nav.css",
@@ -256,6 +256,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "46732e763f50c337fecabcc42150d842"
   },
   {
+    "url": "/static/img/resend.jpg",
+    "revision": "b0c91ed98f8607a6c66a659d82f34191"
+  },
+  {
     "url": "/static/img/splashscreens/ipad_splash.png",
     "revision": "df7171a93c5a2ab28d4011270552d2de"
   },
@@ -357,7 +361,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "3277d641bfb6f3da87094925a6f6a765"
+    "revision": "c4cb8986a7097b732da43e15d2c58ade"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -521,6 +525,12 @@ workbox.routing.registerRoute(
 );
 workbox.routing.registerRoute(
   new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/media/profile_pics"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "CDN-img-cache"
+  })
+);
+workbox.routing.registerRoute(
+  new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/messages"),
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: "CDN-img-cache"
   })

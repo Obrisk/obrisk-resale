@@ -16,7 +16,6 @@
 
 {% block content %}
 <div class="chat">
-
   <div class="chat-title">
     <a class="back-btn" href="{% url 'messager:contacts_list' %}"> <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
@@ -36,8 +35,8 @@
       </div>
 
 
-      <div><i class="status-light fa fa-circle" aria-hidden="true"></i>
-        <small class="online-stat"> Offline </small></div>
+      <!-- <div><i class="status-light fa fa-circle" aria-hidden="true"></i>
+        <small class="online-stat"> Offline </small></div> -->
 
 
     </div>
@@ -140,6 +139,12 @@
       <input id="image" type="hidden" name="image">
       <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
     </form>
+
+  </div>
+  <div class="total-progress d-none">
+    <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
+      aria-valuemax="100">
+    </div>
   </div>
 </div>
 <!-- card end-->
@@ -178,11 +183,12 @@
   var currentUser = "{{ request.user.username }}";
   var activeUser = "{{ active }}";
   const oss_url = "{% url 'get_oss_auth' %}";
-
-  {% if message.sender.thumbnail %}
-  var user_thumb = https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}
-    {% else %}
-  var user_thumb = "{% static 'img/user.png' %}"
+  var loading_gif = "{% static 'img/loading.gif' %}";
+  var resend = "{% static 'img/resend.jpg' %}";
+  {% if request.user.thumbnail %}
+  var user_thumb = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ request.user.thumbnail }}";
+  {% else %}
+  var user_thumb = "{% static 'img/user.png' %}";
   {% endif %}
 
   //This scrolls the div #messages only to the bottom

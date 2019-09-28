@@ -5,7 +5,7 @@ workbox.setConfig({
 });
 //Show debug logs in console
 workbox.setConfig({
-  debug: true
+  debug: false
 });
 
 workbox.core.skipWaiting();
@@ -104,6 +104,12 @@ workbox.routing.registerRoute(
 );
 workbox.routing.registerRoute(
   new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/media/profile_pics"),
+  new workbox.strategies.StaleWhileRevalidate({
+    cacheName: "CDN-img-cache"
+  })
+);
+workbox.routing.registerRoute(
+  new RegExp("^https://obrisk.oss-cn-hangzhou.aliyuncs.com/messages"),
   new workbox.strategies.StaleWhileRevalidate({
     cacheName: "CDN-img-cache"
   })
