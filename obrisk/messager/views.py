@@ -46,6 +46,16 @@ class ContactsListView(LoginRequiredMixin, ListView):
                             conversation=OuterRef('pk'),
                         ).values('message')[:1]
                     ),
+                    img = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('image')[:1]
+                    ),
+                    attachment = Subquery (
+                        Message.objects.filter(
+                            conversation=OuterRef('pk'),
+                        ).values('attachment')[:1]
+                    ),
                     unread = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),

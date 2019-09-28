@@ -442,3 +442,7 @@ h5 {
   -o-object-fit: contain;
   object-fit: contain;
 }
+
+.classified-card {
+   background: #c3def3;
+}

@@ -86,9 +86,6 @@
   {% block body %}
   <div class="m-b-1">
     {% if request.user.is_authenticated %}
-    {% if new_msgs %}
-
-    {% endif %}
     <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
       <div class="container">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
@@ -120,7 +117,7 @@
                 class="nav-link {% if base_active == 'chat' %} is-active {% endif %} "
                 href="{% url 'messager:contacts_list' %}">
                 {% if new_msgs %}
-                <i class=" fa fa-envelope d-none d-md-block"
+                <i class=" fa fa-envelope"
                   style="color: #dc3545;position: absolute;font-size: 15px;"></i>
                 {% endif %}
                 {% trans 'Chat' %}</a>
