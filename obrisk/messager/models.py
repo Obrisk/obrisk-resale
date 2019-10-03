@@ -18,10 +18,11 @@ class ConversationQuerySet(models.query.QuerySet):
     #https://docs.djangoproject.com/en/2.1/ref/models/querysets/#operators-that-return-new-querysets
     
     def get_conversations(self, user):
-        """ Check if these 2 users had conversation before """
+        """ Get all conversations of a specific user """
         return self.filter(first_user=user) | self.filter(second_user=user)
 
     def conversation_exists(self, user1, user2):
+        """ Check if these 2 users had conversation before """
         qs = self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1) 
 
         if qs:
@@ -66,7 +67,7 @@ class MessageQuerySet(models.query.QuerySet):
         """Returns all the messages sent between two users."""
         qs_one = self.filter(sender=sender, recipient=recipient)
         qs_two = self.filter(sender=recipient, recipient=sender)
-        return qs_one.union(qs_two).order_by('timestamp')
+        return qs_one.union(qs_two).order_by('-timestamp')
 
     def get_most_recent_conversation(self, recipient):
         """Returns the most recent conversation counterpart's username."""

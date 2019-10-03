@@ -68,7 +68,6 @@ class ContactsListView(LoginRequiredMixin, ListView):
                     )
                 ).order_by('-time')
 
-     
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
 
