@@ -13,11 +13,51 @@
   <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
     id="classified-form" method="post" role="form">
     {% csrf_token %}
-    {{ form|crispy }}
+    
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.title|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.details|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.price|as_crispy_field }}
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.located_area|as_crispy_field }}
+      </div>
+    </div>
+
+    {% if request.user.phone_number %}
+        <!-- Material switch -->
+        <div class="outerDivFull" >
+          <div class="switchToggle">
+              <input type="checkbox" id="switch" dis>
+              <label for="switch">Add your phone number:</label>
+          </div>
+        </div>
+
+    {% else %}
+        <div class="form-row">
+          <div class="form-group col-md-12 mb-0">
+            {{ form.phone_number|as_crispy_field }}
+          </div>
+        </div>
+    {% endif %}
 
     <p class="city"> <strong> City*: </strong> {{request.user.city}} </p>
     <br>
-    <p class="city"> <strong> Images*: </strong>
+    <p class="city"> <strong> Images*: </strong> <p>
     <div id="wrapper" class="mb-4">
       <div id="container">
         <div id="uploader">

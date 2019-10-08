@@ -6,15 +6,34 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from asgiref.sync import async_to_sync
-
 from channels.layers import get_channel_layer
 
 from obrisk.notifications.models import Notification, notification_handler
+
+from taggit.managers import TaggableManager
+from taggit.models import TaggedItemBase
+
+
+class TaggedStories(TaggedItemBase):
+    content_object = models.ForeignKey('Stories', on_delete=models.CASCADE)
+
+
 
 
 class Stories(models.Model):
     """Stories model to contain small information snippets in the same manner as
     Twitter does."""
+
+    PUBLIC = "P"
+    NEAR_BY = "N"
+    CONNECTS = "C"
+
+    VIEWERS = (
+        (PUBLIC, _("Public")),
+        (NEAR_BY, _("near-by")),
+        (CONNECTS, _("Connects")),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="publisher",
         on_delete=models.CASCADE)
@@ -23,7 +42,13 @@ class Stories(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     uuid_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
-    content = models.TextField(max_length=280)
+    content = models.TextField(max_length=400)
+    viewers =  models.CharField(max_length=1, choices=VIEWERS, default=PUBLIC)
+    priority = models.IntegerField(default=0)
+    tags = TaggableManager(through=TaggedStories)
+    city = models.CharField (max_length=100, null=True)
+    province_region = models.CharField(max_length= 100, null=True)
+    address = models.CharField(max_length=255, null=True)
     liked = models.ManyToManyField(settings.AUTH_USER_MODEL,
         blank=True, related_name="liked_stories")
     reply = models.BooleanField(verbose_name=_("Is a reply?"), default=False)
@@ -101,3 +126,20 @@ class Stories(models.Model):
 
     def get_likers(self):
         return self.liked.all()
+
+
+class StoryImages(models.Model):
+    story = models.ForeignKey(Stories, on_delete=models.CASCADE, related_name='images')
+    image = models.CharField(max_length=300)
+    image_thumb = models.CharField(max_length=300)
+
+    """ Informative name for model """
+    def __unicode__(self):
+        try:
+            public_id = self.image.public_id
+        except AttributeError:
+            public_id = ''
+        return "Image <%s:%s>" % (self.story, public_id)
+
+    def __str__(self):
+        return str(self.image)

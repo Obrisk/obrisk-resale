@@ -16,6 +16,7 @@ class User(AbstractUser):
     org_picture = models.CharField(max_length=150, null=True, blank=True)
     picture = models.CharField(max_length=150, null=True, blank=True)
     thumbnail = models.CharField(max_length=150, null=True, blank=True)
+    
     job_title = models.CharField(
         _('Job title'), max_length=50, null=True, blank=True)
     personal_url = models.URLField(
@@ -28,19 +29,28 @@ class User(AbstractUser):
         _('LinkedIn a/c profile name'), max_length=255, blank=True, null=True)
     snapchat_account = models.CharField(
         _('Snapchat a/c profile name'), max_length=255, blank=True, null=True)
+    wechat_id = models.CharField (max_length=150, null=True, blank=True)
+    address = models.CharField(max_length=255, null=True)
+    province_region = models.CharField (_('Province'), max_length=100)
+    city = models.CharField  (  _('City'), max_length=100) 
+    nationality = models.CharField (_('Nationality'), max_length=100, blank=True, null=True )
     short_bio = models.CharField(
         _('Describe yourself'), max_length=60, blank=True, null=True)
     bio = models.CharField(
         _('Short bio'), max_length=280, blank=True, null=True)
     country = models.CharField(
         _('Country'), max_length=100, default="China")
-    province_region = models.CharField (_('Province'), max_length=100)
-    city = models.CharField  (  _('City'), max_length=100) 
     points = models.IntegerField(  _('Points'), default=0)
-    nationality = models.CharField (_('Nationality'), max_length=100, blank=True, null=True )
     phone_number = PhoneNumberField (_('Phone number'))  #Needs a country's code 
     is_official = models.BooleanField (default=False)      #For the use of published posts
     is_seller = models.BooleanField (default=False)  #For sellers in Classifieds.
+    #The values here are only in one month therefore reset every month.
+    classifieds_transactions_received = models.IntegerField(default=0)
+    no_of_classifieds_posted = models.IntegerField( default=0)
+    no_of_classifieds_negotiated = models.IntegerField( default=0)
+    no_of_jobs_applied =  models.IntegerField( default=0)
+    no_of_jobs_posted =  models.IntegerField( default=0)
+    no_of_events_registered =  models.IntegerField( default=0)
     # near future please add unique 12 digit ID to use instead of username for url's especially in chat.
     #https://stackoverflow.com/questions/42703059/how-to-create-a-8-digit-unique-id-in-python
 

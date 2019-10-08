@@ -97,11 +97,11 @@
 
         <div class="card-text text-justify">{{ classified.details }}</div>
 
-        {% if classified.contact_info %}
+        {% if classified.phone_number %}
         <br />
         {% if user.is_authenticated %}
         <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
-          {{ classified.contact_info }}</small>
+          {{ classified.phone_number }}</small>
         {% else %}
         <h6> Please login to view seller's contacts: </h6>
         <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"

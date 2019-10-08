@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "112bd6c13a00d74d74bbe7379504e85d"
+    "revision": "923a75d5a4b68fd2b9a8a4c72b1c37ed"
   },
   {
     "url": "/static/css/colors.css",
@@ -357,7 +357,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "cdecacb4a541188e92ecbb0990174981"
+    "revision": "d71e17e583aa6bbc60bc0fdaa9a776fd"
   },
   {
     "url": "/static/js/moment.min.js",
