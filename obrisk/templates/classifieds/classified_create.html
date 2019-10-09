@@ -6,6 +6,8 @@
 <link rel="stylesheet" href="/static/css/uploader.css" />
 <link rel="stylesheet" href="/static/css/classified-create.css" />
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
 {% endblock head %}
 
 {% block content %}
@@ -17,6 +19,12 @@
     <div class="form-row">
       <div class="form-group col-md-12 mb-0">
         {{ form.title|as_crispy_field }}
+      </div>
+    </div>
+
+ <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.show_phone|as_crispy_field }}
       </div>
     </div>
 
@@ -32,20 +40,27 @@
       </div>
     </div>
 
-    <div class="form-row">
-      <div class="form-group col-md-12 mb-0">
-        {{ form.located_area|as_crispy_field }}
+    {% if request.user.address %}
+        <div> <span class="city" > Address*: </span> {{ request.user.address}} </div> 
+    {% else %}
+      <div class="form-row">
+        <div class="form-group col-md-12 mb-0">
+          {{ form.address|as_crispy_field }}
+        </div>
+        <p class="col-md-12 mb-3"> City*:{{request.user.city}} <span class="mr-1"> </span> 
+          {% if request.user.province_region %}
+              Province*: {{request.user.province_region}} </p>
+          {% endif %}
       </div>
-    </div>
+    {% endif %}
 
     {% if request.user.phone_number %}
-        <!-- Material switch -->
-        <div class="outerDivFull" >
-          <div class="switchToggle">
-              <input type="checkbox" id="switch" dis>
-              <label for="switch">Add your phone number:</label>
-          </div>
-        </div>
+        <!-- iOS Style: Rounded -->
+
+        <strong>  Include your phone no?  </strong> 
+        <input type="checkbox" checked data-toggle="toggle" name="phone-check" data-width="70" data-on="Yes" data-off="No"  data-style="ios">
+        <br>
+
 
     {% else %}
         <div class="form-row">
@@ -55,7 +70,6 @@
         </div>
     {% endif %}
 
-    <p class="city"> <strong> City*: </strong> {{request.user.city}} </p>
     <br>
     <p class="city"> <strong> Images*: </strong> <p>
     <div id="wrapper" class="mb-4">

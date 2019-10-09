@@ -455,6 +455,15 @@ $(function () {
             $("#id_images").val(images);
             $("#id_img_error").val(img_error);
             $("#classified-form").submit();
+
+            
+            if ($("[name='phone-check']").val() == "on") {
+                $("[name='show_phone']").prop("checked", true);
+            }
+            else {
+                $("[name='show_phone']").prop("checked", false);
+            }
+
         }
     });
 

@@ -63,6 +63,15 @@ class Stories(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+        #These locations will be taken from the user's profile, else he has to change location.
+        if not self.city:
+            self.city =self.user.city
+        if not self.province_region:
+            self.province_region = self.user.province_region
+        if not self.country:
+            self.country = self.user.country
+
         if not self.reply:
             channel_layer = get_channel_layer()
             payload = {
@@ -72,6 +81,7 @@ class Stories(models.Model):
 
                 }
             async_to_sync(channel_layer.group_send)('notifications', payload)
+
 
     def get_absolute_url(self):
         return reverse("stories:detail", kwargs={"uuid_id": self.uuid})

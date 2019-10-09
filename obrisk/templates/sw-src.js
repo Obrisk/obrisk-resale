@@ -13,8 +13,6 @@ workbox.core.skipWaiting();
 workbox.precaching.precacheAndRoute([]);
 
 
-
-
 // This will cache only the images loaded from https://obrisks.com/ all other images handle using CDN caching
 // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
 // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration

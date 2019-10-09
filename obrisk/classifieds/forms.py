@@ -5,18 +5,26 @@ from obrisk.classifieds.models import Classified, OfficialAd
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
-    details = forms.CharField(widget=forms.Textarea)
+    show_phone = forms.BooleanField( initial=True) 
     images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False) #100 for each image.
     img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) #Store images error for later debugging.
 
 
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price" ]
+        fields = ["title", "details", "status", "edited", "price", "address", "phone_number", "show_phone"]
 
         widgets = {
             'user': forms.HiddenInput(),
+            'details': forms.Textarea(attrs={'rows': 3})
             #'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
+        }
+
+        help_texts = {
+            "title": "Short description of your product",
+            "details": "The more information you provide, the more likely you are to sell your product",
+            "address": "It can be a street address, name, or other location description.\
+                Please don't enter your city or Province",
         }
 
 class ClassifiedEditForm(forms.ModelForm):
@@ -26,11 +34,21 @@ class ClassifiedEditForm(forms.ModelForm):
     #images = forms.CharField(widget=forms.HiddenInput(), max_length=1500) #100 for each image.
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price" ]
+        fields = ["title", "details", "status", "edited", "price", "tags",
+         "address", "wechat_id", "phone_number" ]
 
         widgets = {
             'user': forms.HiddenInput(),
             'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
+        }
+
+        help_texts = {
+            "address": "It can be a street name, address or other description.\
+            Please don't enter your city it will be added automatically based on your profile",
+            "phone_number": "This field is optional.", 
+            "wechat_id": "This field is optional.", 
+            "tags": "Write the categories of your item, can be one or multiple separated by a comma.\
+            e.g phone,electronics. Some categories will appear as you start to type."
         }
 
 
