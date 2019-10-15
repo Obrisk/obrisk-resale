@@ -5,10 +5,10 @@ from obrisk.classifieds.models import Classified, OfficialAd
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
-    show_phone = forms.BooleanField( initial=True) 
+    show_phone = forms.BooleanField( widget=forms.HiddenInput(), initial=True) 
     images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False) #100 for each image.
     img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) #Store images error for later debugging.
-
+    phone_number = forms.IntegerField( required=False)
 
     class Meta:
         model = Classified
@@ -21,9 +21,10 @@ class ClassifiedForm(forms.ModelForm):
         }
 
         help_texts = {
+            "phone_number": "Please don't include the country code.", 
             "title": "Short description of your product",
-            "details": "The more information you provide, the more likely you are to sell your product",
-            "address": "It can be a street address, name, or other location description.\
+            "details": "Please provide enough and detailed information, if you want to sell your product easily and quickly",
+            "address": "It can be a street address, street name, or other location description.\
                 Please don't enter your city or Province",
         }
 

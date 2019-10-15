@@ -12,6 +12,12 @@
 
 {% block content %}
 <div class="col-lg-8 ml-auto mr-auto mt-5">
+  {% if form.errors %}
+    <div class="alert alert-error">
+      <strong>Your form is having invalid input(s) on {% for fld in form.errors%} {{ fld }} {% endfor %} </strong>
+    </div>
+  {% endif %}
+
   <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
     id="classified-form" method="post" role="form">
     {% csrf_token %}
@@ -22,9 +28,10 @@
       </div>
     </div>
 
- <div class="form-row">
+    <div class="form-row">
       <div class="form-group col-md-12 mb-0">
         {{ form.show_phone|as_crispy_field }}
+        {{ form.status|as_crispy_field }}
       </div>
     </div>
 
@@ -41,11 +48,14 @@
     </div>
 
     {% if request.user.address %}
-        <div> <span class="city" > Address*: </span> {{ request.user.address}} </div> 
+        <div> <span class="city" > Address*: </span> {{ request.user.address}} </div>
+        <small class="form-text text-muted"> Note: You can change the address on your profile settings </small> 
+        <br/>
     {% else %}
       <div class="form-row">
         <div class="form-group col-md-12 mb-0">
           {{ form.address|as_crispy_field }}
+          <small class="form-text text-muted"> Note: You can permanently save your address on your profile settings </small> 
         </div>
         <p class="col-md-12 mb-3"> City*:{{request.user.city}} <span class="mr-1"> </span> 
           {% if request.user.province_region %}
@@ -56,11 +66,9 @@
 
     {% if request.user.phone_number %}
         <!-- iOS Style: Rounded -->
-
         <strong>  Include your phone no?  </strong> 
         <input type="checkbox" checked data-toggle="toggle" name="phone-check" data-width="70" data-on="Yes" data-off="No"  data-style="ios">
         <br>
-
 
     {% else %}
         <div class="form-row">
@@ -151,8 +159,8 @@
 
   const title_id = "{{ form.title.auto_id }}";
   const details_id = "{{ form.details.auto_id }}";
-  const located_area = "{{ form.located_area.auto_id }}";
-  const tags = "{{ form.tags.auto_id }}";
+  const address = "{{ form.address.auto_id }}";
+  //const tags = "{{ form.tags.auto_id }}";
 </script>
 
 <script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>

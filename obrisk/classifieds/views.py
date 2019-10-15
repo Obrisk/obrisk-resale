@@ -66,6 +66,13 @@ def classified_list(request, tag_slug=None):
     else:
         city = "Hangzhou"
     
+    #Try to Get the popular tags from cache
+    popular_tags = cache.get('popular_tags')
+
+    if popular_tags == None:
+        popular_tags = Classified.objects.get_counted_tags()
+    
+    #Get classifieds
     classifieds_list = Classified.objects.get_active().annotate(
         order = Case (
             When(city=city, then=Value(1)),
@@ -117,10 +124,12 @@ def classified_list(request, tag_slug=None):
     
     if request.is_ajax():        
        return render(request,'classifieds/classified_list_ajax.html',
-                    {'page': page, 'classifieds': classifieds, 'base_active': 'classifieds'})   
+                    {'page': page, 'popular_tags': popular_tags,
+                    'classifieds': classifieds, 'base_active': 'classifieds'})   
     
-    return render(request, 'classifieds/classified_list.html',
-                {'page': page, 'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
+    return render(request, 'classifieds/classified_list.html', 
+                {'page': page, 'popular_tags': popular_tags,
+                'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds
@@ -257,6 +266,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                         return self.form_invalid(form)
                     
                     else:
+                        print("here")
                         d = str(datetime.datetime.now())
                         thumb_name = "classifieds/" + slugify(str(classified.user)) + "/" + \
                         slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
