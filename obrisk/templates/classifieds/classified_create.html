@@ -49,13 +49,12 @@
 
     {% if request.user.address %}
         <div> <span class="city" > Address*: </span> {{ request.user.address}} </div>
-        <small class="form-text text-muted"> Note: You can change the address on your profile settings </small> 
+        <small class="form-text text-muted"> Note: You can change the address in your profile settings </small> 
         <br/>
     {% else %}
       <div class="form-row">
         <div class="form-group col-md-12 mb-0">
           {{ form.address|as_crispy_field }}
-          <small class="form-text text-muted"> Note: You can permanently save your address on your profile settings </small> 
         </div>
         <p class="col-md-12 mb-3"> City*:{{request.user.city}} <span class="mr-1"> </span> 
           {% if request.user.province_region %}

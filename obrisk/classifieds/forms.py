@@ -1,6 +1,7 @@
 from django import forms
 from dal import autocomplete
 from obrisk.classifieds.models import Classified, OfficialAd
+from phonenumber_field.formfields import PhoneNumberField
 
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
@@ -8,7 +9,13 @@ class ClassifiedForm(forms.ModelForm):
     show_phone = forms.BooleanField( widget=forms.HiddenInput(), initial=True) 
     images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False) #100 for each image.
     img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) #Store images error for later debugging.
-    phone_number = forms.IntegerField( required=False)
+    address = forms.CharField (required=False, label=("Your address"), help_text='You can easily add your address permenently on your profile settings')
+    phone_number = PhoneNumberField(required=False, label=("Phone number"),
+                                    widget=forms.TextInput(
+                                    attrs={'placeholder': ('Don\'t enter country code'),
+                                          'autofocus': 'autofocus'})
+                            )
+
 
     class Meta:
         model = Classified
@@ -21,11 +28,8 @@ class ClassifiedForm(forms.ModelForm):
         }
 
         help_texts = {
-            "phone_number": "Please don't include the country code.", 
             "title": "Short description of your product",
             "details": "Please provide enough and detailed information, if you want to sell your product easily and quickly",
-            "address": "It can be a street address, street name, or other location description.\
-                Please don't enter your city or Province",
         }
 
 class ClassifiedEditForm(forms.ModelForm):
