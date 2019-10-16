@@ -92,3 +92,11 @@
         height: 60px;
     }
 }
+
+.toggle-off.btn {
+    padding-right: 0 !important;    
+}
+
+.toggle-on.btn  {
+    padding-left: 0 !important;
+}

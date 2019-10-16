@@ -66,6 +66,13 @@ def classified_list(request, tag_slug=None):
     else:
         city = "Hangzhou"
     
+    #Try to Get the popular tags from cache
+    popular_tags = cache.get('popular_tags')
+
+    if popular_tags == None:
+        popular_tags = Classified.objects.get_counted_tags()
+    
+    #Get classifieds
     classifieds_list = Classified.objects.get_active().annotate(
         order = Case (
             When(city=city, then=Value(1)),
@@ -117,10 +124,12 @@ def classified_list(request, tag_slug=None):
     
     if request.is_ajax():        
        return render(request,'classifieds/classified_list_ajax.html',
-                    {'page': page, 'classifieds': classifieds, 'base_active': 'classifieds'})   
+                    {'page': page, 'popular_tags': popular_tags,
+                    'classifieds': classifieds, 'base_active': 'classifieds'})   
     
-    return render(request, 'classifieds/classified_list.html',
-                {'page': page, 'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
+    return render(request, 'classifieds/classified_list.html', 
+                {'page': page, 'popular_tags': popular_tags,
+                'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds
@@ -213,6 +222,12 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         classified = form.save(commit=False)
         classified.user = self.request.user
+        
+        if self.request.user.address: 
+            classified.address = self.request.user.address
+        else:
+            classified.address = form.cleaned_data['address']
+        
         classified.save()
 
         if img_errors:
@@ -229,13 +244,13 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         tot_imgs = len(images_list)
 
         if tot_imgs < 2:
-            messages.error(self.request, "Sorry, it looks like the images were not uploaded successfully. \
+            messages.error(self.request, "Sorry, it looks like the image(s) was not uploaded successfully. \
                 or you've done something wrong. Please add the images again and submit the form!")
             classified.delete()
             return self.form_invalid(form)
         else:
             if (images_list[1] == None or images_list[1].startswith('classifieds/') == False):
-                messages.error(self.request, "Sorry, the images were not uploaded successfully. \
+                messages.error(self.request, "Sorry, the image(s) were not uploaded successfully. \
                     Please add the images again and submit the form!")
                 classified.delete()
                 return self.form_invalid(form)
@@ -250,8 +265,8 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                         continue
 
                     if str_result.startswith('classifieds/') == False:
-                        messages.error(self.request, "Hello! It looks like some of the images you uploaded, \
-                            were corrupted, or you've done something wrong. Please edit your post, \
+                        messages.error(self.request, "Hello! It looks like some of the image(s) you uploaded, \
+                            are corrupted, or you've done something wrong. Please edit your post, \
                             and upload the images again.")
                         classified.delete()
                         return self.form_invalid(form)
@@ -280,8 +295,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                                     + 'status={0}, request_id={1}'.format(e.status, e.request_id))
                     
                                 img.save()
-                                for tag in form.cleaned_data['tags']:
-                                    classified.tags.add(tag)
                                 return redirect ('classifieds:list')
                             else:
                                 img.save()
@@ -294,8 +307,6 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                                     were not uploaded successfully. Please edit your item to add images. "
                                     + 'status={0}, request_id={1}'.format(e.status, e.request_id))
                     
-                                for tag in form.cleaned_data['tags']:
-                                    classified.tags.add(tag)
                                 return redirect ('classifieds:list')
                             else:
                                 continue   
@@ -303,7 +314,12 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
                             img.image_thumb = thumb_name
                             img.save()
 
-                #When the for-loop has ended return the results.        
+                #When the for-loop has ended return the results.       
+                #Initiate a background task to handle the classified tags creation
+                #And then pass the classified object and after the process add then
+                # for tag in generated_tags_list 
+                    #classified.tags.add(tag)
+ 
                 return super(CreateClassifiedView, self).form_valid(form)
 
 

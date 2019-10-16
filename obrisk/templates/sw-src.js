@@ -13,8 +13,6 @@ workbox.core.skipWaiting();
 workbox.precaching.precacheAndRoute([]);
 
 
-
-
 // This will cache only the images loaded from https://obrisks.com/ all other images handle using CDN caching
 // https://developers.google.com/web/tools/workbox/modules/workbox-strategies#cache_first_cache_falling_back_to_network
 // https://developers.google.com/web/tools/workbox/modules/workbox-cache-expiration
@@ -131,17 +129,22 @@ workbox.routing.registerRoute(matcher, handler);
 // End fallback offline
 
 
+
 // Register event listener for the 'push' event.
 self.addEventListener('push', function (event) {
   // Retrieve the textual payload from event.data (a PushMessageData object).
   // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
   // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
-  console.log(event.data);
   const eventInfo = event.data.text();
-  console.log(eventInfo);
-  const data = JSON.parse(eventInfo);
-  const head = data.head || 'New Notification 🕺🕺';
-  const body = data.body || 'Open Obrisk to view';
+
+  try {
+      var data = JSON.parse(eventInfo);
+      var head = data.head;
+      var body = data.body;
+  } catch (e) {
+      var head = 'New Notification 🕺🕺';
+      var body =  'Open Obrisk to view';
+  }
 
   // Keep the service worker alive until the notification is created.
   event.waitUntil(

@@ -6,11 +6,6 @@ from django.conf import settings
 
 
 def cached_queries(request):
-    popular_tags = cache.get('popular_tags')
-
-    if popular_tags == None:
-        popular_tags = Classified.objects.get_counted_tags()
-    
     new_msgs = None
 
     webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})
@@ -37,4 +32,4 @@ def cached_queries(request):
                     break
 
 
-    return {'popular_tags': popular_tags, 'new_msgs': new_msgs, 'vapid_key':vapid_key}
+    return {'new_msgs': new_msgs, 'vapid_key':vapid_key}

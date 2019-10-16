@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "112bd6c13a00d74d74bbe7379504e85d"
+    "revision": "c41e616083ae2619b9d8a7415b4ff216"
   },
   {
     "url": "/static/css/colors.css",
@@ -357,7 +357,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "cdecacb4a541188e92ecbb0990174981"
+    "revision": "d71e17e583aa6bbc60bc0fdaa9a776fd"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -413,7 +413,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/uploader.js",
-    "revision": "d0e32381f9e3a23f11554ca0ecb358b3"
+    "revision": "01f65ab229686eed300ee89b3c5c4afd"
   },
   {
     "url": "/static/js/user-form.js",
@@ -428,8 +428,6 @@ workbox.precaching.precacheAndRoute([
     "revision": "c0e497b590f7058fa9cd8d0225e2eed1"
   }
 ]);
-
-
 
 
 // This will cache only the images loaded from https://obrisks.com/ all other images handle using CDN caching
@@ -548,17 +546,22 @@ workbox.routing.registerRoute(matcher, handler);
 // End fallback offline
 
 
+
 // Register event listener for the 'push' event.
 self.addEventListener('push', function (event) {
   // Retrieve the textual payload from event.data (a PushMessageData object).
   // Other formats are supported (ArrayBuffer, Blob, JSON), check out the documentation
   // on https://developer.mozilla.org/en-US/docs/Web/API/PushMessageData.
-  console.log(event.data);
   const eventInfo = event.data.text();
-  console.log(eventInfo);
-  const data = JSON.parse(eventInfo);
-  const head = data.head || 'New Notification 🕺🕺';
-  const body = data.body || 'Open Obrisk to view';
+
+  try {
+      var data = JSON.parse(eventInfo);
+      var head = data.head;
+      var body = data.body;
+  } catch (e) {
+      var head = 'New Notification 🕺🕺';
+      var body =  'Open Obrisk to view';
+  }
 
   // Keep the service worker alive until the notification is created.
   event.waitUntil(

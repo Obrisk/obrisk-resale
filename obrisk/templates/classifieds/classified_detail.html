@@ -28,7 +28,7 @@
 
 {% block meta %}
 <meta name="author" content="{{ classified.user.get_profile_name }}">
-<meta name="keywords" content="{{ classified.title }} ,{{ classified.located_area }}, {{ classified.city }}">
+<meta name="keywords" content="{{ classified.title }} ,{{ classified.address }}, {{ classified.city }}">
 <meta name="description" content="{{ classified.details }}">
 {% endblock %}
 
@@ -67,7 +67,7 @@
                 </a>
                 <div class="location">
                   <small class="card-subtitle mb-2">📍</small><span class="card-subtitle mb-2">
-                    {{ classified.located_area }}, {{ classified.city }}</span>
+                    {{ classified.address }}, {{ classified.city }}</span>
                 </div>
                 <!-- Date/Time -->
                 <div class="time mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
@@ -97,11 +97,11 @@
 
         <div class="card-text text-justify">{{ classified.details }}</div>
 
-        {% if classified.contact_info %}
+        {% if classified.phone_number %}
         <br />
         {% if user.is_authenticated %}
         <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
-          {{ classified.contact_info }}</small>
+          {{ classified.phone_number }}</small>
         {% else %}
         <h6> Please login to view seller's contacts: </h6>
         <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
@@ -136,10 +136,13 @@
         {% endif %}
         <div class="m-3 d-flex justify-content-between">
             <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
-            <a href="#" class="share btn btn-dark"
+            {% comment  %}
+               <a href="#" class="share btn btn-dark"
               onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
               🔗{% trans 'share' %} </a>
-        </div>
+
+            {% endcomment %}        
+          </div>
     </div>
 
 

@@ -40,7 +40,7 @@ class MyUserAdmin(AuthUserAdmin):
                 {'fields': 
                     ('name','is_official','is_seller','points','city','province_region', 'country',
                         'phone_number', 'picture', 'thumbnail', 'instagram_account', 'linkedin_account',
-                         'snapchat_account', 'facebook_account', 
+                         'snapchat_account', 'facebook_account', 'address',
                     )
                 }),
     ) + AuthUserAdmin.fieldsets

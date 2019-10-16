@@ -101,7 +101,7 @@ OssUpload.prototype = {
 
         $("#startUpload").click(function (event) {
             if ($("#id_title").val() == '' || $("#id_details").val() == '' ||
-                $("#id_located_area").val() == '' || $("#id_tags").val() == '') {
+                $("#id_address").val() == '') {
                 event.preventDefault();
                 bootbox.alert("Please fill in all of the information before uploading the images!");
             } else if (uploader.fileStats.totalFilesNum == 0) {
@@ -448,12 +448,22 @@ $(function () {
         if (!images) {
             event.preventDefault();
             bootbox.alert("Please upload at least one image for your advertisement!");
+        
         } else {
             $(".loading-modal").removeClass('d-none');
             $('#create-btn').attr("disabled", true);
             $("input[name='status']").val("A");
             $("#id_images").val(images);
             $("#id_img_error").val(img_error);
+          
+
+            if ($("[name='phone-check']").val() == "on") {
+                $("[name='show_phone']").prop("checked", true);
+            }
+            else {
+                $("[name='show_phone']").prop("checked", false);
+            }
+
             $("#classified-form").submit();
         }
     });
