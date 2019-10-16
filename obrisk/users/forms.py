@@ -33,20 +33,14 @@ class UserForm(forms.ModelForm):
     bio = forms.CharField (widget=forms.Textarea(attrs={'rows': 3}), required=False) 
     province_region = forms.CharField (widget=forms.HiddenInput())
     city = forms.CharField (widget=forms.HiddenInput())
+    job_title = forms.CharField (required=False, label=("Occupation")) 
     class Meta:
         model = User
-        fields = ('name', 'job_title', 'province_region', 'city', 'bio', 'instagram_account',
-               'linkedin_account','snapchat_account', 'facebook_account' )
-        help_texts = {
-            "instagram_account": "Your instagram username as it appears on your instagram profile page.\
-                 Make sure it is spelled correctly",
-            "linkedin_account": "Your linkedin username as it appears on your linkedin profile page.\
-                 Make sure it is spelled correctly",
-            "facebook_account": "Your facebook username as it appears on your facebook profile page.\
-                 Make sure it is spelled correctly",
-            "snapchat_account": "Your snapchat username as it appears on your snapchat profile page.\
-                 Make sure it is spelled correctly.",
-        }
+        fields = ('name', 'job_title', 'province_region', 'city', 'bio', 'address')
+        #help_texts = {
+        #    "linkedin_account": "Your linkedin username as it appears on your linkedin profile page.\
+        #          Make sure it is spelled correctly",
+        #}
     
 
 #This form inherits all-auth. 
