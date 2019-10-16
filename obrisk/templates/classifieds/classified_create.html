@@ -30,8 +30,11 @@
 
     <div class="form-row">
       <div class="form-group col-md-12 mb-0">
-        {{ form.show_phone|as_crispy_field }}
-        {{ form.status|as_crispy_field }}
+        {{ form.show_phone }}
+        {{ form.status }}
+        {{ form.images }}
+        {{ form.img_errors }}
+        {{ form.edited }}
       </div>
     </div>
 
