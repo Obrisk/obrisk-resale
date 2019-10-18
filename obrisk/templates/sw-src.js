@@ -5,7 +5,7 @@ workbox.setConfig({
 });
 //Show debug logs in console
 workbox.setConfig({
-  debug: true
+  debug: false
 });
 
 workbox.core.skipWaiting();

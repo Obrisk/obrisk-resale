@@ -1,0 +1,99 @@
+<div class="chat-wrapper">
+    <div class="chat-inner">
+
+        <!-- Chat top navigation -->
+        {{> chat-nav}}
+
+        <!-- Chat sidebar -->
+        <div id="chat-sidebar" class="users-sidebar">
+            <!-- Header -->
+            <div class="header-item">
+                <img src="assets/images/logo/friendkit.svg" alt="">
+            </div>
+            <!-- User list -->
+            <div class="conversations-list has-slimscroll-xs">
+                {{> conversations-list}}
+            </div>
+            <!-- Add Conversation -->
+            <div class="footer-item">
+                <div class="add-button modal-trigger" data-modal="add-conversation-modal"><i data-feather="user"></i></div>
+            </div>
+        </div>
+
+        <!-- Chat body -->
+        <div id="chat-body" class="chat-body is-opened">
+            <!-- Conversation with Dan -->
+            {{> dan-conversation}}
+
+            <!-- Conversation with Stella -->
+            {{> stella-conversation}}
+
+            <!-- Conversation with Daniel -->
+            {{> daniel-conversation}}
+
+            <!-- Conversation with David -->
+            {{> david-conversation}}
+
+            <!-- Conversation with Edward -->
+            {{> edward-conversation}}
+
+            <!-- Conversation with Edward -->
+            {{> elise-conversation}}
+
+            <!-- Conversation with Nelly -->
+            {{> nelly-conversation}}
+
+            <!-- Conversation with Milly -->
+            {{> milly-conversation}}
+
+            <!-- Compose message area -->
+            <div class="chat-action">
+                <div class="chat-action-inner">
+                    <div class="control">
+                        <textarea class="textarea comment-textarea" rows="1"></textarea>
+                        {{> compose-add-dropdown}}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="chat-panel" class="chat-panel is-opened">
+            <div class="panel-inner">
+                <div class="panel-header">
+                    <h3>Details</h3>
+                    <div class="panel-close">
+                        <i data-feather="x"></i>
+                    </div>
+                </div>
+
+                <!-- Dan details -->
+                {{> dan-details}}
+
+                <!-- Stella details -->
+                {{> stella-details}}
+
+                <!-- Daniel details -->
+                {{> daniel-details}}
+
+                <!-- David details -->
+                {{> david-details}}
+
+                <!-- Edward details -->
+                {{> edward-details}}
+
+                <!-- Elise details -->
+                {{> elise-details}}
+
+                <!-- Nelly details -->
+                {{> nelly-details}}
+
+                <!-- Milly details -->
+                {{> milly-details}}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{{> add-conversation-modal}}

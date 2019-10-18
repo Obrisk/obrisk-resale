@@ -58,12 +58,12 @@ $(function () {
 
     checkNotifications();
 
-    $('#notifications').popover({
-        html: true,
-        trigger: 'manual',
-        container: "body",
-        placement: "bottom",
-    });
+    // $('#notifications').popover({
+    //     html: true,
+    //     trigger: 'manual',
+    //     container: "body",
+    //     placement: "bottom",
+    // });
 
     $("#notifications").click(function () {
         if ($(".popover").is(":visible")) {

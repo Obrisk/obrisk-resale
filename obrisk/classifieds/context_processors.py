@@ -3,6 +3,8 @@ from django.db.models import Subquery, OuterRef
 from obrisk.classifieds.models import Classified
 from obrisk.messager.models import Conversation, Message
 from django.conf import settings
+import environ 
+
 
 
 def cached_queries(request):
@@ -31,5 +33,5 @@ def cached_queries(request):
                     new_msgs = True
                     break
 
-
-    return {'new_msgs': new_msgs, 'vapid_key':vapid_key}
+    oss = 'https://obrisk.oss-cn-hangzhou.aliyuncs.com'
+    return {'popular_tags': popular_tags, 'new_msgs': new_msgs, 'vapid_key':vapid_key, 'oss':oss}

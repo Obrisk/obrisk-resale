@@ -1,0 +1,222 @@
+---
+layout: default
+title: Feed
+---
+
+<!-- Container -->
+<div id="main-feed" class="container">
+
+    <!-- Content placeholders at page load -->
+    <!-- /html/includes/global/placeload/feed-page/feed-menu-shadow-dom.html -->
+    {{> feed-menu-shadow-dom}}
+
+    <!-- Feed page main wrapper -->
+    <div id="activity-feed" class="view-wrap true-dom is-hidden">
+        <div class="columns">
+            <!-- Left side column -->
+            <div class="column is-3 is-hidden-mobile">
+                <!-- Feed menu -->
+                <div class="feed-menu-v1">
+                    <ul class="main-menu">
+                        <li class="is-active">
+                            <a>
+                                <i data-feather="activity"></i>
+                                <span>Feed</span>
+                                <span class="close-icon">
+                                    <i data-feather="chevron-right"></i>
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li class="is-subactive">
+                                    <a>Trending <span class="tag">4</span></a>
+                                </li>
+                                <li>
+                                    <a>Popular</a>
+                                </li>
+                                <li>
+                                    <a>Following</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>
+                                <i data-feather="help-circle"></i>
+                                <span>Questions</span>
+                                <span class="close-icon">
+                                    <i data-feather="chevron-right"></i>
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a>Home</a>
+                                </li>
+                                <li>
+                                    <a>My Questions</a>
+                                </li>
+                                <li>
+                                    <a>Popular</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>
+                                <i data-feather="youtube"></i>
+                                <span>Videos</span>
+                                <span class="close-icon">
+                                    <i data-feather="chevron-right"></i>
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a>Home<span class="tag">7</span></a>
+                                </li>
+                                <li>
+                                    <a>Suggested</a>
+                                </li>
+                                <li>
+                                    <a>My Channel</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>
+                                <i data-feather="shopping-cart"></i>
+                                <span>Shopping</span>
+                                <span class="close-icon">
+                                    <i data-feather="chevron-right"></i>
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a>Trending<span class="tag">2</span></a>
+                                </li>
+                                <li>
+                                    <a>Popular<span class="tag">5</span></a>
+                                </li>
+                                <li>
+                                    <a>My Products</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a>
+                                <i data-feather="music"></i>
+                                <span>Music</span>
+                                <span class="close-icon">
+                                    <i data-feather="chevron-right"></i>
+                                </span>
+                            </a>
+                            <ul class="submenu">
+                                <li>
+                                    <a>My Products</a>
+                                </li>
+                                <li>
+                                    <a>Trending<span class="tag">6</span></a>
+                                </li>
+                                <li>
+                                    <a>Popular</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <!-- /Left side column -->
+
+            <!-- Middle column -->
+            <div class="column is-6">
+
+                <!-- Publishing Area -->
+                <!-- /includes/pages/feed/compose-card.html -->
+                {{> compose-card}}
+
+                <!-- Post 1 -->
+                <!-- /includes/pages/feed/posts/feed-post1.html -->
+                {{> feed-post1}}
+
+                <!-- Post 2 -->
+                <!-- /includes/pages/feed/posts/feed-post2.html -->
+                {{> feed-post2}}
+
+                <!-- Post 3 -->
+                <!-- /includes/pages/feed/posts/feed-post3.html -->
+                {{> feed-post3}}
+
+                <!-- Post 4 -->
+                <!-- /includes/pages/feed/posts/feed-post4.html -->
+                {{> feed-post4}}
+
+                <!-- Post 5 -->
+                <!-- /includes/pages/feed/posts/feed-post5.html -->
+                {{> feed-post5}}
+
+                <!-- Post 6 -->
+                <!-- /includes/pages/feed/posts/feed-post6.html -->
+                {{> feed-post6}}
+
+                <!-- Load more posts -->
+                <div class=" load-more-wrap has-text-centered">
+                    <a href="#" class="load-more-button">Load More</a>
+                </div>
+                <!-- /Load more posts -->
+
+            </div>
+            <!-- /Middle column -->
+
+            <!-- Right side column -->
+            <div class="column is-3">
+
+                <!-- Stories widget -->
+                <!-- /includes/widgets/stories-widget.html -->
+                {{> stories-widget}}
+
+                <!-- Birthday widget -->
+                <!-- /includes/widgets/birthday-widget.html -->
+                {{> birthday-widget}}
+
+                <!-- Suggested friends widget -->
+                <!-- /includes/widgets/suggested-friends-1-widget.html -->
+                {{> suggested-friends-1-widget}}
+
+                <!-- New job widget -->
+                <!-- /includes/widgets/new-job-widget.html -->
+                {{> new-job-widget}}
+
+            </div>
+            <!-- /Right side column -->
+        </div>
+    </div>
+    <!-- /Feed page main wrapper -->
+</div>
+<!-- /Container -->
+
+<!-- Create group modal in compose card -->
+<!-- /includes/pages/feed/modals/create-group-modal.html -->
+{{> create-group-modal}}
+
+<!-- Albums onboarding modal -->
+<!-- /includes/pages/feed/modals/albums-help-modal.html -->
+{{> albums-help-modal}}
+
+<!-- Album upload modal -->
+<!-- /includes/pages/feed/modals/albums-modal.html -->
+{{> albums-modal}}
+
+<!-- Live video onboarding modal -->
+<!-- /includes/pages/feed/modals/videos-help-modal.html -->
+{{> videos-help-modal}}
+
+<!-- Live video modal -->
+<!-- /includes/pages/feed/modals/videos-modal.html -->
+{{> videos-modal}}
+
+<!-- Share from feed modal -->
+<!-- /includes/pages/feed/modals/share-modal.html -->
+{{> share-modal}}
+
+<!-- No Stream modal -->
+<!-- /includes/pages/feed/modals/no-stream-modal.html -->
+{{> no-stream-modal}}
+
+<!-- Google places Lib -->
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyAGLO_M5VT7BsVdjMjciKoH1fFJWWdhDPU&libraries=places"></script>

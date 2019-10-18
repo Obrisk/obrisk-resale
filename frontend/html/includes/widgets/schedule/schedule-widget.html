@@ -1,0 +1,152 @@
+<div class="schedule">
+    <div class="schedule-day-container hidden">
+        <div class="day-header day-header--large">
+            <div class="day-header-bg"></div>
+            <div class="day-header-close">
+                <i data-feather="x"></i>
+            </div>
+            <div class="day-header-content">
+                <div class="day-header-title">
+                    <div class="day-header-title-day">24</div>
+                    <div class="day-header-title-month">October</div>
+                </div>
+                <div class="day-header-event">Workout Session</div>
+            </div>
+        </div>
+        <div class="day-content has-slimscroll">
+
+            <!-- Event 1 details -->
+            <!-- html/includes/widgets/schedule/event-details/event-1.html -->
+            {{> event-1}}
+
+            <!-- Event 2 details -->
+            <!-- html/includes/widgets/schedule/event-details/event-2.html -->
+            {{> event-2}}
+
+            <!-- Event 3 details -->
+            <!-- html/includes/widgets/schedule/event-details/event-3.html -->
+            {{> event-3}}
+
+            <!-- Event 4 details -->
+            <!-- html/includes/widgets/schedule/event-details/event-4.html -->
+            {{> event-4}}
+
+            <!-- Event 5 details -->
+            <!-- html/includes/widgets/schedule/event-details/event-5.html -->
+            {{> event-5}}
+
+        </div>
+    </div>
+    <div class="schedule-header">
+        <div class="nav-icon">
+            <i data-feather="chevron-left"></i>
+        </div>
+        <div class="month">October</div>
+        <div class="nav-icon">
+            <i data-feather="chevron-right"></i>
+        </div>
+    </div>
+    <div class="schedule-calendar">
+        <div class="calendar-row day-row">
+            <div class="day day-name">M</div>
+            <div class="day day-name">T</div>
+            <div class="day day-name">W</div>
+            <div class="day day-name">T</div>
+            <div class="day day-name">F</div>
+            <div class="day day-name">S</div>
+            <div class="day day-name">S</div>
+        </div>
+        <div class="calendar-row">
+            <div class="day">&nbsp;</div>
+            <div class="day">&nbsp;</div>
+            <div class="day">1</div>
+            <div class="day event green" data-content="1" data-day="2" data-event="Eat at mom and dad's">2</div>
+            <div class="day">3</div>
+            <div class="day">4</div>
+            <div class="day">5</div>
+        </div>
+        <div class="calendar-row">
+            <div class="day">6</div>
+            <div class="day event purple" data-content="2" data-day="7" data-event="Meet customer in LA">7</div>
+            <div class="day">8</div>
+            <div class="day">9</div>
+            <div class="day">10</div>
+            <div class="day">11</div>
+            <div class="day">12</div>
+        </div>
+        <div class="calendar-row">
+            <div class="day">13</div>
+            <div class="day">14</div>
+            <div class="day">15</div>
+            <div class="day">16</div>
+            <div class="day">17</div>
+            <div class="day">18</div>
+            <div class="day">19</div>
+        </div>
+        <div class="calendar-row">
+            <div class="day">20</div>
+            <div class="day">21</div>
+            <div class="day event green" data-content="3" data-day="22" data-event="Frank's birthday">22</div>
+            <div class="day">23</div>
+            <div class="day event primary" data-content="4" data-day="24" data-event="Workout Session">24</div>
+            <div class="day">25</div>
+            <div class="day event purple" data-content="5" data-day="26" data-event="Project review">26</div>
+        </div>
+        <div class="calendar-row">
+            <div class="day">27</div>
+            <div class="day">28</div>
+            <div class="day">29</div>
+            <div class="day">30</div>
+            <div class="day"></div>
+            <div class="day"></div>
+            <div class="day"></div>
+        </div>
+        <div class="next-fab">
+            <i data-feather="chevron-down"></i>
+        </div>
+    </div>
+    <div class="schedule-divider"></div>
+    <div class="schedule-events">
+        <div class="schedule-events-title">
+            Upcoming events
+        </div>
+        <div class="schedule-event">
+            <div class="event-date green">2</div>
+            <div class="event-title">
+                <span>Eat at mom and dad's</span>
+                <span>07:30pm | Home</span>
+            </div>
+        </div>
+        <div class="schedule-event">
+            <div class="event-date purple">7</div>
+            <div class="event-title">
+                <span>Meet customer in LA</span>
+                <span>11:00am | St Luc Café</span>
+            </div>
+        </div>
+        <div class="schedule-event">
+            <div class="event-date green">22</div>
+            <div class="event-title">
+                <span>Frank's birthday</span>
+                <span>03:00pm | Frank's home</span>
+            </div>
+        </div>
+        <div class="schedule-event">
+            <div class="event-date primary">24</div>
+            <div class="event-title">
+                <span>Workout session</span>
+                <span>07:00am | Gold Gym</span>
+            </div>
+        </div>
+        <div class="schedule-event">
+            <div class="event-date purple">26</div>
+            <div class="event-title">
+                <span>Project review</span>
+                <span>08:00am | Office</span>
+            </div>
+        </div>
+        <div class="button-wrap">
+            <a class="button is-fullwidth has-icon"><i data-feather="plus"></i>New Event</a>
+        </div>
+    </div>
+</div>
