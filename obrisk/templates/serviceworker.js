@@ -5,15 +5,138 @@ workbox.setConfig({
 });
 //Show debug logs in console
 workbox.setConfig({
-  debug: true
+  debug: false
 });
 
 workbox.core.skipWaiting();
 
-workbox.precaching.precacheAndRoute([
+workbox.precaching.precacheAndRoute([{
+    "url": "/static/assets/css/ajax-loader.gif",
+    "revision": "c5cd7f5300576ab4c88202b42f6ded62"
+  },
+  {
+    "url": "/static/assets/css/app.css",
+    "revision": "cdb7eab95e30b95d29bcc178bd96b3fb"
+  },
+  {
+    "url": "/static/assets/css/bulma.css",
+    "revision": "3d7dbc3e093f3e73074f21ae30f0a771"
+  },
+  {
+    "url": "/static/assets/css/core.css",
+    "revision": "c6500168c8ffe4a19c19c347b9ef888a"
+  },
+  {
+    "url": "/static/assets/css/materialdesignicons.min.css",
+    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
+  },
+  {
+    "url": "/static/assets/css/webfont.css",
+    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
+  },
+  {
+    "url": "/static/assets/js/app.js",
+    "revision": "f8118613e701fe8aa40dc43334a2d5b3"
+  },
+  {
+    "url": "/static/assets/js/autocompletes.js",
+    "revision": "a84c9e2e8b09234eebf8b94f4e7a6a88"
+  },
+  {
+    "url": "/static/assets/js/chat.js",
+    "revision": "a3172027f3176521cfe7403431289892"
+  },
+  {
+    "url": "/static/assets/js/elements.js",
+    "revision": "a32f46c2a4b411950b1b891c192b6c10"
+  },
+  {
+    "url": "/static/assets/js/events.js",
+    "revision": "24e63a872b5cbf926826ce79c41336b0"
+  },
+  {
+    "url": "/static/assets/js/explorer.js",
+    "revision": "466d466ed591b9a557fea495ef662ef9"
+  },
+  {
+    "url": "/static/assets/js/feed.js",
+    "revision": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  {
+    "url": "/static/assets/js/friends.js",
+    "revision": "4db6c2e7eff4c21670dde3227df7dbb0"
+  },
+  {
+    "url": "/static/assets/js/global.js",
+    "revision": "eb083b6aa4b56e4cdead8d078e34a579"
+  },
+  {
+    "url": "/static/assets/js/go-live.js",
+    "revision": "bf76b7cd1a32e52388d32c932242b435"
+  },
+  {
+    "url": "/static/assets/js/inbox.js",
+    "revision": "04068a235862aa45574e287165d94559"
+  },
+  {
+    "url": "/static/assets/js/landing.js",
+    "revision": "1c90809f8d2f444c6d7b47a1576b88a2"
+  },
+  {
+    "url": "/static/assets/js/lightbox.js",
+    "revision": "5344d8c46b063ed71fe25c1044e50cd1"
+  },
+  {
+    "url": "/static/assets/js/main.js",
+    "revision": "cb0774ba0079311c467ad1da25793cba"
+  },
+  {
+    "url": "/static/assets/js/modal-uploader.js",
+    "revision": "cd66113247e284c73cb78d462f6fc040"
+  },
+  {
+    "url": "/static/assets/js/news.js",
+    "revision": "0044306da774b6bbf76d8f369bb236ac"
+  },
+  {
+    "url": "/static/assets/js/popovers-pages.js",
+    "revision": "84703e877b88d17bf2bb6febcba204d5"
+  },
+  {
+    "url": "/static/assets/js/popovers-users.js",
+    "revision": "7b103ef98cf014962eb7d08ce3347b61"
+  },
+  {
+    "url": "/static/assets/js/profile.js",
+    "revision": "22232474dae8182c745b52a7df32748d"
+  },
+  {
+    "url": "/static/assets/js/questions.js",
+    "revision": "765dca8c12dd834efd4773c7b204f18e"
+  },
+  {
+    "url": "/static/assets/js/signup.js",
+    "revision": "7760e1216245b3896ef0da25f0a0108b"
+  },
+  {
+    "url": "/static/assets/js/touch.js",
+    "revision": "1140bb01d2a04b048245c5a1036be175"
+  },
+  {
+    "url": "/static/assets/js/tour.js",
+    "revision": "18de6e2130b112c2961f2cfd603f69f6"
+  },
+  {
+    "url": "/static/assets/js/videos.js",
+    "revision": "a1ab8ad0ce3e68f7841518cda5b562a4"
+  },
+  {
+    "url": "/static/assets/js/widgets.js",
+    "revision": "b8e215360a354e57aa6c753016e03fe0"
+  },
   {
     "url": "/static/css/account.css",
-    "revision": "a338cc2e6f9c6c794eefab13aaf5e27d"
+    "revision": "289df53074c930a43556f71537a9e23e"
   },
   {
     "url": "/static/css/bootstrap-grid.min.css",
@@ -29,15 +152,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classified-create.css",
-    "revision": "36ff5e54c3dbe754c7cad54a70e7a95d"
+    "revision": "dd18d06f83c5bbd0b180801e007aa76e"
   },
   {
     "url": "/static/css/classified-details.css",
-    "revision": "2708ccf0e952bc019b6d50d710f418fe"
+    "revision": "5560e0789d8e2823cd66da29393faee9"
   },
   {
     "url": "/static/css/classifieds-list.css",
-    "revision": "cec2e8e8ab59042b170e2e5cf9040bf9"
+    "revision": "e472cf4ef2fcb4d20aec21a151630806"
   },
   {
     "url": "/static/css/classifieds.css",
@@ -49,7 +172,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/creative.css",
-    "revision": "5cd67ce3d1f423fd48826070dbf9be22"
+    "revision": "d8ea8e39df4cb9f2829795c8085b1e50"
   },
   {
     "url": "/static/css/default-skin.min.css",
@@ -61,7 +184,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/listing.css",
-    "revision": "82cb2d0cc455218a5e35998a5aea27e9"
+    "revision": "ba3cd62796c6ef299573e487809989ca"
   },
   {
     "url": "/static/css/login.css",
@@ -77,31 +200,31 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/notifications.css",
-    "revision": "c8c9b0217b4580c04d00c9a4aeaf2fe3"
+    "revision": "08f6483366fa709c97a8aaa571858d62"
   },
   {
     "url": "/static/css/obrisk.css",
-    "revision": "50c4768839f18fbc036e1552c1fcc0e3"
+    "revision": "4430da15e6f00e327cd9605a85efa6f9"
   },
   {
     "url": "/static/css/photoswipe.min.css",
-    "revision": "7a55d43eef1b6fe6def95b70be9d742a"
+    "revision": "f196c59501ba1283d3d863bf7b733635"
   },
   {
     "url": "/static/css/post-create.css",
-    "revision": "157e23707df89649711ee7f70c470827"
+    "revision": "8f35a0037000978eff167c0f9b0bb836"
   },
   {
     "url": "/static/css/post-details.css",
-    "revision": "edda765773a08e81941634042fd3abed"
+    "revision": "ec1f65bffb1c2b52a5eca725ab934123"
   },
   {
     "url": "/static/css/post-list.css",
-    "revision": "dfc48eec859e06ac42fd91b0a12e31fc"
+    "revision": "960ea00e06bf3189421a6243d2dbb045"
   },
   {
     "url": "/static/css/post-update.css",
-    "revision": "157e23707df89649711ee7f70c470827"
+    "revision": "8f35a0037000978eff167c0f9b0bb836"
   },
   {
     "url": "/static/css/preloader.gif",
@@ -109,15 +232,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/qa.css",
-    "revision": "ddd3af46392bc5e6c808ab15ff48ee28"
+    "revision": "a99ce06bc73af4a7a4665ee8acfcc75b"
   },
   {
     "url": "/static/css/stories.css",
-    "revision": "9611d940a8a8dc29d5dd2d31ee518bb6"
+    "revision": "db5470b7fd44a000fc736db5e7c1189f"
   },
   {
     "url": "/static/css/swiper.min.css",
-    "revision": "e7827ef3b92ce9040ca473de65143402"
+    "revision": "e15e63828bf778572d6535e497a718a2"
   },
   {
     "url": "/static/css/uploader.css",
@@ -125,7 +248,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/user_form.css",
-    "revision": "d3fb601fcd0b620277abdd4411c86e77"
+    "revision": "5a20c5887cf8043d5099017e97e54b90"
   },
   {
     "url": "/static/css/user_list.css",
@@ -133,7 +256,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/user_profile.css",
-    "revision": "186c1b0ab492621c780def7434879ab5"
+    "revision": "5b7038b0ee03761a3bfb3bf819e5f578"
   },
   {
     "url": "/static/css/util.css",
@@ -309,7 +432,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/aliyun-oss.min.js",
-    "revision": "394d956eca3bc1d64e6b5a06d539fe94"
+    "revision": "205caeb2754ac7de94d1ea88b367badf"
   },
   {
     "url": "/static/js/bootbox.min.js",
@@ -321,7 +444,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/browser-md5.js",
-    "revision": "005d7aca45591ad4203f12ea12712ea6"
+    "revision": "ea4417a595c5f82501191869ba42aa02"
   },
   {
     "url": "/static/js/fancybox.min.js",
@@ -329,11 +452,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/html5shiv.min.js",
-    "revision": "7b7a4e3a218061d489d18edc20018200"
+    "revision": "40bd440d29b3a9371b0c63fec41ee64f"
   },
   {
     "url": "/static/js/imageClient.js",
-    "revision": "4ab948f26be9ea5a0ce149e6f2b1022c"
+    "revision": "201ffb200c62b0f13b58ff362f8790c0"
   },
   {
     "url": "/static/js/infinite.min.js",
@@ -349,15 +472,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/listing.js",
-    "revision": "464391cc6d6f4dc59d4a7052b70bff94"
+    "revision": "0faf7bed8823a75120e36c8f63dabc87"
   },
   {
     "url": "/static/js/location.js",
-    "revision": "1a27a7150aefee3a045965bfd5272631"
+    "revision": "45be2f2d5b1e9015c4b8f0761aa52d65"
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "d71e17e583aa6bbc60bc0fdaa9a776fd"
+    "revision": "3277d641bfb6f3da87094925a6f6a765"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -365,19 +488,19 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/notif-sw.js",
-    "revision": "38d1cb8689e33c694cc8ff6139b1790f"
+    "revision": "74eb00aa496ead50011a95306103430c"
   },
   {
     "url": "/static/js/obrisk.js",
-    "revision": "ec8cfa2606bbad1b8106d867da490ab5"
+    "revision": "98565704295ce288cfb484ff0aa9c63a"
   },
   {
     "url": "/static/js/photoswipe-ui-default.min.js",
-    "revision": "8e606a5f652bf3d96b48f5b426001885"
+    "revision": "9517baca43cd4e9cb23ff337fbc1baa1"
   },
   {
     "url": "/static/js/photoswipe.min.js",
-    "revision": "c260bce75dabf9ffef99b5d743638db5"
+    "revision": "f5cd6479c4e4682545a9603e6b50c741"
   },
   {
     "url": "/static/js/popper.min.js",
@@ -385,23 +508,23 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/post-uploader.js",
-    "revision": "d299ce34ae034e1b780b8696b636943d"
+    "revision": "0c76b0bd3813a9bc7ce5ffa038558fd6"
   },
   {
     "url": "/static/js/posts.js",
-    "revision": "9991ed072b6ba3fb5e4ea8f96d40eebf"
+    "revision": "3e629bf0360dced14124c2baf030516d"
   },
   {
     "url": "/static/js/profile-uploader.js",
-    "revision": "7c63b99426e49c72f1262c9ddd73b1e3"
+    "revision": "24ff27e6dc4c145baa420dbfd83e67f2"
   },
   {
     "url": "/static/js/qa.js",
-    "revision": "de517f44c5974b93e7b984f0570dbf15"
+    "revision": "b1a4f5f99b3024b3bfff64965b2319bf"
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "97df19f569dc7642b4d88d15031f90c4"
+    "revision": "4c638b3f4d9688fbd307aa5879a3a974"
   },
   {
     "url": "/static/js/swiper.min.js",
@@ -409,7 +532,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/toast-msg.js",
-    "revision": "af82356c546778cbdf17b6f9ae8b79d7"
+    "revision": "36d40daeb71af271364fb3a27987e7aa"
   },
   {
     "url": "/static/js/uploader.js",
@@ -417,7 +540,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/user-form.js",
-    "revision": "d3f581eb5d8717367088e752be2c57d8"
+    "revision": "872dcd7dc266c7323fb814ef1e3bcbe6"
   },
   {
     "url": "/static/js/websocketbridge.js",
@@ -425,7 +548,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/webpush/webpush.js",
-    "revision": "c0e497b590f7058fa9cd8d0225e2eed1"
+    "revision": "0b019a8f720c305a6ce0de13762865db"
   }
 ]);
 
@@ -555,12 +678,12 @@ self.addEventListener('push', function (event) {
   const eventInfo = event.data.text();
 
   try {
-      var data = JSON.parse(eventInfo);
-      var head = data.head;
-      var body = data.body;
+    var data = JSON.parse(eventInfo);
+    var head = data.head;
+    var body = data.body;
   } catch (e) {
-      var head = 'New Notification 🕺🕺';
-      var body =  'Open Obrisk to view';
+    var head = 'New Notification 🕺🕺';
+    var body = 'Open Obrisk to view';
   }
 
   // Keep the service worker alive until the notification is created.

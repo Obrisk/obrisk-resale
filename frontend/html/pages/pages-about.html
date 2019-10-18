@@ -1,0 +1,149 @@
+---
+layout: default
+title: Page Profile
+---
+
+<!-- Container -->
+<div class="container is-custom">
+
+    <!-- Profile page main wrapper -->
+    <div id="pages-about" class="view-wrap is-headless">
+        <div class="columns is-multiline no-margin">
+            <!-- Left side column -->
+            <div class="column is-paddingless">
+                <!-- Timeline Header -->
+                <!-- html/includes/pages/pages/page-profile-header.html -->
+                {{> page-profile-header}}
+            </div>
+
+        </div>
+
+        <div class="columns has-portrait-padding">
+            <div class="column is-4">
+
+                <!-- Community widget -->
+                <!-- html/includes/pages/widgets/page-community-widget.html -->
+                {{> page-community-widget}}
+
+                <!-- Related pages widget -->
+                <!-- html/includes/pages/widgets/pages-related-pages-widget.html -->
+                {{> page-related-pages-widget}}
+
+            </div>
+
+            <div class="column is-8">
+
+                <div class="card page-about-card">
+                    <div class="card-title">
+                        <h4>About Fast Pizza</h4>
+                        <a href="https://www.fastpizza.com/index.intl.html" target="_blank" class="button is-solid grey-button raised">Go to Website</a>
+                    </div>
+                    <div class="about-body">
+                        <div class="columns">
+                            <div class="column is-5">
+                                <div class="about-block">
+                                    <div class="block-header">
+                                        <h4>Contact Info</h4>
+                                    </div>
+                                    <div class="block-content">
+                                        <div class="flex-inner">
+                                            <i data-feather="phone"></i>
+                                            <span>Call <a>+555-654-545-88</a></span>
+                                        </div>
+                                        <div class="flex-inner">
+                                            <i data-feather="message-circle"></i>
+                                            <span>Start a <a>Conversation</a></span>
+                                        </div>
+                                        <div class="flex-inner">
+                                            <i data-feather="globe"></i>
+                                            <span><a>https://fastpizza.com</a></span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="about-block">
+                                    <div class="block-header">
+                                        <h4>More Info</h4>
+                                    </div>
+                                    <div class="block-content">
+                                        <div class="flex-inner has-meta">
+                                            <i class="mdi mdi-office-building"></i>
+                                            <div class="meta">
+                                                <span>Company</span>
+                                                <span>Domino's Pizza is a global fast-food company</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex-inner has-meta">
+                                            <i class="mdi mdi-earth"></i>
+                                            <div class="meta">
+                                                <span>Around the world</span>
+                                                <span>Domino's Pizza has 28,489 stores around the world</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="column is-6">
+                                <div class="about-block">
+                                    <div class="block-header">
+                                        <h4>History</h4>
+                                    </div>
+                                    <div class="block-content">
+                                        <div class="history-block">
+                                            <div class="date">1960's</div>
+                                            <div class="timeline">
+                                                <ul>
+                                                    <li>Tom Willis and his brother James purchase "GoGo", a pizza restaurant in Saratoga, Michigan.</li>
+                                                    <li>The first Fast Pizza franchise restaurant opens in Saratoga, Michigan.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="history-block">
+                                            <div class="date">1970's</div>
+                                            <div class="timeline">
+                                                <ul>
+                                                    <li>Amstar Corp., maker of Fast Pace, institutes a trademark infringement lawsuit against Fast Pizza.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+
+                                        <div class="history-block">
+                                            <div class="date">1980's</div>
+                                            <div class="timeline">
+                                                <ul>
+                                                    <li>Fast Pizza's first international restaurant opens in Winnipeg, Canada. The 1000th Fast Pizza's restaurant opens.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Change cover image modal -->
+<!--html/includes/pages/profile/timeline/modals/change-cover-modal.html-->
+{{> change-cover-modal}}
+
+<!-- Change profile pic modal -->
+<!--html/includes/pages/profile/timeline/modals/change-profile-pic-modal.html-->
+{{> change-profile-pic-modal}}
+
+<!-- User photos and albums -->
+<!--html/includes/pages/profile/timeline/modals/user-photos-modal.html-->
+{{> user-photos-modal}}
+
+<!-- Profile picture crop modal -->
+<!--html/includes/pages/profile/timeline/modals/upload-crop-profile-modal.html-->
+{{> upload-crop-profile-modal}}
+
+<!-- Cover image crop modal -->
+<!--html/includes/pages/profile/timeline/modals/upload-crop-cover-modal.html-->
+{{> upload-crop-cover-modal}}

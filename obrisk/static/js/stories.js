@@ -31,74 +31,11 @@ $(function () {
             }
         }
     });
+    $("input, textarea").val('');
 
-    function hide_stream_update() {
-        $(".stream-update").hide();
-    };
-
-
-    // Focus on the modal input by default.
-    $('#storiesFormModal').on('shown.bs.modal', function () {
-        $('#storiesInput').trigger('focus')
-    });
-
-    $('#storiesThreadModal').on('shown.bs.modal', function () {
-        $('#replyInput').trigger('focus')
-    });
-
-    // Counts textarea characters to provide data to user.
-    $("#storiesInput").keyup(function () {
-        var charCount = $(this).val().length;
-        $("#storiesCounter").text(280 - charCount);
-    });
-
-    $("#replyInput").keyup(function () {
-        var charCount = $(this).val().length;
-        $("#replyCounter").text(280 - charCount);
-    });
-
-    $("input, textarea").attr("autocomplete", "off");
-
-    $("#postStories").click(function () {
-        // Ajax call after pushing button, to register a Stories object.
-        $.ajax({
-            url: '/stories/post-stories/',
-            data: $("#postStoriesForm").serialize(),
-            type: 'POST',
-            cache: false,
-            success: function (data) {
-                $("ul.stream").prepend(data);
-                $("#storiesInput").val("");
-                $("#storiesFormModal").modal("hide");
-                hide_stream_update();
-            },
-            error: function (data) {
-                bootbox.alert(data.responseText);
-            },
-        });
-    });
-
-    $("#replyStories").click(function () {
-        // Ajax call to register a reply to any given Stories object.
-        $.ajax({
-            url: '/stories/post-comment/',
-            data: $("#replyStoriesForm").serialize(),
-            type: 'POST',
-            cache: false,
-            success: function () {
-                $("#replyInput").val("");
-                $("#storiesThreadModal").modal("hide");
-                $('.comment-count').html(parseInt($('.comment-count').html(), 10)+1);
-            },
-            error: function (data) {
-                bootbox.alert(data.responseText);
-            },
-        });
-    });
-
-    $("ul.stream").on("click", ".like", function () {
+    $(".infinite-container").on("click", ".like-wrapper", function () {
         // Ajax call on action on like button.
-        var li = $(this).closest("li");
+        var li = $(this).closest(".card");
         var stories = $(li).attr("stories-id");
 
         $.ajax({
@@ -109,87 +46,187 @@ $(function () {
             type: 'GET',
             cache: false,
             success: function (data) {
-                $(".like .like-count", li).text(data.likes);
-                if ($(".like .heart", li).hasClass("fa fa-heart")) {
-                    $(".like .heart", li).removeClass("fa fa-heart");
-                    $(".like .heart", li).addClass("fa fa-heart-o");
-                } else {
-                    $(".like .heart", li).removeClass("fa fa-heart-o");
-                    $(".like .heart", li).addClass("fa fa-heart");
-                }
+                li.find(".likes-count .count").text(data.likes);
+
             }
         });
         return false;
     });
 
-    $("ul.stream").on("click", ".comment", function () {
+    //Cose comments
+    $(".infinite-container").on("click", ".close-comments", function () {
         // Ajax call to request a given Stories object detail and thread, and to
         // show it in a modal.
         var post = $(this).closest(".card");
-        var stories = $(post).closest("li").attr("stories-id");
-        $("#storiesThreadModal").modal("show");
+        var stories = $(post).attr("stories-id");
+        post.find('.content-wrap').toggleClass('is-hidden');
+        post.find('.comments-wrap').toggleClass('is-hidden')
+    });
+
+
+    //Show comments
+    $(".infinite-container").on("click", ".is-comment", function () {
+        // Ajax call to request a given Stories object detail and thread, and to
+        // show it in a modal.
+        var post = $(this).closest(".card");
+        var stories = $(post).attr("stories-id");
+        post.find('.content-wrap').toggleClass('is-hidden');
+        post.find('.comments-wrap').toggleClass('is-hidden');
+        $("textarea").keyup(function () {
+            var counter = $(this).closest(".textarea-parent");
+            counter.find(".counter .count").text(400 - $(this).val().length);
+            $(this).height('auto');
+            $(this).height($(this).prop('scrollHeight'));
+        });
+        $("input, textarea").val('');
+        $('.emojionearea-editor').html("");
         $.ajax({
             url: '/stories/get-thread/',
             data: {
                 'stories': stories
             },
             cache: false,
-            beforeSend: function () {
-                $("#threadContent").html("<li class='loadcomment'><img src='/static/img/loading.gif'></li>");
-            },
+
             success: function (data) {
-                $("input[name=parent]").val(data.uuid)
-                $("#storiesContent").html(data.stories);
-                $("#threadContent").html(data.thread);
+                if (data.thread.trim() != "")
+                    post.find(".comments-body").html(data.thread);
+                post.find("input[name=parent]").val(data.uuid)
             }
         });
-        return false;
+        $('.comment-textarea').addClass("focused");
+    });
+
+    //Comment on a story
+    $("a#post-comment-button").click(function () {
+        // Ajax call to register a reply to any given Stories object.
+        post = $(this).closest('.card');
+        $.ajax({
+            url: '/stories/post-comment/',
+            data: post.find(".replyStoriesForm").serialize(),
+            type: 'POST',
+            cache: false,
+            success: function () {
+                post.find(".comment-textarea").val("");
+                post.find('.comments-count .count').html(parseInt(post.find('.comments-count .count').html(), 10) + 1);
+                post.find('.content-wrap').toggleClass('is-hidden');
+                post.find('.comments-wrap').toggleClass('is-hidden');
+                var stories = $(post).attr("stories-id");
+                $("input, textarea").val('');
+                setTimeout(function () {
+                    $.ajax({
+                        url: '/stories/get-thread/',
+                        data: {
+                            'stories': stories
+                        },
+                        cache: false,
+
+                        success: function (data) {
+                            if (data.thread.trim() != "")
+                                post.find(".comments-body").html(data.thread);
+                            post.find("input[name=parent]").val(data.uuid)
+                        }
+                    });
+                    post.find('.content-wrap').toggleClass('is-hidden');
+                    post.find('.comments-wrap').toggleClass('is-hidden');
+
+                }, 200);
+            },
+            error: function (data) {
+                bootbox.alert(data.responseText);
+            },
+        });
+
+    });
+
+    //Character count 
+    $("textarea").keyup(function () {
+        var counter = $(this).closest(".textarea-parent");
+        counter.find(".counter .count").text(400 - $(this).val().length);
+        $(this).height('auto');
+        $(this).height($(this).prop('scrollHeight'));
+    });
+
+    //Open publish mode
+    $('#publish').on('click', function () {
+        $('.app-overlay').addClass('is-active');
+        $('.close-wrap').removeClass('d-none');
+        $('.is-new-content').addClass('is-highlighted');
+
+    });
+    //Enable and disable publish button based on the textarea value length (1)
+    $('#publish').on('input', function () {
+        var valueLength = $(this).val().length;
+
+        if (valueLength >= 1) {
+            $('#publish-button').removeClass('is-disabled');
+        } else {
+            $('#publish-button').addClass('is-disabled');
+        }
+    })
+    $("#publish-button").click(function () {
+        // Ajax call after pushing button, to register a Stories object.
+        $.ajax({
+            url: '/stories/post-stories/',
+            data: $("#postStoriesForm").serialize(),
+            type: 'POST',
+            cache: false,
+            success: function (data) {
+                $(".infinite-container").prepend(data);
+                $('[name="post"]').val("");
+                $('.app-overlay').removeClass('is-active');
+                $('.is-new-content').removeClass('is-highlighted');
+                $('.close-wrap').addClass('d-none');
+                feather.replace();
+            },
+            error: function (data) {
+                bootbox.alert(data.responseText);
+            },
+        });
+    });
+    //Close compose box
+    $('.close-publish').on('click', function () {
+        $('.app-overlay').removeClass('is-active');
+        $('.is-new-content').removeClass('is-highlighted');
+        $('.close-wrap').addClass('d-none');
+    });
+    //Comment on a story
+    $(".comment-button").click(function () {
+        // Ajax call to register a reply to any given Stories object.
+        $.ajax({
+            url: '/stories/post-comment/',
+            data: $("#replyStoriesForm").serialize(),
+            type: 'POST',
+            cache: false,
+            success: function () {
+                $(".comment-textarea").val("");
+                $('.is-comment-count').html(parseInt($('.is-comment-count').html(), 10) + 1);
+            },
+            error: function (data) {
+                bootbox.alert(data.responseText);
+            },
+        });
+    });
+    //Show comments
+    $(".infinite-container").on("click", ".is-comment", function () {
+        // Ajax call to request a given Stories object detail and thread, and to
+        // show it in a modal.
+        var post = $(this).closest(".card");
+        var stories = $(post).attr("stories-id");
+        post.find('.content-wrap').toggleClass('is-hidden');
+        post.find('.comments-wrap').toggleClass('is-hidden')
+
+        $.ajax({
+            url: '/stories/get-thread/',
+            data: {
+                'stories': stories
+            },
+            cache: false,
+
+            success: function (data) {
+                if (data.thread.trim() != "")
+                    post.find(".comments-body").html(data.thread);
+                post.find("input[name=parent]").val(data.uuid)
+            }
+        });
     });
 });
-
-
-/* Example query for the GraphQL endpoint.
-
-    query{
-        stories(uuidId: "--insert here the required uuid_id value for the lookup"){
-          uuidId
-          content
-          timestamp
-          countThread
-          countLikers
-          user {
-            name
-            picture
-          }
-          liked {
-            name
-          }
-          thread{
-            content
-          }
-        }
-        paginatedStories(page: 1){
-          page
-          pages
-          hasNext
-          hasPrev
-          objects {
-            uuidId
-            content
-            timestamp
-            countThread
-            countLikers
-            user {
-              name
-              picture
-            }
-            liked {
-              name
-            }
-            thread{
-              content
-            }
-          }
-        }
-      }
- */

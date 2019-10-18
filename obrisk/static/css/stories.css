@@ -78,12 +78,6 @@ a:hover {
   color: #424247;
 }
 
-.compose {
-  display: none;
-  border-bottom: 1px solid #eee;
-  padding-left: 15px;
-  padding-right: 15px;
-}
 
 .col-centered {
   float: none;

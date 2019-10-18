@@ -1,0 +1,61 @@
+<div class="navbar-item">
+    <div id="global-search" class="control">
+        <input id="tipue_drop_input" class="input is-rounded" type="text" placeholder="Search" required>
+        <span id="clear-search" class="reset-search">
+            <i data-feather="x"></i>
+        </span>
+        <span class="search-icon">
+            <i data-feather="search"></i>
+        </span>
+        <span class="drop-icon">
+            <i data-feather="more-vertical"></i>
+        </span>
+
+        <!-- Search Dropdown -->
+        <div class="search-options">
+            <ul class="options-list">
+                <!-- Search Option -->
+                <li class="is-selected">
+                    <!--label class="material-radio">
+                        <input type="radio" name="search-type" checked>
+                        <span class="radio-label"></span>
+                    </label-->
+                    <span class="option-icon">
+                        <i data-feather="search"></i>
+                    </span>
+                    <span class="option-description">
+                        <span>Search All</span>
+                        <span>Search everything </span>
+                    </span>
+                </li>
+                <!-- Search Option -->
+                <li>
+                    <span class="option-icon">
+                        <i data-feather="users"></i>
+                    </span>
+                    <span class="option-description">
+                        <span>Search People</span>
+                        <span>Search accross people and friends</span>
+                    </span>
+                </li>
+                <!-- Search Option -->
+                <li>
+                    <span class="option-icon">
+                        <i data-feather="file-text"></i>
+                    </span>
+                    <span class="option-description">
+                        <span>Search Pages</span>
+                        <span>Search all Posts and news feeds</span>
+                    </span>
+                </li>
+            </ul>
+            <!-- Close -->
+            <div class="is-close">
+                <button id="close-search-options" type="button" class="button is-solid grey-button">Close</button>
+            </div>
+        </div>
+
+        <div id="tipue_drop_content"></div>
+    </div>
+
+</div>
