@@ -9,7 +9,7 @@ class ClassifiedForm(forms.ModelForm):
     show_phone = forms.BooleanField( widget=forms.HiddenInput(), initial=True) 
     images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False) #100 for each image.
     img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) #Store images error for later debugging.
-    address = forms.CharField (required=False, label=("Your address"), help_text='You can easily add your address permenently on your profile settings')
+    address = forms.CharField (required=False, label=("Your address"), help_text='You can easily add your address permanently on your profile settings')
     phone_number = PhoneNumberField(required=False, label=("Phone number"),
                                     widget=forms.TextInput(
                                     attrs={'placeholder': ('Don\'t enter country code'),

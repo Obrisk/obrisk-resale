@@ -9,7 +9,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import CreateView, ListView, DetailView
 from django.views.decorators.csrf import csrf_exempt
 
-from obrisk.helpers import ajax_required
+from obrisk.utils.helpers import ajax_required
 from obrisk.qa.models import Question, Answer
 from obrisk.qa.forms import QuestionForm
 

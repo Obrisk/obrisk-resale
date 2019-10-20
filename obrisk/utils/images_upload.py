@@ -1,24 +1,21 @@
-from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseBadRequest, HttpResponseRedirect
-from django.views.generic import View
-from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
-from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
-from django.views.decorators.http import require_GET, require_POST
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
+from slugify import slugify
 
 import json
+import base64
 import re
 import os
-import time
+import datetime
 
 import oss2
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
-from pwa_webpush.utils import send_notification_to_user
-
+from obrisk.classifieds.models import ClassifiedImages
+from obrisk.stories.models import StoryImages
 
 # STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
 # STS's official documentation can be found at https://help.aliyun.com/document_detail/28627.html
@@ -54,7 +51,7 @@ class StsToken(object):
         self.access_key_secret = ''
         self.expiration = 0
         self.security_token = ''
-        self.request_id = ''
+        request_id = ''
 
 
 def fetch_sts_token(access_key_id, access_key_secret, role_arn):
@@ -154,86 +151,90 @@ def get_oss_auth(request):
         return JsonResponse(data)
 
 
-def paginate_data(qs, page_size, page, paginated_type, **kwargs):
-    """Helper function to turn many querysets into paginated results at
-    dispose of our GraphQL API endpoint."""
-    p = Paginator(qs, page_size)
-    try:
-        page_obj = p.page(page)
+def multipleImagesPersist(request, images_list, app, obj):
+    ''' This function takes the request, images list, app name (string) and app object
+    and it validates the images list and saves the images to the database.
+    It returns True if the images where saved to the db and False if there is a validation problem '''
 
-    except PageNotAnInteger:
-        page_obj = p.page(1)
+    #The code from here onwards assume the first element of images list is undefined.
+    tot_img_objs = len(images_list)
 
-    except EmptyPage:
-        page_obj = p.page(p.num_pages)
-
-    return paginated_type(
-        page=page_obj.number,
-        pages=p.num_pages,
-        has_next=page_obj.has_next(),
-        has_prev=page_obj.has_previous(),
-        objects=page_obj.object_list,
-        **kwargs
-    )
-
-
-def ajax_required(f):
-    """Not a mixin, but a nice decorator to validate than a request is AJAX"""
-    def wrap(request, *args, **kwargs):
-        if not request.is_ajax():
-            return HttpResponseBadRequest()
-
-        return f(request, *args, **kwargs)
-
-    wrap.__doc__ = f.__doc__
-    wrap.__name__ = f.__name__
-    return wrap
-
-
-def redirect_browser(request):
-    """This function is here for reference but is never called by any urls in obrisk.
-    It was pushing the user out of wechat browser for android users."""
-    if request.user_agent.browser.family == 'Mobile Safari':
-        return redirect('ios_download', permanent=True)
+    if tot_img_objs < 2:
+        messages.error(request, "Sorry, it looks like the image(s) was not uploaded successfully. \
+            or you've done something wrong.")
+        obj.delete()
+        return False
     else:
-        response = HttpResponseRedirect('/classifieds/')
-        response['Content-Disposition'] = 'attachment;filename=open.pdf'
-        response['Content-Type'] = 'text/plain; charset=utf-8'
-        response['If-None-Match'] = None
-        response['If-Modified-Since'] = None
-        response.status_code = 206
-        return response
-
-
-class AuthorRequiredMixin(View):
-    """Mixin to validate than the loggedin user is the creator of the object
-    to be edited or updated."""
-    def dispatch(self, request, *args, **kwargs):
-        obj = self.get_object()
-        if obj.user != self.request.user:
-            raise PermissionDenied
-
-        return super().dispatch(request, *args, **kwargs)
-
-
-def send_push_notif(recipient_id, title, body, notif_type='Message'):
-    try:
-        user = get_object_or_404(get_user_model(), pk=recipient_id)
+        if (images_list[1] == None or images_list[1].startswith(f'{app}/') == False):
+            messages.error(request, "Sorry, the image(s) were not uploaded successfully. \
+                Please add the images again and submit the form!")
+            obj.delete()
+            return False 
         
-        url = "https://www.obrisk.com/"
-        if user and notif_type == 'Message':
-            url =  "https://www.obrisk.com/ws/messages/"
+        else:
+            #from here if you return form invalid then you have to prior delete the obj, obj.delete()
+            #The current implementation will sucessfully create obj even when there are error on images
+            #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
+            #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
+     
+            for index, str_result in enumerate(images_list):
+                if index == 0:
+                    continue
 
-        payload = { 'head': title,
-                    'body': body,
-                    'icon': 'https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/favicon.png',
-                    'url': url
-                }
+                if str_result.startswith(f'{app}/') == False:
+                    messages.error(request, "Hello! It looks like some of the image(s) you uploaded, \
+                        are corrupted, or you've done something wrong. Please edit your post, \
+                        and upload the images again.")
+                    obj.delete()
+                    return False 
                 
-        send_notification_to_user(user=user, payload=payload, ttl=1000)
+                else:
+                    d = str(datetime.datetime.now())
+                    style = 'image/resize,m_fill,h_156,w_156'
 
-        return {"status": "200", "message": "Web push successful"}
-    except TypeError:
-        return {"status": "500", "message": "Web push failed"}
+                    if app == 'classifieds':
+                        img_obj = ClassifiedImages(classified=obj, image=str_result)
+                        thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
+                                slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
 
+                    elif app == 'stories':
+                        img_obj = StoryImages(story=obj, image=str_result)
+                        thumb_name = "stories/" + slugify(str(obj.user)) + "/" + "/thumbnails/" + d + str(index)
+            
+                    else:
+                        return False
 
+                    try:
+                        process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                                    oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                        oss2.compat.to_bytes(thumb_name))),
+                                                                    oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                        bucket.process_object(str_result, process)
+                    
+                    except oss2.exceptions.OssError as e:
+                        #Most likely this is our problem so save the image without the thumbnail:
+                        if index+1 == tot_img_objs:
+                            messages.error(request, f"Oops we are sorry. It looks like some of your images, \
+                                were not uploaded successfully. Please edit your item to add images.\
+                                status= f{e.status}, requestID= f{e.request_id}")
+                
+                            img_obj.save()
+                            return True
+                        else:
+                            img_obj.save()
+                            continue   
+
+                    except Exception as e:
+                        #If there is a problem with the thumbnail generation, don't save the image just save the tags.
+                        if index+1 == tot_img_objs:
+                            messages.error(request, "Oops we are sorry. It looks like some of your images, \
+                                were not uploaded successfully. Please edit your item to add images. ")
+                            return True 
+                        
+                        else:
+                            continue   
+                    else:
+                        img_obj.image_thumb = thumb_name
+                        img_obj.save()
+
+            return True

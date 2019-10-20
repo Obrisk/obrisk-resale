@@ -20,15 +20,14 @@ from django.core.mail import send_mail
 from slugify import slugify
 
 from taggit.models import Tag
-from obrisk.helpers import AuthorRequiredMixin
+from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
-from obrisk.helpers import bucket, bucket_name
+from obrisk.utils.images_upload import multipleImagesPersist
 
 # For images
 import json
 import re
-import os
 import base64
 import datetime
 
@@ -42,7 +41,7 @@ from django.views.decorators.http import require_http_methods
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from obrisk.helpers import ajax_required
+from obrisk.utils.helpers import ajax_required
 
 from dal import autocomplete
 
@@ -176,27 +175,10 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
 
-        for index, str_result in enumerate(images_list):
-            if index == 0:
-                continue
-            img = ClassifiedImages(image=str_result)
-            img.classified = classified
-
-
-            d = str(datetime.datetime.now())
-            thumb_name = "Official-ads/" + str(classified.user) + "/" + \
-            slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
-            style = 'image/resize,m_fill,h_156,w_156'
-            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                          oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                              oss2.compat.to_bytes(thumb_name))),
-                                                          oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            bucket.process_object(str_result, process)
-            img.image_thumb = thumb_name
-
-            img.save()
-
-        return super(CreateOfficialAdView, self).form_valid(form)
+        if multipleImagesPersist(self.request, images_list, 'classifieds', classified):
+            return super(CreateOfficialAdView, self).form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
@@ -235,93 +217,16 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
         
         if not images_json:
-            return super(CreateClassifiedView, self).form_valid(form)
+            #For security Images must be there even if there is an error
+            return self.form_invalid(form)
 
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
-    
-        #The code from here onwards assume the first element of images list is undefined.
-        tot_imgs = len(images_list)
 
-        if tot_imgs < 2:
-            messages.error(self.request, "Sorry, it looks like the image(s) was not uploaded successfully. \
-                or you've done something wrong. Please add the images again and submit the form!")
-            classified.delete()
-            return self.form_invalid(form)
+        if multipleImagesPersist(self.request, images_list, 'classifieds', classified):    
+            return super(CreateClassifiedView, self).form_valid(form)
         else:
-            if (images_list[1] == None or images_list[1].startswith('classifieds/') == False):
-                messages.error(self.request, "Sorry, the image(s) were not uploaded successfully. \
-                    Please add the images again and submit the form!")
-                classified.delete()
-                return self.form_invalid(form)
-            
-            else:
-                #from here if you return form invalid then you have to prior delete the classified, classified.delete()
-                #The current implementation will sucessfully create classified even when there are error on images
-                #This is just to help to increase the classifieds post on the website. The user shouldn't be discourage with errors
-                #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
-                for index, str_result in enumerate(images_list):
-                    if index == 0:
-                        continue
-
-                    if str_result.startswith('classifieds/') == False:
-                        messages.error(self.request, "Hello! It looks like some of the image(s) you uploaded, \
-                            are corrupted, or you've done something wrong. Please edit your post, \
-                            and upload the images again.")
-                        classified.delete()
-                        return self.form_invalid(form)
-                    
-                    else:
-                        d = str(datetime.datetime.now())
-                        thumb_name = "classifieds/" + slugify(str(classified.user)) + "/" + \
-                        slugify(str(classified.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
-                        style = 'image/resize,m_fill,h_156,w_156'
-                        
-                        img = ClassifiedImages(image=str_result)
-                        img.classified = classified
-
-                        try:
-                            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                            oss2.compat.to_bytes(thumb_name))),
-                                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                            bucket.process_object(str_result, process)
-                        
-                        except oss2.exceptions.OssError as e:
-                            #Most likely this is our problem so save the image without the thumbnail:
-                            if index+1 == tot_imgs:
-                                messages.error(self.request, "Oops we are sorry. It looks like some of your images, \
-                                    were not uploaded successfully. Please edit your item to add images. "
-                                    + 'status={0}, request_id={1}'.format(e.status, e.request_id))
-                    
-                                img.save()
-                                return redirect ('classifieds:list')
-                            else:
-                                img.save()
-                                continue   
-
-                        except:
-                            #If there is a problem with the thumbnail generation, don't save the image just save the tags.
-                            if index+1 == tot_imgs:
-                                messages.error(self.request, "Oops we are sorry. It looks like some of your images, \
-                                    were not uploaded successfully. Please edit your item to add images. "
-                                    + 'status={0}, request_id={1}'.format(e.status, e.request_id))
-                    
-                                return redirect ('classifieds:list')
-                            else:
-                                continue   
-                        else:
-                            img.image_thumb = thumb_name
-                            img.save()
-
-                #When the for-loop has ended return the results.       
-                #Initiate a background task to handle the classified tags creation
-                #And then pass the classified object and after the process add then
-                # for tag in generated_tags_list 
-                    #classified.tags.add(tag)
- 
-                return super(CreateClassifiedView, self).form_valid(form)
-
+            return self.form_invalid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)

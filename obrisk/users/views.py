@@ -15,7 +15,7 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
-from obrisk.helpers import ajax_required
+from obrisk.utils.helpers import ajax_required
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.shortcuts import get_current_site
 from slugify import slugify
@@ -33,7 +33,7 @@ from allauth.account.views import SignupView, LoginView, PasswordResetView, _aja
 from allauth.account.forms import  UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
-from obrisk.helpers import bucket, bucket_name
+from obrisk.utils.images_upload import bucket, bucket_name
 from .forms import UserForm, EmailSignupForm, PhoneRequestPasswordForm, PhoneSignupForm, PhoneResetPasswordForm
 from .models import User
 from .phone_verification import send_sms, verify_counter

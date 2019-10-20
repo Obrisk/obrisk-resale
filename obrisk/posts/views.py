@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from django.shortcuts import redirect
-from obrisk.helpers import AuthorRequiredMixin
+from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post, Comment
 from obrisk.posts.forms import PostForm, CommentForm
 #For comments
@@ -13,7 +13,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
-from obrisk.helpers import bucket, bucket_name
+from obrisk.utils.images_upload import bucket, bucket_name
 from slugify import slugify
 
 import os

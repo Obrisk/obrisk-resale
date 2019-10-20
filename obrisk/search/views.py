@@ -9,7 +9,7 @@ from taggit.models import Tag
 
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.stories.models import Stories
-from obrisk.helpers import ajax_required
+from obrisk.utils.helpers import ajax_required
 from obrisk.qa.models import Question
 
 
