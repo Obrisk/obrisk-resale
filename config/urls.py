@@ -11,7 +11,7 @@ from graphene_django.views import GraphQLView
 from pwa_webpush.views import save_info
 from obrisk.messager import views
 from obrisk.users.views import PasswordResetFromKeyView, AutoLoginView
-from obrisk.helpers import get_oss_auth
+from obrisk.utils.images_upload import get_oss_auth
 from obrisk.classifieds.sitemaps import ClassifiedsSitemap
 from obrisk.posts.sitemaps import PostsSitemap
 from obrisk.qa.sitemaps import QASitemap

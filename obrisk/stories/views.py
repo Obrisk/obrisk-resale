@@ -7,9 +7,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView
+from django.core.mail import send_mail
 
-from obrisk.helpers import ajax_required, AuthorRequiredMixin
-from obrisk.stories.models import Stories
+from obrisk.utils.images_upload import multipleImagesPersist
+from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
+from obrisk.stories.models import Stories, StoryImages
 
 
 class StoriesListView(LoginRequiredMixin, ListView):
@@ -42,23 +44,45 @@ def post_stories(request):
     user = request.user
     post = request.POST['post']
     post = post.strip()
-    if len(post) > 0 and len(post) <= 280:
-        posted = Stories.objects.create(
+    images = request.POST['images']
+    img_errors = request.POST['img_error']
+
+    if (len(post) > 0 and len(post)<= 400) or images:
+
+        if img_errors:
+            #In the near future, send a message like sentry to our mailbox to notify about the error!
+            send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
+        
+        story = Stories.objects.create(
             user=user,
             content=post,
         )
+
         html = render_to_string(
             'stories/stories_single.html',
             {
-                'stories': posted,
+                'stories': story,
                 'request': request
             })
-        return HttpResponse(html)
+        
+        if images:            
+            # split one long string of images into a list of string each for one JSON img_obj
+            images_list = images.split(",")
+
+            story_img = StoryImages(story=story)
+
+            if multipleImagesPersist(request, images_list, 'stories', story, story_img):
+                return HttpResponse(html)
+            else:
+                return HttpResponseBadRequest(
+                    content=_('Image(s) were not uploaded successfully!'))
+        
+        else:
+            return HttpResponse(html)
 
     else:
-        lenght = len(post) - 280
         return HttpResponseBadRequest(
-            content=_(f'Text is {lenght} characters longer than accepted.'))
+                content=_(f'Text length is longer than accepted characters.'))
 
 @csrf_exempt
 @login_required

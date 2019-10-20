@@ -22,7 +22,8 @@ import oss2
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
-from obrisk.helpers import ajax_required, bucket, bucket_name
+from obrisk.utils.helpers import ajax_required 
+from obrisk.utils.images_upload import bucket, bucket_name
 
 
 class ContactsListView(LoginRequiredMixin, ListView):

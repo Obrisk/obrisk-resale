@@ -143,7 +143,7 @@ class StoryImages(models.Model):
     image = models.CharField(max_length=300)
     image_thumb = models.CharField(max_length=300)
 
-    """ Informative name for model """
+
     def __unicode__(self):
         try:
             public_id = self.image.public_id
