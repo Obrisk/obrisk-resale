@@ -3,18 +3,19 @@ from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
+from slugify import slugify
 
 import json
+import base64
 import re
 import os
-import time
 import datetime
 
 import oss2
 from aliyunsdkcore import client
-from slugify import slugify
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
-
+from obrisk.classifieds.models import ClassifiedImages
+from obrisk.stories.models import StoryImages
 
 # STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
 # STS's official documentation can be found at https://help.aliyun.com/document_detail/28627.html
@@ -150,8 +151,8 @@ def get_oss_auth(request):
         return JsonResponse(data)
 
 
-def multipleImagesPersist(request, images_list, app, obj, img_obj):
-    ''' This function takes list of images, app name, app object and app images object
+def multipleImagesPersist(request, images_list, app, obj):
+    ''' This function takes the request, images list, app name (string) and app object
     and it validates the images list and saves the images to the database.
     It returns True if the images where saved to the db and False if there is a validation problem '''
 
@@ -180,7 +181,7 @@ def multipleImagesPersist(request, images_list, app, obj, img_obj):
                 if index == 0:
                     continue
 
-                if str_result.startswith('app/') == False:
+                if str_result.startswith(f'{app}/') == False:
                     messages.error(request, "Hello! It looks like some of the image(s) you uploaded, \
                         are corrupted, or you've done something wrong. Please edit your post, \
                         and upload the images again.")
@@ -188,17 +189,16 @@ def multipleImagesPersist(request, images_list, app, obj, img_obj):
                     return False 
                 
                 else:
-                    #Update the image object to add the validated image
-                    img_obj.image = str_result
-
                     d = str(datetime.datetime.now())
                     style = 'image/resize,m_fill,h_156,w_156'
 
                     if app == 'classifieds':
+                        img_obj = ClassifiedImages(classified=obj, image=str_result)
                         thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
                                 slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
 
                     elif app == 'stories':
+                        img_obj = StoryImages(story=obj, image=str_result)
                         thumb_name = "stories/" + slugify(str(obj.user)) + "/" + "/thumbnails/" + d + str(index)
             
                     else:
@@ -214,9 +214,9 @@ def multipleImagesPersist(request, images_list, app, obj, img_obj):
                     except oss2.exceptions.OssError as e:
                         #Most likely this is our problem so save the image without the thumbnail:
                         if index+1 == tot_img_objs:
-                            messages.error(request, "Oops we are sorry. It looks like some of your images, \
-                                were not uploaded successfully. Please edit your item to add images. "
-                                + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                            messages.error(request, f"Oops we are sorry. It looks like some of your images, \
+                                were not uploaded successfully. Please edit your item to add images.\
+                                status= f{e.status}, requestID= f{e.request_id}")
                 
                             img_obj.save()
                             return True
@@ -224,12 +224,11 @@ def multipleImagesPersist(request, images_list, app, obj, img_obj):
                             img_obj.save()
                             continue   
 
-                    except:
+                    except Exception as e:
                         #If there is a problem with the thumbnail generation, don't save the image just save the tags.
                         if index+1 == tot_img_objs:
                             messages.error(request, "Oops we are sorry. It looks like some of your images, \
-                                were not uploaded successfully. Please edit your item to add images. "
-                                + 'status={0}, request_id={1}'.format(e.status, e.request_id))                
+                                were not uploaded successfully. Please edit your item to add images. ")
                             return True 
                         
                         else:

@@ -100,10 +100,10 @@ OssUpload.prototype = {
         });
 
         $("#startUpload").click(function (event) {
-            if ($("#id_title").val() == '' || $("#id_details").val() == '' ||
-                $("#id_address").val() == '') {
+            if ( $("#id_title").val() == '' || $("#id_details").val() == '')
+            {
                 event.preventDefault();
-                bootbox.alert("Please fill in all of the information before uploading the images!");
+                bootbox.alert("Please fill in the title and the details before uploading the images!");
             } else if (uploader.fileStats.totalFilesNum == 0) {
                 event.preventDefault();
                 bootbox.alert("Please select images to upload!");

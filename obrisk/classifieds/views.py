@@ -175,8 +175,10 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
 
-        if 
+        if multipleImagesPersist(self.request, images_list, 'classifieds', classified):
             return super(CreateOfficialAdView, self).form_valid(form)
+        else:
+            return self.form_invalid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
@@ -221,10 +223,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
 
-        #The image object is one but will be replicated with different images value.
-        classified_img = ClassifiedImages(classified=classified)
-
-        if multipleImagesPersist(self.request, images_list, 'classifieds', classified, classified_img):    
+        if multipleImagesPersist(self.request, images_list, 'classifieds', classified):    
             return super(CreateClassifiedView, self).form_valid(form)
         else:
             return self.form_invalid(form)
