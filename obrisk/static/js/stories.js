@@ -208,12 +208,14 @@ $(function () {
     });
     //Show comments
     $(".infinite-container").on("click", ".is-comment", function () {
+
         // Ajax call to request a given Stories object detail and thread, and to
         // show it in a modal.
         var post = $(this).closest(".card");
         var stories = $(post).attr("stories-id");
-        post.find('.content-wrap').toggleClass('is-hidden');
-        post.find('.comments-wrap').toggleClass('is-hidden')
+        post.find('.content-wrap').addClass('is-hidden');
+        post.find('.comments-wrap').removeClass('is-hidden');
+        post.find('textarea').focus();
 
         $.ajax({
             url: '/stories/get-thread/',

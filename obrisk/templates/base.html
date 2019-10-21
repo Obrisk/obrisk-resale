@@ -96,7 +96,7 @@
   {% block body %}
   <div class="m-b-1">
     {% if request.user.is_authenticated %}
-    <nav class="navbar fixed-top navbar-expand-lg navbar-dark O-bg-blue">
+    <nav class="navbar fixed-top is-hidden-mobile navbar-expand-lg navbar-dark O-bg-blue">
       <div class="container">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
           data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -300,103 +300,46 @@
         </div>
       </div>
     </nav>
-    <nav class="navbar mobile-navbar is-hidden-desktop no-shadow" aria-label="main navigation">
-      <!-- Brand -->
-      <div class="navbar-brand">
-        <a class="navbar-item" href="/">
-          <img src="assets/images/logo/friendkit.svg" alt="">
-        </a>
-
-
-
-
-
-
-
-
-        <!-- Mobile menu toggler icon -->
-        <div class="navbar-burger">
-          <div id="mobile-explorer-trigger" class="navbar-item is-icon">
-            <a class="icon-link is-primary">
-              <i class="mdi mdi-apps"></i>
+    <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop is-fixed-bottom has-shadow">
+      <div class="tabs is-toggle is-fullwidth">
+        <ul>
+          <li class="is-active">
+            <div class="dropdown is-up">
+              <div class="dropdown-trigger">
+                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu7">
+                  <span>Dropup button</span>
+                  <span class="icon is-small">
+                    <i class="fas fa-angle-up" aria-hidden="true"></i>
+                  </span>
+                </button>
+              </div>
+              <div class="dropdown-menu" id="dropdown-menu7" role="menu">
+                <div class="dropdown-content">
+                  <div class="dropdown-item">
+                    <p>You can add the <code>is-up</code> modifier to have a dropdown menu that appears above the
+                      dropdown button.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+          <li>
+            <a>
+              <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
             </a>
-          </div>
-
-
-        </div>
-      </div>
-      <!-- Navbar mobile menu -->
-      <div class="navbar-menu">
-        <!-- Account -->
-        <div class="navbar-item has-dropdown is-active">
-          <div class="navbar-link">
-            <img src="https://via.placeholder.com/150x150" data-demo-src="assets/images/avatars/jenna.png" alt="">
-            <span class="is-heading">Jenna</span>
-          </div>
-
-          <!-- Mobile Dropdown -->
-          <div class="navbar-dropdown">
-            <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-user">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                  <circle cx="12" cy="7" r="4"></circle>
-                </svg>Profile</span>
+          </li>
+          <li>
+            <a>
+              <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
             </a>
-            <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-activity">
-                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-                </svg>Feed</span>
-              <span class="menu-badge">87</span>
+          </li>
+          <li>
+            <a>
+              <span class="icon is-small"><i class="far fa-file-alt" aria-hidden="true"></i></span>
             </a>
-            <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-settings">
-                  <circle cx="12" cy="12" r="3"></circle>
-                  <path
-                    d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
-                  </path>
-                </svg>Settings</span>
-            </a>
-            <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-hexagon">
-                  <path
-                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                  </path>
-                </svg>Logout</span>
-            </a>
-          </div>
-        </div>
-
-        <!-- More -->
-        <div class="navbar-item has-dropdown">
-          <a class="navbar-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-              stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-              class="feather feather-life-buoy">
-              <circle cx="12" cy="12" r="10"></circle>
-              <circle cx="12" cy="12" r="4"></circle>
-              <line x1="4.93" y1="4.93" x2="9.17" y2="9.17"></line>
-              <line x1="14.83" y1="14.83" x2="19.07" y2="19.07"></line>
-              <line x1="14.83" y1="9.17" x2="19.07" y2="4.93"></line>
-              <line x1="14.83" y1="9.17" x2="18.36" y2="5.64"></line>
-              <line x1="4.93" y1="19.07" x2="9.17" y2="14.83"></line>
-            </svg>
-            <span class="is-heading">Assistance</span>
-          </a>
-
-          <!-- Mobile Dropdown -->
-          <div class="navbar-dropdown">
-            <a href="#" class="navbar-item">Help</a>
-            <a href="#" class="navbar-item">Support</a>
-          </div>
-        </div>
+          </li>
+        </ul>
       </div>
     </nav>
     {% else%}
