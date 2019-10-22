@@ -156,7 +156,7 @@
             <li class="nav-item">
               <div class="navbar-item is-icon drop-trigger">
                 <a class="icon-link" href="javascript:void(0);">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                     stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                     class="feather feather-bell">
                     <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
@@ -186,7 +186,7 @@
                         </div>
                         <div class="media-right">
                           <div class="added-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                               stroke-linejoin="round" class="feather feather-message-square">
                               <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
@@ -208,7 +208,7 @@
                         </div>
                         <div class="media-right">
                           <div class="added-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                               stroke-linejoin="round" class="feather feather-heart">
                               <path
@@ -232,7 +232,7 @@
                         </div>
                         <div class="media-right">
                           <div class="added-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                               stroke-linejoin="round" class="feather feather-youtube">
                               <path
@@ -258,7 +258,7 @@
                         </div>
                         <div class="media-right">
                           <div class="added-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                               fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                               stroke-linejoin="round" class="feather feather-image">
                               <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
@@ -300,44 +300,116 @@
         </div>
       </div>
     </nav>
-    <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop is-fixed-bottom has-shadow">
-      <div class="tabs is-toggle is-fullwidth">
+    <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop fixed-bottom has-shadow w-100  p-0">
+      <div class="tabs is-toggle is-fullwidth w-100">
         <ul>
           <li class="is-active">
-            <div class="dropdown is-up">
-              <div class="dropdown-trigger">
-                <button class="button" aria-haspopup="true" aria-controls="dropdown-menu7">
-                  <span>Dropup button</span>
-                  <span class="icon is-small">
-                    <i class="fas fa-angle-up" aria-hidden="true"></i>
-                  </span>
-                </button>
+            <a class="d-flex flex-column p-0 border-0" href="{% url 'classifieds:list' %}"><span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-shopping-bag">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              </span>
+              <span class="nav-label is-size-7	">
+                Classifieds
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="d-flex flex-column p-0 border-0" href="{% url 'posts:list' %}"><span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-book-open">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+              </span>
+              <span class="nav-label is-size-7	">
+                {% trans 'Published' %}
+              </span>
+            </a>
+          </li>
+          <li>
+            <a class="d-flex flex-column p-0 border-0" href="{% url 'messager:contacts_list' %}">
+              <span class="nav-icons"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
+                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-message-square">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg> </span>
+              <span class="nav-label is-size-7	">
+                {% trans 'Chat' %}
+              </span>
+            </a>
+          </li>
+
+          <li>
+            <a class="d-flex flex-column p-0 border-0" href="{% url 'qa:index_noans' %}">
+              <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-compass">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg> </span>
+              <span class="nav-label is-size-7	">
+                {% trans 'Stories' %}
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop is-fixed-top has-shadow w-100 p-0">
+      <div class="tabs overflow-auto is-toggle is-fullwidth w-100 ml-2 mr-2">
+        <ul class="justify-content-between">
+          <li class="flex-grow-0">
+            <a class="d-flex flex-column p-0 border-0" href="{% url 'classifieds:list' %}"><span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-bell">
+                  <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                  <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                </svg>
+              </span>
+
+            </a>
+          </li>
+          <li class="flex-grow-0">
+            <div class="dropdown">
+              <a class="border-0" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+                aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-user">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="12" cy="7" r="4"></circle>
+                </svg>
+              </a>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" x-placement="bottom-start"
+                style="position: absolute; transform: translate3d(-149px, 36px, 0px); top: 0px; left: 0px; will-change: transform;">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+                {% if request.user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
+                  style="width:30px;height:30px;border-radius: 50%;"
+                  class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
+                {% else %}
+                <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+                {% endif %}
+                {{ request.user.username|truncatechars:12}}
+              </a>
+              <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                <a class="dropdown-item" href="{% url 'users:detail' request.user.username  %}"><i
+                    class="fa fa-cogs fa-fw" aria-hidden="true"></i>&nbsp; {% trans 'Profile Settings' %}</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="{% url 'account_logout' %}"><i class="fa fa-sign-out fa-fw"
+                    aria-hidden="true"></i>&nbsp; {% trans "Log Out" %}</a>
               </div>
-              <div class="dropdown-menu" id="dropdown-menu7" role="menu">
-                <div class="dropdown-content">
-                  <div class="dropdown-item">
-                    <p>You can add the <code>is-up</code> modifier to have a dropdown menu that appears above the
-                      dropdown button.
-                    </p>
-                  </div>
-                </div>
               </div>
             </div>
-          </li>
-          <li>
-            <a>
-              <span class="icon is-small"><i class="fas fa-music" aria-hidden="true"></i></span>
-            </a>
-          </li>
-          <li>
-            <a>
-              <span class="icon is-small"><i class="fas fa-film" aria-hidden="true"></i></span>
-            </a>
-          </li>
-          <li>
-            <a>
-              <span class="icon is-small"><i class="far fa-file-alt" aria-hidden="true"></i></span>
-            </a>
           </li>
         </ul>
       </div>
@@ -380,7 +452,7 @@
           <!-- Mobile Dropdown -->
           <div class="navbar-dropdown">
             <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-user">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
@@ -388,7 +460,7 @@
                 </svg>Profile</span>
             </a>
             <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-activity">
                   <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
@@ -396,7 +468,7 @@
               <span class="menu-badge">87</span>
             </a>
             <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-settings">
                   <circle cx="12" cy="12" r="3"></circle>
@@ -406,7 +478,7 @@
                 </svg>Settings</span>
             </a>
             <a href="#" class="navbar-item is-flex is-mobile-icon">
-              <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+              <span><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-hexagon">
                   <path
@@ -420,7 +492,7 @@
         <!-- More -->
         <div class="navbar-item has-dropdown">
           <a class="navbar-link">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="feather feather-life-buoy">
               <circle cx="12" cy="12" r="10"></circle>

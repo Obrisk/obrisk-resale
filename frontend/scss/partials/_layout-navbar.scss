@@ -16,18 +16,21 @@ Navbar styles
 ========================================================================== */
 
 .navbar {
-    position: fixed;
-    left: 0;
-    top: 0;
-    z-index: 19;
-    height: 58px;
-    width: 100%;
-    background: $white;
-    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
-    border-bottom: 1px solid $fade-grey;
-    transition: all .3s;
+    // position: fixed;
+    // left: 0;
+    // top: 0;
+    // z-index: 19;
+    // height: 58px;
+    // width: 100%;
+    // background: $white;
+    // box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+    // border-bottom: 1px solid $fade-grey;
+    // transition: all .3s;
 
     //Box shadow modifier
+    &.fixed-bottom{
+        bottom: 0px;
+    }
     &.no-shadow {
         box-shadow: none !important;
     }
@@ -988,7 +991,6 @@ Navbar styles
 //Mobile mode navbar
 .mobile-navbar {
     position: fixed;
-    top: 0;
     left: 0;
     width: 100%;
     z-index: 99;
