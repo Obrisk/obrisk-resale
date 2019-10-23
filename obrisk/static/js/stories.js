@@ -67,13 +67,13 @@ $(function () {
     //Show comments
     $(".infinite-container").on("click", ".is-comment", function () {
         // Ajax call to request a given Stories object detail and thread, and to
-        // show it in a modal.
         var post = $(this).closest(".card");
         var stories = $(post).attr("stories-id");
         post.find('.content-wrap').toggleClass('is-hidden');
         post.find('.comments-wrap').toggleClass('is-hidden');
-        $("textarea").keyup(function () {
-            var counter = $(this).closest(".textarea-parent");
+        $(".comment-textarea").keyup(function () {
+
+            var counter = stories.find(".textarea-parent");
             counter.find(".counter .count").text(400 - $(this).val().length);
             $(this).height('auto');
             $(this).height($(this).prop('scrollHeight'));

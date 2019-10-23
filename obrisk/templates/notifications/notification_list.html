@@ -27,14 +27,14 @@
         <div class="media">
           <div class="media-left">
             <div class="media-object">
-            
-            {% if notification.actor.thumbnail %}
-                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{notification.actor.thumbnail}}" alt="Picture Profile"
-                  style="width:70px;height:70px;border-radius: 50%;"
-                  class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-            {% else %}
-                  <img src="{% static 'img/user.png' %}" class="pull-left" height="70px" alt="No Profile Picture" />
-            {% endif %}
+
+              {% if notification.actor.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{notification.actor.thumbnail}}"
+                alt="Picture Profile" style="width:70px;height:70px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              {% else %}
+              <img src="{% static 'img/user.png' %}" class="pull-left" height="70px" alt="No Profile Picture" />
+              {% endif %}
 
             </div>
           </div>

@@ -6,22 +6,23 @@
 <link rel="stylesheet" href="/static/css/uploader.css" />
 <link rel="stylesheet" href="/static/css/classified-create.css" />
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css"
+  rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
 {% endblock head %}
 
 {% block content %}
-<div class="col-lg-8 ml-auto mr-auto mt-5">
+<div class="col-lg-8 ml-auto mr-auto mt-5 mb-5">
   {% if form.errors %}
-    <div class="alert alert-error">
-      <strong>Your form is having invalid input(s) on {% for fld in form.errors%} {{ fld }} {% endfor %} </strong>
-    </div>
+  <div class="alert alert-error">
+    <strong>Your form is having invalid input(s) on {% for fld in form.errors%} {{ fld }} {% endfor %} </strong>
+  </div>
   {% endif %}
 
-  <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
+  <form class="mb-5" action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
     id="classified-form" method="post" role="form">
     {% csrf_token %}
-    
+
     <div class="form-row">
       <div class="form-group col-md-12 mb-0">
         {{ form.title|as_crispy_field }}
@@ -51,85 +52,87 @@
     </div>
 
     {% if request.user.address %}
-        <div> <span class="city" > Address*: </span> {{ request.user.address}} </div>
-        <small class="form-text text-muted"> Note: You can change the address in your profile settings </small> 
-        <br/>
+    <div> <span class="city"> Address*: </span> {{ request.user.address}} </div>
+    <small class="form-text text-muted"> Note: You can change the address in your profile settings </small>
+    <br />
     {% else %}
-      <div class="form-row">
-        <div class="form-group col-md-12 mb-0">
-          {{ form.address|as_crispy_field }}
-        </div>
-        <p class="col-md-12 mb-3"> City*:{{request.user.city}} <span class="mr-1"> </span> 
-          {% if request.user.province_region %}
-              Province*: {{request.user.province_region}} </p>
-          {% endif %}
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.address|as_crispy_field }}
       </div>
+      <p class="col-md-12 mb-3"> City*:{{request.user.city}} <span class="mr-1"> </span>
+        {% if request.user.province_region %}
+        Province*: {{request.user.province_region}} </p>
+      {% endif %}
+    </div>
     {% endif %}
 
     {% if request.user.phone_number %}
-        <!-- iOS Style: Rounded -->
-        <strong>  Include your phone no?  </strong> 
-        <input type="checkbox" checked data-toggle="toggle" name="phone-check" data-width="70" data-on="Yes" data-off="No"  data-style="ios">
-        <br>
+    <!-- iOS Style: Rounded -->
+    <strong> Include your phone no? </strong>
+    <input type="checkbox" checked data-toggle="toggle" name="phone-check" data-width="70" data-on="Yes" data-off="No"
+      data-style="ios">
+    <br>
 
     {% else %}
-        <div class="form-row">
-          <div class="form-group col-md-12 mb-0">
-            {{ form.phone_number|as_crispy_field }}
-          </div>
-        </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.phone_number|as_crispy_field }}
+      </div>
+    </div>
     {% endif %}
 
     <br>
-    <p class="city"> <strong> Images*: </strong> <p>
-    <div id="wrapper" class="mb-4">
-      <div id="container">
-        <div id="uploader">
-          <div class="queueList">
-            <div id="dndArea" class="placeholder">
-              <div class="" id="uploaderPick">
-                <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
+    <p class="city"> <strong> Images*: </strong>
+      <p>
+        <div id="wrapper" class="mb-4">
+          <div id="container">
+            <div id="uploader">
+              <div class="queueList">
+                <div id="dndArea" class="placeholder">
+                  <div class="" id="uploaderPick">
+                    <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
-          <div class="total-progress">
-            <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-              aria-valuemax="100">
+            <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
+              <div class="total-progress">
+                <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
+                  aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+              <div class="upload-btn d-flex flex-column flex-md-row">
+                <div class="start-uploader startUploadBtn ml-2 mr-2">
+                  <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
+                </div>
+                <div class="start-uploader addBtn ml-2 mr-2">
+                  <a id="addBtn" href="javascript:void(0);" class="text">Add images</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="" style="clear: both;">
+              <p class="text-center">
+                Notes:
+                Max number of files 8 & Max size per file is 13MB
+              </p>
             </div>
           </div>
-          <div class="upload-btn d-flex flex-column flex-md-row">
-            <div class="start-uploader startUploadBtn ml-2 mr-2">
-              <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
-            </div>
-            <div class="start-uploader addBtn ml-2 mr-2">
-              <a id="addBtn" href="javascript:void(0);" class="text">Add images</a>
-            </div>
-          </div>
         </div>
 
-        <div class="" style="clear: both;">
-          <p class="text-center">
-            Notes:
-            Max number of files 8 & Max size per file is 13MB
-          </p>
+        <div class="container bs-docs-container">
+          <form id="form">
+            <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+          </form>
         </div>
-      </div>
-    </div>
-
-    <div class="container bs-docs-container">
-      <form id="form">
-        <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
-      </form>
-    </div>
 
 
-    <div class="form-group d-flex justify-content-center"> <br>
-      <button id="create-btn" type="button" class="btn btn-dark create">{% trans 'Submit' %}</button>
-      <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
-      <a href="{% url 'classifieds:list' %}" class="ml-4 btn btn-danger">{% trans 'Cancel' %}</a>
-    </div>
+        <div class="form-group d-flex justify-content-center"> <br>
+          <button id="create-btn" type="button" class="btn btn-dark create">{% trans 'Submit' %}</button>
+          <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
+          <a href="{% url 'classifieds:list' %}" class="ml-4 btn btn-danger">{% trans 'Cancel' %}</a>
+        </div>
   </form>
   {{ form.media }}
 </div>
