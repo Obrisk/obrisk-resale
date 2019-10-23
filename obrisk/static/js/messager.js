@@ -138,7 +138,7 @@ $(function () {
 
         switch (event.key) {
             case "message":
-                if (activeUser != "" && activeUser != undefined ) {   
+                if (activeUser != "" && activeUser != undefined) {
                     if (event.sender === activeUser) {
                         addNewMessage(event.message_id);
                         // I hope there is a more elegant way to work this out.
@@ -151,7 +151,7 @@ $(function () {
                     }
                 }
                 break;
-            
+
             case "set_status":
                 console.log(event.set_status + " " +
                     event.sender)

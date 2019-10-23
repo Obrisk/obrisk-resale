@@ -27,7 +27,7 @@ $dark-text: #393a4f;
 
 $primary: #ff5f59;
 $secondary: $medium-text;
-$accent: #0062ff;
+$accent: #3EC4E2;
 
 $sidebar: #344258;
 $lightbox: #181e28;
@@ -73,32 +73,44 @@ $base-shadow: rgba(0, 0, 0, 0.12);
 //Primary box shadow
 $primary-shadow-from: rgba($primary, 0.42);
 $primary-shadow-to: rgba($primary, 0.2);
-$primary-box-shadow: 0 14px 26px -12px $primary-shadow-from, 0 4px 23px 0px $base-shadow, 0 8px 10px -5px $primary-shadow-to !important;
+$primary-box-shadow: 0 14px 26px -12px $primary-shadow-from,
+0 4px 23px 0px $base-shadow,
+0 8px 10px -5px $primary-shadow-to !important;
 
 //Secondary box shadow
 $secondary-shadow-from: rgba($secondary, 0.42);
 $secondary-shadow-to: rgba($secondary, 0.2);
-$secondary-box-shadow: 0 14px 26px -12px $secondary-shadow-from, 0 4px 23px 0px $base-shadow, 0 8px 10px -5px $secondary-shadow-to !important;
+$secondary-box-shadow: 0 14px 26px -12px $secondary-shadow-from,
+0 4px 23px 0px $base-shadow,
+0 8px 10px -5px $secondary-shadow-to !important;
 
 //Accent box shadow
 $accent-shadow-from: rgba($accent, 0.42);
 $accent-shadow-to: rgba($accent, 0.2);
-$accent-box-shadow: 0 14px 26px -12px $accent-shadow-from, 0 4px 23px 0px $base-shadow, 0 8px 10px -5px $accent-shadow-to !important;
+$accent-box-shadow: 0 14px 26px -12px $accent-shadow-from,
+0 4px 23px 0px $base-shadow,
+0 8px 10px -5px $accent-shadow-to !important;
 
 //Green box shadow
 $green-shadow-from: rgba($green, 0.42);
 $green-shadow-to: rgba($green, 0.2);
-$green-box-shadow: 0 14px 26px -12px $green-shadow-from, 0 4px 23px 0px $base-shadow, 0 8px 10px -5px $green-shadow-to !important;
+$green-box-shadow: 0 14px 26px -12px $green-shadow-from,
+0 4px 23px 0px $base-shadow,
+0 8px 10px -5px $green-shadow-to !important;
 
 //Red box shadow
 $red-shadow-from: rgba($red, 0.42);
 $red-shadow-to: rgba($red, 0.2);
-$red-box-shadow: 0 14px 26px -12px $red-shadow-from, 0 4px 23px 0px $base-shadow, 0 8px 10px -5px $red-shadow-to !important;
+$red-box-shadow: 0 14px 26px -12px $red-shadow-from,
+0 4px 23px 0px $base-shadow,
+0 8px 10px -5px $red-shadow-to !important;
 
 //Blue box shadow
 $blue-shadow-from: rgba($blue, 0.42);
 $blue-shadow-to: rgba($blue, 0.2);
-$blue-box-shadow: 0 14px 26px -12px $blue-shadow-from, 0 4px 23px 0px $base-shadow, 0 8px 10px -5px $blue-shadow-to !important;
+$blue-box-shadow: 0 14px 26px -12px $blue-shadow-from,
+0 4px 23px 0px $base-shadow,
+0 8px 10px -5px $blue-shadow-to !important;
 
 //Light box shadow
 $light-box-shadow: -1px 3px 10px 0 rgba(0, 0, 0, 0.06);
