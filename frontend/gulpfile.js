@@ -18,7 +18,7 @@ gulp.task('watch', function () {
     gulp.watch('scss/**/*', ['compile-scss']);
     gulp.watch('sass/**/*', ['compile-sass']);
     gulp.watch('js/**/*', ['copy-js']);
-    gulp.watch('images/**/*', ['copy-images']);
+    //gulp.watch('images/**/*', ['copy-images']);
 });
 
 // Erases the dist folder
@@ -206,10 +206,10 @@ gulp.task('copy-js', function () {
 });
 
 //Copy images to production site
-gulp.task('copy-images', function () {
-    gulp.src('images/**/*')
-        .pipe(gulp.dest('../obrisk/static/assets/images/'));
-});
+// gulp.task('copy-images', function () {
+//     gulp.src('images/**/*')
+//         .pipe(gulp.dest('../obrisk/static/assets/images/'));
+// });
 gulp.task('update-sw', function (cb) {
     exec('workbox injectManifest config.js', function (err, stdout, stderr) {
         console.log(stdout);
@@ -218,5 +218,5 @@ gulp.task('update-sw', function (cb) {
     });
 })
 gulp.task('init', ['setupBulma']);
-gulp.task('build', ['clean', 'copy', 'compile-css', 'compile-js', 'copy-js', 'compile-sass', 'compile-scss', 'copy-images']);
+gulp.task('build', ['clean', 'copy', 'compile-css', 'compile-js', 'copy-js', 'compile-sass', 'compile-scss']);
 gulp.task('default', ['watch', 'update-sw']);
