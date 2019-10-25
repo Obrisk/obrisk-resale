@@ -4,6 +4,8 @@
 
 {% block head %}
 <link href="{% static 'css/stories.css' %}?v=1" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/uploader.css" />
+
 <title>Obrisk Stories</title>
 {% endblock head %}
 
@@ -61,6 +63,7 @@
                     <textarea id="publish" name="post" class="textarea publish-textarea" rows="3"
                       placeholder="Write something about you..." maxlength="400">
                   </textarea>
+                    <input type="text" id="id_images" name="images" class="d-none">
                   </div>
 
                 </div>
@@ -74,7 +77,7 @@
                   <div class="channel">
                     <div id="basic-options" class="compose-options" style="background:none;">
                       <!-- Upload action -->
-                      <!-- <div class="compose-option" style="background:#fff;">
+                      <div id="addBtn" class="compose-option" style="background:#fff;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                           stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                           class="feather feather-camera">
@@ -82,9 +85,8 @@
                           </path>
                           <circle cx="12" cy="13" r="4"></circle>
                         </svg>
-                        <span>Media</span>
-                        <input type="file">
-                      </div> -->
+                        <span>Image</span>
+                      </div>
                     </div>
                     <!-- Dropdown menu -->
                     <div class="dropdown is-spaced is-modern is-right is-neutral dropdown-trigger is-active">
@@ -160,7 +162,47 @@
                       </div>
                     </div>
                   </div>
+                  <div class="channel">
+                    <div id="wrapper" class="mb-4" style="display: none;">
+                      <div class="container">
+                        <div id="uploader">
+                          <div class="queueList">
+                            <div id="dndArea" class="placeholder" style="display: none;">
+                              <div class="" id="uploaderPick">
+                                <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
+                              </div>
+                            </div>
+                            <ul class="filelist"></ul>
+                          </div>
+                        </div>
+                        <div id="statusBar" class="statusBar  flex-column align-items-center" style="display: flex;">
+                          <div class="total-progress">
+                            <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
+                              aria-valuemin="0" aria-valuemax="100">
+                            </div>
+                          </div>
+                          <div class="upload-btn d-flex flex-column flex-md-row">
+                            <div class="start-uploader startUploadBtn ml-2 mr-2">
+                              <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
+                            </div>
+                          </div>
+                        </div>
 
+                        <div class="" style="clear: both;">
+                          <p class="text-center">
+                            Notes:
+                            Max number of files 8 &amp; Max size per file is 13MB
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="container bs-docs-container">
+                      <form id="form">
+                        <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+                      </form>
+                    </div>
+                  </div>
                 </div>
 
 
@@ -211,8 +253,14 @@
 {% block extra_js %}
 <script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>
+
 <script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
+
 <script>
+  const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
+
+  const user = "{{ request.user.username }}";
   var infinite = new Waypoint.Infinite({
     element: $('.infinite-container')[0],
     onBeforePageLoad: function () {
