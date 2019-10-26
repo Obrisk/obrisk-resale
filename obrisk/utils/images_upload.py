@@ -213,6 +213,7 @@ def multipleImagesPersist(request, images_list, app, obj):
                     
                     except oss2.exceptions.OssError as e:
                         #Most likely this is our problem so save the image without the thumbnail:
+                        print(e)
                         if index+1 == tot_img_objs:
                             messages.error(request, f"Oops we are sorry. It looks like some of your images, \
                                 were not uploaded successfully. Please edit your item to add images.\

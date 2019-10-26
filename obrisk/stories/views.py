@@ -8,10 +8,13 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView
 from django.core.mail import send_mail
+from django.core import serializers
 
 from obrisk.utils.images_upload import multipleImagesPersist
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.stories.models import Stories, StoryImages
+from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
+
 
 
 class StoriesListView(LoginRequiredMixin, ListView):
@@ -25,7 +28,45 @@ class StoriesListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self, **kwargs):
-        return Stories.objects.filter(reply=False)
+        return Stories.objects.all().annotate (
+            img1 = Subquery (
+                    StoryImages.objects.filter(
+                        story=OuterRef('pk'),
+                    ).values(
+                    'image_thumb'
+                    )[:1]),
+            img2 = Subquery (
+                StoryImages.objects.filter(
+                    story=OuterRef('pk'),
+                ).values(
+                   'image_thumb'
+                )[1:2]),
+            img3 = Subquery (
+                StoryImages.objects.filter(
+                    story=OuterRef('pk'),
+                ).values(
+                   'image_thumb'
+                )[2:3])
+        ).order_by('-priority', '-timestamp')
+
+
+@login_required
+
+@require_http_methods(["GET"])
+def get_images_stories(request):
+    """A function view return all images of a specific story"""
+    story_id = request.GET['story_id']
+
+    images = serializers.serialize('json', StoryImages.objects.filter(
+                        story=story_id,
+                    ).values_list(
+                        'image_thumb', 'image'
+                    )
+                )
+
+    return HttpResponse(images, content_type='application/json')
+
+
 
 
 class StoriesDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):

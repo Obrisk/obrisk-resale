@@ -255,7 +255,7 @@ OssUpload.prototype = {
         });
 
         $('input[type="file"]').change(function (e) {
-            $("#wrapper").css('display', "block");
+            $("#wrapper .container").css('display', "block");
             //console.log(e)
             var files = e.target.files;
             var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
@@ -660,7 +660,7 @@ $(function () {
     $("#publish-button").click(function () {
         // Ajax call after pushing button, to register a Stories object.
         $("#id_images").val(images);
-
+        $("#id_img_error").val(img_error);
         $.ajax({
             url: '/stories/post-stories/',
             data: $("#postStoriesForm").serialize(),
@@ -673,6 +673,39 @@ $(function () {
                 $('.is-new-content').removeClass('is-highlighted');
                 $('.close-wrap').addClass('d-none');
                 feather.replace();
+                $("#postStoriesForm")[0].reset();
+                $("input, textarea").val('');
+                $('#wrapper').html(`<div class="container" style="display: none;">
+                                                <div id="uploader">
+                                                <div class="queueList">
+                                                    <div id="dndArea" class="placeholder" style="display: none;">
+                                                    <div class="" id="uploaderPick">
+                                                        <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
+                                                    </div>
+                                                    </div>
+                                                    <ul class="filelist"></ul>
+                                                </div>
+                                                </div>
+                                                <div id="statusBar" class="statusBar  flex-column align-items-center" style="display: flex;">
+                                                <div class="total-progress">
+                                                    <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
+                                                    aria-valuemin="0" aria-valuemax="100">
+                                                    </div>
+                                                </div>
+                                                <div class="upload-btn d-flex flex-column flex-md-row">
+                                                    <div class="start-uploader startUploadBtn ml-2 mr-2">
+                                                    <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
+                                                    </div>
+                                                </div>
+                                                </div>
+
+                                                <div class="" style="clear: both;">
+                                                <p class="text-center">
+                                                    Notes:
+                                                    Max number of files 8 &amp; Max size per file is 13MB
+                                                </p>
+                                                </div>
+                                            </div>`);
             },
             error: function (data) {
                 bootbox.alert(data.responseText);
