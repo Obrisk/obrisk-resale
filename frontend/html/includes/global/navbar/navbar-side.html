@@ -1,0 +1,37 @@
+<div class="navbar is-side is-inline-flex is-transparent no-shadow is-hidden-mobile">
+    <div class="container is-fluid">
+        <div class="navbar-brand is-title">
+            <h2>Friends</h2>
+        </div>
+        <div class="navbar-menu">
+            <div class="navbar-start">
+                <!-- Navbar Search -->
+
+                {{> friend-requests-dropdown}}
+
+                {{> notifications-dropdown}}
+
+                {{> messages-dropdown}}
+
+                <div class="navbar-item is-icon open-chat">
+                    <a class="icon-link is-primary" href="javascript:void(0);">
+                        <i data-feather="message-square"></i>
+                        <span class="indicator"></span>
+                    </a>
+                </div>
+            </div>
+
+            <div class="navbar-end">
+
+                {{> search-widget}}
+
+                {{> account-dropdown}}
+
+                <div class="navbar-item">
+                    <a id="upgrade-button" class="button action-button is-solid primary-button raised">Upgrade</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

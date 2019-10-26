@@ -69,8 +69,6 @@ class Stories(models.Model):
             self.city =self.user.city
         if not self.province_region:
             self.province_region = self.user.province_region
-        if not self.country:
-            self.country = self.user.country
 
         if not self.reply:
             channel_layer = get_channel_layer()

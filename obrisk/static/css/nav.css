@@ -21,6 +21,10 @@ nav {
 
 }
 
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #3EC4E2;
+}
+
 #notifications {
     font-size: 20px;
     padding: auto;
@@ -32,7 +36,7 @@ nav {
 }
 
 .navbar-nav a.is-active {
-    color: rgba(255, 255, 255, .75) !important;
+    color: #3EC4E2 !important;
 }
 
 .navbar-toggler-icon {
@@ -46,7 +50,7 @@ nav {
         content: "";
         width: 90px;
         display: block;
-        border-bottom: 5px solid #fff;
+        border-bottom: 5px solid #3EC4E2;
         position: absolute;
         bottom: 0;
         border-radius: 9999px;
@@ -63,7 +67,7 @@ nav {
         content: "";
         width: 90px;
         display: block;
-        border-bottom: 5px solid #fff;
+        border-bottom: 5px solid #3EC4E2;
         position: absolute;
         bottom: 0;
         border-radius: 9999px;
@@ -199,4 +203,8 @@ nav {
     color: white;
     opacity: 0.5;
     font-weight: bolder;
+}
+
+.tabs.is-toggle li.is-active a {
+    background-color: #3EC4E2;
 }

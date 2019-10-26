@@ -2,7 +2,7 @@
 
 
 #wrapper {
-    width: 980px;
+    width: 980px!important;
     margin: 0 auto;
     width: auto;
 }

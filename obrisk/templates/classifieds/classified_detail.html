@@ -35,7 +35,7 @@
 
 {% block content %}
 <!-- Page Content -->
-<div class="container">
+<div class="container mt-5">
 
   <div class="row">
     <!-- Post Content Column -->
@@ -126,23 +126,23 @@
 
       <!-- Navigation buttons -->
       {% if request.user == classified.user%}
-      <div class = "m-3">
+      <div class="m-3">
         <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
           title="{% trans 'Edit this classified' %}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-      </div>      
-        {% else %}
-        <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
-        {% endif %}
-        <div class="m-3 d-flex justify-content-between">
-            <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
-            {% comment  %}
-               <a href="#" class="share btn btn-dark"
-              onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
-              🔗{% trans 'share' %} </a>
+      </div>
+      {% else %}
+      <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
+      {% endif %}
+      <div class="m-3 d-flex justify-content-between">
+        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
+        {% comment  %}
+        <a href="#" class="share btn btn-dark"
+          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+          🔗{% trans 'share' %} </a>
 
-            {% endcomment %}        
-          </div>
+        {% endcomment %}
+      </div>
     </div>
 
 

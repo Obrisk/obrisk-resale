@@ -58,62 +58,24 @@ $(function () {
 
     checkNotifications();
 
-    $('#notifications').popover({
-        html: true,
-        trigger: 'manual',
-        container: "body",
-        placement: "bottom",
-    });
+    // $('#notifications').popover({
+    //     html: true,
+    //     trigger: 'manual',
+    //     container: "body",
+    //     placement: "bottom",
+    // });
 
     $("#notifications").click(function () {
-        if ($(".popover").is(":visible")) {
-            $("#notifications").popover('hide');
-            checkNotifications();
-        } else {
-            $("#notifications").popover('dispose');
-            $.ajax({
-                url: '/ws/notifications/latest-notifications/',
-                cache: false,
-                success: function (data) {
-                    var regex = /You have no unread notification/
-                    if (!regex.test(data)) {
-                        var dialog = bootbox.dialog({
-                            title: 'Notifications',
-                            message: data,
-                            backdrop: true,
-                            buttons: {
-                                noclose: {
-                                    label: "View all",
-                                    className: 'btn btn-dark text-center',
-                                    callback: function () {
-                                        window.location = window.location.origin + "/ws/notifications/"
-                                    }
-                                },
-                                ok: {
-                                    label: "Mark all ass read",
-                                    className: 'btn btn-light text-center',
-                                    callback: function () {
+        $("#recent-notifications").html('');
+        $.ajax({
+            url: '/ws/notifications/latest-notifications/',
 
-                                        $.ajax({
-                                            url: window.location.origin + "/ws/notifications/mark-all-as-read/",
-                                            success: function (data) {
-                                                dialog.modal('hide');
-                                            }
-                                        })
-                                    }
-                                }
-                            }
-                        })
-                    } else {
-                        var dialog = bootbox.dialog({
-                            title: 'Notifications',
-                            message: data,
-                        })
-                    }
+            success: function (data) {
+                console.log(data);
+                $("#recent-notifications").html(data);
+            },
+        });
 
-                },
-            });
-        }
         return false;
     });
 

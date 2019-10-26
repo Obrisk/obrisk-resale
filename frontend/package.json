@@ -1,83 +1,65 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "serve": "npm i && vue-cli-service serve",
-    "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
-  },
-  "dependencies": {
-    "axios": "^0.18.0",
-    "register-service-worker": "^1.5.2",
-    "vue": "^2.5.17",
-    
-    "vue-router": "^3.0.1",
-    "vue-raven": "^1.0.0",
-    
-    
-    "vuex": "^3.0.1"
-  },
+  "name": "friendkit",
+  "version": "0.0.1",
+  "description": "Social Media Bulma Kit",
+  "main": "Gruntfile.js",
   "devDependencies": {
-    "@vue/cli-plugin-babel": "^3.0.1",
-    "@vue/cli-plugin-eslint": "^3.0.1",
-    "@vue/cli-plugin-pwa": "^3.0.1",
-    "@vue/cli-plugin-unit-jest": "^3.0.1",
-    "@vue/cli-service": "^3.0.1",
-    "@vue/eslint-config-standard": "^3.0.1",
-    "@vue/test-utils": "^1.0.0-beta.24",
-    "babel-core": "^6.26.3",
-    "babel-jest": "^23.4.2",
-    "node-sass": "^4.9.3",
-    
-    "sass-loader": "^7.1.0",
-    "vue-template-compiler": "^2.5.17"
+    "autoprefixer": "^6.3.6",
+    "browser-sync": "^2.18.13",
+    "gulp-clean": "^0.3.2",
+    "gulp-concat": "^2.6.0",
+    "gulp-postcss": "^6.1.0",
+    "gulp-sass": "^3.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-wait": "0.0.2",
+    "jquery": "2.2.4",
+    "mq4-hover-shim": "^0.3.0",
+    "panini": "^1.3.0",
+    "popper.js": "^1.12.3",
+    "rimraf": "^2.5.2"
   },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/essential",
-      "@vue/standard"
-    ],
-    "rules": {},
-    "parserOptions": {
-      "parser": "babel-eslint"
-    }
+  "engines": {
+    "node": ">=0.10.1"
   },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {}
-    }
+  "scripts": {
+    "start": "gulp",
+    "build": "gulp build"
   },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ],
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json",
-      "vue"
-    ],
-    "transform": {
-      "^.+\\.vue$": "vue-jest",
-      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
-      "^.+\\.jsx?$": "babel-jest"
-    },
-    "moduleNameMapper": {
-      "^@/(.*)$": "<rootDir>/src/$1"
-    },
-    "snapshotSerializers": [
-      "jest-serializer-vue"
-    ],
-    "testMatch": [
-      "<rootDir>/(tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx))"
-    ]
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cssninjaStudio/friendkit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/cssninjaStudio/friendkit/issues",
+    "email": "support@cssninja.io"
+  },
+  "author": "Css Ninja <hello@cssninja.io> (https://cssninja.io)",
+  "license": "Commercial",
+  "private": true,
+  "dependencies": {
+    "@fengyuanchen/datepicker": "^0.6.5",
+    "@mdi/font": "^3.4.93",
+    "bulma": "^0.7.5",
+    "bulma-extensions": "^1.0.14",
+    "cropperjs": "^1.5.5",
+    "croppie": "^2.6.2",
+    "dripicons": "^2.0.0",
+    "dropzone": "^5.5.1",
+    "easy-autocomplete": "^1.3.5",
+    "emojionearea": "^3.0.0",
+    "feather-icons": "^4.24.0",
+    "glider-js": "^1.6.6",
+    "global": "^4.4.0",
+    "gulp": "3.9.1",
+    "hammerjs": "^2.0.8",
+    "hopscotch": "^0.3.1",
+    "izitoast": "^1.2.0",
+    "modal-video": "^2.4.2",
+    "particlesjs": "2.2.0",
+    "plyr": "^3.5.6",
+    "quill": "^1.3.7",
+    "scrollreveal": "^3.4.0",
+    "slick-carousel": "^1.8.1",
+    "webui-popover": "^1.2.18"
   }
 }
