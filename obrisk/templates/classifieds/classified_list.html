@@ -11,7 +11,6 @@
 {% endblock head %}
 
 {% block content %}
-{% include "classifieds/search.html" %}
 
 <!-- Page Content -->
 <div class="sidebar-overlay is-hidden"></div>
@@ -32,6 +31,18 @@
 
   <!-- Write Classified Widget -->
 
+
+  <div>
+    <form class="form-inline navbar-left" role="search" action="{% url 'classifieds:classifieds_results' %}">
+      <div class="input-group">
+        <input name="query" type="search" id="searchInput" class="form-control" aria-label="Search">
+        <div class="input-group-append">
+          <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+        </div>
+      </div>
+    </form>
+
+  </div>
   <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
     <div class="toggle-tags d-lg-none">
       <div class="d-flex flex-column align-items-center" id="sidebarBtnOpen">

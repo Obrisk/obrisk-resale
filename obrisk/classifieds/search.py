@@ -11,13 +11,12 @@ from obrisk.utils.helpers import ajax_required
 class SearchListView(LoginRequiredMixin, ListView):
     """CBV to contain all the search results"""
     model = Classified
-    template_name = "classified/search_results.html"
+    template_name = "classifieds/search_results.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         query = self.request.GET.get("query")
         context["active"] = 'classified'
-        context["hide_search"] = True
         context["tags_list"] = Tag.objects.filter(name=query).distinct()
         context["classifieds_list"] = Classified.objects.filter(Q(
             title__icontains=query) | Q(details__icontains=query) | Q(

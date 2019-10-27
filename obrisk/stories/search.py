@@ -16,7 +16,7 @@ from obrisk.qa.models import Question
 class SearchListView(LoginRequiredMixin, ListView):
     """CBV to contain all the search results"""
     model = Stories
-    template_name = "search/search_results.html"
+    template_name = "stories/search_results.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
