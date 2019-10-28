@@ -138,12 +138,12 @@ self.addEventListener('push', function (event) {
   const eventInfo = event.data.text();
 
   try {
-      var data = JSON.parse(eventInfo);
-      var head = data.head;
-      var body = data.body;
+    var data = JSON.parse(eventInfo);
+    var head = data.head;
+    var body = data.body;
   } catch (e) {
-      var head = 'New Notification 🕺🕺';
-      var body =  'Open Obrisk to view';
+    var head = 'New Notification 🕺🕺';
+    var body = 'Open Obrisk to view';
   }
 
   // Keep the service worker alive until the notification is created.
