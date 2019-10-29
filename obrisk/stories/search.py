@@ -24,14 +24,23 @@ class SearchListView(LoginRequiredMixin, ListView):
         context["active"] = 'stories'
         context["hide_search"] = True
         context["tags_list"] = Tag.objects.filter(name=query).distinct()
-        context["stories_list"] = Stories.objects.filter(
-            content__icontains=query).distinct()
+        context["stories_list"] = Stories.objects.filter(Q(
+            content__icontains=query) | Q(content__trigram_similar=query)).distinct()
+
         context["classifieds_list"] = Classified.objects.filter(Q(
             title__icontains=query) | Q(details__icontains=query) | Q(
-                tags__name__icontains=query)).distinct()
+                tags__name__icontains=query) | Q(
+                title__trigram_similar=query) | Q(
+                details__trigram_similar=query)
+                ).distinct()
+
         context["questions_list"] = Question.objects.filter(
             Q(title__icontains=query) | Q(content__icontains=query) | Q(
-                tags__name__icontains=query)).distinct()
+                tags__name__icontains=query) | Q(
+                title__trigram_similar=query) | Q(
+                content__trigram_similar=query) | Q(
+                tags__name__trigram_similar=query) 
+                ).distinct()
         # context["users_list"] = get_user_model().objects.filter(
         #     Q(username__icontains=query) | Q(
         #         name__icontains=query)).distinct()
