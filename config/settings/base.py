@@ -76,6 +76,7 @@ DJANGO_APPS = [
     'dal_select2',
     'django.contrib.admin',
     'django.forms',
+    'django.contrib.postgres',
 ]
 THIRD_PARTY_APPS = [
     'crispy_forms',

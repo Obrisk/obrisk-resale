@@ -20,7 +20,11 @@ class SearchListView(LoginRequiredMixin, ListView):
         context["tags_list"] = Tag.objects.filter(name=query).distinct()
         context["classifieds_list"] = Classified.objects.filter(Q(
             title__icontains=query) | Q(details__icontains=query) | Q(
-                tags__name__icontains=query)).distinct()
+                tags__name__icontains=query) | Q(
+                title__trigram_similar=query) | Q(
+                details__trigram_similar=query)
+                ).distinct()
+       
         context["images"]  = ClassifiedImages.objects.all()
         context["classifieds_count"] = context["classifieds_list"].count()
         context["tags_count"] = context["tags_list"].count()
@@ -39,7 +43,13 @@ def get_suggestions(request):
     query = request.GET.get('term', '')
     classifieds = list(Classified.objects.filter(
         Q(title__icontains=query) | Q(content__icontains=query) | Q(
-            tags__name__icontains=query)))
+            tags__name__icontains=query) | Q(
+                title__trigram_similar=query) | Q(
+                details__trigram_similar=query) | Q(
+                tags__trigram_similar=query)))
+                
+
+
     # Add all the retrieved classifieds to data_retrieved
     # list.
     data_retrieved = classifieds

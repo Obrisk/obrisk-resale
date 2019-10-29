@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.postgres.search import SearchVectorField
 
 from slugify import slugify
 from taggit.managers import TaggableManager
@@ -69,6 +70,8 @@ class Classified(models.Model):
     priority = models.IntegerField(default=0)
     #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)
+    # search_vector = SearchVectorField(null=True)
+
     objects = ClassifiedQuerySet.as_manager()
 
     class Meta:
