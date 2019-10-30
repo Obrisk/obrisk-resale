@@ -52,6 +52,7 @@ class Stories(models.Model):
     liked = models.ManyToManyField(settings.AUTH_USER_MODEL,
         blank=True, related_name="liked_stories")
     reply = models.BooleanField(verbose_name=_("Is a reply?"), default=False)
+    thread_count = models.IntegerField(default=0)
 
     class Meta:
         verbose_name = _("Stories")
@@ -124,10 +125,10 @@ class Stories(models.Model):
 
     def get_thread(self):
         parent = self.get_parent()
-        return parent.thread.all().order_by('timestamp')
+        return parent.thread.all().prefetch_related('user__username__thumbnail').order_by('timestamp')
 
     def count_thread(self):
-        return self.get_thread().count()
+        return self.thread_count
 
     def count_likers(self):
         return self.liked.count()

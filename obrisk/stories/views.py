@@ -47,8 +47,8 @@ class StoriesListView(LoginRequiredMixin, ListView):
                 ).values(
                    'image_thumb'
                 )[2:3])
-        ).order_by('-priority', '-timestamp')
-
+        ).prefetch_related('liked', 'parent', 'user__thumbnail__username').order_by('-priority', '-timestamp')
+        
 
 @login_required
 
