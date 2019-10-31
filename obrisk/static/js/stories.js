@@ -156,7 +156,7 @@ $(function () {
     $('#publish').on('input', function () {
         var valueLength = $(this).val().length;
 
-        if (valueLength >= 1) {
+        if (valueLength >= 1 || $(".filelist").children().length > 0) {
             $('#publish-button').removeClass('is-disabled');
         } else {
             $('#publish-button').addClass('is-disabled');
@@ -256,6 +256,7 @@ OssUpload.prototype = {
 
         $('input[type="file"]').change(function (e) {
             $("#wrapper .container").css('display', "block");
+            $('#publish-button').removeClass('is-disabled');
             //console.log(e)
             var files = e.target.files;
             var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
@@ -315,11 +316,8 @@ OssUpload.prototype = {
             uploader.fileStats.totalFilesNum = uploader.fileList.length;
         });
 
-        $("#startUpload").click(function (event) {
-            if ($("#publish").val() == '') {
-                event.preventDefault();
-                bootbox.alert("Please fill in all of the information before uploading the images!");
-            } else if (uploader.fileStats.totalFilesNum == 0) {
+        $("#publish-button").click(function (event) {
+            if (uploader.fileStats.totalFilesNum == 0) {
                 event.preventDefault();
                 bootbox.alert("Please select images to upload!");
                 $(".start-uploader").css('display', 'block');
@@ -336,6 +334,7 @@ OssUpload.prototype = {
                     file = uploader.fileList[i];
                     _this.uploadFile(file, filename);
                 }
+
             }
         });
         $(".queueList .filelist").delegate('li span.cancel', 'click', function () {
@@ -354,8 +353,8 @@ OssUpload.prototype = {
             }
 
             $li.remove();
-            if (uploader.fileList.length <= TotalFilesMaxSize) {
-                $('.addBtn').show();
+            if (uploader.fileList.length == 0) {
+                $("#wrapper .container").css('display', "none");
             }
         });
 
@@ -394,11 +393,11 @@ OssUpload.prototype = {
                 const upload = async () => {
                     try {
                         const results = await client.multipartUpload(filename, file, {
-                            progress: progress,
-                            partSize: 200 * 1024, //Minimum is 100*1024
-                            timeout: 120000, // 2 minutes timeout
+                                progress: progress,
+                                partSize: 200 * 1024, //Minimum is 100*1024
+                                timeout: 120000, // 2 minutes timeout
 
-                        })
+                            })
                             .then(function (res) {
 
                                 //Try to get the dominat color from the uploaded image, if it fails it means the image
@@ -413,16 +412,17 @@ OssUpload.prototype = {
                                         uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
                                         progressBarNum = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100;
                                         progressBar = (uploader.fileStats.curFileSize / uploader.fileStats.totalFilesSize).toFixed(2) * 100 + '%';
-
+                                        images += ',' + res.name;
                                         if (progressBarNum == 100) {
                                             $totalProgressbar.css('width', progressBar)
                                                 .html('Upload complete');
+                                            $("body").trigger("uploadComplete");
                                         } else {
                                             $totalProgressbar.css('width', progressBar)
                                                 .html(progressBar);
                                         }
 
-                                        images += ',' + res.name;
+
                                     },
                                     error: function (e) {
 
@@ -530,10 +530,10 @@ OssUpload.prototype = {
      */
     addFile: function (file) {
         var $li = $('<li id="' + file.id + '">' +
-            '<p class="title">' + file.name + '</p>' +
-            '<p class="imgWrap"></p>' +
-            '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
-            '</li>'),
+                '<p class="title">' + file.name + '</p>' +
+                '<p class="imgWrap"></p>' +
+                '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
+                '</li>'),
             $btns = $('<div class="file-panel">' +
                 '<span class="cancel">cancel</span>' +
                 '</div>').appendTo($li),
@@ -619,12 +619,27 @@ function OssUpload() {
  */
 
 function genKey() {
-    return "stories/" + user + '/' + slugify($("#publish").val().substring(0, 20)) +
-        '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0,
-                v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        });
+    if ($("#publish").val().substring(0, 20).length != 0) {
+        return "stories/" + user + '/' + slugify($("#publish").val().substring(0, 20)) +
+            '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+    } else {
+        return "stories/" + user + '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            }) +
+            '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            });
+    }
+
+
 }
 
 /**
@@ -657,8 +672,8 @@ $(function () {
     ossUpload = new OssUpload();
     ossUpload.init();
 
-    $("#publish-button").click(function () {
-        // Ajax call after pushing button, to register a Stories object.
+    $("body").on("uploadComplete", function (event) {
+
         $("#id_images").val(images);
         $("#id_img_error").val(img_error);
         $.ajax({
@@ -667,45 +682,45 @@ $(function () {
             type: 'POST',
             cache: false,
             success: function (data) {
-                $(".infinite-container").prepend(data);
-                $('[name="post"]').val("");
-                $('.app-overlay').removeClass('is-active');
-                $('.is-new-content').removeClass('is-highlighted');
-                $('.close-wrap').addClass('d-none');
-                feather.replace();
-                $("#postStoriesForm")[0].reset();
-                $("input, textarea").val('');
-                $('#wrapper').html(`<div class="container" style="display: none;">
-                                                <div id="uploader">
-                                                <div class="queueList">
-                                                    <div id="dndArea" class="placeholder" style="display: none;">
-                                                    <div class="" id="uploaderPick">
-                                                        <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
-                                                    </div>
-                                                    </div>
-                                                    <ul class="filelist"></ul>
-                                                </div>
-                                                </div>
-                                                <div id="statusBar" class="statusBar  flex-column align-items-center" style="display: flex;">
-                                                <div class="total-progress">
-                                                    <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
-                                                    aria-valuemin="0" aria-valuemax="100">
-                                                    </div>
-                                                </div>
-                                                <div class="upload-btn d-flex flex-column flex-md-row">
-                                                    <div class="start-uploader startUploadBtn ml-2 mr-2">
-                                                    <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
-                                                    </div>
-                                                </div>
-                                                </div>
+                window.location.reload();
+                // $('[name="post"]').val("");
+                // $('.app-overlay').removeClass('is-active');
+                // $('.is-new-content').removeClass('is-highlighted');
+                // $('.close-wrap').addClass('d-none');
+                // feather.replace();
+                // $("#postStoriesForm")[0].reset();
+                // $("input, textarea").val('');
+                // $('#wrapper').html(`<div class="container" style="display: none;">
+                //                                 <div id="uploader">
+                //                                 <div class="queueList">
+                //                                     <div id="dndArea" class="placeholder" style="display: none;">
+                //                                     <div class="" id="uploaderPick">
+                //                                         <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
+                //                                     </div>
+                //                                     </div>
+                //                                     <ul class="filelist"></ul>
+                //                                 </div>
+                //                                 </div>
+                //                                 <div id="statusBar" class="statusBar  flex-column align-items-center" style="display: flex;">
+                //                                 <div class="total-progress">
+                //                                     <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
+                //                                     aria-valuemin="0" aria-valuemax="100">
+                //                                     </div>
+                //                                 </div>
+                //                                 <div class="upload-btn d-flex flex-column flex-md-row">
+                //                                     <div class="start-uploader startUploadBtn ml-2 mr-2">
+                //                                     <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
+                //                                     </div>
+                //                                 </div>
+                //                                 </div>
 
-                                                <div class="" style="clear: both;">
-                                                <p class="text-center">
-                                                    Notes:
-                                                    Max number of files 8 &amp; Max size per file is 13MB
-                                                </p>
-                                                </div>
-                                            </div>`);
+                //                                 <div class="" style="clear: both;">
+                //                                 <p class="text-center">
+                //                                     Notes:
+                //                                     Max number of files 8 &amp; Max size per file is 13MB
+                //                                 </p>
+                //                                 </div>
+                //                             </div>`);
             },
             error: function (data) {
                 bootbox.alert(data.responseText);

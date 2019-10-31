@@ -147,7 +147,15 @@ def post_stories(request):
             # split one long string of images into a list of string each for one JSON img_obj
             images_list = images.split(",")
 
+
             if multipleImagesPersist(request, images_list, 'stories', story):
+                html = render_to_string(
+                    'stories/stories_single.html',
+                    {
+                        'stories': story,
+                        'images': images,
+                        'request': request
+                    })
                 return HttpResponse(html)
             else:
                 return HttpResponseBadRequest(
