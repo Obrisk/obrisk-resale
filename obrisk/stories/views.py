@@ -28,7 +28,7 @@ class StoriesListView(LoginRequiredMixin, ListView):
         return context
 
     def get_queryset(self, **kwargs):
-        return Stories.objects.all().annotate (
+        return Stories.objects.filter(reply=False).annotate (
             img1 = Subquery (
                     StoryImages.objects.filter(
                         story=OuterRef('pk'),
@@ -51,9 +51,8 @@ class StoriesListView(LoginRequiredMixin, ListView):
         
 
 @login_required
-
 @require_http_methods(["GET"])
-def get_images_stories(request):
+def get_story_images(request):
     """A function view return all images of a specific story"""
     story_id = request.GET['story_id']
 
@@ -65,6 +64,41 @@ def get_images_stories(request):
                 )
 
     return HttpResponse(images, content_type='application/json')
+
+
+
+@login_required
+@require_http_methods(["GET"])
+def get_story_likers(request):
+    """A function view return all images of a specific story"""
+    story_id = request.GET['story_id']
+
+    images = serializers.serialize('json', StoryImages.objects.filter(
+                        story=story_id,
+                    ).values_list(
+                        'image_thumb', 'image'
+                    )
+                )
+
+    return HttpResponse(images, content_type='application/json')
+
+
+
+@login_required
+@ajax_required
+@require_http_methods(["GET"])
+def get_thread(request):
+    """Returns a list of stories with the given stories as parent."""
+    stories_id = request.GET['stories']
+    stories = Stories.objects.get(pk=stories_id)
+    stories_html = render_to_string("stories/stories_single.html", {"stories": stories})
+    thread_html = render_to_string(
+        "stories/stories_thread.html", {"thread": stories.get_thread()})
+    return JsonResponse({
+        "uuid": stories_id,
+        "stories": stories_html,
+        "thread": thread_html,
+    })
 
 
 
@@ -136,23 +170,12 @@ def like(request):
     stories = Stories.objects.get(pk=stories_id)
     user = request.user
     stories.switch_like(user)
-    return JsonResponse({"likes": stories.count_likers()})
 
-@login_required
-@ajax_required
-@require_http_methods(["GET"])
-def get_thread(request):
-    """Returns a list of stories with the given stories as parent."""
-    stories_id = request.GET['stories']
-    stories = Stories.objects.get(pk=stories_id)
-    stories_html = render_to_string("stories/stories_single.html", {"stories": stories})
-    thread_html = render_to_string(
-        "stories/stories_thread.html", {"thread": stories.get_thread()})
-    return JsonResponse({
-        "uuid": stories_id,
-        "stories": stories_html,
-        "thread": thread_html,
-    })
+    #Without this you will get error
+    #Object of type 'CombinedExpression' is not JSON serializable
+    stories.refresh_from_db()
+    return JsonResponse({"likes": stories.likes_count})
+
 
 
 @login_required
@@ -169,7 +192,8 @@ def post_comment(request):
     post = post.strip()
     if post:
         parent.reply_this(user, post)
-        return JsonResponse({'comments': parent.count_thread(), 'likes': parent.count_likers()})
+        parent.refresh_from_db()
+        return JsonResponse({'comments': parent.thread_count, 'likes': parent.likes_count})
 
     else:
         return HttpResponseBadRequest()
@@ -179,6 +203,22 @@ def post_comment(request):
 @require_http_methods(["POST"])
 def update_interactions(request):
     data_point = request.POST['id_value']
-    stories = Stories.objects.get(pk=data_point)
-    data = {'likes': stories.count_likers(), 'comments': stories.count_thread()}
+    story = Stories.objects.get(pk=data_point)
+    data = {'likes': story.likes_count, 'comments': story.thread_count}
     return JsonResponse(data)
+
+
+@login_required
+@require_http_methods(["GET"])
+def update_reactions_count(request):
+    """ This view is temporal used to update stories to new reaction counts model setup"""
+    for story in Stories.objects.all():
+        try:
+            story.thread_count = story.count_thread()
+            story.likes_count = story.count_likers()
+            story.save()
+        except:
+            return HttpResponse(f"can't update the story object, {story}. Check the admin for more info")
+
+
+    return HttpResponse("Successfully updated likes")

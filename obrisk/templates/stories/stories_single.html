@@ -144,11 +144,11 @@
       <div class="social-count">
 
         <div class="likes-count">
-          <span class="count">{{ stories.count_likers }}</span>
+          <span class="count">{{ stories.likes_count }}</span>
           <span>Liked</span>
         </div>
         <div class="comments-count">
-          <span class="count">{{ stories.count_thread }}</span>
+          <span class="count">{{ stories.thread_count }}</span>
           <span>Comments</span>
         </div>
       </div>
@@ -163,7 +163,7 @@
     <div class="comments-heading">
       <h4>
         Comments
-        (<small>{{ stories.count_thread }}</small>)
+        (<small>{{ stories.thread_count }}</small>)
       </h4>
       <div class="close-comments">
         <i data-feather="x"></i>
