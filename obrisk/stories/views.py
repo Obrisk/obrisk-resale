@@ -120,6 +120,7 @@ def post_stories(request):
     post = request.POST['post']
     post = post.strip()
     images = request.POST['images']
+    viewers = request.POST['viewers']
     img_errors = request.POST['img_error']
 
     if (len(post) > 0 and len(post)<= 400) or images:
@@ -131,6 +132,7 @@ def post_stories(request):
         story = Stories.objects.create(
             user=user,
             content=post,
+            viewers=viewers
         )
 
         html = render_to_string(
@@ -192,6 +194,8 @@ def post_comment(request):
     post = post.strip()
     if post:
         parent.reply_this(user, post)
+        #Without this you will get error
+        #Object of type 'CombinedExpression' is not JSON serializable
         parent.refresh_from_db()
         return JsonResponse({'comments': parent.thread_count, 'likes': parent.likes_count})
 

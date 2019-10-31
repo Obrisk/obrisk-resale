@@ -23,12 +23,12 @@ class Stories(models.Model):
     Twitter does."""
 
     PUBLIC = "P"
-    NEAR_BY = "N"
+    AROUND = "A"
     CONNECTS = "C"
 
     VIEWERS = (
         (PUBLIC, _("Public")),
-        (NEAR_BY, _("near-by")),
+        (AROUND, _("around")),
         (CONNECTS, _("Connects")),
     )
 
