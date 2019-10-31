@@ -120,7 +120,7 @@ def post_stories(request):
     post = request.POST['post']
     post = post.strip()
     images = request.POST['images']
-    viewers = request.POST['viewers']
+    #viewers = request.POST['viewers']
     img_errors = request.POST['img_error']
 
     if (len(post) > 0 and len(post)<= 400) or images:
@@ -129,10 +129,11 @@ def post_stories(request):
             #In the near future, send a message like sentry to our mailbox to notify about the error!
             send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
         
+        #Before saving the user inputs to the database, clean everything.
         story = Stories.objects.create(
             user=user,
-            content=post,
-            viewers=viewers
+            content=post
+            #viewers=viewers
         )
 
         html = render_to_string(
