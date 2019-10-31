@@ -1,7 +1,7 @@
 from django.conf.urls import url
 
 from obrisk.stories import views
-
+from obrisk.stories.search import SearchListView, get_suggestions
 app_name = 'stories'
 urlpatterns = [
     url(r'^$', views.StoriesListView.as_view(), name='list'),
@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^update-reaction-counts/$', views.update_reactions_count, name='one-time-update'),
     url(r'^post-comment/$', views.post_comment, name='post_comments'),
     url(r'^update-interactions/$', views.update_interactions, name='update_interactions'),
+    url(r'^stories-search-reslts/$', SearchListView.as_view(), name='results'),
+    url(r'^stories-suggestions/$', get_suggestions, name='suggestions'),
+    
 ]

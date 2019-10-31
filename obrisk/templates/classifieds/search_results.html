@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load humanize thumbnail %}
+
+{% block title %} {% trans 'Search Results' %} {% endblock %}
+
+{% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds-list.css' %}?v=1908301" rel="stylesheet">
+<link href="{% static 'css/stories.css' %}?v=1" rel="stylesheet">
+<link href="{% static 'css/qa.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="container search-results">
+  <!-- This search bar should be displayed with pre-filled in values that user searched for. -->
+  <!-- currently it is not doing so -->
+  <div class="col-md-3 mb-5 mt-5">
+    <div class="justify-content-end ml-auto d-flex flex-row">
+      <form class="searchbar" id="classifiedsearch" action="{% url 'classifieds:classifieds_results' %}" style="display:inline;">
+        <input type="text" name="query" placeholder="Search...">
+        <div class="search"></div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- row -->
+  <div class="row">
+    <div class="col-md-3">
+      <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action active" id="list-classifieds-list" data-toggle="list"
+          href="#list-classifieds" role="tab" aria-controls="classifieds">{% trans 'Classifieds' %}<span
+            class="badge btn-dark pull-right">{{ classifieds_count }}</span></a>
+        <a class="list-group-item list-group-item-action" id="list-tags-list" data-toggle="list" href="#list-tags"
+          role="tab" aria-controls="tags">{% trans 'Tags' %}<span
+            class="badge btn-dark pull-right">{{ tags_count }}</span></a>
+      </div>
+    </div>
+    <div class="col-md-9 p-0">
+      <div class="tab-content" id="nav-tabContent">
+        <div class="tab-pane fade my-4 show active" id="list-classifieds" role="tabpanel"
+          aria-labelledby="list-classifieds-list">
+          <div class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
+            {% for classified in classifieds_list %}
+            <div class="card classified-card mr-2 mb-3 justify-content-center">
+              <!--Display image-->
+              <a href="{% url 'classifieds:classified' classified.slug %}"
+                style="color:black; text-decoration:none; background-color:none">
+                <div class="card-img-top img-responsive">
+
+                  {% for photo in images %}
+                  {% if photo.classified == classified %}
+                  <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
+                  {{ "<!--" }}
+                  {% endif %}
+                  {% endfor %}
+                  {{ "-->" }}
+                </div>
+                <div class="divider"></div>
+                <div class="card-body">
+                  <h6 class="card-title"> {{ classified.title}} </h6>
+                  <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+                  <div class="card-meta d-flex justify-content-between">
+                    <div class="d-flex location">
+                      <small>📍</small>
+                      <span class="card-text small "> {{ classified.city|safe }}</span>
+                    </div>
+                    <div class="share-card">
+                      <small>🔗</small>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+            {% empty %}
+            <h4 class="card-body card card">{% trans 'There are no results related to your search in classifieds' %}.
+            </h4>
+            {% endfor %}
+          </div>
+        </div>
+        
+        <div class="tab-pane fade my-4 " id="list-tags" role="tabpanel" aria-labelledby="list-tags-list">
+          <div class="card">
+            <div class="card-body">
+              {% for tag in tags_list %}
+              <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
+              {% empty %}
+              <h4>{% trans 'There are no results related to your search in tags' %}.</h4>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.container -->
+
+{% endblock content %}
