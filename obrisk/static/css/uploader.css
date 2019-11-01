@@ -2,7 +2,7 @@
 
 
 #wrapper {
-    width: 980px!important;
+    width: 980px !important;
     margin: 0 auto;
     width: auto;
 }
@@ -161,7 +161,7 @@
     bottom: 0;
     height: 40px;
     width: 100%;
-    z-index: 200;
+    z-index: 2;
     background: url(/static/img/success.png) no-repeat right bottom;
 }
 
@@ -172,7 +172,7 @@
     bottom: 0;
     height: 40px;
     width: 100%;
-    z-index: 200;
+    z-index: 2;
     background: url(/static/img/fail.png) no-repeat right bottom;
 }
 
@@ -251,7 +251,7 @@
     bottom: 0;
     height: 40px;
     width: 100%;
-    z-index: 200;
+    z-index: 2;
     background: url(/static/img/success.png) no-repeat right bottom;
 }
 
@@ -264,7 +264,7 @@
     top: 0;
     left: 0;
     overflow: hidden;
-    z-index: 300;
+    z-index: 3;
 }
 
 #uploader .filelist div.file-panel span {
