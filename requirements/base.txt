@@ -10,8 +10,8 @@ whitenoise>=3.3.1  # https://github.com/evansd/whitenoise
 environ>=1.0    #https://files.pythonhosted.org/packages/29/e4/6f448fcce1649a1f0f265e20bd88b7c8ff36e265657604b920240045928b/environ-1.0.tar.gz
 oss2  #https://github.com/aliyun/aliyun-oss-python-sdk
 aliyun-python-sdk-sts>=3.0.1 #https://github.com/aliyun/aliyun-openapi-python-sdk
-#pypiwin32      #This is only for windows OS     
-#boto3 
+#pypiwin32      #This is only for windows OS   
+
 
 # Django
 # ------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ django-star-ratings>=0.7.0 #https://github.com/wildfish/django-star-ratings
 django-autocomplete-light>=3.3.5 #https://github.com/yourlabs/django-autocomplete-light/
 django-pwa-webpush>=1.0.0 #https://pypi.org/project/django-pwa-webpush/
 django_user_agents>=0.4.0 #https://github.com/selwin/django-user_agents
-
+django-elasticsearch-dsl>=7.1.0 #https://github.com/sabricot/django-elasticsearch-dsl
 
 # Channels
 # ------------------------------------------------------------------------------

@@ -85,7 +85,6 @@ class Classified(models.Model):
     def get_absolute_url(self):
         return reverse('classifieds:classified', args=[self.slug])
 
-
     def save(self, *args, **kwargs):
         
         if not self.slug:

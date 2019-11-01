@@ -1,3 +1,36 @@
+from elasticsearch_dsl.connections import connections
+from elasticsearch_dsl import Document, Text, Date, Search
+from elasticsearch.helpers import bulk
+from elasticsearch import Elasticsearch
+from . import models
+
+# Create a connection to ElasticSearch
+connections.create_connection()
+
+# ElasticSearch "model" mapping out what fields to index
+class ClassifiedPostIndex(Document):
+    author = Text()
+    posted_date = Date()
+    title = Text()
+    text = Text()
+
+    class Meta:
+        index = 'blogpost-index'
+
+# Bulk indexing function, run in shell
+def bulk_indexing():
+    ClassifiedPostIndex.init()
+    es = Elasticsearch()
+    bulk(client=es, actions=(b.indexing() for b in models.ClassifiedPost.objects.all().iterator()))
+
+# Simple search function
+def search(author):
+    s = Search().filter('term', author=author)
+    response = s.execute()
+    return response
+
+
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -18,19 +51,19 @@ class SearchListView(LoginRequiredMixin, ListView):
         query = self.request.GET.get("query")
         context["active"] = 'classified'
         context["tags_list"] = Tag.objects.filter(name=query).distinct()
-        context["classifieds_list"] = Classified.objects.filter(Q(
-            title__icontains=query) | Q(details__icontains=query) | Q(
-                tags__name__icontains=query) | Q(
-                title__trigram_similar=query) | Q(
-                details__trigram_similar=query)
-                ).distinct()
+        context["classifieds_list"] = Classified.objects.none()
+        #This query is very expensive it does 200 queries.
+            #title__icontains=query) | Q(details__icontains=query) | Q(
+                #tags__name__icontains=query) | Q(
+                #title__trigram_similar=query) | Q(
+                #details__trigram_similar=query)
+                #).distinct()
        
         context["images"]  = ClassifiedImages.objects.all()
         context["classifieds_count"] = context["classifieds_list"].count()
         context["tags_count"] = context["tags_list"].count()
 
         return context
-
 
 
 

@@ -12,9 +12,9 @@
 
 {% block content %}
 <div class="app-overlay"></div>
-<!-- Container -->
-<div>
 
+<!-- Container -->
+{% comment %} <div>
   <ul class="nav navbar-nav navbar-right">
     {% if not hide_search %}
     <form class="form-inline navbar-left" role="search" action="{% url 'stories:results' %}">
@@ -26,8 +26,10 @@
               </div>
             </form>
     {% endif %}
-    
 </div>
+
+{% endcomment %} 
+
 <div class="container mt-5">
   <div class="row mt-4">
 

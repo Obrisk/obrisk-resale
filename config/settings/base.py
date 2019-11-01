@@ -96,6 +96,7 @@ THIRD_PARTY_APPS = [
     'taggit',
     'star_ratings',
     'pwa_webpush',
+    'django_elasticsearch_dsl',
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -426,3 +427,8 @@ TAGGIT_CASE_INSENSITIVE = True
 # cache alias will be used. Set to `None` to disable caching.
 #USER_AGENTS_CACHE = 'default'
 
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
+}
