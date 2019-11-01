@@ -317,12 +317,10 @@ OssUpload.prototype = {
         });
 
         $("#publish-button").click(function (event) {
-            if (uploader.fileStats.totalFilesNum == 0) {
-                event.preventDefault();
-                bootbox.alert("Please select images to upload!");
-                $(".start-uploader").css('display', 'block');
-
-            } else {
+            if (uploader.fileStats.totalFilesNum == 0 && $("#publish").val().substring(0, 20).length >= 0) {
+                $("body").trigger("uploadComplete");
+            }
+            if (uploader.fileStats.totalFilesNum > 0) {
                 $("#statusBar").css('display', 'flex');
                 var length = uploader.fileStats.totalFilesNum;
                 var file;
@@ -638,6 +636,7 @@ function genKey() {
                 return v.toString(16);
             });
     }
+
 
 
 }
