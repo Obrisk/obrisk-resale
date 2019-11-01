@@ -448,10 +448,12 @@ OssUpload.prototype = {
                                                     .html(progressBar);
                                             }
                                             img_error = res.name + ", Message: " + "Corrupted image" + ", RequestID: " + res.name;
+                                            $("#retry-button").removeClass("is-hidden");
+
                                             if (!images) {
                                                 images = 'undef,classifieds/error-img.jpg';
                                                 bootbox.alert("Oops! an error occured when uploading your image(s). \
-                                                But you can submit this form without images and edit your post later to add images");
+                                                But you can submit this stories without images .");
                                             }
                                         }
                                     }
@@ -479,12 +481,13 @@ OssUpload.prototype = {
                                         $totalProgressbar.css('width', '94%')
                                             .html("Completed with minor errors!");
                                         $("ul.filelist li").children(".success-span").addClass("fail");
+                                        $("#addBtn").hide();
                                         img_error = err.name + ", Message: " + err.message + ", RequestID: " + err.requestId;
-
+                                        $("#retry-button").removeClass("is-hidden");
                                         if (!images) {
                                             images = 'undef,classifieds/error-img.jpg';
                                             bootbox.alert("Oops! an error occured when uploading your image(s). \
-                                            But you can submit this form without images and edit your post later to add images");
+                                            But you can submit this stories without images .");
                                         }
                                     }
                                 } else {
@@ -492,13 +495,13 @@ OssUpload.prototype = {
                                     //Allow the users to submit the form atleast with default image.
                                     $totalProgressbar.css('width', '94%')
                                         .html("Completed with minor errors!");
-
+                                    $("#addBtn").hide();
                                     img_error = err.name + ", Message: " + err.message + ", RequestID: " + err.requestId;
-
+                                    $("#retry-button").removeClass("is-hidden");
                                     if (!images) {
                                         images = 'undef,classifieds/error-img.jpg';
                                         bootbox.alert("Oops! an error occured when uploading your image(s). \
-                                            But you can submit this form without images and edit your post later to add images");
+                                            But you can submit this stories without images .");
                                     }
                                 }
 
@@ -689,42 +692,41 @@ $(function () {
                 // feather.replace();
                 // $("#postStoriesForm")[0].reset();
                 // $("input, textarea").val('');
-                // $('#wrapper').html(`<div class="container" style="display: none;">
-                //                                 <div id="uploader">
-                //                                 <div class="queueList">
-                //                                     <div id="dndArea" class="placeholder" style="display: none;">
-                //                                     <div class="" id="uploaderPick">
-                //                                         <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
-                //                                     </div>
-                //                                     </div>
-                //                                     <ul class="filelist"></ul>
-                //                                 </div>
-                //                                 </div>
-                //                                 <div id="statusBar" class="statusBar  flex-column align-items-center" style="display: flex;">
-                //                                 <div class="total-progress">
-                //                                     <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
-                //                                     aria-valuemin="0" aria-valuemax="100">
-                //                                     </div>
-                //                                 </div>
-                //                                 <div class="upload-btn d-flex flex-column flex-md-row">
-                //                                     <div class="start-uploader startUploadBtn ml-2 mr-2">
-                //                                     <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
-                //                                     </div>
-                //                                 </div>
-                //                                 </div>
 
-                //                                 <div class="" style="clear: both;">
-                //                                 <p class="text-center">
-                //                                     Notes:
-                //                                     Max number of files 8 &amp; Max size per file is 13MB
-                //                                 </p>
-                //                                 </div>
-                //                             </div>`);
             },
             error: function (data) {
                 bootbox.alert(data.responseText);
             },
         });
+    });
+    $("#retry-button").click(function (e) {
+        e.preventDefault();
+        $("#addBtn").show();
+        uploader = {
+            fileList: [],
+            fileStats: {
+                totalFilesNum: 0,
+                totalFilesSize: 0,
+                uploadFinishedFilesNum: 0,
+                curFileSize: 0,
+            },
+        };
+
+        $('.queueList ul').html(``);
+        img_error = "";
+        images = "";
+        var progressBar = 0;
+        var progress = '';
+        var $wrap = $('#uploader ');
+        $totalProgressbar.css('width', '0%').html('');
+        $("#retry-button").addClass("is-hidden");
+
+    });
+    $(".select-status a").click(function (e) {
+        e.preventDefault();
+        $("#selected-status #viewer-icon").html($(this).find("svg").html())
+        $("#selected-status span").text($(this).find("h3").text())
+        $("#viewers").val($(this).data("status"));
     });
 
 
