@@ -391,11 +391,11 @@ OssUpload.prototype = {
                 const upload = async () => {
                     try {
                         const results = await client.multipartUpload(filename, file, {
-                                progress: progress,
-                                partSize: 200 * 1024, //Minimum is 100*1024
-                                timeout: 120000, // 2 minutes timeout
+                            progress: progress,
+                            partSize: 200 * 1024, //Minimum is 100*1024
+                            timeout: 120000, // 2 minutes timeout
 
-                            })
+                        })
                             .then(function (res) {
 
                                 //Try to get the dominat color from the uploaded image, if it fails it means the image
@@ -531,10 +531,10 @@ OssUpload.prototype = {
      */
     addFile: function (file) {
         var $li = $('<li id="' + file.id + '">' +
-                '<p class="title">' + file.name + '</p>' +
-                '<p class="imgWrap"></p>' +
-                '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
-                '</li>'),
+            '<p class="title">' + file.name + '</p>' +
+            '<p class="imgWrap"></p>' +
+            '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
+            '</li>'),
             $btns = $('<div class="file-panel">' +
                 '<span class="cancel">cancel</span>' +
                 '</div>').appendTo($li),
@@ -629,10 +629,10 @@ function genKey() {
             });
     } else {
         return "stories/" + user + '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-                var r = Math.random() * 16 | 0,
-                    v = c == 'x' ? r : (r & 0x3 | 0x8);
-                return v.toString(16);
-            }) +
+            var r = Math.random() * 16 | 0,
+                v = c == 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        }) +
             '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                 var r = Math.random() * 16 | 0,
                     v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -723,10 +723,10 @@ $(function () {
 
     });
     $(".select-status a").click(function (e) {
-        e.preventDefault();
         $("#selected-status #viewer-icon").html($(this).find("svg").html())
         $("#selected-status span").text($(this).find("h3").text())
         $("#viewers").val($(this).data("status"));
+        $(".dropdown-trigger").removeClass("is-active");
     });
 
 

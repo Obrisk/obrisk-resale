@@ -13,9 +13,7 @@
       <figure class="media-left">
         <p class="image">
           {% if notification.actor.thumbnail %}
-          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{
-              notification.actor.thumbnail
-            }}" alt="Picture Profile" style="border-radius: 50%;"
+          <img src="{{oss}}/{{notification.actor.thumbnail}}" alt="Picture Profile" style="border-radius: 50%;"
             class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic" />
           {% else %}
           <img src="{% static 'img/user.png' %}" class="pull-left" alt="No Profile Picture" />
