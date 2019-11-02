@@ -130,8 +130,11 @@ window.onscroll = function () {
         document.getElementById("navbarBottom").style.bottom = "-80px";
         document.getElementById("navbarTop").style.top = "0";
     } else {
-        document.getElementById("navbarBottom").style.bottom = "-0";
-        document.getElementById("navbarTop").style.top = "-80px";
+        document.getElementById("navbarBottom").style.bottom = "0";
+        if (!$(".is-account-dropdown").hasClass("is-active")) {
+            document.getElementById("navbarTop").style.top = "-80px";
+        }
+
     }
     prevScrollpos = currentScrollPos;
 }
