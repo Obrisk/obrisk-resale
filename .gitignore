@@ -60,6 +60,7 @@ media/
 
 .env
 .env.prod
+*.onpremises*
 
 venv_obrisk/
 staticfiles/

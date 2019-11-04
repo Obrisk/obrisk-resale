@@ -1,0 +1,14 @@
+[Unit]
+Description=Gulp process to update serviceWorker
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=obdev-user
+Group=www-data
+WorkingDirectory=/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin
+ExecStart=/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js watch
+
+
+[Install]
+WantedBy=multi-user.target

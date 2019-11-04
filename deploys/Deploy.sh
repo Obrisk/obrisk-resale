@@ -1,6 +1,17 @@
+#!/bin/bash -xe
 # These are the list of commands on how to deploy obrisk on a fresh Ubuntu 18.04 OS running on AWS Lightsail.
+
 sudo apt-get update
 sudo apt-get -y upgrade
+
+#First, install codedeploy agent.
+apt-get -y update
+apt-get -y install ruby
+apt-get -y install wget
+cd /home/ubuntu
+wget https://obdev-deploy-bucket-ap-northeast-2.s3.amazonaws.com/latest/install
+chmod +x ./install
+./install auto
 
 sudo apt install python3-pip python3-dev libpq-dev nginx curl redis-server -y
 #sudo apt install postgresql if you will want to access DB with psql
@@ -29,6 +40,7 @@ sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
 sudo cp deploys/uvicorn.socket /etc/systemd/system
 sudo cp deploys/uvicorn.service /etc/systemd/system
+sudo cp deploys/gulp.service /etc/systemd/system
 
 sudo systemctl start gunicorn.socket uvicorn.socket
 sudo systemctl enable gunicorn.socket uvicorn.socket
