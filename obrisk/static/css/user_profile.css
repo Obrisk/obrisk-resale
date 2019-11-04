@@ -3,15 +3,19 @@
 }
 
 .fa-instagram {
-  color: #cf153d
+  color: #cf153d;
 }
 
 .fa-linkedin {
-  color: #1556cf
+  color: #1556cf;
 }
 
 .fa-facebook {
-  color: #2815cf
+  color: #2815cf;
+}
+
+.fa-snapchat {
+  color: #ecde16;
 }
 
 .profile-header-avatar {
@@ -67,3 +71,23 @@
     margin-top: 15px;
   }
 }
+
+#pic {
+    width:250px;
+    height:250px;
+    border-radius: 50%;
+}
+
+.lazy-img {
+    text-align: center;
+    font-size: 10px;
+}
+
+@media screen and (max-width: 400px) {
+  #pic {
+    width : 175px;
+    height : 175px;
+  }
+
+}
+

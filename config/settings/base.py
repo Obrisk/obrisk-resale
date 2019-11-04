@@ -1,7 +1,7 @@
 """
 Base settings to build other settings files upon.
 """
-import environ
+import environ, os
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path('obrisk')
@@ -68,11 +68,15 @@ DJANGO_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
+    'django.contrib.sitemaps',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'dal',   #Django auto complete has to be before admin
+    'dal_select2',
     'django.contrib.admin',
     'django.forms',
+    'django.contrib.postgres',
 ]
 THIRD_PARTY_APPS = [
     'crispy_forms',
@@ -91,6 +95,8 @@ THIRD_PARTY_APPS = [
     'markdownx',
     'taggit',
     'star_ratings',
+    'pwa_webpush',
+    'django_elasticsearch_dsl',
 ]
 LOCAL_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -117,17 +123,22 @@ MIGRATION_MODULES = {
 
 # AUTHENTICATION
 # ------------------------------------------------------------------------------
+# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
+AUTH_USER_MODEL = 'users.User'
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
+    #'users.phone_authentication.PhoneAuthBackend',
 ]
-# https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
-AUTH_USER_MODEL = 'users.User'
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = 'classifieds:list'
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = 'account_login'
+
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 40 #40 Days.
+
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -171,7 +182,7 @@ MIDDLEWARE = [
 ]
 
 # STATIC
-# ------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
     str(APPS_DIR.path('static')),
@@ -219,6 +230,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'obrisk.classifieds.context_processors.cached_queries',
             ],
         },
     },
@@ -250,21 +262,38 @@ ADMINS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
 
-
 # django-allauth
 # ------------------------------------------------------------------------------
+# https://django-allauth.readthedocs.io/en/latest/configuration.html
 ACCOUNT_ALLOW_REGISTRATION = env.bool('ACCOUNT_ALLOW_REGISTRATION', True)
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_AUTHENTICATION_METHOD = 'username'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_REQUIRED = True
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
-# https://django-allauth.readthedocs.io/en/latest/configuration.html
-SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+#This is because of overiding login forms on users.forms
+#options are False and True for the remember me box
+SESSION_REMEMBER = None
+
+ACCOUNT_EMAIL_VERIFICATION = 'optional'
+
+SOCIALACCOUNT_EMAIL_VERIFICATION = 'none'
+
+#This will avoid the duplicates in usernames with diff casing
+ACCOUNT_PRESERVE_USERNAME_CASING = True
+
+USERNAME_MIN_LENGTH = 3
+
+ACCOUNT_FORMS = {
+    'signup': 'users.forms.PhoneSignupForm', 
+    'login': 'users.forms.CustomLoginForm'
+}
+
+ACCOUNT_USERNAME_BLACKLIST = ['AnonymousUser', 'admin', 'obrisk']
+
+ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
+
+ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
+
+#SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 # SOCIALACCOUNT_PROVIDERS = {
 #     'weixin': {
 #         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
@@ -296,9 +325,110 @@ GRAPHENE = {
     'SCHEMA': 'obrisk.schema.schema'
 }
 
-ACCOUNT_FORMS = {'signup': 'users.forms.CustomSignupForm'}
-
 #Max data to be uploaded to Django server. This is around 12MB
 DATA_UPLOAD_MAX_MEMORY_SIZE = 13000000
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 13000000
+
+TAGS_CACHE_TIMEOUT = 60 * 60 * 24 * 7 #7 days. 
+
+PWA_APP_NAME = 'Obrisk'
+PWA_APP_DESCRIPTION = 'A location based social network for foreigners in China'
+PWA_APP_THEME_COLOR = '#3ec4e2'
+PWA_APP_BACKGROUND_COLOR = '#ffffff'
+PWA_APP_DISPLAY = 'standalone'
+PWA_APP_SCOPE = "/"
+PWA_APP_ORIENTATION = 'any'
+PWA_APP_START_URL = "/"
+PWA_APP_ICONS = [    {
+        "src": "/static/img/android-chrome-192x192.png",
+        "sizes": "192x192",
+    }, {
+        "src": "/static/img/android-chrome-512x512.png",
+        "sizes": "512x512",
+    }
+    , {
+        "src": "/static/img/mstile-310x310.png",
+        "sizes": "310x310",
+    }, {
+        "src": "/static/img/mstile-310x150.png",
+        "sizes": "310x150",
+    }, {
+        "src": "/static/img/mstile-150x150.png",
+        "sizes": "150x150",
+    }, {
+        "src": "/static/img/mstile-144x144.png",
+        "sizes": "144x144",
+    }
+    , {
+        "src": "/static/img/mstile-70x70.png",
+        "sizes": "70x70",
+    }]
+ 
+
+PWA_APP_SPLASH_SCREEN = [
+
+    {
+        'src':"/static/img/splashscreens/iphone5_splash.png",
+        'media':"(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+    },
+    {
+        'src':"/static/img/splashscreens/iphone6_splash.png",
+        'media':"(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)"
+    },
+    {
+        'src':"/static/img/splashscreens/iphoneplus_splash.png",
+        'media':"(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)"
+    },
+    {
+        'src':"/static/img/splashscreens/iphonex_splash.png",
+        'media':"(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)"
+    },
+    {
+        'src':"/static/img/splashscreens/iphonexr_splash.png",
+        'media':"(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)"
+    },
+    {
+        'src':"/static/img/splashscreens/iphonexsmax_splash.png",
+        'media':"(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)"
+    },
+    {
+        'src':"/static/img/splashscreens/ipad_splash.png",
+        'media':"(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)"
+    },
+    {
+        'src':"/static/img/splashscreens/ipadpro1_splash.png",
+        'media':"(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)"
+    },
+    {
+        'src':"/static/img/splashscreens/ipadpro3_splash.png",
+        'media':"(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)"
+    },
+    {
+        'src':"/static/img/splashscreens/ipadpro2_splash.png",
+        'media':"(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)"
+    } 
+]
+PWA_APP_DIR = '/'
+PWA_APP_LANG = 'en-US'
+PWA_SERVICE_WORKER_PATH = APPS_DIR.path('templates/serviceworker.js')
+
+
+WEBPUSH_SETTINGS = {
+   "VAPID_PUBLIC_KEY": env('VAPID_PUBLIC_KEY'),
+   "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
+   "VAPID_ADMIN_EMAIL": env('VAPID_EMAIL')
+}
+
+
+TAGGIT_CASE_INSENSITIVE = True
+
+# Name of cache backend to cache user agents. If it not specified default
+# cache alias will be used. Set to `None` to disable caching.
+#USER_AGENTS_CACHE = 'default'
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
+}

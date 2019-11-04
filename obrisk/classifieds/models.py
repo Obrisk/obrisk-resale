@@ -1,12 +1,14 @@
 import datetime
 import itertools
+import operator
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
+from django.contrib.postgres.search import SearchVectorField
 
 from slugify import slugify
-
 from taggit.managers import TaggableManager
 
 class ClassifiedQuerySet(models.query.QuerySet):
@@ -34,7 +36,7 @@ class ClassifiedQuerySet(models.query.QuerySet):
                 else: #smart
                     tag_dict[tag] += 1
 
-        return tag_dict.items()
+        return sorted(tag_dict.items(), key=operator.itemgetter(1), reverse=True)
 
 
 class Classified(models.Model):
@@ -47,32 +49,41 @@ class Classified(models.Model):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     title = models.CharField(max_length=80)
-    timestamp = models.DateTimeField(auto_now_add=True, editable=False)
+    timestamp = models.DateTimeField(auto_now_add=True)
     slug = models.SlugField(max_length=300, null=True, blank=True, unique=True, editable=False)
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
     details = models.CharField(max_length=2000)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
-    located_area = models.CharField (max_length=100)
+    address = models.CharField (max_length=100)
     city = models.CharField (max_length=100)
     province_region = models.CharField(max_length= 100)
-    contact_info = models.CharField (max_length=150, null=True, blank=True)
+    phone_number = models.CharField (max_length=150, null=True, blank=True)
+    wechat_id = models.CharField (max_length=150, null=True, blank=True)
     country = models.CharField(max_length= 100)
     total_views = models.IntegerField(default=0)
     total_responses = models.IntegerField(default=0)
     edited = models.BooleanField(default=False)
+    show_phone = models.BooleanField(default=True)
     tags = TaggableManager()
+    priority = models.IntegerField(default=0)
+    #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)
+    # search_vector = SearchVectorField(null=True)
+
     objects = ClassifiedQuerySet.as_manager()
 
     class Meta:
+        ordering = ("-timestamp",)
         verbose_name = _("Classified")
         verbose_name_plural = _("Classifieds")
-        ordering = ("-timestamp",)
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('classifieds:classified', args=[self.slug])
 
     def save(self, *args, **kwargs):
         
@@ -115,14 +126,14 @@ class ClassifiedImages(models.Model):
 class OfficialAd(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="official_user",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     title = models.CharField(max_length=80)
     timestamp = models.DateTimeField(auto_now_add=True, editable=False)
     details = models.CharField(max_length=2000)
-    located_area = models.CharField (max_length=100, null=True, blank=True)
+    address = models.CharField (max_length=100, null=True, blank=True)
     city = models.CharField (max_length=100)
     province_region = models.CharField(max_length= 100)
-    contact_info = models.CharField (max_length=150, null=True, blank=True)
+    phone_number = models.CharField (max_length=150, null=True, blank=True)
     tags = TaggableManager()
 
     class Meta:

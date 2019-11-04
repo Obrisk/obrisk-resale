@@ -4,16 +4,28 @@ from django.views.generic import CreateView, ListView, UpdateView, DetailView
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
-from obrisk.helpers import AuthorRequiredMixin
+from django.shortcuts import redirect
+from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post, Comment
 from obrisk.posts.forms import PostForm, CommentForm
 #For comments
 from django.http import JsonResponse 
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import login_required
+from obrisk.utils.images_upload import bucket, bucket_name
+from slugify import slugify
+
+import os
+import base64
+import datetime
 
 
-class PostsListView(LoginRequiredMixin, ListView):
+import oss2
+from aliyunsdkcore import client
+from aliyunsdksts.request.v20150401 import AssumeRoleRequest
+
+class PostsListView(ListView):
     """Basic ListView implementation to call the published Posts list."""
     model = Post
     paginate_by = 10
@@ -21,14 +33,14 @@ class PostsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        #This query is too slow
+        #This query could be slowing the posts
         #context['popular_tags'] = Post.objects.get_counted_tags()
         context['base_active'] = 'posts'
 
         return context
 
     def get_queryset(self, **kwargs):
-        return Post.objects.get_active()
+        return Post.objects.select_related('user')
 
 
 class DraftsListView(PostsListView):
@@ -37,13 +49,69 @@ class DraftsListView(PostsListView):
     def get_queryset(self, **kwargs):
         return Post.objects.get_draft()
 
-
 class CreatePostView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new Posts."""
     model = Post
     message = _("Your Post has been created.")
     form_class = PostForm
     template_name = 'posts/post_create.html'
+    
+    def __init__(self, **kwargs):
+        self.object = None
+        super().__init__(**kwargs)
+        
+
+    def form_valid(self, form):
+        image = form.cleaned_data['image']
+
+        if (image == None):
+            messages.error(self.request, "Sorry, the image were not uploaded successfully. \
+                Please add the image again and submit the form!")
+            return self.form_invalid(form)
+        
+        else:
+            form.instance.user = self.request.user
+            post = form.save(commit=False)
+            post.user = self.request.user
+
+            d = str(datetime.datetime.now())
+            thumb_name = "posts/" + str(post.user) + "/" + \
+            slugify(str(post.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d 
+            style = 'image/resize,m_fill,h_300,w_430'
+            
+            try:
+                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(thumb_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(str_result, process)
+                post.img_small = thumb_name
+
+                post.save()
+
+            except oss2.exceptions.ServerError as e:
+                post.save()
+                messages.error(self.request, "Oops we are very sorry. \
+                Your image was not uploaded successfully. Please ensure that, \
+                your internet connection is stable and edit your item to add images. "
+                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                # return self.form_invalid(form)
+                #I am not returning form errors because this is our problem and not user's
+                return redirect ('posts:list')
+            
+            except:
+                post.save()
+                messages.error(self.request, "Oops we are sorry! Your image \
+                    was not uploaded successfully. Please select your item, then edit, \
+                    and try again to upload the images.")
+                #return self.form_invalid(form)
+                #I am not returning form errors because this is our problem and not user's
+                return redirect ('posts:list')
+
+            #When the for-loop has ended return the results.        
+            return super(CreatePostView, self).form_valid(form)
+
+
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -71,8 +139,8 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 
-@method_decorator(csrf_exempt, name='dispatch')
-class DetailPostView(LoginRequiredMixin, DetailView):
+@method_decorator(login_required, name='post')
+class DetailPostView(DetailView):
     """Basic DetailView implementation to call an individual Post."""
     model = Post
 
@@ -109,7 +177,6 @@ class DetailPostView(LoginRequiredMixin, DetailView):
             return self.render_to_response(context=context)
         
         else:
-            print(comment_form.errors)
             context = super(DetailPostView, self).get_context_data(**kwargs)
             #Return the form with errors.
             context['comment_form'] = comment_form

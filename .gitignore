@@ -60,9 +60,13 @@ media/
 
 .env
 .env.prod
+*.onpremises*
 
 venv_obrisk/
-staticfiles
+staticfiles/
 .idea
 
 CODEOWNERS
+
+frontend/node_modules/
+

@@ -2,43 +2,64 @@
 
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    {# block title %}{ block head_title %}  {% endblock head_title %}{% endblock title #}
-    <meta charset="utf-8">
-    <!--This is to ensure scripts are loaded from my site only!-->
-    <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title> {% block heading %}Obrisk{% endblock heading %}</title>
+<head>
+  {# block title %}{ block head_title %}  {% endblock head_title %}{% endblock title #}
+  <meta charset="utf-8">
+  <!--This is to ensure scripts are loaded from my site only!-->
+  <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-    <meta name="description" content="A Social Network for foreigners living in China.">
+  <title> {% block heading %}Obrisk{% endblock heading %}</title>
 
-    {% block cdn %}
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">   
-    <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <meta name="description" content="A Social Network for foreigners living in China.">
 
-    <!-- This file stores project-specific CSS -->
-    <link href="{% static 'css/obrisk.css' %}?v=1" rel="stylesheet">
-    {% endblock cdn %}
+  {% block cdn %}
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
 
-    
-    </head>
-    
+  <!-- This file stores project-specific CSS -->
+  <link href="{% static 'css/obrisk.css' %}?v=0908231" rel="stylesheet">
+  <link href="{% static 'css/account.css' %}?v=0908231" rel="stylesheet">
+
+  {% endblock cdn %}
+
+  {% block head %} {% endblock head %}
+</head>
 
 <body>
 
+  <body class="O-bg">
 
-{% block content %}
-<div class="row">
-  <div class="col-md-6 offset-md-3">
-    {% block inner %}{% endblock %}
-  </div>
-</div>
-{% endblock %}
+    <div class="container">
+      {% if messages %}
+      {% for message in messages %}
+      <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ message }}
+      </div>
+      {% endfor %}
+      {% endif %}
+
+      {% block body %}
+      <div class="m-b-1">
+        <div class="container">
+          {% block content %}
+          {% endblock content %}
+          {% block inner %}
+          {% endblock inner %}
+        </div>
+
+      </div>
 
 
- </body>
+      {% endblock body %}
+  </body>
+
+  {% block scripts %}
+  {% endblock scripts %}
 
   <!-- /.container -->
+
 </html>

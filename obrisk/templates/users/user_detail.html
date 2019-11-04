@@ -1,23 +1,25 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% load thumbnail %}
 
 {% block title %}{{ object.username }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/user_profile.css' %}?v=1" rel="stylesheet">
+<link href="{% static 'css/user_profile.css' %}?v=200719" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
+<a href="{% url 'classifieds:list' %}" class="d-sm-block d-md-none btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></a>
 
 <div class="col-md-8 m-auto">
-  <div class="media profile-header d-flex flex-column flex-md-row">
-    {% thumbnail object.picture "150x150" crop="center" upscale="true"  as im %}
-    <img src="{{ im.url }}" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
-      alt="Picture Profile" id="pic">
-    {% empty %}
-    <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
-    {% endthumbnail %}
+  <div class="media user-profile profile-header d-flex flex-column">
+    {% if object.picture %}
+      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
+      class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+    {% else %}
+      <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
+      <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
+    {% endif %}
+
     <div class="media-body">
       <h1 class="mt-0">{{ object.username|title }}</h1>
 
@@ -41,50 +43,53 @@
 
       <p>
         {% if object.instagram_account %}
-        <a href="{{ object.instagram_account }}" style="font-size: 2em" title="{% trans 'Instagram Profile' %}"><i
-            class="fa fa-instagram"></i> </a>
+        <a href="https://www.instagram.com/{{ object.instagram_account }}" style="font-size: 2em"
+          title="{% trans 'Instagram Profile' %}"><i class="fa fa-instagram"></i> </a>
         {% endif %}
 
         {% if object.linkedin_account %}
-        <a href="{{ object.linkedin_account }}" style="font-size: 2em" title="{% trans 'LinkedIn Profile' %}"><i
-            class="fa fa-linkedin"></i> </a>
+        <a href="https://www.linkedin.com/in/{{ object.linkedin_account }}" style="font-size: 2em"
+          title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i> </a>
+        {% endif %}
+
+        {% if object.snapchat_account %}
+        <a href="https://www.snapchat.com/add/{{ object.snapchat_account }}" style="font-size: 2em"
+          title="{% trans 'Snapchat Profile' %}"><i class="fa fa-snapchat"></i> </a>
         {% endif %}
 
         {% if object.facebook_account %}
-        <a href="{{ object.facebook_account }}" style="font-size: 2em" title="{% trans 'Facebook Profile' %}"><i
-            class="fa fa-facebook"></i> </a>
+        <a href="https://www.facebook.com/{{ object.facebook_account }}" style="font-size: 2em"
+          title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i> </a>
         {% endif %}
 
         <br />
         {% if object.name %}
-        <i class="fa fa-user-circle-o" aria-hidden="true"></i>
-        {{ object.name|title  }}
+            👤{{ object.name|title  }}
         {% endif %}
 
         <br />
         {% if object.city %}
-        <span class="fa"> <i class="fa-map-marker" aria-hidden="true"> </i> {{ object.city }} </span> <br />
+        <span class="fa"> 📍{{ object.city }} </span> <br />
         {% endif %}
         <br />
         {% if object.job_title %}
-        <i class="fa fa-briefcase" aria-hidden="true"></i> {{ object.job_title }} <br />
+        💼{{ object.job_title }} <br />
+        {% else %}
+        <p>🛌 {{ object.username }} is too lazy to add a job title.</p>
         {% endif %}
       </p>
 
       {% if object.bio %}
       <div class="panel-body" id="objective">
-        <p>{{ object.bio }}</p>
+       <p>📇{{ object.bio }}</p>
       </div>
+      {% else %}
+      <p> 🛌{{ object.username}} is too lazy to write a short bio.</p>
       {% endif %}
       <div class="clear"></div>
     </div>
 
-
-
-
   </div>
 </div>
-
-
 
 {% endblock content %}

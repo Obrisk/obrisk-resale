@@ -1,24 +1,65 @@
-{% load static i18n thumbnail %}
+{% load static i18n%}
 <!DOCTYPE html>
-
-<ul>
+<div class="inner">
+  <div class="nav-drop-header">
+    <span style="color: #555;">{% trans 'Unread notifications for' %}
+      {{ request.user.get_profile_name | title }}</span>
+    <a href="/ws/notifications">View All</a>
+  </div>
+  <div class="is-notifications nav-drop-body">
+    {% if notifications %} {% for notification in notifications %}
+    <!-- Notification -->
+    <div class="media">
+      <figure class="media-left">
+        <p class="image">
+          {% if notification.actor.thumbnail %}
+          <img src="{{oss}}/{{notification.actor.thumbnail}}" alt="Picture Profile" style="border-radius: 50%;"
+            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic" />
+          {% else %}
+          <img src="{% static 'img/user.png' %}" class="pull-left" alt="No Profile Picture" />
+          {% endif %}
+        </p>
+      </figure>
+      <div class="media-content">
+        <span><span>{{ notification.actor.get_profile_name | title }}</span>
+          {{ notification.get_verb_display }}
+          {% if notification.action_object %}
+          {{ notification.action_object }}
+          {% endif %}
+        </span>
+        <span class="time">{{ notification.time_since }}</span>
+      </div>
+      <div class="media-right">
+        {%if notification.get_verb_display == "replied to"%}
+        <div class="added-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-message-square">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+          </svg>
+        </div>
+        {% elif notification.get_verb_display == "liked" %}
+        <div class="added-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-heart">
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+            </path>
+          </svg>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %} {% else %}
+    <p class="" style="color: #555;">
+      You have no unread notification
+    </p>
+    {% endif %}
+  </div>
   {% if notifications %}
-  {% for notification in notifications %}
-  <li class="clearfix d-flex align-items-center">
-    <div class="icon">
-      <span class="fa-stack fa-2x float-left">
-        {{ notification.get_icon }}
-      </span>
-    </div>
-    <div class="notification-message">
-      <p class="text-bold">{{ notification|safe }}</p>
-      <p><small>{{ notification.timestamp }}</small></p>
-    </div>
-  </li>
-  {% endfor %}
-  <a class="btn btn-dark text-center" href="{% url 'notifications:unread' %}">{% trans 'See all' %}</a>
-  <a class="btn btn-light text-center" href="{% url 'notifications:mark_all_read' %}">{% trans 'Mark all as read' %}</a>
-  {% else %}
-  <li class="text-center">{% trans 'You have no unread notification' %}</li>
+  <div class="nav-drop-footer">
+    <a class="btn" href="{% url 'notifications:mark_all_read' %}">{% trans 'Mark all as read' %}</a>
+  </div>
   {% endif %}
-</ul>
+</div>

@@ -21,6 +21,10 @@ nav {
 
 }
 
+.navbar-dark .navbar-nav .nav-link:hover {
+    color: #3EC4E2;
+}
+
 #notifications {
     font-size: 20px;
     padding: auto;
@@ -32,7 +36,11 @@ nav {
 }
 
 .navbar-nav a.is-active {
-    color: rgba(255, 255, 255, .75) !important;
+    color: #3EC4E2 !important;
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3Csvg width='31' height='26' viewBox='0 0 31 26' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30.8571 22.1429C30.8571 21.4397 30.2746 20.8571 29.5714 20.8571H1.28571C0.582589 20.8571 0 21.4397 0 22.1429V24.7143C0 25.4174 0.582589 26 1.28571 26H29.5714C30.2746 26 30.8571 25.4174 30.8571 24.7143V22.1429ZM30.8571 11.8571C30.8571 11.154 30.2746 10.5714 29.5714 10.5714H1.28571C0.582589 10.5714 0 11.154 0 11.8571V14.4286C0 15.1317 0.582589 15.7143 1.28571 15.7143H29.5714C30.2746 15.7143 30.8571 15.1317 30.8571 14.4286V11.8571ZM30.8571 1.57143C30.8571 0.868302 30.2746 0.285714 29.5714 0.285714H1.28571C0.582589 0.285714 0 0.868302 0 1.57143V4.14286C0 4.84598 0.582589 5.42857 1.28571 5.42857H29.5714C30.2746 5.42857 30.8571 4.84598 30.8571 4.14286V1.57143Z' fill='white'/%3E%3C/svg%3E%0A") !important;
 }
 
 /*Larger than mobile*/
@@ -42,7 +50,7 @@ nav {
         content: "";
         width: 90px;
         display: block;
-        border-bottom: 5px solid #fff;
+        border-bottom: 5px solid #3EC4E2;
         position: absolute;
         bottom: 0;
         border-radius: 9999px;
@@ -59,7 +67,7 @@ nav {
         content: "";
         width: 90px;
         display: block;
-        border-bottom: 5px solid #fff;
+        border-bottom: 5px solid #3EC4E2;
         position: absolute;
         bottom: 0;
         border-radius: 9999px;
@@ -71,4 +79,132 @@ nav {
         margin-right: 6rem
     }
 
+}
+
+.searchbar {
+    position: absolute;
+    top: -45px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 40px;
+    height: 100px;
+}
+
+.searchbar .search {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 50px;
+    height: 50px;
+    background: #3ec4e2;
+    border-radius: 50%;
+    transition: all 1s;
+    z-index: 4;
+    box-shadow: 0 0 25px 0 rgba(0, 0, 0, 0.4);
+}
+
+.searchbar .search:hover {
+    cursor: pointer;
+}
+
+.searchbar .search::before {
+    content: "";
+    position: absolute;
+    margin: auto;
+    top: 10px;
+    right: 0;
+    bottom: 0;
+    left: 10px;
+    width: 5px;
+    height: 2px;
+    background: white;
+    transform: rotate(45deg);
+    transition: all .5s;
+}
+
+.searchbar .search::after {
+    content: "";
+    position: absolute;
+    margin: auto;
+    top: -5px;
+    right: 0;
+    bottom: 0;
+    left: -5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid white;
+    transition: all .5s;
+}
+
+.searchbar input {
+    position: absolute;
+    margin: auto;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 30px;
+    height: 30px;
+    outline: none;
+    border: none;
+    background: #3ec4e2;
+    color: white;
+    text-shadow: 0 0 10px #3ec4e2;
+    padding: 0 80px 0 20px;
+    border-radius: 30px;
+    box-shadow: 0 0 0px 5px #3ec4e2,
+        0px 5px 8px 0px rgba(0, 0, 0, 0.2);
+    transition: all 1s;
+    opacity: 0;
+    z-index: 5;
+    font-weight: bolder;
+    letter-spacing: 0.1em;
+}
+
+.searchbar input:hover {
+    cursor: pointer;
+}
+
+.searchbar input:focus {
+    width: 250px;
+    opacity: 1;
+    cursor: text;
+}
+
+.searchbar input:focus~.search {
+    right: -450px;
+    background: linear-gradient(45deg, #0aacec, #0aeee3);
+    z-index: 6;
+}
+
+.searchbar input:focus~.search::before {
+    top: 0;
+    left: 0;
+    width: 25px;
+}
+
+.searchbar input:focus~.search::after {
+    top: 0;
+    left: 0;
+    width: 25px;
+    height: 2px;
+    border: none;
+    background: white;
+    border-radius: 0%;
+    transform: rotate(-45deg);
+}
+
+.searchbar input::placeholder {
+    color: white;
+    opacity: 0.5;
+    font-weight: bolder;
+}
+
+.tabs.is-toggle li.is-active a {
+    background-color: #3EC4E2;
 }

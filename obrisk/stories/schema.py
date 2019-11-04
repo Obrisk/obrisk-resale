@@ -3,7 +3,7 @@ import graphene
 from graphene_django.types import DjangoObjectType
 
 from obrisk.stories.models import Stories
-from obrisk.helpers import paginate_data
+from obrisk.utils.helpers import paginate_data
 
 
 class StoriesType(DjangoObjectType):

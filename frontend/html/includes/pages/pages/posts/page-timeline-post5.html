@@ -1,0 +1,196 @@
+<!-- Timeline POST #5 -->
+<div class="profile-post">
+    <!-- Timeline -->
+    <div class="time is-hidden-mobile">
+        <div class="img-container">
+            <img src="https://via.placeholder.com/300x300" data-demo-src="assets/images/icons/logos/fastpizza.svg" alt="">
+        </div>
+    </div>
+    <!-- Post -->
+    <div class="card is-post">
+        <!-- Main wrap -->
+        <div class="content-wrap">
+            <!-- Header -->
+            <div class="card-heading">
+                <!-- User image -->
+                <div class="user-block">
+                    <div class="image">
+                        <img src="https://via.placeholder.com/300x300" data-demo-src="assets/images/icons/logos/fastpizza.svg"
+                            data-page-popover="1" alt="">
+                    </div>
+                    <div class="user-info">
+                        <a href="#">Fast Pizza</a>
+                        <span class="time">September 17 2018, 10:23am</span>
+                    </div>
+                </div>
+
+                {{> feed-post-dropdown}}
+            </div>
+            <!-- /Header -->
+
+            <!-- Post body -->
+            <div class="card-body">
+                <!-- Post body text -->
+                <div class="post-text">
+                    <p>Today, our website was hacked / under attack and we were unable to process some customer orders. We sincerely apologize for any inconvenience that could have been caused by this.<p>
+                </div>
+                <!-- Post actions -->
+                <div class="post-actions">
+                    {{> feed-post-actions}}
+                </div>
+            </div>
+            <!-- /Post body -->
+
+            <!-- Post footer -->
+            <div class="card-footer">
+                <!-- Followers -->
+                <div class="likers-group">
+                    <img src="https://via.placeholder.com/300x300" data-demo-src="assets/images/avatars/daniel.jpg"
+                        data-user-popover="3" alt="">
+                    <img src="https://via.placeholder.com/300x300" data-demo-src="assets/images/avatars/elise.jpg"
+                        data-user-popover="6" alt="">
+                </div>
+                <div class="likers-text">
+                    <p><a href="#">Daniel</a> and <a href="#">Elise</a></p>
+                    <p>liked this</p>
+                </div>
+                <!-- Post statistics -->
+                <div class="social-count">
+                    <div class="likes-count">
+                        <i data-feather="heart"></i>
+                        <span>2</span>
+                    </div>
+                    <div class="shares-count">
+                        <i data-feather="link-2"></i>
+                        <span>0</span>
+                    </div>
+                    <div class="comments-count">
+                        <i data-feather="message-circle"></i>
+                        <span>2</span>
+                    </div>
+                </div>
+            </div>
+            <!-- /Post footer -->
+        </div>
+        <!-- /Main wrap -->
+
+        <!-- Post #6 comments -->
+        <div class="comments-wrap is-hidden">
+            <!-- Header -->
+            <div class="comments-heading">
+                <h4>Comments (<small>2</small>)</h4>
+                <div class="close-comments">
+                    <i data-feather="x"></i>
+                </div>
+            </div>
+            <!-- /Header -->
+
+            <!-- Comments body -->
+            <div class="comments-body has-slimscroll">
+
+                <!-- Comment -->
+                <div class="media is-comment">
+                    <!-- User image -->
+                    <div class="media-left">
+                        <div class="image">
+                            <img src="https://via.placeholder.com/300x300"
+                                data-demo-src="assets/images/avatars/elise.jpg" data-user-popover="6" alt="">
+                        </div>
+                    </div>
+                    <!-- Content -->
+                    <div class="media-content">
+                        <a href="#">Elise Walker</a>
+                        <span class="time">2 days ago</span>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempo incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris consequat.</p>
+                        <div class="controls">
+                            <div class="like-count">
+                                <i data-feather="thumbs-up"></i>
+                                <span>1</span>
+                            </div>
+                            <div class="reply">
+                                <a href="#">Reply</a>
+                            </div>
+                        </div>
+                        <!-- Comment -->
+                        <div class="media is-comment">
+                            <!-- User image -->
+                            <div class="media-left">
+                                <div class="image">
+                                    <img src="https://via.placeholder.com/300x300"
+                                        data-demo-src="assets/images/avatars/jenna.png" data-user-popover="0" alt="">
+                                </div>
+                            </div>
+                            <!-- Content -->
+                            <div class="media-content">
+                                <a href="#">Jenna Davis</a>
+                                <span class="time">2 days ago</span>
+                                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempo
+                                    incididunt ut labore et dolore magna aliqua.</p>
+                                <div class="controls">
+                                    <div class="like-count">
+                                        <i data-feather="thumbs-up"></i>
+                                        <span>0</span>
+                                    </div>
+                                    <div class="reply">
+                                        <a href="#">Reply</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Right side dropdown -->
+                            <div class="media-right">
+                                {{> comment-dropdown}}
+                            </div>
+                        </div>
+                        <!-- /Comment -->
+                    </div>
+                    <!-- Right side dropdown -->
+                    <div class="media-right">
+                        {{> comment-dropdown}}
+                    </div>
+                </div>
+                <!-- /Comment -->
+
+            </div>
+            <!-- /Comments body -->
+
+            <!-- Comments footer -->
+            <div class="card-footer">
+                <div class="media post-comment">
+                    <!-- User image -->
+                    <div class="media-left">
+                        <p class="image is-48x48">
+                            <img src="https://via.placeholder.com/300x300"
+                                data-demo-src="assets/images/avatars/jenna.png" data-user-popover="8" alt="">
+                        </p>
+                    </div>
+                    <!-- Textarea -->
+                    <div class="media-content">
+                        <div class="field">
+                            <p class="control">
+                                <textarea class="textarea comment-textarea" rows="5"
+                                    placeholder="Write a comment..."></textarea>
+                            </p>
+                        </div>
+                        <!-- Additional actions -->
+                        <div class="actions">
+                            <div class="action is-auto">
+                                <i data-feather="at-sign"></i>
+                            </div>
+                            <div class="action is-upload">
+                                <i data-feather="camera"></i>
+                                <input type="file">
+                            </div>
+                            <a class="button primary-button is-solid raised">Post Comment</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /Comments footer -->
+        </div>
+        <!-- /Post #6 comments -->
+    </div>
+    <!-- /Post -->
+</div>
+<!-- /timeline POST #5 -->

@@ -1,35 +1,39 @@
 {% extends 'base.html' %}
 {% load static i18n %}
-{% load crispy_forms_tags thumbnail humanize %}
-
-{% block title %}{{ post.title|title }}{% endblock %}
+{% load crispy_forms_tags humanize %}
 
 {% block head %}
 <link href="{% static 'css/notifications.css' %}" rel="stylesheet">
 <link href="{% static 'css/post-details.css' %}" rel="stylesheet">
+<title>{{ post.title|title }}</title>
 {% endblock head %}
+
+{% block meta %}
+<meta name="author" content="{{  post.user.get_profile_name }}">
+<meta name="keywords" content="{{ post.title|title }} ">
+{% endblock %}
 
 {% block content %}
 <!-- Page Content -->
-<div class="container">
+<div class="container mt-5 pt-4 pb-4 mb-5">
   <div class="row">
     <!-- Post Content Column -->
     <div class="post-wrapper col-lg-8 col-md-10 m-auto">
       <div class="classified-meta mb-4">
         <!-- Title -->
-        <h1 class="mt-4 text-center">{{ post.title|title }}</h1>
+        <h1 class="mt-4 title text-center">{{ post.title|title }}</h1>
 
         <div class="meta-details mt-4 d-flex justify-content-center">
 
           <div class="meta-right d-flex flex-column align-items-center">
             <a href="{% url 'users:detail' post.user.get_profile_name %}">
-              {% thumbnail post.user.picture "30x30" crop="center" upscale="true" as im %}
-              <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
-                class="user-image">
-              {% empty %}
-              <img src="{% static 'img/user.png' %}" class="pull-left" height="35px"
-                alt="{% trans 'No Profile Picture' %}" />
-              {% endthumbnail %}
+              {% if post.user.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              {% else %}
+              <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+              {% endif %}
             </a>
             <div class="d-flex flex-column align-items-center">
               <a href="{% url 'users:detail' post.user.get_profile_name %}"><strong id="classified-user">
@@ -42,16 +46,30 @@
 
       </div>
       <!-- Featured Image -->
-      {% thumbnail post.image "900x300" as im %}
-      <div class="featured-img"
-        style="background-image:url({{ im.url }}); height: 250px; width: 100%; background-size:cover">
+      {% if post.image %}
+      <div class="featured-img" style="background-size:cover">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="900" height="300"
+          alt="{% trans 'Featured Image' %}" class="card-img-top">
       </div>
-      {% endthumbnail %}
+      {% else %}
+      <div class="featured-img" style="background-size:cover">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default" width="900" height="300"
+          alt="{% trans 'Featured Image' %}" class="card-img-top">
+      </div>
+
+      {% endif %}
       <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
       <hr>
       <!-- Post Content -->
       <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
       <hr>
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i class="fa fa-chevron-left"
+            aria-hidden="true"></i> BACK</button>
+        <a href="#" class="share btn btn-dark"
+          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+          🔗{% trans 'share' %} </a>
+      </div>
       <!-- Cloud Tag Widget -->
       <div class="card my-4">
         <h5 class="card-header">{% trans 'Tags' %}</h5>
@@ -78,12 +96,13 @@
       <div class="comment-wrapper d-flex align-items-center p-2 m-4">
         <div class="autor-avatar">
           <a href="{% url 'users:detail' post.user.username %}">
-            {% thumbnail comment.user.picture "30x30" crop="center" upscale="true" as im %}
-            <img class="d-flex mr-3 rounded-circle" src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic" />
-            {% empty %}
-            <img class="d-flex mr-3 rounded-circle" src="{% static 'img/user.png' %}" height="30px"
-              alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}</a>
+            {% if comment.user.thumbnail %}
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{comment.user.thumbnail}}" alt="Picture Profile"
+              style="width:30px;height:30px;border-radius: 50%;"
+              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+            <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+            {% endif %}
         </div>
         <div class="comment-body">
           <div class="comment-author">
@@ -99,25 +118,30 @@
       <p>There are no comments yet.</p>
       {% endfor %}
 
-      {% if user.is_authenticated %}
+
       {% if new_comment %}
       <h2>Your comment has been added.</h2>
       {% else %}
 
-      <!-- <div id="comment-notify d-none" class="notification"> </div> -->
+      <div id="comment-notify d-none" class="notification"> </div>
 
       <div class="card my-4">
-        <h4 class="card-header">{% trans 'Leave a Comment' %}:</h4>
+        <h4 class="">{% trans 'Leave a Comment' %}:</h4>
         <div class="card-body">
 
           <form method="post" id="commentForm">
             {% csrf_token %}
             {{ comment_form|crispy }}
+            {% if user.is_authenticated %}
             <input class="btn btn-dark comment-btn" type="button" value="Add comment">
+            {% else %}
+            <h6> Please login to post your comment: </h6>
+            <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+              href="{% url 'account_login' %}">{% trans 'Login' %}</a>
           </form>
+          {% endif %}
         </div>
       </div>
-      {% endif %}
       {% endif %}
 
       <!-- Sidebar Widgets Column -->
@@ -137,16 +161,81 @@
         {% endif %}
       </div>
     </div>
+
   </div>
-  <!-- /.container -->
-  {% endblock content %}
+</div>
+<!-- /.container -->
+{% endblock content %}
 
 
 
-  {% block javascript %}
-  <script type="text/javascript">
-    var url = "{% url 'posts:post' post.slug %}"
-  </script>
-  <script src="{% static 'js/posts.js' %}"> </script>
+{% block javascript %}
+<script type="text/javascript">
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
-  {% endblock javascript %}
+  var url = "{% url 'posts:post' post.slug %}"
+</script>
+<script src="{% static 'js/posts.js' %}"> </script>
+<script src="{% static 'js/bootbox.min.js' %}"> </script>
+
+
+<!-- Need to fix issues parsing markdown to plain text to use here for articlebody and others -->
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "{{ post.title|title }}",
+    {% if post.image %}
+    "image": "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}",
+    {% else %}
+    "image": "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}",
+    {% endif %}
+    "url": "{% url 'posts:post' post.slug %}",
+    "datePublished": "{{ post.timestamp }}",
+    "dateCreated": "{{ post.timestamp }}",
+    "dateModified": "{{ post.timestamp }}",
+    "description": "{{ post.title|title }}",
+    "author": {
+      "@type": "Person",
+      "name": "{{ post.user.get_profile_name|title }}"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "Obrisk",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://obrisk.com/static/img/favicon.png"
+      }
+    },
+    "mainEntityOfPage": {
+      "@type": "WebPage",
+      "@id": "{% url 'posts:post' post.slug %}"
+    }
+  }
+</script>
+<script type="text/javascript">
+  function share(title, text) {
+    url = location.href
+    if (window.navigator.share) {
+      window.navigator.share({
+        title: title,
+        text: text,
+        url: url
+      }).
+
+        then(function () {
+          return console.log('Successful share');
+        })["catch"](function (error) {
+          return console.log('Error sharing', error);
+        });
+    } else {
+      window.navigator.clipboard.writeText(url);
+      bootbox.alert("copied to clipboard");
+
+    }
+  }
+  jQuery('.share').click(function (e) {
+    e.preventDefault();
+  })
+</script>
+{% endblock javascript %}

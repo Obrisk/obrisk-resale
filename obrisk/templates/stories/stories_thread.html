@@ -1,46 +1,66 @@
 {% load i18n %}
 {% load humanize static %}
-{% load thumbnail %}
 
 
 {% for reply in thread %}
-<li class="card" stories-id="{{ reply.uuid_id }}">
-  <div class="card-body">
-    <div class="profile-picture">
-      {% thumbnail reply.user.picture "60x60" crop="center" upscale="true"  as im %}
-      <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}"
-        class="user-image">
-      {% empty %}
-      <img src="{% static 'img/user.png' %}" class="pull-left" height="60px" alt="{% trans 'No Profile Picture' %}" />
-      {% endthumbnail %}
-    </div>
-    <div class="post">
-      {% if reply.user == request.user %}
-      <a href="{% url 'stories:delete_stories' reply.pk %}">
-        <i class="fa fa-times pull-right" aria-hidden="true" title="{% trans 'Click to remove this story' %}"></i>
-      </a>
-      {% endif %}
-      <p>
-        <strong>
-          <a href="{% url 'users:detail' reply.user.username  %}">{{ reply.user.get_profile_name|title }}</a>
-        </strong>
-      </p>
-      <p>{{ reply }}</p>
-      {% if reply.image %}
-      <img class="card-img-top" src="{{ reply.image }}" alt="Card image cap">
-      {% endif %}
-    </div>
-  </div>
-  <div class="interaction" id="interaction">
-    <a href="#" class="like" title="{% for i in stories.get_likers %}{{ i }}&#10;{% endfor %}">
-      {% if request.user in stories.get_likers %}
-      ❤️
+
+<div class="media is-comment">
+
+  <!-- User image -->
+  <div class="media-left">
+    <div class="image">
+      {% if reply.user.thumbnail %}
+      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{reply.user.thumbnail}}" alt="Picture Profile"
+        style="width:30px;height:30px;border-radius: 50%;"
+        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
       {% else %}
-      <i class="heart fa fa-heart-o" aria-hidden="true"></i>
+      <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="No Profile Picture" />
       {% endif %}
-      <span class="like-count">{{ stories.count_likers }}</span>
-    </a>
-    <span class="timestamp">{{ reply.timestamp|naturaltime }}</span>
+    </div>
+
   </div>
-</li>
+  <!-- Content -->
+  <div class="media-content">
+    <a href="/users/{{ reply.user.get_profile_name }}">{{ reply.user.get_profile_name|title }}</a>
+    <span class="time">{{ reply.timestamp|naturaltime }}</span>
+    <p>{{ reply }}</p>
+    <!-- Comment actions -->
+
+    {% comment %} <div class="controls">
+      <div class="like-count">
+
+        {% if request.user in stories.get_likers %}
+        <a href="javascript:void(0);" class="like-button is-active">
+          <i class="mdi mdi-heart is-liked bouncy"></i>
+          <span class="like-overlay"></span>
+        </a>
+        {% else %}
+        <a href="javascript:void(0);" class="like-button is-active">
+          <i class="mdi mdi-heart not-liked bouncy"></i>
+          <span class="like-overlay"></span>
+        </a>
+        {% endif %}
+        <span>0</span> {% endcomment %}
+
+      </div>
+    </div>
+  </div>
+
+  <div class="media-right">
+    {% if reply.user == request.user %}
+    <a href="{% url 'stories:delete_stories' reply.pk %}">
+
+      <i title="{% trans 'Click to delete this reply' %}"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" class="feather feather-trash-2">
+          <polyline points="3 6 5 6 21 6"></polyline>
+          <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          <line x1="10" y1="11" x2="10" y2="17"></line>
+          <line x1="14" y1="11" x2="14" y2="17"></line>
+        </svg></i>
+    </a>
+    {% endif %}
+  </div>
+
+</div>
 {% endfor %}

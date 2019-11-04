@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>Download Obrisk</title>
+	<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+	<meta content="yes" name="apple-mobile-web-app-capable" />
+	<meta content="black" name="apple-mobile-web-app-status-bar-style" />
+	<meta name="format-detection" content="telephone=no" />
+	<meta content="false" name="twcClient" id="twcClient" />
+	<link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/favicon.png">
+	<link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/favicon.ico?v=1">
+	<link rel="apple-touch-icon" sizes="180x180"
+		href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/apple-touch-icon.png?v=1">
+	<link rel="icon" type="image/png" sizes="32x32"
+		href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/favicon-32x32.png?v=1">
+	<style>
+		body,
+		html {
+			width: 100%;
+			height: 100%
+		}
+
+		* {
+			margin: 0;
+			padding: 0
+		}
+
+		body {
+			background-color: #fff
+		}
+
+		.top-bar-guidance {
+			font-size: 15px;
+			color: #fff;
+			height: 40%;
+			line-height: 1.8;
+			padding-left: 20px;
+			padding-top: 20px;
+			background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/download-banner.png) center top/contain no-repeat
+		}
+
+		.top-bar-guidance .icon {
+			width: 25px;
+			height: 25px;
+			vertical-align: middle;
+			margin: 0 .2em
+		}
+
+		img {
+			width: 25px;
+			height: 25px;
+			vertical-align: middle;
+			margin: 0 .2em
+		}
+
+		.app-download-btn {
+			display: block;
+			width: 214px;
+			height: 40px;
+			line-height: 40px;
+			margin: 18px auto 0 auto;
+			text-align: center;
+			font-size: 18px;
+			color: #2466f4;
+			border-radius: 20px;
+			border: .5px #2466f4 solid;
+			text-decoration: none
+		}
+	</style>
+</head>
+
+<body>
+	<div class="top-bar-guidance">
+		<p id="message">
+
+
+		</p>
+
+
+	</div>
+	<a class="app-download-btn" id="BtnClick" href="https://www.obrisk.com/"> Or click here to continue</a>
+	<script>
+		var url = 'https://www.obrisk.com/classifieds';//Targeted address.
+
+		document.querySelector('body').addEventListener('touchmove', function (event) {
+			event.preventDefault();
+		});
+		window.mobileUtil = (function (win, doc) {
+			var UA = navigator.userAgent,
+				isAndroid = /android|adr/gi.test(UA),
+				isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
+				isBlackBerry = /BlackBerry/i.test(UA),
+				isWindowPhone = /IEMobile/i.test(UA),
+				isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
+			return {
+				isAndroid: isAndroid,
+				isIOS: isIOS,
+				isMobile: isMobile,
+				isWeixin: /MicroMessenger/gi.test(UA),
+				isQQ: /QQ/gi.test(UA)
+			};
+		})(window, document);
+
+		var message = document.getElementById('message');
+
+		if (mobileUtil.isWeixin) {
+			if (mobileUtil.isIOS) {
+				document.getElementById('BtnClick').href = url;
+				message.innerHTML = `Please tap on the top right corner then open this app using your browser <img src = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/safari-icon.png" class=icon" /> <p> From there, install this app. </p>`
+			} else if (mobileUtil.isAndroid) {
+				message.innerHTML = `Please tap on the top right corner then open this app using your browser <img src = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/Open-In-Browser.png" class="icon" /> <p> From there, install this app. </p>`
+			}
+		} else {
+			message.innerHTML = 'Redirecting You!'
+			document.getElementById('BtnClick').href = url;
+			window.location.replace(url);
+		}
+	//setTimeout('WeixinJSBridge.invoke("closeWindow", {}, function(e) {})', 2000);</script>
+</body>
+
+</html>

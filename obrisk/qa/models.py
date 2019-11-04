@@ -2,6 +2,7 @@ import uuid
 from collections import Counter
 
 from django.conf import settings
+from django.urls import reverse
 from django.contrib.contenttypes.fields import GenericForeignKey, GenericRelation
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
@@ -103,6 +104,9 @@ class Question(models.Model):
     def __str__(self):
         return self.title
 
+    def get_absolute_url(self):
+        return reverse('qa:question_detail', args=[self.pk])
+
     @property
     def count_answers(self):
         return Answer.objects.filter(question=self).count()
@@ -172,7 +176,7 @@ class Answer(models.Model):
         return [vote.user for vote in self.votes.filter(value=False)]
 
     def accept_answer(self):
-        answer_set = Answer.objects.filter(question=self.question)
+        answer_set = Answer.objects.filter(question=self.question).order_by('timestamp')
         answer_set.update(is_answer=False)
         self.is_answer = True
         self.save()

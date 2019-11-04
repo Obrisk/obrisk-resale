@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load static i18n %}
-{% load thumbnail %}
 {% block title %}{% trans 'Contacts' %}{% endblock %}
 
 {% block head %}
@@ -18,11 +17,16 @@
       <li>
         <div class="user-avatar">
           <a href="{% url 'users:detail' user.username  %}" class="user-avatar">
-            {% thumbnail user.picture "x80" as im %}
-              <img src="{{ im.url }}" alt="{% trans 'Picture Profile' %}" id="pic">
-            {% empty %}
-              <img src="{% static 'img/user.png' %}" height="80px" alt="{% trans 'No Profile Picture' %}" />
-            {% endthumbnail %}
+          
+        {% if user.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.thumbnail}}" alt="Picture Profile"
+              style="width:70px;height:70px;border-radius: 50%;"
+              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+        {% else %}
+              <img src="{% static 'img/user.png' %}" class="pull-left" height="70px" alt="No Profile Picture" />
+        {% endif %}
+
+         
           </a>
         </div>
         <p>

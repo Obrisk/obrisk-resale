@@ -58,35 +58,24 @@ $(function () {
 
     checkNotifications();
 
-    $('#notifications').popover({
-        html: true,
-        trigger: 'manual',
-        container: "body",
-        placement: "bottom",
-    });
+    // $('#notifications').popover({
+    //     html: true,
+    //     trigger: 'manual',
+    //     container: "body",
+    //     placement: "bottom",
+    // });
 
     $("#notifications").click(function () {
-        if ($(".popover").is(":visible")) {
-            $("#notifications").popover('hide');
-            checkNotifications();
-        } else {
-            $("#notifications").popover('dispose');
-            $.ajax({
-                url: '/ws/notifications/latest-notifications/',
-                cache: false,
-                success: function (data) {
-                    $("#notifications").popover({
-                        html: true,
-                        trigger: 'focus',
-                        container: "body",
-                        placement: "bottom",
-                        content: data,
-                    });
-                    $("#notifications").popover('show');
-                    $("#notifications").removeClass("btn-dark")
-                },
-            });
-        }
+        $("#recent-notifications").html('');
+        $.ajax({
+            url: '/ws/notifications/latest-notifications/',
+
+            success: function (data) {
+                console.log(data);
+                $("#recent-notifications").html(data);
+            },
+        });
+
         return false;
     });
 
@@ -132,3 +121,20 @@ $(function () {
     //     };
     // });
 });
+
+//Hide Top nav bar on scroll 
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function () {
+    var currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+        document.getElementById("navbarBottom").style.bottom = "-80px";
+        document.getElementById("navbarTop").style.top = "0";
+    } else {
+        document.getElementById("navbarBottom").style.bottom = "0";
+        if (!$(".is-account-dropdown").hasClass("is-active")) {
+            document.getElementById("navbarTop").style.top = "-80px";
+        }
+
+    }
+    prevScrollpos = currentScrollPos;
+}

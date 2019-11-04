@@ -7,9 +7,9 @@ from django.views.generic import ListView
 
 from taggit.models import Tag
 
-from obrisk.classifieds.models import Classified
+from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.stories.models import Stories
-from obrisk.helpers import ajax_required
+from obrisk.utils.helpers import ajax_required
 from obrisk.qa.models import Question
 
 
@@ -23,26 +23,30 @@ class SearchListView(LoginRequiredMixin, ListView):
         query = self.request.GET.get("query")
         context["active"] = 'stories'
         context["hide_search"] = True
-        context["tags_list"] = Tag.objects.filter(name=query)
+        context["tags_list"] = Tag.objects.filter(name=query).distinct()
         context["stories_list"] = Stories.objects.filter(
-            content__icontains=query, reply=False)
+            content__icontains=query).distinct()
         context["classifieds_list"] = Classified.objects.filter(Q(
             title__icontains=query) | Q(details__icontains=query) | Q(
-                tags__name__icontains=query), status="P")
+                tags__name__icontains=query)).distinct()
         context["questions_list"] = Question.objects.filter(
             Q(title__icontains=query) | Q(content__icontains=query) | Q(
-                tags__name__icontains=query))
-        context["users_list"] = get_user_model().objects.filter(
-            Q(username__icontains=query) | Q(
-                name__icontains=query))
+                tags__name__icontains=query)).distinct()
+        # context["users_list"] = get_user_model().objects.filter(
+        #     Q(username__icontains=query) | Q(
+        #         name__icontains=query)).distinct()
+            
+        context["images"]  = ClassifiedImages.objects.all()
+
         context["stories_count"] = context["stories_list"].count()
         context["classifieds_count"] = context["classifieds_list"].count()
         context["questions_count"] = context["questions_list"].count()
-        context["users_count"] = context["users_list"].count()
+        # context["users_count"] = context["users_list"].count()
         context["tags_count"] = context["tags_list"].count()
         context["total_results"] = context["stories_count"] + \
-            context["classifieds_count"] + context["questions_count"] + \
-            context["users_count"] + context["tags_count"]
+        context["classifieds_count"] + context["questions_count"] + \
+        context["tags_count"]
+
         return context
 
 
@@ -57,7 +61,7 @@ def get_suggestions(request):
         Q(username__icontains=query) | Q(name__icontains=query)))
     classifieds = list(Classified.objects.filter(
         Q(title__icontains=query) | Q(content__icontains=query) | Q(
-            tags__name__icontains=query), status="P"))
+            tags__name__icontains=query)))
     questions = list(Question.objects.filter(Q(title__icontains=query) | Q(
         content__icontains=query) | Q(tags__name__icontains=query)))
     # Add all the retrieved users, classifieds, questions to data_retrieved

@@ -5,197 +5,330 @@
 
 {% block head %}
 <link href="{% static 'css/listing.css' %}" rel="stylesheet">
-<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="{% static 'css/classifieds-list.css' %}" rel="stylesheet">
-
+<link href="{% static 'css/classifieds.css' %}?v=21" rel="stylesheet">
+<link href="{% static 'css/classifieds-list.css' %}?v=1908301" rel="stylesheet">
+<title>Obrisk Classifieds </title>
 {% endblock head %}
 
 {% block content %}
-<!-- Page Content -->
-<div class="sidebar-overlay"></div>
-<div class="mt-4 p-0 mw-100 w-95">
 
-  <div
+<!-- Page Content -->
+<div class="sidebar-overlay is-hidden"></div>
+<div class="mt-5 p-0 mw-100 w-95">
+
+  <!-- <div class="justify-content-center mt-5 mr-0">
+    <div class="justify-content-end ml-auto d-flex flex-row">
+    <form class="form-inline navbar-left" role="search" action="{% url 'classifieds:classifieds_results' %}">
+      <div class="input-group">
+        <input name="query" type="search" id="searchInput" class="form-control" aria-label="Search">
+        <div class="input-group-append">
+          <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+        </div>
+      </div>
+    </form>
+    </div>
+
+    <div class="d-flex justify-content-center h-100">
+
+    </div> -->
+
+
+  <!-- Write Classified Widget -->
+  <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
+    <div class="toggle-tags d-lg-none">
+      <div class="d-flex flex-column align-items-center" id="sidebarBtnOpen">
+        <span><i class="fa fa-hashtag mb-1"></i></span> <br>
+      </div>
+    </div>
+
+    <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
+      title="{% trans 'Write a new classified' %}">➕{% trans 'Add new item' %}</a>
+
+  </div>
+
+</div>
+<!-- <div
     class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-md-9 ml-auto  mr-auto">
 
-    <div class="toggle-tags d-lg-none">
-      <a href=""></a>
-      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+  </div> -->
+
+<!-- Sidebar Widgets Column -->
+<div id="sidebar" class="sidebar mr-4">
+  <!-- Cloud Tag Widget -->
+  <div class="card">
+    <div class="card-header d-flex justify-content-between">
+      <h5>{% trans 'Popular tags' %}</h5>
+      <span class="d-sm-block d-md-none" id="sidebarBtnClose"> <i class="fa fa-times pull-right" aria-hidden="true">
+        </i> </span>
     </div>
-    <!-- Write Classified Widget -->
-    {% if request.user.is_authenticated %}
-    <div class="text-center">
-      <a class="btn btn-dark" href="{% url 'classifieds:write_new' %}"
-        title="{% trans 'Write a new classified' %}">📝{% trans 'New Classified' %}</a>
 
-      {% if request.user.is_seller %}
-      <a class="btn btn-dark" href="{% url 'classifieds:write_new_official' %}"
-        title="{% trans 'Write a new official classified' %}">📝{% trans 'New Classified' %}</a>
-      {% endif %}
-      <!--a class="btn btn-dark" href="{% url 'classifieds:list' %}" title="{% trans 'expired' %}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'expired' %}</a-->
-    </div>
-    {% endif %}
-  </div>
-
-  <!-- Sidebar Widgets Column -->
-  <div id="sidebar" class="sidebar">
-    <!-- Cloud Tag Widget -->
-    <div class="card">
-      <div class="card-header">
-        <h5>{% trans 'Popular tags' %}</h5>
-      </div>
-
-      <div class="card-body">
-        {% for tag, count in popular_tags %}
-        <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }}
-            {{ tag }}</span></a>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-
-
-  <!-- official ads for pc sized-->
-  {% if official_ads %}
-      <div class="right-sidebar d-none d-lg-block">
-        {% include 'classifieds/ads.html' %}
-      </div>
-  {% endif %}
-
-  <div class="row">
-    <div class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
-      <!-- Classified Entries Column -->
-      <!-- <div class="col-md-9"> -->
-      {% for classified in classifieds %}
-      <!-- Classified ad. -->
-      <div class="card classified-card mr-2 mb-3 justify-content-center">
-        <!--Display image-->
-        <div class="card-img-top img-responsive">
-          <a href="{% url 'classifieds:classified' classified.slug %}"
-            style="color:black; text-decoration:none; background-color:none">
-            {% for photo in images %}
-            {% if photo.classified == classified %}
-            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-            {{ "<!--" }}
-            {% endif %}
-            {% endfor %}
-            {{ "-->" }}
-        </div>
-        <div class="divider"></div>
-        <div class="card-body">
-          <h6 class="word-break card-title"> {{ classified.title|truncatechars:20}} </h6>
-          <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-          <div class="card-meta d-flex justify-content-between">
-            <div class="d-flex location">
-              <small>📍</small>
-              <span class="card-text small "> {{ classified.city|safe }}</span>
-            </div>
-            <div class="share-card">
-              <small>🔗</small>
-            </div>
-          </div>
-
-        </div>
-        </a>
-      </div>
-      <!-- official ads for phones-->
-      {% if official_ads %}
-        {% if forloop.counter == 6 %}
-      <div class="ads d-lg-none" style="height: 250px; width:80%;">
-        <iframe class="h-100 w-100" src="{% url 'classifieds:mobile-ads'%}" frameborder="0"></iframe>
-      </div>
-        {% endif %}
-      {% endif %}
-
-    {% empty %}
-        <h6 class="no-data">{% trans 'Dear '%} {{ request.user.username }}
-          {% trans 'you are welcome. Mmh! It looks like there are no posts near you.' %}
-          <a href="{% url 'classifieds:write_new' %}"> {% trans ' be the first one to post.' %}!</a>
-          {% trans 'Or check what we have found from other places '%} </h6>
-        <br />
-    {% endfor %}
-
-
-
-      <!--Will be using ajax in near future.-->
-      {% for classified in other_classifieds %}
-      <!-- Classified ad. -->
-      <div class="card classified-card mr-2 mb-3 justify-content-center">
-        <!--Display image-->
-        <div class="card-img-top img-responsive">
-          <a href="{% url 'classifieds:classified' classified.slug %}"
-            style="color:black; text-decoration:none; background-color:none">
-            {% for photo in images %}
-            {% if photo.classified == classified %}
-            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-            {{ "<!--" }}
-            {% endif %}
-            {% endfor %}
-            {{ "-->" }}
-        </div>
-
-        <div class="divider"></div>
-        <div class="card-body">
-          <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-          <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-          <div class="card-meta d-flex justify-content-between">
-            <div class="location">
-              <small>📍</small>
-              <span class="card-text small "> {{ classified.city|safe }}</span>
-            </div>
-            <div class="share-card">
-              <small>🔗</small>
-            </div>
-          </div>
-
-        </div>
-        </a>
-      </div>
+    <div class="card-body" style="overflow:auto;max-height:400px">
+      {% for tag, count in popular_tags %}
+      <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }}
+          {{ tag }}</span></a>
       {% endfor %}
     </div>
-    <!-- End div for row of all classified ads-->
-
   </div>
 </div>
 
-  <!-- pagination -->
-  {% if classifieds.paginator.num_pages > 1 %}
-  <div class="row">
-      {% include "pagination.html" with page=classifieds %}
+
+<!-- official ads for pc sized-->
+{% if official_ads %}
+<div class="right-sidebar d-none d-lg-block">
+  {% include 'classifieds/ads.html' %}
+</div>
+{% endif %}
+
+<div class="classifieds-container row">
+  <div id="classifieds"
+    class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
+    {% include "classifieds/classified_list_ajax.html" %}
+
   </div>
-  {% endif %}
+  <div class="loading classified-card m-auto d-none">
+    <div class="stage">
+      <div class="dot-pulse"></div>
+    </div>
+  </div>
+  <!-- End div for row of all classified ads-->
+</div>
+
+</div>
+
+
 
 <!-- /.row -->
 </div>
 <!-- /.container -->
 
 
+{% endblock content %}
+
+{% block extra_js %}
+<script src="{% static 'js/listing.js' %}?v=1908191" type="text/javascript"></script>
 <script>
-  (function () {
-    var sidebar = document.getElementById('sidebar');
-    var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
-    var container = document.getElementsByClassName('container')[0];
-    var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
-
-    var openSidebar = function () {
-      sidebarOverlay.style.left = '0';
-      sidebar.style.left = '0';
-      sidebarOverlay.style.top = '0';
-      sidebar.style.display = 'block';
-      $(".classifieds").toggleClass("open-sidebar");
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  $(window).scroll(function () {
+    if (empty_page == false && block_request == false) {
+      block_request = true;
+      page += 1;
+      $('.loading').removeClass('d-none')
+      $.get('?page=' + page, function (data) {
+        if (data == '') {
+          empty_page = true;
+          $('.loading').addClass('d-none')
+          $('.classifieds-container').append('<div class="m-auto"> End of Classifieds</div>')
+        } else {
+          $('.loading').addClass('d-none');
+          block_request = false;
+          $('#classifieds').append(data);
+        }
+      });
     }
-
-    var closeSidebar = function (e) {
-      e.cancelBubble = true;
-      sidebarOverlay.style.left = '-100%';
-      sidebar.style.left = '-100%';
-      $(".classifieds").toggleClass("open-sidebar");
-
-    }
-
-    sidebarOverlay.addEventListener('click', closeSidebar);
-    sidebarBtnOpen.addEventListener('click', openSidebar);
-  })()
+  });
 </script>
 
-{% endblock content %}
+<script>
+  /**
+   * Vic Shóstak <truewebartisans@gmail.com>
+   * Copyright (c) 2019 True web artisans https://1wa.co
+   * http://opensource.org/licenses/MIT The MIT License (MIT)
+   *
+   * a2hs.js v0.4.5 at 13/05/2019
+   *
+   * Add to Home Screen
+   *
+   * A useful modern JavaScript solution for adding a progressive
+   * web application (PWA) to the home screen of your mobile
+   * iOS device.
+   *
+   * @param settings Initial settings.
+   * @return {HTMLElement}
+   *
+   * @example
+   * import AddToHomeScreen from "a2hs.js";
+   * AddToHomeScreen({
+   *  brandName: "Demo",
+   *  fontFamily: "Tahoma, sans-serif",
+   *  backgroundColor: "red",
+   *  color: "white"
+   * });
+   */
+  var AddToHomeScreen = function (settings = {}) {
+    // Container styles
+    var backgroundColor = settings.backgroundColor || "#f9f9f9";
+    var padding = settings.padding || "10px";
+    var shadowColor = settings.shadowColor || "#e9e9e9";
+    var shadowSize = settings.shadowSize || "10px";
+    // Content styles
+    var fontFamily = settings.fontFamily || "-apple-system, sans-serif";
+    var color = settings.color || "#5d5d5d";
+    var fontSize = settings.fontSize || "0.9rem";
+    // Content
+    var brandName = settings.brandName || "";
+    var logoImage =
+      settings.logoImage ||
+      `<svg enable-background="new 0 0 1952.00 734.93" height="25" viewBox="0 0 1952 734.93" width="70" xmlns="http://www.w3.org/2000/svg">
+                <g stroke-linejoin="round" stroke-width=".2">
+                  <path d="m1436.62 603.304 56.39-142.599h162.82l-77.27-216.315 96.64-244.38947166 276.8 734.93247166h-204.13l-47.3-131.629z" fill="#3d3d3d"/>
+                  <path d="m1262.47 734.935 296.32-734.93343407-196.45.00097657-202.7 474.9304575-144.14-474.92948094h-151.001l-154.768 474.92948094-109.146-216.416-98.773 304.302 100.284 172.116h193.331l139.857-425.91 133.346 425.91z" fill="#5a0fc8"/>
+                  <path d="m186.476 482.643h121.003c36.654 0 69.293-4.091 97.917-12.273l31.293-96.408 87.459-269.446c-6.664-10.5625-14.272-20.5493-22.824-29.9591-44.905-49.7049-110.605-74.55649373-197.102-74.55649373h-304.22200381v734.93259373h186.47600381zm160.166-313.564c17.54 17.653 26.309 41.276 26.309 70.871 0 29.822-7.713 53.474-23.138 70.956-16.91 19.425-48.047 29.137-93.409 29.137h-69.928v-197.445h70.442c42.277 0 72.185 8.827 89.724 26.481z" fill="#3d3d3d"/>
+                </g>
+              </svg>`;
+    var htmlContent =
+      settings.htmlContent ||
+      `Install <strong>${brandName} app</strong> on your device: On safari, tap share and <strong>Add to Home Screen</strong> ↓`;
+    // Define iOS User-Agent variable
+    var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+    var isWX = /wxwork/gi.test(window.navigator.userAgent);
+    var isWeixin = /MicroMessenger/gi.test(window.navigator.userAgent)
+    // Define standalone mode variable
+    var standalone =
+      "standalone" in window.navigator && window.navigator.standalone;
+    // Check localStorage before render a2hs container
+    if (iOS && !standalone && isSafari && !isWX && !isWeixin && !window.localStorage.a2hs_message) {
+      // Define container variable
+      var div = document.createElement("div");
+      // Define style variable
+      var style = document.createElement("style");
+      // Create styles
+      style.innerHTML = `
+              .a2hs__container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                box-sizing: border-box;
+                box-shadow: ${shadowColor} 0 0 ${shadowSize};
+                background-color: ${backgroundColor};
+                padding: ${padding};
+                width: 100%;
+                bottom: 50px;
+                right: 0;
+                left: 0;
+              }
+              .a2hs__container .a2hs__logo {
+                padding: ${padding};
+              }
+              .a2hs__container .a2hs__text {
+                font-family: ${fontFamily};
+                font-size: ${fontSize};
+                color: ${color};
+              }`;
+      // Create message
+      div.innerHTML = `
+              <div class="a2hs__text">${htmlContent}</div>`;
+      // Add class to container
+      div.setAttribute("class", "a2hs__container");
+      // Add onClick function
+      div.onclick = function (event) {
+        // Prevent default click
+        event.preventDefault();
+        // Hide a2hs_message
+        window.localStorage.setItem("a2hs_message", "hide");
+        // Remove a2hs container from DOM
+        document.querySelector(".a2hs__container").remove();
+      };
+      // Render elements
+      document.head.appendChild(style);
+      document.body.appendChild(div);
+    }
+  };
+  AddToHomeScreen({
+    brandName: "Obrisk",
+    fontFamily: "Tahoma, sans-serif",
+    backgroundColor: "#3ec4e2",
+    color: "white",
+
+  });
+  var NugUser = function (settings = {}) {
+    // Container styles
+    var backgroundColor = settings.backgroundColor || "#f9f9f9";
+    var padding = settings.padding || "10px";
+    var shadowColor = settings.shadowColor || "#e9e9e9";
+    var shadowSize = settings.shadowSize || "10px";
+    // Content styles
+    var fontFamily = settings.fontFamily || "-apple-system, sans-serif";
+    var color = settings.color || "#5d5d5d";
+    var fontSize = settings.fontSize || "0.9rem";
+    // Content
+    var brandName = settings.brandName || "";
+    var logoImage =
+      settings.logoImage ||
+      `<svg enable-background="new 0 0 1952.00 734.93" height="25" viewBox="0 0 1952 734.93" width="70" xmlns="http://www.w3.org/2000/svg">
+                <g stroke-linejoin="round" stroke-width=".2">
+                  <path d="m1436.62 603.304 56.39-142.599h162.82l-77.27-216.315 96.64-244.38947166 276.8 734.93247166h-204.13l-47.3-131.629z" fill="#3d3d3d"/>
+                  <path d="m1262.47 734.935 296.32-734.93343407-196.45.00097657-202.7 474.9304575-144.14-474.92948094h-151.001l-154.768 474.92948094-109.146-216.416-98.773 304.302 100.284 172.116h193.331l139.857-425.91 133.346 425.91z" fill="#5a0fc8"/>
+                  <path d="m186.476 482.643h121.003c36.654 0 69.293-4.091 97.917-12.273l31.293-96.408 87.459-269.446c-6.664-10.5625-14.272-20.5493-22.824-29.9591-44.905-49.7049-110.605-74.55649373-197.102-74.55649373h-304.22200381v734.93259373h186.47600381zm160.166-313.564c17.54 17.653 26.309 41.276 26.309 70.871 0 29.822-7.713 53.474-23.138 70.956-16.91 19.425-48.047 29.137-93.409 29.137h-69.928v-197.445h70.442c42.277 0 72.185 8.827 89.724 26.481z" fill="#3d3d3d"/>
+                </g>
+              </svg>`;
+    var htmlContent =
+      settings.htmlContent |
+      `Install <strong>${brandName}`;
+    // Define iOS User-Agent variable
+    var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
+    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
+    var isWX = /wxwork/gi.test(window.navigator.userAgent);
+    var isWeixin = /MicroMessenger/gi.test(window.navigator.userAgent)
+    // Define standalone mode variable
+    var standalone =
+      "standalone" in window.navigator && window.navigator.standalone;
+    // Check localStorage before render a2hs container
+    if (isWeixin) {
+      // Define container variable
+      var div = document.createElement("div");
+      // Define style variable
+      var style = document.createElement("style");
+      // Create styles
+      style.innerHTML = `
+              .weixin__container {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                box-sizing: border-box;
+                box-shadow: ${shadowColor} 0 0 ${shadowSize};
+                background-color: ${backgroundColor};
+                padding: ${padding};
+                width: 30%;
+                bottom: 0;
+                left: 0;
+              }
+              .weixin__container .weixin__logo {
+                padding: ${padding};
+              }
+              .weixin__container .weixin__text {
+                font-family: ${fontFamily};
+                font-size: ${fontSize};
+                color: ${color};
+              }`;
+      // Create message
+      div.innerHTML = `
+              <div class="weixin__text"> Install Obrisk </div>`;
+      // Add class to container
+      div.setAttribute("class", "weixin__container");
+      // Add onClick function
+      div.onclick = function (event) {
+        // Prevent default click
+        event.preventDefault();
+        // Hide a2hs_message
+        location.replace('/download-pwa/');
+      };
+      // Render elements
+      document.head.appendChild(style);
+      document.body.appendChild(div);
+    }
+  };
+  NugUser({
+    brandName: "Obrisk",
+    fontFamily: "Tahoma, sans-serif",
+    backgroundColor: "#3ec4e2",
+    color: "white"
+
+  });
+
+</script>
+{% endblock extra_js %}

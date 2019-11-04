@@ -3,21 +3,39 @@
 {% load crispy_forms_tags thumbnail humanize %}
 
 {% block head %}
-<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="{% static 'css/classified-details.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}?v=20" rel="stylesheet">
+<link href="{% static 'css/classified-details.css' %}?v=20 " rel="stylesheet">
 <link href="{% static 'css/colors.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
+<script src="{% static 'js/swiper.min.js' %}"></script>
+<title>{{ classified.title|title }}</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/js/swiper.min.js"></script>
 {% endblock head %}
 
-{% block title %}{{ classified.title|title }}{% endblock %}
+
+{% block icon %}
+<link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="apple-touch-icon" sizes="180x180"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="icon" type="image/png" sizes="32x32"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="icon" type="image/png" sizes="16x16"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="mask-icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}" color="#5bbad5">
+{% endblock %}
+
+
+{% block meta %}
+<meta name="author" content="{{ classified.user.get_profile_name }}">
+<meta name="keywords" content="{{ classified.title }} ,{{ classified.address }}, {{ classified.city }}">
+<meta name="description" content="{{ classified.details }}">
+{% endblock %}
+
 
 {% block content %}
 <!-- Page Content -->
-<div class="container">
+<div class="container mt-5">
 
   <div class="row">
     <!-- Post Content Column -->
@@ -33,35 +51,39 @@
 
             <div class="meta-right d-flex">
               <a href="{% url 'users:detail' classified.user.username %}">
-                {% thumbnail classified.user.picture "30x30" crop="center" upscale="true" as im %}
-                <img src="{{ im.url }}" class="pull-left mr-4" style="border-radius: 50%;"
-                  alt="{% trans 'User Image' %}" class="user-image">
-                {% empty %}
-                <img src="{% static 'img/user.png' %}" class="pull-left mr-4" height="35px"
-                  alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
+                {% if classified.user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+                  alt="Picture Profile" style="height:35px; width:35px; border-radius: 50%;" id="pic">
+                {% else %}
+                <img src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
+                {% endif %}
               </a>
               <!-- Location -->
               <div class="meta-left d-flex flex-column">
-                <strong id="classified-user"> {{ classified.user.get_profile_name|title }} </strong>
+                <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                  href="{% url 'users:detail' classified.user.username %}">
+                  <strong itemprop="name" id="classified-user">
+                    {{ classified.user.get_profile_name|title }} </strong>
+                </a>
                 <div class="location">
                   <small class="card-subtitle mb-2">📍</small><span class="card-subtitle mb-2">
-                    {{ classified.located_area }}, {{ classified.city }}</span>
+                    {{ classified.address }}, {{ classified.city }}</span>
                 </div>
                 <!-- Date/Time -->
                 <div class="time mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
 
               </div>
             </div>
+
             <div
-              class="meta-right mt-md-0 mt-4 col-md-8 d-flex flex-column align-items-baseline align-items-md-end ml-auto mr-auto">
+              class="align-items-baseline align-items-md-end d-flex flex-column meta-right ml-xl-0 mr-xl-0 mt-4 mt-md-0 ml-0 mr-0">
               <!-- Price -->
               <h3 class="O-cl-red price">
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if classified.user != request.user %}
-              <a href="{% url 'messager:conversation_detail' classified.user.username  %}" class="btn btn-action">
-                <i class="lead fa fa-shopping-cart"></i> <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
+              <a href="{% url 'messager:classified_chat' classified.user classified.id %}" class="btn btn-action">
+                🗪 <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
               <br>
               {% endif %}
             </div>
@@ -75,34 +97,51 @@
 
         <div class="card-text text-justify">{{ classified.details }}</div>
 
-        {% if classified.contact_info %}
-            <small><strong>Seller contacts :</strong>
-            {{ classified.contact_info }}</small>
+        {% if classified.phone_number %}
+        <br />
+        {% if user.is_authenticated %}
+        <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
+          {{ classified.phone_number }}</small>
+        {% else %}
+        <h6> Please login to view seller's contacts: </h6>
+        <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+          href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+        {% endif %}
+
         {% endif %}
       </section>
 
 
       <!-- Cloud Tag Widget -->
+      {% if classified.tags.all %}
       <div class="card my-4">
         <h5 class="card-header">{% trans 'Tags' %}</h5>
         <div class="card-body">
           {% for tag in classified.tags.all %}
-          <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ tag }}</span></a>
+          <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="badge badge-info">{{ tag }}</span></a>
           {% endfor %}
         </div>
       </div>
+      {% endif %}
 
       <!-- Navigation buttons -->
-      <div class="m-4">
-        {% if request.user == classified.user%}
+      {% if request.user == classified.user%}
+      <div class="m-3">
         <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
           title="{% trans 'Edit this classified' %}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-        {% else %}
-        <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
-        {% endif %}
-        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Back' %} </a><br> <br>
+      </div>
+      {% else %}
+      <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
+      {% endif %}
+      <div class="m-3 d-flex justify-content-between">
+        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
+        {% comment  %}
+        <a href="#" class="share btn btn-dark"
+          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+          🔗{% trans 'share' %} </a>
 
+        {% endcomment %}
       </div>
     </div>
 
@@ -121,13 +160,11 @@
           <div class="card-img-top img-responsive">
             <a href="{% url 'classifieds:classified' classified.slug %}"
               style="color:black; text-decoration:none; background-color:none">
-              {% for photo in all_images %}
-              {% if photo.classified == classified %}
-              <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-              {{ "<!--" }}
+              {% if classified.image_thumb %}
+              <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+              {% else %}
+              <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
               {% endif %}
-              {% endfor %}
-              {{ "-->" }}
           </div>
 
           <div class="card-body">
@@ -156,8 +193,59 @@
 
 
 </div>
-
+<script type="application/ld+json">
+{
+   "@context":"http://schema.org/",
+   "@type":"Product",
+   "name":"{{ classified.title|title }}",
+   "description":"{{ classified.details }}",
+   "image":[
+      "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}"
+   ],
+   "brand":"",
+   "offers":{
+      "@type":"Offer",
+      "priceCurrency":"CNY",
+      "price":{{ classified.price }},
+      "availability":"http://schema.org/InStock",
+      "itemCondition":"http://schema.org/UsedCondition",
+      "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}",
+      "seller":{
+         "@type":"Person",
+         "name":"{{ classified.user.get_profile_name }}",
+         {% if classified.user.thumbnail %}
+         "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+         {% else %}
+        "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+         {% endif %}
+         
+      }
+   }
+}
+</script>
 <script type="text/javascript">
+  function share(title, text) {
+    url = location.href
+    if (window.navigator.share) {
+      window.navigator.share({
+        title: title,
+        text: text,
+        url: url
+      }).
 
+        then(function () {
+          return console.log('Successful share');
+        })["catch"](function (error) {
+          return console.log('Error sharing', error);
+        });
+    } else {
+      window.navigator.clipboard.writeText(url);
+      bootbox.alert("copied to clipboard");
+
+    }
+  }
+  jQuery('.share').click(function (e) {
+    e.preventDefault();
+  })
 </script>
 {% endblock content %}

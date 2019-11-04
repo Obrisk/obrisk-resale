@@ -4,15 +4,36 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
+from django.shortcuts import redirect
+from django.contrib.sitemaps.views import sitemap
 
 from graphene_django.views import GraphQLView
+from pwa_webpush.views import save_info
 from obrisk.messager import views
-from obrisk.classifieds import views as images_views
+from obrisk.users.views import PasswordResetFromKeyView, AutoLoginView
+from obrisk.utils.images_upload import get_oss_auth
+from obrisk.classifieds.sitemaps import ClassifiedsSitemap
+from obrisk.posts.sitemaps import PostsSitemap
+from obrisk.qa.sitemaps import QASitemap
+from config.sitemaps import StaticSitemap
+
+sitemaps = {
+    'pages': StaticSitemap,
+    'classifieds': ClassifiedsSitemap,
+    'posts': PostsSitemap,
+    'questions': QASitemap,
+}
+
 
 urlpatterns = [
+    url(r'', include('pwa_webpush.urls')),
     url(r'^$',
         TemplateView.as_view(template_name='pages/home.html'), name='home'),
-    url(r'^get-oss-auth/$', images_views.get_oss_auth, name='get_oss_auth'),
+    url(r'^download-pwa/$', 
+        TemplateView.as_view(template_name='pages/download.html'), name='download_pwa'),
+    url(r'^offline/$',
+        TemplateView.as_view(template_name='offline.html'), name='offline'),
+    url(r'^get-oss-auth/$', get_oss_auth, name='get_oss_auth'),
     url(r'^about/$',
         TemplateView.as_view(template_name='pages/about.html'), name='about'),
     url(r'^terms-and-conditions/$',
@@ -21,14 +42,19 @@ urlpatterns = [
         TemplateView.as_view(template_name='pages/privacy.html'), name='privacy_policy'),
     url(r'^contacts/$',
         TemplateView.as_view(template_name='pages/contacts.html'), name='contacts'),
+    url(r'^webpush/save_information', save_info, name='save_push_info' ),
 
     # Django Admin, use {% url 'admin:index' %}
     url(settings.ADMIN_URL, admin.site.urls),
+    url(r'^accounts-authorization/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$', PasswordResetFromKeyView.as_view(), name="account_reset_password_from_key"),
+
     # User management
     url(r'^users/', include('obrisk.users.urls', namespace='users')),
-    url(r'^accounts/', include('allauth.urls')),
+    #This accounts/ url is  for django and soon should be deprecated and use only allauth.
+    url(r'^accounts/', include('django.contrib.auth.urls')),
+    url(r'^accounts-authorization/', include('allauth.urls')),
+    url(r'^auto-login-obdev2018-wsguatpotlfwccdi/', AutoLoginView.as_view(), name="auto_login"),
     # Third party apps here
-    url(r'^comments/', include('django_comments.urls')),
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
     url(r'^markdownx/', include('markdownx.urls')),
     # Local apps here
@@ -43,6 +69,8 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
+    url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

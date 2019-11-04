@@ -1,12 +1,14 @@
 {% extends 'base.html' %}
 {% load i18n static humanize %}
-{% load thumbnail %}
-
-{% block title %}{{ question.title }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/qa.css' %}" rel="stylesheet">
+<link href="{% static 'css/qa.css' %}?v=1508191" rel="stylesheet">
+<title>{{ question.title }}</title>
 {% endblock head %}
+{% block meta%}
+<meta name="keywords" content="{{ question.title }}">
+<meta name="author" content="{{ question.user.username }}">
+{%endblock meta%}
 
 {% block content %}
 <div class="col-lg-8 m-auto">
@@ -17,11 +19,11 @@
   </div>
   <div class="row">
 
-    <div class=" question" question-id="{{ question.id }}">
+    <div class="question" question-id="{{ question.id }}">
       <div class="title">
         <h4>{{ question.title }}</h4>
       </div>
-      <div class="col-md-1">
+      <div class="col-md-3">
         <div class="question-info options">
 
           <i id="questionUpVote"
@@ -36,32 +38,40 @@
         </div>
       </div>
 
-      <div class="col-md-11 word-break">
-        <p>{{ question.get_markdown|safe }}</p>
 
-        <div class="question-user d-flex flex-row align-items-center">
+      <div class="col-lg-11 col-8  question-wrapper">
 
+        <span class="m-auto">
+          {{ question.get_markdown|safe }}
+        </span>
+
+        <div class="question-user d-flex flex-row align-items-center justify-content-between">
           <a href="{% url 'users:detail' question.user.username  %}">
+            <div class="text-secondary d-flex flex-row align-content-center mr-3 text-nowrap">
+              {% if question.user.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{question.user.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              {% else %}
+              <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+              {% endif %}
 
-
-            <div class="text-secondary d-flex flex-row align-content-center mr-3">
-              {% thumbnail question.user.picture "30x30" crop="center" upscale="true"  as im %}
-              <img src="{{ im.url }}" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
-              {% empty %}
-              <img src="{% static 'img/user.png' %}" height="30px" alt="{% trans 'No Profile Picture' %}" />
-              {% endthumbnail %}
-              {{ question.user.get_profile_name|title }}
+              {{ question.user.get_profile_name|title|truncatechars:15 }}
             </div>
-            <small class="text-secondary">{% trans 'Asked' %} {{ question.timestamp|naturaltime }}</small>
           </a>
 
-
+          <small class="text-secondary asked"> {{ question.timestamp|naturaltime }}</small>
         </div>
+
+
+
+
         <div class="tags">
           {% if question.tags.names %}
+          <!--When adding the href, remember the tag url to have tag.slug and not tag itself-->
           <p>
             {% for tag in question.tags.names %}
-            <span class="badge badge-info">{{ tag }}</span>
+            <span class="badge badge-info"> {{ tag }} </span>
             {% endfor %}
           </p>
           {% endif %}

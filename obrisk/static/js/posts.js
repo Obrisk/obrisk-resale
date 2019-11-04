@@ -18,24 +18,7 @@ $(function () {
 });
 
 
-// adding a crsf tokken
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-var csrftoken = getCookie('csrftoken');
-
+// adding a crsf token
 function csrfSafeMethod(method) {
   // these HTTP methods do not require CSRF protection
   return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
@@ -53,7 +36,6 @@ $(document).ready(function(){
     $(".comment-btn").click(function(event){
         event.preventDefault();
     
-        console.log($('#commentForm').serialize());
         $.ajax({
             method: 'POST',
             url: url,
@@ -64,7 +46,7 @@ $(document).ready(function(){
                 $('#commentForm')[0].reset();
                 location.reload();
             },
-            error: function(xhr, desc, err){
+            error: function(err){
                 console.log(err);
             }
         });

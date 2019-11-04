@@ -9,13 +9,15 @@ from .base import env
 SECRET_KEY = env('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com', '54.180.169.125']
+#https://stackoverflow.com/questions/16676314/should-server-ip-address-be-in-allowed-hosts-django-setting
+ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
 
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES['default'] = env.db('DATABASE_URL')  # noqa F405
-DATABASES['default']['ATOMIC_REQUESTS'] = True  # noqa F405
-DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=60)  # noqa F405
+DATABASES['default']['ENGINE'] = 'django_db_geventpool.backends.postgresql_psycopg2'
+DATABASES['default']['ATOMIC_REQUESTS'] = False  # From django-db-geventpool
+DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=0)  # From django-db-geventpool
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -46,6 +48,7 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
+
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
@@ -64,16 +67,16 @@ X_FRAME_OPTIONS = 'DENY'
 # https://github.com/aliyun/django-oss-storage
 INSTALLED_APPS += ['django_oss_storage']  # noqa F405
 
-#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
-# ------------------------
+
+# STATIC
+# ----------------------------------------------------------------------------
 STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
-DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
 
 # AliCloud access key ID
-OSS_ACCESS_KEY_ID = env('OSS_STS_ID')
+OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
 
 # AliCloud access key secret
-OSS_ACCESS_KEY_SECRET = env('OSS_STS_KEY')
+OSS_ACCESS_KEY_SECRET = env('RAM_USER_S3KT_KEY')
 
 # The name of the bucket to store files in
 OSS_BUCKET_NAME = env('OSS_BUCKET')
@@ -91,15 +94,23 @@ OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
 # The default location for the static files stored in bucket.
 OSS_STATIC_LOCATION = '/static/'
 
+#OSS_COVERAGE_IF_FILE_EXIST = True
 
-# The default location for your static files
-STATIC_ROOT =  '/static/'
+#OSS_FILE_SAVE_AS_URL = False
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
 STATIC_URL =  '/static/'
 
 # MEDIA
 # ------------------------------------------------------------------------------
 # The default location for the media files stored in bucket.
+
+#I serve them in oss bucket when scaling up, don't duplicate static files in every server.
+# ------------------------
+DEFAULT_FILE_STORAGE = 'django_oss_storage.backends.OssMediaStorage'
+
 OSS_MEDIA_LOCATION = '/media/'
 
 MEDIA_URL = '/media/'
@@ -145,12 +156,6 @@ ANYMAIL = {
     'MAILGUN_API_KEY': env('MAILGUN_API_KEY'),
     'MAILGUN_SENDER_DOMAIN': env('MAILGUN_SENDER_DOMAIN')
 }
-
-# WhiteNoise
-# ------------------------------------------------------------------------------
-# http://whitenoise.evans.io/en/latest/django.html#enable-whitenoise
-MIDDLEWARE = ['whitenoise.middleware.WhiteNoiseMiddleware'] + MIDDLEWARE  # noqa F405
-
 
 # raven
 # ------------------------------------------------------------------------------
@@ -217,5 +222,12 @@ RAVEN_CONFIG = {
     'DSN': SENTRY_DSN
 }
 
-# Your stuff...
+# Other stuffs...
 # ------------------------------------------------------------------------------
+
+#SESSION
+#Improve performance
+SESSION_ENGINE = "django.contrib.sessions.backends.cache"
+SESSION_CACHE_ALIAS = "default"
+
+PHONE_SIGNUP_DEBUG = False

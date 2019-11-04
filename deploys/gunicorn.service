@@ -1,0 +1,23 @@
+#Destination /etc/systemd/system/gunicorn.service
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=obdev-user
+Group=www-data
+WorkingDirectory=/home/obdev-user/obdev2018
+ExecStart=/home/obdev-user/venv_obrisk/bin/gunicorn -c "/home/obdev-user/obdev2018/deploys/gunicorn-config.py" config.wsgi:application
+
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
+
+

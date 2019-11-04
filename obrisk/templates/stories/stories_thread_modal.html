@@ -1,28 +1,37 @@
-{% load i18n static %}
-{% load thumbnail %}
+{% load i18n static %} 
 
-<div class="modal fade" id="storiesThreadModal" tabindex="-1" role="dialog" aria-labelledby="storiesThreadModalLabel" aria-hidden="true">
+<div class="modal fade" id="storiesThreadModal" tabindex="-1" role="dialog" aria-labelledby="storiesThreadModalLabel"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
+      <div class="modal-header story-modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
       <!-- Body -->
-      <div class="modal-body" >
+      <div class="modal-body">
         <ul class="stream" id="storiesContent"></ul>
         <ul class="stream">
           <li class="card">
             <div class="card-body">
               <div class="profile-picture">
-                {% thumbnail request.user.picture "60x60" crop="center" upscale="true"  as im %}
-                  <img src="{{ im.url }}" class="pull-left" style="border-radius: 50%;" alt="{% trans 'User Image' %}" class="user-image">
-                {% empty %}
-                  <img src="{% static 'img/user.png' %}" class="pull-left" height="60px" alt="{% trans 'No Profile Picture' %}" />
-                {% endthumbnail %}
+              {% if request.user.picture %}
+                      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.picture}}" alt="Picture Profile"
+                      style="width:30px;height:30px;border-radius: 50%;"
+                      class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                {% else %}
+                      <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="No Profile Picture" />
+                {% endif %}
+
               </div>
               <div class="post">
                 <form id="replyStoriesForm" role="form" method="post" action="#" onsubmit="return false">
                   {% csrf_token %}
                   <input type="hidden" name="parent" value="">
                   <div class="form-group">
-                    <textarea id="replyInput" name="reply" rows="2" class="form-control" maxlength="280" required></textarea>
+                    <textarea id="replyInput" name="reply" rows="2" class="form-control" maxlength="280"
+                      required></textarea>
                     <span id="replyCounter" class="pull-right">280</span>
                   </div>
                 </form>
@@ -40,13 +49,13 @@
     </div>
   </div>
 </div>
- 
+
 {% block extra_js %}
 <script>
-  $(document).ready(function(){
-    $('#replyStories').prop('disabled',true);
-    $('#replyInput').keyup(function(){
-        $('#replyStories').prop('disabled', this.value == "" ? true : false);     
+  $(document).ready(function () {
+    $('#replyStories').prop('disabled', true);
+    $('#replyInput').keyup(function () {
+      $('#replyStories').prop('disabled', this.value == "" ? true : false);
     })
   });
 </script>

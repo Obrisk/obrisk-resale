@@ -5,10 +5,12 @@
 
 {% block head %}
 <link href="{% static 'css/post-update.css' %}" rel="stylesheet">
+<title>Obrisk Post</title>
+
 {% endblock head %}
 
 {% block content %}
-<div class="col-lg-8 m-auto">
+<div class="col-lg-8 ml-auto mr-auto mt-5 pt-4 pb-4 mb-5">
   <form action="{% url 'posts:edit_post' form.instance.pk %}" enctype="multipart/form-data" id="posts-form"
     method="post" role="form">
     {% csrf_token %}

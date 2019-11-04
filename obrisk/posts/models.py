@@ -2,13 +2,13 @@ import datetime
 import itertools
 
 from django.conf import settings
+from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
 
 from slugify import slugify
 
-from django_comments.signals import comment_was_posted
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 from taggit.managers import TaggableManager
@@ -20,6 +20,7 @@ from obrisk.notifications.models import Notification, notification_handler
 class PostQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
+    #this query is the longest.
     def get_active(self):
         """Returns only the published items in the current queryset."""
         return self.filter(status="P")
@@ -63,9 +64,9 @@ class Post(models.Model):
 
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="author",
-        on_delete=models.SET_NULL)
-    image = models.ImageField(
-        _('Featured image'), upload_to='posts_pictures/%Y/%m/%d/')
+        on_delete=models.CASCADE)
+    image = models.CharField(max_length=150, null=True, blank=True)
+    img_small = models.CharField(max_length=150, null=True, blank=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     title = models.CharField(max_length=80, null=False, unique=True)
     slug = models.SlugField(max_length=150, null=True, blank=True)
@@ -84,6 +85,9 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('posts:post', args=[self.slug])
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -105,7 +109,7 @@ class Comment(models.Model):
         on_delete=models.CASCADE, related_name='comments')
     user =models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="commentor",
-        on_delete=models.SET_NULL)
+        on_delete=models.CASCADE)
     body = models.TextField(max_length=280)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
@@ -127,4 +131,3 @@ def notify_comment(**kwargs):
         )
 
 
-comment_was_posted.connect(receiver=notify_comment)

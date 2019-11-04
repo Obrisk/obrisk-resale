@@ -9,7 +9,7 @@ To confirm this is correct, kindly go to {{ activate_url }}
 {% endblocktrans %}{% endautoescape %}
 {% blocktrans with site_name=current_site.name site_domain=current_site.domain %} and simply log-in to the website and you're good to go.
 
-Please not use this email to reply back to us. Please contact us via e-mail address, support@obrisk.com, incase you are facing any problem with signing up or getting started with using the website. 
+Please not use this email to reply back to us. Please contact us via e-mail address, support@obrisk.com, incase you are facing any problem with signing up or getting started using the website. 
 We will reply back within the shortest time possible. 
 
 Regards,

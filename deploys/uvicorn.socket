@@ -1,0 +1,8 @@
+[Unit]
+Description=uvicorn socket
+
+[Socket]
+ListenStream=/run/uvicorn.sock
+
+[Install]
+WantedBy=sockets.target

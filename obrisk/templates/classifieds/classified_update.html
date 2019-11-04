@@ -9,7 +9,7 @@
 
 {% block content %}
 <div class="col-lg-8 ml-auto mr-auto mt-5">
-  <form action="{% url 'classifieds:edit_classified' form.instance.pk %}" enctype="multipart/form-data"
+  <form class="mb-5" action="{% url 'classifieds:edit_classified' form.instance.pk %}" enctype="multipart/form-data"
     id="classified-form" method="post" role="form">
     {% csrf_token %}
     {{ form|crispy }}
@@ -19,6 +19,10 @@
       <a href="{% url 'classifieds:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>
   </form>
+
+  <a href="{% url 'classifieds:delete_classified' classified.pk %}">
+    <span class="pull-right" aria-hidden="true" title="{% trans 'Click to delete this classified post' %}"> 🗑️ </span>
+  </a>
 
 </div>
 

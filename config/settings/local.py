@@ -1,3 +1,4 @@
+    
 import logging
 
 from django.utils.log import DEFAULT_LOGGING
@@ -19,11 +20,6 @@ ALLOWED_HOSTS = [
      '*'
 ]
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR('staticfiles'))
-# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
-STATIC_URL = '/static/'
-
 # CACHES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#caches
@@ -36,6 +32,13 @@ CACHES = {
         }
     }
 }
+
+
+#STATIC
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+STATIC_ROOT = str(ROOT_DIR('staticfiles'))
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-url
+STATIC_URL = '/static/'
 
 # TEMPLATES
 # ------------------------------------------------------------------------------
@@ -78,6 +81,5 @@ if os.environ.get('USE_DOCKER') == 'yes':
 INSTALLED_APPS += ['django_extensions']  # noqa F405
 
 # Your stuff...
-
-
-
+# ------------------------------------------------------------------------------
+PHONE_SIGNUP_DEBUG = True

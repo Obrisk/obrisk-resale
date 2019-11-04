@@ -1,161 +1,243 @@
 
-var helpers = {
-	province: function (result, dropdown, emptyMessage) {
-		// Remove current options
-		dropdown.html('');
-		// Add the empty option with the empty message
-		dropdown.append('<option value="">' + emptyMessage + '</option>');
-		// Check result isnt empty
-		if (result != '') {
-			// Loop through each of the results and append the option to the dropdown
-			$.each(result, function (k, v) {
-				dropdown.append('<option value="' + v.name + '">' + v.name + '</option>');
-			});
-		}
-
-
-	},
-
-	city: function (result, dropdown, emptyMessage) {
-		// Remove current options
-		dropdown.html('');
-		// Add the empty option with the empty message
-		dropdown.append('<option value="">' + emptyMessage + '</option>');
-		// Check result isnt empty
-		if (result != '') {
-			// Loop through each of the sorted results and append the option to the dropdown
-			$.each(result.sort(), function (index, text) {
-
-				dropdown.append('<option value="' + text + '">' + text + '</option>');
-			});
-		}
-	}
-
-}
-
-const geo_data = [{
-	"name": "Anhui",
-	"cities": ["Hefei", "Wuhu", "Bengbu", "Huainan", "Maanshan", "Huaibei", "Tongling", "Anqing", "Huangshan", "Yangyang", "Suzhou", "Chuzhou", "Lu'an", "Xuancheng", "Chizhou", "Chuzhou"]
-}, {
-	"name": "Beijing",
-	"cities": ["Beijing"]
-}, {
-	"name": "Chongqing",
-	"cities": ["Chongqing"]
-}, {
-	"name": "Fujian",
-	"cities": ["Fuzhou", "Quanzhou", "Sanming", "Nanping", "Longyan", "Zhangzhou", "Ningde", "Putian", "Xiamen"]
-}, {
-	"name": "Gansu",
-	"cities": ["Lanzhou", "Jiayuguan", "Jinchang", "Wuwei", "Jiuquan", "Zhangye", "Baiyin", "Pingliang", "Qingyang", "Tianshui", "Longnan", " Dingxi", "Linxia Autonomous Prefecture", "Gannan Autonomous Prefecture"]
-}, {
-	"name": "Guangdong",
-	"cities": ["Guangzhou", "Shenzhen", "Zhuhai", "Dongguan", "Foshan", "Zhongshan", "Huizhou", "Shantou", "Jiangmen", "Maoming", "Zhaoqing", "Zhanjiang", "Meizhou", "Iris", "Heyuan", "Qingyuan", "Shaoguan", "Jieyang", "Yangjiang", "Chaozhou", "Yunfu"]
-}, {
-	"name": "Guangxi",
-	"cities": ["Nanning", "Guilin", "Liuzhou", "Chuzhou", "Qinzhou", "Beihai", "Yulin", "Guigang", "Fangchenggang", "Baise", "Chongzuo", "Guest ", "Hezhou", "Hechi"]
-}, {
-	"name": "Guizhou",
-	"cities": ["Guiyang", "Zunyi", "Anshun", "Six Panshui", "Duyun", "Kerry", "Tongren", "Bijie", "Xingyi", "Chishui", "Ren Huai", "Qingzhen", "Fuquan"]
-}, {
-	"name": "Hainan",
-	"cities": ["Haikou", "Sanya", "Qionghai", "Chuzhou"]
-}, {
-	"name": "Hebei",
-	"cities": ["Zhangjiakou", "Chengde", "Baoding", "Chuzhou", "Hengshui", "Shijiazhuang", "Xingtai", "Handan", "Tangshan", "Langfang", "Qinhuangdao"]
-}, {
-	"name": "Heilongjiang",
-	"cities": ["Harbin", "Qiqihar", "Mudanjiang", "Jiamusi", "Daqing", "Chixi", "Shuangyashan", "Yichun", "Qitaihe", "Hegang", "Black River", "Suihua", "Daxinganling area"]
-}, {
-	"name": "Henan",
-	"cities": ["Zhengzhou", "Kaifeng", "Luoyang", "Nanyang", "Yuhe", "Xuchang", "Sanmenxia", "Pingdingshan", "Zhoukou", "Zhumadian", "Xinxiang", "Hebi", "Jiao Zuo", "Yangyang", "Anyang", "Shangqiu", "Xinyang", "Jiyuan"]
-}, {
-	"name": "Hubei",
-	"cities": ["Wuhan", "Shiyan", "Xiangfan", "Suizhou", "Jingmen", "Xiaogan", "Yichang", "Huanggang", "Ezhou", "Jingzhou", "Yellowstone", "Xianning"]
-}, {
-	"name": "Hunan",
-	"cities": ["Changsha", "Zhuzhou", "Xiangtan", "Hengyang", "Shaoyang", "Yueyang", "Zhangjiajie", "Yiyang", "Changde", "Loudi", "Chenzhou", "Yongzhou", "Huaihua", "Xiangxi Tujia and Miao Autonomous Prefecture"]
-}, {
-	"name": "Inner Mongolia",
-	"cities": ["Hohhot", "Hulunbeier", "Xing'an", "Tongliao", "Chifeng", "Xilinguol", "Ulanchabu", "Baotou", "Ordos", "Bayanmuer", "U Sea", "Alashan"]
-}, {
-	"name": "Jiangsu",
-	"cities": ["Nanjing", "Wuxi", "Xuzhou", "Changzhou", "Suzhou", "Nantong", "Lianyungang", "Huai'an", "Yancheng", "Yangzhou", "Zhenjiang", "Taizhou", "Suqian"]
-}, {
-	"name": "Jiangxi",
-	"cities": ["Nanchang", "Jiujiang", "Jian", "Chuzhou", "Pingxiang", "Xinyu", "Yichun", "Jingdezhen", "Shangrao", "Yingtan", "Fuzhou"]
-}, {
-	"name": "Jilin",
-	"cities": ["Changchun", "Jilin", "Siping", "Tonghua", "White Mountain", "Liaoyuan", "White City", "Songyuan", "Yanbian Korean Autonomous Prefecture"]
-}, {
-	"name": "Liaoning",
-	"cities": ["Shenyang", "Dalian", "Anshan", "Fushun", "Benxi", "Dandong", "Jinzhou", "Yingkou", "Fuxin", "Liaoyang", "Panjin", "Tieling", "Chaoyang", "Huludao"]
-}, {
-	"name": "Ningxia",
-	"cities": ["Yinchuan", "Shizuishan", "Wu Zhong", "Zhongwei", "Guyuan"]
-}, {
-	"name": "Qinghai",
-	"cities": ["Xining", "Haidong Area", "Haixi Mongolian Tibetan Autonomous Prefecture", "Hainan Tibetan Autonomous Prefecture", "Haibei Tibetan Autonomous Prefecture", "Huangnan Tibetan Autonomous Prefecture", "Gaolu Tibetan Autonomous Prefecture", "Yushu Tibetan Autonomous Prefecture"]
-}, {
-	"name": "Shaanxi",
-	"cities": ["Xi'an", "Baoji", "Xianyang", "Southern", "Tongchuan", "Yan'an", "Yulin", "Hanzhong", "Ankang", "Shangluo"]
-}, {
-	"name": "Shandong",
-	"cities": ["Jinan", "Tai'an", "Weifang", "Dezhou", "Binzhou", "Laiwu", "Qingdao", "Yantai", "Rizhao", "Dongying", "Jining", "Heze", "Liaocheng", "Linyi", "Zaozhuang", "Zibo", "Weihai"]
-}, {
-	"name": "Shanghai",
-	"cities": ["Shanghai"]
-}, {
-	"name": "Shanxi",
-	"cities": ["Taiyuan", "Datong", "Yangquan", "Changzhi", "Jincheng", "Chuzhou", "Jinzhong", "Yuncheng", "Chuzhou", "Linyi", "Lvliang"]
-}, {
-	"name": "Sichuan",
-	"cities": ["Chengdu", "Zigong", "Panzhihua", "Chuzhou", "Deyang", "Mianyang", "Guangyuan", "Suining", "Neijiang", "Ziyang", "Leshan", "Meishan", "Nan Chong", "Yibin", "Guangan", "Dazhou", "Bazhong", "Ya'an", "Ganzi Tibetan Autonomous Prefecture", "Aba Tibetan and Qiang Autonomous Prefecture", "Liangshan Yi Autonomous Prefecture"]
-}, {
-	"name": "Tianjin",
-	"cities": ["Tianjin"]
-}, {
-	"name": "Tibet",
-	"cities": ["Lhasa", "Nagqu area", "Changdu area", "Nyingchi area", "Shannam area", "Shigatse area", "Ali area"]
-}, {
-	"name": "Xinjiang",
-	"cities": ["Urumqi", "Karamai", "Changji", "Tulufan", "Hami", "Korla", "Aksu", "Atushi", "Kash", "Hetian", "Yining", "Kui Yu", "Tacheng", "Usu", "Altay", "Shihezi"]
-}, {
-	"name": "Yunnan",
-	"cities": ["Kunming", "Yuxi", "Qujing", "Pu'er", "Baoshan", "Lijiang", "Linyi", "Zhaotong"]
-}, {
-	"name": "Zhejiang",
-	"cities": ["Hangzhou", "Huzhou", "Jiaxing", "Jinhua", "Lishui", "Ningbo", "Shaoxing", "Taizhou", "Wenzhou", "Zhangzhou", "Zhoushan"]
-}]
-
 $(document).ready(function () {
-	$province = $("select[name='province']");
-	$city = $("select[name='city']");
-	helpers.province(geo_data, $province, "Select an option");
+	//Hide the verification code form
+	$("#code").hide();
+	$("#email-request").hide();
 
-	$province.change(function () {
-		helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
+	if (!errors) {
+		$("#name_and_psword").hide();
+	}
+	
+	// adding a crsf token
+	function csrfSafeMethod(method) {
+		// these HTTP methods do not require CSRF protection
+		return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+	}
+	$.ajaxSetup({
+		beforeSend: function (xhr, settings) {
+			if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+				xhr.setRequestHeader("X-CSRFToken", csrftoken);
+			}
+		}
 	});
 
 });
 
+var verify_counter = 0;
+var code_counter = 0;
+
+var phone_no;
 
 $(function () {
-	$("#submit").click(function (event) {
-		if (!$("select[name='city']").val() || !$("select[name='province']")) {
+	$("#send-code").click(function (event) {
+		if (!$("#id_phone_number").val()) {
 			event.preventDefault();
-			alert("Please enter your address!");
+			bootbox.alert("It looks like you didn't enter your phone number. Please enter a valid phone number!");
+		} 
+		else {
+			
+			var num = parseInt($("#id_phone_number").val());
+			var str = num.toString() ;
+
+		
+			if (isNaN(num) || (str.length != 11) || (str.charAt(0) != 1)) {
+				event.preventDefault();
+				bootbox.alert("The phone number you entered is not correct. Please don't include the country code or spaces or any character!");
+			} else {
+				//If button is disabled and the verification code is not sent, user can't do anything.
+				var url, req;
+				
+				if (current_url == '/accounts-authorization/signup/') {
+					url = '/users/verification-code/';
+					req = 'GET';
+				}else if (current_url == '/users/phone-password-reset/') {
+					url = '/users/phone-password-reset/';
+					req = 'POST';
+				}else {
+					bootbox.alert("We are sorry, we can't handle users registration at the moment. Please try again later");
+				}
+
+				$.ajax({
+					url: url,
+					data: {
+						phone_no: num
+					},
+					cache: false,
+					type: req,
+					success: function (data) {
+						if (data.success == true)
+						{
+							timeout = 60;
+							$("#send-code").attr("disabled", true);
+							$("#phone_label").hide();
+							$("#code").show();
+							$("#email-request").show();
+							$("#code-notice").empty().append("<p>" + data.message + "<p>");
+
+							function updateSec() {
+								timeout--;
+								if (timeout > 0) {
+									$("#send-code").text(timeout + " S")
+								} else {
+									$("#send-code").text("Get Code")
+									$("#send-code").attr("disabled", false);
+								}
+							}
+							// repeat with the interval of 1 seconds
+							let timerId = setInterval(() => updateSec(), 1000);
+
+							// after 60 seconds stop
+							setTimeout(() => { clearInterval(timerId); }, 61000);
+
+
+							verify_counter = verify_counter + 1;
+
+							if(verify_counter >= 5){
+								$("#send-code").attr("disabled", true);
+								bootbox.alert("Maximum number of sending code trials has reached, we can't send anymore!");
+
+							}
+
+							//$("#send-code").attr("disabled", false);
+						} else {
+							$("#code-notice").empty().append("<p>" + data.error_message + "</p>");
+							if (data.messageId != undefined) {
+								console.log(data.messageId);
+							}
+							if (data.requestId != undefined) {
+								console.log(data.requestId);
+							}
+							if (data.returnedCode != undefined) {
+								console.log(data.returnedCode);
+							}
+							if (data.retries != undefined) {
+								console.log(data.retries);
+							}
+						}
+					},
+					error: function (err) {
+						console.log(err);
+					}
+				});
+				return false;
+			}
+		}
+
+	});
+
+	$("#phone-verify").click(function () {
+
+		if ((isNaN($("input[name='code']").val())) || ($("input[name='code']").val().length != 6) ||
+			(isNaN($("#id_phone_number").val())) || ($("#id_phone_number").val().length != 11) ||
+			($("#id_phone_number").val().charAt(0) != 1)) {
+			event.preventDefault();
+			bootbox.alert("The code you entered is wrong!");
 		} else {
+			$.ajax({
+				url: '/users/phone-verify/',
+				data: {
+					phone_no: $('#id_phone_number').val(),
+					code: $("input[name='code']").val()
+				},
+				cache: false,
+				type: 'GET',
+				success: function (data) {
+					//enable send button after message is sent
+					if (data.success == true)
+					{
+						// $('#send-code').removeAttr("disabled");
+						if (data.url) {
+							$("#results").empty().append("<p> You have successfully verified your phone number! Please wait to be redirected <p>");
+							window.location.href = data.url;
+						}
+						else {
+							$("#results").empty().append("<p> You have successfully verified your phone number! <p>");
+							$("input[name='verified_no']").val("YES");
+
+							//I should hide the phone number label that says don't enter country code
+							$("#phone_label").hide();
+
+							$("#code-notice").empty();
+
+							$("#code").hide();
+							$("#send-code").hide();
+							$("#email-request").hide();
+							$("#id_phone_number").attr("disabled", true);
+							$("#name_and_psword").show();
+						}
+
+					} else {
+						$("#results").empty().append("<p class='text-error'>" + data.error_message + "</p>");
+						$("#send-code").attr("disabled", false);
+						code_counter = code_counter + 1;
+
+						if (code_counter >= 5) {
+							$("#phone-verify").attr("disabled", true);
+							bootbox.alert("Maximum number of code retrial has reached, you can't retry anymore!");
+						}	
+					}
+				},
+				error: function (error) {
+					bootbox.alert(error)
+				}
+			});
+			return false;
+		}
+	});
+
+
+	$("#phone-signup-submit").click(function (event) {
+		if (!$("input[name='verified_no']").val()) {
+			event.preventDefault();
+			bootbox.alert("Please verify your phone number by requesting the verification code, before signing up!");
+		}
+		else if (!$("select[name='city']").val() || !$("select[name='province']")) {
+			event.preventDefault();
+			bootbox.alert("Please enter your address!");
+		}
+		else if (!$("input[name='username']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
+			event.preventDefault();
+			bootbox.alert("Please fill in all of the info. Also verify your phone number!");
+		}
+		else if ($("input[name='password1']").val() != $("input[name='password2']").val()) {
+			event.preventDefault();
+			bootbox.alert("Your password's inputs don't match!");
+		} else {
+			$("#id_phone_number").attr("disabled", false);
+
+			if ($("#id_phone_number").val().toString().startsWith("+86") == false ) {
+				$("#id_phone_number").val("+86" + $("#id_phone_number").val());
+			}
 			$("input[name='city']").val($("select[name='city']").val());
 			$("input[name='province_region']").val($("select[name='province']").val());
 			$("#signup_form").submit();
 		}
 	});
 
-	$(".update").click(function() {
+	//update-profile submit event is on the image-uploader.js file
+	//In the near future please reorganise the files.
+
+	$("#email-signup-submit").click(function (event) {
+
+		if (!$("select[name='city']").val() || !$("select[name='province']")) {
+			event.preventDefault();
+			bootbox.alert("Please enter your address!");
+		}
+		else if (!$("input[name='username']").val() || !$("input[name='email']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
+			event.preventDefault();
+			bootbox.alert("Please fill in all of the infomation");
+		}
+		else if ($("input[name='password1']").val() != $("input[name='password2']").val()) {
+			event.preventDefault();
+			bootbox.alert("Your password's inputs don't match!");
+		} else {
+			$("#id_phone_number").attr("disabled", false);
 			$("input[name='city']").val($("select[name='city']").val());
 			$("input[name='province_region']").val($("select[name='province']").val());
-			$("#update").submit();
+			$("#signup_form").submit();
 		}
-	);
+	});
+
+
 });
+

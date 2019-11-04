@@ -1,0 +1,2 @@
+{% load i18n %}
+{% blocktrans %}E-mail sent to {{email}}. Please confirm your email address or this a/c will be terminated.{% endblocktrans %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static i18n %}
+{% block title %}{% trans 'Notifications' %}{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/notifications.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block content %}
+<div class="row">
+    <div
+        class="align-items-center col-md-8 d-flex flex-column flex-md-row ml-auto mr-auto mb-4 justify-content-between">
+        <h3>
+
+        </h3>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 col-10 m-auto">
+        <ul class="list-unstyled p-0 notifications">
+            {% for notification in notification_list %}
+            <div class="is-notifications">
+                <div class="media">
+                    <figure class="media-left">
+                        <p class="image">
+                            {% if notification.actor.thumbnail %}
+                            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{notification.actor.thumbnail}}"
+                                alt="Picture Profile" style="width:70px;height:70px;border-radius: 50%;"
+                                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                            {% else %}
+                            <img src="{% static 'img/user.png' %}" class="pull-left" height="70px"
+                                alt="No Profile Picture" />
+                            {% endif %} </p>
+                    </figure>
+                    <div class="media-content">
+                        <span><a
+                                href="{% url 'users:detail' notification.actor.username  %}">{{ notification.actor.get_profile_name|title }}</a>
+                            commented on <a href="#">your post</a>.</span>
+                        <span class="time">{{ notification.time_since }} ago</span>
+                    </div>
+                    <div class="media-right">
+                        <div class="added-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                stroke-linejoin="round" class="feather feather-message-square">
+                                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% empty %}
+            <li class="notification p-3">
+                Sorry nothing here
+            </li>
+
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<div class="inner">
+    <div class="nav-drop-header">
+        <span>{% trans 'Unread notifications for' %}
+            {{ request.user.get_profile_name|title }}</span>
+        <a href="#">View All</a>
+    </div>
+    <div class="is-notifications nav-drop-body">
+        {% for notification in notification_list %}
+        <!-- Notification -->
+        <div class="media">
+            <figure class="media-left">
+                <p class="image">
+                    {% if notification.actor.thumbnail %}
+                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{notification.actor.thumbnail}}"
+                        alt="Picture Profile" style="width:70px;height:70px;border-radius: 50%;"
+                        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                    {% else %}
+                    <img src="{% static 'img/user.png' %}" class="pull-left" height="70px" alt="No Profile Picture" />
+                    {% endif %}
+                </p>
+            </figure>
+            <div class="media-content">
+                <span><a href="{% url 'users:detail' notification.actor.username  %}">
+                        {{ notification.actor.get_profile_name|title }}</a>{{ notification.get_verb_display }}
+                    {% if notification.action_object %}
+                    {{ notification.action_object }}
+                    {% endif %}<a href="#">your post</a>.</span>
+                <span class="time">{{ notification.time_since }}</span>
+            </div>
+            <div class="media-right">
+                <div class="added-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-message-square">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p>Sorry nothing here</p>
+
+        {% endfor %}
+    </div>
+    <div class="nav-drop-footer">
+        <a class="btn btn-dark pull-right"
+            href="{% url 'notifications:mark_all_read' %}">{% trans 'Mark all as read' %}</a>
+    </div>
+</div>
+{% endblock content %}

@@ -1,7 +1,7 @@
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.css'>
-<link rel='stylesheet prefetch'
-    href='https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/default-skin/default-skin.min.css'>
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.2.0/css/swiper.min.css'>
+{% load static %}
+<link rel='stylesheet prefetch' href="{% static 'css/photoswipe.min.css' %}">
+<link rel='stylesheet prefetch' href="{% static 'css/default-skin.min.css' %}">
+<link rel='stylesheet prefetch' href="{% static 'css/swiper.min.css'%}">
 
 
 <!-- Slider main container -->
@@ -96,9 +96,9 @@
 
 </div>
 
-<script src='https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.1/photoswipe-ui-default.min.js'></script>
-<script src='https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.2.0/js/swiper.min.js'></script>
+<script src="{% static 'js/photoswipe.min.js'%}"></script>
+<script src="{% static 'js/photoswipe-ui-default.min.js'%}"></script>
+<script src="{% static 'js/swiper.min.js'%}"></script>
 <script>
 
     /* 1 of 2 : SWIPER ################################### */
@@ -148,7 +148,7 @@
                 }
                 var img = new Image();
                 img.onload = function () {
-                    alert(this.width + 'x' + this.height);
+                    //alert(this.width + 'x' + this.height);
                 }
                 linkEl = figureEl.children[0]; // <a> element
 

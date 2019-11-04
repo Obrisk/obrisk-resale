@@ -4,21 +4,23 @@
 {% block title %}{% trans "Questions" %}{% endblock %}
 
 {% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/qa.css' %}" rel="stylesheet">
+<title>Obrisk QA </title>
+
 {% endblock head %}
 
 {% block content %}
 <!-- Page Content -->
-<div class="sidebar-overlay"></div>
-
 <div class="container mt-4 p-0">
   <div class="col-lg-10 m-auto">
     <div class="align-items-center d-flex justify-content-end mb-5 mt-3 justify-content-between justify-content-lg-end">
 
-      <div class="toggle-tags d-lg-none">
+      <!--tags-->
+      {% comment %} <div class="toggle-tags d-lg-none">
         <a href=""></a>
         <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-      </div>
+      </div> {% endcomment %}
       <!-- Write question Widget -->
       <a href="{% url 'qa:ask_question' %}" class="btn btn-dark pull-right">
         📝{% trans "Ask a Question" %}
@@ -28,8 +30,7 @@
   </div>
 
 
-  <div id="sidebar" class="sidebar">
-    <!-- Cloud Tag Widget -->
+  <!-- div id="sidebar" class="sidebar mr-4">
     <div class="card">
       <div class="card-header">
         <h5>{% trans 'Popular tags' %}</h5>
@@ -42,7 +43,7 @@
       </div>
     </div>
 
-  </div>
+  </div> -->
 
   <div class="row">
     <div class="questions col-12 col-md-9 m-auto">
@@ -102,32 +103,5 @@
 
 
 {% block extra_js %}
-<script>
-  (function () {
-    var sidebar = document.getElementById('sidebar');
-    var sidebarOverlay = document.getElementsByClassName('sidebar-overlay')[0];
-    var container = document.getElementsByClassName('container')[0];
-    var sidebarBtnOpen = document.getElementById('sidebarBtnOpen');
-
-    var openSidebar = function () {
-      sidebarOverlay.style.left = '0';
-      sidebar.style.left = '0';
-      sidebarOverlay.style.top = '0';
-      sidebar.style.display = 'block';
-      $(".classifieds").toggleClass("open-sidebar");
-    }
-
-    var closeSidebar = function (e) {
-      e.cancelBubble = true;
-      sidebarOverlay.style.left = '-100%';
-      sidebar.style.left = '-100%';
-      $(".classifieds").toggleClass("open-sidebar");
-
-    }
-
-    sidebarOverlay.addEventListener('click', closeSidebar);
-    sidebarBtnOpen.addEventListener('click', openSidebar);
-  })()
-</script>
 <script src="{% static 'js/qa.js' %}"></script>
 {% endblock extra_js %}
