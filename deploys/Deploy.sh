@@ -1,7 +1,6 @@
 #!/bin/bash -xe
 # These are the list of commands on how to deploy obrisk on a fresh Ubuntu 18.04 OS running on AWS Lightsail.
 
-sudo apt-get update
 sudo apt-get -y upgrade
 
 #First, install codedeploy agent.
