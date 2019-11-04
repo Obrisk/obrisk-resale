@@ -177,3 +177,26 @@ a:hover {
   z-index: 99999;
   background: #3EC4E2;
 }
+
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas: "img1 img2""img1 img3";
+}
+
+.img1 {
+  grid-area: img1;
+}
+
+.img2 {
+  grid-area: img2;
+}
+
+.img3 {
+  grid-area: img3;
+}
+.tabs.is-toggle li.is-active a{
+  background: #3EC4E2;
+  background-color: #3EC4E2;
+}

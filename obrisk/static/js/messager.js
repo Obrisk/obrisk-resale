@@ -306,11 +306,11 @@ OssUpload.prototype = {
                 const upload = async () => {
                     try {
                         const results = await client.multipartUpload(filename, file, {
-                                progress: progress,
-                                partSize: 200 * 1024, //Minimum is 100*1024
-                                timeout: 120000, // 2 minutes timeout
+                            progress: progress,
+                            partSize: 200 * 1024, //Minimum is 100*1024
+                            timeout: 120000, // 2 minutes timeout
 
-                            })
+                        })
                             .then(function (res) {
 
                                 //Try to get the dominat color from the uploaded image, if it fails it means the image
@@ -459,10 +459,10 @@ OssUpload.prototype = {
      */
     addFile: function (file) {
         var $li = $('<li id="' + file.id + '">' +
-                '<p class="title">' + file.name + '</p>' +
-                '<p class="imgWrap"></p>' +
-                '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
-                '</li>'),
+            '<p class="title">' + file.name + '</p>' +
+            '<p class="imgWrap"></p>' +
+            '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
+            '</li>'),
             $btns = $('<div class="file-panel">' +
                 '<span class="cancel">cancel</span>' +
                 '</div>').appendTo($li),

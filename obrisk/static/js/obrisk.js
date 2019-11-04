@@ -121,3 +121,20 @@ $(function () {
     //     };
     // });
 });
+
+//Hide Top nav bar on scroll 
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function () {
+    var currentScrollPos = window.pageYOffset;
+    if (prevScrollpos > currentScrollPos) {
+        document.getElementById("navbarBottom").style.bottom = "-80px";
+        document.getElementById("navbarTop").style.top = "0";
+    } else {
+        document.getElementById("navbarBottom").style.bottom = "0";
+        if (!$(".is-account-dropdown").hasClass("is-active")) {
+            document.getElementById("navbarTop").style.top = "-80px";
+        }
+
+    }
+    prevScrollpos = currentScrollPos;
+}

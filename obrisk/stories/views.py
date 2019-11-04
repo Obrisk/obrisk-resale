@@ -120,7 +120,7 @@ def post_stories(request):
     post = request.POST['post']
     post = post.strip()
     images = request.POST['images']
-    #viewers = request.POST['viewers']
+    viewers = request.POST['viewers']
     img_errors = request.POST['img_error']
 
     if (len(post) > 0 and len(post)<= 400) or images:
@@ -132,10 +132,9 @@ def post_stories(request):
         #Before saving the user inputs to the database, clean everything.
         story = Stories.objects.create(
             user=user,
-            content=post
-            #viewers=viewers
+            content=post,
+            viewers=viewers
         )
-
         html = render_to_string(
             'stories/stories_single.html',
             {
@@ -147,7 +146,15 @@ def post_stories(request):
             # split one long string of images into a list of string each for one JSON img_obj
             images_list = images.split(",")
 
+
             if multipleImagesPersist(request, images_list, 'stories', story):
+                html = render_to_string(
+                    'stories/stories_single.html',
+                    {
+                        'stories': story,
+                        'images': images,
+                        'request': request
+                    })
                 return HttpResponse(html)
             else:
                 return HttpResponseBadRequest(
