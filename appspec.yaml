@@ -1,0 +1,17 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/obdev-user/obdev2018
+  - source: requirements.txt
+    destination: /tmp
+hooks:
+  AfterInstall:
+    - location: deploys/python-setup.sh
+      timeout: 300
+      runas: root
+
+  ApplicationStart:
+      - location: restarts.sh
+        timeout: 300
+        runas: root

@@ -4,13 +4,17 @@
 sudo apt-get -y upgrade
 
 #First, install codedeploy agent.
-apt-get -y update
-apt-get -y install ruby
-apt-get -y install wget
+sudo apt-get -y update
+sudo apt-get -y install ruby
+sudo apt-get -y install wget
 cd /home/ubuntu
-wget https://obdev-deploy-bucket-ap-northeast-2.s3.amazonaws.com/latest/install
+wget https://aws-codedeploy-ap-northeast-2.s3.amazonaws.com/latest/install
 chmod +x ./install
 ./install auto
+
+#This command is to add the config files then restart the service
+sudo vim /etc/codedeploy-agent/conf/codedeploy.onpremises.yml
+sudo service codedeploy-agent restart
 
 sudo apt install python3-pip python3-dev libpq-dev nginx curl redis-server -y
 #sudo apt install postgresql if you will want to access DB with psql
@@ -65,6 +69,7 @@ sudo apt-get install python-certbot-nginx -y
 #ssh-keygen -R <the-ip-address> 
 sudo certbot --nginx  #interactive step
 
+#To copy data from one db instance to another.
 #pg_dump -C -h localhost -U obrisk -P obrisk_db | psql -h ls-475c8c9aa913ef145c97aecda604ec8b6ae7a92f.ccyq1xb49cwb.ap-northeast-2.rds.amazonaws.com -U dbobdevuser2018 obrisk_db
 
 
