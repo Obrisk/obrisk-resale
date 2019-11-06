@@ -1,6 +1,10 @@
 .O-bg-blue {
-    background: #3EC4E2;
+
     box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.O-bg-blue-ns {
+    background: #3EC4E2;
 }
 
 .O-cl-red {
@@ -9,4 +13,8 @@
 
 .O-bg {
     background: #EEF3F4
+}
+
+.O-black {
+    background: #000
 }
