@@ -33,6 +33,7 @@
 {% csrf_token %}
 <div class="container mt-5">
   <div class="row mt-4">
+
     <div class="col-md-6 m-auto mt-0 p-sm-0">
       <div id="compose-card" class="card is-new-content">
         <!-- Top tabs -->
@@ -74,13 +75,12 @@
                   </p>
                   <div class="control textarea-parent">
                     <p class="counter" style="font-size: .8rem;color: #999;float: right;">Remaining: <span
-                        class="count">400
-                      </span>
+                        class="count">400 </span>
                       Character</p>
 
                     <textarea id="publish" name="post" class="textarea publish-textarea" rows="3"
                       placeholder="Share something..." maxlength="400">
-                        </textarea>
+                  </textarea>
                     <input type="text" id="id_images" name="images" class="d-none">
                     <input type="text" id="id_img_error" name="img_error" class="d-none">
                   </div>
@@ -242,9 +242,6 @@
           </form>
         </div>
       </div>
-    </div>
-    <div class="all-stories col-md-6 m-auto mt-0 p-sm-0">
-
       <!-- Modals -->
       {% include 'stories/stories_form_modal.html' %}
       {% include 'stories/stories_thread_modal.html' %}
