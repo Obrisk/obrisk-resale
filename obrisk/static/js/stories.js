@@ -150,6 +150,7 @@ $(function () {
         $('.app-overlay').addClass('is-active');
         $('.close-wrap').removeClass('d-none');
         $('.is-new-content').addClass('is-highlighted');
+        $("body").addClass("block-scroll");
 
     });
     //Enable and disable publish button based on the textarea value length (1)
@@ -168,6 +169,7 @@ $(function () {
         $('.app-overlay').removeClass('is-active');
         $('.is-new-content').removeClass('is-highlighted');
         $('.close-wrap').addClass('d-none');
+        $("body").removeClass("block-scroll");
     });
     //Comment on a story
     $(".comment-button").click(function () {
@@ -391,11 +393,11 @@ OssUpload.prototype = {
                 const upload = async () => {
                     try {
                         const results = await client.multipartUpload(filename, file, {
-                            progress: progress,
-                            partSize: 200 * 1024, //Minimum is 100*1024
-                            timeout: 120000, // 2 minutes timeout
+                                progress: progress,
+                                partSize: 200 * 1024, //Minimum is 100*1024
+                                timeout: 120000, // 2 minutes timeout
 
-                        })
+                            })
                             .then(function (res) {
 
                                 //Try to get the dominat color from the uploaded image, if it fails it means the image
@@ -531,10 +533,10 @@ OssUpload.prototype = {
      */
     addFile: function (file) {
         var $li = $('<li id="' + file.id + '">' +
-            '<p class="title">' + file.name + '</p>' +
-            '<p class="imgWrap"></p>' +
-            '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
-            '</li>'),
+                '<p class="title">' + file.name + '</p>' +
+                '<p class="imgWrap"></p>' +
+                '<p class="upload-state"><span></span></p><span class="success-span"></span>' +
+                '</li>'),
             $btns = $('<div class="file-panel">' +
                 '<span class="cancel">cancel</span>' +
                 '</div>').appendTo($li),
@@ -629,10 +631,10 @@ function genKey() {
             });
     } else {
         return "stories/" + user + '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-            var r = Math.random() * 16 | 0,
-                v = c == 'x' ? r : (r & 0x3 | 0x8);
-            return v.toString(16);
-        }) +
+                var r = Math.random() * 16 | 0,
+                    v = c == 'x' ? r : (r & 0x3 | 0x8);
+                return v.toString(16);
+            }) +
             '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
                 var r = Math.random() * 16 | 0,
                     v = c == 'x' ? r : (r & 0x3 | 0x8);
@@ -673,6 +675,18 @@ $(function () {
     //create and initialize upload object 
     ossUpload = new OssUpload();
     ossUpload.init();
+
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
 
     $("body").on("uploadComplete", function (event) {
 
@@ -726,8 +740,15 @@ $(function () {
         $("#selected-status #viewer-icon").html($(this).find("svg").html())
         $("#selected-status span").text($(this).find("h3").text())
         $("#viewers").val($(this).data("status"));
-        $(".dropdown-trigger").removeClass("is-active");
+        $(".dropdown-trigger").toggleClass("is-active");
+    });
+    $(".dropdown-trigger").click(function (e) {
+        e.preventDefault();
+        $(".dropdown-trigger").toggleClass("is-active");
     });
 
 
+
 });
+
+// adding a crsf token

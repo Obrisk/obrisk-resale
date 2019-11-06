@@ -9,13 +9,16 @@
   <!-- User image -->
   <div class="media-left">
     <div class="image">
-      {% if reply.user.thumbnail %}
-      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{reply.user.thumbnail}}" alt="Picture Profile"
-        style="width:30px;height:30px;border-radius: 50%;"
-        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-      {% else %}
-      <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="No Profile Picture" />
-      {% endif %}
+      <a href="/users/{{stories.user}}">
+        {% if reply.user.thumbnail %}
+
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{reply.user.thumbnail}}" alt="Picture Profile"
+          style="width:30px;height:30px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+        {% else %}
+        <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="No Profile Picture" />
+        {% endif %}
+      </a>
     </div>
 
   </div>

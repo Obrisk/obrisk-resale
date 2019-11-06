@@ -156,7 +156,7 @@
                   <span class="indicator"></span>
                 </a>
 
-                <div class="nav-drop is-account-dropdown recent-notifications" id="">
+                <div class="nav-drop recent-notifications" id="">
 
                 </div>
               </div>
@@ -225,8 +225,8 @@
     <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop fixed-bottom has-shadow w-100  p-0">
       <div class="tabs is-toggle is-fullwidth w-100">
         <ul>
-          <li class="{% if base_active == 'stories' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'stories:list' %}">
+          <li class="stories grid-image{% if base_active == 'stories' %} is-active {% endif %}">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'stories:list' %}">
               <span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -239,8 +239,9 @@
               </span>
             </a>
           </li>
-          <li class="{% if base_active == 'classifieds' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'classifieds:list' %}"><span class="nav-icons">
+          <li class=" classifieds {% if base_active == 'classifieds' %} is-active {% endif %}">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'classifieds:list' %}"><span
+                class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-shopping-bag">
@@ -254,8 +255,8 @@
               </span>
             </a>
           </li>
-          <li class="{% if base_active == 'posts' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'posts:list' %}"><span class="nav-icons">
+          <li class="posts {% if base_active == 'posts' %} is-active {% endif %}">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'posts:list' %}"><span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-book-open">
@@ -268,8 +269,8 @@
               </span>
             </a>
           </li>
-          <li class="{% if base_active == 'chat' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'messager:contacts_list' %}">
+          <li class="chat {% if base_active == 'chat' %} is-active {% endif %}">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'messager:contacts_list' %}">
               <span class="nav-icons"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-message-square">
@@ -299,7 +300,7 @@
                   </svg>
                 </a>
 
-                <div class="nav-drop is-account-dropdown recent-notifications" id="">
+                <div class="nav-drop recent-notifications" id="">
 
                 </div>
               </div>
@@ -307,71 +308,92 @@
           </li>
           <li class="flex-grow-0">
             <a class="border-0" href="{% url 'home' %}">
-              <svg width="50" height="50" viewBox="0 0 544 392" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <svg width="64" height="48" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_i)">
-                  <path d="M201.542 85.9413C198.637 85.3611 196.396 84.6887 194.967 83.9127L201.542 85.9413Z"
-                    fill="#0AACEC"></path>
+                  <path d="M23.4699 10.0511C23.1315 9.98326 22.8706 9.90461 22.7042 9.81386L23.4699 10.0511Z"
+                    fill="url(#paint0_linear)" />
                   <path
-                    d="M120.972 141.825C166.967 182.257 233.942 236.497 279.636 267.014L305.439 159.542L330.783 141.825C297.56 134.058 305.581 135.605 257.696 116.944C227.507 105.179 60.304 25.0019 60.304 25.0019C88.4512 53.2209 199.845 130.264 247.381 150.785C188.945 139.72 131.27 103.175 89.1342 76.4755L88.2089 75.8892C34.3873 41.787 7.56076 26.1263 0 18.0398C15.321 52.2718 74.9776 101.393 120.972 141.825Z"
-                    fill="#0AACEC"></path>
+                    d="M14.0874 16.5869C19.4435 21.3157 27.2428 27.6592 32.564 31.2283L35.5688 18.659L38.5202 16.5869C34.6513 15.6786 35.5853 15.8594 30.0091 13.677C26.4935 12.301 7.02249 2.924 7.02249 2.924C10.3003 6.22432 23.2722 15.2348 28.8079 17.6348C22.0029 16.3408 15.2866 12.0666 10.3798 8.94405L10.2721 8.87547C4.00446 4.88709 0.880462 3.05549 0 2.10975C1.78415 6.11332 8.73125 11.8582 14.0874 16.5869Z"
+                    fill="url(#paint1_linear)" />
                   <path
-                    d="M137.713 198.55C169.968 248.704 213.511 280.547 251.411 321.944L245.858 314.042L241.464 306.139L234.348 290.335L229.221 274.53L225.888 258.725L261.044 273.87C234.477 267.014 164.054 224.29 137.713 198.55Z"
-                    fill="#0AACEC"></path>
+                    d="M16.0371 23.2212C19.7932 29.0869 24.8639 32.8112 29.2773 37.6527L28.6308 36.7285L28.119 35.8043L27.2904 33.9558L26.6934 32.1074L26.3052 30.259L30.3991 32.0303C27.3054 31.2284 19.1046 26.2317 16.0371 23.2212Z"
+                    fill="#00BAF6" />
                   <path
-                    d="M195.771 82.3202L283.665 111.776L293.341 104.611L304.631 97.3778L317.047 91.0773L330.434 85.7168C316.726 93.6778 261.087 87.8929 249.798 87.8929C240.767 87.8929 210.017 83.9124 195.771 82.3202Z"
-                    fill="#0AACEC"></path>
+                    d="M22.7981 9.62769L33.0334 13.0726L34.1603 12.2347L35.4749 11.3887L36.9208 10.6519L38.4798 10.0249C36.8834 10.956 30.4042 10.2794 29.0895 10.2794C28.0378 10.2794 24.457 9.8139 22.7981 9.62769Z"
+                    fill="#00BAF6" />
                   <path
-                    d="M543.315 234.374C543.315 147.319 471.833 76.7476 383.654 76.7476C345.314 76.7476 311.189 89.5381 283.665 111.776C283.403 111.688 284.023 111.584 283.665 111.776L320.261 124.343C338.56 114.307 359.625 108.591 382.042 108.591C452.406 108.591 509.448 164.906 509.448 234.374C509.448 303.842 452.406 360.157 382.042 360.157C325.653 360.157 277.82 323.99 261.044 273.87L248.991 269.636L238.509 264.907L225.888 258.725C237.746 334.217 303.865 392 383.654 392C471.833 392 543.315 321.429 543.315 234.374Z"
-                    fill="#0AACEC"></path>
+                    d="M63.27 27.411C63.27 17.2296 54.9458 8.97595 44.6773 8.97595C40.2126 8.97595 36.2386 10.4719 33.0334 13.0726C33.0029 13.0623 33.075 13.0502 33.0334 13.0726L37.2951 14.5424C39.426 13.3687 41.879 12.7002 44.4895 12.7002C52.6835 12.7002 59.3261 19.2865 59.3261 27.411C59.3261 35.5356 52.6835 42.1218 44.4895 42.1218C37.9229 42.1218 32.3527 37.8919 30.3991 32.0303L28.9956 31.535L27.7749 30.982L26.3052 30.259C27.6861 39.0881 35.3857 45.8461 44.6773 45.8461C54.9458 45.8461 63.27 37.5924 63.27 27.411Z"
+                    fill="#00BAF6" />
                   <path
-                    d="M224.11 228.301C224.218 225.507 224.398 222.733 224.651 219.978C224.418 222.699 224.236 225.473 224.11 228.301Z"
-                    fill="#0AACEC"></path>
+                    d="M26.0982 26.7007C26.1107 26.374 26.1317 26.0495 26.1611 25.7274C26.134 26.0455 26.1129 26.37 26.0982 26.7007Z"
+                    fill="#00BAF6" />
                   <g filter="url(#filter1_d)">
                     <path fill-rule="evenodd" clip-rule="evenodd"
-                      d="M382.043 127.697C441.719 127.697 490.096 175.458 490.096 234.374C490.096 293.289 441.719 341.05 382.043 341.05C322.367 341.05 273.99 293.289 273.99 234.374C273.99 175.458 322.367 127.697 382.043 127.697Z"
-                      fill="#0AACEC"></path>
+                      d="M44.4897 14.9348C51.439 14.9348 57.0726 20.5206 57.0726 27.411C57.0726 34.3014 51.439 39.8873 44.4897 39.8873C37.5403 39.8873 31.9067 34.3014 31.9067 27.411C31.9067 20.5206 37.5403 14.9348 44.4897 14.9348Z"
+                      fill="url(#paint2_radial)" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                      d="M44.4897 14.9348C51.439 14.9348 57.0726 20.5206 57.0726 27.411C57.0726 34.3014 51.439 39.8873 44.4897 39.8873C37.5403 39.8873 31.9067 34.3014 31.9067 27.411C31.9067 20.5206 37.5403 14.9348 44.4897 14.9348Z"
+                      fill="url(#paint3_linear)" />
                   </g>
                   <g opacity="0.6" filter="url(#filter2_d)">
                     <path
-                      d="M490.814 233.571C490.814 174.656 442.437 126.895 382.761 126.895C323.085 126.895 274.708 174.656 274.708 233.571C274.708 292.487 323.085 340.248 382.761 340.248C442.437 340.248 490.814 292.487 490.814 233.571Z"
-                      fill="#0AACEC"></path>
+                      d="M57.1561 27.3172C57.1561 20.4268 51.5225 14.8409 44.5732 14.8409C37.6238 14.8409 31.9902 20.4268 31.9902 27.3172C31.9902 34.2076 37.6238 39.7934 44.5732 39.7934C51.5225 39.7934 57.1561 34.2076 57.1561 27.3172Z"
+                      fill="#00BAF6" />
                   </g>
                 </g>
                 <defs>
-                  <filter id="filter0_i" x="0" y="13.0398" width="543.315" height="378.96" filterUnits="userSpaceOnUse"
+                  <filter id="filter0_i" x="0" y="-2.89025" width="63.27" height="48.7363" filterUnits="userSpaceOnUse"
                     color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"></feBlend>
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
                     <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                      result="hardAlpha"></feColorMatrix>
-                    <feOffset dy="-5"></feOffset>
-                    <feGaussianBlur stdDeviation="30"></feGaussianBlur>
-                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1"></feComposite>
-                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0"></feColorMatrix>
-                    <feBlend mode="overlay" in2="shape" result="effect1_innerShadow"></feBlend>
+                      result="hardAlpha" />
+                    <feOffset dy="-5" />
+                    <feGaussianBlur stdDeviation="30" />
+                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0" />
+                    <feBlend mode="overlay" in2="shape" result="effect1_innerShadow" />
                   </filter>
-                  <filter id="filter1_d" x="269.99" y="127.697" width="224.106" height="221.353"
+                  <filter id="filter1_d" x="27.9067" y="14.9348" width="33.1659" height="32.9525"
                     filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0">
-                    </feColorMatrix>
-                    <feOffset dy="4"></feOffset>
-                    <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                    <feOffset dy="4" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
                   </filter>
-                  <filter id="filter2_d" x="270.708" y="126.895" width="224.106" height="221.353"
+                  <filter id="filter2_d" x="27.9902" y="14.8409" width="33.1659" height="32.9525"
                     filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix"></feFlood>
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0">
-                    </feColorMatrix>
-                    <feOffset dy="4"></feOffset>
-                    <feGaussianBlur stdDeviation="2"></feGaussianBlur>
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"></feColorMatrix>
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"></feBlend>
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"></feBlend>
+                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
+                    <feOffset dy="4" />
+                    <feGaussianBlur stdDeviation="2" />
+                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
+                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
+                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
                   </filter>
+                  <linearGradient id="paint0_linear" x1="55.2858" y1="38.3233" x2="13.1949" y2="-9.44434"
+                    gradientUnits="userSpaceOnUse">
+                    <stop offset="0.270833" stop-color="#EB5757" />
+                    <stop offset="0.557292" stop-color="#56CCF2" />
+                  </linearGradient>
+                  <linearGradient id="paint1_linear" x1="55.2858" y1="38.3233" x2="13.1949" y2="-9.44434"
+                    gradientUnits="userSpaceOnUse">
+                    <stop offset="0.270833" stop-color="#EB5757" />
+                    <stop offset="0.557292" stop-color="#56CCF2" />
+                  </linearGradient>
+                  <radialGradient id="paint2_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                    gradientTransform="translate(49.9663 30.4821) rotate(-128.694) scale(17.7726 13.2688)">
+                    <stop offset="0.015625" stop-color="#EB5757" />
+                    <stop offset="1" stop-color="#56CCF2" />
+                  </radialGradient>
+                  <linearGradient id="paint3_linear" x1="44.4897" y1="39.8873" x2="44.4897" y2="14.9348"
+                    gradientUnits="userSpaceOnUse">
+                    <stop stop-color="white" />
+                    <stop offset="1" stop-color="white" stop-opacity="0" />
+                  </linearGradient>
                 </defs>
               </svg>
 
@@ -481,7 +503,7 @@
       <div class="tabs is-toggle is-fullwidth w-100">
         <ul>
           <li class="{% if base_active == 'stories' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'stories:list' %}">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'stories:list' %}">
               <span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -495,7 +517,8 @@
             </a>
           </li>
           <li class="{% if base_active == 'classifieds' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'classifieds:list' %}"><span class="nav-icons">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'classifieds:list' %}"><span
+                class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-shopping-bag">
@@ -510,7 +533,7 @@
             </a>
           </li>
           <li class="{% if base_active == 'posts' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'posts:list' %}"><span class="nav-icons">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'posts:list' %}"><span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-book-open">
@@ -524,7 +547,7 @@
             </a>
           </li>
           <li class="{% if base_active == 'chat' %} is-active {% endif %}">
-            <a class="d-flex flex-column p-0 border-0" href="{% url 'messager:contacts_list' %}">
+            <a class="d-flex flex-column pt-2 pl-0 pr-0 border-0" href="{% url 'messager:contacts_list' %}">
               <span class="nav-icons"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-message-square">
