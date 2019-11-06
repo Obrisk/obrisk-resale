@@ -5,6 +5,7 @@ from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.db.models import Q
 
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
@@ -19,7 +20,7 @@ class ConversationQuerySet(models.query.QuerySet):
     
     def get_conversations(self, user):
         """ Get all conversations of a specific user """
-        return self.filter(first_user=user) | self.filter(second_user=user)
+        return self.filter( Q(first_user=user) | Q(second_user=user))
 
     def conversation_exists(self, user1, user2):
         """ Check if these 2 users had conversation before """
@@ -29,8 +30,19 @@ class ConversationQuerySet(models.query.QuerySet):
             return True
         return False
 
+
+    def get_conv_obj(self, user1, user2):
+        """ Check if these 2 users had conversation before """
+        try:
+            obj = self.filter( Q(first_user=user1, second_user=user2) | Q(first_user=user2, second_user=user1))[:1].get()
+
+        except:
+            return None
+        else:
+            return obj
+
     def get_conv_classified(self, user1, user2):
-        qs = self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1) 
+        qs = self.filter(Q (first_user=user1, second_user=user2)) | self.filter(first_user=user2, second_user=user1) 
         return qs.values_list('classified', flat=True)
     
 class Conversation(models.Model):
@@ -53,7 +65,6 @@ class Conversation(models.Model):
         verbose_name_plural = _("Conversations")
         ordering = ("-timestamp", )
     
-
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = "{}.{}".format(*sorted([self.first_user.pk, self.second_user.pk]))
@@ -62,12 +73,6 @@ class Conversation(models.Model):
 
 class MessageQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability."""
-
-    def get_msgs(self, sender, recipient):
-        """Returns all the messages sent between two users."""
-        qs_one = self.filter(sender=sender, recipient=recipient)
-        qs_two = self.filter(sender=recipient, recipient=sender)
-        return qs_one.union(qs_two).order_by('-timestamp')
 
     def get_most_recent_conversation(self, recipient):
         """Returns the most recent conversation counterpart's username."""
@@ -79,29 +84,6 @@ class MessageQuerySet(models.query.QuerySet):
                 return qs.recipient
 
             return qs.sender
-
-        except self.model.DoesNotExist:
-            return get_user_model().objects.get(username=recipient.username)
-
-    def get_conversations(self, recipient):
-        user_list = [] #Stores user's list for checking inside this function.
-        msgs_list = [] #Stores messages objects
-        try:
-            qs_sent = self.filter(sender=recipient)
-            qs_recieved = self.filter(recipient=recipient)
-            queryset = qs_sent.union(qs_recieved).order_by('-timestamp')
-            
-            #Search for conversations that user was involved
-            for qs in queryset:
-                if qs.sender == recipient:
-                    if qs.recipient not in user_list:
-                        msgs_list.append(qs)
-                        user_list.append(qs.recipient)
-                        
-                elif qs.sender not in user_list:
-                    msgs_list.append(qs)
-                    user_list.append(qs.sender)
-            return user_list, msgs_list
 
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
@@ -134,7 +116,7 @@ class Message(models.Model):
     class Meta:
         verbose_name = _("Message")
         verbose_name_plural = _("Messages")
-        ordering = ("-timestamp", )
+        ordering = ("timestamp", )
 
     def __str__(self):
         if self.message:

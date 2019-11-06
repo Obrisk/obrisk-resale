@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
@@ -35,43 +35,49 @@ class ContactsListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        
-        context['convs'] = Conversation.objects.get_conversations(self.request.user).annotate(
+
+        #Instead of running this query, be storing the last image on every conversation. 
+        context['convs'] = Conversation.objects.get_conversations(
+                        self.request.user
+                    ).select_related('first_user','second_user').annotate(
                     time = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
-                        ).values('timestamp')[:1]
+                        ).values_list('timestamp', flat=True).order_by('-timestamp')[:1]
                     ), 
                     last_msg = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
-                        ).values('message')[:1]
+                        ).values_list('message', flat=True).order_by('-timestamp')[:1]
                     ),
                     img = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
-                        ).values('image')[:1]
+                        ).values_list('image', flat=True).order_by('-timestamp')[:1]
                     ),
                     attachment = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
-                        ).values('attachment')[:1]
+                        ).values_list('attachment', flat=True).order_by('-timestamp')[:1]
                     ),
                     unread = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
-                        ).values('unread')[:1]
+                        ).values_list('unread', flat=True).order_by('-timestamp')[:1]
                     ),
                     recipient = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
-                        ).values('recipient')[:1]
+                        ).values_list('recipient', flat=True).order_by('-timestamp')[:1]
                     )
                 ).order_by('-time')
+
 
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
 
+        #This is for active user in the messages.js, I was trying to quickly make push notifications work
+        #now there is probably no need.
         if context['convs']:
             if context['convs'][0].first_user == self.request.user:
                 context['active'] = context['convs'][0].second_user.username
@@ -84,7 +90,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
     user, who requires to be active too."""
 
     model = Message
-    paginate_by = 100
+    paginate_by = 100 #The pagination destroys the order of messages #NEEDS FIX
     template_name = "messager/message_list.html"
 
     def get(self, *args, **kwargs):
@@ -120,6 +126,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
                         )[:1]
                     )
                 ).get(id=classified[0])
+
             except Classified.DoesNotExist:
                 return context
             else: 
@@ -131,14 +138,13 @@ class MessagesListView(LoginRequiredMixin, ListView):
         try:               
             active_user = get_user_model().objects.get(username=self.kwargs["username"])
             
-            #When I have fully migrated to the conversation model design this condition becomes important
-            #if Conversation.objects.conversation_exists(self.request.user, active_user):
-            
+            conv = Conversation.objects.get_conv_obj(self.request.user, active_user)
             #Below is called only when the conversation is opened thus mark all msgs as read.
-            #In the near future implement it to query only last 100 messages, and update last few images.
-            Message.objects.filter(sender=active_user, recipient=self.request.user).update(unread=False)         
-            return Message.objects.get_msgs(active_user, self.request.user)      
-            
+            if conv:
+                return conv.messages.all()
+                #Celery task: conv.messages.all().update(unread=False) 
+            return reverse('messager:contacts_list')   
+
         except get_user_model().DoesNotExist:
             return reverse('messager:contacts_list')   
 
