@@ -25,6 +25,7 @@ sudo adduser obdev-user  #Interactive step
 sudo gpasswd -a obdev-user sudo
 sudo su - obdev-user
 
+
 virtualenv venv_obrisk
 source venv_obrisk/bin/activate
 git clone https://github.com/elshaddae/obdev2018.git  #Psword required.
@@ -33,6 +34,11 @@ pip install -r requirements/production.txt
 vim .env #Add all the settings parameters.
 python manage.py migrate
 python manage.py collectstatic --settings=config.settings.static #Pass the settings parameter only when django-storages is not working
+
+#Install the aliyun CLI for static assets
+wget https://github.com/aliyun/aliyun-cli/releases/download/v3.0.16/aliyun-cli-linux-3.0.16-amd64.tgz
+tar xzvf aliyun-cli-linux-3.0.16-amd64.tgz
+sudo mv aliyun /usr/local/bin
 
 sudo mkdir /tmp/logs
 sudo chmod 664 -R /tmp/logs
