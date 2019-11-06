@@ -32,21 +32,28 @@ class StoriesListView(LoginRequiredMixin, ListView):
             img1 = Subquery (
                     StoryImages.objects.filter(
                         story=OuterRef('pk'),
-                    ).values(
-                    'image_thumb'
+                ).values_list(
+                   'image_thumb', flat=True
                     )[:1]),
             img2 = Subquery (
                 StoryImages.objects.filter(
                     story=OuterRef('pk'),
-                ).values(
-                   'image_thumb'
+                ).values_list(
+                   'image_thumb', flat=True
                 )[1:2]),
             img3 = Subquery (
                 StoryImages.objects.filter(
                     story=OuterRef('pk'),
-                ).values(
-                   'image_thumb'
-                )[2:3])
+                ).values_list(
+                   'image_thumb', flat=True
+                )[2:3]),
+            img4 =  Subquery (
+                StoryImages.objects.filter(
+                    story=OuterRef('pk'),
+                ).values_list(
+                   'image_thumb', flat=True
+                )[3:4])
+
         ).prefetch_related('liked', 'parent', 'user__thumbnail__username').order_by('-priority', '-timestamp')
         
 
