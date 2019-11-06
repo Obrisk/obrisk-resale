@@ -208,3 +208,19 @@ nav {
 .tabs.is-toggle li.is-active a {
     background-color: #3EC4E2;
 }
+
+#navbarBottom .navbar .navbar-item .nav-drop:before {
+    left: auto !important;
+    right: 7% !important;
+}
+
+#navbarBottom .navbar .navbar-item .nav-drop {
+    right: 0 !important;
+    left: auto !important;
+}
+
+#navbarBottom .navbar .navbar-item .nav-drop:after,
+.navbar .navbar-item .nav-drop:before {
+    right: 7% !important;
+    left: auto !important;
+}
