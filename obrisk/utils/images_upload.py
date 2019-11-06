@@ -190,17 +190,18 @@ def multipleImagesPersist(request, images_list, app, obj):
                 
                 else:
                     d = str(datetime.datetime.now())
-                    style = 'image/resize,m_fill,h_156,w_156'
 
                     if app == 'classifieds':
                         img_obj = ClassifiedImages(classified=obj, image=str_result)
                         thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
                                 slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+                        style = 'image/resize,m_fill,h_156,w_156'
 
                     elif app == 'stories':
                         img_obj = StoryImages(story=obj, image=str_result)
                         thumb_name = "stories/" + slugify(str(obj.user)) + "/" + "/thumbnails/" + d + str(index)
-            
+                        style = 'image/resize,m_fill,h_456,w_456'
+
                     else:
                         return False
 
@@ -213,10 +214,9 @@ def multipleImagesPersist(request, images_list, app, obj):
                     
                     except oss2.exceptions.OssError as e:
                         #Most likely this is our problem so save the image without the thumbnail:
-                        print(e)
                         if index+1 == tot_img_objs:
-                            messages.error(request, f"Oops we are sorry. It looks like some of your images, \
-                                were not uploaded successfully. Please edit your item to add images.\
+                            messages.error(request, f"Oops we are sorry, some of your image(s), \
+                                were not uploaded successfully. Please edit your item to add images. \
                                 status= f{e.status}, requestID= f{e.request_id}")
                 
                             img_obj.save()
@@ -228,8 +228,8 @@ def multipleImagesPersist(request, images_list, app, obj):
                     except Exception as e:
                         #If there is a problem with the thumbnail generation, don't save the image just save the tags.
                         if index+1 == tot_img_objs:
-                            messages.error(request, "Oops we are sorry. It looks like some of your images, \
-                                were not uploaded successfully. Please edit your item to add images. ")
+                            messages.error(request, "Oops we are sorry, some of your image(s), \
+                                were not uploaded successfully. Please edit your item to add images.")
                             return True 
                         
                         else:

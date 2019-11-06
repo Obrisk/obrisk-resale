@@ -50,7 +50,7 @@ class StoriesListView(LoginRequiredMixin, ListView):
         ).prefetch_related('liked', 'parent', 'user__thumbnail__username').order_by('-priority', '-timestamp')
         
 
-@login_required
+@ajax_required
 @require_http_methods(["GET"])
 def get_story_images(request):
     """A function view return all images of a specific story"""
@@ -58,9 +58,7 @@ def get_story_images(request):
 
     images = serializers.serialize('json', StoryImages.objects.filter(
                         story=story_id,
-                    ).values_list(
-                        'image_thumb', 'image'
-                    )
+                    ).values_list('image', flat=True)
                 )
 
     return HttpResponse(images, content_type='application/json')
