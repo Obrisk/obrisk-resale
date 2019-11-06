@@ -150,7 +150,7 @@ $(function () {
         $('.app-overlay').addClass('is-active');
         $('.close-wrap').removeClass('d-none');
         $('.is-new-content').addClass('is-highlighted');
-        $("body").addClass("block-scroll");
+        $(".all-stories ").addClass("block-scroll");
 
     });
     //Enable and disable publish button based on the textarea value length (1)
@@ -169,7 +169,7 @@ $(function () {
         $('.app-overlay').removeClass('is-active');
         $('.is-new-content').removeClass('is-highlighted');
         $('.close-wrap').addClass('d-none');
-        $("body").removeClass("block-scroll");
+        $(".all-stories ").removeClass("block-scroll");
     });
     //Comment on a story
     $(".comment-button").click(function () {

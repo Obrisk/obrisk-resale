@@ -221,7 +221,6 @@ nav {
 
 #navbarBottom .navbar .navbar-item .nav-drop:after,
 .navbar .navbar-item .nav-drop:before {
-    right: 7% !important;
     left: auto !important;
 }
 

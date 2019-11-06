@@ -4,7 +4,7 @@
   <div class="nav-drop-header">
     <span style="color: #555;">{% trans 'Unread notifications for' %}
       {{ request.user.get_profile_name | title }}</span>
-    <a href="/ws/notifications">View All</a>
+    <a id="close">Close</a>
   </div>
   <div class="is-notifications nav-drop-body">
     {% if notifications %} {% for notification in notifications %}
@@ -59,7 +59,8 @@
   </div>
   {% if notifications %}
   <div class="nav-drop-footer">
-    <a class="btn" href="{% url 'notifications:mark_all_read' %}">{% trans 'Mark all as read' %}</a>
+    <a class="btn" id="mark" href="{% url 'notifications:mark_all_read' %}">{% trans 'Mark all as read' %}</a>
+    <a class="btn" id="view" href="/ws/notifications">{% trans 'View All' %}</a>
   </div>
   {% endif %}
 </div>
