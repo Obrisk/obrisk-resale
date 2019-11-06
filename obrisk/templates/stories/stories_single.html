@@ -8,13 +8,15 @@
       <!-- User image -->
       <div class="user-block">
         <div class="image">
-          {% if stories.user.thumbnail %}
-          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.user.thumbnail}}" alt="Picture Profile"
-            style="width:35px;height:35px;border-radius: 50%;"
-            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-          {% else %}
-          <img class="pull-left mr-2" src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
-          {% endif %}
+          <a href="/users/{{stories.user}}">
+            {% if stories.user.thumbnail %}
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.user.thumbnail}}" alt="Picture Profile"
+              style="width:35px;height:35px;border-radius: 50%;"
+              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+            <img class="pull-left mr-2" src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
+            {% endif %}
+          </a>
 
         </div>
         <div class="user-info">
@@ -23,7 +25,7 @@
         </div>
       </div>
       <!-- /includes/pages/feed/dropdowns/feed-post-dropdown.html -->
-      <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
+      <!-- <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
         <div>
           <div class="button">
             <i data-feather="more-vertical"></i>
@@ -42,18 +44,9 @@
               </div>
             </a>
             {% endif %}
-            <a href="#" class="dropdown-item">
-              <div class="media">
-                <i data-feather="flag"></i>
-                <div class="media-content">
-                  <h3>Flag</h3>
-                  <small>In case of inappropriate content.</small>
-                </div>
-              </div>
-            </a>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
     <!-- /Header -->
 
@@ -69,25 +62,45 @@
 
       <!-- Post image  -->
 
-      <div class="grid-container">
+      <div
+        class="{% if stories.img4 %}grid-4{% elif stories.img3 %} grid-3 {% elif  stories.img2 %} grid-2{% else  %} grid-1{%endif%}">
         <!-- CSS masonry wrap -->
         {% if stories.img1 %}
-        <a class="img1" data-fancybox="img1" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img1}}"
-          href="{{oss}}/{{stories.img1}}" data-demo-href="{{oss}}/{{stories.img1}}">
-          <img src="{{oss}}/{{stories.img1}}" data-demo-src="{{oss}}/{{stories.img1}}" alt="">
-        </a>
+        <figure class="img1 image is-square">
+
+
+          <a class="" data-fancybox="img1" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img1}}"
+            href="{{oss}}/{{stories.img1}}" data-demo-href="{{oss}}/{{stories.img1}}">
+            <img src="{{oss}}/{{stories.img1}}" data-demo-src="{{oss}}/{{stories.img1}}" alt="">
+          </a>
+        </figure>
         {%endif%}
         {% if stories.img2%}
-        <a class="img2" data-fancybox="img2" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img2}}"
-          href="{{oss}}/{{stories.img2}}" data-demo-href="{{oss}}/{{stories.img2}}">
-          <img src="{{oss}}/{{stories.img2}}" data-demo-src="{{oss}}/{{stories.img2}}" alt="">
-        </a>
+        <figure class=" img2 image is-square">
+
+          <a class="" data-fancybox="img2" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img2}}"
+            href="{{oss}}/{{stories.img2}}" data-demo-href="{{oss}}/{{stories.img2}}">
+            <img src="{{oss}}/{{stories.img2}}" data-demo-src="{{oss}}/{{stories.img2}}" alt="">
+          </a>
+        </figure>
         {%endif%}
         {% if stories.img3 %}
-        <a class="img3" data-fancybox="img3" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img3}}"
-          href="{{oss}}/{{stories.img3}}" data-demo-href="{{oss}}/{{stories.img3}}">
-          <img src="{{oss}}/{{stories.img3}}" data-demo-src="{{oss}}/{{stories.img3}}" alt="">
-        </a>
+        <figure class="img3 image is-square">
+
+          <a class="" data-fancybox="img3" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img3}}"
+            href="{{oss}}/{{stories.img3}}" data-demo-href="{{oss}}/{{stories.img3}}">
+            <img src="{{oss}}/{{stories.img3}}" data-demo-src="{{oss}}/{{stories.img3}}" alt="">
+          </a>
+        </figure>
+        {%endif%}
+        {% if stories.img4 %}
+        <figure class="img4 image is-square">
+
+          <a class="" data-fancybox="img4" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img4}}"
+            href="{{oss}}/{{stories.img4}}" data-demo-href="{{oss}}/{{stories.img4}}">
+            <img src="{{oss}}/{{stories.img4}}" data-demo-src="{{oss}}/{{stories.img4}}" alt="">
+          </a>
+        </figure>
         {%endif%}
 
 
@@ -138,19 +151,12 @@
       {% if stories.get_likers %}
       <div class="likers-group">
         {% for liker in stories.get_likers %}
-        <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
+        <a href="/users/{{liker}}">
+          <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
+        </a>
         {% endfor %}
       </div>
       <div class="likers-text">
-        <p>
-          {% for liker in stories.get_likers %}
-          {% if liker.last %}
-          <a href="/users/{{liker}}">{{liker}}</a>
-          {% else %}
-          <a href="/users/{{liker}}">{{liker}}</a>,
-          {% endif %}
-          {% endfor %}
-        </p>
         {% if stories.get_likers|length > 3%}
         <p>and {{ stories.get_likers|length|add:"-3" }} more liked this</p>
         {% else %}
@@ -166,11 +172,11 @@
       <div class="social-count">
 
         <div class="likes-count">
-          <span class="count">{{ stories.likes_count }} </span> <span>Liked</span>
+          <span class="count">{{ stories.likes_count }} </span> <span class="m-0">Liked</span>
         </div>
         <div class="comments-count">
           <span class="count">{{ stories.thread_count }}</span>
-          <span>Comments</span>
+          <span class="m-0">Comments</span>
         </div>
       </div>
     </div>

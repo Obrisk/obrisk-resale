@@ -208,10 +208,7 @@ $(document).ready(function () {
 
         //Init dropdowns
         $.fn.initDropdowns = function () {
-            $('.dropdown-trigger').click(function () {
-                $('.dropdown-trigger').removeClass('is-active');
-                $(this).addClass('is-active');
-            });
+
 
             $(document).click(function (e) {
                 var target = e.target;
