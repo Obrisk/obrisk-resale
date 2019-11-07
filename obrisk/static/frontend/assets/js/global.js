@@ -209,11 +209,6 @@ $(document).ready(function () {
         //Init dropdowns
         $.fn.initDropdowns = function () {
 
-            $(".dropdown-item").click(function (e) {
-                e.preventDefault()
-                $('.dropdown-trigger').removeClass('is-active');
-
-            })
 
             $(document).click(function (e) {
                 var target = e.target;
