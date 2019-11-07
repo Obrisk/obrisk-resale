@@ -64,7 +64,7 @@ class Stories(models.Model):
         if self.content:
             return str(self.content)
         else:
-            return "This story has no content"
+            return ""
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

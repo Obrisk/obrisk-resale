@@ -17,7 +17,7 @@ from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 
 
 
-class StoriesListView(LoginRequiredMixin, ListView):
+class StoriesListView(ListView):
     """A really simple ListView, with some JS magic on the UI."""
     model = Stories
     paginate_by = 50

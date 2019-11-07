@@ -38,18 +38,24 @@ $(function () {
         var li = $(this).closest(".card");
         var stories = $(li).attr("stories-id");
 
-        $.ajax({
-            url: '/stories/like/',
-            data: {
-                'stories': stories
-            },
-            type: 'GET',
-            cache: false,
-            success: function (data) {
-                li.find(".likes-count .count").text(data.likes);
+        if (user != "") {
 
-            }
-        });
+            $.ajax({
+                url: '/stories/like/',
+                data: {
+                    'stories': stories
+                },
+                type: 'GET',
+                cache: false,
+                success: function (data) {
+                    li.find(".likes-count .count").text(data.likes);
+
+                }
+            });
+        } else {
+            window.location.href = '/accounts-authorization/login/';
+        }
+
         return false;
     });
 
@@ -87,8 +93,10 @@ $(function () {
             cache: false,
 
             success: function (data) {
-                if (data.thread.trim() != "")
-                    post.find(".comments-body").html(data.thread);
+                if (data.thread) { 
+                    if (data.thread.trim() != "")
+                        post.find(".comments-body").html(data.thread);
+                }
                 post.find("input[name=parent]").val(data.uuid)
             }
         });
@@ -99,41 +107,48 @@ $(function () {
     $("a#post-comment-button").click(function () {
         // Ajax call to register a reply to any given Stories object.
         post = $(this).closest('.card');
-        $.ajax({
-            url: '/stories/post-comment/',
-            data: post.find(".replyStoriesForm").serialize(),
-            type: 'POST',
-            cache: false,
-            success: function () {
-                post.find(".comment-textarea").val("");
-                post.find('.comments-count .count').html(parseInt(post.find('.comments-count .count').html(), 10) + 1);
-                post.find('.content-wrap').toggleClass('is-hidden');
-                post.find('.comments-wrap').toggleClass('is-hidden');
-                var stories = $(post).attr("stories-id");
-                $("input, textarea").val('');
-                setTimeout(function () {
-                    $.ajax({
-                        url: '/stories/get-thread/',
-                        data: {
-                            'stories': stories
-                        },
-                        cache: false,
-
-                        success: function (data) {
-                            if (data.thread.trim() != "")
-                                post.find(".comments-body").html(data.thread);
-                            post.find("input[name=parent]").val(data.uuid)
-                        }
-                    });
+        
+        
+        if (user != "") {
+            $.ajax({
+                url: '/stories/post-comment/',
+                data: post.find(".replyStoriesForm").serialize(),
+                type: 'POST',
+                cache: false,
+                success: function () {
+                    post.find(".comment-textarea").val("");
+                    post.find('.comments-count .count').html(parseInt(post.find('.comments-count .count').html(), 10) + 1);
                     post.find('.content-wrap').toggleClass('is-hidden');
                     post.find('.comments-wrap').toggleClass('is-hidden');
+                    var stories = $(post).attr("stories-id");
+                    $("input, textarea").val('');
+                    setTimeout(function () {
+                        $.ajax({
+                            url: '/stories/get-thread/',
+                            data: {
+                                'stories': stories
+                            },
+                            cache: false,
 
-                }, 200);
-            },
-            error: function (data) {
-                bootbox.alert(data.responseText);
-            },
-        });
+                            success: function (data) {
+                                if (data.thread.trim() != "")
+                                    post.find(".comments-body").html(data.thread);
+                                post.find("input[name=parent]").val(data.uuid)
+                            }
+                        });
+                        post.find('.content-wrap').toggleClass('is-hidden');
+                        post.find('.comments-wrap').toggleClass('is-hidden');
+
+                    }, 200);
+                },
+                error: function (data) {
+                    bootbox.alert(data.responseText);
+                },
+            });
+        
+        } else {
+            window.location.href = '/accounts-authorization/login/';
+        }
 
     });
 

@@ -32,7 +32,7 @@ gulp.task('reset', function () {
 
 // Erases the dist folder
 gulp.task('clean', function () {
-    rimraf('../obrisk/static/assets');
+    rimraf('../obrisk/static/frontend/assets');
 });
 
 // Copy Bulma filed into Bulma development folder
