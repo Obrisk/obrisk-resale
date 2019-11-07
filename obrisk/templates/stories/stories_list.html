@@ -209,7 +209,7 @@
                         <div class="" style="clear: both;">
                           <p class="text-center">
                             Notes:
-                            Max number of files 8 &amp; Max size per file is 13MB
+                            Not more than 8 images &amp; Max size per image is 13MB
                           </p>
                           <button id="retry-button" type="button"
                             class="button is-solid accent-button is-fullwidth is-hidden">
@@ -233,10 +233,19 @@
               <!-- Footer buttons -->
               <div class="more-wrap">
                 <!-- Publish button -->
+                {% if request.user.is_authenticated %}
+                
                 <button id="publish-button" type="button"
                   class="button is-solid accent-button is-fullwidth is-disabled">
                   Publish
                 </button>
+                {% else %}
+
+                  <button id="publish-button" type="button"
+                    class="button is-solid accent-button is-fullwidth is-disabled">
+                    <a href="{% url 'account_login' %}">  Login & Post </a>
+                  </button>
+                {% endif %}
               </div>
             </div>
           </form>
