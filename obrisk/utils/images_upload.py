@@ -165,7 +165,7 @@ def multipleImagesPersist(request, images_list, app, obj):
         obj.delete()
         return False
     else:
-        if (images_list[1] == None or images_list[1].startswith(f'{app}/') == False):
+        if (images_list[1] == None or images_list[1].startswith(f'{app}/{request.user.username}') == False):
             messages.error(request, "Sorry, the image(s) were not uploaded successfully. \
                 Please add the images again and submit the form!")
             obj.delete()
@@ -181,7 +181,7 @@ def multipleImagesPersist(request, images_list, app, obj):
                 if index == 0:
                     continue
 
-                if str_result.startswith(f'{app}/') == False:
+                if str_result.startswith(f'{app}/{request.user.username}') == False:
                     messages.error(request, "Hello! It looks like some of the image(s) you uploaded, \
                         are corrupted, or you've done something wrong. Please edit your post, \
                         and upload the images again.")
@@ -198,7 +198,12 @@ def multipleImagesPersist(request, images_list, app, obj):
                         style = 'image/resize,m_fill,h_156,w_156'
 
                     elif app == 'stories':
-                        img_obj = StoryImages(story=obj, image=str_result)
+                        #The image here is full url to the OSS bucket because of how it is consumed in the front-end
+                        #Note it has to be not more that 300 string.
+                        img_obj = StoryImages(
+                                story=obj, 
+                                image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
+                            )
                         thumb_name = "stories/" + slugify(str(obj.user)) + "/" + "/thumbnails/" + d + str(index)
                         style = 'image/resize,m_fill,h_456,w_456'
 
