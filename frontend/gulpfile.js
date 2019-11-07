@@ -158,7 +158,6 @@ gulp.task('compile-css', function () {
             nodepath + 'hopscotch/dist/css/hopscotch.min.css',
             nodepath + 'glider-js/glider.min.css',
             //Other external css
-            assetspath + 'css/tipuedrop.css',
             assetspath + 'css/jquery.fancybox.min.css',
             nodepath + 'modal-video/css/modal-video.min.css',
         ])
@@ -191,7 +190,6 @@ gulp.task('compile-js', function () {
             nodepath + 'glider-js/glider.min.js',
             //Get external js assets
             assetspath + 'js/highlight.min.js',
-            assetspath + 'js/tipuedrop.js',
             assetspath + 'js/jquery.fancybox.min.js',
             assetspath + 'js/ggtooltip.js',
         ])

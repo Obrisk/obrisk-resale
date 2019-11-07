@@ -187,6 +187,7 @@ MIDDLEWARE = [
 STATICFILES_DIRS = [
     str(APPS_DIR.path('static')),
     ('frontend/assets', str(ROOT_DIR.path('frontend/assets'))),
+    
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
