@@ -63,10 +63,11 @@ def get_story_images(request):
     """A function view return all images of a specific story"""
     story_id = request.GET['story_id']
 
-    images = list( StoryImages.objects.filter(
+    images = list(StoryImages.objects.filter(
                         story=story_id,
-                    ).values_list('image', flat=True)
-                )
+                    ).extra( 
+                        select={ 'src': 'image'}).values('src')
+                    )
     
     return HttpResponse(json.dumps(images), content_type='application/json')
 
