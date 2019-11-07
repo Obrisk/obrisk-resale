@@ -93,7 +93,7 @@ $(function () {
             cache: false,
 
             success: function (data) {
-                if (data.thread) { 
+                if (data.thread) {
                     if (data.thread.trim() != "")
                         post.find(".comments-body").html(data.thread);
                 }
@@ -107,8 +107,8 @@ $(function () {
     $("a#post-comment-button").click(function () {
         // Ajax call to register a reply to any given Stories object.
         post = $(this).closest('.card');
-        
-        
+
+
         if (user != "") {
             $.ajax({
                 url: '/stories/post-comment/',
@@ -145,7 +145,7 @@ $(function () {
                     bootbox.alert(data.responseText);
                 },
             });
-        
+
         } else {
             window.location.href = '/accounts-authorization/login/';
         }
@@ -761,9 +761,21 @@ $(function () {
         e.preventDefault();
         $(".dropdown-trigger").toggleClass("is-active");
     });
+    $("img").on('click', function () {
+        console.log($(this).closest("[stories-id]").data("id"))
+        $.ajax({
+            type: "get",
+            url: "/stories/story-images/?story_id=" + $(this).closest("[stories-id]").data("id"),
+            success: function (response) {
+                $.fancybox.open(response, {
+                    type: "image",
+                    loop: true,
+                });
+            }
+        });
 
+
+    });
 
 
 });
-
-// adding a crsf token
