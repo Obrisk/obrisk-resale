@@ -12,7 +12,7 @@ module.exports = {
         'fonts': '/static/fonts',
         'img': '/static/img',
         'js': '/static/js',
-        'assets': '/static/assets',
+        'assets': '/static/frontend/assets',
         'webpush': '/static/webpush'
     },
 };

@@ -9,7 +9,7 @@ var rimraf = require('rimraf').sync;
 var concat = require('gulp-concat');
 var wait = require('gulp-wait')
 var nodepath = 'node_modules/';
-var assetspath = '../obrisk/static/assets/';
+var assetspath = '../obrisk/static/frontend/assets/';
 var exec = require('child_process').exec;
 
 
@@ -25,8 +25,8 @@ gulp.task('watch', function () {
 gulp.task('reset', function () {
     rimraf('bulma/*');
     rimraf('scss/*');
-    rimraf('../obrisk/static/assets/css/*');
-    rimraf('../obrisk/static/assets/fonts/*');
+    rimraf('../obrisk/static/frontend/assets/css/*');
+    rimraf('../obrisk/static/frontend/assets/fonts/*');
     rimraf('images/*');
 });
 
@@ -51,18 +51,18 @@ gulp.task('extendBulma', function () {
 // Copy assets
 gulp.task('copy', function () {
     //Copy other external css assets
-    gulp.src(['../obrisk/static/assets/css/*.css']).pipe(gulp.dest('../obrisk/static/assets/css/'));
-    gulp.src([nodepath + '@mdi/font/css/materialdesignicons.min.css']).pipe(gulp.dest('../obrisk/static/assets/css/'));
-    gulp.src([nodepath + 'dripicons/webfont/webfont.css']).pipe(gulp.dest('../obrisk/static/assets/css/'));
+    gulp.src(['../obrisk/static/frontend/assets/css/*.css']).pipe(gulp.dest('../obrisk/static/frontend/assets/css/'));
+    gulp.src([nodepath + '@mdi/font/css/materialdesignicons.min.css']).pipe(gulp.dest('../obrisk/static/frontend/assets/css/'));
+    gulp.src([nodepath + 'dripicons/webfont/webfont.css']).pipe(gulp.dest('../obrisk/static/frontend/assets/css/'));
     //Copy other external font assets
-    gulp.src(['../obrisk/static/assets/fonts/*']).pipe(gulp.dest('../obrisk/static/assets/fonts/'));
-    gulp.src([nodepath + '@mdi/font/fonts/**/*']).pipe(gulp.dest('../obrisk/static/assets/fonts/'));
-    gulp.src([nodepath + 'dripicons/webfont/fonts/**/*']).pipe(gulp.dest('../obrisk/static/assets/css/fonts/'));
-    gulp.src([nodepath + 'slick-carousel/slick/fonts/**/*', ]).pipe(gulp.dest('../obrisk/static/assets/css/fonts/'));
-    gulp.src([nodepath + 'slick-carousel/slick/ajax-loader.gif', ]).pipe(gulp.dest('../obrisk/static/assets/css/'));
-    gulp.src([assetspath + 'img/**/*', ]).pipe(gulp.dest('../obrisk/static/assets/img/'));
+    gulp.src(['../obrisk/static/frontend/assets/fonts/*']).pipe(gulp.dest('../obrisk/static/frontend/assets/fonts/'));
+    gulp.src([nodepath + '@mdi/font/fonts/**/*']).pipe(gulp.dest('../obrisk/static/frontend/assets/fonts/'));
+    gulp.src([nodepath + 'dripicons/webfont/fonts/**/*']).pipe(gulp.dest('../obrisk/static/frontend/assets/css/fonts/'));
+    gulp.src([nodepath + 'slick-carousel/slick/fonts/**/*', ]).pipe(gulp.dest('../obrisk/static/frontend/assets/css/fonts/'));
+    gulp.src([nodepath + 'slick-carousel/slick/ajax-loader.gif', ]).pipe(gulp.dest('../obrisk/static/frontend/assets/css/'));
+    gulp.src([assetspath + 'img/**/*', ]).pipe(gulp.dest('../obrisk/static/frontend/assets/img/'));
     //Particles js
-    gulp.src(['../obrisk/static/assets/js/particles.min.js']).pipe(gulp.dest('../obrisk/static/assets/js/'));
+    gulp.src(['../obrisk/static/frontend/assets/js/particles.min.js']).pipe(gulp.dest('../obrisk/static/frontend/assets/js/'));
 });
 
 //Theme Sass variables
@@ -105,7 +105,7 @@ gulp.task('compile-sass', function () {
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(postcss(processors))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('../obrisk/static/assets/css/'));
+        .pipe(gulp.dest('../obrisk/static/frontend/assets/css/'));
 });
 
 // Compile Theme Scss
@@ -135,7 +135,7 @@ gulp.task('compile-scss', function () {
         .pipe(sass(sassOptions).on('error', sass.logError))
         .pipe(postcss(processors))
         .pipe(sourcemaps.write())
-        .pipe(gulp.dest('../obrisk/static/assets/css/'));
+        .pipe(gulp.dest('../obrisk/static/frontend/assets/css/'));
 });
 
 
@@ -163,7 +163,7 @@ gulp.task('compile-css', function () {
             nodepath + 'modal-video/css/modal-video.min.css',
         ])
         .pipe(concat('app.css'))
-        .pipe(gulp.dest('../obrisk/static/assets/css/'));
+        .pipe(gulp.dest('../obrisk/static/frontend/assets/css/'));
 });
 
 // Compile js from node modules
@@ -196,19 +196,19 @@ gulp.task('compile-js', function () {
             assetspath + 'js/ggtooltip.js',
         ])
         .pipe(concat('app.js'))
-        .pipe(gulp.dest('../obrisk/static/assets/js/'));
+        .pipe(gulp.dest('../obrisk/static/frontend/assets/js/'));
 });
 
 //Copy Theme js to production site
 gulp.task('copy-js', function () {
     gulp.src(['js/**/*.js', '!js/**/config.js'])
-        .pipe(gulp.dest('../obrisk/static/assets/js/'));
+        .pipe(gulp.dest('../obrisk/static/frontend/assets/js/'));
 });
 
 //Copy images to production site
 // gulp.task('copy-images', function () {
 //     gulp.src('images/**/*')
-//         .pipe(gulp.dest('../obrisk/static/assets/images/'));
+//         .pipe(gulp.dest('../obrisk/static/frontend/assets/images/'));
 // });
 gulp.task('update-sw', function (cb) {
     exec('workbox injectManifest config.js', function (err, stdout, stderr) {

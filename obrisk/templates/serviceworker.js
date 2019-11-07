@@ -12,127 +12,127 @@ workbox.core.skipWaiting();
 
 workbox.precaching.precacheAndRoute([
   {
-    "url": "/static/assets/css/ajax-loader.gif",
+    "url": "/static/frontend/assets/css/ajax-loader.gif",
     "revision": "c5cd7f5300576ab4c88202b42f6ded62"
   },
   {
-    "url": "/static/assets/css/app.css",
+    "url": "/static/frontend/assets/css/app.css",
     "revision": "cdb7eab95e30b95d29bcc178bd96b3fb"
   },
   {
-    "url": "/static/assets/css/bulma.css",
+    "url": "/static/frontend/assets/css/bulma.css",
     "revision": "3d7dbc3e093f3e73074f21ae30f0a771"
   },
   {
-    "url": "/static/assets/css/core.css",
+    "url": "/static/frontend/assets/css/core.css",
     "revision": "c13c2c7ba1c5b008fbca80e550963dbf"
   },
   {
-    "url": "/static/assets/css/materialdesignicons.min.css",
+    "url": "/static/frontend/assets/css/materialdesignicons.min.css",
     "revision": "6c19656af1c9b61a27ddbef91b7495f4"
   },
   {
-    "url": "/static/assets/css/webfont.css",
+    "url": "/static/frontend/assets/css/webfont.css",
     "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
   },
   {
-    "url": "/static/assets/js/app.js",
+    "url": "/static/frontend/assets/js/app.js",
     "revision": "f8118613e701fe8aa40dc43334a2d5b3"
   },
   {
-    "url": "/static/assets/js/autocompletes.js",
+    "url": "/static/frontend/assets/js/autocompletes.js",
     "revision": "a84c9e2e8b09234eebf8b94f4e7a6a88"
   },
   {
-    "url": "/static/assets/js/chat.js",
+    "url": "/static/frontend/assets/js/chat.js",
     "revision": "a3172027f3176521cfe7403431289892"
   },
   {
-    "url": "/static/assets/js/elements.js",
+    "url": "/static/frontend/assets/js/elements.js",
     "revision": "a32f46c2a4b411950b1b891c192b6c10"
   },
   {
-    "url": "/static/assets/js/events.js",
+    "url": "/static/frontend/assets/js/events.js",
     "revision": "24e63a872b5cbf926826ce79c41336b0"
   },
   {
-    "url": "/static/assets/js/explorer.js",
+    "url": "/static/frontend/assets/js/explorer.js",
     "revision": "466d466ed591b9a557fea495ef662ef9"
   },
   {
-    "url": "/static/assets/js/feed.js",
+    "url": "/static/frontend/assets/js/feed.js",
     "revision": "6dd4cb00219f26cdd8fc17e1a9aa02e4"
   },
   {
-    "url": "/static/assets/js/friends.js",
+    "url": "/static/frontend/assets/js/friends.js",
     "revision": "4db6c2e7eff4c21670dde3227df7dbb0"
   },
   {
-    "url": "/static/assets/js/global.js",
+    "url": "/static/frontend/assets/js/global.js",
     "revision": "eb083b6aa4b56e4cdead8d078e34a579"
   },
   {
-    "url": "/static/assets/js/go-live.js",
+    "url": "/static/frontend/assets/js/go-live.js",
     "revision": "bf76b7cd1a32e52388d32c932242b435"
   },
   {
-    "url": "/static/assets/js/inbox.js",
+    "url": "/static/frontend/assets/js/inbox.js",
     "revision": "04068a235862aa45574e287165d94559"
   },
   {
-    "url": "/static/assets/js/landing.js",
+    "url": "/static/frontend/assets/js/landing.js",
     "revision": "1c90809f8d2f444c6d7b47a1576b88a2"
   },
   {
-    "url": "/static/assets/js/lightbox.js",
+    "url": "/static/frontend/assets/js/lightbox.js",
     "revision": "5344d8c46b063ed71fe25c1044e50cd1"
   },
   {
-    "url": "/static/assets/js/main.js",
+    "url": "/static/frontend/assets/js/main.js",
     "revision": "cb0774ba0079311c467ad1da25793cba"
   },
   {
-    "url": "/static/assets/js/modal-uploader.js",
+    "url": "/static/frontend/assets/js/modal-uploader.js",
     "revision": "cd66113247e284c73cb78d462f6fc040"
   },
   {
-    "url": "/static/assets/js/news.js",
+    "url": "/static/frontend/assets/js/news.js",
     "revision": "0044306da774b6bbf76d8f369bb236ac"
   },
   {
-    "url": "/static/assets/js/popovers-pages.js",
+    "url": "/static/frontend/assets/js/popovers-pages.js",
     "revision": "84703e877b88d17bf2bb6febcba204d5"
   },
   {
-    "url": "/static/assets/js/popovers-users.js",
+    "url": "/static/frontend/assets/js/popovers-users.js",
     "revision": "7b103ef98cf014962eb7d08ce3347b61"
   },
   {
-    "url": "/static/assets/js/profile.js",
+    "url": "/static/frontend/assets/js/profile.js",
     "revision": "22232474dae8182c745b52a7df32748d"
   },
   {
-    "url": "/static/assets/js/questions.js",
+    "url": "/static/frontend/assets/js/questions.js",
     "revision": "765dca8c12dd834efd4773c7b204f18e"
   },
   {
-    "url": "/static/assets/js/signup.js",
+    "url": "/static/frontend/assets/js/signup.js",
     "revision": "7760e1216245b3896ef0da25f0a0108b"
   },
   {
-    "url": "/static/assets/js/touch.js",
+    "url": "/static/frontend/assets/js/touch.js",
     "revision": "1140bb01d2a04b048245c5a1036be175"
   },
   {
-    "url": "/static/assets/js/tour.js",
+    "url": "/static/frontend/assets/js/tour.js",
     "revision": "18de6e2130b112c2961f2cfd603f69f6"
   },
   {
-    "url": "/static/assets/js/videos.js",
+    "url": "/static/frontend/assets/js/videos.js",
     "revision": "a1ab8ad0ce3e68f7841518cda5b562a4"
   },
   {
-    "url": "/static/assets/js/widgets.js",
+    "url": "/static/frontend/assets/js/widgets.js",
     "revision": "b8e215360a354e57aa6c753016e03fe0"
   },
   {
