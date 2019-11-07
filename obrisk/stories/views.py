@@ -8,7 +8,8 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView
 from django.core.mail import send_mail
-from django.core import serializers
+from django.shortcuts import get_object_or_404
+import json
 
 from obrisk.utils.images_upload import multipleImagesPersist
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
@@ -57,39 +58,32 @@ class StoriesListView(ListView):
         ).prefetch_related('liked', 'parent', 'user__thumbnail__username').order_by('-priority', '-timestamp')
         
 
-@ajax_required
 @require_http_methods(["GET"])
 def get_story_images(request):
     """A function view return all images of a specific story"""
     story_id = request.GET['story_id']
 
-    images = serializers.serialize('json', StoryImages.objects.filter(
+    images = list( StoryImages.objects.filter(
                         story=story_id,
                     ).values_list('image', flat=True)
                 )
+    
+    return HttpResponse(json.dumps(images), content_type='application/json')
 
-    return HttpResponse(images, content_type='application/json')
 
 
-
-@login_required
 @require_http_methods(["GET"])
 def get_story_likers(request):
-    """A function view return all images of a specific story"""
+    """A function view that returns all people that liked the story"""
     story_id = request.GET['story_id']
 
-    images = serializers.serialize('json', StoryImages.objects.filter(
-                        story=story_id,
-                    ).values_list(
-                        'image_thumb', 'image'
-                    )
-                )
+    story = Stories.objects.get(uuid_id=story_id)
+    users = list(story.liked.all().values_list('username', flat=True))
 
-    return HttpResponse(images, content_type='application/json')
+    return HttpResponse(json.dumps(users), content_type='application/json')
 
 
 
-@login_required
 @ajax_required
 @require_http_methods(["GET"])
 def get_thread(request):
@@ -215,7 +209,6 @@ def post_comment(request):
     else:
         return HttpResponseBadRequest()
 
-@login_required
 @ajax_required
 @require_http_methods(["POST"])
 def update_interactions(request):

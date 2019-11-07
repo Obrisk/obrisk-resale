@@ -193,7 +193,7 @@ $(function () {
 		}
 		else if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();
-			bootbox.alert("Please enter your address!");
+			bootbox.alert("Please enter your city and province!");
 		}
 		else if (!$("input[name='username']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
 			event.preventDefault();
@@ -221,7 +221,7 @@ $(function () {
 
 		if (!$("select[name='city']").val() || !$("select[name='province']")) {
 			event.preventDefault();
-			bootbox.alert("Please enter your address!");
+			bootbox.alert("Please enter your city and province!");
 		}
 		else if (!$("input[name='username']").val() || !$("input[name='email']").val() || !$("input[name='password1']") || !$("input[name='password2']")) {
 			event.preventDefault();
