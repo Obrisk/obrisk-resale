@@ -180,7 +180,7 @@ workbox.precaching.precacheAndRoute([
     "revision": "96370330bb378f42b33670a7df03b9d5"
   },
   {
-    "url": "/static/css/fancybox.css",
+    "url": "/static/css/fancybox.min.css",
     "revision": "6115baf335801b1b85a34c0d48980eab"
   },
   {
