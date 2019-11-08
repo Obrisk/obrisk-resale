@@ -84,9 +84,12 @@
     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
 
 
-
+  //NOTE!!!
+  //This auto-login mechanism is a quick hack around to solve the problem of iOS 11 and weixin browsers
+  //There could be security risks in the future therefore not recommended as permanent fix
+  //All the variables with /stories URL represents the login url where the user will be redirected
+  //after a successful login
   if (mobileUtil.isWeixin || mobileUtil.isIOS) {
-
 
     if (!localStorage.getItem('auth')) {
 
@@ -101,7 +104,8 @@
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function () {
           if (this.readyState == 4 && this.status == 200) {
-            if (this.responseURL && /stories/gi.test(this.responseURL)) {
+            //This condition marks false while things are true
+             (this.responseURL && /stories/gi.test(this.responseURL)) {
               var auth = {
                 username: username,
                 password: pass
@@ -123,11 +127,11 @@
                   else
                     console.log("Storage may be cleared by the UA under storage pressure.");
                 });
-              location.replace('/classifieds')
+              location.replace('/stories')
 
             } else {
               alert('Login failed, please check your username and password!');
-            }
+           }
 
           }
         }
@@ -151,9 +155,9 @@
       ajax.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
           console.log('autologin');
-          if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+          if (this.responseURL && /stories/gi.test(this.responseURL)) {
 
-            location.replace('/classifieds')
+            location.replace('/stories')
 
           } else {
             //try auto login only once
