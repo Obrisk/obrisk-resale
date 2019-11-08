@@ -271,3 +271,12 @@ a:hover {
   }
 
 }
+
+.card.is-post .content-wrap .card-footer .likers-group a {
+  border-radius: 50%;
+  border: 3px solid #fff;
+}
+
+.card.is-post .content-wrap .card-footer .likers-group a:not(:first-child) {
+  margin-left: -12px;
+}
