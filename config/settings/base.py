@@ -129,7 +129,7 @@ AUTH_USER_MODEL = 'users.User'
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
-    #'users.phone_authentication.PhoneAuthBackend',
+    'users.phone_authentication.PhoneAuthBackend',
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
