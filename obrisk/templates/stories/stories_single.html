@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load humanize static %}
-<div class="card is-post is-simple" stories-id="{{ stories.uuid_id }}">
+<div class="card is-post is-simple" data-id="{{ stories.uuid_id }}" stories-id="{{ stories.uuid_id }}">
   <!-- Main wrap -->
   <div class="content-wrap">
     <!-- Header -->
@@ -69,37 +69,33 @@
         <figure class="img1 image is-square">
 
 
-          <a class="" data-fancybox="img1" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img1}}"
-            href="{{oss}}/{{stories.img1}}" data-demo-href="{{oss}}/{{stories.img1}}">
-            <img src="{{oss}}/{{stories.img1}}" data-demo-src="{{oss}}/{{stories.img1}}" alt="">
-          </a>
+
+          <img src="{{oss}}/{{stories.img1}}" data-demo-src="{{oss}}/{{stories.img1}}" alt="">
+
         </figure>
         {%endif%}
         {% if stories.img2%}
         <figure class=" img2 image is-square">
 
-          <a class="" data-fancybox="img2" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img2}}"
-            href="{{oss}}/{{stories.img2}}" data-demo-href="{{oss}}/{{stories.img2}}">
-            <img src="{{oss}}/{{stories.img2}}" data-demo-src="{{oss}}/{{stories.img2}}" alt="">
-          </a>
+
+          <img src="{{oss}}/{{stories.img2}}" data-demo-src="{{oss}}/{{stories.img2}}" alt="">
+
         </figure>
         {%endif%}
         {% if stories.img3 %}
         <figure class="img3 image is-square">
 
-          <a class="" data-fancybox="img3" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img3}}"
-            href="{{oss}}/{{stories.img3}}" data-demo-href="{{oss}}/{{stories.img3}}">
-            <img src="{{oss}}/{{stories.img3}}" data-demo-src="{{oss}}/{{stories.img3}}" alt="">
-          </a>
+
+          <img src="{{oss}}/{{stories.img3}}" data-demo-src="{{oss}}/{{stories.img3}}" alt="">
+
         </figure>
         {%endif%}
         {% if stories.img4 %}
         <figure class="img4 image is-square">
 
-          <a class="" data-fancybox="img4" data-lightbox-type="images" data-thumb="{{oss}}/{{stories.img4}}"
-            href="{{oss}}/{{stories.img4}}" data-demo-href="{{oss}}/{{stories.img4}}">
-            <img src="{{oss}}/{{stories.img4}}" data-demo-src="{{oss}}/{{stories.img4}}" alt="">
-          </a>
+
+          <img src="{{oss}}/{{stories.img4}}" data-demo-src="{{oss}}/{{stories.img4}}" alt="">
+
         </figure>
         {%endif%}
 
