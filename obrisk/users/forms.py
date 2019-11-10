@@ -139,8 +139,9 @@ class CustomLoginForm(LoginForm):
         'account_inactive':
         _("This account is currently inactive."),
 
+        #This error message includes both username or phone number
         'username_password_mismatch':
-        _("The username or password you specified are not correct."),
+        _("The phone number/username or password you specified are not correct."),
 
         'email_password_mismatch':
         _("The e-mail address or password you specified are not correct."),
@@ -151,30 +152,13 @@ class CustomLoginForm(LoginForm):
         self.request = kwargs.pop('request', None)
         super(CustomLoginForm, self).__init__(*args, **kwargs)
         
-        if settings.ACCOUNT_AUTHENTICATION_METHOD == 'email':
-            login_widget = forms.TextInput(attrs={'type': 'email',
-                                                  'placeholder':
-                                                  _('E-mail address'),
-                                                  'autofocus': 'autofocus'})
-            login_field = forms.EmailField(label=_("E-mail"),
-                                           widget=login_widget)
-        elif settings.ACCOUNT_AUTHENTICATION_METHOD \
-                == 'username':
-            login_widget = forms.TextInput(attrs={'placeholder':
-                                                  _('Username'),
-                                                  'autofocus': 'autofocus'})
-            login_field = forms.CharField(
-                label=_("Username"),
-                widget=login_widget,
-                max_length=get_username_max_length())
-        else:
-            assert settings.ACCOUNT_AUTHENTICATION_METHOD \
-                == 'username_email'
-            login_widget = forms.TextInput(attrs={'placeholder':
-                                                    _('Username'),
-                                                    'autofocus': 'autofocus' })
-        
-            login_field = forms.CharField(label="Username", widget=login_widget)
+        assert settings.ACCOUNT_AUTHENTICATION_METHOD \
+            == 'username_email'
+        login_widget = forms.TextInput(attrs={'placeholder':
+                                                _('Phone number or username or email'),
+                                                'autofocus': 'autofocus' })
+    
+        login_field = forms.CharField(label="Phone or username or email", widget=login_widget)
 
         self.fields["login"] = login_field
         set_form_field_order(self, ["login", "password", "remember"])

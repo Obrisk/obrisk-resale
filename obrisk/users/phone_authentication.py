@@ -1,11 +1,24 @@
 from django.contrib.auth import get_user_model
+from django.contrib.auth.backends import ModelBackend
 
-User = get_user_model()
 
-class PhoneAuthBackend(object):
+class PhoneAuthBackend(ModelBackend):
     """
     Authenticate using a phone number.
     """
+    def __init__(self, *args, **kwargs):
+        self.user_model = get_user_model()
+
+    
+    def get_phone_number_data(self, phone):
+        """
+        Method used for filtering query.
+        """
+        data = {
+            'phone_number': phone
+        }
+        return data
+
     def authenticate(self, request, username=None, password=None):
         #This is a forgiving code, allow users to login with country code.
         phone = str(username)
@@ -14,23 +27,18 @@ class PhoneAuthBackend(object):
         if len(phone) == 11 and phone[0] != '1':
             return None
         else:
-            try:
-                #This code only works for Chinese phone numbers.
-                if phone.startswith("+86") == False:
-                    phone = "+86" + phone
-                try:
-                    user = User.objects.get(phone_number=phone)
-                except:
-                    #This is not a right return value on this failure. To improve more in the near future.
-                    return None
+            #This code only works for Chinese phone numbers.
+            if phone.startswith("+86") == False:
+                phone = "+86" + phone
+            
+            user = self.user_model.objects.filter(
+                    **self.get_phone_number_data(phone)
+                ).first()
+            
+            if not user:
+                # Run the default password hasher once to reduce the timing
+                # difference between an existing and a nonexistent user (#20760).
+                self.user_model().set_password(password)
+            else:
                 if user.check_password(password):
                     return user
-                return None
-            except User.DoesNotExist:
-                return None
-
-    def get_user(self, user_id):
-        try:
-            return User.objects.get(pk=user_id)
-        except User.DoesNotExist:
-            return None
