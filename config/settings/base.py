@@ -79,6 +79,7 @@ DJANGO_APPS = [
     'django.contrib.postgres',
 ]
 THIRD_PARTY_APPS = [
+    'obrisk.users.apps.UsersConfig',
     'crispy_forms',
     'sorl.thumbnail',
     'phonenumber_field',
@@ -99,7 +100,6 @@ THIRD_PARTY_APPS = [
     'django_elasticsearch_dsl',
 ]
 LOCAL_APPS = [
-    'obrisk.users.apps.UsersConfig',
     # Your stuff: custom apps go here
     'obrisk.classifieds.apps.ClassifiedsConfig',
     'obrisk.messager.apps.MessagerConfig',
