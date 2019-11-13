@@ -105,7 +105,7 @@
         ajax.onreadystatechange = function () {
           if (this.readyState == 4 && this.status == 200) {
             //This condition marks false while things are true
-             (this.responseURL && /stories/gi.test(this.responseURL)) {
+            if (this.responseURL && /stories/gi.test(this.responseURL)) {
               var auth = {
                 username: username,
                 password: pass
@@ -129,11 +129,12 @@
                 });
               location.replace('/stories')
 
-            } else {
+            }
+             
+          }else {
               alert('Login failed, please check your username and password!');
            }
 
-          }
         }
         ajax.open("POST", "/accounts-authorization/login/");
         ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");

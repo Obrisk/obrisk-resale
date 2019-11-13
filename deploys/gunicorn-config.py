@@ -7,7 +7,7 @@
 #This is to not allow nginx to return timeout so soon
 timeout = 300
 
-#Depending on the number of cpu, also remember uvicorn is running
+#Depending on the number of cpu, also remember uvicorn is running so requests are split
 #This number is for 2 vCPU instance. I have to deploy same instances for easy managing.
 workers = 6
 
