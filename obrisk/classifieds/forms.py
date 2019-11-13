@@ -6,10 +6,15 @@ from phonenumber_field.formfields import PhoneNumberField
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
-    show_phone = forms.BooleanField( widget=forms.HiddenInput(), initial=True) 
-    images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False) #100 for each image.
-    img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) #Store images error for later debugging.
-    address = forms.CharField (required=False, label=("Your address"), help_text='You can easily add your address permanently on your profile settings')
+    show_phone = forms.BooleanField( widget=forms.HiddenInput(), initial=True)
+    #100 for each image.
+    images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False)
+    #Store images error for later debugging.
+    img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) 
+    address = forms.CharField (
+        required=False, 
+        label=("Your address"), help_text='English address is preferred'
+    )
     phone_number = PhoneNumberField(required=False, label=("Phone number"),
                                     widget=forms.TextInput(
                                     attrs={'placeholder': ('Don\'t enter country code'),
@@ -29,7 +34,7 @@ class ClassifiedForm(forms.ModelForm):
 
         help_texts = {
             "title": "Short description of your product",
-            "details": "Please provide enough and detailed information, if you want to sell your product easily and quickly",
+            "details": "Please provide enough and detailed information if you want to sell your product easily and quickly",
         }
 
 class ClassifiedEditForm(forms.ModelForm):

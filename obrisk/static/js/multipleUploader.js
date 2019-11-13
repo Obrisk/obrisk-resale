@@ -26,7 +26,6 @@ $(function() {
   // This sets up every ajax call with proper headers.
   $.ajaxSetup({
     beforeSend: function(xhr, settings) {
-      console.log(csrftoken);
       if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
       }

@@ -195,7 +195,12 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
-        
+
+    #def post():
+        #For now, invalid form doesn't refresh the whole page so images is retained. 
+        #To-do: images of the users must be stored and when form has errors
+        #They must be updated on the front-end to avoid users to re-upload.
+        #self.classified_images = self.request.POST['images']
 
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
@@ -205,10 +210,16 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified = form.save(commit=False)
         classified.user = self.request.user
         
-        if self.request.user.address: 
-            classified.address = self.request.user.address
-        else:
+        if form.cleaned_data['address']:
             classified.address = form.cleaned_data['address']
+        else:
+            classified.address = self.request.user.address
+        
+        if form.cleaned_data['show_phone']:
+            classified.phone_number = self.request.user.phone_number
+        
+        if form.cleaned_data['phone_number']:
+            classified.phone_number = form.cleaned_data['phone_number']
         
         classified.save()
 
@@ -217,7 +228,8 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
         
         if not images_json:
-            #For security Images must be there even if there is an error
+            #The front-end will add the default images in case of errors 
+            #Empty images_json means this form bypassed our front-end upload.
             return self.form_invalid(form)
 
         # split one long string of images into a list of string each for one JSON obj

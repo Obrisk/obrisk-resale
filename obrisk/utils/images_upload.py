@@ -157,6 +157,7 @@ def multipleImagesPersist(request, images_list, app, obj):
     It returns True if the images where saved to the db and False if there is a validation problem '''
 
     #The code from here onwards assume the first element of images list is undefined.
+    #This variable will be used in the end of this code.
     tot_img_objs = len(images_list)
 
     if tot_img_objs < 2:
@@ -164,83 +165,80 @@ def multipleImagesPersist(request, images_list, app, obj):
             or you've done something wrong.")
         obj.delete()
         return False
-    else:
-        if (images_list[1] == None or images_list[1].startswith(f'{app}/{request.user.username}') == False):
-            messages.error(request, "Sorry, the image(s) were not uploaded successfully. \
-                Please add the images again and submit the form!")
-            obj.delete()
-            return False 
+
+    #from here if you return form invalid then you have to prior delete the obj, obj.delete()
+    #The current implementation will sucessfully create obj even when there are error on images
+    #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
+    #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
+    for index, str_result in enumerate(images_list):
+        if index == 0:
+            continue
+
+        if str_result.startswith(f'{app}/{request.user.username}') == False:
+            #Check if it was default image as it has no username.
+            #This is the same default on all multiple upload apps
+            #Though stories shouldn't have this, form shouldn't be submitted without images
+            if (images_list[index] != 'classifieds/error-img.jpg'):
+                messages.error(request, "Sorry, the image(s) were not uploaded successfully. \
+                    Please add the images again and submit the form!")
+                obj.delete()
+                return False 
         
+        d = str(datetime.datetime.now())
+
+        if app == 'classifieds':
+            img_obj = ClassifiedImages(classified=obj, image=str_result)
+            thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
+                    slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+            style = 'image/resize,m_fill,h_156,w_156'
+
+        elif app == 'stories':
+            #The image here is full url to the OSS bucket because of how it is consumed in the front-end
+            img_obj = StoryImages(
+                    story=obj, 
+                    image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
+                )
+            thumb_name = "stories/" + slugify(str(obj.user)) + "/" + "/thumbnails/" + d + str(index)
+            style = 'image/resize,m_fill,h_456,w_456'
+
         else:
-            #from here if you return form invalid then you have to prior delete the obj, obj.delete()
-            #The current implementation will sucessfully create obj even when there are error on images
-            #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
-            #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
-     
-            for index, str_result in enumerate(images_list):
-                if index == 0:
-                    continue
+            return False
 
-                if str_result.startswith(f'{app}/{request.user.username}') == False:
-                    messages.error(request, "Hello! It looks like some of the image(s) you uploaded, \
-                        are corrupted, or you've done something wrong. Please edit your post, \
-                        and upload the images again.")
-                    obj.delete()
-                    return False 
+        try:
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                            oss2.compat.to_bytes(thumb_name))),
+                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            bucket.process_object(str_result, process)
+        
+        except oss2.exceptions.OssError as e:
+            #Most likely this is our problem so save the image without the thumbnail:
+            if index+1 == tot_img_objs:
+                #To-do:
+                #Take this image object to background task (celery) and retry to generate thumbnail
+                messages.error(request, f"Oops, we are having difficulty processing your image(s), \
+                    check your post if everything is fine. \
+                    status= f{e.status}, requestID= f{e.request_id}")
                 
-                else:
-                    d = str(datetime.datetime.now())
+            img_obj.image_thumb = str_result 
+            img_obj.save()
+            continue   
 
-                    if app == 'classifieds':
-                        img_obj = ClassifiedImages(classified=obj, image=str_result)
-                        thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
-                                slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
-                        style = 'image/resize,m_fill,h_156,w_156'
-
-                    elif app == 'stories':
-                        #The image here is full url to the OSS bucket because of how it is consumed in the front-end
-                        #Note it has to be not more that 300 string.
-                        img_obj = StoryImages(
-                                story=obj, 
-                                image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
-                            )
-                        thumb_name = "stories/" + slugify(str(obj.user)) + "/" + "/thumbnails/" + d + str(index)
-                        style = 'image/resize,m_fill,h_456,w_456'
-
-                    else:
-                        return False
-
-                    try:
-                        process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                                    oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                        oss2.compat.to_bytes(thumb_name))),
-                                                                    oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                        bucket.process_object(str_result, process)
-                    
-                    except oss2.exceptions.OssError as e:
-                        #Most likely this is our problem so save the image without the thumbnail:
-                        if index+1 == tot_img_objs:
-                            messages.error(request, f"Oops we are sorry, some of your image(s), \
-                                were not uploaded successfully. Please edit your item to add images. \
-                                status= f{e.status}, requestID= f{e.request_id}")
+        except Exception:
+            #If there is a problem with the thumbnail generation, most likely our code is wrong... 
+            if index+1 == tot_img_objs:
+                #To-do 
+                #Pass the image object to background task and verify if image exist
+                #and retry thumbnail creation
+                messages.error(request, "Oops! sorry, some of your image(s), \
+                    were not uploaded successfully. Please retry to upload your images.")
                 
-                            img_obj.save()
-                            return True
-                        else:
-                            img_obj.save()
-                            continue   
+            img_obj.image_thumb = str_result 
+            img_obj.save()
+            continue   
 
-                    except Exception as e:
-                        #If there is a problem with the thumbnail generation, don't save the image just save the tags.
-                        if index+1 == tot_img_objs:
-                            messages.error(request, "Oops we are sorry, some of your image(s), \
-                                were not uploaded successfully. Please edit your item to add images.")
-                            return True 
-                        
-                        else:
-                            continue   
-                    else:
-                        img_obj.image_thumb = thumb_name
-                        img_obj.save()
+        else:
+            img_obj.image_thumb = thumb_name
+            img_obj.save()
 
-            return True
+    return True

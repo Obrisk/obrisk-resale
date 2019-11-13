@@ -66,8 +66,13 @@
                     {{ classified.user.get_profile_name|title }} </strong>
                 </a>
                 <div class="location">
-                  <small class="card-subtitle mb-2">📍</small><span class="card-subtitle mb-2">
-                    {{ classified.address }}, {{ classified.city }}</span>
+                  <small class="card-subtitle mb-2">📍</small>
+                  <span class="card-subtitle mb-2">
+                  {% if classified.address  %}
+                      {{ classified.address }}, {{ classified.city }}
+                  {% else %}
+                      {{ classified.user.city }}
+                  {% endif %}  </span>
                 </div>
                 <!-- Date/Time -->
                 <div class="time mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>

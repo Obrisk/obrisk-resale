@@ -12,7 +12,7 @@
 {% endblock head %}
 
 {% block content %}
-<div class="col-lg-8 ml-auto mr-auto mt-5 mb-5">
+<div id="classified-form-div" class="col-lg-8 ml-auto mr-auto mt-5 mb-5">
   {% if form.errors %}
   <div class="alert alert-error">
     <strong>Your form is having invalid input(s) on {% for fld in form.errors%} {{ fld }} {% endfor %} </strong>
