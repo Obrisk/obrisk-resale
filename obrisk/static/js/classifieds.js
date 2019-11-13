@@ -2,10 +2,7 @@
 
 $( function(){
     $("body").on("uploadComplete", function(event) {
-        if (!images) {
-            event.preventDefault();
-            bootbox.alert("Please upload at least one image for your post!");
-        } else {
+       //Todo check if images where uploaded or empty
             $("input[name='status']").val("A");
             $("#id_images").val(images);
             $("#id_img_error").val(img_error);
@@ -18,7 +15,7 @@ $( function(){
               success: function(data) {
                 if (data.readyState == 4 && (data.status == 302 || data.status == 301))  {
                    //This doesn't redirect smoothly 
-                    window.location.href = "/classifieds";
+                    window.location.replace("/classifieds");
                 } else {
                     //At this point check if the images variable exists and 
                     //update the thumbnail holder to show the previous uploaded images.
@@ -31,6 +28,6 @@ $( function(){
                 bootbox.alert(data.responseText);
               }
           });
-        }
+        
       });
 });

@@ -252,3 +252,7 @@ nav {
 .chat {
     grid-area: 1 / 4 / 2 / 5;
 }
+
+.nav-label {
+    margin-top:-8px ;
+}

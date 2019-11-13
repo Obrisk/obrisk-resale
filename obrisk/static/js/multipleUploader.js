@@ -466,8 +466,10 @@ var $wrap = $("#uploader"),
   $totalProgressbar = $("#totalProgressBar");
 
 var progress = function(p) {
-  if(p ==1 )
+  if(p ==1 ){
     $("body").trigger("uploadComplete");
+  }
+    
   
   return function(done) {
     $totalProgressbar.css("width", progressBar);

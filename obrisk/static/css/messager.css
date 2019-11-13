@@ -446,3 +446,8 @@ h5 {
 .classified-card {
    background: #c3def3;
 }
+body{
+  height: 100%!important;
+  width: 100%!important;
+  overflow: hidden;
+}
