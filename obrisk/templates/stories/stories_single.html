@@ -108,8 +108,9 @@
 
 
       <!-- Post actions -->
-      <div class="post-actions">
-        <div class="like-wrapper">
+      <div class="d-flex justify-content-between post-actions">
+        <div class="align-items-center d-flex like-wrapper">
+
           {% if request.user in stories.get_likers %}
           <a href="javascript:void(0);" class="like-button is-active">
             <i class="mdi mdi-heart not-liked bouncy"></i>
@@ -124,10 +125,13 @@
           </a>
           {% endif %}
 
-        </div>
 
-        <div class="fab-wrapper is-comment">
-          <a href="javascript:void(0);" class="small-fab">
+          <small class="likes-count ml-2">
+            <span class="count">{{ stories.likes_count }}</span> <span class="m-0">Liked</span>
+          </small></div>
+
+        <div class="align-items-center d-flex fab-wrapper is-comment">
+          <a href="javascript:void(0);" class="small-fab comment-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
               class="feather feather-message-circle">
@@ -136,13 +140,17 @@
               </path>
             </svg>
           </a>
-        </div>
+          <small class="comments-count">
+            <span class="count ml-2">{{ stories.thread_count }}</span>
+            <span class="m-0">Comments</span>
+          </small></div>
       </div>
+
       <!-- /Post actions  -->
     </div>
     <!-- /Post body -->
     <!-- Post footer -->
-    <div class="card-footer">
+    <div class="card-footer justify-content-end">
       <!-- Followers -->
       {% if stories.get_likers %}
       <div class="likers-group">
@@ -164,17 +172,6 @@
         <p>Be the first to like</p>
       </div>
       {% endif %}
-      <!-- Post statistics -->
-      <div class="social-count flex-column flex-sm-row">
-
-        <div class="likes-count">
-          <span class="count">{{ stories.likes_count }} </span> <span class="m-0">Liked</span>
-        </div>
-        <div class="comments-count">
-          <span class="count">{{ stories.thread_count }}</span>
-          <span class="m-0">Comments</span>
-        </div>
-      </div>
     </div>
     <!-- /Post footer -->
   </div>

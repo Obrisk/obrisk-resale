@@ -2,6 +2,9 @@
   margin: 2em 0 0 0;
   padding: 0;
 }
+.like-wrapper .like-button{
+  background: #e9bdbd;
+}
 
 .stream li {
   list-style: none;
@@ -279,4 +282,14 @@ a:hover {
 
 .card.is-post .content-wrap .card-footer .likers-group a:not(:first-child) {
   margin-left: -12px;
+}
+
+.card.is-post .content-wrap .post-actions .like-wrapper .like-button {
+  width: 28px;
+  height: 28px;
+}
+
+.card.is-post .content-wrap .post-actions .fab-wrapper .small-fab {
+  width: 28px;
+  height: 28px;
 }

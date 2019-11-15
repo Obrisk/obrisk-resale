@@ -100,3 +100,8 @@
 .toggle-on.btn  {
     padding-left: 0 !important;
 }
+body{
+    height: 100%!important;
+    width: 100%!important;
+    overflow: hidden;
+}
