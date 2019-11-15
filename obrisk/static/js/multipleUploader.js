@@ -54,7 +54,7 @@ var Buffer = OSS.Buffer;
 var STS = OSS.STS;
 var FileMaxSize = 13000000;
 var TotalFilesMaxSize = 8;
-var images;
+var images = "";
 var img_error; //Records the errors happened during upload.
 var client;
 var imgClient; //If we'll  be checking the file size.
@@ -242,18 +242,22 @@ OssUpload.prototype = {
                           uploader.fileStats.curFileSize /
                           uploader.fileStats.totalFilesSize
                         ).toFixed(2) * 100;
-                      progressBar =
-                        (
+                      progressBar = (
                           uploader.fileStats.curFileSize /
                           uploader.fileStats.totalFilesSize
-                        ).toFixed(2) *
-                          100 +
-                        "%";
-                      images += "," + res.name;
+                        ).toFixed(2) * 100 + "%";
+
+                      if (images == '') {
+                          images += res.name;
+                      }else {
+                          images += "," + res.name;
+                      }
                       if (progressBarNum == 100) {
                         $totalProgressbar
                           .css("width", progressBar)
                           .html("Upload complete");
+
+                          $("body").trigger("uploadComplete");
                        
                       } else {
                         $totalProgressbar
@@ -310,10 +314,10 @@ OssUpload.prototype = {
                         $("#retry-button").removeClass("is-hidden");
 
                         if (!images) {
-                          images = "undef,classifieds/error-img.jpg";
+                          images = "classifieds/error-img.jpg";
                           bootbox.alert(
                             "Oops! an error occured when uploading your image(s). \
-                                                But you can submit this stories without images ."
+                                                But you can submit this post without images ."
                           );
                         }
                       }
@@ -353,10 +357,10 @@ OssUpload.prototype = {
                         err.requestId;
                       $("#retry-button").removeClass("is-hidden");
                       if (!images) {
-                        images = "undef,classifieds/error-img.jpg";
+                        images = "classifieds/error-img.jpg";
                         bootbox.alert(
                           "Oops! an error occured when uploading your image(s). \
-                                            But you can submit this stories without images ."
+                                            But you can submit this post without images ."
                         );
                       }
                     }
@@ -375,10 +379,10 @@ OssUpload.prototype = {
                       err.requestId;
                     $("#retry-button").removeClass("is-hidden");
                     if (!images) {
-                      images = "undef,classifieds/error-img.jpg";
+                      images = "classifieds/error-img.jpg";
                       bootbox.alert(
                         "Oops! an error occured when uploading your image(s). \
-                                            But you can submit this stories without images ."
+                                            But you can submit this post without images ."
                       );
                     }
                   }
@@ -466,11 +470,7 @@ var $wrap = $("#uploader"),
   $totalProgressbar = $("#totalProgressBar");
 
 var progress = function(p) {
-  if(p ==1 ){
-    $("body").trigger("uploadComplete");
-  }
-    
-  
+  //console.log(p)    
   return function(done) {
     $totalProgressbar.css("width", progressBar);
     done();
@@ -540,7 +540,7 @@ function genKey() {
         })
         );
     }
-  }else if ( app === "classifieds" ){
+  }else if ( app == "classifieds" ){
     return "classifieds/" + user + '/' + slugify($('#id_title').val()) +
     '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
         var r = Math.random() * 16 | 0,

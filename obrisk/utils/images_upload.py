@@ -125,7 +125,7 @@ def get_oss_auth(request):
         #for debugging on the logs
         print("WARNING: OSS STS initialization was not successful, please consider redesigning the infastructure!")
         #This is very bad, but we'll do it until we move the servers to China.
-        #No one will try to hunt our code in this beginning.
+        #Send the alert email to developers (via celery) instead of logging.
         key_id = str(access_key_id)
         scrt = str(access_key_secret)
         data = {
@@ -160,9 +160,7 @@ def multipleImagesPersist(request, images_list, app, obj):
     #This variable will be used in the end of this code.
     tot_img_objs = len(images_list)
 
-    if tot_img_objs < 2:
-        messages.error(request, "Sorry, it looks like the image(s) was not uploaded successfully. \
-            or you've done something wrong.")
+    if tot_img_objs < 1:
         obj.delete()
         return False
 
@@ -171,16 +169,11 @@ def multipleImagesPersist(request, images_list, app, obj):
     #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
     #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
     for index, str_result in enumerate(images_list):
-        if index == 0:
-            continue
-
         if str_result.startswith(f'{app}/{request.user.username}') == False:
             #Check if it was default image as it has no username.
             #This is the same default on all multiple upload apps
             #Though stories shouldn't have this, form shouldn't be submitted without images
-            if (images_list[index] != 'classifieds/error-img.jpg'):
-                messages.error(request, "Sorry, the image(s) were not uploaded successfully. \
-                    Please add the images again and submit the form!")
+            if (str_result != 'classifieds/error-img.jpg'):
                 obj.delete()
                 return False 
         
@@ -198,7 +191,7 @@ def multipleImagesPersist(request, images_list, app, obj):
                     story=obj, 
                     image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
                 )
-            thumb_name = "stories/" + slugify(str(obj.user)) + "/" + "/thumbnails/" + d + str(index)
+            thumb_name = "stories/" + slugify(str(obj.user)) + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_456,w_456'
 
         else:
@@ -216,7 +209,8 @@ def multipleImagesPersist(request, images_list, app, obj):
             if index+1 == tot_img_objs:
                 #To-do:
                 #Take this image object to background task (celery) and retry to generate thumbnail
-                messages.error(request, f"Oops, we are having difficulty processing your image(s), \
+                #Send alert email to the developers
+                messages.error(request, f"We are having difficulty processing your image(s), \
                     check your post if everything is fine. \
                     status= f{e.status}, requestID= f{e.request_id}")
                 
@@ -230,8 +224,9 @@ def multipleImagesPersist(request, images_list, app, obj):
                 #To-do 
                 #Pass the image object to background task and verify if image exist
                 #and retry thumbnail creation
-                messages.error(request, "Oops! sorry, some of your image(s), \
-                    were not uploaded successfully. Please retry to upload your images.")
+                #Send email to the developers
+                messages.error(request, f"We are having difficulty processing your image(s), \
+                    check your post if everything is fine.")
                 
             img_obj.image_thumb = str_result 
             img_obj.save()

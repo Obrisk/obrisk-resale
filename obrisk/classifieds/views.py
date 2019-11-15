@@ -196,54 +196,86 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         self.object = None
         super().__init__(**kwargs)
 
-    #def post():
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        form = self.get_form()
         #For now, invalid form doesn't refresh the whole page so images is retained. 
         #To-do: images of the users must be stored and when form has errors
         #They must be updated on the front-end to avoid users to re-upload.
-        #self.classified_images = self.request.POST['images']
-
+        #self.classified_images = form['images']
+        #self.redo_upload = False
+        #In the front-end if redo_upload = False, don't trigger upload when submit btn 
+        #is clicked. Just submit the form.
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+ 
+    def form_invalid(self, form, data=None):
+        '''Render the invalid form messages as json responses
+        instead of html form. '''
+        if data:
+            if data['status'] == '400':
+                return JsonResponse(data) 
+        if form.errors:
+            data = {
+                'status': '400',
+                'error_message': f'Your form is having invalid inputs on {form.errors}. Please try again'
+            }
+        else:
+            data = {
+                'status': '400',
+                'error_message': 'We are having trouble to process your post, please try again later' 
+            }
+        return JsonResponse(data)
+     
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
         img_errors = form.cleaned_data['img_error']
 
+        failure_data = {
+            'status': '400',
+            'error_message': 'Sorry, the image(s) were not successful uploaded, please try again'
+        }
+        if not images_json:
+            #The front-end will add the default images in case of errors 
+            #Empty images_json means this form bypassed our front-end upload.
+            return self.form_invalid(form, data=failure_data)
+        
+        if img_errors:
+            #Send this email in a celery task to improve performance
+            send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
+        
         form.instance.user = self.request.user
         classified = form.save(commit=False)
         classified.user = self.request.user
         
-        if form.cleaned_data['address']:
-            classified.address = form.cleaned_data['address']
-        else:
+        if not classified.phone_number and classified.user.phone_number:
+            classified.phone_number = classified.user.phone_number
+        
+        if not classified.address and classified.user.address:
             classified.address = self.request.user.address
         
-        if form.cleaned_data['show_phone']:
-            classified.phone_number = self.request.user.phone_number
-        
-        if form.cleaned_data['phone_number']:
-            classified.phone_number = form.cleaned_data['phone_number']
-        
         classified.save()
-
-        if img_errors:
-            #In the near future, send a message like sentry to our mailbox to notify about the error!
-            send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
         
-        if not images_json:
-            #The front-end will add the default images in case of errors 
-            #Empty images_json means this form bypassed our front-end upload.
-            return self.form_invalid(form)
-
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
-
         if multipleImagesPersist(self.request, images_list, 'classifieds', classified):    
-            return super(CreateClassifiedView, self).form_valid(form)
+            messages.success(self.request, self.message)
+            data = {
+                'status': '200',
+                'success_message': 'Successfully created a new classified post'
+            }
+            return JsonResponse(data)
         else:
-            return self.form_invalid(form)
+            form = ClassifiedForm()
+            return self.form_invalid(form,data=failure_data)
 
-    def get_success_url(self):
-        messages.success(self.request, self.message)
-        return reverse('classifieds:list')
-
+    #def get_success_url(self):
+        #This method is never called
 
 @method_decorator(login_required, name='dispatch')
 class TagsAutoComplete(autocomplete.Select2QuerySetView):
