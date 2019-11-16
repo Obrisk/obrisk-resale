@@ -90,10 +90,7 @@
   //All the variables with /stories URL represents the login url where the user will be redirected
   //after a successful login
   if (mobileUtil.isWeixin || mobileUtil.isIOS) {
-
     if (!localStorage.getItem('auth')) {
-
-
       //When user click on login save the auth details only after successfull ajax login then redirect
       //else allow user to retry login
       $('.login100-form-btn').click(function (event) {
@@ -130,12 +127,12 @@
               location.replace('/stories')
 
             }
-             
-          }else {
-              alert('Login failed, please check your username and password!');
-           }
-
+            else {
+                alert('Auto login is failing, please verify your inputs');
+              }           
+          }
         }
+
         ajax.open("POST", "/accounts-authorization/login/");
         ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
@@ -144,7 +141,6 @@
 
     }
     else {
-
 
       var dialog = bootbox.dialog({
         message: '<p class="text-center mb-0"><i class="fa fa-spin fa-cog"></i> Autologin</p>',
@@ -177,5 +173,4 @@
   }
 
 </script>
-
 {% endblock content %}
