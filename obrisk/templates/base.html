@@ -256,7 +256,8 @@
             </a>
           </li>
           <li class="posts {% if base_active == 'posts' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'posts:list' %}"><span class="nav-icons">
+            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'posts:list' %}"><span
+                class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-book-open">
@@ -533,7 +534,8 @@
             </a>
           </li>
           <li class="{% if base_active == 'posts' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'posts:list' %}"><span class="nav-icons">
+            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'posts:list' %}"><span
+                class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-book-open">
@@ -715,14 +717,16 @@
     {% endif %}
   </div>
 
-  <div class="container mt-4 pt-2 pb-4">
+  <div class="mt-4 pt-2 pb-4">
     <!-- These messages are not from chat, they are the notifications 
     upon successful POST request on the chat the message context is message_list -->
     {% if messages %}
     {% for message in messages %}
-    <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-      <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-      {{ message }}
+    <div class="container">
+      <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} mt-lg-2">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {{ message }}
+      </div>
     </div>
     {% endfor %}
     {% endif %}

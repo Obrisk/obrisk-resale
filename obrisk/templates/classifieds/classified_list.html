@@ -11,98 +11,93 @@
 {% endblock head %}
 
 {% block content %}
+<div class="view-wrapper">
+  <!-- Container -->
+  <div id="main-feed" class="container">
+    <div id="" class="view-wrap true-dom">
+      <div class="columns">
 
-<!-- Page Content -->
-<div class="sidebar-overlay is-hidden"></div>
-<div class="mt-5 p-0 mw-100 w-95">
+        <!-- Left side column -->
+        <div class="column is-3 is-hidden-mobile" style="height: 500px;position: sticky;top: 0px;">
+          <!-- Sidebar Widgets Column -->
+          <!-- Cloud Tag Widget -->
+          <div class="card is-weather-card position-fixed" style="width: 300px;">
+            <div class="card-heading">
+              <h5 class="has-text-weight-medium	 has-text-white	">{% trans 'Popular tags' %}</h5>
 
-  <!-- <div class="justify-content-center mt-5 mr-0">
-    <div class="justify-content-end ml-auto d-flex flex-row">
-    <form class="form-inline navbar-left" role="search" action="{% url 'classifieds:classifieds_results' %}">
-      <div class="input-group">
-        <input name="query" type="search" id="searchInput" class="form-control" aria-label="Search">
-        <div class="input-group-append">
-          <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+            </div>
+            <div class="card-body">
+
+
+              <div class="previsions">
+                {% for tag, count in popular_tags %}
+                <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="tag is-white">{{ count }}
+                    {{ tag }}</span></a>
+                {% endfor %}
+
+              </div>
+
+            </div>
+          </div>
         </div>
+        <!-- /Left side column -->
+
+        <!-- Middle column -->
+        <div class="column is-9">
+
+          <div class="d-flex flex-end mb-4" style="justify-content: flex-end;">
+
+            <!-- <div class="justify-content-center mt-5 mr-0">
+            <div class="justify-content-end ml-auto d-flex flex-row">
+            <form class="form-inline navbar-left" role="search" action="/classifieds/classifieds-search-results/">
+              <div class="input-group">
+                <input name="query" type="search" id="searchInput" class="form-control" aria-label="Search">
+                <div class="input-group-append">
+                  <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
+                </div>
+              </div>
+            </form>
+            </div>
+        
+            <div class="d-flex justify-content-center h-100">
+        
+            </div> -->
+
+
+            <!-- Write Classified Widget -->
+
+            <a class="btn btn-dark align-self-center" href="/classifieds/write-new-classified/"
+              title="Write a new classified">➕Add new item</a>
+
+          </div>
+          <div id="classifieds" class="p-0 row justify-content-center justify-content-lg-start">
+            {% include "classifieds/classified_list_ajax.html" %}
+
+          </div>
+          <div class="loading classified-card m-auto d-none">
+            <div class="stage">
+              <div class="dot-pulse"></div>
+            </div>
+          </div>
+
+
+        </div>
+
       </div>
-    </form>
-    </div>
+      <!-- /Middle column -->
 
-    <div class="d-flex justify-content-center h-100">
-
-    </div> -->
-
-
-  <!-- Write Classified Widget -->
-  {% comment %}
-  
-  <div class="justify-content-between justify-content-lg-end ml-auto d-flex mt-3 mb-5">
-    <div class="toggle-tags d-lg-none">
-      <div class="d-flex flex-column align-items-center" id="sidebarBtnOpen">
-        <span><i class="fa fa-hashtag mb-1"></i></span> <br>
+      <!-- official ads for pc sized-->
+      {% if official_ads %}
+      <div class="right-sidebar d-none d-lg-block">
+        {% include 'classifieds/ads.html' %}
       </div>
-    </div>
+      {% endif %}
 
-  {% endcomment %}
-    <a class="btn btn-dark align-self-center" href="{% url 'classifieds:write_new' %}"
-      title="{% trans 'Write a new classified' %}">➕{% trans 'Add new item' %}</a>
-
-  </div>
-
-</div>
-<!-- <div
-    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-md-9 ml-auto  mr-auto">
-
-  </div> -->
-
-<!-- Sidebar Widgets Column -->
-<div id="sidebar" class="sidebar mr-4">
-  <!-- Cloud Tag Widget -->
-  <div class="card">
-    <div class="card-header d-flex justify-content-between">
-      <h5>{% trans 'Popular tags' %}</h5>
-      <span class="d-sm-block d-md-none" id="sidebarBtnClose"> <i class="fa fa-times pull-right" aria-hidden="true">
-        </i> </span>
-    </div>
-
-    <div class="card-body" style="overflow:auto;max-height:400px">
-      {% for tag, count in popular_tags %}
-      <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="badge badge-info">{{ count }}
-          {{ tag }}</span></a>
-      {% endfor %}
     </div>
   </div>
 </div>
 
 
-<!-- official ads for pc sized-->
-{% if official_ads %}
-<div class="right-sidebar d-none d-lg-block">
-  {% include 'classifieds/ads.html' %}
-</div>
-{% endif %}
-
-<div class="classifieds-container row">
-  <div id="classifieds"
-    class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
-    {% include "classifieds/classified_list_ajax.html" %}
-
-  </div>
-  <div class="loading classified-card m-auto d-none">
-    <div class="stage">
-      <div class="dot-pulse"></div>
-    </div>
-  </div>
-  <!-- End div for row of all classified ads-->
-</div>
-
-</div>
-
-
-
-<!-- /.row -->
-</div>
-<!-- /.container -->
 
 
 {% endblock content %}
@@ -332,6 +327,5 @@
     color: "white"
 
   });
-
 </script>
 {% endblock extra_js %}
