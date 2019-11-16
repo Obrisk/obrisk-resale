@@ -293,3 +293,7 @@ a:hover {
   width: 28px;
   height: 28px;
 }
+.like-overlay {
+  width: 100%!important;
+  height: 100%!important;
+}
