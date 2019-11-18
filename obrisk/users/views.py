@@ -27,6 +27,7 @@ import datetime
 import oss2
 import ast
 import json
+import boto3
 
 from allauth.account.views import SignupView, LoginView, PasswordResetView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView
 from allauth.account.forms import  UserTokenForm
