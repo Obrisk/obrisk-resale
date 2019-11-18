@@ -18,7 +18,7 @@
       <div class="columns">
 
         <!-- Left side column -->
-        <div class="column is-3 is-hidden-mobile is-hidden-tablet-only"
+        <div class="column is-3 is-hidden-mobile is-hidden-desktop-only"
           style="height: 500px;position: sticky;top: 0px;">
           <!-- Sidebar Widgets Column -->
           <!-- Cloud Tag Widget -->
@@ -30,7 +30,7 @@
             <div class="card-body">
 
 
-              <div class="previsions">
+              <div class="previsions d-block">
                 {% for tag, count in popular_tags %}
                 <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="tag is-white">{{ count }}
                     {{ tag }}</span></a>
@@ -44,7 +44,7 @@
         <!-- /Left side column -->
 
         <!-- Middle column -->
-        <div class="column is-9-desktop">
+        <div class="column is-9-fullhd">
 
           <div class="d-flex flex-end mb-4" style="justify-content: flex-end;">
 
