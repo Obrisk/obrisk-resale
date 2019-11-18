@@ -272,18 +272,18 @@ $(document).ready(function () {
         };
 
         //Init Emojis
-        $.fn.initEmojis = function () {
-            $(".comment-textarea").emojioneArea({
-                pickerPosition: "bottom",
-                filtersPosition: "top",
-                tones: false,
-                autocomplete: false,
-                inline: false,
-                hidePickerOnBlur: true,
-                buttonTitle: "Use the TAB key to insert emoji faster",
-                //container: $(".emoji-picker")
-            });
-        };
+        // $.fn.initEmojis = function () {
+        //     $(".comment-textarea").emojioneArea({
+        //         pickerPosition: "bottom",
+        //         filtersPosition: "top",
+        //         tones: false,
+        //         autocomplete: false,
+        //         inline: false,
+        //         hidePickerOnBlur: true,
+        //         buttonTitle: "Use the TAB key to insert emoji faster",
+        //         //container: $(".emoji-picker")
+        //     });
+        // };
 
         //Load more buttons
         $.fn.initLoadMore = function () {
