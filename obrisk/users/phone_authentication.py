@@ -22,14 +22,14 @@ class PhoneAuthBackend(ModelBackend):
     def authenticate(self, request, username=None, password=None):
         #This is a forgiving code, allow users to login with country code.
         phone = str(username)
-        if phone.isalpha() and phone.startswith("+86") == False:
-            return None
-        if len(phone) == 11 and phone[0] != '1':
-            return None
-        else:
+        print(phone.isalpha())
+        if phone.startswith("+86"):
+            phone = phone.strip('+86')
+        
+        
+        if phone.isdigit() and len(phone) == 11 and phone[0] == '1':
             #This code only works for Chinese phone numbers.
-            if phone.startswith("+86") == False:
-                phone = "+86" + phone
+            phone = "+86" + phone
             
             user = self.user_model.objects.filter(
                     **self.get_phone_number_data(phone)

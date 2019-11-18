@@ -18,8 +18,10 @@ Main feed styles
 ========================================================================== */
 
 .card {
+
     //Compose Card modifier
     &.is-new-content {
+
         //Tabs
         .tabs-wrapper {
             border-radius: 6px;
@@ -252,6 +254,7 @@ Main feed styles
 
             //Channels
             .target-channels {
+
                 //Single Channel
                 .channel {
                     display: flex;
@@ -519,7 +522,8 @@ Main feed styles
             }
         }
 
-        .card-heading, .card-body {
+        .card-heading,
+        .card-body {
             padding: 16px 16px 0 16px;
         }
 
@@ -542,7 +546,8 @@ Main feed styles
                 border-radius: 50%;
             }
 
-            a, .time {
+            a,
+            .time {
                 display: block;
             }
 
@@ -579,6 +584,7 @@ Main feed styles
 
         //Card content
         .content-wrap {
+
             //Text
             .post-text {
                 p {
@@ -823,7 +829,7 @@ Main feed styles
 
                 //Link image
                 .link-image {
-                    > img {
+                    >img {
                         display: block;
                         height: 130px;
                         width: 180px;
@@ -956,7 +962,6 @@ Main feed styles
                         height: 32px;
                         width: 32px;
                         border-radius: 50%;
-                        border: 3px solid $white;
 
                         &:not(:first-child) {
                             margin-left: -12px;
@@ -1003,7 +1008,9 @@ Main feed styles
                     display: flex;
                     align-items: stretch;
 
-                    .shares-count, .comments-count, .likes-count {
+                    .shares-count,
+                    .comments-count,
+                    .likes-count {
                         display: flex;
                         justify-content: flex-start;
                         align-items: center;
@@ -1028,6 +1035,7 @@ Main feed styles
 
         //Comments wrapper
         .comments-wrap {
+
             //Header
             .comments-heading {
                 display: flex;
@@ -1173,7 +1181,8 @@ Main feed styles
                             }
 
                             //Reply
-                            .reply, .edit {
+                            .reply,
+                            .edit {
                                 margin: 0 5px;
 
                                 a {
@@ -1255,7 +1264,8 @@ Main feed styles
                         cursor: pointer;
                         transition: background .3s;
 
-                        &:active, &:focus {
+                        &:active,
+                        &:focus {
                             outline: none;
                         }
 
@@ -1368,8 +1378,10 @@ Main feed styles
 
     //Left side and right side widgets
     .card-body {
+
         //Recommended page
-        .page-block, .add-friend-block {
+        .page-block,
+        .add-friend-block {
             display: flex;
             justify-content: flex-start;
             align-items: center;
@@ -1409,7 +1421,8 @@ Main feed styles
             }
 
             //Add button
-            .add-page, .add-friend {
+            .add-page,
+            .add-friend {
                 display: flex;
                 justify-content: center;
                 align-items: center;
@@ -1542,7 +1555,7 @@ Main feed styles
     }
 
     //Tagged friends
-    .tagged-friend + span small {
+    .tagged-friend+span small {
         display: none !important;
     }
 
@@ -1619,7 +1632,8 @@ Main feed styles
     justify-content: center;
 
     //Active state
-    &.is-active, &:hover {
+    &.is-active,
+    &:hover {
         background: transparent !important;
     }
 
@@ -1644,7 +1658,8 @@ Main feed styles
         }
 
         //Location and GIF modfiers
-        &.is-location-wrapper, &.is-gif-wrapper {
+        &.is-location-wrapper,
+        &.is-gif-wrapper {
             input {
                 height: 32px;
                 padding-left: 34px;
@@ -1656,7 +1671,7 @@ Main feed styles
                 &:focus {
                     border-color: $fade-grey;
 
-                    + .icon {
+                    +.icon {
                         color: $primary;
                     }
                 }
@@ -1669,7 +1684,7 @@ Main feed styles
 
             input {
                 &:focus {
-                    ~ .gif-dropdown {
+                    ~.gif-dropdown {
                         opacity: 1;
                         pointer-events: all;
                     }
@@ -1727,7 +1742,8 @@ Main feed styles
         }
 
         //Close icon
-        .icon, .close-icon {
+        .icon,
+        .close-icon {
             position: absolute;
             top: 0;
             left: 0;
@@ -1800,7 +1816,7 @@ Main feed styles
                 &:focus {
                     border-color: $fade-grey;
 
-                    + .icon {
+                    +.icon {
                         color: $primary;
                     }
                 }
@@ -2055,7 +2071,9 @@ Main feed styles
     }
 
     .card {
-        .page-block, .add-friend-block {
+
+        .page-block,
+        .add-friend-block {
             img {
                 height: 32px !important;
                 width: 32px !important;

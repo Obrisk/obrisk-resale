@@ -13,141 +13,141 @@
 
 {% block content %}
 <div class="col-lg-8 ml-auto mr-auto mt-5 mb-5">
-    <div class="alert alert-error">
-      <strong><span id="data-errors">  </span></strong>
+  <div class="alert alert-error d-none">
+    <strong><span id="data-errors"> </span></strong>
+  </div>
+
+  <form class="mb-5" action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
+    id="classified-form" method="post" role="form">
+    {% csrf_token %}
+
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.title|as_crispy_field }}
+      </div>
     </div>
-  
-      <form class="mb-5" action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
-        id="classified-form" method="post" role="form">
-        {% csrf_token %}
 
-        <div class="form-row">
-          <div class="form-group col-md-12 mb-0">
-            {{ form.title|as_crispy_field }}
-          </div>
-        </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.show_phone }}
+        {{ form.status }}
+        {{ form.images }}
+        {{ form.img_errors }}
+        {{ form.edited }}
+      </div>
+    </div>
 
-        <div class="form-row">
-          <div class="form-group col-md-12 mb-0">
-            {{ form.show_phone }}
-            {{ form.status }}
-            {{ form.images }}
-            {{ form.img_errors }}
-            {{ form.edited }}
-          </div>
-        </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.details|as_crispy_field }}
+      </div>
+    </div>
 
-        <div class="form-row">
-          <div class="form-group col-md-12 mb-0">
-            {{ form.details|as_crispy_field }}
-          </div>
-        </div>
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.price|as_crispy_field }}
+      </div>
+    </div>
 
-        <div class="form-row">
-          <div class="form-group col-md-12 mb-0">
-            {{ form.price|as_crispy_field }}
-          </div>
-        </div>
+    {% if request.user.address %}
+    <div> <span class="city"> Address*: </span> {{ request.user.address}} </div>
+    <small class="form-text text-muted"> Note: You can change this address in your profile settings </small>
+    <br />
+    {% else %}
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.address|as_crispy_field }}
+      </div>
+      <p class="col-md-12 mb-3"> City*:{{request.user.city}} <span class="mr-1"> </span>
+        {% if request.user.province_region %}
+        Province*: {{request.user.province_region}} </p>
+      {% endif %}
+    </div>
+    {% endif %}
 
-        {% if request.user.address %}
-        <div> <span class="city"> Address*: </span> {{ request.user.address}} </div>
-        <small class="form-text text-muted"> Note: You can change this address in your profile settings </small>
-        <br />
-        {% else %}
-        <div class="form-row">
-          <div class="form-group col-md-12 mb-0">
-            {{ form.address|as_crispy_field }}
-          </div>
-          <p class="col-md-12 mb-3"> City*:{{request.user.city}} <span class="mr-1"> </span>
-            {% if request.user.province_region %}
-            Province*: {{request.user.province_region}} </p>
-          {% endif %}
-        </div>
-        {% endif %}
+    {% if request.user.phone_number %}
+    <!-- iOS Style: Rounded -->
+    <strong> Include your phone no? </strong>
+    <input type="checkbox" checked data-toggle="toggle" name="phone-check" data-width="70" data-on="Yes" data-off="No"
+      data-style="ios">
+    <br>
 
-        {% if request.user.phone_number %}
-        <!-- iOS Style: Rounded -->
-        <strong> Include your phone no? </strong>
-        <input type="checkbox" checked data-toggle="toggle" name="phone-check" data-width="70" data-on="Yes" data-off="No"
-          data-style="ios">
-        <br>
+    {% else %}
+    <div class="form-row">
+      <div class="form-group col-md-12 mb-0">
+        {{ form.phone_number|as_crispy_field }}
+      </div>
+    </div>
+    {% endif %}
 
-        {% else %}
-        <div class="form-row">
-          <div class="form-group col-md-12 mb-0">
-            {{ form.phone_number|as_crispy_field }}
-          </div>
-        </div>
-        {% endif %}
-
-        <br>
-        <p class="city"> <strong> Images*: </strong>
-          <p>
-            <div id="wrapper" class="mb-4">
-              <div id="container">
-                <div id="uploader">
-                  <div class="queueList">
-                    <div id="dndArea" class="placeholder">
-                      <div class="" id="uploaderPick">
-                        <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
-                      </div>
-                    </div>
+    <br>
+    <p class="city"> <strong> Images*: </strong>
+      <p>
+        <div id="wrapper" class="mb-4">
+          <div id="container">
+            <div id="uploader">
+              <div class="queueList">
+                <div id="dndArea" class="placeholder">
+                  <div class="" id="uploaderPick">
+                    <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
                   </div>
                 </div>
-                <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
-                  <div class="total-progress">
-                    <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
-                      aria-valuemin="0" aria-valuemax="100">
-                    </div>
-                  </div>
-                  <div class="upload-btn d-flex flex-column flex-md-row">
-                    <div class="start-uploader startUploadBtn ml-2 mr-2">
-                      <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
-                    </div>
-                    <div class="start-uploader addBtn ml-2 mr-2">
-                      <a id="addBtn" href="javascript:void(0);" class="text">Add images</a>
-                    </div>
-                  </div>
+              </div>
+            </div>
+            <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
+              <div class="total-progress">
+                <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
+                  aria-valuemin="0" aria-valuemax="100">
                 </div>
-
-                <div class="" style="clear: both;">
-                  <p class="text-center">
-                    Notes:
-                    Max number of files 8 & Max size per file is 13MB
-                  </p>
+              </div>
+              <div class="upload-btn d-flex flex-column flex-md-row">
+                <div class="start-uploader startUploadBtn ml-2 mr-2">
+                  <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
+                </div>
+                <div class="start-uploader addBtn ml-2 mr-2">
+                  <a id="addBtn" href="javascript:void(0);" class="text">Add images</a>
                 </div>
               </div>
             </div>
 
-            <div class="container bs-docs-container">
-              <form id="form">
-                <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
-              </form>
+            <div class="" style="clear: both;">
+              <p class="text-center">
+                Notes:
+                Max number of files 8 & Max size per file is 13MB
+              </p>
             </div>
-
-
-            <div class="form-group d-flex justify-content-center"> <br>
-              <button id="create-btn" type="button" class="btn btn-dark create submit-button">{% trans 'Submit' %}</button>
-              <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
-              <a href="{% url 'classifieds:list' %}" class="ml-4 btn btn-danger">{% trans 'Cancel' %}</a>
-            </div>
-      </form>
-      {{ form.media }}
-    </div>
-
-    <div id="error-modal" class="modal fade">
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <!-- dialog body -->
-          <div class="modal-body">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-
           </div>
-          <!-- dialog buttons -->
-          <div class="modal-footer"><button type="button" class="btn btn-primary">OK</button></div>
         </div>
+
+        <div class="container bs-docs-container">
+          <form id="form">
+            <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+          </form>
+        </div>
+
+
+        <div class="form-group d-flex justify-content-center"> <br>
+          <button id="create-btn" type="button" class="btn btn-dark create submit-button">{% trans 'Submit' %}</button>
+          <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
+          <a href="{% url 'classifieds:list' %}" class="ml-4 btn btn-danger">{% trans 'Cancel' %}</a>
+        </div>
+  </form>
+  {{ form.media }}
+</div>
+
+<div id="error-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- dialog body -->
+      <div class="modal-body">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+
       </div>
+      <!-- dialog buttons -->
+      <div class="modal-footer"><button type="button" class="btn btn-primary">OK</button></div>
     </div>
+  </div>
+</div>
 
 {% endblock content %}
 
@@ -158,7 +158,7 @@
 
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const user = "{{ request.user.username }}";
-  const app  =  "classifieds";
+  const app = "classifieds";
 
   const title_id = "{{ form.title.auto_id }}";
   const details_id = "{{ form.details.auto_id }}";
