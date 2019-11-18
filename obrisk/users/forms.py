@@ -34,13 +34,16 @@ class UserForm(forms.ModelForm):
     province_region = forms.CharField (widget=forms.HiddenInput())
     city = forms.CharField (widget=forms.HiddenInput())
     job_title = forms.CharField (required=False, label=("Occupation")) 
+    address = forms.CharField(required=False)
     class Meta:
         model = User
         fields = ('name', 'job_title', 'province_region', 'city', 'bio', 'address')
-        #help_texts = {
-        #    "linkedin_account": "Your linkedin username as it appears on your linkedin profile page.\
-        #          Make sure it is spelled correctly",
-        #}
+        help_texts = {
+           #"linkedin_account": "Your linkedin username as it appears on your linkedin profile page.\
+            #     Make sure it is spelled correctly",
+            'bio': 'A short introduction about yourself',
+            'address': 'English address is preferred, don\'t include your City and Province'
+        }
     
 
 #This form inherits all-auth. 

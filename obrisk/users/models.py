@@ -30,10 +30,11 @@ class User(AbstractUser):
     snapchat_account = models.CharField(
         _('Snapchat a/c profile name'), max_length=255, blank=True, null=True)
     wechat_id = models.CharField (max_length=150, null=True, blank=True)
-    address = models.CharField(max_length=255, null=True)
-    province_region = models.CharField (_('Province'), max_length=100)
-    city = models.CharField  (  _('City'), max_length=100) 
-    nationality = models.CharField (_('Nationality'), max_length=100, blank=True, null=True )
+    #Without blank=True the forms add is required label
+    address = models.CharField(max_length=300, null=True, blank=True)
+    province_region = models.CharField (_('Province'), max_length=200)
+    city = models.CharField  (  _('City'), max_length=200) 
+    nationality = models.CharField (_('Nationality'), max_length=200, blank=True, null=True )
     short_bio = models.CharField(
         _('Describe yourself'), max_length=60, blank=True, null=True)
     bio = models.CharField(

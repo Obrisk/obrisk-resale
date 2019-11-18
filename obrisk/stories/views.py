@@ -63,12 +63,15 @@ def get_story_images(request):
     """A function view return all images of a specific story"""
     story_id = request.GET['story_id']
 
-    images = list(StoryImages.objects.filter(
-                        story=story_id,
-                    ).extra( 
-                        select={ 'src': 'image'}).values('src')
-                    )
-    
+    try:
+        images = list(StoryImages.objects.filter(
+                            story=story_id,
+                        ).extra( 
+                            select={ 'src': 'image'}).values('src')
+                        )
+    except:
+        return HttpResponseBadRequest(
+                content=_('The story post is invalid'))
     return HttpResponse(json.dumps(images), content_type='application/json')
 
 
@@ -78,7 +81,11 @@ def get_story_likers(request):
     """A function view that returns all people that liked the story"""
     story_id = request.GET['story_id']
 
-    story = Stories.objects.get(uuid_id=story_id)
+    try:
+        story = Stories.objects.get(uuid_id=story_id)
+    except:
+        return HttpResponseBadRequest(
+                content=_('The story post is invalid'))
     users = list(story.liked.all().values_list('username', flat=True))
 
     return HttpResponse(json.dumps(users), content_type='application/json')
@@ -90,7 +97,10 @@ def get_story_likers(request):
 def get_thread(request):
     """Returns a list of stories with the given stories as parent."""
     stories_id = request.GET['stories']
-    stories = Stories.objects.get(pk=stories_id)
+    try:
+        stories = Stories.objects.get(pk=stories_id)
+    except:
+        return JsonResponse({"error":"Story post is not valid"})
     stories_html = render_to_string("stories/stories_single.html", {"stories": stories})
     thread_html = render_to_string(
         "stories/stories_thread.html", {"thread": stories.get_thread()})
@@ -165,7 +175,7 @@ def post_stories(request):
 
     else:
         return HttpResponseBadRequest(
-                content=_(f'Text length is longer than accepted characters.'))
+                content=_('Text length is longer than accepted characters.'))
 
 @csrf_exempt
 @login_required
@@ -177,7 +187,10 @@ def like(request):
     """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""
     stories_id = request.GET['stories']
-    stories = Stories.objects.get(pk=stories_id)
+    try:
+        stories = Stories.objects.get(pk=stories_id)
+    except:
+        return JsonResponse({"error":"The story post is invalid!"}) 
     user = request.user
     stories.switch_like(user)
 
