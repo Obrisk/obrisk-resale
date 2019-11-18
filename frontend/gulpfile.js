@@ -143,7 +143,6 @@ gulp.task('compile-scss', function () {
 gulp.task('compile-css', function () {
     return gulp.src([
             //nodepath + 'path/to/file.min.css',
-            nodepath + 'emojionearea/dist/emojionearea.min.css',
             nodepath + 'webui-popover/dist/jquery.webui-popover.min.css',
             nodepath + 'easy-autocomplete/dist/easy-autocomplete.min.css',
             nodepath + 'slick-carousel/slick/slick.css',
@@ -172,7 +171,6 @@ gulp.task('compile-js', function () {
             nodepath + 'feather-icons/dist/feather.min.js',
             nodepath + 'vivid-icons/dist/vivid-icons.min.js',
             nodepath + 'slick-carousel/slick/slick.min.js',
-            nodepath + 'emojionearea/dist/emojionearea.min.js',
             nodepath + 'webui-popover/dist/jquery.webui-popover.min.js',
             nodepath + 'easy-autocomplete/dist/jquery.easy-autocomplete.min.js',
             nodepath + 'dropzone/dist/min/dropzone.min.js',
