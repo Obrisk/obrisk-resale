@@ -4,132 +4,128 @@
 Main js file
 ========================================================================== */
 
-$(document).ready(function () {
+$(document).ready(function() {
+  "use strict";
 
-    "use strict";
+  //Code highlight init
+  $(".highlight-block code").each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
 
-    //Code highlight init
-    $('.highlight-block code').each(function (i, block) {
-        hljs.highlightBlock(block);
-    });
+  //Pageloader
+  $().initPageloader();
 
-    //Pageloader
-    $().initPageloader();
+  //Init navbar
+  $().initNavbar();
 
-    //Init navbar
-    $().initNavbar();
+  //Mobile menu toggle
+  $().initResponsiveMenu();
 
-    //Mobile menu toggle
-    $().initResponsiveMenu();
+  //Navbar dropdown
+  $().initNavDropdowns();
 
-    //Navbar dropdown
-    $().initNavDropdowns();
+  //Common Dropdown
+  $().initDropdowns();
 
-    //Common Dropdown
-    $().initDropdowns();
+  //Sidebars
+  $().initSidebar();
 
-    //Sidebars
-    $().initSidebar();
+  //Tabs
+  $().initTabs();
 
-    //Tabs
-    $().initTabs();
+  //Modals
+  $().initModals();
 
-    //Modals
-    $().initModals();
+  //Subnavbar search
+  $().initSubSearch();
 
-    //Subnavbar search
-    $().initSubSearch();
+  //Attribute background images
+  $().initBgImages();
 
-    //Attribute background images
-    $().initBgImages();
+  //Feather icons initialization
+  feather.replace();
 
-    //Feather icons initialization
-    feather.replace();
+  //Emojis
+  // $().initEmojis();
 
-    //Emojis
-    $().initEmojis();
+  //Load More
+  $().initLoadMore();
 
-    //Load More
-    $().initLoadMore();
+  // //Init tooltips
+  // $().initTooltips();
 
-    // //Init tooltips
-    // $().initTooltips();
+  //Init Like Button
+  $().initLikeButton();
 
-    //Init Like Button
-    $().initLikeButton();
+  //Init Simple Popover
+  $().initSimplePopover();
 
-    //Init Simple Popover
-    $().initSimplePopover();
+  //Share modal demo
+  $().initShareModal();
 
-    //Share modal demo
-    $().initShareModal();
+  //Init Plus Menu
+  $().initPlusMenu();
 
-    //Init Plus Menu
-    $().initPlusMenu();
-
-    // //Init Tipuedrop
-    // $('#tipue_drop_input').tipuedrop();
-
+  // //Init Tipuedrop
+  // $('#tipue_drop_input').tipuedrop();
 });
 
-
-
 //Toast Service
-var toasts = {}
+var toasts = {};
 
 toasts.service = {
-    info: function (title, icon, message, position, t) {
-        iziToast.show({
-            class: 'toast',
-            icon: icon,
-            title: title,
-            message: message,
-            titleColor: '#fff',
-            messageColor: '#fff',
-            iconColor: "#fff",
-            backgroundColor: '#0062ff',
-            progressBarColor: '#bc7aff',
-            position: position,
-            transitionIn: 'fadeInDown',
-            close: false,
-            timeout: t,
-            zindex: 99999,
-        });
-    },
-    success: function (title, icon, message, position, t) {
-        iziToast.show({
-            class: 'toast',
-            icon: icon,
-            title: title,
-            message: message,
-            titleColor: '#fff',
-            messageColor: '#fff',
-            iconColor: "#fff",
-            backgroundColor: '#0062ff',
-            progressBarColor: '#fafafa',
-            position: position,
-            transitionIn: 'fadeInDown',
-            close: false,
-            timeout: t,
-            zindex: 99999,
-        });
-    },
-    error: function (title, icon, message, position, t) {
-        iziToast.show({
-            class: 'toast',
-            icon: icon,
-            title: title,
-            message: message,
-            titleColor: '#fff',
-            messageColor: '#fff',
-            iconColor: "#fff",
-            backgroundColor: '#ff533d',
-            progressBarColor: '#fff',
-            position: position,
-            transitionIn: 'fadeInDown',
-            close: false,
-            timeout: t,
-            zindex: 99999,
-        });
-    }
-}
+  info: function(title, icon, message, position, t) {
+    iziToast.show({
+      class: "toast",
+      icon: icon,
+      title: title,
+      message: message,
+      titleColor: "#fff",
+      messageColor: "#fff",
+      iconColor: "#fff",
+      backgroundColor: "#0062ff",
+      progressBarColor: "#bc7aff",
+      position: position,
+      transitionIn: "fadeInDown",
+      close: false,
+      timeout: t,
+      zindex: 99999
+    });
+  },
+  success: function(title, icon, message, position, t) {
+    iziToast.show({
+      class: "toast",
+      icon: icon,
+      title: title,
+      message: message,
+      titleColor: "#fff",
+      messageColor: "#fff",
+      iconColor: "#fff",
+      backgroundColor: "#0062ff",
+      progressBarColor: "#fafafa",
+      position: position,
+      transitionIn: "fadeInDown",
+      close: false,
+      timeout: t,
+      zindex: 99999
+    });
+  },
+  error: function(title, icon, message, position, t) {
+    iziToast.show({
+      class: "toast",
+      icon: icon,
+      title: title,
+      message: message,
+      titleColor: "#fff",
+      messageColor: "#fff",
+      iconColor: "#fff",
+      backgroundColor: "#ff533d",
+      progressBarColor: "#fff",
+      position: position,
+      transitionIn: "fadeInDown",
+      close: false,
+      timeout: t,
+      zindex: 99999
+    });
+  }
+};
