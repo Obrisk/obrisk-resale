@@ -128,8 +128,8 @@
 
             }
             else {
-                bootbox.alert('Login failed, please verify your login input or/and password');
-              }           
+              bootbox.alert('Login failed, please verify your login input or/and password');
+            }
           }
         }
 
@@ -172,5 +172,17 @@
 
   }
 
+</script>
+<script>
+  var toast = new iqwerty.toast.Toast();
+  toast.setText('<p style="color:#fff">Loading...</p>').stylize({
+    background: '#3EC4E2',
+    color: '#fff!important',
+    width: 100,
+    'box-shadow': '0 0 25px rgba(0, 0, 0, .7)'
+  }).setDuration(10000);
+  $(window).on("beforeunload", () => {
+    toast.show();
+  })
 </script>
 {% endblock content %}

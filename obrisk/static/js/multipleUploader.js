@@ -31,7 +31,6 @@ $(function() {
       }
     }
   });
-
 });
 
 //localStorage.debug = 'ali-oss';
@@ -145,22 +144,21 @@ OssUpload.prototype = {
       uploader.fileStats.totalFilesNum = uploader.fileList.length;
     });
 
-    $(".submit-button").click(function(event) {
-      if (uploader.fileStats.totalFilesNum > 0) {
-        $("#statusBar").css("display", "flex");
-        var length = uploader.fileStats.totalFilesNum;
-        var file;
-        $(".start-uploader").css("display", "none");
-        $totalProgressbar
-          .css("width", "40%")
-          .html("Upload Started please wait...");
-        for (var i = 0; i < length; i++) {
-          var filename = genKey();
-          file = uploader.fileList[i];
-          _this.uploadFile(file, filename);
-        }
+    $("body").on("submitClicked", function() {
+      $("#statusBar").css("display", "flex");
+      var length = uploader.fileStats.totalFilesNum;
+      var file;
+      $(".start-uploader").css("display", "none");
+      $totalProgressbar
+        .css("width", "40%")
+        .html("Upload Started please wait...");
+      for (var i = 0; i < length; i++) {
+        var filename = genKey();
+        file = uploader.fileList[i];
+        _this.uploadFile(file, filename);
       }
     });
+
     $(".queueList .filelist").delegate("li span.cancel", "click", function() {
       var $this = $(this);
       var $li = $this.parent().parent();
@@ -242,23 +240,25 @@ OssUpload.prototype = {
                           uploader.fileStats.curFileSize /
                           uploader.fileStats.totalFilesSize
                         ).toFixed(2) * 100;
-                      progressBar = (
+                      progressBar =
+                        (
                           uploader.fileStats.curFileSize /
                           uploader.fileStats.totalFilesSize
-                        ).toFixed(2) * 100 + "%";
+                        ).toFixed(2) *
+                          100 +
+                        "%";
 
-                      if (images == '') {
-                          images += res.name;
-                      }else {
-                          images += "," + res.name;
+                      if (images == "") {
+                        images += res.name;
+                      } else {
+                        images += "," + res.name;
                       }
                       if (progressBarNum == 100) {
                         $totalProgressbar
                           .css("width", progressBar)
                           .html("Upload complete");
 
-                          $("body").trigger("uploadComplete");
-                       
+                        $("body").trigger("uploadComplete");
                       } else {
                         $totalProgressbar
                           .css("width", progressBar)
@@ -470,7 +470,7 @@ var $wrap = $("#uploader"),
   $totalProgressbar = $("#totalProgressBar");
 
 var progress = function(p) {
-  //console.log(p)    
+  //console.log(p)
   return function(done) {
     $totalProgressbar.css("width", progressBar);
     done();
@@ -513,48 +513,72 @@ function OssUpload() {
  * @return  {string}
  */
 
-
 function genKey() {
-  if (app == 'stories') { 
-  
-    if ($("#publish").val().substring(0, 20).length != 0){
-        return (
-        app +"/"+ user +"/" +slugify($("#publish").val().substring(0, 20)) +"/" +"xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-            var r = (Math.random() * 16) | 0,v = c == "x" ? r : (r & 0x3) | 0x8;return v.toString(16);})
-        );
+  if (app == "stories") {
+    if (
+      $("#publish")
+        .val()
+        .substring(0, 20).length != 0
+    ) {
+      return (
+        app +
+        "/" +
+        user +
+        "/" +
+        slugify(
+          $("#publish")
+            .val()
+            .substring(0, 20)
+        ) +
+        "/" +
+        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+          var r = (Math.random() * 16) | 0,
+            v = c == "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        })
+      );
     } else {
-        return (
+      return (
         "stories/" +
         user +
         "/" +
         "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-            var r = (Math.random() * 16) | 0,
+          var r = (Math.random() * 16) | 0,
             v = c == "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
+          return v.toString(16);
         }) +
         "/" +
         "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-            var r = (Math.random() * 16) | 0,
+          var r = (Math.random() * 16) | 0,
             v = c == "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
+          return v.toString(16);
         })
-        );
+      );
     }
-  }else if ( app == "classifieds" ){
-    return "classifieds/" + user + '/' + slugify($('#id_title').val()) +
-    '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
+  } else if (app == "classifieds") {
+    return (
+      "classifieds/" +
+      user +
+      "/" +
+      slugify($("#id_title").val()) +
+      "/" +
+      "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
-    });
+      })
+    );
   } else {
-      return "junk/"+ '/' + 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
+    return (
+      "junk/" +
+      "/" +
+      "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+        var r = (Math.random() * 16) | 0,
+          v = c == "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
-    });
+      })
+    );
   }
-
 }
 
 /**

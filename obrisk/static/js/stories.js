@@ -22,6 +22,12 @@ $(function() {
     // These HTTP methods do not require CSRF protection
     return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
   }
+  function offset(el) {
+    var rect = el.getBoundingClientRect(),
+      scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+      scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
+  }
 
   // This sets up every ajax call with proper headers.
   $.ajaxSetup({
@@ -34,6 +40,24 @@ $(function() {
   });
   $("input, textarea").val("");
 
+  //Submit stories
+  $(".submit-button").click(function(e) {
+    e.preventDefault();
+    //check if text only
+    if (uploader.fileStats.totalFilesNum > 0) {
+      $("body").trigger("submitClicked");
+    } else if (
+      $("#publish")
+        .val()
+        .substring(0, 20).length != 0
+    ) {
+      $("body").trigger("uploadComplete");
+    } else {
+      bootbox.alert("Please, Upload an image or write something!");
+    }
+  });
+
+  //Liker
   $(".infinite-container").on("click", ".like-wrapper", function() {
     // Ajax call on action on like button.
     var li = $(this).closest(".card");
@@ -75,6 +99,11 @@ $(function() {
     var stories = $(post).attr("stories-id");
     post.find(".content-wrap").toggleClass("is-hidden");
     post.find(".comments-wrap").toggleClass("is-hidden");
+    console.log(offset(post[0]));
+    window.scrollTo({
+      top: offset(post[0]).top,
+      behavior: "smooth"
+    });
     $(".emojionearea-editor").keyup(function() {
       var counter = $(this).closest(".textarea-parent");
       counter.find(".counter .count").text(400 - $(this).val().length);
@@ -88,6 +117,7 @@ $(function() {
       data: {
         stories: stories
       },
+      type: "GET",
       cache: false,
 
       success: function(data) {
@@ -180,25 +210,6 @@ $(function() {
     $(".is-new-content").removeClass("is-highlighted");
     $(".close-wrap").addClass("d-none");
     $(".all-stories ").removeClass("block-scroll");
-  });
-  //Comment on a story
-  $(".comment-button").click(function() {
-    // Ajax call to register a reply to any given Stories object.
-    $.ajax({
-      url: "/stories/post-comment/",
-      data: $("#replyStoriesForm").serialize(),
-      type: "POST",
-      cache: false,
-      success: function() {
-        $(".comment-textarea").val("");
-        $(".is-comment-count").html(
-          parseInt($(".is-comment-count").html(), 10) + 1
-        );
-      },
-      error: function(data) {
-        bootbox.alert(data.responseText);
-      }
-    });
   });
   //Show comments
   $(".infinite-container").on("click", ".is-comment", function() {

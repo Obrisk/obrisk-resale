@@ -18,7 +18,8 @@
       <div class="columns">
 
         <!-- Left side column -->
-        <div class="column is-3 is-hidden-mobile" style="height: 500px;position: sticky;top: 0px;">
+        <div class="column is-3 is-hidden-mobile is-hidden-tablet-only"
+          style="height: 500px;position: sticky;top: 0px;">
           <!-- Sidebar Widgets Column -->
           <!-- Cloud Tag Widget -->
           <div class="card is-weather-card position-fixed" style="width: 300px;">
@@ -43,7 +44,7 @@
         <!-- /Left side column -->
 
         <!-- Middle column -->
-        <div class="column is-9">
+        <div class="column is-9-desktop">
 
           <div class="d-flex flex-end mb-4" style="justify-content: flex-end;">
 
@@ -177,7 +178,7 @@
               </svg>`;
     var htmlContent =
       settings.htmlContent ||
-      `Install <strong>${brandName} app</strong> on your device: On safari, tap share and <strong>Add to Home Screen</strong> ↓`;
+      `Install ${brandName} app on your device: On safari, tap share and Add to Home Screen ↓`;
     // Define iOS User-Agent variable
     var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
     var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);

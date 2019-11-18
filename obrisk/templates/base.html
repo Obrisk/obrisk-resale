@@ -97,7 +97,7 @@
   {% block body %}
   <div class="m-b-1">
     {% if request.user.is_authenticated %}
-    <nav class="navbar fixed-top is-hidden-mobile navbar-expand-lg navbar-dark O-bg-blue">
+    <nav class="navbar fixed-top is-hidden-mobile is-hidden-tablet-only navbar-expand-lg navbar-dark O-bg-blue">
       <div class="container">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
           data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
@@ -461,7 +461,7 @@
       </div>
     </nav>
     {% else%}
-    <nav class="navbar fixed-top navbar-expand-lg is-hidden-mobile navbar-dark O-bg-blue">
+    <nav class="navbar fixed-top navbar-expand-lg is-hidden-mobile is-hidden-tablet-only navbar-dark O-bg-blue">
       <div class="container">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
           data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"

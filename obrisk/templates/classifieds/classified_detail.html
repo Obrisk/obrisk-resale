@@ -53,7 +53,7 @@
               <a href="{% url 'users:detail' classified.user.username %}" class="mr-2">
                 {% if classified.user.thumbnail %}
                 <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
-                  alt="Picture Profile" style="height:35px; width:35px; border-radius: 50%;" id="pic">
+                  alt="Picture Profile" style="height:35px; max-width:35px; border-radius: 50%;" id="pic">
                 {% else %}
                 <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
                 {% endif %}
@@ -68,11 +68,11 @@
                 <div class="location">
                   <small class="card-subtitle mb-2">📍</small>
                   <span class="card-subtitle mb-2">
-                  {% if classified.address  %}
-                      {{ classified.address }}, {{ classified.city }}
-                  {% else %}
-                      {{ classified.user.city }}
-                  {% endif %}  </span>
+                    {% if classified.address  %}
+                    {{ classified.address }}, {{ classified.city }}
+                    {% else %}
+                    {{ classified.user.city }}
+                    {% endif %} </span>
                 </div>
                 <!-- Date/Time -->
                 <div class="time mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
@@ -154,7 +154,7 @@
     <!-- Similar lassified -->
     {% if similar_classifieds %}
     <div class="col-lg-8 col-md-10 mr-auto ml-auto related-card mt-4 pt-4 mb-4">
-     <h5 class="card-header O-bg-blue-ns">Related Classifieds</h5>
+      <h5 class="card-header O-bg-blue-ns">Related Classifieds</h5>
       <div class=" related mt-4 mb-4">
         <!-- Classified Entries Column -->
         <!-- <div class="col-md-8"> -->
