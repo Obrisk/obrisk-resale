@@ -84,6 +84,16 @@
       <div class="c_feature_box">
         <div class="row">
 
+          <div class="col-lg-4 mb-5">
+            <div class="c_box_item">
+              <h4 class="p-0 m-0">Stories posts</h4>
+              <p>Read and share brief informative content</p>
+              <a href="{% url 'stories:list' %}" class="read-btn">
+                View Stories
+              </a>
+            </div>
+          </div>
+
           <div class="col-lg-4">
             <div class="c_box_item mb-5">
               <h4 class="p-0 m-0">Secondhand platform</h4>
@@ -96,18 +106,8 @@
 
           <div class="col-lg-4 mb-5">
             <div class="c_box_item">
-              <h4 class="p-0 m-0">Q&A platform</h4>
-              <p>Ask for any information and the community will help.</p>
-              <a href="{% url 'qa:index_all' %}" class="read-btn">
-                View Q&A
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-4 mb-5">
-            <div class="c_box_item">
-              <h4 class="p-0 m-0">Articles & Posts </h4>
-              <p>Read, discuss and share helpful ideas and information</p>
+              <h4 class="p-0 m-0">Published articles</h4>
+              <p>Read, discuss and share helpful ideas</p>
               <a href="{% url 'posts:list' %}" class="read-btn">
                 View Post
               </a>

@@ -364,7 +364,7 @@ header.masthead p {
 
 /**Home V2*/
 .banner {
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(54, 54, 54, 0.85)), url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/102696502-hangzhou3.jpg);
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(54, 54, 54, 0.85)), url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/homepage-bg.jpg);
   height: 600px;
   background-size: cover;
   background-position: top center;
