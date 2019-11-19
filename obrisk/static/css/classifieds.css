@@ -114,3 +114,9 @@ body{
 .numberinput {
     width: 70%;
 }
+
+@media (min-width: 1200px) {
+    .is-9-fullhd {
+        margin-left: 7%;
+    }
+}

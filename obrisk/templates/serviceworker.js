@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "cfbb77601adf526784f8300a2e7ffb1f"
+    "revision": "95cae27a0a8fe6b7f9f22c960c453b18"
   },
   {
     "url": "/static/css/colors.css",
@@ -161,7 +161,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "75120c27fa3ed1f0289cb4f5f38b48b0"
+    "revision": "48d4383437a356640acae7cff914f0ba"
   },
   {
     "url": "frontend/assets/css/core.css",
@@ -465,7 +465,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/classifieds.js",
-    "revision": "6de29a786dcd04577e232e496283b706"
+    "revision": "831fdeff08cf0bbbdebc94bf9bb9759d"
   },
   {
     "url": "/static/js/fancybox.min.js",
@@ -493,7 +493,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/listing.js",
-    "revision": "464391cc6d6f4dc59d4a7052b70bff94"
+    "revision": "548da0625fb5256127b9a7ffab8aed3e"
   },
   {
     "url": "/static/js/location.js",
@@ -509,7 +509,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "4210d3aa6d555750f92237f273415eb8"
+    "revision": "b88d137e7e0bb02bb25f44ff4ed707f1"
   },
   {
     "url": "/static/js/nav.js",
