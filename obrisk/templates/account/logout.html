@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% load i18n %}
+{% load static i18n %}
 
 {# block head_title %}{% trans "Sign Out" %}{% endblock #}
 
@@ -16,8 +16,9 @@
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
     <button id="confirmlogout" class="btn btn-dark" type="submit">{% trans 'Sign Out' %}</button>
-    <button class="btn btn-danger"> <a href="{% url 'posts:list' %}"> {% trans 'Cancel' %} </a> </button>
+    <button class="btn btn-danger"> <a href="{% url 'stories:list' %}"> {% trans 'Cancel' %} </a> </button>
   </form>
+
   <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>
   <script>
     var toast = new iqwerty.toast.Toast();

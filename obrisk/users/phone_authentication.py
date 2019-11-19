@@ -25,6 +25,9 @@ class PhoneAuthBackend(ModelBackend):
         if phone.startswith("+86"):
             phone = phone.strip('+86')
         
+        if phone == '13300000000':
+            return None
+            
         if phone.isdigit() and len(phone) == 11 and phone[0] == '1':
             #This code only works for Chinese phone numbers.
             phone = "+86" + phone

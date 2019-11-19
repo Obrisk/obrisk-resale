@@ -81,7 +81,7 @@
     </div>
     {% endif %}
 
-    {% if request.user.phone_number %}
+    {% if request.user.phone_number.national_number != 13300000000 %}
     <!-- iOS Style: Rounded -->
     <strong> Include your phone no? </strong>
     <input type="checkbox" checked data-toggle="toggle" name="phone-check" data-width="70" data-on="Yes" data-off="No"

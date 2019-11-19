@@ -254,7 +254,8 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified = form.save(commit=False)
         classified.user = self.request.user
 
-        if not classified.phone_number and classified.user.phone_number:
+        #Empty phone number is +8613300000000 for all old users around 150 users
+        if not classified.phone_number and classified.user.phone_number.national_number != 13300000000:
             classified.phone_number = classified.user.phone_number
         
         if not classified.address and classified.user.address:

@@ -248,7 +248,7 @@ def send_code_sms(request):
     if request.method == "GET":
         phone_no = request.GET.get("phone_no")
         
-        if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1':
+        if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1' and phone_no != '13300000000':
             
             full_number = "+86" + phone_no
             check_phone = User.objects.filter(phone_number=full_number).exists()
@@ -399,10 +399,11 @@ def bulk_update_user_phone_no(request):
     before Convervation model was created."""
     users = User.objects.all()
     for user in users:
-        if not user.phone_number.country_code:
-            user.phone_number = '+8613300000000'
-            user.save()
-            
+        if isinstance(user.phone_number, PhoneNumber):
+            if not user.phone_number.country_code:
+                user.phone_number = '+8613300000000'
+                user.save()
+
     return redirect('stories:list')
 
 
