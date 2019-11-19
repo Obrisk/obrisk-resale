@@ -400,7 +400,7 @@ def bulk_update_user_phone_no(request):
     users = User.objects.all()
     for user in users:
         if user.phone_number == '+NoneNone':
-            user.phone_number == '+8613300000000'
+            user.phone_number = '+8613300000000'
             user.save()
         
     return redirect('stories:list')
