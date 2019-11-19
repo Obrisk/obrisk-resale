@@ -390,3 +390,22 @@ class PhonePasswordResetConfirmView(FormView):
 class AutoLoginView(LoginView):
     pass
 
+
+
+@login_required
+@require_http_methods(["GET"])
+def bulk_update_user_phone_no(request):
+    """ A temporally view to create Conversations to users already chatted
+    before Convervation model was created."""
+    users = User.objects.all()
+    for user in users:
+        if user.phone_number == '+NoneNone':
+            user.phone_number == '+8613300000000'
+            user.save()
+        
+    return redirect('stories:list')
+
+
+
+
+

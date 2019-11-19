@@ -113,7 +113,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/stories.css",
-    "revision": "c7b18d47af8f20575174a2b8ef3b425c"
+    "revision": "c2cac86e85b3a8aafb3d394c93859b5b"
   },
   {
     "url": "/static/css/swiper.min.css",
@@ -157,23 +157,27 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/app.css",
-    "revision": "29629a61fa5e93899c1baa402ba11e02"
+    "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "3d7dbc3e093f3e73074f21ae30f0a771"
+    "revision": "75120c27fa3ed1f0289cb4f5f38b48b0"
+  },
+  {
+    "url": "frontend/assets/css/core.css",
+    "revision": "e6d1e370c37a68c92057099ac71ddd13"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
-    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
+    "revision": "169a7721873bc1ecad61797edc3b304f"
   },
   {
     "url": "frontend/assets/css/webfont.css",
-    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
+    "revision": "aea41e7f54519a53a1629b2d23069e61"
   },
   {
     "url": "frontend/assets/js/app.js",
-    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
+    "revision": "9bf0224de24fee8db5746617c44de6b3"
   },
   {
     "url": "frontend/assets/js/autocompletes.js",
@@ -461,7 +465,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/classifieds.js",
-    "revision": "e88247cff95b5650976cd2692cb6a835"
+    "revision": "6de29a786dcd04577e232e496283b706"
   },
   {
     "url": "/static/js/fancybox.min.js",
@@ -549,7 +553,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "fee3d1c459a90edc04502b0580956768"
+    "revision": "85cfb3b8f4a0a825bb780f8b07696fca"
   },
   {
     "url": "/static/js/swiper.min.js",

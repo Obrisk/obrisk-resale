@@ -13,9 +13,9 @@ class ClassifiedForm(forms.ModelForm):
     img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) 
     address = forms.CharField (
         required=False, 
-        label=("Your address"), help_text='English address is preferred. You can save it in your profile settings'
+        label=("Your address"), help_text='English address is preferred. You can permanently save it in your profile settings'
     )
-    phone_number = PhoneNumberField(required=False, label=("Phone number"),
+    phone_number = PhoneNumberField(required=False, label=("Phone number(optional)"),
                                     widget=forms.TextInput(
                                         attrs={'placeholder': ('Don\'t enter country code')}
                                     )
@@ -35,7 +35,7 @@ class ClassifiedForm(forms.ModelForm):
         help_texts = {
             "title": "Short description of your product",
             "price": "Leave 0 if you're giving away for free",
-            "details": "Please provide enough information, it easily convince someone to buy.",
+            "details": "Please provide detailed information, it easily convince someone to buy.",
         }
 
 class ClassifiedEditForm(forms.ModelForm):
