@@ -37,7 +37,7 @@ from obrisk.utils.images_upload import bucket, bucket_name
 from .forms import UserForm, EmailSignupForm, PhoneRequestPasswordForm, PhoneSignupForm, PhoneResetPasswordForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
-
+from phonenumbers import PhoneNumber
     
 #There is no need to override this view. By default All-auth directly login users when they signup.
 class EmailSignUp(SignupView):
@@ -399,10 +399,10 @@ def bulk_update_user_phone_no(request):
     before Convervation model was created."""
     users = User.objects.all()
     for user in users:
-        if user.phone_number == '+NoneNone':
+        if not user.phone_number.country_code:
             user.phone_number = '+8613300000000'
             user.save()
-        
+            
     return redirect('stories:list')
 
 
