@@ -223,7 +223,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         if form.errors:
             data = {
                 'status': '400',
-                'error_message': f'Your form is having invalid inputs on {form.errors}. Please try again'
+                'error_message': f'Your form is having invalid input on: {form.errors} Correct your input and submit again'
             }
         else:
             data = {
@@ -248,11 +248,12 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         if img_errors:
             #Send this email in a celery task to improve performance
             send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
-        
+
+        #Phone number needs no backend verification, it is just a char field. 
         form.instance.user = self.request.user
         classified = form.save(commit=False)
         classified.user = self.request.user
-        
+
         if not classified.phone_number and classified.user.phone_number:
             classified.phone_number = classified.user.phone_number
         

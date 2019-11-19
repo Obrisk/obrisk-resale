@@ -18,7 +18,7 @@ $(function() {
           //At this point check if the images variable exists and
           //update the thumbnail holder to show the previous uploaded images.
           //Scroll the page to the top or to the place with errors.
-          $(".alert-error").toggleClass("d-none");
+          $(".alert-error").removeClass("d-none");
           $("#data-errors").html(data.error_message);
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
@@ -31,9 +31,13 @@ $(function() {
 
   $(".submit-button").click(function(event) {
     if (uploader.fileStats.totalFilesNum > 0) {
-      $("body").trigger("submitClicked");
+      if(images != "" && ($('#id_images').val() == images)) {
+          $("body").trigger('uploadComplete');
+      }else {
+          $("body").trigger("submitClicked");
+      }
     } else {
-      bootbox.alert("Please, upload an images.");
+      bootbox.alert("Please upload at least one image for your post");
     }
   });
 });

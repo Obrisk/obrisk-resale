@@ -314,11 +314,17 @@ OssUpload.prototype = {
                         $("#retry-button").removeClass("is-hidden");
 
                         if (!images) {
-                          images = "classifieds/error-img.jpg";
-                          bootbox.alert(
-                            "Oops! an error occured when uploading your image(s). \
-                                                But you can submit this post without images ."
-                          );
+                          if (app == "classifieds") {
+                              images = "classifieds/error-img.jpg";
+                              bootbox.alert(
+                                "Oops! an error occured when uploading your image(s). \
+                                                    But you can submit this post without images ."
+                              );
+                          }else {
+                              bootbox.alert(
+                                "Sorry! an error occured when uploading your image(s). You can post without images"
+                              );
+                          }
                         }
                       }
                     }

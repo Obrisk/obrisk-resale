@@ -34,7 +34,7 @@ class ClassifiedForm(forms.ModelForm):
 
         help_texts = {
             "title": "Short description of your product",
-            "price": "Leave 0 if you're giving away for free",
+            "price": "Leave 0 if you're giving away for free. Input numbers only",
             "details": "Please provide detailed information, it easily convince someone to buy.",
         }
 

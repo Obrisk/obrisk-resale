@@ -105,3 +105,12 @@ body{
     width: 100%!important;
     overflow: hidden;
 }
+
+.price-label {
+    background-color: gray;
+    padding: 4px;
+}
+
+.numberinput {
+    width: 70%;
+}
