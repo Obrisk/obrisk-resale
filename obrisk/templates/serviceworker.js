@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "95cae27a0a8fe6b7f9f22c960c453b18"
+    "revision": "595883908eac509b732471ee0176b08f"
   },
   {
     "url": "/static/css/colors.css",
@@ -161,7 +161,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "48d4383437a356640acae7cff914f0ba"
+    "revision": "75120c27fa3ed1f0289cb4f5f38b48b0"
   },
   {
     "url": "frontend/assets/css/core.css",
