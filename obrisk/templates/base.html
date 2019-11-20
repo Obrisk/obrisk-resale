@@ -122,9 +122,6 @@
                 class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
                 href="{% url 'posts:list' %}">{% trans 'Published' %} <span class="sr-only">(current)</span></a></li>
             <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                class="nav-link {% if base_active == 'q_and_a' %} is-active {% endif %} "
-                href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
-            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'chat' %} is-active {% endif %} "
                 href="{% url 'messager:contacts_list' %}">
                 {% if new_msgs %}
@@ -162,7 +159,7 @@
               </div>
             </li>
             <li class="nav-item dropdown">
-              <div id="account-dropdown" class="navbar-item is-account drop-trigger has-caret">
+              <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
                 <div class="user-image">
                   {% if request.user.thumbnail %}
                   <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}"
@@ -176,7 +173,7 @@
                   <div class="inner">
                     <div class="nav-drop-header">
                       <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                      <a href="{% url 'users:detail' request.user.username  %}">My Profile</a>
+                      <a id="close">❌ CLOSE</a>
                     </div>
                     <div class="nav-drop-body account-items">
 
@@ -215,6 +212,10 @@
                       </a>
                     </div>
                   </div>
+                </div>
+
+                <div class="nav-drop acc-nav-toggle" id="">
+
                 </div>
               </div>
             </li>
@@ -401,7 +402,7 @@
             </a>
           </li>
           <li class="flex-grow-0">
-            <div id="account-dropdown" class="navbar-item is-account drop-trigger has-caret">
+            <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
               <div class="user-image">
                 {% if request.user.thumbnail %}
                 <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
@@ -415,7 +416,7 @@
                 <div class="inner">
                   <div class="nav-drop-header">
                     <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                    <a href="{% url 'users:detail' request.user.username  %}">My Profile</a>
+                    <a id="close">❌ CLOSE</a>
                   </div>
                   <div class="nav-drop-body account-items">
 
@@ -454,6 +455,11 @@
                     </a>
                   </div>
                 </div>
+
+                <div class="nav-drop acc-nav-toggle" id="">
+
+                </div>
+                
               </div>
             </div>
           </li>

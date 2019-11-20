@@ -2,9 +2,8 @@
 <!DOCTYPE html>
 <div class="inner">
   <div class="nav-drop-header">
-    <span style="color: #555;">{% trans 'Unread notifications for' %}
-      {{ request.user.get_profile_name | title }}</span>
-    <a id="close">Close</a>
+    <span style="color: #555;">{% trans 'Unread notifications' %} </span>
+    <a id="close">❌ Close</a>
   </div>
   <div class="is-notifications nav-drop-body">
     {% if notifications %} {% for notification in notifications %}

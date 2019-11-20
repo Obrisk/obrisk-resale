@@ -2,7 +2,6 @@ $(document).ready(function () {
     $(".notifications").click(function (e) {
 
         var target = e.target;
-        console.log(e.target)
         if ($(target).is('.recent-notifications #close')) {
             $(".recent-notifications").removeClass("is-active");
         } else if ($(target).is('#mark')) {
@@ -21,6 +20,14 @@ $(document).ready(function () {
 
 
         return false;
+    });
+
+    $(".acc").click(function (e) {
+
+        var target = e.target;
+        if ($(target).is('#close')) {
+            $(".is-account-dropdown").removeClass("is-active");
+        }
     });
 
 });
