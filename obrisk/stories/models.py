@@ -146,7 +146,9 @@ class Stories(models.Model):
     def get_likers(self):
         return self.liked.all()[:3]
 
-
+    def get_all_likers(self):
+        return self.liked.all()
+        
     def count_thread(self):
         return self.get_thread().count()
 

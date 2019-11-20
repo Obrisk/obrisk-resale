@@ -105,13 +105,11 @@
 
       <!-- /Post image  -->
 
-
-
       <!-- Post actions -->
       <div class="d-flex justify-content-between post-actions">
         <div class="align-items-center d-flex like-wrapper">
 
-          {% if request.user in stories.get_likers %}
+          {% if request.user in stories.get_all_likers %}
           <a href="javascript:void(0);" class="like-button is-active">
             <i class="mdi mdi-heart not-liked bouncy"></i>
             <i class="mdi mdi-heart is-liked bouncy"></i>
@@ -151,24 +149,40 @@
     <!-- /Post body -->
     <!-- Post footer -->
     <div class="card-footer justify-content-end">
-      <!-- Followers -->
-      {% if stories.get_likers %}
-      <div class="likers-group">
-        {% for liker in stories.get_likers %}
-        <a href="/users/{{liker}}">
-          <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
-        </a>
-        {% endfor %}
-      </div>
-      <div class="likers-text">
-        {% if stories.get_likers|length > 3%}
-        <p>and {{ stories.get_likers|length|add:"-3" }} more liked this</p>
-        {% else %}
-        <p>liked this</p>
-        {% endif%}
-      </div>
-      {% else %}
-      <div class="likers-text">
+        <!-- Followers -->
+        {% if stories.get_likers %}
+          <div class="likers-group">
+            {% for liker in stories.get_likers %}
+            <a href="/users/{{liker}}">
+              <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
+            </a>
+            {% endfor %}
+          </div>
+          <div class="likers-text">
+            {% if stories.likes_count > 3%}
+            <p><a href="javascript:void(0);" class="view-all-likers" data-toggle="modal" data-target=".demo-popup"> {{ stories.likes_count|add:"-3" }} More </a></p>
+            <!-- popup box modal starts here -->
+            <div class="modal fade demo-popup" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button> <h3 class="modal-title"> ALL LIKES </h3>
+                    </div>
+                    <div class="modal-body likers-group">
+                    <P> {% for liker in stories.get_all_likers %}
+                    <a href="/users/{{liker}}">
+                      <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
+                    </a>
+                    {% endfor %} </P>
+                    </div>
+                </div><!-- /.modal-content -->
+              </div><!-- /.modal-dialog -->
+            </div><!-- /.modal-->
+            <!-- popup box modal ends -->
+            {% endif%}
+          </div>
+       {% else %}
+       <div class="likers-text">
         <p>Be the first to like</p>
       </div>
       {% endif %}
