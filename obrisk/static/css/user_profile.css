@@ -23,6 +23,8 @@
   border-radius: 100%;
   object-fit: cover;
   background-color: #fff;
+  width:250px;
+  height:250px;
 }
 
 .profile-header {
@@ -51,7 +53,7 @@
 }
 
 .points {
-  font-size: 36px;
+  font-size: 20px;
   font-weight: 400;
 }
 
@@ -62,6 +64,7 @@
   text-transform: uppercase;
   font-size: 12px;
   font-weight: 400;
+  margin-top: 25%;
 }
 
 @media screen and (max-width: 991px) {
@@ -70,13 +73,11 @@
   .profile-wrapper {
     margin-top: 15px;
   }
+  .media-body {
+    margin-top: -10px;
+  }
 }
 
-#pic {
-    width:250px;
-    height:250px;
-    border-radius: 50%;
-}
 
 .lazy-img {
     text-align: center;
@@ -84,10 +85,15 @@
 }
 
 @media screen and (max-width: 400px) {
-  #pic {
+  .profile-header-avatar {
     width : 175px;
     height : 175px;
   }
 
 }
+
+.media-body {
+  font-size: 32px;
+}
+
 
