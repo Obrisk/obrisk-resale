@@ -133,7 +133,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/user_profile.css",
-    "revision": "186c1b0ab492621c780def7434879ab5"
+    "revision": "1793c36a63916087ca206be8e7622dee"
   },
   {
     "url": "/static/css/util.css",
@@ -513,7 +513,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/nav.js",
-    "revision": "afe3271924ae324ec2f430be8287c976"
+    "revision": "521845ef0218c4edfdcaa3e553eebeb9"
   },
   {
     "url": "/static/js/notif-sw.js",
