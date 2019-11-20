@@ -97,9 +97,6 @@ Responsive styles
     //Cards
     .card {
         &.is-post {
-            .likers-text {
-                display: none;
-            }
 
             .post-link {
                 flex-direction: column;

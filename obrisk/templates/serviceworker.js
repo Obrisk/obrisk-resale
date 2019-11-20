@@ -165,7 +165,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/core.css",
-    "revision": "e6d1e370c37a68c92057099ac71ddd13"
+    "revision": "2c838031b9c782d78982b14fc271a998"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
