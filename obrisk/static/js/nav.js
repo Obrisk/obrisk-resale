@@ -24,9 +24,4 @@ $(document).ready(function() {
       $(".is-account-dropdown").removeClass("is-active");
     }
   });
-  let iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
-  let aspect = window.screen.width / window.screen.height;
-  if (iPhone && aspect.toFixed(3) === "0.462") {
-    $("#navbarBottom").addClass("pb-4");
-  }
 });

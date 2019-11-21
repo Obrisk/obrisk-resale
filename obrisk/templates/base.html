@@ -459,7 +459,7 @@
                 <div class="nav-drop acc-nav-toggle" id="">
 
                 </div>
-                
+
               </div>
             </div>
           </li>
@@ -818,6 +818,16 @@
     $(window).on("beforeunload", () => {
       toast.show();
     })
+    let iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
+    let aspect = window.screen.width / window.screen.height;
+    if (
+      iPhone &&
+      (aspect.toFixed(3) === "0.462" ||
+        aspect.toFixed(3) === "0.576" ||
+        aspect.toFixed(3) === "0.591")
+    ) {
+      $("#navbarBottom").addClass("pb-4");
+    }
   </script>
 
 </body>
