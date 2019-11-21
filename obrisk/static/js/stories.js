@@ -272,7 +272,7 @@ $(function() {
     });
   });
 
-  $(".select-status a").click(function(e) {
+  $(".select-status button").click(function(e) {
     $("#selected-status #viewer-icon").html(
       $(this)
         .find("svg")
@@ -284,7 +284,6 @@ $(function() {
         .text()
     );
     $("#viewers").val($(this).data("status"));
-    $(".dropdown-trigger").toggleClass("is-active");
   });
   $(".dropdown-trigger").click(function(e) {
     e.preventDefault();

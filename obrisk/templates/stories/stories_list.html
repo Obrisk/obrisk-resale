@@ -74,8 +74,8 @@
                     {% endif %}
                   </p>
                   <div class="control textarea-parent">
-                    <p class="counter" style="font-size: .8rem;color: #999;float: right;"> <span
-                        class="count">400 </span> Characters</p>
+                    <p class="counter" style="font-size: .8rem;color: #999;float: right;"> <span class="count">400
+                      </span> Characters</p>
 
                     <textarea id="publish" name="post" class="textarea publish-textarea" rows="3"
                       placeholder="Share something..." maxlength="400">
@@ -107,7 +107,8 @@
                       </div>
                     </div>
                     <!-- Dropdown menu -->
-                    <div class="dropdown is-spaced is-modern is-right is-neutral dropdown-trigger is-active">
+                    <div
+                      class="dropdown is-spaced is-modern is-right is-neutral dropdown-trigger is-active select-viewers">
                       <div>
                         <button id="selected-status" class="button" aria-haspopup="true">
                           <svg id="viewer-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -129,7 +130,7 @@
                       </div>
                       <div class="dropdown-menu select-status" role="menu">
                         <div class="dropdown-content">
-                          <a href="#" class="dropdown-item" data-status="P">
+                          <button class="dropdown-item" data-status="P">
                             <div class="media">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -145,8 +146,8 @@
                                 <small>Anyone can see this post.</small>
                               </div>
                             </div>
-                          </a>
-                          <a href="#" class="dropdown-item" data-status="C">
+                          </button>
+                          <button class="dropdown-item" data-status="C">
                             <div class="media">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -161,8 +162,8 @@
                                 <small>Only connects can see this post</small>
                               </div>
                             </div>
-                          </a>
-                          <a href="#" class="dropdown-item" data-status="A">
+                          </button>
+                          <button class="dropdown-item" data-status="A">
                             <div class="media">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -174,7 +175,7 @@
                                 <small>Only people in your city can see this post.</small>
                               </div>
                             </div>
-                          </a>
+                          </button>
 
                         </div>
                       </div>
