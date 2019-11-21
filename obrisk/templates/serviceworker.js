@@ -157,11 +157,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/app.css",
-    "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
+    "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "75120c27fa3ed1f0289cb4f5f38b48b0"
+    "revision": "3d7dbc3e093f3e73074f21ae30f0a771"
   },
   {
     "url": "frontend/assets/css/core.css",
@@ -169,15 +169,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
-    "revision": "169a7721873bc1ecad61797edc3b304f"
+    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
   },
   {
     "url": "frontend/assets/css/webfont.css",
-    "revision": "aea41e7f54519a53a1629b2d23069e61"
+    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
   },
   {
     "url": "frontend/assets/js/app.js",
-    "revision": "9bf0224de24fee8db5746617c44de6b3"
+    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
   },
   {
     "url": "frontend/assets/js/autocompletes.js",
@@ -553,7 +553,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "85cfb3b8f4a0a825bb780f8b07696fca"
+    "revision": "7ba13574beb3269b7b73d11f768b357a"
   },
   {
     "url": "/static/js/swiper.min.js",
