@@ -41,8 +41,8 @@
 				{% endif %}
 
 				<span class="txt3">
-					<p>Already have an account? Then please sign in <a href="{% url 'account_login' %}">
-							here</a>.</p>
+					<p>Already have an account? <a class="blue-link" href="{% url 'account_login' %}">
+							SIGN IN HERE </a></p>
 				</span>
 
 				<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
@@ -134,9 +134,9 @@
 
 				</form>
 				<br />
-				<div> <small class="mt-5" id="support"> If you have any problem with signing up, Please
-						<a href="mailto:support@obrisk.com"> click here </a> to contact us or via WechatID:
-						<span style="font-weight:bold; color: #0aeee3"> Obrisk. </span> </small> </div>
+				<div> <small class="mt-5" id="support"> Signing up problem?
+						<a href="mailto:support@obrisk.com" class="blue-link"> click here </a> to contact us or add WechatID:
+						<span class="blue-link"> Obrisk. </span> </small> </div>
 				{% comment  %}
 				<small class="mt-5" id="email-request"> <a href=" {% url 'users:email_signup' %} "> Request to signup
 						with
