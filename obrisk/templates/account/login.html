@@ -33,8 +33,8 @@
           </div>
           {% include "socialaccount/snippets/login_extra.html" %}
           {% else %}
-          <p>If you have not created an account yet, then please
-            <a href="{% url 'account_signup' %}">{% trans 'sign up first.' %}</a> </p>
+          <p>New here? Then 
+            <a class="blue-link" href="{% url 'account_signup' %}">{% trans 'SIGN UP HERE' %}</a> </p>
           {% endif %}
         </span>
         <form class="login" method="POST" action="{% url 'account_login' %}">
@@ -53,9 +53,9 @@
           </div>
         </form>
 
-        <div> <small class="mt-5" id="support"> For inquiries or problems,
-            <a href="mailto:support@obrisk.com"> click here </a> to contact us or add WechatID:
-            <span style="font-weight:bold; color: #0aeee3"> Obrisk. </span> </small> </div>
+        <div> <small class="mt-5" id="support"> Login problem?
+            <a class="blue-link" href="mailto:support@obrisk.com"> click here </a> to contact us or add WechatID:
+            <span class="blue-link"> Obrisk. </span> </small> </div>
 
       </div>
     </div>
