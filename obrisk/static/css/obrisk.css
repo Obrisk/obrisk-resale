@@ -183,7 +183,13 @@ a:hover {
   -webkit-transition: 0.15s linear;
   transition: 0.15s linear;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+}
 
+.btn-link {
+  padding-left: 14px;
+  padding-right: 14px;
+  margin-left: -4px;
+  margin-right: -4px;
 }
 
 @media (min-width: 1200px) {
