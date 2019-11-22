@@ -119,20 +119,20 @@
 
         <div class="card-text text-justify">{{ classified.details }}</div>
 
-        
+
         {% if user.is_authenticated %}
-          {% if classified.phone_number %}
-            <br />
-            <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
-              {{ classified.phone_number }}</small>
-          {% endif %}
-        
-          {% if classified.wechat_id %}
-              <small class="seller-contacts"><strong> Seller's WechatID :</strong>
-              {{ classified.wechat_id }}</small>
-          
-          {% endif %}
-        
+        {% if classified.phone_number %}
+        <br />
+        <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
+          {{ classified.phone_number }}</small>
+        {% endif %}
+
+        {% if classified.wechat_id %}
+        <small class="seller-contacts"><strong> Seller's WechatID :</strong>
+          {{ classified.wechat_id }}</small>
+
+        {% endif %}
+
         {% else %}
         <h6> Please login to view seller's contacts: </h6>
         <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
@@ -278,15 +278,11 @@
     e.preventDefault();
   })
   $(".slider-pro").sliderPro({
-    width: 960,
-    height: 500,
     arrows: true,
-    keyboard: false,
     fade: true,
     autoplay: false,
     autoScaleLayers: false,
-    fadeArrows: false,
-    touchSwipe: false
+
   });
 </script>
 {% endblock content %}
