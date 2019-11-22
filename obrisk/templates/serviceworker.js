@@ -65,7 +65,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/login.css",
-    "revision": "b7d7429a362e177eec11edec5edd2fc5"
+    "revision": "8fb1b3fdbaf394c5fd9f53b1ee33a214"
   },
   {
     "url": "/static/css/messager.css",
@@ -81,7 +81,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/obrisk.css",
-    "revision": "50c4768839f18fbc036e1552c1fcc0e3"
+    "revision": "d3faebb3ea124679a9264006fea227e8"
   },
   {
     "url": "/static/css/photoswipe.min.css",
@@ -161,23 +161,24 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/app.css",
-    "revision": "29629a61fa5e93899c1baa402ba11e02"
+    "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
   },
   {
     "url": "frontend/assets/css/bulma.css",
+
     "revision": "5853a1a9df4005500d5690e0f4ff50bd"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
-    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
+    "revision": "169a7721873bc1ecad61797edc3b304f"
   },
   {
     "url": "frontend/assets/css/webfont.css",
-    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
+    "revision": "aea41e7f54519a53a1629b2d23069e61"
   },
   {
     "url": "frontend/assets/js/app.js",
-    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
+    "revision": "9bf0224de24fee8db5746617c44de6b3"
   },
   {
     "url": "frontend/assets/js/autocompletes.js",

@@ -532,6 +532,11 @@ iframe {
   opacity: 1;
 }
 
+.blue-link {
+  font-weight: bold;
+  color: rgb(19, 147, 179);
+}
+
 @media (max-width: 992px) {
   .alert-validate::before {
     visibility: visible;
@@ -548,6 +553,11 @@ iframe {
     padding-left: 15px;
     padding-right: 15px;
     margin-top: -40px;
+  }
+
+  .login100-form-btn {
+    min-width: 100px;
+    height: 40px;
   }
 }
 

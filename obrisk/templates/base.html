@@ -667,14 +667,18 @@
             </a>
           </li>
           <li class="flex-grow-0">
-            <div id="account-dropdown" class="navbar-item is-account drop-trigger has-caret">
+            <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
               <div class="user-image">
 
                 <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
 
               </div>
-              <div class="nav-drop">
+              <div class="nav-drop is-account-dropdown">
                 <div class="inner">
+
+                  <div class="nav-drop-header">
+                    <a id="close">❌ CLOSE</a>
+                  </div>
 
                   <div class="nav-drop-body account-items">
 

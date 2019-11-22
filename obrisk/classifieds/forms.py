@@ -35,13 +35,15 @@ class ClassifiedForm(forms.ModelForm):
         help_texts = {
             "title": "Short description of your product",
             "price": "Leave 0 if you're giving away for free. Input numbers only",
-            "details": "Please provide detailed information, it easily convince someone to buy.",
+            "details": "Please provide detailed information, it easily convinces someone to buy.",
         }
 
 class ClassifiedEditForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
     details = forms.CharField(widget=forms.Textarea)
+    wechat_id = forms.CharField(required=False, label=('WechatID'))
+    phone_number = forms.CharField(required=False)
     #images = forms.CharField(widget=forms.HiddenInput(), max_length=1500) #100 for each image.
     class Meta:
         model = Classified
