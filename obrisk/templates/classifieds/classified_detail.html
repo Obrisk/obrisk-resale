@@ -105,18 +105,21 @@
         
         {% if user.is_authenticated %}
           {% if classified.phone_number %}
-          <br />
-          <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
-            {{ classified.phone_number }}</small>
-          
-          {% if classified.wechat_id %}
+            <br />
             <small class="seller-contacts"><strong> 📱Seller's contacts :</strong>
-            {{ classified.phone_number }}</small>
+              {{ classified.phone_number }}</small>
+          {% endif %}
+        
+          {% if classified.wechat_id %}
+              <small class="seller-contacts"><strong> Seller's WechatID :</strong>
+              {{ classified.wechat_id }}</small>
+          
+          {% endif %}
+        
         {% else %}
         <h6> Please login to view seller's contacts: </h6>
         <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
           href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-        {% endif %}
 
         {% endif %}
       </section>
