@@ -34,7 +34,7 @@
           {% include "socialaccount/snippets/login_extra.html" %}
           {% else %}
           <p>New here? Then 
-            <a class="blue-link" href="{% url 'account_signup' %}">{% trans 'SIGN UP HERE' %}</a> </p>
+            <a class="blue-link" href="{% url 'account_signup' %}">{% trans 'SIGN UP' %}</a> </p>
           {% endif %}
         </span>
         <form class="login" method="POST" action="{% url 'account_login' %}">
