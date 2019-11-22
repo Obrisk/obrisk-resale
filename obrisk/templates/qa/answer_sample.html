@@ -32,12 +32,12 @@
       <div class="text-secondary d-flex flex-column align-content-center mr-3">
         <a href="{% url 'users:detail' answer.user.username %}" class="username">
           {% if answer.user.thumbnail %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{answer.user.thumbnail}}" alt="Picture Profile"
-                style="width:30px;height:30px;border-radius: 50%;"
-                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-            {% else %}
-                <img src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
-            {% endif %}
+          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{answer.user.thumbnail}}" alt="Picture Profile"
+            style="width:30px;height:30px;border-radius: 50%;"
+            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+          {% else %}
+          <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
+          {% endif %}
           {{ answer.user.username|title|truncatechars:15 }}
         </a>
         <small class="answered"> {{ answer.timestamp|naturaltime }}</small>

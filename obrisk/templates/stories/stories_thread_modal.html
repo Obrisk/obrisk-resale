@@ -1,4 +1,4 @@
-{% load i18n static %} 
+{% load i18n static %}
 
 <div class="modal fade" id="storiesThreadModal" tabindex="-1" role="dialog" aria-labelledby="storiesThreadModalLabel"
   aria-hidden="true">
@@ -16,12 +16,13 @@
           <li class="card">
             <div class="card-body">
               <div class="profile-picture">
-              {% if request.user.picture %}
-                      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.picture}}" alt="Picture Profile"
-                      style="width:30px;height:30px;border-radius: 50%;"
-                      class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                {% if request.user.picture %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.picture}}" alt="Picture Profile"
+                  style="width:30px;height:30px;border-radius: 50%;"
+                  class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
                 {% else %}
-                      <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" alt="No Profile Picture" />
+                <img src="{% static 'img/user.png' %}" class="pull-left" height="30px" width="30px"
+                  alt="No Profile Picture" />
                 {% endif %}
 
               </div>

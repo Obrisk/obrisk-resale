@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "595883908eac509b732471ee0176b08f"
+    "revision": "999f27a90efbb4af0d6ccb5d47bfb0e2"
   },
   {
     "url": "/static/css/colors.css",
@@ -112,6 +112,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "ddd3af46392bc5e6c808ab15ff48ee28"
   },
   {
+    "url": "/static/css/slider-pro.min.css",
+    "revision": "6ad9f544594d24c79e2e708252dee520"
+  },
+  {
     "url": "/static/css/stories.css",
     "revision": "c2cac86e85b3a8aafb3d394c93859b5b"
   },
@@ -161,11 +165,8 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "75120c27fa3ed1f0289cb4f5f38b48b0"
-  },
-  {
-    "url": "frontend/assets/css/core.css",
-    "revision": "2c838031b9c782d78982b14fc271a998"
+
+    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
@@ -294,6 +295,10 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/img/bg.png",
     "revision": "8ddad23ce6dcc70bf111b23ae022f10c"
+  },
+  {
+    "url": "/static/img/blank.gif",
+    "revision": "07b31fa8a00640021b3997ebe4562b70"
   },
   {
     "url": "/static/img/chat.png",
@@ -486,6 +491,10 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/js/jquery.min.js",
     "revision": "a46fb81762396b7bf2020774a2fb4d9e"
+  },
+  {
+    "url": "/static/js/jquery.sliderPro.min.js",
+    "revision": "65a3bab710e0c266d08584b0c8987c34"
   },
   {
     "url": "/static/js/jquery.waypoints.min.js",

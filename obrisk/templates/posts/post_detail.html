@@ -32,7 +32,8 @@
                 style="width:30px;height:30px;border-radius: 50%;"
                 class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
               {% else %}
-              <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+              <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
+                alt="No Profile Picture" />
               {% endif %}
             </a>
             <div class="d-flex flex-column align-items-center">
@@ -47,14 +48,14 @@
       </div>
       <!-- Featured Image -->
       {% if post.image %}
-      <div class="featured-img" style="background-size:cover">
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="900" height="300"
-          alt="{% trans 'Featured Image' %}" class="card-img-top">
+      <div class="card-img-top"
+        style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
+
       </div>
       {% else %}
-      <div class="featured-img" style="background-size:cover">
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default" width="900" height="300"
-          alt="{% trans 'Featured Image' %}" class="card-img-top">
+      <div class="card-img-top"
+        style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
+
       </div>
 
       {% endif %}
@@ -102,7 +103,8 @@
               style="width:30px;height:30px;border-radius: 50%;"
               class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
             {% else %}
-            <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+            <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
+              alt="No Profile Picture" />
             {% endif %}
         </div>
         <div class="comment-body">

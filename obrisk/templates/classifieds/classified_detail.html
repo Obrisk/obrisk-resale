@@ -3,11 +3,15 @@
 {% load crispy_forms_tags thumbnail humanize %}
 
 {% block head %}
-<link href="{% static 'css/classifieds.css' %}?v=20" rel="stylesheet">
-<link href="{% static 'css/classified-details.css' %}?v=20 " rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="{% static 'css/classified-details.css' %} " rel="stylesheet">
 <link href="{% static 'css/colors.css' %}" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/swiper.min.css' %}">
-<script src="{% static 'js/swiper.min.js' %}"></script>
+<script src="{% static 'js/fancybox.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/slider-pro.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
+<script src="{% static 'js/jquery.sliderPro.min.js' %}"></script>
+
+
 <title>{{ classified.title|title }}</title>
 
 {% endblock head %}
@@ -97,7 +101,20 @@
 
         </div>
         <div class="col-lg-9 m-auto h-50">
-          {% include 'classifieds/image-swiper.html' with images=images %}
+
+          <div class="slider-pro mt-4 mb-4" id="image-slider">
+            <div class="sp-slides">
+              {% for image in images %}
+              <div class="sp-slide">
+                <a href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ image }} " data-fancybox="classified-gallery">
+                  <img class="sp-image" src="{% static 'img/blank.gif' %}"
+                    data-src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ image }}" />
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
         </div>
 
         <div class="card-text text-justify">{{ classified.details }}</div>
@@ -260,5 +277,16 @@
   jQuery('.share').click(function (e) {
     e.preventDefault();
   })
+  $(".slider-pro").sliderPro({
+    width: 960,
+    height: 500,
+    arrows: true,
+    keyboard: false,
+    fade: true,
+    autoplay: false,
+    autoScaleLayers: false,
+    fadeArrows: false,
+    touchSwipe: false
+  });
 </script>
 {% endblock content %}
