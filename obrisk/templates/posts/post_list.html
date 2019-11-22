@@ -77,14 +77,18 @@
                 <a href="{% url 'posts:post' post.slug %}"
                   style="color:black; text-decoration:none; background-color:none">
                   {% if post.image %}
-                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}" width="700" height="300"
-                    alt="{% trans 'Featured Image' %}" class="card-img-top">
-                  {% else %}
-                  <div class="featured-img" style="background-size:cover">
-                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default" width="700" height="300"
-                      alt="{% trans 'Featured Image' %}" class="card-img-top">
+                  <div class="card-img-top"
+                    style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
+
                   </div>
+                  {% else %}
+                  <div class="card-img-top"
+                    style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
+
+                  </div>
+
                   {% endif %}
+                </a>
               </div>
 
               <div class="col-12 pl-5 pr-5 pt-4 pb-4">
@@ -96,7 +100,8 @@
                       style="width:30px;height:30px;border-radius: 50%;"
                       class="rounded-circle  mb-0 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
                     {% else %}
-                    <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" alt="No Profile Picture" />
+                    <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
+                      alt="No Profile Picture" />
                     {% endif %}
                     <div id="post-user">
                       <div class="d-flex flex-row mt-2">

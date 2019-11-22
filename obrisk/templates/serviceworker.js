@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "595883908eac509b732471ee0176b08f"
+    "revision": "999f27a90efbb4af0d6ccb5d47bfb0e2"
   },
   {
     "url": "/static/css/colors.css",
@@ -112,6 +112,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "ddd3af46392bc5e6c808ab15ff48ee28"
   },
   {
+    "url": "/static/css/slider-pro.min.css",
+    "revision": "6ad9f544594d24c79e2e708252dee520"
+  },
+  {
     "url": "/static/css/stories.css",
     "revision": "c2cac86e85b3a8aafb3d394c93859b5b"
   },
@@ -161,11 +165,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "3d7dbc3e093f3e73074f21ae30f0a771"
-  },
-  {
-    "url": "frontend/assets/css/core.css",
-    "revision": "2c838031b9c782d78982b14fc271a998"
+    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
@@ -294,6 +294,10 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/img/bg.png",
     "revision": "8ddad23ce6dcc70bf111b23ae022f10c"
+  },
+  {
+    "url": "/static/img/blank.gif",
+    "revision": "07b31fa8a00640021b3997ebe4562b70"
   },
   {
     "url": "/static/img/chat.png",
@@ -488,6 +492,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "a46fb81762396b7bf2020774a2fb4d9e"
   },
   {
+    "url": "/static/js/jquery.sliderPro.min.js",
+    "revision": "65a3bab710e0c266d08584b0c8987c34"
+  },
+  {
     "url": "/static/js/jquery.waypoints.min.js",
     "revision": "cebc34dedef229a98275955df75e20e5"
   },
@@ -513,7 +521,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/nav.js",
-    "revision": "521845ef0218c4edfdcaa3e553eebeb9"
+    "revision": "6d50249b1413a573c4d592437f092d05"
   },
   {
     "url": "/static/js/notif-sw.js",
@@ -521,7 +529,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/obrisk.js",
-    "revision": "950fa8034a9774a10e9d9b01b675c66e"
+    "revision": "74ea2840b2d6944215e8bdf22bf2e7ca"
   },
   {
     "url": "/static/js/photoswipe-ui-default.min.js",
@@ -553,7 +561,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "7ba13574beb3269b7b73d11f768b357a"
+    "revision": "cadb538595ea32a931d3a7c5730acb17"
   },
   {
     "url": "/static/js/swiper.min.js",
