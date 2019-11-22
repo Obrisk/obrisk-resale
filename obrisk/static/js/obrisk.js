@@ -19,122 +19,117 @@ Issues with the above approach:
 4. Undocumented: No mention in the documentation, or it's too hard for me to find
 */
 
-
-$('.form-group').removeClass('row');
-
+$(".form-group").removeClass("row");
 
 /* Notifications JS basic client */
-$(function () {
-    let emptyMessage = 'You have no unread notification';
+$(function() {
+  let emptyMessage = "You have no unread notification";
 
-    function checkNotifications() {
-        $.ajax({
-            url: '/ws/notifications/latest-notifications/',
-            cache: false,
-            success: function (data) {
-                if (!data.includes(emptyMessage)) {
-                    $(".is-notify").addClass("notification--num");
-                }
-            },
-        });
+  function checkNotifications() {
+    $.ajax({
+      url: "/ws/notifications/latest-notifications/",
+      cache: false,
+      success: function(data) {
+        if (!data.includes(emptyMessage)) {
+          $(".is-notify").addClass("notification--num");
+        }
+      }
+    });
+  }
+
+  function update_social_activity(id_value) {
+    let storiesToUpdate = $("[stories-id=" + id_value + "]");
+    payload = {
+      id_value: id_value
     };
+    $.ajax({
+      url: "/stories/update-interactions/",
+      data: payload,
+      type: "POST",
+      cache: false,
+      success: function(data) {
+        $(".like-count", storiesToUpdate).text(data.likes);
+        $(".comment-count", storiesToUpdate).text(data.comments);
+      }
+    });
+  }
 
-    function update_social_activity(id_value) {
-        let storiesToUpdate = $("[stories-id=" + id_value + "]");
-        payload = {
-            'id_value': id_value,
-        };
-        $.ajax({
-            url: '/stories/update-interactions/',
-            data: payload,
-            type: 'POST',
-            cache: false,
-            success: function (data) {
-                $(".like-count", storiesToUpdate).text(data.likes);
-                $(".comment-count", storiesToUpdate).text(data.comments);
-            },
-        });
-    };
+  checkNotifications();
 
-    checkNotifications();
+  // $('#notifications').popover({
+  //     html: true,
+  //     trigger: 'manual',
+  //     container: "body",
+  //     placement: "bottom",
+  // });
 
-    // $('#notifications').popover({
-    //     html: true,
-    //     trigger: 'manual',
-    //     container: "body",
-    //     placement: "bottom",
-    // });
+  $("#notifications").click(function() {
+    $("#recent-notifications").html("");
+    $.ajax({
+      url: "/ws/notifications/latest-notifications/",
 
-    $("#notifications").click(function () {
-        $("#recent-notifications").html('');
-        $.ajax({
-            url: '/ws/notifications/latest-notifications/',
-
-            success: function (data) {
-                console.log(data);
-                $("#recent-notifications").html(data);
-            },
-        });
-
-        return false;
+      success: function(data) {
+        console.log(data);
+        $("#recent-notifications").html(data);
+      }
     });
 
+    return false;
+  });
 
+  // Code block to manage WebSocket connections
+  // Try to correctly decide between ws:// and wss://
+  let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  let ws_path = ws_scheme + "://" + window.location.host + "/ws/notifications/";
+  let webSocket = new channels.WebSocketBridge();
+  webSocket.connect(ws_path);
 
-    // Code block to manage WebSocket connections
-    // Try to correctly decide between ws:// and wss://
-    let ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    let ws_path = ws_scheme + '://' + window.location.host + "/ws/notifications/";
-    let webSocket = new channels.WebSocketBridge();
-    webSocket.connect(ws_path);
+  // When debugging websockets uncomment these lines.
+  // webSocket.socket.onopen = function () {
+  //     //console.log("Connected to " + ws_path);
+  // };
 
-    // When debugging websockets uncomment these lines.
-    // webSocket.socket.onopen = function () {
-    //     //console.log("Connected to " + ws_path);
-    // };
+  // webSocket.socket.onclose = function () {
+  //     //console.log("Disconnected from " + ws_path);
+  // };
 
-    // webSocket.socket.onclose = function () {
-    //     //console.log("Disconnected from " + ws_path);
-    // };
+  // Listen the WebSocket bridge created throug django-channels library.
+  // webSocket.listen(function(event) {
+  //     switch (event.key) {
+  //         case "notification":
+  //             $("#notifications").addClass("btn-dark");
+  //             break;
 
-    // Listen the WebSocket bridge created throug django-channels library.
-    // webSocket.listen(function(event) {
-    //     switch (event.key) {
-    //         case "notification":
-    //             $("#notifications").addClass("btn-dark");
-    //             break;
+  //         case "social_update":
+  //             $("#notifications").addClass("btn-dark");
+  //             update_social_activity(event.id_value);
+  //             break;
 
-    //         case "social_update":
-    //             $("#notifications").addClass("btn-dark");
-    //             update_social_activity(event.id_value);
-    //             break;
+  //         case "additional_stories":
+  //             if (event.actor_name !== currentUser) {
+  //                 $(".stream-update").show();
+  //             }
+  //             break;
 
-    //         case "additional_stories":
-    //             if (event.actor_name !== currentUser) {
-    //                 $(".stream-update").show();
-    //             }
-    //             break;
-
-    //         default:
-    //             // console.log('error: ', event);
-    //             break;
-    //     };
-    // });
+  //         default:
+  //             // console.log('error: ', event);
+  //             break;
+  //     };
+  // });
 });
 
-//Hide Top nav bar on scroll 
+//Hide Top nav bar on scroll
 var prevScrollpos = window.pageYOffset;
-window.onscroll = function () {
-    var currentScrollPos = window.pageYOffset;
-    if (prevScrollpos > currentScrollPos) {
-        document.getElementById("navbarBottom").style.bottom = "-80px";
-        document.getElementById("navbarTop").style.top = "0";
-    } else {
-        document.getElementById("navbarBottom").style.bottom = "0";
-        if (!$(".is-account-dropdown").hasClass("is-active")) {
-            document.getElementById("navbarTop").style.top = "-80px";
-        }
-
+window.onscroll = function() {
+  var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("navbarBottom").style.bottom = "-80px";
+    document.getElementById("navbarTop").style.top = "0";
+  } else {
+    document.getElementById("navbarBottom").style.bottom = "0";
+    if (!$(".is-account-dropdown").hasClass("is-active")) {
+      document.getElementById("navbarTop").style.top = "0";
     }
-    prevScrollpos = currentScrollPos;
-}
+  }
+  prevScrollpos = currentScrollPos;
+};

@@ -25,49 +25,53 @@
 		}
 	}
 </script>
+<div class="container mt-5 mb-md-5">
 
-<div class="limiter">
-	<button onclick="window.history.go(-1); return false;" class="btn btn-dark"> <i class="fa fa-chevron-left" aria-hidden="true"></i></button>
-	<div class="container-login100">
-		<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
-			<span class="login100-form-title p-b-32">{% trans 'Account Creation' %}</span>
-			<span class="txt3">
-				<p>{% blocktrans %}Already have an account? Then please sign in <a href="{{ login_url }}">
-						here</a>.{% endblocktrans %}</p>
-			</span>
+	<div class="limiter">
+		<button onclick="window.history.go(-1); return false;" class="btn btn-dark"> <i class="fa fa-chevron-left"
+				aria-hidden="true"></i></button>
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-85 p-r-85 p-t-55 p-b-55">
+				<span class="login100-form-title p-b-32">{% trans 'Account Creation' %}</span>
+				<span class="txt3">
+					<p>{% blocktrans %}Already have an account? Then please sign in <a href="{{ login_url }}">
+							here</a>.{% endblocktrans %}</p>
+				</span>
 
-			<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-				{% csrf_token %}
-				<h5 class="text-center mt-3">Please enter your address. </h5>
-				<div class="input-group mb-3 mt-4">
-					<div class="input-group-prepend">
-						<label class="input-group-text" for="province">Province</label>
+				<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+					{% csrf_token %}
+					<h5 class="text-center mt-3">Please enter your address. </h5>
+					<div class="input-group mb-3 mt-4">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="province">Province</label>
+						</div>
+						<select class="custom-select" id="province" name="province"></select>
 					</div>
-					<select class="custom-select" id="province" name="province"></select>
-				</div>
 
-				<div class="input-group mb-3">
-					<div class="input-group-prepend">
-						<label class="input-group-text" for="city">City</label>
+					<div class="input-group mb-3">
+						<div class="input-group-prepend">
+							<label class="input-group-text" for="city">City</label>
+						</div>
+						<select class="custom-select" id="city" name="city"> </select>
 					</div>
-					<select class="custom-select" id="city" name="city"> </select>
-				</div>
 
-				<small>Please enter a valid email as it will require confirmation</small>
+					<small>Please enter a valid email as it will require confirmation</small>
 
-				{{ form|crispy }}
-				<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
-				I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the
-				laws and regulations of the country residing.</a>
+					{{ form|crispy }}
+					<input type="checkbox" name="terms" id="terms" onchange="activateButton(this)">
+					I Agree to <a href="{% url 'terms_and_conditions' %}">Terms & Conditions </a> and to abide with the
+					laws and regulations of the country residing.</a>
 
-				{% if redirect_field_value %}
-				<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-				{% endif %}
-				<div class="form-group container-login100-form-btn justify-content-center mt-4">
-					<button disabled type="submit" id="email-signup-submit" class="login100-form-btn">{% trans 'Sign Up' %}
-						&raquo;</button>
-				</div>
-			</form>
+					{% if redirect_field_value %}
+					<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+					{% endif %}
+					<div class="form-group container-login100-form-btn justify-content-center mt-4">
+						<button disabled type="submit" id="email-signup-submit"
+							class="login100-form-btn">{% trans 'Sign Up' %}
+							&raquo;</button>
+					</div>
+				</form>
+			</div>
 		</div>
 	</div>
 </div>
