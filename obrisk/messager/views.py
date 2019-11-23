@@ -93,17 +93,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
     paginate_by = 100 #The pagination destroys the order of messages #NEEDS FIX
     template_name = "messager/message_list.html"
 
-    def get(self, *args, **kwargs):
-        url = str('/ws/messages/')
-        if self.get_queryset() == url :
-            messages.error(self.request, 
-            f"Hello, It looks like you are trying to do something bad. \
-            Your account {self.request.user.username}, has been flagged. \
-            If similar actions happen again, this account will be blocked!")
-            return redirect('messager:contacts_list')
-        else:
-            return super(MessagesListView, self).get(*args, **kwargs)
-
+    
 
     def get_context_data(self, *args, **kwargs): 
         context = super().get_context_data(*args, **kwargs)
@@ -111,7 +101,9 @@ class MessagesListView(LoginRequiredMixin, ListView):
 
         try:
             active_user = get_user_model().objects.get(username=self.kwargs["username"])
+            print(active_user)
         except get_user_model().DoesNotExist:
+            print('line106')
             return context    
         
         classified = Conversation.objects.get_conv_classified(self.request.user, active_user)
@@ -133,6 +125,18 @@ class MessagesListView(LoginRequiredMixin, ListView):
                 context['classified'] = classified
         return context
 
+    def get(self, *args, **kwargs):
+        # user = get_object_or_404(user_model, pk=self.object.pk)
+
+        url = str('/ws/messages/')
+        if self.get_queryset() == url :
+            messages.error(self.request, 
+            f"Hello, It looks like you are trying to do something bad. \
+            Your account {self.request.user.username}, has been flagged. \
+            If similar actions happen again, this account will be blocked!")
+            return redirect('messager:contacts_list')
+        else:
+            return super(MessagesListView, self).get(*args, **kwargs)
 
     def get_queryset(self):    
         try:               
