@@ -164,11 +164,6 @@ workbox.precaching.precacheAndRoute([
     "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
   },
   {
-    "url": "frontend/assets/css/bulma.css",
-
-    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
-  },
-  {
     "url": "frontend/assets/css/materialdesignicons.min.css",
     "revision": "169a7721873bc1ecad61797edc3b304f"
   },
