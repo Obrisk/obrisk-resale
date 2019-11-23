@@ -9,6 +9,6 @@ urlpatterns = [
     url(r'^receive-message/$', views.receive_message, name='receive_message'),
     url(r'^make-conversations/$', views.make_conversations, name='make_conversations'),    
     url(r'^classified-chat/(?P<to>([^/]+))/(?P<classified>[-\w]+)/$', views.classified_chat, name='classified_chat'),
-    url(r'^(?P<username>([^/]+))/$', views.MessagesListView.as_view(),
+    url(r'^chat/(?P<username>([^/]+))/$', views.MessagesListView.as_view(),
         name='conversation_detail'),
 ]

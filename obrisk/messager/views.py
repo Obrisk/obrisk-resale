@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
@@ -94,16 +94,13 @@ class MessagesListView(LoginRequiredMixin, ListView):
     template_name = "messager/message_list.html"
 
     
-
     def get_context_data(self, *args, **kwargs): 
         context = super().get_context_data(*args, **kwargs)
         context['active'] = self.kwargs["username"]
 
         try:
             active_user = get_user_model().objects.get(username=self.kwargs["username"])
-            print(active_user)
         except get_user_model().DoesNotExist:
-            print('line106')
             return context    
         
         classified = Conversation.objects.get_conv_classified(self.request.user, active_user)
@@ -125,19 +122,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
                 context['classified'] = classified
         return context
 
-    def get(self, *args, **kwargs):
-        # user = get_object_or_404(user_model, pk=self.object.pk)
-
-        url = str('/ws/messages/')
-        if self.get_queryset() == url :
-            messages.error(self.request, 
-            f"Hello, It looks like you are trying to do something bad. \
-            Your account {self.request.user.username}, has been flagged. \
-            If similar actions happen again, this account will be blocked!")
-            return redirect('messager:contacts_list')
-        else:
-            return super(MessagesListView, self).get(*args, **kwargs)
-
+        
     def get_queryset(self):    
         try:               
             active_user = get_user_model().objects.get(username=self.kwargs["username"])
