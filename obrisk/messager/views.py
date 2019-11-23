@@ -6,7 +6,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
@@ -93,18 +93,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
     paginate_by = 100 #The pagination destroys the order of messages #NEEDS FIX
     template_name = "messager/message_list.html"
 
-    def get(self, *args, **kwargs):
-        url = str('/ws/messages/')
-        if self.get_queryset() == url :
-            messages.error(self.request, 
-            f"Hello, It looks like you are trying to do something bad. \
-            Your account {self.request.user.username}, has been flagged. \
-            If similar actions happen again, this account will be blocked!")
-            return redirect('messager:contacts_list')
-        else:
-            return super(MessagesListView, self).get(*args, **kwargs)
-
-
+    
     def get_context_data(self, *args, **kwargs): 
         context = super().get_context_data(*args, **kwargs)
         context['active'] = self.kwargs["username"]

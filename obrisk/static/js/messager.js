@@ -73,7 +73,7 @@ $(function () {
                     scrollMessages();
                 },
                 fail: function () {
-                    console.log('test')
+                    console.log('failed to send the message')
                 }
             });
 
