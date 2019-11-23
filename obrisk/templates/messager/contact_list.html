@@ -78,16 +78,14 @@
 
 
       <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
+        <ol class="breadcrumb" style="background-color: #3EC4E2;">
           <li class="breadcrumb-item">
-            <h4> {% trans "You don't have any contacts in your account." %} </h4>
+            <h4> {% trans "No contacts" %} </h4>
           </li>
         </ol>
       </nav>
 
-      <p>{% trans "Start a chat from the classifieds details or invite new friends! " %}</p>
-      <p>{% trans "If you have questions, then you can chat with the Obrisk team member below... " %}</p>
-      <p>{% trans "We will reply you within the shortest time possible." %}</p>
+      <p>{% trans "Start a chat from the classifieds details or invite friends, Or you can chat with the available Obrisk team member" %}</p>
 
       <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
         class="list-group-item list-group-item-action ">
