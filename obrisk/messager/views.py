@@ -122,7 +122,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
                 context['classified'] = classified
         return context
 
-        
+
     def get_queryset(self):    
         try:               
             active_user = get_user_model().objects.get(username=self.kwargs["username"])
