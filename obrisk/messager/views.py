@@ -93,7 +93,6 @@ class MessagesListView(LoginRequiredMixin, ListView):
     paginate_by = 100 #The pagination destroys the order of messages #NEEDS FIX
     template_name = "messager/message_list.html"
 
-    
     def get_context_data(self, *args, **kwargs): 
         context = super().get_context_data(*args, **kwargs)
         context['active'] = self.kwargs["username"]
@@ -129,6 +128,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
             
             conv = Conversation.objects.get_conv_obj(self.request.user, active_user)
             #Below is called only when the conversation is opened thus mark all msgs as read.
+            
             if conv:
                 return conv.messages.all()
                 #Celery task: conv.messages.all().update(unread=False) 

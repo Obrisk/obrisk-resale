@@ -7,7 +7,7 @@
 <title>Chatting with {{ active|title}}</title>
 <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
-<link href="{% static 'css/messager.css' %}" rel="stylesheet">
+<link href="{% static 'css/messages.css' %}" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
 <link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}" />
@@ -17,7 +17,7 @@
 {% block content %}
 <div class="chat">
 
-  <div class="chat-title">
+  <div class="chat-title nav-bar navbar-fixed-top">
     <a class="back-btn" href="{% url 'messager:contacts_list' %}"> <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
     <div class="d-flex w-100 justify-content-between">
@@ -45,6 +45,8 @@
 
 
   </div>
+
+
   <div class="messages">
     <div class="messages-content">
 

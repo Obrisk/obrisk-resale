@@ -2,21 +2,20 @@
 {% load static i18n %}
 
 {% block head %}
-<link href="{% static 'css/messager.css' %}" rel="stylesheet">
+<link href="{% static 'css/contact-list.css' %}" rel="stylesheet">
 <title>{% trans 'Contacts' %}</title>
 {% endblock head %}
 
 {% block content %}
 <div class="container mt-5 mb-md-5">
 
-  <div class="row mt-md-5" style="overflow-y:hidden;">
+  <div class="row mt-md-5" >
 
     <div class="col-md-8 m-auto pb-4">
        <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
     </div>
 
-    <div class="col-md-8 col-10 m-auto list-group users-list " style="overflow-y:hidden;">
-
+    <div class="col-md-8 col-10 m-auto list-group users-list">
       {% for con in convs %}
           {% if con.first_user.username == request.user.username %}
             <a href="{% url 'messager:conversation_detail' con.second_user.username %}"

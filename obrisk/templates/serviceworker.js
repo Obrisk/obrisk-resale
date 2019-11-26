@@ -68,7 +68,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "8fb1b3fdbaf394c5fd9f53b1ee33a214"
   },
   {
-    "url": "/static/css/messager.css",
+    "url": "/static/css/contact-list.css"
+  },
+  {
+    "url": "/static/css/messages.css",
     "revision": "e555fe222961829dd4e3c6101901c0d6"
   },
   {

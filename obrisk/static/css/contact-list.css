@@ -1,0 +1,77 @@
+@charset "UTF-8";
+
+html,
+body,
+.chat {
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden;
+}
+
+
+#msg-timestamp {
+  position: absolute;
+  top: 28%;
+  right: 11%;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+}
+
+#last-msg {
+  position: absolute;
+  height: 18px;
+  overflow: hidden;
+  left: 70px;
+  top: 60%;
+  font-weight: normal;
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+}
+
+
+.chat {
+  width: 100%;
+  display: flex;
+  flex-flow: column wrap;
+}
+
+
+.small-screen .contacts {
+  display: none;
+}
+
+
+.fa-circle {
+  font-size: 12px;
+  color: #cf0808;
+}
+
+h4 {
+  color: white;
+}
+
+.chat-title {
+  text-align: left;
+  display: flex;
+  align-items: center;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+.status {
+  color: black;
+}
+
+.word-break {
+  word-break: break-all;
+}
+
+.btn-dark:disabled {
+  color: #cccccc !important;
+  background: gray !important;
+}

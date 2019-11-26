@@ -64,7 +64,7 @@
 
     <div class="row">
       <!-- Blog Entries Column -->
-      <div class="post-wrapper col-lg-6 m-auto">
+      <div class="post-wrapper col-lg-6">
         {% for post in posts %}
         <!-- Blog Post -->
         <div class="single-post m-4">
@@ -74,25 +74,20 @@
               <div class="col-12">
                 <a href="{% url 'posts:post' post.slug %}"
                   style="color:black; text-decoration:none; background-color:none">
-                  {% if post.image %}
-                  <div class="card-img-top"
-                    style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
-
-                  </div>
-                  {% else %}
-                  <div class="card-img-top"
-                    style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
-
-                  </div>
-
-                  {% endif %}
-                </a>
-              </div>
+                      {% if post.image %}
+                      <div class="card-img-top"
+                        style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
+                      </div>
+                      {% else %}
+                      <div class="card-img-top"
+                        style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
+                      </div>
+                      {% endif %}
+                </div>
 
               <div class="col-12 pl-5 pr-5 pt-4 pb-4">
                 <h3 class="pr-3 title"> {{ post.title|title|truncatechars:60 }} </h3>
-                <div class="text-left">
-                  <a href="{% url 'users:detail' post.user.username %}">
+                <div class="card-details">
                     {% if post.user.thumbnail %}
                     <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
                       style="width:30px;height:30px;border-radius: 50%;"
@@ -103,11 +98,10 @@
                     {% endif %}
                     <div id="post-user">
                       <div class="d-flex flex-row mt-2">
-                        <strong class="ml-0 mr-3">{{ post.user.get_profile_name|title }}</strong>
+                        <strong class="ml-0 mr-3">{{ post.user.get_profile_name|title|truncatechars:12 }}</strong>
                       </div>
                     </div>
-                  </a>
-                  <span class="pull-right time"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></span>
+                  <span class="time pull-right"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></span>
                 </div>
                 </a>
               </div>
