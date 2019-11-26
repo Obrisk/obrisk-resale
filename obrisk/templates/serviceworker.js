@@ -41,11 +41,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "999f27a90efbb4af0d6ccb5d47bfb0e2"
+    "revision": "82bef65d2772dff792bd77781d75b7d4"
   },
   {
     "url": "/static/css/colors.css",
     "revision": "903c85830f85e79dd3a04235dfb842dd"
+  },
+  {
+    "url": "/static/css/contact-list.css",
+    "revision": "b79ec061457ba01eccf69f09b115965f"
   },
   {
     "url": "/static/css/creative.css",
@@ -60,6 +64,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "a2d42584292f64c5827e8b67b1b38726"
   },
   {
+    "url": "/static/css/images/blank.gif",
+    "revision": "07b31fa8a00640021b3997ebe4562b70"
+  },
+  {
     "url": "/static/css/listing.css",
     "revision": "82cb2d0cc455218a5e35998a5aea27e9"
   },
@@ -68,11 +76,8 @@ workbox.precaching.precacheAndRoute([
     "revision": "8fb1b3fdbaf394c5fd9f53b1ee33a214"
   },
   {
-    "url": "/static/css/contact-list.css"
-  },
-  {
     "url": "/static/css/messages.css",
-    "revision": "e555fe222961829dd4e3c6101901c0d6"
+    "revision": "2fa14b3194587451ee8faac93676785a"
   },
   {
     "url": "/static/css/nav.css",
@@ -100,7 +105,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/post-list.css",
-    "revision": "dfc48eec859e06ac42fd91b0a12e31fc"
+    "revision": "e3e94d0fde9007d3b9047135edcef0c9"
   },
   {
     "url": "/static/css/post-update.css",
@@ -165,6 +170,14 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "frontend/assets/css/app.css",
     "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
+  },
+  {
+    "url": "frontend/assets/css/bulma.css",
+    "revision": "4a9a178adeac28389492e5963f30efe6"
+  },
+  {
+    "url": "frontend/assets/css/core.css",
+    "revision": "2c838031b9c782d78982b14fc271a998"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
@@ -508,7 +521,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "a668a413a2df91ce373250ffd0c14049"
+    "revision": "6b443e4c497a5383caa639a2f3e2d55c"
   },
   {
     "url": "/static/js/moment.min.js",
