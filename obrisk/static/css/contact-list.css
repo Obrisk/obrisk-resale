@@ -3,9 +3,14 @@
 html,
 body,
 .chat {
-  height: 100% !important;
   width: 100% !important;
-  overflow: hidden;
+}
+
+.users-list {
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
 }
 
 
@@ -32,20 +37,12 @@ body,
 }
 
 
-.chat {
-  width: 100%;
-  display: flex;
-  flex-flow: column wrap;
-}
-
-
 .small-screen .contacts {
   display: none;
 }
 
-
 .fa-circle {
-  font-size: 12px;
+  font-size: 11px;
   color: #cf0808;
 }
 
@@ -53,11 +50,6 @@ h4 {
   color: white;
 }
 
-.chat-title {
-  text-align: left;
-  display: flex;
-  align-items: center;
-}
 
 h5 {
   font-size: 1.5rem;
@@ -74,4 +66,36 @@ h5 {
 .btn-dark:disabled {
   color: #cccccc !important;
   background: gray !important;
+}
+
+#new-msgs {
+  margin-left: 2px;
+}
+
+@media screen and (max-width:450px) {
+
+  .card {
+    max-width: none;
+    height: 90px;
+    margin: -18px
+  }  
+  .users-list {
+    margin-bottom: 11%;
+  }
+
+  .username {
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 1.5%;
+    margin-left: 3%;
+  }
+
+  .profile-header-avatar {
+    margin-left: -2%;
+  }
+
+  #new-msgs {
+    margin-left: 4%;
+  }
+
 }
