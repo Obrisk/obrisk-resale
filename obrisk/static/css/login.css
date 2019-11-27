@@ -549,6 +549,12 @@ iframe {
 [ Responsive ]*/
 
 @media (max-width: 576px) {
+
+  .wrap-loginonly100 {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+
   .wrap-login100 {
     padding-left: 15px;
     padding-right: 15px;
@@ -572,10 +578,6 @@ iframe {
 @media (max-width: 375px) {
   .code-input {
     width: 140px;
-  }
-  .wrap-loginonly100 {
-    margin-left: 10px; 
-    margin-right: 10px; 
   }
 }
 
