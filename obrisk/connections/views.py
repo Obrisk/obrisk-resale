@@ -62,10 +62,10 @@ def friendship_accept(request, friendship_request_id):
             request.user.friendship_requests_received, id=friendship_request_id
         )
         f_request.accept()
-        return redirect("friends:friendship_view_friends", username=request.user.username)
+        return redirect("connections:friendship_view_friends", username=request.user.username)
 
     return redirect(
-        "friends:friendship_requests_detail", friendship_request_id=friendship_request_id
+        "connections:friendship_requests_detail", friendship_request_id=friendship_request_id
     )
 
 
@@ -77,9 +77,9 @@ def friendship_reject(request, friendship_request_id):
             request.user.friendship_requests_received, id=friendship_request_id
         )
         f_request.reject()
-        return redirect("friends:friendship_request_list")
+        return redirect("connections:friendship_request_list")
 
-    return redirect("friends:friendship_view_friends", username=request.user.username)
+    return redirect("connections:friendship_view_friends", username=request.user.username)
 
 @login_required
 def friendship_cancel(request, friendship_request_id):
@@ -89,10 +89,10 @@ def friendship_cancel(request, friendship_request_id):
             request.user.friendship_requests_sent, id=friendship_request_id
         )
         f_request.cancel()
-        return redirect("friends:friendship_request_list")
+        return redirect("connections:friendship_request_list")
 
     return redirect(
-        "friends:friendship_requests_detail", friendship_request_id=friendship_request_id
+        "connections:friendship_requests_detail", friendship_request_id=friendship_request_id
     )
 
 @login_required
@@ -175,7 +175,7 @@ def follower_add(
         except AlreadyExistsError :
             return following(request, followee)
         else:
-            return redirect("friends:friendship_following", username=follower.username)
+            return redirect("connections:friendship_following", username=follower.username)
 
     return render(request, template_name, ctx)
 
@@ -189,7 +189,7 @@ def follower_remove(
         followee = user_model.objects.get(username=followee_username)
         follower = request.user
         Follow.objects.remove_follower(follower, followee)
-        return redirect("friends:friendship_following", username=follower.username)
+        return redirect("connections:friendship_following", username=follower.username)
 
     return render(request, template_name, {"followee_username": followee_username})
 
@@ -245,7 +245,7 @@ def block_add(request, blocked_username, template_name="connections/add_block.ht
         except AlreadyExistsError :
             return blocking(request, blocking)
         else:
-            return redirect("friends:friendship_blocking", username=blocker.username)
+            return redirect("connections:friendship_blocking", username=blocker.username)
 
     return render(request, template_name, ctx)
 
@@ -259,6 +259,6 @@ def block_remove(
         blocked = user_model.objects.get(username=blocked_username)
         blocker = request.user
         Block.objects.remove_block(blocker, blocked)
-        return redirect("friends:friendship_blocking", username=blocker.username)
+        return redirect("connections:friendship_blocking", username=blocker.username)
 
     return render(request, template_name, {"blocked_username": blocked_username})

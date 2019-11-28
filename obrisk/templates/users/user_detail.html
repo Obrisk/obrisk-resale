@@ -31,11 +31,12 @@
     {% if request.user.username == object.username %}
     <a class="btn btn-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
 
-    {% if object.is_official %}
+    {%if object.is_official %}
             
       <a class="btn btn-outline-dark" href="{% url 'connections:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
 
     {% endif %}
+    <a class="btn btn-outline-dark" href="{% url 'connections:friendship_view_friends' object.username  %}">{% trans 'friends' %}</a>
 
 {% else %}
 
