@@ -58,6 +58,10 @@ urlpatterns = [
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
     url(r'^markdownx/', include('markdownx.urls')),
     # Local apps here
+
+    #url(r'^friendship/', include('friendship.urls')),
+    url(r'^connections/', include('obrisk.connections.urls', namespace='connections')),
+
     url(r'^ws/notifications/',
         include('obrisk.notifications.urls', namespace='notifications')),
     url(r'^classifieds/',

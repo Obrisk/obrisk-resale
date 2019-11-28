@@ -30,7 +30,35 @@
     </div>
     {% if request.user.username == object.username %}
     <a class="btn btn-dark" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+
+    {% if object.is_official %}
+            
+      <a class="btn btn-outline-dark" href="{% url 'connections:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
+
     {% endif %}
+
+{% else %}
+
+    
+    {% if object in friends %}     
+      
+       
+      <a class="btn btn-outline-dark" href="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬chat' %}</a>
+      
+    {% else %}
+       <a class="btn btn-outline-dark" href="{% url 'connections:friendship_add_friend' object.username  %}">{% trans '➕add friends' %}</a>
+    {% endif %}
+    {% if object in following %}
+     
+        <a class="btn btn-outline-danger" href="{% url 'connections:follower_remove'  object.username  %}">{% trans 'unfollow' %}</a>
+      
+    {% else %}
+      {% if object.is_official %}
+      <a class="btn btn-outline-dark" href="{% url 'connections:follower_add'   object.username %}">{% trans 'follow' %}</a>
+      {% endif %}
+    {% endif %}
+    
+  {% endif %}    
     <!--This is else statement. <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
   </div>
   <div class="container profile-wrapper">
