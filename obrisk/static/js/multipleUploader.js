@@ -85,7 +85,6 @@ OssUpload.prototype = {
       $("#uploader .placeholder").hide();
 
       var AllowUploadQuantity = TotalFilesMaxSize - curIndex;
-      //console.log('number of files ' + AllowUploadQuantity)
 
       //check if the upload quantity has reach max
       if (AllowUploadQuantity == 0) {
@@ -176,7 +175,7 @@ OssUpload.prototype = {
 
       $li.remove();
       if (uploader.fileList.length == 0) {
-        $("#wrapper .container").css("display", "none");
+        $("#wrapper .placeholder").css("display", "block");
       }
     });
   },
@@ -315,15 +314,15 @@ OssUpload.prototype = {
 
                         if (!images) {
                           if (app == "classifieds") {
-                              images = "classifieds/error-img.jpg";
-                              bootbox.alert(
-                                "Oops! an error occured when uploading your image(s). \
+                            images = "classifieds/error-img.jpg";
+                            bootbox.alert(
+                              "Oops! an error occured when uploading your image(s). \
                                                     But you can submit this post without images ."
-                              );
-                          }else {
-                              bootbox.alert(
-                                "Sorry! an error occured when uploading your image(s). You can post without images"
-                              );
+                            );
+                          } else {
+                            bootbox.alert(
+                              "Sorry! an error occured when uploading your image(s). You can post without images"
+                            );
                           }
                         }
                       }
