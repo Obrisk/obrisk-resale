@@ -282,6 +282,7 @@ def bulk_update_classifieds_mid_images(request):
             
             except oss2.exceptions.NoSuchKey as e:
                 img.image_mid_size = img.image 
+                img.save()
 
             else:
                 img.image_mid_size = img_mid_name 
