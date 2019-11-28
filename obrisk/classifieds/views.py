@@ -355,7 +355,7 @@ class DetailClassifiedView(DetailView):
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
 
         classified_tags_ids = self.object.tags.values_list('id', flat=True)
-        similar_classifieds = Classified.objects.filter(tags__in=classified_tags_ids)\
+        similar_classifieds = Classified.objects.get_active().filter(tags__in=classified_tags_ids)\
             .exclude(id=self.object.id).annotate (
                 image_thumb = Subquery (
                     ClassifiedImages.objects.filter(

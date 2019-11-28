@@ -3,6 +3,7 @@ from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth import get_user_model
+from django.shortcuts import redirect
 from slugify import slugify
 
 import json
@@ -183,7 +184,10 @@ def multipleImagesPersist(request, images_list, app, obj):
             img_obj = ClassifiedImages(classified=obj, image=str_result)
             thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
                     slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+            img_mid_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
+                    slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
             style = 'image/resize,m_fill,h_156,w_156'
+            style_mid = 'image/resize,m_fill,h_400'
 
         elif app == 'stories':
             #The image here is full url to the OSS bucket because of how it is consumed in the front-end
@@ -204,6 +208,12 @@ def multipleImagesPersist(request, images_list, app, obj):
                                                         oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
             bucket.process_object(str_result, process)
         
+            if app == 'classifieds':
+                process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(img_mid_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(str_result, process)
         except oss2.exceptions.OssError as e:
             #Most likely this is our problem so save the image without the thumbnail:
             if index+1 == tot_img_objs:
@@ -215,6 +225,8 @@ def multipleImagesPersist(request, images_list, app, obj):
                     status= f{e.status}, requestID= f{e.request_id}")
                 
             img_obj.image_thumb = str_result 
+            if img_mid_name:
+                img_obj.image_mid_size = str_result
             img_obj.save()
             continue   
 
@@ -229,11 +241,59 @@ def multipleImagesPersist(request, images_list, app, obj):
                     check your post if everything is fine.")
                 
             img_obj.image_thumb = str_result 
+            if img_mid_name:
+                img_obj.image_mid_size = str_result
             img_obj.save()
             continue   
 
         else:
             img_obj.image_thumb = thumb_name
+            if img_mid_name:
+                img_obj.image_mid_size = img_mid_name
             img_obj.save()
 
     return True
+
+
+
+@login_required
+@require_http_methods(["GET"])
+def bulk_update_classifieds_mid_images(request):
+    """ A temporally view to create Conversations to users already chatted
+    before Convervation model was created."""
+    imgs = ClassifiedImages.objects.all()
+
+    for index, img in enumerate(imgs):
+
+        d = str(datetime.datetime.now())
+        
+        img_mid_name = "classifieds/" + slugify(str(img.classified.user)) + "/" + \
+                slugify(str(img.classified.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
+        
+        style_mid = 'image/resize,m_fill,h_400'
+
+        try:
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
+                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                            oss2.compat.to_bytes(img_mid_name))),
+                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            bucket.process_object(img.image, process)
+
+        
+        except oss2.exceptions.NoSuchKey as e:
+            print('status={0}, request_id={1}'.format(e.status, e.request_id ))
+
+        except Exception as e:
+            print (e)
+            messages.error(request, "This is trouble, restart the process!")
+            return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
+        else:
+            img.image_mid_size = img_mid_name 
+            img.save()
+
+    return redirect('classifieds:list')
+
+
+
+
+

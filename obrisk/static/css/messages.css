@@ -403,6 +403,10 @@ h5 {
   color: black;
 }
 
+.status-light {
+  font-size: 11px;
+}
+
 .word-break {
   word-break: break-all;
 }

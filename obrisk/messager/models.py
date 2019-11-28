@@ -108,7 +108,8 @@ class Message(models.Model):
     message = models.TextField(max_length=1000, blank=True, null=True)
     unread = models.BooleanField(default=True, db_index=True)
     image = models.CharField(max_length=300, blank=True, null=True)
-    img_preview = models.CharField(max_length=300, blank=True, null=True)  
+    img_preview = models.CharField(max_length=300, blank=True, null=True)
+    classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='message', null=True, blank=True)
     attachment = models.CharField(max_length=300, blank=True, null=True)
     has_link = models.BooleanField(default=False)  
     objects = MessageQuerySet.as_manager()
@@ -192,3 +193,4 @@ class Message(models.Model):
             }
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
         return new_message
+

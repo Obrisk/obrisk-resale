@@ -110,6 +110,7 @@ class Classified(models.Model):
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
     image = models.CharField(max_length=300)
+    image_mid_size = models.CharField(max_length=300)
     image_thumb = models.CharField(max_length=300)
 
     """ Informative name for model """
