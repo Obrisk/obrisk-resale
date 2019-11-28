@@ -154,21 +154,20 @@
 
 
 	{% if form.errors %}
-	errors = true;
-	{% if "phone_number" in form.errors %}
-	$("#id_phone_number").attr("disabled", false);
-	$("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
-	{% else %}
-	$("#id_phone_number").attr("disabled", true);
-	$("input[name='verified_no']").val("VAL");
-	$("#phone_label").hide();
-	$("#code").hide();
-	$("#send-code").hide();
+		errors = true;
+		{% if "phone_number" in form.errors %}
+			$("#id_phone_number").attr("disabled", false);
+			$("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
+		{% else %}
+			$("#id_phone_number").attr("disabled", true);
+			$("input[name='verified_no']").val("VAL");
+			$("#phone_label").hide();
+			$("#code").hide();
+			$("#send-code").hide();
+		{% endif %}
 	{% endif %}
-
-	{% endif %}
-
 </script>
+
 <script src="{% static 'js/user-form.js' %}?v=0908193" type="text/javascript"> </script>
 <script src="{% static 'js/location.js' %}?v=0208191" type="text/javascript"> </script>
 <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>

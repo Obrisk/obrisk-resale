@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "82bef65d2772dff792bd77781d75b7d4"
+    "revision": "ec1178f1513f83e8f256912506a0c025"
   },
   {
     "url": "/static/css/colors.css",
@@ -73,11 +73,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/login.css",
-    "revision": "8fb1b3fdbaf394c5fd9f53b1ee33a214"
+    "revision": "d4bbec33e3ea614936fb86a4267da20f"
   },
   {
     "url": "/static/css/messages.css",
-    "revision": "2fa14b3194587451ee8faac93676785a"
+    "revision": "5c816159127eac8aa6d8580828a3c74b"
   },
   {
     "url": "/static/css/nav.css",
@@ -89,7 +89,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/obrisk.css",
-    "revision": "d3faebb3ea124679a9264006fea227e8"
+    "revision": "ea19ac4b90573564bb0e6decd6393023"
   },
   {
     "url": "/static/css/photoswipe.min.css",
@@ -370,6 +370,14 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/img/Jcrop.gif",
     "revision": "7a4b4c6ebdb549fcbe47408f9457493e"
+  },
+  {
+    "url": "/static/img/loading-anti-clockwise.gif",
+    "revision": "24403b4fe8914bc583ae9b0ab09bf0e2"
+  },
+  {
+    "url": "/static/img/loading-block-puzzle.gif",
+    "revision": "2b018964331551ec6c27f81efc8b160c"
   },
   {
     "url": "/static/img/loading.gif",
