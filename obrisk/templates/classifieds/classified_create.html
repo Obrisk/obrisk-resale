@@ -45,22 +45,24 @@
 
     <div class="form-row">
       <div class="form-group col-md-12 mb-0">
-            <label class="col-form-label  requiredField">
-                Price<span class="asteriskField">*</span>
-            </label>
-        
-           <div class="form-group" id="div_id_price">
-           <div class="form-group form-inline" id="div_id_price">
-                  
-                  <span class="price-label"> <label class="col-form-label text-danger requiredField" for="id_price">
-                  CNY  </label> </span>
+        <label class="col-form-label  requiredField">
+          Price<span class="asteriskField">*</span>
+        </label>
 
-                  <input name="price" class="numberinput form-control" id="id_price" required="" type="number" step="1.00" value="0">
-            </div>
+        <div class="form-group" id="div_id_price">
+          <div class="form-group form-inline" id="div_id_price">
 
-                <small class="form-text text-muted" id="hint_id_price">Leave 0 if you're giving away for free, Enter numbers only</small>
-         </div>
-         </div>
+            <span class="price-label"> <label class="col-form-label text-danger requiredField" for="id_price">
+                CNY </label> </span>
+
+            <input name="price" class="numberinput form-control" id="id_price" required="" type="number" step="1.00"
+              value="0">
+          </div>
+
+          <small class="form-text text-muted" id="hint_id_price">Leave 0 if you're giving away for free, Enter numbers
+            only</small>
+        </div>
+      </div>
     </div>
 
     {% if request.user.address %}
@@ -74,9 +76,9 @@
       </div>
       {%if request.user.city%}
       <p class="col-md-12 mb-3"> <strong>City*: </strong> {{request.user.city}} <span class="mr-1"> </span>
-      {% endif %}
+        {% endif %}
         {% if request.user.province_region %}
-        <strong>Province*:</strong>  {{request.user.province_region}} </p>
+        <strong>Province*:</strong> {{request.user.province_region}} </p>
       {% endif %}
     </div>
     {% endif %}
@@ -104,9 +106,6 @@
             <div id="uploader">
               <div class="queueList">
                 <div id="dndArea" class="placeholder">
-                  <div class="" id="uploaderPick">
-                    <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
-                  </div>
                 </div>
               </div>
             </div>
@@ -125,7 +124,11 @@
                 </div>
               </div>
             </div>
-
+            <div class="m-auto justify-content-center d-flex ">
+              <div id="uploaderPick">
+                <a id="chooseFile" href="javascript:void(0);" class="text m-auto">Add images</a>
+              </div>
+            </div>
             <div class="" style="clear: both;">
               <p class="text-center">
                 Notes:

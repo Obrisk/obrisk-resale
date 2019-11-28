@@ -31,10 +31,10 @@ $(function() {
 
   $(".submit-button").click(function(event) {
     if (uploader.fileStats.totalFilesNum > 0) {
-      if(images != "" && ($('#id_images').val() == images)) {
-          $("body").trigger('uploadComplete');
-      }else {
-          $("body").trigger("submitClicked");
+      if (images != "" && $("#id_images").val() == images) {
+        $("body").trigger("uploadComplete");
+      } else {
+        $("body").trigger("submitClicked");
       }
     } else {
       bootbox.alert("Please upload at least one image for your post");

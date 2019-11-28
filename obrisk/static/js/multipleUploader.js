@@ -59,7 +59,7 @@ var client;
 var imgClient; //If we'll  be checking the file size.
 var ossUpload = "";
 var obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
-
+var hasErrors = false;
 var retryCount = 0;
 const retryCountMax = 5;
 
@@ -85,12 +85,11 @@ OssUpload.prototype = {
       $("#uploader .placeholder").hide();
 
       var AllowUploadQuantity = TotalFilesMaxSize - curIndex;
-      //console.log('number of files ' + AllowUploadQuantity)
 
       //check if the upload quantity has reach max
       if (AllowUploadQuantity == 0) {
         bootbox.alert("Only " + TotalFilesMaxSize + " images are allowed");
-        $(".addBtn").hide();
+        $("#addBtn").hide();
       } else if (files.length == 0) {
         bootbox.alert("No image selected , Please select one or more images");
       } else {
@@ -138,7 +137,7 @@ OssUpload.prototype = {
             }
           }
           bootbox.alert("Only " + TotalFilesMaxSize + " images are allowed");
-          $(".addBtn").hide();
+          $("#addBtn").hide();
         }
       }
       uploader.fileStats.totalFilesNum = uploader.fileList.length;
@@ -176,7 +175,7 @@ OssUpload.prototype = {
 
       $li.remove();
       if (uploader.fileList.length == 0) {
-        $("#wrapper .container").css("display", "none");
+        $("#wrapper .placeholder").css("display", "block");
       }
     });
   },
@@ -315,15 +314,15 @@ OssUpload.prototype = {
 
                         if (!images) {
                           if (app == "classifieds") {
-                              images = "classifieds/error-img.jpg";
-                              bootbox.alert(
-                                "Oops! an error occured when uploading your image(s). \
+                            images = "classifieds/error-img.jpg";
+                            bootbox.alert(
+                              "Oops! an error occured when uploading your image(s). \
                                                     But you can submit this post without images ."
-                              );
-                          }else {
-                              bootbox.alert(
-                                "Sorry! an error occured when uploading your image(s). You can post without images"
-                              );
+                            );
+                          } else {
+                            bootbox.alert(
+                              "Sorry! an error occured when uploading your image(s). You can post without images"
+                            );
                           }
                         }
                       }
@@ -363,7 +362,12 @@ OssUpload.prototype = {
                         err.requestId;
                       $("#retry-button").removeClass("is-hidden");
                       if (!images) {
-                        images = "classifieds/error-img.jpg";
+                        if (app == "classifieds") {
+                          images = "classifieds/error-img.jpg";
+                        } else {
+                          //don't add error images to stories
+                        }
+
                         bootbox.alert(
                           "Oops! an error occured when uploading your image(s). \
                                             But you can submit this post without images ."
@@ -376,7 +380,6 @@ OssUpload.prototype = {
                     $totalProgressbar
                       .css("width", "94%")
                       .html("Completed with minor errors!");
-                    $("#addBtn").hide();
                     img_error =
                       err.name +
                       ", Message: " +
@@ -385,11 +388,19 @@ OssUpload.prototype = {
                       err.requestId;
                     $("#retry-button").removeClass("is-hidden");
                     if (!images) {
-                      images = "classifieds/error-img.jpg";
-                      bootbox.alert(
-                        "Oops! an error occured when uploading your image(s). \
+                      if (app == "classifieds") {
+                        images = "classifieds/error-img.jpg";
+                      } else {
+                        //Don't add error message for stories
+                      }
+                      console.log(hasErrors);
+                      if (!hasErrors) {
+                        bootbox.alert(
+                          "Oops! an error occured when uploading your image(s). \
                                             But you can submit this post without images ."
-                      );
+                        );
+                        hasErrors = true;
+                      }
                     }
                   }
                 });
@@ -397,8 +408,7 @@ OssUpload.prototype = {
             } catch (e) {
               bootbox.alert(
                 "Oops! an error occured when uploading your image(s), \
-                    Please try again later or contact us via support@obrisk.com. " +
-                  e
+                    Please try again later or contact us via support@obrisk.com. "
               );
               $(".start-uploader").css("display", "block");
               console.log(e);
@@ -415,8 +425,7 @@ OssUpload.prototype = {
       })
       .catch(e => {
         bootbox.alert(
-          "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com" +
-            e
+          "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
         );
         console.log(e);
       });
@@ -615,9 +624,8 @@ $(function() {
   ossUpload = new OssUpload();
   ossUpload.init();
 
-  $("#retry-button").click(function(e) {
-    e.preventDefault();
-    $("#addBtn").show();
+  //Remove all the selected files from the upload list
+  $("body").on("resetUpload", function() {
     uploader = {
       fileList: [],
       fileStats: {
@@ -631,10 +639,14 @@ $(function() {
     $(".queueList ul").html(``);
     img_error = "";
     images = "";
-    var progressBar = 0;
-    var progress = "";
-    var $wrap = $("#uploader ");
     $totalProgressbar.css("width", "0%").html("");
+    hasErrors = false;
+  });
+  //Reset Button
+  $("#retry-button").click(function(e) {
+    e.preventDefault();
+    $("body").trigger("resetUpload");
     $("#retry-button").addClass("is-hidden");
+    $("#addBtn").show();
   });
 });

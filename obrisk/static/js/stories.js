@@ -206,6 +206,9 @@ $(function() {
 
   //Close compose box
   $(".close-publish").on("click", function() {
+    $("body").trigger("resetUpload");
+    //Clear text input
+    $("input, textarea").val("");
     $(".app-overlay").removeClass("is-active");
     $(".is-new-content").removeClass("is-highlighted");
     $(".close-wrap").addClass("d-none");
