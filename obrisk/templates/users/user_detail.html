@@ -34,10 +34,11 @@
     {%if object.is_official %}
             
       <a class="btn btn-outline-dark" href="{% url 'connections:friendship_followers'  object.username  %}">{% trans 'my followers🤝' %}</a>
+    {% else %}
+    <a class="btn btn-outline-dark" href="{% url 'connections:friendship_following' object.username  %}">{% trans 'following' %}</a>
 
     {% endif %}
     <a class="btn btn-outline-dark" href="{% url 'connections:friendship_view_friends' object.username  %}">{% trans 'friends' %}</a>
-
 {% else %}
 
     
