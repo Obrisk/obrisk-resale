@@ -281,12 +281,8 @@ def bulk_update_classifieds_mid_images(request):
 
             
             except oss2.exceptions.NoSuchKey as e:
-                print('status={0}, request_id={1}'.format(e.status, e.request_id ))
+                img.image_mid_size = img.image 
 
-            except Exception as e:
-                print (e)
-                messages.error(request, "This is trouble, restart the process!")
-                return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
             else:
                 img.image_mid_size = img_mid_name 
                 img.save()
