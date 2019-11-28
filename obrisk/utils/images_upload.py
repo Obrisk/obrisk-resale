@@ -259,36 +259,36 @@ def multipleImagesPersist(request, images_list, app, obj):
 @login_required
 @require_http_methods(["GET"])
 def bulk_update_classifieds_mid_images(request):
-    """ A temporally view to create Conversations to users already chatted
-    before Convervation model was created."""
+    """Function to update all images objects to have 
+    the mid size image."""
     imgs = ClassifiedImages.objects.all()
 
     for index, img in enumerate(imgs):
-        if img.image_mid_size == '1':
-            d = str(datetime.datetime.now())
-            
-            img_mid_name = "classifieds/" + slugify(str(img.classified.user)) + "/" + \
-                    slugify(str(img.classified.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
-            
-            style_mid = 'image/resize,m_fill,h_400'
+        d = str(datetime.datetime.now())
+        
+        img_mid_name = "classifieds/" + slugify(str(img.classified.user)) + "/" + \
+                slugify(str(img.classified.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
+        
+        style_mid = 'image/resize,m_fill,h_400'
 
-            try:
-                process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(img_mid_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                bucket.process_object(img.image, process)
+        try:
+            process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
+                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                            oss2.compat.to_bytes(img_mid_name))),
+                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+            bucket.process_object(img.image, process)
 
-            
-            except oss2.exceptions.NoSuchKey as e:
-                img.image_mid_size = img.image 
-                img.save()
+        
+        except oss2.exceptions.NoSuchKey as e:
+            print('status={0}, request_id={1}'.format(e.status, e.request_id ))
 
-            else:
-                img.image_mid_size = img_mid_name 
-                img.save()
+        except Exception as e:
+            print (e)
+            messages.error(request, "This is trouble, restart the process!")
+            return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         else:
-            continue
+            img.image_mid_size = img_mid_name 
+            img.save()
 
     return redirect('classifieds:list')
 
