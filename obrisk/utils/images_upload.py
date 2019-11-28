@@ -290,6 +290,8 @@ def bulk_update_classifieds_mid_images(request):
             else:
                 img.image_mid_size = img_mid_name 
                 img.save()
+        else:
+            continue
 
     return redirect('classifieds:list')
 
