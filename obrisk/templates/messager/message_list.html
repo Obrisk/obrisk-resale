@@ -15,9 +15,9 @@
 {% endblock head %}
 
 {% block content %}
-<div class="chat">
+<div class="chat " style="overflow: hidden;">
 
-  <div class="chat-title nav-bar navbar-fixed-top">
+  <div class="chat-title nav-bar navbar-fixed-top w-100" style="position: fixed; top: 0px;">
     <a class="back-btn" href="{% url 'messager:contacts_list' %}"> <i class="fa fa-chevron-left" aria-hidden="true"></i>
     </a>
     <div class="d-flex w-100 justify-content-between">
@@ -47,7 +47,7 @@
   </div>
 
 
-  <div class="messages">
+  <div class="messages mt-5">
     <div class="messages-content">
 
       {% if message_list %}
@@ -146,7 +146,6 @@
   </div>
 </div>
 <!-- card end-->
-</div>
 
 {% endblock content %}
 
