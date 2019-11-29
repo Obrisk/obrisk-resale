@@ -488,10 +488,11 @@
             <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
                 href="{% url 'posts:list' %}">{% trans 'Articles' %} <span class="sr-only">(current)</span></a></li>
-            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
+           {# #} <!-- <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'q_and_a' %} is-active {% endif %} "
-                href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li>
-          </ul>
+                href="{% url 'qa:index_noans' %}">{% trans 'Q&A' %}</a></li> -->
+                {# #} 
+              </ul>
           <ul class="nav navbar-nav ">
 
             <li class="nav-item">
