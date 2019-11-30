@@ -40,11 +40,15 @@
     position: relative;
 }
 
+.chooseFile, 
+.startImgUpload {
+    background: linear-gradient(45deg, #0aacec, #0aeee3);
+}
+
 #uploaderPick,
 .start-uploader,
 .add-btn {
     font-size: 15px;
-    background: linear-gradient(45deg, #0aacec, #0aeee3);
     line-height: 30px;
     padding: 0 20px;
     color: #fff;
@@ -53,7 +57,7 @@
     cursor: pointer;
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
 }
-}
+
 
 #uploaderPick {
     font-size: 18px;

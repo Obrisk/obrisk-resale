@@ -15,6 +15,18 @@ $(function () {
         $("input[name='status']").val("D");
         $("#posts-form").submit();
     });
+
+    
+    $("#startImgUpload").click(function(event) {
+        console.log("clicked");
+        if (uploader.fileStats.totalFilesNum > 0) {
+                $("body").trigger("submitClicked");
+                console.log("submit trigged")
+        } else {
+            bootbox.alert("Please upload at least one image for your post");
+        }
+    });
+
 });
 
 
