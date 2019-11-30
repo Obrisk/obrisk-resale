@@ -18,6 +18,7 @@
 
 #uploader {
     padding: 0 1.2em;
+    display: none;
 }
 
 #uploader .placeholder {
@@ -40,8 +41,9 @@
     position: relative;
 }
 
-.chooseFile, 
-.startImgUpload {
+#chooseFile, 
+#startImgUpload {
+    padding: 8px;
     background: linear-gradient(45deg, #0aacec, #0aeee3);
 }
 
@@ -92,14 +94,11 @@
 }
 
 #uploader .filelist li {
-    width: 100px;
-    height: 100px;
     background: url(/static/img/bg.png) no-repeat;
     text-align: center;
     margin: 0 8px 20px 0;
     position: relative;
     display: inline;
-    float: left;
     overflow: hidden;
     font-size: 12px;
 }
@@ -155,7 +154,6 @@
     -ms-animation: progressmove 2s linear infinite;
     animation: progressmove 2s linear infinite;
 
-    -webkit-transform: translateZ(0);
 }
 
 #uploader .filelist li .success {
@@ -272,10 +270,7 @@
 }
 
 #uploader .filelist div.file-panel span {
-    width: 24px;
-    height: 24px;
     display: inline;
-    float: right;
     text-indent: -9999px;
     overflow: hidden;
     background: url(/static/img/icons.png) no-repeat;

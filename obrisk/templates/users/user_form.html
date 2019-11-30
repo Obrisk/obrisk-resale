@@ -5,10 +5,10 @@
 {% block title %}{{ user.username|title }}{% endblock %}
 
 {% block head %}
-<script src="{% static 'js/user-form.js' %}?v=0908192" type="text/javascript"> </script>
-<script src="{% static 'js/location.js' %}?v=0208191" type="text/javascript"> </script>
-<script src="{% static 'js/aliyun-oss.min.js' %}?v=3107191" type="text/javascript"></script>
-<link href="{% static 'css/user_form.css' %}?v=21" rel="stylesheet">
+<script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
+<link href="{% static 'css/user_form.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
@@ -95,5 +95,5 @@
 
 
 </script>
-<script src="{% static 'js/profile-uploader.js' %}?v=0908193" type="text/javascript"></script>
+<script src="{% static 'js/profile-uploader.js' %}" type="text/javascript"></script>
 {% endblock %}

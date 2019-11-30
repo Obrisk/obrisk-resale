@@ -20,8 +20,8 @@ var image; //holds all uploaded images as a string
 var client;
 var ossUpload = '';
 
-let retryCount = 0;
-const retryCountMax = 5;
+var uploadRetryCount = 0;
+const uploadRetryCountMax = 5;
 var obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
 
 OssUpload.prototype = {
@@ -152,9 +152,9 @@ OssUpload.prototype = {
                                     error: function (e) {
 
                                         // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
-                                        if (retryCount < retryCountMax) {
-                                            retryCount++;
-                                            console.error(`retryCount : ${retryCount}`);
+                                        if (uploadRetryCount < uploadRetryCountMax) {
+                                            uploadRetryCount++;
+                                            console.error(`uploadRetryCount : ${uploadRetryCount}`);
                                             upload();
                                         } else {
                                             //We have retried to the max and there is nothing we can do
@@ -174,9 +174,9 @@ OssUpload.prototype = {
 
                             if (err.name.toLowerCase().indexOf('connectiontimeout') !== -1) {
                                 // timeout retry
-                                if (retryCount < retryCountMax) {
-                                    retryCount++;
-                                    console.error(`retryCount : ${retryCount}`);
+                                if (uploadRetryCount < uploadRetryCountMax) {
+                                    uploadRetryCount++;
+                                    console.error(`uploadRetryCount : ${uploadRetryCount}`);
                                     upload();
                                 }
                                 else {

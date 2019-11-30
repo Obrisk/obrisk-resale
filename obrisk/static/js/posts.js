@@ -16,7 +16,18 @@ $(function () {
         $("#posts-form").submit();
     });
 
+    $('#chooseFile').click(function() {
+        $("#uploader").show();
+    });
     
+    $("body").on("uploadComplete", function(event) {
+        //Todo check if images where uploaded or empty
+        var imgs = images.split(',');
+        for (var img in imgs) {
+            $("#imgs-list").append("<p>" + " https://obrisk.oss-cn-hangzhou.aliyuncs.com/" + imgs[img]+ "</p>");
+        }
+    });
+   
     $("#startImgUpload").click(function(event) {
         console.log("clicked");
         if (uploader.fileStats.totalFilesNum > 0) {

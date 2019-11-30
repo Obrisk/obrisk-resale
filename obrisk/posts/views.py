@@ -73,6 +73,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
             form.instance.user = self.request.user
             post = form.save(commit=False)
             post.user = self.request.user
+            post.image = post.image.replace('https://obrisk.oss-cn-hangzhou.aliyuncs.com/', '')
 
             d = str(datetime.datetime.now())
             thumb_name = "posts/" + str(post.user) + "/" + \
@@ -85,9 +86,6 @@ class CreatePostView(LoginRequiredMixin, CreateView):
                                                                 oss2.compat.to_bytes(thumb_name))),
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(str_result, process)
-                post.img_small = thumb_name
-
-                post.save()
 
             except oss2.exceptions.ServerError as e:
                 post.save()
@@ -107,15 +105,13 @@ class CreatePostView(LoginRequiredMixin, CreateView):
                 #return self.form_invalid(form)
                 #I am not returning form errors because this is our problem and not user's
                 return redirect ('posts:list')
+        
+            else:
+                post.img_small = thumb_name
+                post.save()
 
             #When the for-loop has ended return the results.        
             return super(CreatePostView, self).form_valid(form)
-
-
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
