@@ -4,6 +4,8 @@
 
 {% block head %}
 <link href="{% static 'css/post-create.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="/static/css/uploader.css" />
+<link rel="stylesheet" href="/static/css/classified-create.css" />
 <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <title>Obrisk Post</title>
 
@@ -15,47 +17,56 @@
     {% csrf_token %}
     {{ form|crispy }}
 
-    <div id="wrapper" class="mb-4">
-      <div id="container">
-        <div id="uploader">
-          <div class="queueList">
-            <div id="dndArea" class="placeholder">
-              <div class="" id="uploaderPick">
-                <a id="chooseFile" href="javascript:void(0);" class="text">Add images</a>
+    <p class="city"> <strong> Images*: </strong>
+      <p>
+        <div id="wrapper" class="mb-4">
+          <div id="container">
+            <div id="uploader">
+              <div class="queueList">
+                <div id="dndArea" class="placeholder">
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-        <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
-          <div class="total-progress">
-            <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-              aria-valuemax="100">
+            <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
+              <div class="total-progress">
+                <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
+                  aria-valuemin="0" aria-valuemax="100">
+                </div>
+              </div>
+              <div class="upload-btn d-flex flex-column flex-md-row">
+                <div class="start-uploader startUploadBtn ml-2 mr-2">
+                  <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
+                </div>
+                <div class="start-uploader addBtn ml-2 mr-2">
+                  <a id="addBtn" href="javascript:void(0);" class="text">Add images</a>
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="upload-btn d-flex flex-column flex-md-row">
-            <div class="start-uploader startUploadBtn ml-2 mr-2">
-              <a id="startUpload" href="javascript:void(0);" class="text">Upload image</a>
+            <div class="m-auto justify-content-center d-flex ">
+              <div id="uploaderPick" style="background-color: white;">
+               <a id="chooseFile" href="javascript:void(0);" class="text m-2">Add images</a>
+
+                <a id="startImgUpload" href="javascript:void(0);" class="text m-2">Upload</a>
+              </div>
             </div>
-            <div class="start-uploader addBtn ml-2 mr-2">
-              <a id="addBtn" href="javascript:void(0);" class="text  ">Change image</a>
+            <div class="" style="clear: both;">
+              <p class="text-center">
+                Notes:
+                Can select up to 8 multiple images & Max size per image is 13MB
+              </p>
             </div>
           </div>
         </div>
 
-        <div class="" style="clear: both;">
-          <p class="text-center">
-            Notes:
-            Only one image and Max file size is 13MB
-          </p>
+        <div class="container bs-docs-container">
+          <form id="form">
+            <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+          </form>
         </div>
-      </div>
-    </div>
 
-    <div class="container bs-docs-container">
-      <form id="form">
-        <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
-      </form>
-    </div>
+
+      <div id="imgs-list"></div>
+      
     <div class="form-group">
       <button type="button" id="post-submit" class="btn btn-dark publish">{% trans 'Publish' %}</button>
       <button type="button" id="post-draft" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
@@ -74,12 +85,14 @@
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const user = "{{ request.user.username }}";
 
+  const app = "articles";
+
   const title_id = "{{ form.title.auto_id }}";
-  const details_id = "{{ form.details.auto_id }}";
-  const tags = "{{ form.tags.auto_id }}";
 </script>
 
 <!--script src="https://gosspublic.alicdn.com/aliyun-oss-sdk-4.4.4.min.js"></script-->
-<script src="{% static 'js/post-uploader.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/classifieds.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/posts.js' %}"></script>
 {% endblock extra_js %}

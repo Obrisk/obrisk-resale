@@ -489,7 +489,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/classifieds.js",
-    "revision": "831fdeff08cf0bbbdebc94bf9bb9759d"
+    "revision": "ef86fc7d3773372de80ef080394511c6"
   },
   {
     "url": "/static/js/fancybox.min.js",
@@ -537,7 +537,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "b88d137e7e0bb02bb25f44ff4ed707f1"
+    "revision": "e715f89382a987b481d23a2e8354921d"
   },
   {
     "url": "/static/js/nav.js",
@@ -581,7 +581,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "cadb538595ea32a931d3a7c5730acb17"
+    "revision": "68b48088c0e93b44fc1985f6f1ecdbf4"
   },
   {
     "url": "/static/js/swiper.min.js",

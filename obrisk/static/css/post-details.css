@@ -2,6 +2,10 @@
     background: rgb(224, 223, 223);
 }
 
+#comment-notify {
+    display: none;
+}
+
 #post-user {
     color: black;
 }

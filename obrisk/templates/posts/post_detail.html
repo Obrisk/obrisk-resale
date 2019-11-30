@@ -126,10 +126,10 @@
       <h2>Your comment has been added.</h2>
       {% else %}
 
-      <div id="comment-notify d-none" class="notification"> </div>
+      <div id="comment-notify"> </div>
 
       <div class="card my-4">
-        <h4 class="">{% trans 'Leave a Comment' %}:</h4>
+        <h4 class="m-3">{% trans 'Leave a Comment' %}:</h4>
         <div class="card-body">
 
           <form method="post" id="commentForm">
@@ -156,9 +156,9 @@
         {% if request.user == post.user %}
         <div class="row align-items-center mt-4 mb-4">
 
-          <a class="btn btn-dark" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}">
-            <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a> <br> <br>
-          <a class="btn btn-dark ml-3" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}">
+          <a class="btn btn-dark m-2" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}">
+            <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
+          <a class="btn btn-dark m-2" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}">
             <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
         </div>
         {% endif %}

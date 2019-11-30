@@ -36,6 +36,11 @@ html {
   font-family: Raleway-Regular, sans-serif;
 }
 
+html {
+  overflow: scroll;
+}
+
+
 /*---------------------------------------------*/
 a {
   font-family: Raleway-Regular;
