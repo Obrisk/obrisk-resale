@@ -73,7 +73,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/login.css",
-    "revision": "d4bbec33e3ea614936fb86a4267da20f"
+    "revision": "049482c6f9a9dd1d254122b187c892ed"
   },
   {
     "url": "/static/css/messages.css",
@@ -81,7 +81,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/nav.css",
-    "revision": "3ca2770c9b22da159f5fe98062b785d3"
+    "revision": "8348ee23460aa81ecfb494b2b64cc5af"
   },
   {
     "url": "/static/css/notifications.css",
@@ -97,11 +97,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/post-create.css",
-    "revision": "157e23707df89649711ee7f70c470827"
+    "revision": "17c3998c7a6c057cdc072f89909f25d0"
   },
   {
     "url": "/static/css/post-details.css",
-    "revision": "edda765773a08e81941634042fd3abed"
+    "revision": "ee735434ea6da68dcbee355ec46709d2"
   },
   {
     "url": "/static/css/post-list.css",
@@ -133,7 +133,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/uploader.css",
-    "revision": "90c59c696f044caff617065c1c0fa4d0"
+    "revision": "b9715dd8c5b6fe216bdba45023b84790"
   },
   {
     "url": "/static/css/user_form.css",
@@ -537,7 +537,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "e715f89382a987b481d23a2e8354921d"
+    "revision": "87abb8ed8a3a6cf27d22dd239a4986a8"
   },
   {
     "url": "/static/js/nav.js",
@@ -569,11 +569,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/posts.js",
-    "revision": "9991ed072b6ba3fb5e4ea8f96d40eebf"
+    "revision": "31df2b7ca86ce8cfc652629144a99184"
   },
   {
     "url": "/static/js/profile-uploader.js",
-    "revision": "7c63b99426e49c72f1262c9ddd73b1e3"
+    "revision": "1b336e42d3b08f44d47f59345e4d6779"
   },
   {
     "url": "/static/js/qa.js",
