@@ -98,6 +98,7 @@ THIRD_PARTY_APPS = [
     'star_ratings',
     'pwa_webpush',
     'django_elasticsearch_dsl',
+    'friendship',
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
@@ -108,6 +109,7 @@ LOCAL_APPS = [
     'obrisk.qa.apps.QaConfig',
     'obrisk.search.apps.SearchConfig',
     'obrisk.posts.apps.PostsConfig',
+    'obrisk.connections.apps.ConnectionsConfig',
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS

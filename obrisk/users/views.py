@@ -39,6 +39,16 @@ from .models import User
 from .phone_verification import send_sms, verify_counter
 from phonenumbers import PhoneNumber
     
+from friendship.models import Friend, Follow, FriendshipRequest, Block
+try:
+    from django.contrib.auth import get_user_model
+
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+
+    user_model = User
+
 #There is no need to override this view. By default All-auth directly login users when they signup.
 class EmailSignUp(SignupView):
     form_class = EmailSignupForm
@@ -160,13 +170,29 @@ def phone_password_reset(request):
         return render(request, 'account/phone_password_reset.html', {'form': form})
         
 
+
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
-
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        # pk = kwargs.get('pk')pk=self.object.pk
+        context = super(UserDetailView, self).get_context_data(**kwargs)
+        """
+        this prints the other user
+        user = get_object_or_404(user_model, pk=self.object.pk)
+        """
+        user = self.request.user
+        friends = Friend.objects.friends(user)
+        following = Follow.objects.following(user)
+        followers = Follow.objects.followers(user)
+        context['friends'] = friends
+        context['followers'] = followers
+        context['following'] = following
+        return context
 class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
@@ -240,6 +266,8 @@ class UserListView(LoginRequiredMixin, ListView):
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
+
+
 
 
 @ajax_required
