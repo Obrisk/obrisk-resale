@@ -7,7 +7,7 @@ class PostForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
     edited = forms.BooleanField(
         widget=forms.HiddenInput(), required=False, initial=False)
-    image = forms.CharField(required=False, max_length=150, label=('Cover photo'))
+    image = forms.CharField(required=False, max_length=150, label=('Cover photo URL'))
     content = MarkdownxFormField()
 
     class Meta:
