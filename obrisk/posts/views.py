@@ -85,7 +85,7 @@ class CreatePostView(LoginRequiredMixin, CreateView):
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(
                                                                 oss2.compat.to_bytes(thumb_name))),
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                bucket.process_object(str_result, process)
+                bucket.process_object(post.image, process)
 
             except oss2.exceptions.ServerError as e:
                 post.save()
