@@ -33,7 +33,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classified-details.css",
-    "revision": "2708ccf0e952bc019b6d50d710f418fe"
+    "revision": "7c22ccaf4acf4f89e4864bce4be0936a"
   },
   {
     "url": "/static/css/classifieds-list.css",
@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "ec1178f1513f83e8f256912506a0c025"
+    "revision": "82bef65d2772dff792bd77781d75b7d4"
   },
   {
     "url": "/static/css/colors.css",
@@ -169,27 +169,23 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/app.css",
-    "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
+    "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "4a9a178adeac28389492e5963f30efe6"
-  },
-  {
-    "url": "frontend/assets/css/core.css",
-    "revision": "2c838031b9c782d78982b14fc271a998"
+    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
-    "revision": "169a7721873bc1ecad61797edc3b304f"
+    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
   },
   {
     "url": "frontend/assets/css/webfont.css",
-    "revision": "aea41e7f54519a53a1629b2d23069e61"
+    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
   },
   {
     "url": "frontend/assets/js/app.js",
-    "revision": "9bf0224de24fee8db5746617c44de6b3"
+    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
   },
   {
     "url": "frontend/assets/js/autocompletes.js",
@@ -529,7 +525,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "6b443e4c497a5383caa639a2f3e2d55c"
+    "revision": "948b7e2b7d5db08259f90afe5580da17"
   },
   {
     "url": "/static/js/moment.min.js",
