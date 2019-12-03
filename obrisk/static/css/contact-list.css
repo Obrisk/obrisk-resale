@@ -13,7 +13,6 @@ body,
   margin-bottom: auto;
 }
 
-
 #msg-timestamp {
   position: absolute;
   top: 28%;
@@ -36,7 +35,6 @@ body,
   font-size: 12px;
 }
 
-
 .small-screen .contacts {
   display: none;
 }
@@ -49,7 +47,6 @@ body,
 h4 {
   color: white;
 }
-
 
 h5 {
   font-size: 1.5rem;
@@ -72,13 +69,11 @@ h5 {
   margin-left: 2px;
 }
 
-@media screen and (max-width:450px) {
-
+@media screen and (max-width: 450px) {
   .card {
     max-width: none;
     height: 90px;
-    margin: -18px
-  }  
+  }
   .users-list {
     margin-bottom: 11%;
   }
@@ -97,5 +92,4 @@ h5 {
   #new-msgs {
     margin-left: 4%;
   }
-
 }
