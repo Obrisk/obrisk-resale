@@ -260,7 +260,7 @@ OssUpload.prototype = {
                         $("body").trigger("uploadComplete");
                       } else {
                         $totalProgressbar
-                          .css("width", progressBar)
+                          .css("width", progressBar.toFixed(0))
                           .html(progressBar);
                       }
                     },
