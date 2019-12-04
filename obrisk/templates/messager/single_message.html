@@ -1,51 +1,51 @@
 {% load static i18n humanize %}
 
 
+
+
 {% if request.user == message.sender %}
-<div class="user align-items-center mt-1 mb-1">
-    <div class="message-container-user">
-        <div class="timestamp d-flex justify-content-end">{{ message.timestamp|date:'M. d G:i' }}</div>
+<div class="chat-message is-sent">
+    {% if message.sender.thumbnail %}
+    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+        style="width:30px;height:30px;border-radius: 50%;"
+        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic">
+    {% else %}
+    <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" width="30px"
+        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile"
+        alt="No Profile Picture" />
+    {% endif %}
+    <div class="message-block">
+        <span>{{ message.timestamp|date:'M. d G:i' }}</span>
         {% if message.message %}
-        <div class="message-bubble-user"> {{ message.message }} </div>
+        <div class="message-text">{{ message.message }}</div>
         {% endif %}
         {% if message.img_preview %}
         <a data-fancybox="gallery" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}"><img
+                style="width: 250px; height: 250px;"
                 src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}" /></a>
         {% endif %}
     </div>
-
-    <figure class="avatar-user">
-        {% if message.sender.thumbnail %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
-            style="width:30px;height:30px;border-radius: 50%;"
-            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-        {% else %}
-        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" width="30px"
-            alt="No Profile Picture" />
-        {% endif %}
-    </figure>
-
 </div>
-
 {% else %}
-<div class="sender align-items-center mt-1 mb-1">
-    <figure class="avatar-sender">
-        {% if message.sender.thumbnail %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
-            style="width:30px;height:30px;border-radius: 50%;"
-            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-        {% else %}
-        <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" width="30px"
-            alt="No Profile Picture" />
-        {% endif %}
-    </figure>
-    <div class="message-container">
-        <div class="timestamp d-flex justify-content-start"> {{ message.timestamp|date:'N d G:i' }} </div>
+
+<div class="chat-message is-received">
+    {% if message.sender.thumbnail %}
+    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+        style="width:30px;height:30px;border-radius: 50%;"
+        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+    {% else %}
+    <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" width="30px"
+        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" alt="No Profile Picture" />
+    {% endif %}
+    <div class="message-block">
+        <span>{{ message.timestamp|date:'N d G:i' }}</span>
         {% if message.message %}
-        <div class="message-bubble"> {{ message.message }} </div>
+        <div class="message-text">{{ message.message }}</div>
         {% endif %}
         {% if message.img_preview %}
-        <a data-fancybox="gallery" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}"><img
+        <a data-fancybox="gallery" style="width: 250px; height: 250px;"
+            href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}"><img
+                style="width: 250px; height: 250px;"
                 src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}" /></a>
         {% endif %}
 

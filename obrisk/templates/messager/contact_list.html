@@ -9,69 +9,69 @@
 {% block content %}
 <div class="container mt-5 mb-md-5">
 
-  <div class="row mt-md-5" >
+  <div class="column row mt-md-5">
 
     <div class="col-md-8 m-auto pb-4">
-       <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
+      <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
     </div>
 
     <div class="col-lg-10 users-list">
       {% for con in convs %}
-          {% if con.first_user.username == request.user.username %}
-            <a href="{% url 'messager:conversation_detail' con.second_user.username %}"
-              class="card p-4 mb-3 d-flex flex-row ">
-              {% if con.second_user.thumbnail %}
-              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.second_user.thumbnail}}" alt="Pic"
-                width="40px"  style="width:40px;height:40px;border-radius: 50%;"
-                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid">
-              {% else %}
-              <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
-                alt="No Pic" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-              {% endif %}
+      {% if con.first_user.username == request.user.username %}
+      <a href="{% url 'messager:conversation_detail' con.second_user.username %}"
+        class="card p-4 mb-3 d-flex flex-row ">
+        {% if con.second_user.thumbnail %}
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
+          style="width:40px;height:40px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid">
+        {% else %}
+        <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
+          alt="No Pic" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+        {% endif %}
 
-              <strong class="username"> {{ con.second_user.get_profile_name|title }} </strong>
-              
-              {% if con.last_msg %}
-              <span id="last-msg"> {{ con.last_msg|truncatechars:50 }} </span>
-              {% elif con.img or con.attachment %}
-                  <span id="last-msg"> Attachment </span>
-              {% else %}
-                  <span id="last-msg"> New conversation </span>
-              {% endif %} 
-              <span id="msg-timestamp"> {{ con.time|date:'N d G:i' }} </span>
+        <strong class="username"> {{ con.second_user.get_profile_name|title }} </strong>
 
-              {%  if con.unread and request.user.id == con.recipient %}
-                 <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-              {% endif %}
-            </a>
+        {% if con.last_msg %}
+        <span id="last-msg"> {{ con.last_msg|truncatechars:50 }} </span>
+        {% elif con.img or con.attachment %}
+        <span id="last-msg"> Attachment </span>
+        {% else %}
+        <span id="last-msg"> New conversation </span>
+        {% endif %}
+        <span id="msg-timestamp"> {{ con.time|date:'N d G:i' }} </span>
 
-          {% else %}
-            <a href="{% url 'messager:conversation_detail' con.first_user.username %}" class="card p-4 mb-3 d-flex flex-row ">
-              {% if con.first_user.thumbnail %}
-              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.first_user.thumbnail}}" alt="Picture Profile"
-                style="width:40px;height:40px;border-radius: 50%;"
-                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-              {% else %}
-              <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
-                alt="No Profile Picture" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-              {% endif %}
+        {%  if con.unread and request.user.id == con.recipient %}
+        <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+        {% endif %}
+      </a>
 
-              <strong class="username"> {{ con.first_user.get_profile_name|title }} </strong>
-              
-              {% if con.last_msg %}
-              <span id="last-msg"> {{ con.last_msg|truncatechars:50 }} </span>
-              {% elif con.img or con.attachment %}
-                  <span id="last-msg"> Attachment </span>
-              {% else %}
-                  <span id="last-msg"> New conversation </span>
-              {% endif %}
-              <span id="msg-timestamp"> {{ con.time|date:'N d G:i' }} </span>
+      {% else %}
+      <a href="{% url 'messager:conversation_detail' con.first_user.username %}" class="card p-4 mb-3 d-flex flex-row ">
+        {% if con.first_user.thumbnail %}
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.first_user.thumbnail}}" alt="Picture Profile"
+          style="width:40px;height:40px;border-radius: 50%;"
+          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+        {% else %}
+        <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
+          alt="No Profile Picture" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+        {% endif %}
 
-              {%  if con.unread and request.user.id == con.recipient %}
-              <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-              {% endif %}
-            </a>
-          {% endif %}
+        <strong class="username"> {{ con.first_user.get_profile_name|title }} </strong>
+
+        {% if con.last_msg %}
+        <span id="last-msg"> {{ con.last_msg|truncatechars:50 }} </span>
+        {% elif con.img or con.attachment %}
+        <span id="last-msg"> Attachment </span>
+        {% else %}
+        <span id="last-msg"> New conversation </span>
+        {% endif %}
+        <span id="msg-timestamp"> {{ con.time|date:'N d G:i' }} </span>
+
+        {%  if con.unread and request.user.id == con.recipient %}
+        <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+        {% endif %}
+      </a>
+      {% endif %}
 
       {% empty %}
 
@@ -84,7 +84,9 @@
         </ol>
       </nav>
 
-      <p>{% trans "Start a chat from the classifieds details or invite friends, Or you can chat with the available Obrisk team member" %}</p>
+      <p>
+        {% trans "Start a chat from the classifieds details or invite friends, Or you can chat with the available Obrisk team member" %}
+      </p>
 
       <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
         class="list-group-item list-group-item-action ">

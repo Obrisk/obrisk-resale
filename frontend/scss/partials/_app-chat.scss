@@ -55,8 +55,8 @@ Chat window styles
         .chat-nav {
             position: absolute;
             top: 0;
-            left: 60px;
-            width: calc(100% - 60px);
+            
+            width: 100%;
             height: 60px;
             background: $white;
 
@@ -323,9 +323,9 @@ Chat window styles
         .chat-body {
             position: absolute;
             bottom: 0;
-            left: 60px;
+            
             height: 100%;
-            width: calc(100% - 60px);
+            width: 100%;
             background: lighten($fade-grey, 3%);
             transition: all .3s;
 
@@ -342,9 +342,9 @@ Chat window styles
             .chat-body-inner {
                 position: relative;
                 width: 100%;
-                height: calc(100% - 60px);
+                height: 100%;
                 margin-top: 60px;
-                padding: 20px 80px 60px 80px;
+                padding: 20px 20px 100px 20px;
                 overflow-y: auto;
                 animation-name: fadeInLeft;
                 animation-duration: .5s;
@@ -382,7 +382,7 @@ Chat window styles
                     margin-bottom: 30px;
 
                     //Avatar
-                    img {
+                    img.profile-header-avatar {
                         display: block;
                         height: 42px;
                         width: 42px;
@@ -426,7 +426,7 @@ Chat window styles
                         flex-direction: row-reverse;
 
                         //Avatar
-                        img {
+                        img.profile-header-avatar {
                             margin-left: 20px;
                         }
 
@@ -447,7 +447,7 @@ Chat window styles
                         + .is-sent {
                             margin-top: -16px !important;
 
-                            img {
+                            img.profile-header-avatar {
                                 visibility: hidden;
                             }
                         }
@@ -456,7 +456,7 @@ Chat window styles
                     //Received message
                     &.is-received {
                         //Avatar
-                        img {
+                        img.profile-header-avatar {
                             margin-right: 20px;
                         }
 
@@ -481,7 +481,7 @@ Chat window styles
                         + .is-received {
                             margin-top: -16px !important;
 
-                            img {
+                            img.profile-header-avatar {
                                 visibility: hidden;
                             }
                         }
@@ -494,8 +494,8 @@ Chat window styles
         .chat-action {
             position: fixed;
             bottom: 0;
-            left: 60px;
-            width: calc(100% - 60px);
+            
+            width: 100%;
             height: 60px;
             padding: 0 40px;
             background: lighten($fade-grey, 3%);
@@ -520,7 +520,7 @@ Chat window styles
                         max-height: 44px;
                         min-height: 44px;
                         padding: 5px 9px;
-                        padding-left: 54px;
+                        padding-right: 54px;
                         transition: all .3s;
 
                         &:focus {
@@ -532,7 +532,7 @@ Chat window styles
                     .compose-dropdown {
                         position: absolute;
                         top: 0;
-                        left: 0;
+                        right:0;
                     }
 
                     //Add content button
@@ -584,7 +584,7 @@ Chat window styles
             position: absolute;
             bottom: 0;
             right: 0;
-            height: calc(100% - 60px);
+            height: 100%;
             width: 400px;
             background: $white;
             border-left: 1px solid $fade-grey;
@@ -652,7 +652,7 @@ Chat window styles
                     bottom: 0;
                     right: 0;
                     width: 100%;
-                    height: calc(100% - 60px);
+                    height: 100%;
 
                     //User details
                     &.is-user-details {
@@ -696,7 +696,7 @@ Chat window styles
                                 width: 110px;
                                 margin: 10px auto;
 
-                                img {
+                                img.profile-header-avatar {
                                     display: block;
                                     border-radius: 50%;
                                 }
@@ -963,42 +963,3 @@ Chat window styles
     }
 }
 
-/* ==========================================================================
-1. Add conversation modal
-========================================================================== */
-
-//Modal wrap
-.add-conversation-modal {
-    //Content
-    .modal-content {
-        overflow: visible;
-
-        img {
-            height: 70px;
-            width: 70px;
-            display: block;
-            margin: 0 auto;
-        }
-
-        .help-text {
-            text-align: center;
-            font-size: .9rem;
-            padding: 10px 50px;
-            color: $muted-grey;
-        }
-
-        .field {
-            padding: 0 50px;
-            margin-bottom: 0;
-            margin-top: 16px;
-        }
-
-        .action {
-            padding: 10px 50px 20px 50px;
-
-            button {
-                line-height: 0;
-            }
-        }
-    }
-}
