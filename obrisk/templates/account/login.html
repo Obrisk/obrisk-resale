@@ -33,7 +33,7 @@
           </div>
           {% include "socialaccount/snippets/login_extra.html" %}
           {% else %}
-          <p>New here? Then 
+          <p>New here? Then
             <a class="blue-link" href="{% url 'account_signup' %}">{% trans 'SIGN UP' %}</a> </p>
           {% endif %}
         </span>
@@ -171,19 +171,5 @@
 
   }
 
-</script>
-<script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>
-
-<script>
-  var toast = new iqwerty.toast.Toast();
-  toast.setText('<p style="color:#fff">Loading...</p>').stylize({
-    background: '#3EC4E2',
-    color: '#fff!important',
-    width: 100,
-    'box-shadow': '0 0 25px rgba(0, 0, 0, .7)'
-  }).setDuration(10000);
-  $(window).on("beforeunload", () => {
-    toast.show();
-  })
 </script>
 {% endblock content %}

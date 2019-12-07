@@ -60,6 +60,7 @@ $(function() {
   });
 
   $("#send").submit(function(e) {
+    e.preventDefault();
     //make sure the textarea isn't empty before submitting the form
     if ($("textarea").val() != "") {
       $("#conversation").append(
@@ -97,6 +98,11 @@ $(function() {
       });
     }
     return false;
+  });
+
+  $("#send-text").click(function(e) {
+    e.preventDefault();
+    $("#send").trigger("submit");
   });
 
   //This helps the text in the textarea of the message to be send
@@ -298,6 +304,26 @@ OssUpload.prototype = {
         };
       }
     });
+
+    $(".retry-upload").on("click", function(image) {
+      e.preventDefault();
+      var length = uploader.fileStats.totalFilesNum;
+
+      for (var i = 0; i < length; i++) {
+        var filename = genKey();
+        file = uploader.fileList[i];
+        _this.uploadFile(file, filename);
+      }
+      uploader = {
+        fileList: [],
+        fileStats: {
+          totalFilesNum: 0,
+          totalFilesSize: 0,
+          uploadFinishedFilesNum: 0,
+          curFileSize: 0
+        }
+      };
+    });
   },
 
   /***
@@ -389,11 +415,10 @@ OssUpload.prototype = {
                         type: "POST",
                         success: function(data) {
                           $("#image").val("");
-                          //   $("#conversation").append(data);
-
-                          //   setTimeout(function() {
-                          //     scrollMessages();
-                          //   }, 1000);
+                        },
+                        fail: function(err) {
+                          $("body").trigg("showRetry");
+                          console.log(err);
                         }
                       });
                     },
