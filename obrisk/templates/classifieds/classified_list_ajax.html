@@ -76,9 +76,7 @@
 
 {% empty %}
 <small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
-  {% trans 'It looks like there are no items near you😥.' %}
+  {% trans 'It looks like there are no items near you.' %}
   <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a> </small>
-<h6 class="no-data">
-  {% trans 'You can navigate to other sections by the menu on the top⬆️'%} </h6>
 <br />
 {% endfor %}

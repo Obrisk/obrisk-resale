@@ -169,6 +169,8 @@ def multipleImagesPersist(request, images_list, app, obj):
     #The current implementation will sucessfully create obj even when there are error on images
     #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
     #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
+    img_mid_name = None
+
     for index, str_result in enumerate(images_list):
         if str_result.startswith(f'{app}/{request.user.username}') == False:
             #Check if it was default image as it has no username.
