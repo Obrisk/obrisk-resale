@@ -133,7 +133,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/uploader.css",
+<<<<<<< HEAD
     "revision": "69e4e0597b63ad8ae24897e96b9333bf"
+=======
+    "revision": "ad473707c5bc6cf9eed4d141d760c2bb"
+>>>>>>> Fixed minor issues on friendship app
   },
   {
     "url": "/static/css/user_form.css",
@@ -168,6 +172,7 @@ workbox.precaching.precacheAndRoute([
     "revision": "c5cd7f5300576ab4c88202b42f6ded62"
   },
   {
+<<<<<<< HEAD
     "url": "/static/frontend/assets/css/app.css",
     "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
@@ -186,6 +191,30 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/frontend/assets/js/app.js",
     "revision": "48e7ab1f4eec9f82d73849752c787fc3"
+=======
+    "url": "frontend/assets/css/app.css",
+    "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
+  },
+  {
+    "url": "frontend/assets/css/bulma.css",
+    "revision": "4a9a178adeac28389492e5963f30efe6"
+  },
+  {
+    "url": "frontend/assets/css/core.css",
+    "revision": "20b8c5a345a002f25509ed9abef68350"
+  },
+  {
+    "url": "frontend/assets/css/materialdesignicons.min.css",
+    "revision": "169a7721873bc1ecad61797edc3b304f"
+  },
+  {
+    "url": "frontend/assets/css/webfont.css",
+    "revision": "aea41e7f54519a53a1629b2d23069e61"
+  },
+  {
+    "url": "frontend/assets/js/app.js",
+    "revision": "9bf0224de24fee8db5746617c44de6b3"
+>>>>>>> Fixed minor issues on friendship app
   },
   {
     "url": "/static/frontend/assets/js/autocompletes.js",
@@ -537,7 +566,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
+<<<<<<< HEAD
     "revision": "836733f7d133cf24a12f38cab06fa5dd"
+=======
+    "revision": "28047d3919e83248922e62b8fc3598f8"
+>>>>>>> Fixed minor issues on friendship app
   },
   {
     "url": "/static/js/nav.js",
