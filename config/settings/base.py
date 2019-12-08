@@ -336,6 +336,8 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 13000000
 
 TAGS_CACHE_TIMEOUT = 60 * 60 * 24 * 7 #7 days. 
 
+CONNECTS_RECOMMENDATION_TIMEOUT = 60 * 60 * 3 # 3 Hours. 
+
 PWA_APP_NAME = 'Obrisk'
 PWA_APP_DESCRIPTION = 'A location based social network for foreigners in China'
 PWA_APP_THEME_COLOR = '#3ec4e2'
@@ -436,3 +438,6 @@ ELASTICSEARCH_DSL = {
         'hosts': 'elasticsearch:9200'
     },
 }
+
+
+CELERY_BROKER_URL = 'redis://localhost'
