@@ -39,7 +39,8 @@ from .models import User
 from .phone_verification import send_sms, verify_counter
 from phonenumbers import PhoneNumber
     
-from friendship.models import Friend, Follow, FriendshipRequest, Block
+from friendship.models import Friend, Follow
+
 try:
     from django.contrib.auth import get_user_model
 
@@ -193,6 +194,8 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         context['followers'] = followers
         context['following'] = following
         return context
+
+
 class UserRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 

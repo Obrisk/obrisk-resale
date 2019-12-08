@@ -49,7 +49,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/contact-list.css",
-    "revision": "b79ec061457ba01eccf69f09b115965f"
+    "revision": "b8498b9391a43d1be91744340b6ca69e"
   },
   {
     "url": "/static/css/creative.css",
@@ -133,7 +133,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/uploader.css",
-    "revision": "b9715dd8c5b6fe216bdba45023b84790"
+    "revision": "ad473707c5bc6cf9eed4d141d760c2bb"
   },
   {
     "url": "/static/css/user_form.css",
@@ -169,23 +169,27 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "frontend/assets/css/app.css",
-    "revision": "29629a61fa5e93899c1baa402ba11e02"
+    "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
   },
   {
     "url": "frontend/assets/css/bulma.css",
-    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
+    "revision": "4a9a178adeac28389492e5963f30efe6"
+  },
+  {
+    "url": "frontend/assets/css/core.css",
+    "revision": "20b8c5a345a002f25509ed9abef68350"
   },
   {
     "url": "frontend/assets/css/materialdesignicons.min.css",
-    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
+    "revision": "169a7721873bc1ecad61797edc3b304f"
   },
   {
     "url": "frontend/assets/css/webfont.css",
-    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
+    "revision": "aea41e7f54519a53a1629b2d23069e61"
   },
   {
     "url": "frontend/assets/js/app.js",
-    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
+    "revision": "9bf0224de24fee8db5746617c44de6b3"
   },
   {
     "url": "frontend/assets/js/autocompletes.js",
@@ -525,7 +529,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "948b7e2b7d5db08259f90afe5580da17"
+    "revision": "95cebf9452714f61dd85ce7142d28e9b"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -533,7 +537,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "87abb8ed8a3a6cf27d22dd239a4986a8"
+    "revision": "28047d3919e83248922e62b8fc3598f8"
   },
   {
     "url": "/static/js/nav.js",

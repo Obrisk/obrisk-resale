@@ -1,9 +1,6 @@
 # PRECAUTION: avoid production dependencies that aren't in development
 
 -r base.txt
-
-#We must continue to use both AWS and ALICLOUD
-boto3>=1.6.2  # pyup: update minor  # https://github.com/boto/boto3
 gevent>=1.2.2  # https://github.com/gevent/gevent
 raven>=6.6.0  # https://github.com/getsentry/raven-python
 gunicorn>=19.9.0  #https://gunicorn.org/

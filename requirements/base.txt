@@ -5,17 +5,19 @@ awesome-slugify>=1.6.5  # https://github.com/dimka665/awesome-slugify
 Pillow>=5.2.0  # https://github.com/python-pillow/Pillow
 psycopg2>=2.7.7  # https://github.com/psycopg/psycopg2
 pytz>=2018.5  # https://github.com/stub42/pytz
-redis==2.10.6  # https://github.com/antirez/redis
+redis>=2.10.6  # https://github.com/antirez/redis
 whitenoise>=3.3.1  # https://github.com/evansd/whitenoise
 environ>=1.0    #https://files.pythonhosted.org/packages/29/e4/6f448fcce1649a1f0f265e20bd88b7c8ff36e265657604b920240045928b/environ-1.0.tar.gz
 oss2  #https://github.com/aliyun/aliyun-oss-python-sdk
 aliyun-python-sdk-sts>=3.0.1 #https://github.com/aliyun/aliyun-openapi-python-sdk
+celery>=4.3.0 #https://github.com/celery/celery
+boto3>=1.6.2  # pyup: update minor  # https://github.com/boto/boto3
 #pypiwin32      #This is only for windows OS   
 
 
 # Django
 # ------------------------------------------------------------------------------
-django>=2.0.7  # pyup: < 2.1  # https://www.djangoproject.com/
+django==2.2.7  # pyup: < 2.1  # https://www.djangoproject.com/
 django-allauth>=0.35.0  # https://github.com/pennersr/django-allauth
 django-crispy-forms>=1.7.2  # https://github.com/django-crispy-forms/django-crispy-forms
 django-environ>=0.4.4  # https://github.com/joke2k/django-environ
