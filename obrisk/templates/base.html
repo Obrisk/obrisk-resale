@@ -64,6 +64,8 @@
   <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/nav.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/lazyload.js' %}"></script>
+
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800,900" rel="stylesheet">
@@ -95,8 +97,6 @@
 
 <body class="O-bg has-slimscroll">
   <!-- Pageloader -->
-  <div class="pageloader"></div>
-  <div class="infraloader is-active"></div>
   {% block body %}
   <div class="m-b-1">
     {% if request.user.is_authenticated %}
@@ -775,6 +775,11 @@
   <script src="{% static 'js/notif-sw.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
   {% endif %}
+  <script>
+    window.addEventListener("load", function (event) {
+      lazyload();
+    });
+  </script>
 
   <script type="text/javascript">
     function registerServiceWorker() {
@@ -801,7 +806,7 @@
 
   {% endblock javascript %}
 
-  <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>
+  <!-- <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script> -->
 
   <!-- New design script  -->
   <!-- Concatenated js plugins and jQuery -->

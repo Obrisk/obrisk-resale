@@ -28,6 +28,9 @@ $(function() {
       }
     });
   });
+  $("#addBtn").click(function() {
+    $("#uploader").show();
+  });
 
   $(".submit-button").click(function(event) {
     if (uploader.fileStats.totalFilesNum > 0) {
