@@ -15,7 +15,6 @@
 
 #uploader {
   padding: 0 1.2em;
-  display: none;
 }
 
 #uploader .placeholder {
@@ -85,6 +84,8 @@
 }
 
 #uploader .filelist li {
+  width: 100px;
+  height: 100px;
   background: url(/static/img/bg.png) no-repeat;
   text-align: center;
   margin: 0 8px 20px 0;
@@ -92,6 +93,7 @@
   display: inline;
   overflow: hidden;
   font-size: 12px;
+  float: left;
 }
 
 #uploader .filelist li:hover .file-panel {
@@ -144,6 +146,7 @@
   -o-animation: progressmove 2s linear infinite;
   -ms-animation: progressmove 2s linear infinite;
   animation: progressmove 2s linear infinite;
+  -webkit-transform: translateZ(0);
 }
 
 #uploader .filelist li .success {
@@ -260,6 +263,10 @@
 }
 
 #uploader .filelist div.file-panel span {
+  width: 24px;
+  height: 24px;
+  display: inline;
+  float: right;
   display: inline;
   text-indent: -9999px;
   overflow: hidden;

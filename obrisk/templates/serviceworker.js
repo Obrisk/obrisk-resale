@@ -49,7 +49,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/contact-list.css",
-    "revision": "b79ec061457ba01eccf69f09b115965f"
+    "revision": "b8498b9391a43d1be91744340b6ca69e"
   },
   {
     "url": "/static/css/creative.css",
@@ -133,7 +133,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/uploader.css",
-    "revision": "b9715dd8c5b6fe216bdba45023b84790"
+    "revision": "ad473707c5bc6cf9eed4d141d760c2bb"
   },
   {
     "url": "/static/css/user_form.css",
@@ -164,123 +164,123 @@ workbox.precaching.precacheAndRoute([
     "revision": "94bcf8939dee79dd4259c0cc53cfb277"
   },
   {
-    "url": "frontend/assets/css/ajax-loader.gif",
+    "url": "/static/frontend/assets/css/ajax-loader.gif",
     "revision": "c5cd7f5300576ab4c88202b42f6ded62"
   },
   {
-    "url": "frontend/assets/css/app.css",
+    "url": "/static/frontend/assets/css/app.css",
     "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
   {
-    "url": "frontend/assets/css/bulma.css",
+    "url": "/static/frontend/assets/css/bulma.css",
     "revision": "5853a1a9df4005500d5690e0f4ff50bd"
   },
   {
-    "url": "frontend/assets/css/materialdesignicons.min.css",
+    "url": "/static/frontend/assets/css/materialdesignicons.min.css",
     "revision": "6c19656af1c9b61a27ddbef91b7495f4"
   },
   {
-    "url": "frontend/assets/css/webfont.css",
+    "url": "/static/frontend/assets/css/webfont.css",
     "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
   },
   {
-    "url": "frontend/assets/js/app.js",
+    "url": "/static/frontend/assets/js/app.js",
     "revision": "48e7ab1f4eec9f82d73849752c787fc3"
   },
   {
-    "url": "frontend/assets/js/autocompletes.js",
+    "url": "/static/frontend/assets/js/autocompletes.js",
     "revision": "a84c9e2e8b09234eebf8b94f4e7a6a88"
   },
   {
-    "url": "frontend/assets/js/chat.js",
+    "url": "/static/frontend/assets/js/chat.js",
     "revision": "a3172027f3176521cfe7403431289892"
   },
   {
-    "url": "frontend/assets/js/elements.js",
+    "url": "/static/frontend/assets/js/elements.js",
     "revision": "a32f46c2a4b411950b1b891c192b6c10"
   },
   {
-    "url": "frontend/assets/js/events.js",
+    "url": "/static/frontend/assets/js/events.js",
     "revision": "24e63a872b5cbf926826ce79c41336b0"
   },
   {
-    "url": "frontend/assets/js/explorer.js",
+    "url": "/static/frontend/assets/js/explorer.js",
     "revision": "466d466ed591b9a557fea495ef662ef9"
   },
   {
-    "url": "frontend/assets/js/feed.js",
+    "url": "/static/frontend/assets/js/feed.js",
     "revision": "6dd4cb00219f26cdd8fc17e1a9aa02e4"
   },
   {
-    "url": "frontend/assets/js/friends.js",
+    "url": "/static/frontend/assets/js/friends.js",
     "revision": "4db6c2e7eff4c21670dde3227df7dbb0"
   },
   {
-    "url": "frontend/assets/js/global.js",
+    "url": "/static/frontend/assets/js/global.js",
     "revision": "aacebb1f448797470ccad76067d8ac83"
   },
   {
-    "url": "frontend/assets/js/go-live.js",
+    "url": "/static/frontend/assets/js/go-live.js",
     "revision": "bf76b7cd1a32e52388d32c932242b435"
   },
   {
-    "url": "frontend/assets/js/inbox.js",
+    "url": "/static/frontend/assets/js/inbox.js",
     "revision": "04068a235862aa45574e287165d94559"
   },
   {
-    "url": "frontend/assets/js/landing.js",
+    "url": "/static/frontend/assets/js/landing.js",
     "revision": "1c90809f8d2f444c6d7b47a1576b88a2"
   },
   {
-    "url": "frontend/assets/js/lightbox.js",
+    "url": "/static/frontend/assets/js/lightbox.js",
     "revision": "ea87e91145637177d1641359bcd1307f"
   },
   {
-    "url": "frontend/assets/js/main.js",
+    "url": "/static/frontend/assets/js/main.js",
     "revision": "bfa3a9f4dcf53fe0a8c8bbaf9d26b62c"
   },
   {
-    "url": "frontend/assets/js/modal-uploader.js",
+    "url": "/static/frontend/assets/js/modal-uploader.js",
     "revision": "cd66113247e284c73cb78d462f6fc040"
   },
   {
-    "url": "frontend/assets/js/news.js",
+    "url": "/static/frontend/assets/js/news.js",
     "revision": "0044306da774b6bbf76d8f369bb236ac"
   },
   {
-    "url": "frontend/assets/js/popovers-pages.js",
+    "url": "/static/frontend/assets/js/popovers-pages.js",
     "revision": "84703e877b88d17bf2bb6febcba204d5"
   },
   {
-    "url": "frontend/assets/js/popovers-users.js",
+    "url": "/static/frontend/assets/js/popovers-users.js",
     "revision": "7b103ef98cf014962eb7d08ce3347b61"
   },
   {
-    "url": "frontend/assets/js/profile.js",
+    "url": "/static/frontend/assets/js/profile.js",
     "revision": "22232474dae8182c745b52a7df32748d"
   },
   {
-    "url": "frontend/assets/js/questions.js",
+    "url": "/static/frontend/assets/js/questions.js",
     "revision": "765dca8c12dd834efd4773c7b204f18e"
   },
   {
-    "url": "frontend/assets/js/signup.js",
+    "url": "/static/frontend/assets/js/signup.js",
     "revision": "7760e1216245b3896ef0da25f0a0108b"
   },
   {
-    "url": "frontend/assets/js/touch.js",
+    "url": "/static/frontend/assets/js/touch.js",
     "revision": "1140bb01d2a04b048245c5a1036be175"
   },
   {
-    "url": "frontend/assets/js/tour.js",
+    "url": "/static/frontend/assets/js/tour.js",
     "revision": "18de6e2130b112c2961f2cfd603f69f6"
   },
   {
-    "url": "frontend/assets/js/videos.js",
+    "url": "/static/frontend/assets/js/videos.js",
     "revision": "a1ab8ad0ce3e68f7841518cda5b562a4"
   },
   {
-    "url": "frontend/assets/js/widgets.js",
+    "url": "/static/frontend/assets/js/widgets.js",
     "revision": "b8e215360a354e57aa6c753016e03fe0"
   },
   {
@@ -525,7 +525,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "948b7e2b7d5db08259f90afe5580da17"
+    "revision": "95cebf9452714f61dd85ce7142d28e9b"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -533,7 +533,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "87abb8ed8a3a6cf27d22dd239a4986a8"
+    "revision": "28047d3919e83248922e62b8fc3598f8"
   },
   {
     "url": "/static/js/nav.js",
