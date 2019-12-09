@@ -134,6 +134,7 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/css/uploader.css",
     "revision": "69e4e0597b63ad8ae24897e96b9333bf"
+
   },
   {
     "url": "/static/css/user_form.css",
