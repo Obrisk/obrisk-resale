@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from obrisk.connections.search import SearchListView, get_suggestions
 
 from . import views
 
@@ -28,6 +29,7 @@ from obrisk.connections.views import (
 app_name = 'connections'
 urlpatterns = [
      #friendship
+    url(r'^users-search-results/$', SearchListView.as_view(), name='users_search_results'),
     url(regex=r"^users/$", view=all_users, name="friendship_view_users"),
     url(
         regex=r"^friends/(?P<username>[\w-]+)/$",

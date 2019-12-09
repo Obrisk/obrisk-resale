@@ -336,10 +336,10 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 13000000
 
 TAGS_CACHE_TIMEOUT = 60 * 60 * 24 * 7 #7 days. 
 
-CONNECTS_RECOMMENDATION_TIMEOUT = 60 * 60 * 3 # 3 Hours. 
+CONNECTS_RECOMMENDATION_TIMEOUT = 60 * 60 * 24 # 24 Hours. 
 
 PWA_APP_NAME = 'Obrisk'
-PWA_APP_DESCRIPTION = 'A location based social network for foreigners in China'
+PWA_APP_DESCRIPTION = 'English and location based social network for foreigners in China'
 PWA_APP_THEME_COLOR = '#3ec4e2'
 PWA_APP_BACKGROUND_COLOR = '#ffffff'
 PWA_APP_DISPLAY = 'standalone'
@@ -425,7 +425,6 @@ WEBPUSH_SETTINGS = {
    "VAPID_PRIVATE_KEY": env('VAPID_PRIVATE_KEY'),
    "VAPID_ADMIN_EMAIL": env('VAPID_EMAIL')
 }
-
 
 TAGGIT_CASE_INSENSITIVE = True
 

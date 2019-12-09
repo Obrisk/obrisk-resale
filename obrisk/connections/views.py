@@ -1,17 +1,20 @@
 from django.shortcuts import render
-
-# Create your views here.
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.core.cache import cache
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
 try:
     from django.contrib.auth import get_user_model
     user_model = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
     user_model = User
-from django.shortcuts import render, get_object_or_404, redirect
+
 from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
 from friendship.models import Friend, Follow, FriendshipRequest, Block
+
 get_friendship_context_object_name = lambda: getattr(settings, "FRIENDSHIP_CONTEXT_OBJECT_NAME", "user")
 get_friendship_context_object_list_name = lambda: getattr( settings, "FRIENDSHIP_CONTEXT_OBJECT_LIST_NAME", "users")
 
@@ -21,10 +24,27 @@ def view_friends(request, username, template_name="connections/friends.html"):
     """ View the friends of a user """
     user = get_object_or_404(user_model, username=username)
     friends = Friend.objects.friends(user)
+
+    #friends_pk = friends.values_list('id', flat=True)
+    friends_pk = [u.id for u in friends]
+
+    #Try to Get the recommendation list from cache
+    recommended_connects = cache.get(f'recommended_connects_{user.id}')
+
+    if recommended_connects == None:
+        recommended_connects = user_model.objects.filter(
+            city=user.city).exclude(
+                thumbnail=None).exclude(
+                    pk__in=friends_pk)[:20]
+
+        RECOMMENDATION_TIMEOUT = getattr(settings, 'CONNECTS_RECOMMENDATION_TIMEOUT', DEFAULT_TIMEOUT)
+        cache.set(f'recommended_connects_{user.id}', recommended_connects, timeout=RECOMMENDATION_TIMEOUT)
+
     return render(request, template_name, {
         get_friendship_context_object_name(): user,
         'friendship_context_object_name': get_friendship_context_object_name(),
         'friends': friends,
+        'recommended_connects': recommended_connects,
     })
 
 
@@ -49,7 +69,7 @@ def friendship_add_friend(
             except AlreadyExistsError : 
                 return view_friends(request, from_user)
             else:
-                return redirect("messager:contacts_list")
+                return redirect('connections:friendship_view_friends', username=request.user.username )
 
     return render(request, template_name, ctx)
 
@@ -131,7 +151,7 @@ def friendship_request_list_rejected(
 
 @login_required
 def friendship_requests_detail(
-    request, friendship_request_id, template_name="connections/request.html"
+    request, friendship_request_id, template_name="connections/requests.html"
 ):
     """ View a particular friendship request """
     f_request = get_object_or_404(FriendshipRequest, id=friendship_request_id)

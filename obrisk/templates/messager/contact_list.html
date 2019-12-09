@@ -12,7 +12,22 @@
   <div class="column row mt-md-5">
 
     <div class="col-md-8 m-auto pb-4">
-      <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
+      
+      <div class="row">
+        <div class="questions col-12 col-md-9 m-auto">
+          <ul class="nav nav-tabs justify-content-between">
+            <li class="nav-item">
+              <a href="{% url 'messager:conversation_detail' request.user.username %}">
+                <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a href="{% url 'connections:friendship_view_friends' request.user.username %}">
+                <h3 style="color: black;"> <strong> {% trans "Discover" %} </strong></h3>
+              </a>
+            </li>
+            
+          </ul>
     </div>
 
     <div class="col-lg-10 users-list">
