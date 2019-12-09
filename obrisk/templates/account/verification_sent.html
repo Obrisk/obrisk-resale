@@ -5,29 +5,40 @@
 {# block title %}{% trans "Verify Your E-mail Address" %}{% endblock #}
 
 {% block inner %}
-<div class="container mt-5 mb-md-5">
+<div class="view-wrapper">
+    <div class="container">
+        <div id="" class="view-wrap true-dom">
+            <div class="columns is-centered">
+                <div class="column is-half is-one-third-desktop has-background-white p-4">
 
-    <div class="text-justify">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <h2> {% trans "Please Verify Your E-mail Address" %} </h2>
-                </li>
-            </ol>
-        </nav>
-        <hr>
-        <p> Hello! thank you for signing up for Obrisk. Only one last little step is remaining before you continue to
-            use the website. </p>
+                    <div class="text-justify">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb">
+                                <li class="breadcrumb-item">
+                                    <h2> {% trans "Please Verify Your E-mail Address" %} </h2>
+                                </li>
+                            </ol>
+                        </nav>
+                        <hr>
+                        <p> Hello! thank you for signing up for Obrisk. Only one last little step is remaining before
+                            you continue to
+                            use the website. </p>
 
-        <p>{% blocktrans %}We have sent an e-mail to the address you have provided for verification.
-            Follow the link provided in the e-mail to finalize the sign-up process. </p>
-        <p>If you do not receive the confirmation e-mail within a few minutes,
-            be sure to check the <strong> spam/junk </strong> folder for the e-mail. <br>
-            Please <a href="mailto:support@obrisk.com"> click here </a> to contact us, incase you still have problems
-            with signing up.
-        </p> {% endblocktrans %}
+                        <p>{% blocktrans %}We have sent an e-mail to the address you have provided for verification.
+                            Follow the link provided in the e-mail to finalize the sign-up process. </p>
+                        <p>If you do not receive the confirmation e-mail within a few minutes,
+                            be sure to check the <strong> spam/junk </strong> folder for the e-mail. <br>
+                            Please <a href="mailto:support@obrisk.com"> click here </a> to contact us, incase you still
+                            have problems
+                            with signing up.
+                        </p> {% endblocktrans %}
+                    </div>
+
+                    <hr>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <hr>
 </div>
+
 {% endblock %}

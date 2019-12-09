@@ -8,59 +8,63 @@
 <title>{% trans 'Account Login' %}</title>
 <link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}?v=1908191">
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
 <script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
 
 {% endblock head %}
 
 {% block content %}
-<div class="container mt-5 pt-4 pb-4 mb-5">
+<div class="view-wrapper">
+  <div class="container">
+    <div id="" class="view-wrap true-dom">
+      <div class="columns is-centered">
 
-  <div class="limiter">
-    <div class="container-login100">
-      <div class="wrap-login100 wrap-loginonly100 p-l-85 p-r-85 p-t-30 p-b-55">
-        <span class="login100-form-title p-b-32">{% trans 'Account Login' %}</span>
-        <span class="txt3">
-          {% if socialaccount_providers %}
-          <p>{% blocktrans with site.name as site_name %}Please sign in with one
-            of your existing third party accounts. Or, sign up for a {{ site_name }}
-            account and sign in below:{% endblocktrans %}</p>
-          <div class="socialaccount_ballot">
-            <ul class="socialaccount_providers">
-              {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-            </ul>
-            <div class="login-or">{% trans 'or' %}</div>
-          </div>
-          {% include "socialaccount/snippets/login_extra.html" %}
-          {% else %}
-          <p>New here? Then
-            <a class="blue-link" href="{% url 'account_signup' %}">{% trans 'SIGN UP' %}</a> </p>
-          {% endif %}
-        </span>
-        <form class="login" method="POST" action="{% url 'account_login' %}">
-          {% csrf_token %}
-          {{ form|crispy }}
-          {% if redirect_field_value %}
-          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-          {% endif %}
-          <div class="form-group container-login100-form-btn">
-            <button type="submit" class="login100-form-btn">{% trans 'Login' %}</button>
-          </div>
-          <div class="form-group container-login100-form-btn d-flex justify-content-between">
-            <a href="{% url 'account_signup' %}" class="btn btn-link">{% trans 'Sign up' %}</a>
-            <a href="{% url 'users:phone_password_reset' %}"
-              class="btn btn-link float-right">{% trans 'Reset Password' %}</a>
-          </div>
-        </form>
 
-        <div> <small class="mt-5" id="support"> Login problem?
-            <a class="blue-link" href="mailto:support@obrisk.com"> click here </a> to contact us or add WechatID:
-            <span class="blue-link"> Obrisk. </span> </small> </div>
+        <div class="column is-half is-one-third-desktop has-background-white p-4">
+          <span class="login100-form-title p-b-32">{% trans 'Account Login' %}</span>
+          <span class="txt3">
+            {% if socialaccount_providers %}
+            <p>{% blocktrans with site.name as site_name %}Please sign in with one
+              of your existing third party accounts. Or, sign up for a {{ site_name }}
+              account and sign in below:{% endblocktrans %}</p>
+            <div class="socialaccount_ballot">
+              <ul class="socialaccount_providers">
+                {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+              </ul>
+              <div class="login-or">{% trans 'or' %}</div>
+            </div>
+            {% include "socialaccount/snippets/login_extra.html" %}
+            {% else %}
+            <p>New here? Then
+              <a class="blue-link" href="{% url 'account_signup' %}">{% trans 'SIGN UP' %}</a> </p>
+            {% endif %}
+          </span>
+          <form class="login" method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+            {{ form|crispy }}
+            {% if redirect_field_value %}
+            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+            {% endif %}
+            <div class="form-group container-login100-form-btn">
+              <button type="submit" class="login100-form-btn">{% trans 'Login' %}</button>
+            </div>
+            <div class="form-group container-login100-form-btn d-flex justify-content-between">
+              <a href="{% url 'account_signup' %}" class="btn blue-link btn-link">{% trans 'Sign up' %}</a>
+              <a href="{% url 'users:phone_password_reset' %}"
+                class="btn btn-link blue-link float-right">{% trans 'Reset Password' %}</a>
+            </div>
+          </form>
 
+          <div> <small class="mt-5" id="support"> Login problem?
+              <a class="blue-link" href="mailto:support@obrisk.com"> click here </a> to contact us or add WechatID:
+              <span class="blue-link"> Obrisk. </span> </small> </div>
+
+        </div>
       </div>
     </div>
   </div>
 </div>
+
 <script>
 
   var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();

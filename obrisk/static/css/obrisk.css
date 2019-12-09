@@ -4,7 +4,6 @@ body {
   padding-top: 80px;
   overflow-wrap: break-word;
   word-break: break-word;
-
 }
 
 h1 {
@@ -13,22 +12,18 @@ h1 {
 
 h2 {
   font-size: calc(23px + (30 - 23) * ((100vw - 300px) / (1600 - 300)));
-
 }
 
 h3 {
   font-size: calc(18px + (25 - 18) * ((100vw - 300px) / (1600 - 300)));
-
 }
 
 h4 {
   font-size: calc(16px + (22 - 16) * ((100vw - 300px) / (1600 - 300)));
-
 }
 
 h5 {
   font-size: calc(15px + (18 - 15) * ((100vw - 300px) / (1600 - 300)));
-
 }
 
 header .navbar-brand {
@@ -60,12 +55,10 @@ header .navbar-brand {
   }
 }
 
-
 .no-data {
   text-align: center;
   padding: 1em 0;
 }
-
 
 #notifications.new-notifications {
   color: #0aeee3;
@@ -110,7 +103,7 @@ a:hover {
 .popover ul li {
   list-style: none;
   border-bottom: 1px solid #eeeeee;
-  padding: .4em 0;
+  padding: 0.4em 0;
 }
 
 .popover ul li:last-child {
@@ -123,8 +116,8 @@ a:hover {
 }
 
 .popover ul li p {
-  font-size: .9em;
-  padding: 0 0 0 .6em;
+  font-size: 0.9em;
+  padding: 0 0 0 0.6em;
   margin-left: 45px;
   margin-bottom: 0;
 }
@@ -135,7 +128,7 @@ a:hover {
 
 .card-header {
   color: white;
-  background: linear-gradient(45deg, #330c04, #8b2100)
+  background: linear-gradient(45deg, #330c04, #8b2100);
 }
 
 .card {
@@ -145,13 +138,13 @@ a:hover {
 .btn-dark {
   background: linear-gradient(45deg, #0aacec, #0aeee3);
   color: white;
-  border: none
+  border: none;
 }
 
 .btn-danger {
   background-color: white;
   color: #8b2100;
-  border: none
+  border: none;
 }
 
 .btn-danger:hover {
@@ -160,17 +153,14 @@ a:hover {
   color: #0aacec;
 }
 
-
-
-
 .card-header {
   color: white;
   background: gray;
 }
 
 .navbar-dark .navbar-toggler {
-  color: rgba(255, 255, 255, .1);
-  border-color: rgba(255, 255, 255, .1);
+  color: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .btn {
@@ -200,7 +190,7 @@ a:hover {
 
 @media (max-width: 767px) {
   h3 {
-    font-size: 1.3em
+    font-size: 1.3em;
   }
 }
 
@@ -227,8 +217,8 @@ main .notification svg {
   height: 3em;
 }
 
-main .notification svg>path {
-  fill: #FFFFFF;
+main .notification svg > path {
+  fill: #ffffff;
 }
 
 main .notification--bell {
@@ -248,13 +238,12 @@ main .notification--num {
   border-radius: 50%;
   width: 11px;
   height: 10px;
-  background-color: #FF4C13;
-  border: 4px solid #FF4C13;
-  color: #FFFFFF;
+  background-color: #ff4c13;
+  border: 4px solid #ff4c13;
+  color: #ffffff;
   text-align: center;
   animation: notification 2.2s linear;
 }
-
 
 .main-nav li {
   width: 101px;
@@ -275,8 +264,8 @@ https: //nzbin.github.io/three-dots
   background: #fff;
   padding: 2rem 5%;
   margin: 1.5rem 0;
-  box-shadow: 0 .4rem .8rem -.1rem rgba(0, 32, 128, .1), 0 0 0 1px #f0f2f7;
-  border-radius: .25rem;
+  box-shadow: 0 0.4rem 0.8rem -0.1rem rgba(0, 32, 128, 0.1), 0 0 0 1px #f0f2f7;
+  border-radius: 0.25rem;
 }
 
 .stage {
@@ -303,12 +292,12 @@ https: //nzbin.github.io/three-dots
   color: #3ec4e2;
   box-shadow: 9999px 0 0 -5px #3ec4e2;
   animation: dotPulse 1.5s infinite linear;
-  animation-delay: .25s;
+  animation-delay: 0.25s;
 }
 
 .dot-pulse::before,
 .dot-pulse::after {
-  content: '';
+  content: "";
   display: inline-block;
   position: absolute;
   top: 0;
@@ -328,7 +317,7 @@ https: //nzbin.github.io/three-dots
 .dot-pulse::after {
   box-shadow: 10014px 0 0 -5px #3ec4e2;
   animation: dotPulseAfter 1.5s infinite linear;
-  animation-delay: .5s;
+  animation-delay: 0.5s;
 }
 
 @keyframes dotPulseBefore {
@@ -389,34 +378,42 @@ https: //nzbin.github.io/three-dots
   margin: 5px;
 }
 
-#toast-container>#toast-wrapper>.toast {
+#toast-container > #toast-wrapper > .toast {
   min-width: 150px;
 }
 
-#toast-container>#toast-wrapper>.toast>.toast-header strong {
+#toast-container > #toast-wrapper > .toast > .toast-header strong {
   padding-right: 20px;
 }
 
-
 .bootbox .btn-primary {
-  background: #3EC4E2;
-  background-color: #3EC4E2;
-  border-color: #3EC4E2;
+  background: #3ec4e2;
+  background-color: #3ec4e2;
+  border-color: #3ec4e2;
 }
 
 .bootbox .btn-primary:hover {
-  background: #3EC4E2;
-  background-color: #3EC4E2;
-  border-color: #3EC4E2;
+  background: #3ec4e2;
+  background-color: #3ec4e2;
+  border-color: #3ec4e2;
 }
 
-
 #loading {
-    background: url('https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/loading-anti-clockwise.gif') no-repeat center center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    z-index: 9999999;
+  background: url("https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/loading-anti-clockwise.gif")
+    no-repeat center center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 9999999;
+}
+
+/* Error handling */
+.invalid-feedback strong,
+.blue-link {
+  color: #3ec4e2;
+}
+.form-control.is-invalid {
+  border-color: #3ec4e2;
 }

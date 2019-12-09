@@ -80,7 +80,7 @@ OssUpload.prototype = {
       var files = e.target.files;
       var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
       var NumberOfSelectedFiles = files.length;
-      //console.log('total files selected ' + NumberOfSelectedFiles);
+      //console.log("total files selected " + NumberOfSelectedFiles);
       var file = null;
       $("#uploader .placeholder").hide();
 
