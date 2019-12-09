@@ -239,9 +239,7 @@ OssUpload.prototype = {
       if (e.target.files && e.target.files[0]) {
         var reader = new FileReader();
         reader.onload = function() {
-          var image = `<div class="chat-message is-sent"><img src="${
-            reader.result
-          }" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic"><div class="message-block"><span>${moment().format(
+          var image = `<div class="chat-message is-sent"><img src="${user_thumb}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic"><div class="message-block"><span>${moment().format(
             "MMM. Do h:mm"
           )}</span><a data-fancybox="gallery" href="${
             reader.result
