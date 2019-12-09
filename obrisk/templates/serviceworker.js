@@ -173,6 +173,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "url": "/static/frontend/assets/css/app.css",
     "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
@@ -192,6 +193,8 @@ workbox.precaching.precacheAndRoute([
     "url": "/static/frontend/assets/js/app.js",
     "revision": "48e7ab1f4eec9f82d73849752c787fc3"
 =======
+=======
+>>>>>>> update classified upload , add lazyload, fix 404 file
     "url": "frontend/assets/css/app.css",
     "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
   },
@@ -214,9 +217,34 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "frontend/assets/js/app.js",
     "revision": "9bf0224de24fee8db5746617c44de6b3"
+<<<<<<< HEAD
 >>>>>>> Fixed minor issues on friendship app
   },
   {
+=======
+=======
+    "url": "/static/frontend/assets/css/app.css",
+    "revision": "29629a61fa5e93899c1baa402ba11e02"
+  },
+  {
+    "url": "/static/frontend/assets/css/bulma.css",
+    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
+  },
+  {
+    "url": "/static/frontend/assets/css/materialdesignicons.min.css",
+    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
+  },
+  {
+    "url": "/static/frontend/assets/css/webfont.css",
+    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
+  },
+  {
+    "url": "/static/frontend/assets/js/app.js",
+    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
+>>>>>>> update classified upload , add lazyload, fix 404 file
+  },
+  {
+>>>>>>> update classified upload , add lazyload, fix 404 file
     "url": "/static/frontend/assets/js/autocompletes.js",
     "revision": "a84c9e2e8b09234eebf8b94f4e7a6a88"
   },
