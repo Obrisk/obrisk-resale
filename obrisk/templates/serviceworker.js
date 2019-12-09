@@ -73,7 +73,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/login.css",
-    "revision": "049482c6f9a9dd1d254122b187c892ed"
+    "revision": "e8d7f8ce72703b8d49fd74aad7cb0cac"
   },
   {
     "url": "/static/css/messages.css",
@@ -89,7 +89,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/obrisk.css",
-    "revision": "ea19ac4b90573564bb0e6decd6393023"
+    "revision": "89e582dda35230e4e6f95db79c8c7b5c"
   },
   {
     "url": "/static/css/photoswipe.min.css",
@@ -133,7 +133,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/uploader.css",
-    "revision": "ad473707c5bc6cf9eed4d141d760c2bb"
+    "revision": "69e4e0597b63ad8ae24897e96b9333bf"
   },
   {
     "url": "/static/css/user_form.css",
@@ -485,7 +485,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/classifieds.js",
-    "revision": "ef86fc7d3773372de80ef080394511c6"
+    "revision": "bfcb79f117d2e1b09980120762bb61c1"
   },
   {
     "url": "/static/js/fancybox.min.js",
@@ -516,6 +516,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "cebc34dedef229a98275955df75e20e5"
   },
   {
+    "url": "/static/js/lazyload.js",
+    "revision": "60669862b7c39ecb3283b1faa9563a07"
+  },
+  {
     "url": "/static/js/listing.js",
     "revision": "548da0625fb5256127b9a7ffab8aed3e"
   },
@@ -533,7 +537,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "28047d3919e83248922e62b8fc3598f8"
+    "revision": "836733f7d133cf24a12f38cab06fa5dd"
   },
   {
     "url": "/static/js/nav.js",
@@ -593,7 +597,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/user-form.js",
-    "revision": "82a759fee43d43bcfc3913e1674842f4"
+    "revision": "c2326ba12422ce75194316fa2fa3db18"
   },
   {
     "url": "/static/js/websocketbridge.js",

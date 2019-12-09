@@ -7,32 +7,36 @@
 
 
 {% block content %}
-<div class="container mt-5 mb-md-5">
+<div class="view-wrapper">
+    <div class="container">
+        <div id="" class="view-wrap true-dom">
+            <div class="columns is-centered">
+                <div class="column is-half is-one-third-desktop has-background-white p-4">
+                    {% if messages %}
+                    <ul class="messages">
+                        {% for message in messages %}
+                        {% endfor %}
+                        {% endif %}
+                    </ul>
 
-    <div class="row">
-        <div class="page-wrapper col-lg-8 col-md-10 m-auto">
-            {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                {% endfor %}
-                {% endif %}
-            </ul>
+                    <!-- Form rendering code for template -->
+                    <form action="" method="post">
 
-            <!-- Form rendering code for template -->
-            <form action="" method="post">
+                        {% csrf_token %}
+                        {{ form|crispy }}
 
-                {% csrf_token %}
-                {{ form|crispy }}
+                        <input type="submit" value="Submit" class="btn btn-dark" />
+                    </form>
 
-                <input type="submit" value="Submit" class="btn btn-dark" />
-            </form>
+                    <br /> <br />
+                    <small>{% blocktrans %}If you have any problem, please
+                        <a href="mailto:support@obrisk.com"> click here </a> to contact us or via WechatID:
+                        <span style="font-weight:bold; color: #0aeee3"> Obrisk </span>{% endblocktrans %}</small>
 
-            <br /> <br />
-            <small>{% blocktrans %}If you have any problem, please
-                <a href="mailto:support@obrisk.com"> click here </a> to contact us or via WechatID:
-                <span style="font-weight:bold; color: #0aeee3"> Obrisk </span>{% endblocktrans %}</small>
-
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
 {% endblock %}

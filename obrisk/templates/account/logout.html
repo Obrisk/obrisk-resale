@@ -19,19 +19,7 @@
     <button class="btn btn-danger"> <a href="{% url 'stories:list' %}"> {% trans 'Cancel' %} </a> </button>
   </form>
 
-  <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script>
-  <script>
-    var toast = new iqwerty.toast.Toast();
-    toast.setText('<p style="color:#fff">Loading...</p>').stylize({
-      background: '#3EC4E2',
-      color: '#fff!important',
-      width: 100,
-      'box-shadow': '0 0 25px rgba(0, 0, 0, .7)'
-    }).setDuration(10000);
-    $(window).on("beforeunload", () => {
-      toast.show();
-    })
-  </script>
+  <!-- <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script> -->
   <script>
     $("#confirmlogout").click(function () {
       localStorage.setItem('auth', "");
