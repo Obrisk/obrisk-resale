@@ -7,17 +7,29 @@
 {% endblock head %}
 
 {% block content %}
-        
-    <div class="view-wrapper">
-        {% if not to_username == request.user.username %}
-            {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
-            <form method="post">
-                {% csrf_token %}
-                <p> Do you want to send a connection request to {{ to_username }}? </p>
-                <input type="hidden" name="to_username" value="{{ to_username }}" />
-                <button type="submit" class="btn btn-dark">{% trans 'Submit' %}</button>
-            </form>
-        {% endif %}
+<div class="view-wrapper">
+    <div class="container ">
+        <!-- Profile page main wrapper -->
+        <div id="profile-friends" class="view-wrap is-headless">
+
+
+            <div class="columns">
+                <div class="column">
+                    <div class="view-wrapper">
+                        {% if not to_username == request.user.username %}
+                        {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
+                        <form method="post">
+                            {% csrf_token %}
+                            <p> Do you want to send a connection request to {{ to_username }}? </p>
+                            <input type="hidden" name="to_username" value="{{ to_username }}" />
+                            <button type="submit" class="btn btn-dark">{% trans 'Submit' %}</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
 
 {% endblock content %}

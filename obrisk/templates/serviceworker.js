@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //To be able to skip and use the new service worker no matter what
 importScripts("/static/js/workbox-v4.3.1/workbox-sw.js");
 workbox.setConfig({
@@ -755,3 +756,5 @@ self.addEventListener('push', function (event) {
     })
   );
 });
+=======
+>>>>>>> e658525b3afc465d0728dcb58e95f7a2d3c78380
