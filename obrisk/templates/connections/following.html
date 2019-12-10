@@ -7,30 +7,45 @@
 {% endblock head %}
 
 {% block content %}
+<div class="view-wrapper">
+      <div class="container ">
+            <!-- Profile page main wrapper -->
+            <div id="profile-friends" class="view-wrap is-headless">
 
-{% load friendshiptags %}
 
-{% for f in following %}
-{% if f.thumbnail %}
-      <a href="{% url 'users:detail' f.username %}">
-         <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}" alt="Picture Profile"
-          style="width:40px;height:40px;border-radius: 50%;"
-          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
-      {% else %}
-            <a href="{% url 'users:detail' f.username %}">
-            <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
-      {% endif %}
-          
-      <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
-{% empty %}
-Sorry {{ request.user.username }}, you do not follow any official account right now 😞
+                  <div class="columns">
+                        <div class="column">
+                              {% load friendshiptags %}
 
-{% endfor %}
-  
-<div>
-  <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 my profile </a>
+                              {% for f in following %}
+                              {% if f.thumbnail %}
+                              <a href="{% url 'users:detail' f.username %}">
+                                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}"
+                                          alt="Picture Profile" style="width:40px;height:40px;border-radius: 50%;"
+                                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+                                          id="pic"> </a>
+                              {% else %}
+                              <a href="{% url 'users:detail' f.username %}">
+                                    <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
+                              </a>
+                              {% endif %}
 
-</div>
+                              <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
+                                    {% empty %}
+                                    Sorry {{ request.user.username }}, you do not follow any official account right now
+                                    😞
+
+                                    {% endfor %}
+
+                                    <div>
+                                          <a class="btn btn-outline-secondary"
+                                                href="{% url 'users:detail' request.user.username%}"> 👤 my profile </a>
+
+                                    </div>
+                        </div>
+                  </div>
+            </div>
+      </div>
 </div>
 {% endblock content %}
 

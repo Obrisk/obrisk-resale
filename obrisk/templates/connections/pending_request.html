@@ -7,22 +7,39 @@
 {% endblock head %}
 
 {% block content %}
-<div>
-        <strong><p>
-        {% if request.user.thumbnail %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
-         style="width:40px;height:40px;border-radius: 50%;"
-         class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
-     {% else %}
-           <a href="{% url 'users:detail' request.to_user %}">
-           <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
-     {% endif %}
-      <a href="{% url 'users:detail' request.user  %}"> {{ request.user.username | title}} </a>Hello
-    </p>
-your request is on pending,
-please wait for the other user to accept your request
-</strong>
+<div class="view-wrapper">
+  <div class="container ">
+    <!-- Profile page main wrapper -->
+    <div id="profile-friends" class="view-wrap is-headless">
+
+
+      <div class="columns">
+        <div class="column">
+          <strong>
+            <p>
+              {% if request.user.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
+                style="width:40px;height:40px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
+              {% else %}
+              <a href="{% url 'users:detail' request.user.username %}">
+                <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
+              {% endif %}
+              <a href="{% url 'users:detail' request.user  %}"> {{ request.user.username | title}} </a>Hello
+            </p>
+            your request is on pending,
+            please wait for the other user to accept your request
+          </strong>
+          <br />
+
+          <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i class="fa fa-chevron-left"
+              aria-hidden="true"></i> BACK</button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 
 {% endblock content %}
 

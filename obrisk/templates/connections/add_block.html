@@ -7,13 +7,27 @@
 {% endblock head %}
 
 {% block content %}
-{% if not followee_username == request.user.username %}
-{% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
-<form method="post">
-{% csrf_token %}
-<input type="hidden" name="blocked_username" value="{{ blocked_username }}" />
-<input type="submit" value="⛔block {{ blocked_username }}" />
-</form>
+<div class="view-wrapper">
+    <div class="container ">
+        <!-- Profile page main wrapper -->
+        <div id="profile-friends" class="view-wrap is-headless">
+
+
+            <div class="columns">
+                <div class="column">
+                    {% if not followee_username == request.user.username %}
+                    {% if errors %}<p>{{ errors|join:", " }}</p>{% endif %}
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="blocked_username" value="{{ blocked_username }}" />
+                        <input type="submit" value="⛔block {{ blocked_username }}" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% endif %}
 
 {% endblock content %}
