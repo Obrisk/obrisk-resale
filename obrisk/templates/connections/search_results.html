@@ -53,54 +53,35 @@
                     <div
                       class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
                       {% for user in users_list %}
+
                       <div class="card classified-card mr-2 mb-3 justify-content-center">
                         <!--Display image-->
-                        <a href="{% url 'classifieds:classified' classified.slug %}"
-                          style="color:black; text-decoration:none; background-color:none">
-                          <div class="card-img-top img-responsive">
-
-                            {% for photo in images %}
-                            {% if photo.classified == classified %}
-                            <img class="card-img"
-                              src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-                            {{ "<!--" }}
-                            {% endif %}
-                            {% endfor %}
-                            {{ "-->" }}
-                          </div>
-                          <div class="divider"></div>
-                          <div class="card-body">
-                            <h6 class="card-title"> {{ classified.title}} </h6>
-                            <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                            <div class="card-meta d-flex justify-content-between">
-                              <div class="d-flex location">
-                                <small>📍</small>
-                                <span class="card-text small "> {{ classified.city|safe }}</span>
-                              </div>
-                              <div class="share-card">
-                                <small>🔗</small>
-                              </div>
+                        {% if user.thumbnail %}
+                          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.thumbnail}}" alt="Pic">
+                        {% else %}
+                          <img src="{% static 'img/user.png' %}" width="40px"
+                          style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
+                          class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+                        {% endif %}
+                  </div>
+                  <h3>{{ user.username | title}}</h3>
+                </a>
+              </div>
+                        
                             </div>
                           </div>
                         </a>
                       </div>
                       {% empty %}
                       <h4 class="card-body card card">
-                        {% trans 'There are no results related to your search in classifieds' %}.
+                      currently, user {{ query }} does not exists
                       </h4>
                       {% endfor %}
                     </div>
                   </div>
 
                   <div class="tab-pane fade my-4 " id="list-tags" role="tabpanel" aria-labelledby="list-tags-list">
-                    <div class="card">
-                      <div class="card-body">
-                        {% for tag in tags_list %}
-                        <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
-                        {% empty %}
-                        <h4>{% trans 'There are no results related to your search in tags' %}.</h4>
-                        {% endfor %}
-                      </div>
+                   
                     </div>
                   </div>
                 </div>

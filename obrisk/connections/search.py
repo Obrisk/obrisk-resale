@@ -17,6 +17,7 @@ class SearchListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         query = self.request.GET.get("query")
+        context['query'] = query
         context["users_list"] = User.objects.filter(username__icontains=query).distinct()
         context["users_count"] = context["users_list"].count()
         return context
@@ -39,7 +40,7 @@ def get_suggestions(request):
     results = []
     for data in data_retrieved:
         data_json = {}
-        if isinstance(data, Classified):
+        if isinstance(data, User):
             data_json['id'] = data.id
             data_json['label'] = data.username
             data_json['value'] = data.city
