@@ -90,7 +90,7 @@ class MessagesListView(LoginRequiredMixin, ListView):
     user, who requires to be active too."""
 
     model = Message
-    paginate_by = 100 #The pagination destroys the order of messages #NEEDS FIX
+    #paginate_by = 100 #The pagination destroys the order of messages #NEEDS FIX
     template_name = "messager/message_list.html"
 
     def get_context_data(self, *args, **kwargs): 
@@ -128,9 +128,11 @@ class MessagesListView(LoginRequiredMixin, ListView):
             #Below is called only when the conversation is opened thus mark all msgs as read.
             
             if conv:
-                return conv.messages.all().select_related('sender','recipient')
-                #Celery task: 
-                # conv.messages.all().update(unread=False) 
+                msgs_100 = conv.messages.all().select_related('sender','recipient')[:100]
+                 
+                #Celery task: This query takes very long time 
+                conv.messages.all().update(unread=False)
+                return msgs_100
             return reverse('messager:contacts_list')   
 
         except get_user_model().DoesNotExist:

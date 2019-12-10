@@ -6,7 +6,7 @@
 <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-<title>Chatting with {{ active|title}}</title>
+<title>Chatting with {{ active.username|title}}</title>
 <!-- Fonts -->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800,900" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
@@ -38,8 +38,8 @@
           <div class="recipient-block">
             <div class="avatar-container">
               <!--Add image -->
-              {% if message.sender.thumbnail %}
-              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+              {% if active.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{active.thumbnail}}" alt="Picture Profile"
                 style="width:30px;height:30px;border-radius: 50%;"
                 class=" user-avatar rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
               {% else %}
@@ -48,7 +48,7 @@
               {% endif %}
             </div>
             <div class="username">
-              <span>{{ active|title}}</span>
+              <span>{{ active.username|title}}</span>
                 </span></span>
             </div>
           </div>
@@ -107,7 +107,7 @@
 
           {% else %}
           <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
-          <p>{% trans "I am " %} {{ active }} {% trans ", Let's talk!" %}</p>
+          <p>{% trans "I am " %} {{ active.username }} {% trans ", Let's talk!" %}</p>
           {% if classified %}
           <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
             <a href="{% url 'classifieds:classified' classified.slug %}"
@@ -151,7 +151,7 @@
                 <form role="form" method="post" action="#" id="send">
                   <div class="is-flex message-scroll">
                     {% csrf_token %}
-                    <input type="hidden" name="to" value="{{ active }}">
+                    <input type="hidden" name="to" value="{{ active.username }}">
                     <textarea class="form-control mr-2 textarea comment-textarea" autocomplete="off" maxlength="1000"
                       id="sendText" placeholder="{% trans 'Write a message...' %}" name="message" autofocus rows="2"
                       cols="2"></textarea>
@@ -165,7 +165,7 @@
                 </form>
                 <form id="upload">
                   {% csrf_token %}
-                  <input type="hidden" name="to" value="{{ active }}">
+                  <input type="hidden" name="to" value="{{ active.username }}">
                   <input id="image" type="hidden" name="image">
                   <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
 
@@ -215,7 +215,7 @@
 <script type="text/javascript">
 
   var currentUser = "{{ request.user.username }}";
-  var activeUser = "{{ active }}";
+  var activeUser = "{{ active.username }}";
   const oss_url = "{% url 'get_oss_auth' %}";
 
   {% if message.sender.thumbnail %}
