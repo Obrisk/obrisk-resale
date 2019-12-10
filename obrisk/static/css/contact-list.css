@@ -72,7 +72,6 @@ h5 {
 @media screen and (max-width: 450px) {
   .card {
     max-width: none;
-    height: 90px;
   }
   .users-list {
     margin-bottom: 11%;
