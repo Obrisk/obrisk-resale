@@ -94,12 +94,13 @@ class Message(models.Model):
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='received_messages', null=True,
         blank=True, verbose_name=_("Recipient"), on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField(blank=True, null=True)
     message = models.TextField(max_length=1000, blank=True, null=True)
     unread = models.BooleanField(default=True, db_index=True)
     image = models.CharField(max_length=300, blank=True, null=True)
     img_preview = models.CharField(max_length=300, blank=True, null=True)
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='message', null=True, blank=True)
+    classified_thumbnail = models.CharField(max_length=300, blank=True, null=True)
     attachment = models.CharField(max_length=300, blank=True, null=True)
     has_link = models.BooleanField(default=False)  
     objects = MessageQuerySet.as_manager()

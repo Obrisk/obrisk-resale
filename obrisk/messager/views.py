@@ -293,29 +293,32 @@ def make_conversations(request):
 def make_classifieds_as_messages(request):
     """ A temporally view to create Conversations to users already chatted
     before Convervation model was created."""
-    messages = Message.objects.all()
-    for message in messages:
-        from_user = message.sender
-        to_user = message.recipient
+    convs = Conversation.objects.all()
+    for con in convs:
+        classified = Conversation.objects.get_conv_classified(con.first_user, con.second_user)
 
-        classified = Conversation.objects.get_conv_classified(from_user, to_user)
         if classified:
             try:
-                classified = Classified.objects.annotate (
-                    image_thumb = Subquery (
-                        ClassifiedImages.objects.filter(
-                            classified=OuterRef('pk'),
-                        ).values(
-                            'image_thumb'
-                        )[:1]
-                    )
-                ).get(id=classified[0])
-
+                classified = Classified.objects.get(id=classified[0])
             except Classified.DoesNotExist:
                 continue
-            else: 
-                message.classified = classified
-                message.timestamp = "23 August, 2019"
-                message.image_thumb = image_thumb
+            else:
+                if con.first_user == classified.user:
+                    sender = con.second_user
+                    recipient = con.first_user
+                else:
+                    sender = con.first_user 
+                    recipient = con.second_user
 
+                classified_thumbnail = ClassifiedImages.objects.values_list(
+                    'image_thumb', flat=True).filter(
+                        classified=classified
+                    )[:1]
+                Message.objects.create(
+                    sender=sender,
+                    recipient=recipient,
+                    classified=classified,
+                    classified_thumbnail=str(classified_thumbnail)
+                )
+    return HttpResponse("Done!")
 
