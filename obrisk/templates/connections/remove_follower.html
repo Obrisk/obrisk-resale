@@ -7,12 +7,24 @@
 {% endblock head %}
 
 {% block content %}
-<form method="post">
-    {% csrf_token %}
-    <input type="hidden" name="followee_username" value="{{ followee_username }}" />
-    <input type="submit" value="remove {{ followee_username }} " />
-    </form>
-    
+<div class="view-wrapper">
+    <div class="container ">
+        <!-- Profile page main wrapper -->
+        <div id="profile-friends" class="view-wrap is-headless">
+
+
+            <div class="columns">
+                <div class="column">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="followee_username" value="{{ followee_username }}" />
+                        <input type="submit" value="remove {{ followee_username }} " />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
 
 {% block extra_js %}

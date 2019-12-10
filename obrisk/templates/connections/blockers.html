@@ -7,13 +7,28 @@
 {% endblock head %}
 
 {% block content %}
-{% load friendshiptags %}
-{% get_by_name friendship_context_object_name as var %}
-{% blockers var %}
+<div class="view-wrapper">
+  <div class="container ">
+    <!-- Profile page main wrapper -->
+    <div id="profile-friends" class="view-wrap is-headless">
 
-<div>
-  <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 my profile </a>
+
+      <div class="columns">
+        <div class="column">
+          {% load friendshiptags %}
+          {% get_by_name friendship_context_object_name as var %}
+          {% blockers var %}
+
+          <div>
+            <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 my profile
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
+
 {% endblock content %}
 
 {% block extra_js %}

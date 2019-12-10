@@ -174,6 +174,7 @@ workbox.precaching.precacheAndRoute([
   {
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
     "url": "/static/frontend/assets/css/app.css",
     "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
@@ -223,12 +224,18 @@ workbox.precaching.precacheAndRoute([
   {
 =======
 =======
+=======
+>>>>>>> basic styles for friendship
     "url": "/static/frontend/assets/css/app.css",
     "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
   {
     "url": "/static/frontend/assets/css/bulma.css",
     "revision": "5853a1a9df4005500d5690e0f4ff50bd"
+  },
+  {
+    "url": "/static/frontend/assets/css/core.css",
+    "revision": "57dd00fb4303e5f1d58861b26c276415"
   },
   {
     "url": "/static/frontend/assets/css/materialdesignicons.min.css",
@@ -241,7 +248,6 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/frontend/assets/js/app.js",
     "revision": "48e7ab1f4eec9f82d73849752c787fc3"
->>>>>>> update classified upload , add lazyload, fix 404 file
   },
   {
 >>>>>>> update classified upload , add lazyload, fix 404 file
@@ -574,7 +580,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/lazyload.js",
-    "revision": "60669862b7c39ecb3283b1faa9563a07"
+    "revision": "24d9fcc8fa17bbd4fae97f9a8360dbab"
   },
   {
     "url": "/static/js/listing.js",
@@ -586,7 +592,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "95cebf9452714f61dd85ce7142d28e9b"
+    "revision": "066b0b270142a5c879656b7d1042b454"
   },
   {
     "url": "/static/js/moment.min.js",
