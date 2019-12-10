@@ -12,120 +12,131 @@
   <div class="column row mt-md-5">
 
     <div class="col-md-8 m-auto pb-4">
-      
+
       <div class="row">
-        <div class="questions col-12 col-md-9 m-auto">
-          <ul class="nav nav-tabs justify-content-between">
+        <div class="questions col-12 col-md-10 m-auto">
+          <ul class="nav  justify-content-between mb-2">
             <li class="nav-item">
               <a href="{% url 'messager:conversation_detail' request.user.username %}">
                 <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
               </a>
             </li>
             <li class="nav-item">
-              <a href="{% url 'connections:friendship_view_friends' request.user.username %}">
-                <h3 style="color: black;"> <strong> {% trans "Discover" %} </strong></h3>
+              <a href="{% url 'connections:friendship_view_friends' request.user.username %}"
+                class="button has-min-width">
+                {% trans "Discover" %}
               </a>
             </li>
-            
+
           </ul>
+        </div>
+
+        <div class="col-lg-10 users-list">
+          {% for con in convs %}
+          {% if con.first_user.username == request.user.username %}
+          <a href="{% url 'messager:conversation_detail' con.second_user.username %}"
+            class="card flex-row mb-1 pb-2 pl-3 pr-3 pt-2 ">
+            {% if con.second_user.thumbnail %}
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
+              style="width:40px;height:40px;border-radius: 50%;"
+              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2">
+            {% else %}
+            <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
+              alt="No Pic" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2" />
+            {% endif %}
+
+            <div class="w-100">
+              <div class="d-flex justify-content-between">
+                <strong> {{ con.second_user.get_profile_name|title }} </strong>
+                <span> {{ con.time|date:'N d G:i' }} </span>
+              </div>
+
+              {% if con.last_msg %}
+              <span> {{ con.last_msg|truncatechars:50 }} </span>
+              {% elif con.img or con.attachment %}
+              <span> Attachment </span>
+              {% else %}
+              <span> New conversation </span>
+              {% endif %}
+
+              {%  if con.unread and request.user.id == con.recipient %}
+              <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+              {% endif %}
+            </div>
+          </a>
+
+          {% else %}
+          <a href="{% url 'messager:conversation_detail' con.first_user.username %}"
+            class="card flex-row mb-1 pb-2 pl-3 pr-3 pt-2  ">
+            {% if con.first_user.thumbnail %}
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.first_user.thumbnail}}" alt="Picture Profile"
+              style="width:40px;height:40px;border-radius: 50%;"
+              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2" id="pic">
+            {% else %}
+            <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
+              alt="No Profile Picture" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2" />
+            {% endif %}
+
+            <div class="w-100">
+              <div class="d-flex justify-content-between">
+                <strong> {{ con.first_user.get_profile_name|title }} </strong>
+                <span> {{ con.time|date:'N d G:i' }} </span>
+              </div>
+
+
+              {% if con.last_msg %}
+              <span> {{ con.last_msg|truncatechars:50 }} </span>
+              {% elif con.img or con.attachment %}
+              <span> Attachment </span>
+              {% else %}
+              <span> New conversation </span>
+              {% endif %}
+
+              {%  if con.unread and request.user.id == con.recipient %}
+              <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+              {% endif %}
+            </div>
+          </a>
+          {% endif %}
+
+          {% empty %}
+
+
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="background-color: #3EC4E2;">
+              <li class="breadcrumb-item">
+                <h4> {% trans "No contacts" %} </h4>
+              </li>
+            </ol>
+          </nav>
+
+          <p>
+            {% trans "Start a chat from the classifieds details or invite friends, Or you can chat with the available Obrisk team member" %}
+          </p>
+
+          <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
+            class="list-group-item list-group-item-action ">
+            {% if super_users.first.thumbnail %}
+            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{super_users.first.thumbnail}}" alt="Picture Profile"
+              style="width:40px;height:40px;border-radius: 50%;"
+              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+            {% else %}
+            <img src="{% static 'img/user.png' %}" width="40px" alt="No Profile Picture"
+              class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+            {% endif %}
+            <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>
+        </div>
+        {% endfor %}
+      </div>
     </div>
-
-    <div class="col-lg-10 users-list">
-      {% for con in convs %}
-      {% if con.first_user.username == request.user.username %}
-      <a href="{% url 'messager:conversation_detail' con.second_user.username %}"
-        class="card p-4 mb-3 d-flex flex-row ">
-        {% if con.second_user.thumbnail %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
-          style="width:40px;height:40px;border-radius: 50%;"
-          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid">
-        {% else %}
-        <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
-          alt="No Pic" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-        {% endif %}
-
-        <strong class="username"> {{ con.second_user.get_profile_name|title }} </strong>
-
-        {% if con.last_msg %}
-        <span id="last-msg"> {{ con.last_msg|truncatechars:50 }} </span>
-        {% elif con.img or con.attachment %}
-        <span id="last-msg"> Attachment </span>
-        {% else %}
-        <span id="last-msg"> New conversation </span>
-        {% endif %}
-        <span id="msg-timestamp"> {{ con.time|date:'N d G:i' }} </span>
-
-        {%  if con.unread and request.user.id == con.recipient %}
-        <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-        {% endif %}
-      </a>
-
-      {% else %}
-      <a href="{% url 'messager:conversation_detail' con.first_user.username %}" class="card p-4 mb-3 d-flex flex-row ">
-        {% if con.first_user.thumbnail %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.first_user.thumbnail}}" alt="Picture Profile"
-          style="width:40px;height:40px;border-radius: 50%;"
-          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-        {% else %}
-        <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
-          alt="No Profile Picture" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-        {% endif %}
-
-        <strong class="username"> {{ con.first_user.get_profile_name|title }} </strong>
-
-        {% if con.last_msg %}
-        <span id="last-msg"> {{ con.last_msg|truncatechars:50 }} </span>
-        {% elif con.img or con.attachment %}
-        <span id="last-msg"> Attachment </span>
-        {% else %}
-        <span id="last-msg"> New conversation </span>
-        {% endif %}
-        <span id="msg-timestamp"> {{ con.time|date:'N d G:i' }} </span>
-
-        {%  if con.unread and request.user.id == con.recipient %}
-        <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-        {% endif %}
-      </a>
-      {% endif %}
-
-      {% empty %}
-
-
-      <nav aria-label="breadcrumb">
-        <ol class="breadcrumb" style="background-color: #3EC4E2;">
-          <li class="breadcrumb-item">
-            <h4> {% trans "No contacts" %} </h4>
-          </li>
-        </ol>
-      </nav>
-
-      <p>
-        {% trans "Start a chat from the classifieds details or invite friends, Or you can chat with the available Obrisk team member" %}
-      </p>
-
-      <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
-        class="list-group-item list-group-item-action ">
-        {% if super_users.first.thumbnail %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{super_users.first.thumbnail}}" alt="Picture Profile"
-          style="width:40px;height:40px;border-radius: 50%;"
-          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-        {% else %}
-        <img src="{% static 'img/user.png' %}" width="40px" alt="No Profile Picture"
-          class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-        {% endif %}
-        <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>
-    </div>
-    {% endfor %}
-  </div>
-</div>
-{% endblock content %}
+    {% endblock content %}
 
 
 
-{% block extra_js %}
-<script>
-  var activeUser = "{{ active }}";
-</script>
-<script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>
-<script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
-{% endblock extra_js %}
+    {% block extra_js %}
+    <script>
+      var activeUser = "{{ active }}";
+    </script>
+    <script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>
+    <script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+    {% endblock extra_js %}

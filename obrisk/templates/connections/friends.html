@@ -20,7 +20,7 @@
       <div class="columns">
         <div class="column">
 
-          <div class="profile-menu is-hidden-mobile mt-2 mb-2">
+          <div class="profile-menu mt-2 mb-2 d-flex align-items-start">
             <div class="menu-start">
               <a href="{% url 'connections:friendship_followers'  request.user.username %}"
                 class="button has-min-width">{% trans "Followers" %}</a>
@@ -64,7 +64,7 @@
               {%  for connect in recommended_connects %}
               <!--Friend item-->
               <div class="column is-3 is-6-mobile">
-                <a class="friend-item has-text-centered" href="{% url 'users:detail' connect.username %}">
+                <a class="friend-item p-2 has-text-centered" href="{% url 'users:detail' connect.username %}">
                   <div class="avatar-wrap">
                     <div class="circle"></div>
                     <div class="chat-button">
@@ -79,6 +79,7 @@
                     {% endif %}
                   </div>
                   <h3>{{ connect.get_profile_name|title }}</h3>
+                  <p>From {{connect.city|title}}</p>
                 </a>
               </div>
               <!--Friend item-->
@@ -124,12 +125,15 @@
                     {% endif %}
                   </div>
                   <h3>{{ f.username | title}}</h3>
+                  <p>From {{connect.city|title}}</p>
+
                 </a>
+
+                {% empty %}
+                <p class="p-3">Sorry {{ request.user.username }}, you have no friends</p><br>
+                {% endfor %}
+                <!--Friend item-->
               </div>
-              {% empty %}
-              <p>Sorry {{ request.user.username }}, you have no friends</p><br>
-              {% endfor %}
-              <!--Friend item-->
             </div>
           </div>
           <div>

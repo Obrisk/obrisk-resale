@@ -40,16 +40,16 @@
               <!--Add image -->
               {% if active.thumbnail %}
               <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{active.thumbnail}}" alt="Picture Profile"
-                style="width:30px;height:30px;border-radius: 50%;"
+                style="border-radius: 50%;"
                 class=" user-avatar rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
               {% else %}
-              <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" width="30px"
-                class="user-avatar" alt="No Profile Picture" />
+              <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" class="user-avatar"
+                alt="No Profile Picture" />
               {% endif %}
             </div>
             <div class="username">
               <span>{{ active.username|title}}</span>
-                </span></span>
+              </span></span>
             </div>
           </div>
         </div>
@@ -218,9 +218,9 @@
   var activeUser = "{{ active.username }}";
   const oss_url = "{% url 'get_oss_auth' %}";
 
-  {% if message.sender.thumbnail %}
-  var user_thumb = https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}
-    {% else %}
+  {% if active.thumbnail %}
+  var user_thumb = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ active.thumbnail}}"
+  {% else %}
   var user_thumb = "{% static 'img/user.png' %}"
   {% endif %}
 
