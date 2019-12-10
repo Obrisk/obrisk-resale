@@ -31,16 +31,6 @@ class ConversationQuerySet(models.query.QuerySet):
         return False
 
 
-    def get_conv_obj(self, user1, user2):
-        """ Check if these 2 users had conversation before """
-        try:
-            obj = self.filter( Q(first_user=user1, second_user=user2) | Q(first_user=user2, second_user=user1))[:1].get()
-
-        except:
-            return None
-        else:
-            return obj
-
     def get_conv_classified(self, user1, user2):
         qs = self.filter(Q (first_user=user1, second_user=user2)) | self.filter(first_user=user2, second_user=user1) 
         return qs.values_list('classified', flat=True)

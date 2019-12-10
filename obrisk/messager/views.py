@@ -95,43 +95,42 @@ class MessagesListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, *args, **kwargs): 
         context = super().get_context_data(*args, **kwargs)
-        context['active'] = self.kwargs["username"]
+        context['active'] = self.active_user
 
-        try:
-            active_user = get_user_model().objects.get(username=self.kwargs["username"])
-        except get_user_model().DoesNotExist:
-            return context    
-        
-        classified = Conversation.objects.get_conv_classified(self.request.user, active_user)
-        if classified:
-            try:
-                classified = Classified.objects.annotate (
-                    image_thumb = Subquery (
-                        ClassifiedImages.objects.filter(
-                            classified=OuterRef('pk'),
-                        ).values(
-                            'image_thumb'
-                        )[:1]
-                    )
-                ).get(id=classified[0])
+        #classified = Conversation.objects.get_conv_classified(self.request.user, self.active_user.id)
+        #if classified:
+            #try:
+                #classified = Classified.objects.annotate (
+                    #image_thumb = Subquery (
+                        #ClassifiedImages.objects.filter(
+                            #classified=OuterRef('pk'),
+                        #).values(
+                            #'image_thumb'
+                        #)[:1]
+                    #)
+                #).get(id=classified[0])
 
-            except Classified.DoesNotExist:
-                return context
-            else: 
-                context['classified'] = classified
+            #except Classified.DoesNotExist:
+                #return context
+            #else: 
+                #context['classified'] = classified
         return context
 
 
     def get_queryset(self):    
-        try:               
-            active_user = get_user_model().objects.get(username=self.kwargs["username"])
-            
-            conv = Conversation.objects.get_conv_obj(self.request.user, active_user)
+        try:   
+            self.active_user = get_user_model().objects.values(
+                    'pk','username', 'thumbnail').get(
+                        username=self.kwargs["username"])
+
+            key = "{}.{}".format(*sorted([self.request.user.pk, self.active_user['pk']]))
+            conv = Conversation.objects.get(key=key)
             #Below is called only when the conversation is opened thus mark all msgs as read.
             
             if conv:
-                return conv.messages.all()
-                #Celery task: conv.messages.all().update(unread=False) 
+                return conv.messages.all().select_related('sender','recipient')
+                #Celery task: 
+                # conv.messages.all().update(unread=False) 
             return reverse('messager:contacts_list')   
 
         except get_user_model().DoesNotExist:
@@ -285,5 +284,36 @@ def make_conversations(request):
             message.save()
         
     return redirect('messager:contacts_list')
+
+
+@login_required
+@require_http_methods(["GET"])
+def make_classifieds_as_messages(request):
+    """ A temporally view to create Conversations to users already chatted
+    before Convervation model was created."""
+    messages = Message.objects.all()
+    for message in messages:
+        from_user = message.sender
+        to_user = message.recipient
+
+        classified = Conversation.objects.get_conv_classified(from_user, to_user)
+        if classified:
+            try:
+                classified = Classified.objects.annotate (
+                    image_thumb = Subquery (
+                        ClassifiedImages.objects.filter(
+                            classified=OuterRef('pk'),
+                        ).values(
+                            'image_thumb'
+                        )[:1]
+                    )
+                ).get(id=classified[0])
+
+            except Classified.DoesNotExist:
+                continue
+            else: 
+                message.classified = classified
+                message.timestamp = "23 August, 2019"
+                message.image_thumb = image_thumb
 
 
