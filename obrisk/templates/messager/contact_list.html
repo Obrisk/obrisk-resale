@@ -21,13 +21,15 @@
                 <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
               </a>
             </li>
+            {%  comment %}  
             <li class="nav-item">
-              <a href="{% url 'connections:friendship_view_friends' request.user.username %}"
-                class="button has-min-width">
-                {% trans "Discover" %}
-              </a>
-            </li>
-
+                <a href="{% url 'connections:friendship_view_friends' request.user.username %}"
+                  class="button has-min-width">
+                  {% trans "Discover" %}
+                </a>
+              </li>
+            {%  endcomment %}  
+         
           </ul>
         </div>
 
