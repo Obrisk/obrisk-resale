@@ -110,24 +110,27 @@
   var page = 1;
   var empty_page = false;
   var block_request = false;
-  $(window).scroll(function () {
-    if (empty_page == false && block_request == false) {
-      block_request = true;
-      page += 1;
-      $('.loading').removeClass('d-none')
-      $.get('?page=' + page, function (data) {
-        if (data == '') {
-          empty_page = true;
-          $('.loading').addClass('d-none')
-          $('.classifieds-container').append('<div class="m-auto"> End of Classifieds</div>')
-        } else {
-          $('.loading').addClass('d-none');
-          block_request = false;
-          $('#classifieds').append(data);
-        }
-      });
-    }
-  });
+  var is_tag_page = "{{tag}}";
+  if (is_tag_page == "None") {
+    $(window).scroll(function () {
+      if (empty_page == false && block_request == false) {
+        block_request = true;
+        page += 1;
+        $('.loading').removeClass('d-none')
+        $.get('?page=' + page, function (data) {
+          if (data == '') {
+            empty_page = true;
+            $('.loading').addClass('d-none')
+            $('.classifieds-container').append('<div class="m-auto"> End of Classifieds</div>')
+          } else {
+            $('.loading').addClass('d-none');
+            block_request = false;
+            $('#classifieds').append(data);
+          }
+        });
+      }
+    });
+  }
 </script>
 
 <script>
