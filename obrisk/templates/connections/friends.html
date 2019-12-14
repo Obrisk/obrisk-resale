@@ -21,9 +21,9 @@
 
           <div class="profile-menu mt-2 mb-2 d-flex align-items-start">
             <div class="menu-start">
-              <a href="{% url 'connections:friendship_followers'  request.user.username %}"
+              <a href="{% url 'connections:friendship_followers'  %}"
                 class="button has-min-width">{% trans "Followers" %}</a>
-              <a href="{% url 'connections:friendship_following' request.user.username  %}"
+              <a href="{% url 'connections:friendship_following' %}"
                 class="button has-min-width">{% trans "Following" %}</a>
             </div>
             <div class="menu-end">

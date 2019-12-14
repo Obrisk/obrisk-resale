@@ -57,12 +57,16 @@
                       <div class="card classified-card mr-2 mb-3 justify-content-center">
                         <!--Display image-->
                         {% if user.thumbnail %}
-                          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.thumbnail}}" alt="Pic">
-                        {% else %}
-                          <img src="{% static 'img/user.png' %}" width="40px"
-                          style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
-                          class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-                        {% endif %}
+                        <a href="{% url 'users:detail' user.username %}">
+                          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.thumbnail}}"
+                                alt="Picture Profile" style="width:40px;height:40px;border-radius: 50%;"
+                                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+                                id="pic"> </a>
+                    {% else %}
+                    <a href="{% url 'users:detail' user.username %}">
+                        <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
+                    </a>
+                    {% endif %}
                   </div>
                   <h3>{{ user.username | title}}</h3>
                 </a>
