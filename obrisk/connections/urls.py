@@ -32,7 +32,7 @@ urlpatterns = [
     url(r'^users-search-results/$', SearchListView.as_view(), name='users_search_results'),
     url(regex=r"^users/$", view=all_users, name="friendship_view_users"),
     url(
-        regex=r"^friends/(?P<username>[\w-]+)/$",
+        regex=r"^friends/$",
         view=view_friends,
         name="friendship_view_friends",
     ),
@@ -77,12 +77,12 @@ urlpatterns = [
         name="friendship_requests_detail",
     ),
     url(
-        regex=r"^followers/(?P<username>[\w-]+)/$",
+        regex=r"^followers/$",
         view=followers,
         name="friendship_followers",
     ),
     url(
-        regex=r"^following/(?P<username>[\w-]+)/$",
+        regex=r"^following/$",
         view=following,
         name="friendship_following",
     ),
@@ -116,10 +116,5 @@ urlpatterns = [
         view=block_remove,
         name="block_remove",
     ),
-    url(
-        regex=r"^followers/(?P<username>[\w-]+)/$",
-        view=followers,
-        name="friendship_followers",
-    ),
-  
+    
 ]

@@ -41,10 +41,10 @@
       <div class="">
         {%if object.is_official %}
         <a class="button has-min-width m-auto"
-          href="{% url 'connections:friendship_followers'  object.username  %}">{% trans 'Followers🤝' %}</a>
+          href="{% url 'connections:friendship_followers'  %}">{% trans 'Followers🤝' %}</a>
         {% else %}
         <a class="button has-min-width m-auto"
-          href="{% url 'connections:friendship_following' object.username  %}">{% trans 'Following' %}</a>
+          href="{% url 'connections:friendship_following' %}">{% trans 'Following' %}</a>
         {% endif %}
 
         <a class=" button has-min-width m-auto"

@@ -19,15 +19,15 @@
             <li class="nav-item">
                 <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
             </li>
-            {%  comment %}  
+
             <li class="nav-item">
-                <a href="{% url 'connections:friendship_view_friends' request.user.username %}"
+                <a href="{% url 'connections:friendship_view_friends' %}"
                   class="button has-min-width">
                   {% trans "Discover" %}
                 </a>
               </li>
-            {%  endcomment %}  
-         
+
+              
           </ul>
         </div>
 

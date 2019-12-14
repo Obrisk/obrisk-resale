@@ -20,9 +20,9 @@ get_friendship_context_object_list_name = lambda: getattr( settings, "FRIENDSHIP
 
 
 #FRIENDSHIP
-def view_friends(request, username, template_name="connections/friends.html"):
+def view_friends(request, template_name="connections/friends.html"):
     """ View the friends of a user """
-    user = get_object_or_404(user_model, username=username)
+    user = request.user
     friends = Friend.objects.friends(user)
 
     #friends_pk = friends.values_list('id', flat=True)
@@ -159,17 +159,17 @@ def friendship_requests_detail(
     return render(request, template_name, {"friendship_request": f_request})
 
 
-def followers(request, username, template_name="connections/followers.html"):
+def followers(request, template_name="connections/followers.html"):
     """ List this user's followers """
-    user = get_object_or_404(user_model, username=username)
+    user = request.user
     followers = Follow.objects.followers(user)
     ctx = {"followers": followers}
     return render(request, template_name, ctx)
 
 
-def following(request, username, template_name="connections/following.html"):
+def following(request, template_name="connections/following.html"):
     """ List who this user follows """
-    user = get_object_or_404(user_model, username=username)
+    user = request.user
     following = Follow.objects.following(user)
     return render(request, template_name, {
         get_friendship_context_object_name(): user,
@@ -220,9 +220,9 @@ def all_users(request, template_name="friendship/user_actions.html"):
     )
 
 
-def blockers(request, username, template_name="connections/blockers.html"):
+def blockers(request, template_name="connections/blockers.html"):
     """ List this user's followers """
-    user = get_object_or_404(user_model, username=username)
+    user = request.user
     blockers = Block.objects.blocked(user)
 
     return render(
