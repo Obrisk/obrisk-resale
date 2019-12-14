@@ -223,7 +223,7 @@ def all_users(request, template_name="friendship/user_actions.html"):
 def blockers(request, username, template_name="connections/blockers.html"):
     """ List this user's followers """
     user = get_object_or_404(user_model, username=username)
-    blockers = Block.objects.blocked(user)
+   # blockers = Block.objects.blocked(user)
 
     return render(
         request,
@@ -238,7 +238,7 @@ def blockers(request, username, template_name="connections/blockers.html"):
 def blocking(request, username, template_name="connections/blocking.html"):
     """ List who this user follows """
     user = get_object_or_404(user_model, username=username)
-    blocking = Block.objects.blocking(user)
+    #blocking = Block.objects.blocking(user)
 
     return render(
         request,
