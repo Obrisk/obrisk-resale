@@ -1,3 +1,4 @@
+
 {% extends 'base.html' %}
 {% load static i18n %}
 {% load humanize %}
@@ -12,57 +13,18 @@
 {% endblock head %}
 
 {% block content %}
+<div class="container mt-5 pt-4 pb-4 mb-5">
 
-<!-- Page Content -->
-<div class="sidebar-overlay"></div>
-<div class="container pt-4 pb-4 mb-5">
-  
-  {% comment %}
-  <div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
-    <div class="toggle-tags d-lg-none">
-      <a href=""></a>
-      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-    </div> 
-   </div>
-  {% endcomment %}
-  
-  <!-- Write Classified Widget -->
+    <!-- Write Classified Widget -->
   {% if request.user.is_official%}
     <div class="author-buttons">
      <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
         title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
-      <a class="btn btn-dark" href="{% url 'posts:drafts' %}" title="{% trans 'Draft' %}">
+      <a class="btn btn-dark" href="{% url 'posts:list' %}" title="{% trans 'Posts' %}">
       📚 {% trans ' Drafts' %}</a>
     </div>
     {% endif %}
 
-
-    {% comment %}
-    <div class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
-      <div class="toggle-tags d-lg-none">
-        <a href=""></a>
-        <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-      </div>
-    </div>
-    <!-- Sidebar Widgets Column -->
-
-    <div id="sidebar" class="sidebar mr-4">
-      <!-- Cloud Tag Widget -->
-
-      <div class="card">
-        <div class="card-header">
-          <h5>{% trans 'Popular tags' %}</h5>
-        </div>
-
-        <div class="card-body">
-          {% for tag, count in popular_tags %}
-          <!--When adding the href, remember the tag url to have tag.slug and not tag itself-->
-          <a href="#"><span class="badge badge-info"> {{ count }} {{ tag }}</span></a>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-    {% endcomment %}
 
     <div class="row">
       <!-- Blog Entries Column -->
@@ -112,44 +74,10 @@
         </div>
 
 
-        <script type="application/ld+json">
-          {
-            "@context": "https://schema.org",
-            "@type": "BlogPosting",
-            "headline": "{{ post.title|title|truncatechars:60 }}",
-             {% if post.image %}
-              "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}",
-             {% else %}
-              "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default",
-            {% endif %}
-            "url": "{% url 'posts:post' post.slug %}",
-            "datePublished": "{{ post.timestamp }}",
-            "dateCreated": "{{ post.timestamp }}",
-            "dateModified": "{{ post.timestamp }}",
-            "description": "{{ post.title|title }}",
-            "author": {
-              "@type": "Person",
-              "name": "{{ post.user.get_profile_name|title }}"
-            },
-            "publisher": {
-              "@type": "Organization",
-              "name": "Obrisk",
-              "logo": {
-                "@type": "ImageObject",
-                "url": "https://obrisk.com/static/img/favicon.png"
-              }
-            },
-            "mainEntityOfPage": {
-              "@type": "WebPage",
-              "@id": "{% url 'posts:post' post.slug %}"
-            }
-          }
-        </script>
-
         {% empty %}
         <h4 class="no-data">
-          {% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}.
-          <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
+          {% trans 'You have no any drafts posts, ' %}
+          <a href="{% url 'posts:write_new' %}">{% trans 'publish one post now!' %}</a></h4>
         {% endfor %}
 
         {% if is_paginated %}

@@ -48,7 +48,7 @@
         {% endif %}
 
         <a class=" button has-min-width m-auto"
-          href="{% url 'connections:friendship_view_friends' object.username  %}">{% trans 'Connects' %}</a>
+          href="{% url 'connections:friendship_view_friends' %}">{% trans 'Connects' %}</a>
       </div>
       {% else %}
       <div class="d-flex mb-2">
@@ -169,9 +169,9 @@
           },
           dataType: "json",
           success: function (response) {
-            if (response.status == 200) {
+            if (response) {
               bootbox.alert({
-                message: "Friend request sent!",
+                message: response.message,
                 size: 'small'
               });
             } else {

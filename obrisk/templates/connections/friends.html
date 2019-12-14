@@ -8,8 +8,6 @@
 {% block content %}
 {% load friendshiptags %}
 
-
-
 <div class="view-wrapper">
   <div class="container ">
     <!-- Profile page main wrapper -->
@@ -17,32 +15,26 @@
 
 
       <div class="columns">
-        <div class="column">
 
+        <!-- Connections list-->
+        <div class="column">
           <div class="profile-menu mt-2 mb-2 d-flex align-items-start">
+            
             <div class="menu-start">
-              <a href="{% url 'connections:friendship_followers'  %}"
-                class="button has-min-width">{% trans "Followers" %}</a>
               <a href="{% url 'connections:friendship_following' %}"
                 class="button has-min-width">{% trans "Following" %}</a>
             </div>
+            
             <div class="menu-end">
               <a id="profile-friends-link" href="{% url 'connections:friendship_request_list' %}"
                 class="button has-min-width">{% trans "Friend Requests" %}</a>
             </div>
+          
           </div>
 
+          <!--Discover title-->
 
           <div class="box-heading">
-            <div class="dropdown friends-dropdown is-spaced is-neutral dropdown-trigger">
-              <div>
-
-                <h4> {% trans "Discover People" %} </h4>
-
-              </div>
-
-            </div>
-
             <div class="control heading-search">
               <form id="classifiedsearch" action="{% url 'connections:users_search_results' %}">
                 <input name="query" type="text" class="input is-rounded" placeholder="Search Friends...">
@@ -50,15 +42,67 @@
                   <i data-feather="search"></i>
                 </div>
               </form>
+            </div>
+          </div>
 
+
+          <div class="box-heading">
+            <div class="dropdown friends-dropdown is-spaced is-neutral dropdown-trigger">
+              <div>
+                <h4> {% trans "Connections" %} </h4>
+              </div>
+            </div>
+          </div>
+          <!--Friends grid-->
+          <div class="friends-grid">
+            <div class="columns is-multiline d-flex">
+
+              {% for f in friends %}
+              <!--Friend item-->
+              <div class="column is-3 is-6-mobile">
+                <a class="friend-item has-text-centered" href="{% url 'messager:conversation_detail' f.username  %}">
+                  <div class="avatar-wrap">
+                    <div class="circle"></div>
+                    <div class="chat-button">
+                      <i data-feather="message-circle"></i>
+                    </div>
+
+                    {% if f.picture %}
+                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.picture}}" alt="Pic">
+                    {% else %}
+                    <img src="{% static 'img/user.png' %}" width="40px"
+                      style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
+                      class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+                    {% endif %}
+                  </div>
+                  <h3>{{ f.username | title}}</h3>
+                  <p>From {{f.city|title}}</p>
+
+                </a>
+
+                {% empty %}
+                <p class="p-3">Sorry {{ request.user.username | title}}, you have no connections </p><br>
+                {% endfor %}
+                <!--Friend item-->
+              </div>
+            </div>
+          </div>
+        <div>
+       </div>
+      </div>
+
+
+         <div class="box-heading">
+            <div class="dropdown friends-dropdown is-spaced is-neutral dropdown-trigger">
+              <div>
+                <h4> {% trans "Discover People" %} </h4>
+              </div>
             </div>
           </div>
 
           <!--Friends grid-->
           <div class="friends-grid">
             <div class="columns is-multiline d-flex">
-
-
 
               {%  for connect in recommended_connects %}
               <!--Friend item-->
@@ -69,8 +113,8 @@
                     <div class="chat-button">
                       <i data-feather="eye"></i>
                     </div>
-                    {% if connect.thumbnail %}
-                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{connect.thumbnail}}" alt="Pic">
+                    {% if connect.picture %}
+                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{connect.picture}}" alt="Pic">
                     {% else %}
                     <img src="{% static 'img/user.png' %}" width="40px"
                       style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
@@ -91,55 +135,19 @@
             <a href="#" class="load-more-button">Load More</a>
           </div> -->
 
-          <div class="box-heading">
-            <div class="dropdown friends-dropdown is-spaced is-neutral dropdown-trigger">
-              <div>
 
-                <h4> {% trans "Contacts" %} </h4>
-
-              </div>
-
+          {% if request.user.is_official %}
+          <div class="profile-menu mt-2 mb-2 d-flex align-items-start">
+            <div class="menu-start">
+              <a href="{% url 'connections:friendship_followers'  %}"
+                class="button has-min-width">{% trans "Followers" %}</a>
             </div>
           </div>
-          <!--Friends grid-->
-          <div class="friends-grid">
-            <div class="columns is-multiline d-flex">
+          {% endif %}
 
-              {% for f in friends %}
-              <!--Friend item-->
-              <div class="column is-3 is-6-mobile">
-                <a class="friend-item has-text-centered" href="{% url 'messager:conversation_detail' f.username  %}">
-                  <div class="avatar-wrap">
-                    <div class="circle"></div>
-                    <div class="chat-button">
-                      <i data-feather="message-circle"></i>
-                    </div>
-
-                    {% if f.thumbnail %}
-                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}" alt="Pic">
-                    {% else %}
-                    <img src="{% static 'img/user.png' %}" width="40px"
-                      style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
-                      class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-                    {% endif %}
-                  </div>
-                  <h3>{{ f.username | title}}</h3>
-                  <p>From {{f.city|title}}</p>
-
-                </a>
-
-                {% empty %}
-                <p class="p-3">Sorry {{ request.user.username }}, you have no friends</p><br>
-                {% endfor %}
-                <!--Friend item-->
-              </div>
-            </div>
-          </div>
-          <div>
-            <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
+           <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
                 class="fa fa-chevron-left" aria-hidden="true"></i> Back </button>
-          </div>
-        </div>
+          
       </div>
     </div>
   </div>

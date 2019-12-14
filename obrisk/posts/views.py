@@ -28,7 +28,7 @@ from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 class PostsListView(ListView):
     """Basic ListView implementation to call the published Posts list."""
     model = Post
-    paginate_by = 10
+    paginate_by = 30
     context_object_name = "posts"
 
     def get_context_data(self, *args, **kwargs):
@@ -46,8 +46,11 @@ class PostsListView(ListView):
 class DraftsListView(PostsListView):
     """Overriding the original implementation to call the drafts Posts
     list."""
+    template_name = 'posts/draft_list.html'
+
     def get_queryset(self, **kwargs):
-        return Post.objects.get_draft()
+        return Post.objects.get_draft().filter(user=self.request.user)
+
 
 class CreatePostView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new Posts."""

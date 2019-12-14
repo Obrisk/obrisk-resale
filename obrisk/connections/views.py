@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.http import JsonResponse
 
 try:
     from django.contrib.auth import get_user_model
@@ -53,25 +54,26 @@ def friendship_add_friend(
     request, to_username, template_name="connections/add_friends.html"
 ):
     """ Create a FriendshipRequest """
-    ctx = {"to_username": to_username}
-
     if request.method == "POST":
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
+        
         if Friend.objects.can_request_send(from_user, to_user) == True:
-            return render(request, 'connections/pending_request.html', ctx)
+            return JsonResponse ({
+                'status': '200',
+                'message': 'You already requested to connect with this user, your request is pending'
+            })
         else:
-
             try:
                 Friend.objects.add_friend(from_user, to_user)
-            except AlreadyFriendsError :
-                return view_friends(request, from_user)
-            except AlreadyExistsError : 
-                return view_friends(request, from_user)
+            except AlreadyFriendsError:
+                return JsonResponse ({'status': '301', 'message': 'This user is already your connection'})
+            except AlreadyExistsError: 
+                return JsonResponse ({'status': '301', 'message': 'This user is already your connection'})
             else:
-                return redirect('connections:friendship_view_friends', username=request.user.username )
+                return JsonResponse ({'status': '200', 'message': 'Successfully sent connection request'} )
 
-    return render(request, template_name, ctx)
+    return JsonResponse({'status': '400', 'message': 'This method is not allowed'})
 
 
 @login_required
@@ -115,16 +117,6 @@ def friendship_cancel(request, friendship_request_id):
         "connections:friendship_requests_detail", friendship_request_id=friendship_request_id
     )
 
-@login_required
-def friendship_requested_list(
-    request, template_name="connections/friend_requested_list.html"
-):
-    """ View unread and read friendship requests """
-    sent_requests = FriendshipRequest.objects.filter(from_user=request.user)
-    
-    return render(request, template_name, {"sent_requests": sent_requests})
-
-
 
 @login_required
 def friendship_request_list(
@@ -135,7 +127,9 @@ def friendship_request_list(
     # This shows all friendship requests in the database
     # friendship_requests = FriendshipRequest.objects.filter(rejected__isnull=True)
     
-    return render(request, template_name, {"requests": friendship_requests})
+    sent_requests = FriendshipRequest.objects.filter(from_user=request.user)
+
+    return render(request, template_name, {"received_requests": friendship_requests, "sent_requests": sent_requests})
 
 
 @login_required

@@ -29,17 +29,42 @@ body {
 .time {
     font-size: 14px;
     font-weight: bold;
-    margin-top: 3.5%;
+    margin-top: 4%;
 }
 
+
+#post-user {
+    display: inline-block;
+    color: black;
+}
+
+.author-buttons {
+    margin-top: 0;
+    margin-right: 5%;
+    margin-bottom: 0;
+    display: flex;
+    align-content: flex-end;
+    justify-content: right;
+}
+
+.btn-dark {
+    margin: 3px;
+}
 
 /*  Phone post cards */
 @media (max-width: 560px) {
 
     .post-wrapper {
-        margin-top: 10%;
+        margin-top: 5%;
         margin-bottom: 10%;
     }
+    
+    .author-buttons {
+        margin-top: 3%;
+        align-content: center;
+        justify-content: center;
+    }
+
     .title {
         font-size: 16px;
         font-weight: bold;
@@ -57,7 +82,8 @@ body {
     }
 }
 
-#post-user {
-    display: inline-block;
-    color: black;
+@media (max-width: 1024px) {
+    .author-buttons {
+        margin-top: 10%;
+    }
 }

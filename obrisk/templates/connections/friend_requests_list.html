@@ -3,7 +3,6 @@
 {% block title %}{% trans 'Contacts' %}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/messager.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
@@ -13,47 +12,58 @@
         <!-- Profile page main wrapper -->
         <div id="profile-friends" class="view-wrap is-headless">
 
-
             <div class="columns">
                 <div class="column">
                     <div class="community-content">
 
-
-                        <div class="page-invites">
-                            <div class="header">
-                                <h3>Friend requests</h3>
-                                <!-- <div class="control">
-                                    <input type="text" class="input" placeholder="Search your friends...">
-                                    <div class="search-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-search">
-                                            <circle cx="11" cy="11" r="8"></circle>
-                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                                        </svg>
+                    <div class="page-invites">
+                            <h3 class="header">Connections requests</h3>
+                        <div class="suggestions">
+                          
+                        <!--Friends grid-->
+                        <div class="friends-grid">
+                            <div class="columns is-multiline d-flex">
+                          
+                           {% for friendship_request in received_requests %}
+                            
+                            <!--Friend item-->
+                            <div class="column is-3 is-6-mobile">
+                                <a class="friend-item p-2 has-text-centered" 
+                                        href="{% url 'connections:friendship_requests_detail' friendship_request.id %}">
+                                <div class="avatar-wrap">
+                                    <div class="circle"></div>
+                                    <div class="chat-button">
+                                    <i data-feather="eye"></i>
                                     </div>
-                                </div> -->
+                                    {% if friendship_request.from_user.picture %}
+                                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{friendship_request.from_user.picture}}" alt="Pic">
+                                    {% else %}
+                                    <img src="{% static 'img/user.png' %}" width="40px"
+                                    style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
+                                    class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+                                    {% endif %}
+                                </div>
+                                <h3>{{ friendship_request.from_user.get_profile_name|title }}</h3>
+                                <p>From {{friendship_request.from_user.city|title}}</p>
+                                </a>
                             </div>
-                            <div class="suggestions">
-                                {% for friendship_request in requests %}
-                                <div class="suggestion">
-                                    <div class="meta column is-6">
-                                        <span>{{ friendship_request.from_user }}</span>
-                                    </div>
-                                    <a class="button"
-                                        href="{% url 'connections:friendship_requests_detail' friendship_request.id %}">View</a>
-                                </div>
-                                {% empty %}
-                                <div>
-                                    <p>You have received no connections requests</p><br>
-                                </div>
-                                {% endfor %}
+                            <!--Friend item-->
+                            {% empty %}
+
+                            <div>
+                                <p>You have received no requests</p><br>
+                            </div>
+
+                            </div>
+                            </div>
+                            {% endfor %}
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <br>
+
             <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
                     class="fa fa-chevron-left" aria-hidden="true"></i> Back </button>
         </div>
