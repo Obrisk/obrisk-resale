@@ -15,9 +15,4 @@ class Migration(migrations.Migration):
             name='classified_thumbnail',
             field=models.CharField(blank=True, max_length=300, null=True),
         ),
-        migrations.AlterField(
-            model_name='message',
-            name='timestamp',
-            field=models.DateTimeField(),
-        ),
     ]

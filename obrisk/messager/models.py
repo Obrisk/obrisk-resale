@@ -94,7 +94,7 @@ class Message(models.Model):
     recipient = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='received_messages', null=True,
         blank=True, verbose_name=_("Recipient"), on_delete=models.CASCADE)
-    timestamp = models.DateTimeField(blank=True, null=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
     message = models.TextField(max_length=1000, blank=True, null=True)
     unread = models.BooleanField(default=True, db_index=True)
     image = models.CharField(max_length=300, blank=True, null=True)
@@ -184,4 +184,3 @@ class Message(models.Model):
             }
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
         return new_message
-
