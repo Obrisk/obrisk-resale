@@ -49,7 +49,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/contact-list.css",
-    "revision": "b8498b9391a43d1be91744340b6ca69e"
+    "revision": "5516ef49ae01091702f03333e03505fd"
   },
   {
     "url": "/static/css/creative.css",
@@ -105,7 +105,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/post-list.css",
-    "revision": "e3e94d0fde9007d3b9047135edcef0c9"
+    "revision": "1c1393b0bc27e639b852ddbc6d126c15"
   },
   {
     "url": "/static/css/post-update.css",
@@ -541,7 +541,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "836733f7d133cf24a12f38cab06fa5dd"
+    "revision": "ad62e66567d82b33512ca691ba2ca57c"
   },
   {
     "url": "/static/js/nav.js",

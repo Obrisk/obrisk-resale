@@ -259,7 +259,6 @@ OssUpload.prototype = {
 
                         $("body").trigger("uploadComplete");
                       } else {
-                        console.log(progressBar);
                         $totalProgressbar
                           .css("width", progressBar.toFixed(0))
                           .html(progressBar);
