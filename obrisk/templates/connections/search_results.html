@@ -64,7 +64,8 @@
                               <i data-feather="eye"></i>
                             </div>
                             {% if user.picture %}
-                            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{connect.picture}}" alt="Pic">
+                            
+                            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.picture}}" alt="Pic">
                             {% else %}
                             <img src="{% static 'img/user.png' %}" width="40px"
                               style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
@@ -78,7 +79,7 @@
 
                       {% empty %}
                       <h4 class="card-body card card">
-                      currently, user {{ query }} does not exists
+                      currently, user {{ query |title }} does not exists
                       </h4>
                       {% endfor %}
                     </div>
