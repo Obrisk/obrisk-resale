@@ -218,35 +218,54 @@ def receive_message(request):
 @login_required
 @require_http_methods(["GET"])
 def classified_chat(request, to, classified):
-    """ Create a Conversation object btn 2 users """
+    """ Create a Conversation object btn 2 users with 
+    classified post as the initial message """
     try:
         to_user = get_user_model().objects.get(username=to)
         from_user = request.user
+        classified = Classified.objects.get(id=classified)
+    
     except get_user_model().DoesNotExist:
         messages.error(request, f"Sorry, The user {to}, doesn't exist!")
         return redirect('messager:contacts_list')
 
-    if Conversation.objects.conversation_exists(from_user, to_user):
-        return redirect("messager:conversation_detail" , to)
+    except Classified.DoesNotExist:
+        #This error message assumes that the classifieds items are never deleted completely.
+        #If the user reaches here then he/she was playing with url parameters.
+        messages.error(request, f"Hello there, your request is invalid!")
+        return redirect('messager:contacts_list')  
+
     else:
-        try:
-            classified = Classified.objects.get(id=classified)
-        except Classified.DoesNotExist:
-            #This error message assumes that the classifieds items are never deleted completely.
-            #If the user reaches here then he/she was playing with url parameters.
-            messages.error(request, f"Hey you there, it looks like you're trying to do something bad. \
-                Your account { from_user}, has been flagged, and if this happens again, you will be blocked!")
-            return redirect('messager:contacts_list')  
+        classified_thumbnail = ClassifiedImages.objects.values_list(
+            'image_thumb', flat=True).filter(
+                classified=classified
+            )[:1]
+
+        if Conversation.objects.conversation_exists(from_user, to_user):
+            Message.objects.create(
+                sender=from_user,
+                recipient=to_user,
+                classified=classified,
+                classified_thumbnail=str(classified_thumbnail[0])
+            )
+            return redirect("messager:conversation_detail" , to)
         
-        else:  
+        else:
             #This condition assumes classified parameter should never be null.
             if classified.user == to_user:
                 key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
                 conv = Conversation(first_user=from_user,
                                 second_user=to_user,
-                                key=key,
-                                classified=classified)
+                                key=key)
                 conv.save()
+                
+                Message.objects.create(
+                    conversation=conv,
+                    sender=from_user,
+                    recipient=to_user,
+                    classified=classified,
+                    classified_thumbnail=str(classified_thumbnail[0])
+                )
                 return redirect('messager:conversation_detail', to)
             else:
                 messages.error(request, f"Hey you there, it looks like you're trying to do something bad. \
@@ -264,7 +283,6 @@ def make_conversations(request):
     for message in messages:
         from_user = message.sender
         to_user = message.recipient
-
 
         if message.conversation:
             continue
@@ -303,13 +321,6 @@ def make_classifieds_as_messages(request):
             except Classified.DoesNotExist:
                 continue
             else:
-                if con.first_user == classified.user:
-                    sender = con.second_user
-                    recipient = con.first_user
-                else:
-                    sender = con.first_user 
-                    recipient = con.second_user
-
                 classified_thumbnail = ClassifiedImages.objects.values_list(
                     'image_thumb', flat=True).filter(
                         classified=classified
@@ -321,4 +332,3 @@ def make_classifieds_as_messages(request):
                     classified_thumbnail=str(classified_thumbnail)
                 )
     return HttpResponse("Done!")
-

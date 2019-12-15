@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'^new-official-classified/$', CreateOfficialAdView.as_view(), name='new_official_ad'),
     url(r'^ads-mobile/$', TemplateView.as_view(template_name='classifieds/ads-mobile.html'), name="mobile-ads"),
     url(r'^populartags-obdev2018-wsguatpotlfwccdi/$', set_popular_tags, name='popular_tags'),
-    url(r'^update-images-obdev2018-wsguatpotlfwccdi/$', bulk_update_classifieds_mid_images , name='update_images'),
     #url(r'^expired/$', ExpiredListView.as_view(), name='expired'),
     url(r'^tag/([-\w]+)/$', classified_list, name='list_by_tag'),
     url(r'^classifieds-search-results/$', SearchListView.as_view(), name='classifieds_results'),

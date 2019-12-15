@@ -71,35 +71,6 @@
         <div id="conversation" class="chat-body-inner has-slimscroll">
 
           {% if message_list %}
-          {% if classified %}
-          <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="{% url 'classifieds:classified' classified.slug %}"
-              style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
-
-                {% if classified.image_thumb %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
-                {% else %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
-                {% endif %}
-
-              </div>
-              <div class="column">
-                <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
-                <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                <div class="card-meta is-flex justify-content-between">
-                  <div class="is-flex location">
-                    {%if classified.city %}
-                    <small>📍</small>
-                    <span class="card-text small "> {{ classified.city|safe }}</span>
-                    {%endif%}
-                  </div>
-                </div>
-
-              </div>
-            </a>
-          </div>
-          {% endif %}
 
           {% for message in message_list %}
           {% include 'messager/single_message.html' with message=message %}
@@ -108,35 +79,6 @@
           {% else %}
           <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
           <p>{% trans "I am " %} {{ active.username }} {% trans ", Let's talk!" %}</p>
-          {% if classified %}
-          <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="{% url 'classifieds:classified' classified.slug %}"
-              style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
-
-                {% if classified.image_thumb %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
-                {% else %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
-                {% endif %}
-
-              </div>
-              <div class="column">
-                <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
-                <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                <div class="card-meta is-flex justify-content-between">
-                  <div class="is-flex location">
-                    {%if classified.city %}
-                    <small>📍</small>
-                    <span class="card-text small "> {{ classified.city|safe }}</span>
-                    {%endif%}
-                  </div>
-                </div>
-
-              </div>
-            </a>
-          </div>
-          {% endif %}
           {% endif %}
           <div class="send-message"> </div>
         </div>
