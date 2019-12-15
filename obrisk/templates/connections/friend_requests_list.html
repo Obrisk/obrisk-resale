@@ -13,28 +13,26 @@
         <div id="profile-friends" class="view-wrap is-headless">
 
             <div class="columns">
+                <div class="page-invites">
+                    <h3 class="header">Connections requests</h3>
+                <div class="suggestions">
+
                 <div class="column">
                     <div class="community-content">
 
-                    <div class="page-invites">
-                            <h3 class="header">Connections requests</h3>
-                        <div class="suggestions">
                           
                         <!--Friends grid-->
+                        {% for friendship_request in received_requests %}
                         <div class="friends-grid">
                             <div class="columns is-multiline d-flex">
                           
-                           {% for friendship_request in received_requests %}
-                            
-                            <!--Friend item-->
-                            <div class="column is-3 is-6-mobile">
-                                <a class="friend-item p-2 has-text-centered" 
-                                        href="{% url 'connections:friendship_requests_detail' friendship_request.id %}">
+                                <a class="friend-item has-text-centered" href="{% url 'messager:conversation_detail' friendship_request.from_user.username  %}">
                                 <div class="avatar-wrap">
                                     <div class="circle"></div>
                                     <div class="chat-button">
-                                    <i data-feather="eye"></i>
+                                    <i data-feather="message-circle"></i>
                                     </div>
+
                                     {% if friendship_request.from_user.picture %}
                                     <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{friendship_request.from_user.picture}}" alt="Pic">
                                     {% else %}
@@ -43,19 +41,19 @@
                                     class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
                                     {% endif %}
                                 </div>
-                                <h3>{{ friendship_request.from_user.get_profile_name|title }}</h3>
+                                <h3>{{ friendship_request.from_user.username | title}}</h3>
                                 <p>From {{friendship_request.from_user.city|title}}</p>
+
                                 </a>
                             </div>
-                            <!--Friend item-->
+
+                            </div>
                             {% empty %}
 
                             <div>
                                 <p>You have received no requests</p><br>
                             </div>
 
-                            </div>
-                            </div>
                             {% endfor %}
                             </div>
                         </div>

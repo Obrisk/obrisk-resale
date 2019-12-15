@@ -97,44 +97,27 @@ class MessagesListView(LoginRequiredMixin, ListView):
         context = super().get_context_data(*args, **kwargs)
         context['active'] = self.active_user
 
-        #classified = Conversation.objects.get_conv_classified(self.request.user, self.active_user.id)
-        #if classified:
-            #try:
-                #classified = Classified.objects.annotate (
-                    #image_thumb = Subquery (
-                        #ClassifiedImages.objects.filter(
-                            #classified=OuterRef('pk'),
-                        #).values(
-                            #'image_thumb'
-                        #)[:1]
-                    #)
-                #).get(id=classified[0])
-
-            #except Classified.DoesNotExist:
-                #return context
-            #else: 
-                #context['classified'] = classified
         return context
-
 
     def get_queryset(self):    
         try:   
-            self.active_user = get_user_model().objects.values(
-                    'pk','username', 'thumbnail').get(
+            self.active_user = get_user_model().objects.get(
                         username=self.kwargs["username"])
 
-            key = "{}.{}".format(*sorted([self.request.user.pk, self.active_user['pk']]))
-            conv = Conversation.objects.get(key=key)
-            #Below is called only when the conversation is opened thus mark all msgs as read.
-            
-            if conv:
-                msgs_100 = conv.messages.all().select_related('sender','recipient')[:100]
-                 
-                #Celery task: This query takes very long time 
-                conv.messages.all().update(unread=False)
-                return msgs_100
-            return reverse('messager:contacts_list')   
+            key = "{}.{}".format(*sorted([self.request.user.pk, self.active_user.pk]))
+           
+            conv, is_created = Conversation.objects.get_or_create(key=key)
+            if is_created:
+                conv.first_user = self.request.user
+                conv.second_user = self.active_user
+                conv.save()
 
+            msgs_100 = conv.messages.all().select_related('sender','recipient')[:100]
+                
+            #Celery task: This query takes some time 
+            conv.messages.all().update(unread=False)
+            return msgs_100
+            
         except get_user_model().DoesNotExist:
             return reverse('messager:contacts_list')   
 
