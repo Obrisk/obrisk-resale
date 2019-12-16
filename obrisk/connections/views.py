@@ -8,45 +8,62 @@ from django.http import JsonResponse
 
 try:
     from django.contrib.auth import get_user_model
+
     user_model = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
+
     user_model = User
 
 from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
 from friendship.models import Friend, Follow, FriendshipRequest, Block
 
-get_friendship_context_object_name = lambda: getattr(settings, "FRIENDSHIP_CONTEXT_OBJECT_NAME", "user")
-get_friendship_context_object_list_name = lambda: getattr( settings, "FRIENDSHIP_CONTEXT_OBJECT_LIST_NAME", "users")
+get_friendship_context_object_name = lambda: getattr(
+    settings, "FRIENDSHIP_CONTEXT_OBJECT_NAME", "user"
+)
+get_friendship_context_object_list_name = lambda: getattr(
+    settings, "FRIENDSHIP_CONTEXT_OBJECT_LIST_NAME", "users"
+)
 
 
-#FRIENDSHIP
+# FRIENDSHIP
 def view_friends(request, template_name="connections/friends.html"):
     """ View the friends of a user """
     user = request.user
     friends = Friend.objects.friends(user)
 
-    #friends_pk = friends.values_list('id', flat=True)
+    # friends_pk = friends.values_list('id', flat=True)
     friends_pk = [u.id for u in friends]
 
-    #Try to Get the recommendation list from cache
-    recommended_connects = cache.get(f'recommended_connects_{user.id}')
+    # Try to Get the recommendation list from cache
+    recommended_connects = cache.get(f"recommended_connects_{user.id}")
 
     if recommended_connects == None:
-        recommended_connects = user_model.objects.filter(
-            city=user.city).exclude(
-                thumbnail=None).exclude(
-                    pk__in=friends_pk)[:20]
+        recommended_connects = (
+            user_model.objects.filter(city=user.city)
+            .exclude(thumbnail=None)
+            .exclude(pk__in=friends_pk)[:20]
+        )
 
-        RECOMMENDATION_TIMEOUT = getattr(settings, 'CONNECTS_RECOMMENDATION_TIMEOUT', DEFAULT_TIMEOUT)
-        cache.set(f'recommended_connects_{user.id}', recommended_connects, timeout=RECOMMENDATION_TIMEOUT)
+        RECOMMENDATION_TIMEOUT = getattr(
+            settings, "CONNECTS_RECOMMENDATION_TIMEOUT", DEFAULT_TIMEOUT
+        )
+        cache.set(
+            f"recommended_connects_{user.id}",
+            recommended_connects,
+            timeout=RECOMMENDATION_TIMEOUT,
+        )
 
-    return render(request, template_name, {
-        get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name(),
-        'friends': friends,
-        'recommended_connects': recommended_connects,
-    })
+    return render(
+        request,
+        template_name,
+        {
+            get_friendship_context_object_name(): user,
+            "friendship_context_object_name": get_friendship_context_object_name(),
+            "friends": friends,
+            "recommended_connects": recommended_connects,
+        },
+    )
 
 
 @login_required
@@ -57,23 +74,31 @@ def friendship_add_friend(
     if request.method == "POST":
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
-        
+
         if Friend.objects.can_request_send(from_user, to_user) == True:
-            return JsonResponse ({
-                'status': '200',
-                'message': 'You already requested to connect with this user, your request is pending'
-            })
+            return JsonResponse(
+                {
+                    "status": "200",
+                    "message": "You already requested to connect with this user, your request is pending",
+                }
+            )
         else:
             try:
                 Friend.objects.add_friend(from_user, to_user)
             except AlreadyFriendsError:
-                return JsonResponse ({'status': '301', 'message': 'This user is already your connection'})
-            except AlreadyExistsError: 
-                return JsonResponse ({'status': '301', 'message': 'This user is already your connection'})
+                return JsonResponse(
+                    {"status": "301", "message": "This user is already your connection"}
+                )
+            except AlreadyExistsError:
+                return JsonResponse(
+                    {"status": "301", "message": "This user is already your connection"}
+                )
             else:
-                return JsonResponse ({'status': '200', 'message': 'Successfully sent connection request'} )
+                return JsonResponse(
+                    {"status": "200", "message": "Successfully sent connection request"}
+                )
 
-    return JsonResponse({'status': '400', 'message': 'This method is not allowed'})
+    return JsonResponse({"status": "400", "message": "This method is not allowed"})
 
 
 @login_required
@@ -84,11 +109,9 @@ def friendship_accept(request, friendship_request_id):
             request.user.friendship_requests_received, id=friendship_request_id
         )
         f_request.accept()
-        return redirect("connections:friendship_view_friends", username=request.user.username)
+        return JsonResponse({"status": "200", "message": "Successfully connected!"})
 
-    return redirect(
-        "connections:friendship_requests_detail", friendship_request_id=friendship_request_id
-    )
+    return JsonResponse({"status": "400", "message": "This method is not allowed"})
 
 
 @login_required
@@ -99,9 +122,10 @@ def friendship_reject(request, friendship_request_id):
             request.user.friendship_requests_received, id=friendship_request_id
         )
         f_request.reject()
-        return redirect("connections:friendship_request_list")
+        return JsonResponse({"status": "200", "message": "Successfully declined!"})
 
-    return redirect("connections:friendship_view_friends", username=request.user.username)
+    return JsonResponse({"status": "400", "message": "This method is not allowed"})
+
 
 @login_required
 def friendship_cancel(request, friendship_request_id):
@@ -114,7 +138,8 @@ def friendship_cancel(request, friendship_request_id):
         return redirect("connections:friendship_request_list")
 
     return redirect(
-        "connections:friendship_requests_detail", friendship_request_id=friendship_request_id
+        "connections:friendship_requests_detail",
+        friendship_request_id=friendship_request_id,
     )
 
 
@@ -126,10 +151,14 @@ def friendship_request_list(
     friendship_requests = Friend.objects.requests(request.user)
     # This shows all friendship requests in the database
     # friendship_requests = FriendshipRequest.objects.filter(rejected__isnull=True)
-    
+
     sent_requests = FriendshipRequest.objects.filter(from_user=request.user)
 
-    return render(request, template_name, {"received_requests": friendship_requests, "sent_requests": sent_requests})
+    return render(
+        request,
+        template_name,
+        {"received_requests": friendship_requests, "sent_requests": sent_requests},
+    )
 
 
 @login_required
@@ -165,11 +194,15 @@ def following(request, template_name="connections/following.html"):
     """ List who this user follows """
     user = request.user
     following = Follow.objects.following(user)
-    return render(request, template_name, {
-        get_friendship_context_object_name(): user,
-        'friendship_context_object_name': get_friendship_context_object_name(),
-        'following': following,
-    })
+    return render(
+        request,
+        template_name,
+        {
+            get_friendship_context_object_name(): user,
+            "friendship_context_object_name": get_friendship_context_object_name(),
+            "following": following,
+        },
+    )
 
 
 @login_required
@@ -184,10 +217,12 @@ def follower_add(
         follower = request.user
         try:
             Follow.objects.add_follower(follower, followee)
-        except AlreadyExistsError :
+        except AlreadyExistsError:
             return following(request, followee)
         else:
-            return redirect("connections:friendship_following", username=follower.username)
+            return redirect(
+                "connections:friendship_following", username=follower.username
+            )
 
     return render(request, template_name, ctx)
 
@@ -254,10 +289,12 @@ def block_add(request, blocked_username, template_name="connections/add_block.ht
         blocker = request.user
         try:
             Block.objects.add_block(blocker, blocked)
-        except AlreadyExistsError :
+        except AlreadyExistsError:
             return blocking(request, blocking)
         else:
-            return redirect("connections:friendship_blocking", username=blocker.username)
+            return redirect(
+                "connections:friendship_blocking", username=blocker.username
+            )
 
     return render(request, template_name, ctx)
 
