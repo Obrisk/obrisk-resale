@@ -63,21 +63,17 @@ $(function() {
     e.preventDefault();
     //make sure the textarea isn't empty before submitting the form
     if ($("textarea").val() != "") {
-      $("#conversation").append(
-        `<div class="chat-message is-sent " >
-                        <img  alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;    visibility: hidden;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic" src="` +
-          user_thumb +
-          `"  alt="">
-                        <div class="message-block">
-                            <span>` +
-          moment().format("MMM. Do h:mm") +
-          `</span>
-                            <div class="message-text">` +
-          $("#sendText").val() +
-          `</div>
-                        </div>
-                    </div>`
-      );
+      var msg = `<div class="chat-message is-sent">
+    
+    <img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic">
+    
+    <div class="message-block">
+        <span>${moment().format("MMM. Do h:mm")}</span>
+        
+        <div class="message-text">${$("#sendText").val()}</div>
+    </div>
+</div>`;
+      $("#conversation").append(msg);
 
       $.ajax({
         url: "/ws/messages/send-message/",
@@ -239,7 +235,7 @@ OssUpload.prototype = {
       if (e.target.files && e.target.files[0]) {
         var reader = new FileReader();
         reader.onload = function() {
-          var image = `<div class="chat-message is-sent"><img src="${user_thumb}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic"><div class="message-block"><span>${moment().format(
+          var image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic"><div class="message-block"><span>${moment().format(
             "MMM. Do h:mm"
           )}</span><a data-fancybox="gallery" href="${
             reader.result

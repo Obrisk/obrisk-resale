@@ -17,17 +17,16 @@
         <div class="questions col-12 col-md-10 m-auto">
           <ul class="nav  justify-content-between mb-2">
             <li class="nav-item">
-                <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
+              <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
             </li>
 
             <li class="nav-item">
-                <a href="{% url 'connections:friendship_view_friends' %}"
-                  class="button has-min-width">
-                  {% trans "Discover" %}
-                </a>
-              </li>
+              <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
+                {% trans "Discover" %}
+              </a>
+            </li>
 
-              
+
           </ul>
         </div>
 
@@ -48,15 +47,15 @@
             <div class="w-100">
               <div class="d-flex justify-content-between">
                 <strong> {{ con.second_user.get_profile_name|title }} </strong>
-                <span> {{ con.time|date:'N d G:i' }} </span>
+                <small> {{ con.time|date:'N d G:i' }} </small>
               </div>
 
               {% if con.last_msg %}
-              <span> {{ con.last_msg|truncatechars:50 }} </span>
+              <small> {{ con.last_msg|truncatechars:50 }} </small>
               {% elif con.img or con.attachment %}
-              <span> Attachment </span>
+              <small> Attachment </small>
               {% else %}
-              <span> New conversation </span>
+              <small> New conversation </small>
               {% endif %}
 
               {%  if con.unread and request.user.id == con.recipient %}
@@ -80,16 +79,16 @@
             <div class="w-100">
               <div class="d-flex justify-content-between">
                 <strong> {{ con.first_user.get_profile_name|title }} </strong>
-                <span> {{ con.time|date:'N d G:i' }} </span>
+                <small> {{ con.time|date:'N d G:i' }} </small>
               </div>
 
 
               {% if con.last_msg %}
-              <span> {{ con.last_msg|truncatechars:50 }} </span>
+              <small> {{ con.last_msg|truncatechars:50 }} </small>
               {% elif con.img or con.attachment %}
-              <span> Attachment </span>
+              <small> Attachment </small>
               {% else %}
-              <span> New conversation </span>
+              <small> New conversation </small>
               {% endif %}
 
               {%  if con.unread and request.user.id == con.recipient %}
@@ -125,8 +124,16 @@
               class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
             {% endif %}
             <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>
+
+          {% endfor %}
         </div>
-        {% endfor %}
+        <div class="has-text-centered col-12 col-md-10 m-auto">
+
+          <span onclick="shareMe()" class="button has-min-width">
+            {% trans "Invite Friends" %}
+          </span>
+
+        </div>
       </div>
     </div>
     {% endblock content %}
@@ -137,6 +144,18 @@
     <script>
       var activeUser = "{{ active }}";
     </script>
-    <script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>
+    <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
+    <link rel="stylesheet" href="{% static 'css/share.css' %}">
+    <script>
+      function shareMe() {
+        navigator.share({
+          title: 'Join Obrisk Today!',
+          text: "Checkout Obrisk.com, social network for foreigners in China",
+          url: 'https://obrisk.com/',
+        })
+      }
+    </script>
+
     {% endblock extra_js %}
