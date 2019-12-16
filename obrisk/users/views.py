@@ -39,7 +39,7 @@ from .models import User
 from .phone_verification import send_sms, verify_counter
 from phonenumbers import PhoneNumber
     
-from friendship.models import Friend, Follow
+from friendship.models import Friend, Follow, FriendshipRequest
 
 try:
     from django.contrib.auth import get_user_model
@@ -190,9 +190,13 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         friends = Friend.objects.friends(user)
         following = Follow.objects.following(user)
         followers = Follow.objects.followers(user)
+        pending = FriendshipRequest.objects.filter(from_user=user)
+        print(pending)
         context['friends'] = friends
         context['followers'] = followers
         context['following'] = following
+        context['pending'] = pending
+
         return context
 
 

@@ -47,9 +47,7 @@ from dal import autocomplete
 
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
-@login_required
-@require_http_methods(["GET"])
-def set_popular_tags(request):
+def set_popular_tags():
     popular_tags = Classified.objects.get_counted_tags()[:30]
 
     cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)

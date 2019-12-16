@@ -439,4 +439,14 @@ ELASTICSEARCH_DSL = {
 }
 
 
-CELERY_BROKER_URL = 'redis://localhost'
+CELERY_BROKER_URL = 'redis://localhost:6379' 
+CELERY_TIMEZONE = 'Asia/Chongqing'   
+# Let's make things happen 
+CELERY_BEAT_SCHEDULE = {
+ 'classified-tags-update-24-hours': {
+        'task': 'obrisk.classifieds.tasks.update_classified_tags', 
+        # Every 24 hours 
+       'schedule': 86400.0,
+        # If you're using any arguments
+    },
+}
