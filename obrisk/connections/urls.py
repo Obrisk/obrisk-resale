@@ -3,7 +3,7 @@ from obrisk.connections.search import SearchListView, get_suggestions
 
 from . import views
 
-#friendship
+# friendship
 from obrisk.connections.views import (
     view_friends,
     friendship_add_friend,
@@ -22,31 +22,30 @@ from obrisk.connections.views import (
     block_remove,
     blockers,
     blocking,
-    
 )
 
-app_name = 'connections'
+app_name = "connections"
 urlpatterns = [
-     #friendship
-    url(r'^users-search-results/$', SearchListView.as_view(), name='users_search_results'),
-    url(regex=r"^users/$", view=all_users, name="friendship_view_users"),
+    # friendship
     url(
-        regex=r"^friends/$",
-        view=view_friends,
-        name="friendship_view_friends",
+        r"^users-search-results/$",
+        SearchListView.as_view(),
+        name="users_search_results",
     ),
+    url(regex=r"^users/$", view=all_users, name="friendship_view_users"),
+    url(regex=r"^friends/$", view=view_friends, name="friendship_view_friends",),
     url(
         regex=r"^friend/add/(?P<to_username>[\w-]+)/$",
         view=friendship_add_friend,
         name="friendship_add_friend",
     ),
     url(
-        regex=r"^friend/accept/(?P<friendship_request_id>\d+)/$",
+        regex=r"^request/accept/(?P<friendship_request_id>\d+)/$",
         view=friendship_accept,
         name="friendship_accept",
     ),
     url(
-        regex=r"^friend/reject/(?P<friendship_request_id>\d+)/$",
+        regex=r"^request/reject/(?P<friendship_request_id>\d+)/$",
         view=friendship_reject,
         name="friendship_reject",
     ),
@@ -70,16 +69,8 @@ urlpatterns = [
         view=friendship_requests_detail,
         name="friendship_requests_detail",
     ),
-    url(
-        regex=r"^followers/$",
-        view=followers,
-        name="friendship_followers",
-    ),
-    url(
-        regex=r"^following/$",
-        view=following,
-        name="friendship_following",
-    ),
+    url(regex=r"^followers/$", view=followers, name="friendship_followers",),
+    url(regex=r"^following/$", view=following, name="friendship_following",),
     url(
         regex=r"^follower/add/(?P<followee_username>[\w-]+)/$",
         view=follower_add,
@@ -110,5 +101,4 @@ urlpatterns = [
         view=block_remove,
         name="block_remove",
     ),
-    
 ]

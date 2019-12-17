@@ -11,53 +11,55 @@
     <div class="container ">
         <!-- Profile page main wrapper -->
         <div id="profile-friends" class="view-wrap is-headless">
+            <div class="page-invites">
+                <h3 class="header">Connections requests</h3>
+                <!--Friends grid-->
 
-            <div class="columns">
-                <div class="page-invites">
-                    <h3 class="header">Connections requests</h3>
-                <div class="suggestions">
 
-                <div class="column">
-                    <div class="community-content">
+            </div>
+            <!--Friends grid-->
+            <div class="friends-grid">
+                <div class="columns is-multiline d-flex">
+                    {% for friendship_request in received_requests %}
 
-                          
-                        <!--Friends grid-->
-                        {% for friendship_request in received_requests %}
-                        <div class="friends-grid">
-                            <div class="columns is-multiline d-flex">
-                          
-                                <a class="friend-item has-text-centered" href="#">
-                                <div class="avatar-wrap">
-                                    <div class="circle"></div>
-                                    <div class="chat-button">
+                    <div class="column is-3 is-6-mobile" data-id="{{friendship_request.id}}">
+                        <div class="friend-item has-text-centered">
+                            <div class="avatar-wrap">
+                                <div class="circle"></div>
+                                <div class="chat-button">
                                     <i data-feather="message-circle"></i>
-                                    </div>
-
-                                    {% if friendship_request.from_user.picture %}
-                                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{friendship_request.from_user.picture}}" alt="Pic">
-                                    {% else %}
-                                    <img src="{% static 'img/user.png' %}" width="40px"
-                                    style="width:40px;height:40px;border-radius: 50%;" alt="No Pic"
-                                    class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
-                                    {% endif %}
                                 </div>
-                                <h3>{{ friendship_request.from_user.username | title}}</h3>
-                                <p>From {{friendship_request.from_user.city|title}}</p>
 
-                                </a>
+                                {% if friendship_request.from_user.picture %}
+                                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{friendship_request.from_user.picture}}"
+                                    alt="Pic">
+                                {% else %}
+                                <img src="{% static 'img/user.png' %}" width="80px" height="80px" style="" alt="No Pic"
+                                    class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+                                {% endif %}
                             </div>
-
+                            <h3>{{ friendship_request.from_user.username | title}}</h3>
+                            <p>From {{friendship_request.from_user.city|title}}</p>
+                            <div class="button-wrap mt-2">
+                                <button type="button" class="button is-active accept-btn" id="accept-btn"
+                                    onclick="accept({{friendship_request.id}})">Accept</button>
+                                <button onclick="decline({{friendship_request.id}})" type="button" class="button"
+                                    id="decline-btn">Decline</button>
                             </div>
-                            {% empty %}
+                        </div>
 
+                    </div>
+
+
+                    {% empty %}
+                    <div class="suggestions p-3">
+                        <div class="community-content">
                             <div>
                                 <p>You have received no requests</p><br>
                             </div>
-
-                            {% endfor %}
-                            </div>
                         </div>
                     </div>
+                    {% endfor %}
                 </div>
             </div>
             <br>
@@ -73,4 +75,95 @@
 {% endblock content %}
 
 {% block extra_js %}
+<script>
+
+    function getCookie(name) {
+        // Function to get any cookie available in the session.
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== "") {
+            var cookies = document.cookie.split(";");
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) === name + "=") {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie("csrftoken");
+
+    function accept(id) {
+        bootbox.confirm("Accept friend request ?", function (result) {
+            if (result) {
+                $.ajax({
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    },
+                    type: "POST",
+                    url: "/connections/request/accept/" + id + "/",
+                    data: {
+                        friendship_request_id: id
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response) {
+                            bootbox.alert({
+                                message: response.message,
+                                size: 'small'
+                            });
+                            element = `[data-id="${id}"]`
+                            $(element).remove();
+                        } else {
+                            bootbox.alert({
+                                message: "Sorry something went wrong , Please try again later.",
+                                size: 'small'
+                            });
+                        }
+
+                    }
+
+                });
+            }
+        });
+
+    }
+    function decline(id) {
+        bootbox.confirm("Decline friend request ?", function (result) {
+            if (result) {
+                $.ajax({
+                    beforeSend: function (xhr, settings) {
+                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                    },
+                    type: "POST",
+                    url: "/connections/request/reject/" + id + "/",
+                    data: {
+                        friendship_request_id: id
+                    },
+                    dataType: "json",
+                    success: function (response) {
+                        if (response) {
+                            bootbox.alert({
+                                message: response.message,
+                                size: 'small'
+                            });
+                            element = `[data-id="${id}"]`
+                            $(element).remove();
+                        } else {
+                            bootbox.alert({
+                                message: "Sorry something went wrong , Please try again later.",
+                                size: 'small'
+                            });
+                        }
+
+                    }
+
+                });
+            }
+        });
+
+    }
+</script>
 {% endblock extra_js %}

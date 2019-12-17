@@ -17,6 +17,11 @@
 <link rel="stylesheet" href="{% static 'frontend/assets/css/app.css' %}">
 <link rel="stylesheet" href="{% static 'frontend/assets/css/core.css' %}">
 <link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
+<style>
+  .chat-wrapper .chat-inner .chat-body {
+    padding-bottom: 100px;
+  }
+</style>
 
 {% endblock head %}
 
@@ -39,12 +44,12 @@
             <div class="avatar-container">
               <!--Add image -->
               {% if active.thumbnail %}
-              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{active.thumbnail}}" alt="Picture Profile"
-                style="border-radius: 50%;"
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{active.thumbnail}}" height="35px" width="35px"
+                alt="Picture Profile" style="border-radius: 50%;"
                 class=" user-avatar rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
               {% else %}
-              <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" class="user-avatar"
-                alt="No Profile Picture" />
+              <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="35px" width="35px"
+                class="user-avatar" alt="No Profile Picture" />
               {% endif %}
             </div>
             <div class="username">
@@ -157,6 +162,7 @@
 <script type="text/javascript">
 
   var currentUser = "{{ request.user.username }}";
+  var currentUserThumbnail = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ request.user.thumbnail }}"
   var activeUser = "{{ active.username }}";
   const oss_url = "{% url 'get_oss_auth' %}";
 

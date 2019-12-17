@@ -169,27 +169,27 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/frontend/assets/css/app.css",
-    "revision": "a2a2a7117b1cdb5d1efe7b57928c0976"
+    "revision": "29629a61fa5e93899c1baa402ba11e02"
   },
   {
     "url": "/static/frontend/assets/css/bulma.css",
-    "revision": "4a9a178adeac28389492e5963f30efe6"
+    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
   },
   {
     "url": "/static/frontend/assets/css/core.css",
-    "revision": "57dd00fb4303e5f1d58861b26c276415"
+    "revision": "ce7f3caf8a5cb886890fa0ba586688ad"
   },
   {
     "url": "/static/frontend/assets/css/materialdesignicons.min.css",
-    "revision": "169a7721873bc1ecad61797edc3b304f"
+    "revision": "6c19656af1c9b61a27ddbef91b7495f4"
   },
   {
     "url": "/static/frontend/assets/css/webfont.css",
-    "revision": "aea41e7f54519a53a1629b2d23069e61"
+    "revision": "535b5c2f1492d1d10fc85e9fdc2411c8"
   },
   {
     "url": "/static/frontend/assets/js/app.js",
-    "revision": "9bf0224de24fee8db5746617c44de6b3"
+    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
   },
   {
     "url": "/static/frontend/assets/js/autocompletes.js",
@@ -533,7 +533,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "066b0b270142a5c879656b7d1042b454"
+    "revision": "b0f4f511db4741b025012a68a6e6c713"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -541,7 +541,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "ad62e66567d82b33512ca691ba2ca57c"
+    "revision": "836733f7d133cf24a12f38cab06fa5dd"
   },
   {
     "url": "/static/js/nav.js",
@@ -590,6 +590,10 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/js/swiper.min.js",
     "revision": "7513a78ef80742576aee1bdd39d217ed"
+  },
+  {
+    "url": "/static/js/tag.js",
+    "revision": "df61f972e28702b9552499855c9a3f1f"
   },
   {
     "url": "/static/js/toast-msg.js",
