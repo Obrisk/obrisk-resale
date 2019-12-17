@@ -4,6 +4,7 @@ Description=Celery daemon
 After=network.target
 
 [Service]
+Type=forking
 User=obdev-user
 Group=www-data
 WorkingDirectory=/home/obdev-user/obdev2018
