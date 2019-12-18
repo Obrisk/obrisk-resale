@@ -5,19 +5,21 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.urls import reverse
 from django.db.models import Q
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
-import time
+from django.core import serializers
 
+import time
 import os
 import base64
 import datetime
 import oss2
+from collections import OrderedDict
 
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
@@ -25,6 +27,12 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required 
 from obrisk.utils.images_upload import bucket, bucket_name
 
+try:
+    from django.contrib.auth import get_user_model
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+    user_model = User
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -85,41 +93,74 @@ class ContactsListView(LoginRequiredMixin, ListView):
                 context['active'] = context['convs'][0].first_user.username
         return context
 
-class MessagesListView(LoginRequiredMixin, ListView):
+@login_required
+@require_http_methods(["GET"])
+def messagesView(request, username):
     """CBV to render the inbox, showing a specific conversation with a given
     user, who requires to be active too."""
-
-    model = Message
-    #paginate_by = 100 #The pagination destroys the order of messages #NEEDS FIX
-    template_name = "messager/message_list.html"
-
-    def get_context_data(self, *args, **kwargs): 
-        context = super().get_context_data(*args, **kwargs)
-        context['active'] = self.active_user
-
-        return context
-
-    def get_queryset(self):    
+    if request.method == 'GET':
         try:   
-            self.active_user = get_user_model().objects.get(
-                        username=self.kwargs["username"])
+            active_user = get_user_model().objects.get(
+                        username=username)
 
-            key = "{}.{}".format(*sorted([self.request.user.pk, self.active_user.pk]))
+        except get_user_model().DoesNotExist:
+            return JsonResponse({
+                'status': '404',
+                'message': 'This user does not exist'
+            })
+        
+        else:
+            key = "{}.{}".format(*sorted([request.user.pk, active_user.pk]))
            
             conv, is_created = Conversation.objects.get_or_create(key=key)
             if is_created:
-                conv.first_user = self.request.user
-                conv.second_user = self.active_user
+                conv.first_user = request.user
+                conv.second_user = active_user
                 conv.save()
 
-            msgs_100 = conv.messages.all().select_related('sender','recipient')[:100]
-                
+            msgs_100 = conv.messages.all().select_related(
+                    'sender',
+                    'recipient',
+                    'classified'
+                ).values('message', 
+                        'timestamp', 
+                        'classified_thumbnail',
+                        'img_preview',
+                        'image',
+                        'unread').annotate(
+                    sender_thumbnail = Subquery (
+                        user_model.objects.filter(
+                            sent_messages=OuterRef('pk'),
+                        ).values_list('thumbnail', flat=True)[:1]),
+                    recipient_thumbnail = Subquery (
+                        user_model.objects.filter(
+                            received_messages=OuterRef('pk'),
+                        ).values_list('thumbnail', flat=True)[:1]),
+                    classified_title = Subquery (
+                        Classified.objects.filter(
+                            message=OuterRef('pk'),
+                        ).values_list('title', flat=True)[:1]),
+                    classified_price = Subquery (
+                        Classified.objects.filter(
+                            message=OuterRef('pk'),
+                        ).values_list('price', flat=True)[:1]),
+                    )[:100]
+
+            msgs_data = list(msgs_100)
             #Celery task: This query takes some time 
             conv.messages.all().update(unread=False)
-            return msgs_100
-            
-        except get_user_model().DoesNotExist:
-            return reverse('messager:contacts_list')   
+
+            return JsonResponse({
+                'msgs': msgs_data, 
+                'active_username': active_user.username,
+                'active_thumbnail': active_user.thumbnail
+            })
+    
+    else:
+        return JsonResponse ({
+            'status': '403',
+            'message': 'Invalid request'
+        })
 
          
 @login_required
