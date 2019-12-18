@@ -65,12 +65,20 @@
       <div
         class="{% if stories.img4 %}grid-4{% elif stories.img3 %} grid-3 {% elif  stories.img2 %} grid-2{% else  %} grid-1{%endif%}">
         <!-- CSS masonry wrap -->
+        {% if stories.video %}
+
+        <video style="height: 50vh;" controls id="video" preload="metadata">
+          <source src="{{oss}}/{{stories.video}}" type="video/mp4">
+          Your browser doesn't support HTML5 video tag.
+        </video>
+        {% else %}
+
         {% if stories.img1 %}
         <figure class="img1 image is-square">
 
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" data-demo-src="{{oss}}/{{stories.img1}}" alt="">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" alt="">
 
         </figure>
         {%endif%}
@@ -78,7 +86,7 @@
         <figure class=" img2 image is-square">
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img2}}" data-demo-src="{{oss}}/{{stories.img2}}" alt="">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img2}}" alt="">
 
         </figure>
         {%endif%}
@@ -86,7 +94,7 @@
         <figure class="img3 image is-square">
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img3}}" data-demo-src="{{oss}}/{{stories.img3}}" alt="">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img3}}" alt="">
 
         </figure>
         {%endif%}
@@ -94,9 +102,10 @@
         <figure class="img4 image is-square">
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img4}}" data-demo-src="{{oss}}/{{stories.img4}}" alt="">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img4}}" alt="">
 
         </figure>
+        {% endif %}
         {%endif%}
 
 
