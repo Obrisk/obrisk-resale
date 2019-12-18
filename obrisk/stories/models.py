@@ -45,6 +45,7 @@ class Stories(models.Model):
     priority = models.IntegerField(default=0)
     tags = TaggableManager(through=TaggedStories)
     city = models.CharField (max_length=100, null=True)
+    video = models.CharField (max_length=300, null=True)
     province_region = models.CharField(max_length= 100, null=True)
     address = models.CharField(max_length=255, null=True)
     liked = models.ManyToManyField(settings.AUTH_USER_MODEL,
