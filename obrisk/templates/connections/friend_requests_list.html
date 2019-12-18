@@ -68,6 +68,7 @@
                     class="fa fa-chevron-left" aria-hidden="true"></i> Back </button>
         </div>
     </div>
+    {% csrf_token %}
 </div>
 
 
@@ -93,7 +94,8 @@
         }
         return cookieValue;
     }
-    var csrftoken = getCookie("csrftoken");
+
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val()
 
     function accept(id) {
         bootbox.confirm("Accept friend request ?", function (result) {

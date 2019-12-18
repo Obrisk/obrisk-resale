@@ -135,6 +135,7 @@
     </div>
 
   </div>
+  {% csrf_token %}
 </div>
 <script>
   function getCookie(name) {
@@ -153,8 +154,9 @@
     }
     return cookieValue;
   }
+
   const username = "{{ object.username }}";
-  var csrftoken = getCookie("csrftoken");
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val()
 
 
   $(".connect-btn").click(function (e) {
