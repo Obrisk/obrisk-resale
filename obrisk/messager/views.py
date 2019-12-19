@@ -128,10 +128,18 @@ def messagesView(request, username):
                         'img_preview',
                         'image',
                         'unread').annotate(
+                    sender_username = Subquery (
+                        user_model.objects.filter(
+                            sent_messages=OuterRef('pk'),
+                        ).values_list('username', flat=True)[:1]),
                     sender_thumbnail = Subquery (
                         user_model.objects.filter(
                             sent_messages=OuterRef('pk'),
                         ).values_list('thumbnail', flat=True)[:1]),
+                    recipient_username = Subquery (
+                        user_model.objects.filter(
+                            received_messages=OuterRef('pk'),
+                        ).values_list('username', flat=True)[:1]),
                     recipient_thumbnail = Subquery (
                         user_model.objects.filter(
                             received_messages=OuterRef('pk'),

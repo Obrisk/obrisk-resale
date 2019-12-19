@@ -91,7 +91,8 @@
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
               {% if classified.user != request.user %}
-              <a href="{% url 'messager:classified_chat' classified.user classified.id %}" class="btn btn-action">
+              <a href="#" data-url="{% url 'messager:classified_chat' classified.user classified.id %}"
+                class="btn btn-action go-to-chat">
                 🗪 <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
               <br>
               {% endif %}
@@ -257,29 +258,26 @@
 }
 </script>
 <script type="text/javascript">
-  function share(title, text) {
-    url = location.href
-    if (window.navigator.share) {
-      window.navigator.share({
-        title: title,
-        text: text,
-        url: url
-      }).
 
-        then(function () {
-          return console.log('Successful share');
-        })["catch"](function (error) {
-          return console.log('Error sharing', error);
-        });
-    } else {
-      window.navigator.clipboard.writeText(url);
-      bootbox.alert("copied to clipboard");
-
+  var setCookie = function (name, value, days) {
+    if (!name && !value) {
+      return false;
+    } else if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      var expires = "; expires=" + date.toGMTString();
     }
+    else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/";
+    return true;
   }
-  jQuery('.share').click(function (e) {
+  $(".go-to-chat").click(function (e) {
     e.preventDefault();
-  })
+    setCookie("active-chat", $(this).data("url"), 1);
+    location.href = "/ws/messages";
+
+  });
+
   var image_count = {{ images| length}}
 
   if (image_count > 1) {
