@@ -58,20 +58,24 @@
         <p>{{ stories }}</p>
       </div>
 
-
+      <!-- Post Video -->
+      {% if stories.video %}
+      <div class="grid-1">
+        <video class="afterglow" style="height: 50vh;" width="100%" controls id="video" preload="metadata">
+          <source src="{{oss}}/{{stories.video}}" type="video/mp4">
+          Your browser doesn't support HTML5 video tag.
+        </video>
+      </div>
+      {% else %}
 
       <!-- Post image  -->
 
       <div
         class="{% if stories.img4 %}grid-4{% elif stories.img3 %} grid-3 {% elif  stories.img2 %} grid-2{% else  %} grid-1{%endif%}">
         <!-- CSS masonry wrap -->
-        {% if stories.video %}
 
-        <video style="height: 50vh;" controls id="video" preload="metadata">
-          <source src="{{oss}}/{{stories.video}}" type="video/mp4">
-          Your browser doesn't support HTML5 video tag.
-        </video>
-        {% else %}
+
+
 
         {% if stories.img1 %}
         <figure class="img1 image is-square">
@@ -108,9 +112,8 @@
         {% endif %}
         {%endif%}
 
-
-
       </div>
+
 
       <!-- /Post image  -->
 

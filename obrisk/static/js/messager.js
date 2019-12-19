@@ -65,7 +65,7 @@ $(function() {
     if ($("textarea").val() != "") {
       var msg = `<div class="chat-message is-sent">
     
-    <img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic">
+    <img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
     
     <div class="message-block">
         <span>${moment().format("MMM. Do h:mm")}</span>
@@ -162,8 +162,8 @@ $(function() {
   };
 
   webSocket.listen(function(event) {
+    console.log(event);
     if (event.key === undefined) event = JSON.parse(event);
-
     switch (event.key) {
       case "message":
         if (activeUser != "" && activeUser != undefined) {
