@@ -120,6 +120,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "ddd3af46392bc5e6c808ab15ff48ee28"
   },
   {
+    "url": "/static/css/share.css",
+    "revision": "9d28b13eb46f364461626ac4daaee9d7"
+  },
+  {
     "url": "/static/css/slider-pro.min.css",
     "revision": "6ad9f544594d24c79e2e708252dee520"
   },
@@ -177,7 +181,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/frontend/assets/css/core.css",
-    "revision": "ce7f3caf8a5cb886890fa0ba586688ad"
+    "revision": "5f11c075e190210704487ef5d5acd88b"
   },
   {
     "url": "/static/frontend/assets/css/materialdesignicons.min.css",
@@ -472,6 +476,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "6aadcee86193ab8e487ec40871a206ce"
   },
   {
+    "url": "/static/js/afterglow.js",
+    "revision": "e7261acc6d62556168cfd3dd30920299"
+  },
+  {
     "url": "/static/js/aliyun-oss.min.js",
     "revision": "394d956eca3bc1d64e6b5a06d539fe94"
   },
@@ -533,7 +541,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "b0f4f511db4741b025012a68a6e6c713"
+    "revision": "b7337252ae9382cfc5fb5006faa2eba4"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -584,16 +592,16 @@ workbox.precaching.precacheAndRoute([
     "revision": "de517f44c5974b93e7b984f0570dbf15"
   },
   {
+    "url": "/static/js/share.js",
+    "revision": "98959a4677a4341fb8dcfbd24b47f925"
+  },
+  {
     "url": "/static/js/stories.js",
     "revision": "68b48088c0e93b44fc1985f6f1ecdbf4"
   },
   {
     "url": "/static/js/swiper.min.js",
     "revision": "7513a78ef80742576aee1bdd39d217ed"
-  },
-  {
-    "url": "/static/js/tag.js",
-    "revision": "df61f972e28702b9552499855c9a3f1f"
   },
   {
     "url": "/static/js/toast-msg.js",
