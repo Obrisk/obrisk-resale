@@ -186,8 +186,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         this prints the other user
         user = get_object_or_404(user_model, pk=self.object.pk)
         """
-        p_user = get_object_or_404(user_model, pk=self.object.pk)
-
         user = self.request.user
         friends = Friend.objects.friends(user)
         following = Follow.objects.following(user)
