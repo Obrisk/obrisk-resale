@@ -186,11 +186,22 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         this prints the other user
         user = get_object_or_404(user_model, pk=self.object.pk)
         """
+        p_user = get_object_or_404(user_model, pk=self.object.pk)
+
         user = self.request.user
         friends = Friend.objects.friends(user)
         following = Follow.objects.following(user)
         followers = Follow.objects.followers(user)
-        pending = FriendshipRequest.objects.filter(from_user=user)
+        # pending = FriendshipRequest.objects.filter(from_user=user)
+        sent_requests = Friend.objects.sent_requests(user)
+        pending = [u.to_user for u in sent_requests]
+
+        # for p in friendship_requests:
+        #     print(p.to_user)
+        # p = list(friendship_requests)
+        # print(friendship_requests)
+        # print(p.to_user)
+        # # p = friendship_requests.to_user
         print(pending)
         context['friends'] = friends
         context['followers'] = followers

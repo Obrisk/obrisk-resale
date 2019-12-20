@@ -58,7 +58,7 @@
         <a class="button has-min-width m-auto"
           href="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
         {% elif object in pending %}
-        <a class="connect-btn button has-min-width m-auto" href="#">{% trans 'Pending' %}</a>
+        <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
         {% else %}
         <a class="connect-btn button has-min-width m-auto" href="#">{% trans '➕Connect' %}</a>
         {% endif %}
