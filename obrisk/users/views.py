@@ -194,8 +194,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         sent_requests = Friend.objects.sent_requests(user)
         pending = [u.to_user for u in sent_requests]
 
-        
-        print(pending)
         context['friends'] = friends
         context['followers'] = followers
         context['following'] = following
