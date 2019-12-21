@@ -42,6 +42,7 @@ def view_friends(request, template_name="connections/friends.html"):
         recommended_connects = (
             user_model.objects.filter(city=user.city)
             .exclude(thumbnail=None)
+            .exclude(user)
             .exclude(pk__in=friends_pk)[:40]
         )
 
