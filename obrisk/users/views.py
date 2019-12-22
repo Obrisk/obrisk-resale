@@ -190,8 +190,10 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         friends = Friend.objects.friends(user)
         following = Follow.objects.following(user)
         followers = Follow.objects.followers(user)
-        pending = FriendshipRequest.objects.filter(from_user=user)
-        print(pending)
+        # pending = FriendshipRequest.objects.filter(from_user=user)
+        sent_requests = Friend.objects.sent_requests(user)
+        pending = [u.to_user for u in sent_requests]
+
         context['friends'] = friends
         context['followers'] = followers
         context['following'] = following

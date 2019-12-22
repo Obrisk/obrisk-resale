@@ -15,28 +15,28 @@
       <div class="columns">
         <div class="column">
           {% for f in followers %}
-          {% if f.thumbnail %}
-          <a href="{% url 'users:detail' f.username %}">
-            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}" alt="Picture Profile"
-              style="width:40px;height:40px;border-radius: 50%;"
-              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
-          {% else %}
-          <a href="{% url 'users:detail' f.username %}">
-            <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
-          {% endif %}
+            {% if f.thumbnail %}
+              <a href="{% url 'users:detail' f.username %}">
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}" alt="Picture Profile"
+                style="width:40px;height:40px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic"> </a>
+            {% else %}
+              <a href="{% url 'users:detail' f.username %}">
+                <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" /> </a>
+            {% endif %}
 
           <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
-            {{ f.username }}
-            {% empty %}
+          {% empty %}
             Sorry {{ request.user.username| title }}, you don't have any followers right now 😞
 
-            {% endfor %}
+          {% endfor %}
 
             <div class="mt-3">
               <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
                 class="fa fa-chevron-left" aria-hidden="true"></i> Back </button>
-          
-                <a class="btn btn-outline-secondary" href="{% url 'users:detail' request.user.username%}"> 👤 My profile </a>
+                <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
+                  {% trans "Discover" %}
+                </a>
 
             </div>
         </div>
