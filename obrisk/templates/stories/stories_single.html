@@ -61,7 +61,7 @@
       <!-- Post Video -->
       {% if stories.video %}
       <div class="grid-1">
-        <video class="afterglow" style="height: 50vh;" width="100%" controls id="video" preload="metadata">
+        <video class="afterglow" style="height: 50vh" width="1280" height="720" controls id="video" preload="metadata">
           <source src="{{oss}}/{{stories.video}}" type="video/mp4">
           Your browser doesn't support HTML5 video tag.
         </video>
@@ -110,10 +110,11 @@
 
         </figure>
         {% endif %}
-        {%endif%}
+
+
 
       </div>
-
+      {%endif%}
 
       <!-- /Post image  -->
 
