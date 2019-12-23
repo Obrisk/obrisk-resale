@@ -14,7 +14,8 @@
 <div class="app-overlay"></div>
 
 <!-- Container -->
-{% comment %} <div>
+{% comment %}
+<div>
   <ul class="nav navbar-nav navbar-right">
     {% if not hide_search %}
     <form class="form-inline navbar-left" role="search" action="{% url 'stories:results' %}">
@@ -27,6 +28,7 @@
       </div>
     </form>
     {% endif %}
+  </ul>
 </div>
 
 {% endcomment %}
