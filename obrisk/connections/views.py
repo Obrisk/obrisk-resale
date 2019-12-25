@@ -34,6 +34,7 @@ def view_friends(request, template_name="connections/friends.html"):
 
     # friends_pk = friends.values_list('id', flat=True)
     friends_pk = [u.id for u in friends]
+    friends_pk.append(user.id)
 
     # Try to Get the recommendation list from cache
     recommended_connects = cache.get(f"recommended_connects_{user.id}")
@@ -42,7 +43,6 @@ def view_friends(request, template_name="connections/friends.html"):
         recommended_connects = (
             user_model.objects.filter(city=user.city)
             .exclude(thumbnail=None)
-            .exclude(user)
             .exclude(pk__in=friends_pk)[:40]
         )
 
