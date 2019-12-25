@@ -70,7 +70,7 @@ CODEOWNERS
 
 frontend/node_modules/
 
-obrisk/static/frontend
+obrisk/static/frontend/
 
 obrisk/templates/serviceworker.js
 
