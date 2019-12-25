@@ -70,3 +70,19 @@ CODEOWNERS
 
 frontend/node_modules/
 
+obrisk/static/frontend
+
+obrisk/templates/serviceworker.js
+
+# Aliyun CLI 
+aliyun/
+
+# This files maybe needed by some packages
+obrisk/static/assets/
+
+node_modules/
+
+*.out
+
+celerybeat*
+
