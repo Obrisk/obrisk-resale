@@ -65,43 +65,62 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
 # https://github.com/aliyun/django-oss-storage
-INSTALLED_APPS += ['django_oss_storage']  # noqa F405
+
+INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
 
 
 # STATIC
 # ----------------------------------------------------------------------------
-STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
+if os.getenv('USE_S3_STATICFILES'):
+    AWS_ACCESS_KEY_ID = os.getenv('AWS_STATIC_S3_KEY_ID')
 
-# AliCloud access key ID
-OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
+    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_STATIC_S3_S3KT')
 
-# AliCloud access key secret
-OSS_ACCESS_KEY_SECRET = env('RAM_USER_S3KT_KEY')
+    AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
 
-# The name of the bucket to store files in
-OSS_BUCKET_NAME = env('OSS_BUCKET')
+    AWS_DEFAULT_ACL = 'public-read'
 
-# The URL of AliCloud OSS endpoint
-# Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
-OSS_ENDPOINT = env('OSS_ENDPOINT')
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.amazonaws.com'
 
+    AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-# The expire time to construct signed url for private acl bucket.
-# Can be set by OSS_EXPIRE_TIME as environment variable or as Django settings.
-#The default value is 30 days. I took the values from AWS_EXPIRY in sample project
-OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
+    # s3 static settings
+    AWS_LOCATION = 'static'
+    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-# The default location for the static files stored in bucket.
-OSS_STATIC_LOCATION = '/static/'
+else:
+    STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
 
-#OSS_COVERAGE_IF_FILE_EXIST = True
+    # AliCloud access key ID
+    OSS_ACCESS_KEY_ID = env('RAM_USER_ID')
 
-#OSS_FILE_SAVE_AS_URL = False
+    # AliCloud access key secret
+    OSS_ACCESS_KEY_SECRET = env('RAM_USER_S3KT_KEY')
+
+    # The name of the bucket to store files in OSS_BUCKET_NAME = env('OSS_BUCKET')
+
+    # The URL of AliCloud OSS endpoint
+    # Refer https://www.alibabacloud.com/help/zh/doc-detail/31837.htm for OSS Region & Endpoint
+    OSS_ENDPOINT = env('OSS_ENDPOINT')
+
+    # The expire time to construct signed url for private acl bucket.
+    # Can be set by OSS_EXPIRE_TIME as environment variable or as Django settings.
+    #The default value is 30 days. I took the values from AWS_EXPIRY in sample project
+    OSS_EXPIRE_TIME =  60 * 60 * 24 * 7
+
+    # The default location for the static files stored in bucket.
+    OSS_STATIC_LOCATION = '/static/'
+
+    OSS_COVERAGE_IF_FILE_EXIST = True
+
+    OSS_FILE_SAVE_AS_URL = False
+
+    STATIC_URL =  '/static/'
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
-STATIC_URL =  '/static/'
 
 # MEDIA
 # ------------------------------------------------------------------------------
