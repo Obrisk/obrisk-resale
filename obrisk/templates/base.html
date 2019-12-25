@@ -18,7 +18,6 @@
   <meta name="locale" content="en">
   <meta name="theme-color" content="#3EC4E2">
   <meta name="vapid-key" content="{{ vapid_key }}">
-  <meta http-equiv="Content-Security-Policy" content="default-src *">
 
   {% if request.user.is_authenticated %}
   {% webpush_header %}
