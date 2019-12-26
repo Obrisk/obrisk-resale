@@ -88,6 +88,12 @@ if os.getenv('USE_S3_STATICFILES'):
     AWS_LOCATION = 'static'
     STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    
+    # General optimization for faster delivery
+    AWS_IS_GZIPPED = True
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
 
 else:
     STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
