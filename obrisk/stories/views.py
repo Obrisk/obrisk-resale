@@ -158,14 +158,17 @@ def post_stories(request):
             imgs_objs = multipleImagesPersist(request, images_list, 'stories', story)
             if imgs_objs[0]:
                 story.img1 = imgs_objs[0].image_thumb
-                
+                story.img2 = story.img3 = story.img4 = None 
                 #Find a way to return a list in a subquery
-                if imgs_objs[1]:
-                    story.img2 = imgs_objs[1].image_thumb
-                    if imgs_objs[2]:
-                        story.img3 = imgs_objs[2].image_thumb
-                        if imgs_objs[3]:
-                            story.img4 = imgs_objs[3].image_thumb
+                try:
+                    if imgs_objs[1]:
+                        story.img2 = imgs_objs[1].image_thumb
+                        if imgs_objs[2]:
+                            story.img3 = imgs_objs[2].image_thumb
+                            if imgs_objs[3]:
+                                story.img4 = imgs_objs[3].image_thumb
+                except IndexError:
+                    pass 
                 html = render_to_string(
                     'stories/stories_single.html',
                     {
