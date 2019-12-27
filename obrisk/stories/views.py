@@ -125,12 +125,12 @@ def post_stories(request):
     """A function view to implement the post functionality with AJAX allowing
     to create Stories instances as parent ones."""
     user = request.user
-    post = request.POST['post']
+    post = request.POST.get('post')
     post = post.strip()
-    images = request.POST['images']
-    video = request.POST['story_video']
-    viewers = request.POST['viewers']
-    img_errors = request.POST['img_error']
+    images = request.POST.get('images')
+    video = request.POST.get('story_video')
+    viewers = request.POST.get('viewers')
+    img_errors = request.POST.get('img_error')
 
     if len(post) <= 400 or images or video:
 
@@ -166,7 +166,6 @@ def post_stories(request):
                         story.img3 = imgs_objs[2].image_thumb
                         if imgs_objs[3]:
                             story.img4 = imgs_objs[3].image_thumb
-                print(story)
                 html = render_to_string(
                     'stories/stories_single.html',
                     {
@@ -178,6 +177,9 @@ def post_stories(request):
                 return HttpResponseBadRequest(
                     content=_('Sorry, the image(s) were not uploaded successfully!'))
         
+        if video:
+            #First clean the user input.
+            story.video = video
         else:
             return HttpResponse(html)
 
