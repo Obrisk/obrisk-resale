@@ -180,6 +180,13 @@ def post_stories(request):
         if video:
             #First clean the user input.
             story.video = video
+            html = render_to_string(
+                'stories/stories_single.html',
+                {
+                    'stories': story,
+                    'request': request
+                })
+            return HttpResponse(html)
         else:
             return HttpResponse(html)
 
