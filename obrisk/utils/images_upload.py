@@ -108,8 +108,6 @@ def get_oss_auth(request):
     token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
     
     if token == False:
-        #for debugging on the logs
-        print("WARNING: OSS STS initialization was not successful, please consider redesigning the infastructure!")
         #This is very bad, but we'll do it until we move the servers to China.
         #Send the alert email to developers (via celery) instead of logging.
         key_id = str(access_key_id)

@@ -111,8 +111,6 @@ def get_thread(request):
     })
 
 
-
-
 class StoriesDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
     """Implementation of the DeleteView overriding the delete method to
     allow a no-redirect response to use with AJAX call."""
@@ -130,10 +128,11 @@ def post_stories(request):
     post = request.POST['post']
     post = post.strip()
     images = request.POST['images']
+    video = request.POST['story_video']
     viewers = request.POST['viewers']
     img_errors = request.POST['img_error']
 
-    if (len(post) > 0 and len(post)<= 400) or images:
+    if len(post) <= 400 or images or video:
 
         if img_errors:
             #In the near future, send a message like sentry to our mailbox to notify about the error!
@@ -156,19 +155,28 @@ def post_stories(request):
             # split one long string of images into a list of string each for one JSON img_obj
             images_list = images.split(",")
 
-
-            if multipleImagesPersist(request, images_list, 'stories', story):
+            imgs_objs = multipleImagesPersist(request, images_list, 'stories', story)
+            if imgs_objs[0]:
+                story.img1 = imgs_objs[0].image_thumb
+                
+                #Find a way to return a list in a subquery
+                if imgs_objs[1]:
+                    story.img2 = imgs_objs[1].image_thumb
+                    if imgs_objs[2]:
+                        story.img3 = imgs_objs[2].image_thumb
+                        if imgs_objs[3]:
+                            story.img4 = imgs_objs[3].image_thumb
+                print(story)
                 html = render_to_string(
                     'stories/stories_single.html',
                     {
                         'stories': story,
-                        'images': images,
                         'request': request
                     })
                 return HttpResponse(html)
             else:
                 return HttpResponseBadRequest(
-                    content=_('Image(s) were not uploaded successfully!'))
+                    content=_('Sorry, the image(s) were not uploaded successfully!'))
         
         else:
             return HttpResponse(html)
