@@ -269,6 +269,7 @@ $(function() {
         $(".stream");
         $(".stream").prepend(data);
         lazyload();
+        $("body").trigger("resetUpload");
       },
       error: function(data) {
         bootbox.alert(data.responseText);
