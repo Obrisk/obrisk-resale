@@ -70,46 +70,31 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
                              timeout=30, max_retry_time=3)
         
     except:
+        return False
+    
+    else:
         try:
-            #Retry again to get client authorization on different Alibaba data center (Hangzhou)
-            clt = client.AcsClient(access_key_id, access_key_secret, 'cn-hangzhou',
-                                timeout=30, max_retry_time=3)
-        except:
-            return False
-
-    try:
-        #converting the clt results to json
-        req = AssumeRoleRequest.AssumeRoleRequest()
-
-        req.set_accept_format('json')
-        req.set_RoleArn(role_arn)
-        req.set_RoleSessionName('obriskdev-1330-oss-sts')
-        body = clt.do_action_with_exception(req)
-        j = json.loads(oss2.to_unicode(body))
-    except:
-        try:
-            time.sleep(2)
-
+            #converting the clt results to json
             req = AssumeRoleRequest.AssumeRoleRequest()
             req.set_accept_format('json')
             req.set_RoleArn(role_arn)
             req.set_RoleSessionName('obriskdev-1330-oss-sts')
-
             body = clt.do_action_with_exception(req)
             j = json.loads(oss2.to_unicode(body))
         except:
             return False
+        
+        else:
+            #Using the clt results to create an STSToken
+            token = StsToken()
 
-    #Using the clt results to create an STSToken
-    token = StsToken()
+            token.access_key_id = j['Credentials']['AccessKeyId']
+            token.access_key_secret = j['Credentials']['AccessKeySecret']
+            token.security_token = j['Credentials']['SecurityToken']
+            token.request_id = j['RequestId']
+            token.expiration = oss2.utils.to_unixtime(j['Credentials']['Expiration'], '%Y-%m-%dT%H:%M:%SZ')
 
-    token.access_key_id = j['Credentials']['AccessKeyId']
-    token.access_key_secret = j['Credentials']['AccessKeySecret']
-    token.security_token = j['Credentials']['SecurityToken']
-    token.request_id = j['RequestId']
-    token.expiration = oss2.utils.to_unixtime(j['Credentials']['Expiration'], '%Y-%m-%dT%H:%M:%SZ')
-
-    return token
+            return token
 
 
 bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
