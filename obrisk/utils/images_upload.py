@@ -70,46 +70,31 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
                              timeout=30, max_retry_time=3)
         
     except:
+        return False
+    
+    else:
         try:
-            #Retry again to get client authorization on different Alibaba data center (Hangzhou)
-            clt = client.AcsClient(access_key_id, access_key_secret, 'cn-hangzhou',
-                                timeout=30, max_retry_time=3)
-        except:
-            return False
-
-    try:
-        #converting the clt results to json
-        req = AssumeRoleRequest.AssumeRoleRequest()
-
-        req.set_accept_format('json')
-        req.set_RoleArn(role_arn)
-        req.set_RoleSessionName('obriskdev-1330-oss-sts')
-        body = clt.do_action_with_exception(req)
-        j = json.loads(oss2.to_unicode(body))
-    except:
-        try:
-            time.sleep(2)
-
+            #converting the clt results to json
             req = AssumeRoleRequest.AssumeRoleRequest()
             req.set_accept_format('json')
             req.set_RoleArn(role_arn)
             req.set_RoleSessionName('obriskdev-1330-oss-sts')
-
             body = clt.do_action_with_exception(req)
             j = json.loads(oss2.to_unicode(body))
         except:
             return False
+        
+        else:
+            #Using the clt results to create an STSToken
+            token = StsToken()
 
-    #Using the clt results to create an STSToken
-    token = StsToken()
+            token.access_key_id = j['Credentials']['AccessKeyId']
+            token.access_key_secret = j['Credentials']['AccessKeySecret']
+            token.security_token = j['Credentials']['SecurityToken']
+            token.request_id = j['RequestId']
+            token.expiration = oss2.utils.to_unixtime(j['Credentials']['Expiration'], '%Y-%m-%dT%H:%M:%SZ')
 
-    token.access_key_id = j['Credentials']['AccessKeyId']
-    token.access_key_secret = j['Credentials']['AccessKeySecret']
-    token.security_token = j['Credentials']['SecurityToken']
-    token.request_id = j['RequestId']
-    token.expiration = oss2.utils.to_unixtime(j['Credentials']['Expiration'], '%Y-%m-%dT%H:%M:%SZ')
-
-    return token
+            return token
 
 
 bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
@@ -123,8 +108,6 @@ def get_oss_auth(request):
     token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
     
     if token == False:
-        #for debugging on the logs
-        print("WARNING: OSS STS initialization was not successful, please consider redesigning the infastructure!")
         #This is very bad, but we'll do it until we move the servers to China.
         #Send the alert email to developers (via celery) instead of logging.
         key_id = str(access_key_id)
@@ -154,8 +137,9 @@ def get_oss_auth(request):
 
 def multipleImagesPersist(request, images_list, app, obj):
     ''' This function takes the request, images list, app name (string) and app object
-    and it validates the images list and saves the images to the database.
-    It returns True if the images where saved to the db and False if there is a validation problem '''
+    and it validates the images list and stores them to the database. 
+    It returns images objects list if the images where saved to the db
+    False if there is a validation problem '''
 
     #The code from here onwards assume the first element of images list is undefined.
     #This variable will be used in the end of this code.
@@ -170,6 +154,7 @@ def multipleImagesPersist(request, images_list, app, obj):
     #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
     #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
     img_mid_name = None
+    saved_objs = []
 
     for index, str_result in enumerate(images_list):
         if str_result.startswith(f'{app}/{request.user.username}') == False:
@@ -230,6 +215,7 @@ def multipleImagesPersist(request, images_list, app, obj):
             if img_mid_name:
                 img_obj.image_mid_size = str_result
             img_obj.save()
+            saved_objs.append(img_obj)
             continue   
 
         except Exception:
@@ -246,6 +232,7 @@ def multipleImagesPersist(request, images_list, app, obj):
             if img_mid_name:
                 img_obj.image_mid_size = str_result
             img_obj.save()
+            saved_objs.append(img_obj)
             continue   
 
         else:
@@ -253,9 +240,9 @@ def multipleImagesPersist(request, images_list, app, obj):
             if img_mid_name:
                 img_obj.image_mid_size = img_mid_name
             img_obj.save()
+            saved_objs.append(img_obj)
 
-    return True
-
+    return saved_objs 
 
 
 @login_required

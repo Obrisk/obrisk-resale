@@ -83,6 +83,7 @@
                       placeholder="Share something..." maxlength="400">
                   </textarea>
                     <input type="text" id="id_images" name="images" class="d-none">
+                    <input type="text" id="id_video" name="story_video" class="d-none">
                     <input type="text" id="id_img_error" name="img_error" class="d-none">
                   </div>
 
@@ -281,9 +282,10 @@
 {% block extra_js %}
 <script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/aliyun-oss.min.js' %}?v=3007191" type="text/javascript"></script>
+<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <link rel="stylesheet" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/css/fancybox.min.css">
 <script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/videoUploader.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/afterglow.js' %}" type="text/javascript"></script>
 

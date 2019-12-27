@@ -253,6 +253,7 @@ $(function() {
   });
   $("body").on("uploadComplete", function(event) {
     $("#id_images").val(images);
+    $("#id_video").val(storyVideo);
     $("#id_img_error").val(img_error);
     $.ajax({
       url: "/stories/post-stories/",
