@@ -62,7 +62,7 @@
       {% if stories.video %}
       <div class="grid-1">
         <video class="afterglow" style="height: 50vh" width="1280" height="720" controls id="video" preload="auto">
-          <source src="{{oss}}/{{stories.video}}" type="video/mp4">
+          <source src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.video}}" type="video/mp4">
           Your browser doesn't support HTML5 video tag.
         </video>
       </div>
@@ -82,7 +82,7 @@
 
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" alt="">
+          <img class="lazyload" data-src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.img1}}" alt="">
 
         </figure>
         {%endif%}
@@ -90,7 +90,7 @@
         <figure class=" img2 image is-square">
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img2}}" alt="">
+          <img class="lazyload" data-src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.img2}}" alt="">
 
         </figure>
         {%endif%}
@@ -98,7 +98,7 @@
         <figure class="img3 image is-square">
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img3}}" alt="">
+          <img class="lazyload" data-src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.img3}}" alt="">
 
         </figure>
         {%endif%}
@@ -106,7 +106,7 @@
         <figure class="img4 image is-square">
 
 
-          <img class="lazyload" data-src="{{oss}}/{{stories.img4}}" alt="">
+          <img class="lazyload" data-src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.img4}}" alt="">
 
         </figure>
         {% endif %}
@@ -167,7 +167,9 @@
       <div class="likers-group">
         {% for liker in stories.get_likers %}
         <a href="/users/{{liker}}">
-          <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
+          <img
+            src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}"
+            alt="User profile picture">
         </a>
         {% endfor %}
       </div>
@@ -187,7 +189,8 @@
               <div class="modal-body likers-group">
                 <P> {% for liker in stories.get_all_likers %}
                   <a href="/users/{{liker}}">
-                    <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}"
+                    <img
+                      src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}"
                       alt="User profile picture">
                   </a>
                   {% endfor %} </P>

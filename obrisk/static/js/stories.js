@@ -22,6 +22,14 @@ $(function() {
     // These HTTP methods do not require CSRF protection
     return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
   }
+
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
+    }
+  });
   function offset(el) {
     var rect = el.getBoundingClientRect(),
       scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
@@ -32,7 +40,6 @@ $(function() {
   // This sets up every ajax call with proper headers.
   $.ajaxSetup({
     beforeSend: function(xhr, settings) {
-      console.log(csrftoken);
       if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
         xhr.setRequestHeader("X-CSRFToken", csrftoken);
       }
@@ -99,7 +106,6 @@ $(function() {
     var stories = $(post).attr("stories-id");
     post.find(".content-wrap").toggleClass("is-hidden");
     post.find(".comments-wrap").toggleClass("is-hidden");
-    console.log(offset(post[0]));
     window.scrollTo({
       top: offset(post[0]).top,
       behavior: "smooth"
@@ -193,6 +199,7 @@ $(function() {
     $(".is-new-content").addClass("is-highlighted");
     $(".all-stories ").addClass("block-scroll");
   });
+
   //Enable and disable publish button based on the textarea value length (1)
   $("#publish").on("input", function() {
     var valueLength = $(this).val().length;
@@ -214,6 +221,7 @@ $(function() {
     $(".close-wrap").addClass("d-none");
     $(".all-stories ").removeClass("block-scroll");
   });
+
   //Show comments
   $(".infinite-container").on("click", ".is-comment", function() {
     // Ajax call to request a given Stories object detail and thread, and to
@@ -238,19 +246,8 @@ $(function() {
       }
     });
   });
-});
-$(function() {
-  function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-  }
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
+
+  //
   $("body").on("uploadComplete", function(event) {
     $("#id_images").val(images);
     $("#id_video").val(storyVideo);
@@ -261,14 +258,18 @@ $(function() {
       type: "POST",
       cache: false,
       success: function(data) {
-        window.location.reload();
-        // $('[name="post"]').val("");
-        // $('.app-overlay').removeClass('is-active');
-        // $('.is-new-content').removeClass('is-highlighted');
-        // $('.close-wrap').addClass('d-none');
-        // feather.replace();
-        // $("#postStoriesForm")[0].reset();
-        // $("input, textarea").val('');
+        //window.location.reload();
+        $('[name="post"]').val("");
+        $(".app-overlay").removeClass("is-active");
+        $(".is-new-content").removeClass("is-highlighted");
+        $(".close-wrap").addClass("d-none");
+        feather.replace();
+        $("#postStoriesForm")[0].reset();
+        $("input, textarea").val("");
+        $(".stream");
+        $(".stream").prepend(data);
+        lazyload();
+        $("body").trigger("resetUpload");
       },
       error: function(data) {
         bootbox.alert(data.responseText);
