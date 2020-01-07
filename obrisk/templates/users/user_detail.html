@@ -55,8 +55,8 @@
 
 
         {% if object in friends %}
-        <a class="button has-min-width m-auto"
-          href="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
+        <a class="button has-min-width m-auto go-to-chat"
+          data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
         {% elif object in pending %}
         <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
         {% else %}
@@ -158,7 +158,6 @@
   const username = "{{ object.username }}";
   var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val()
 
-
   $(".connect-btn").click(function (e) {
     bootbox.confirm("Send friend request ?", function (result) {
       if (result) {
@@ -190,6 +189,27 @@
         });
       }
     });
+
+  });
+
+
+  //setcookies to open chat window
+  var setCookie = function (name, value, days) {
+    if (!name && !value) {
+      return false;
+    } else if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      var expires = "; expires=" + date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/";
+    return true;
+  }
+  $(".go-to-chat").click(function (e) {
+    e.preventDefault();
+    setCookie("active-chat", $(this).data("url"), 1);
+    location.href = "/ws/messages";
 
   });
 </script>
