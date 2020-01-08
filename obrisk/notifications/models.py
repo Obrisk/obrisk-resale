@@ -83,6 +83,7 @@ class Notification(models.Model):
         <Sebastian> <Logged In> <1 minute ago>
         <Sebastian> <commented> <Classified> <2 hours ago>
     """
+    NEW_MESSAGE = 'M'
     LIKED = 'L'
     COMMENTED = 'C'
     FAVORITED = 'F'
@@ -97,6 +98,7 @@ class Notification(models.Model):
     SIGNUP = 'U'
     REPLY = 'R'
     NOTIFICATION_TYPES = (
+        (NEW_MESSAGE, _('new message')),
         (LIKED, _('liked')),
         (COMMENTED, _('commented')),
         (FAVORITED, _('cavorited')),
@@ -162,7 +164,7 @@ class Notification(models.Model):
         """Model method to validate notification type and return the closest
         icon to the verb.
         """
-        if self.verb == 'C' or self.verb == 'A' or self.verb == 'K':
+        if self.verb == 'C' or self.verb == 'A' or self.verb == 'K' or self.verb == 'M':
             return '💬'
 
         elif self.verb == 'I' or self.verb == 'U' or self.verb == 'O':
@@ -200,7 +202,7 @@ class Notification(models.Model):
             self.save()
 
 
-def notification_handler(actor, recipient, verb, **kwargs):
+def notification_handler(actor, recipient, verb, is_msg=False, **kwargs):
     """
     Handler function to create a Notification instance.
     :requires:
@@ -216,7 +218,12 @@ def notification_handler(actor, recipient, verb, **kwargs):
     """
     key = kwargs.pop('key', 'notification')
     id_value = kwargs.pop('id_value', None)
-    if recipient == 'global':
+    
+    if is_msg:
+        
+        notification_broadcast(actor, key, is_msg, recipient=recipient.username)
+        
+    elif recipient == 'global':
         users = get_user_model().objects.all().exclude(username=actor.username)
         for user in users:
             Notification.objects.create(
@@ -250,7 +257,7 @@ def notification_handler(actor, recipient, verb, **kwargs):
         pass
 
 
-def notification_broadcast(actor, key, **kwargs):
+def notification_broadcast(actor, key, is_msg=False, **kwargs):
     """Notification handler to broadcast calls to the recieve layer of the
     WebSocket consumer of this app.
     :requires:
@@ -271,6 +278,7 @@ def notification_broadcast(actor, key, **kwargs):
         'key': key,
         'actor_name': actor.username,
         'id_value': id_value,
-        'recipient': recipient
+        'recipient': recipient,
+        'is_msg' : is_msg
     }
     async_to_sync(channel_layer.group_send)('notifications', payload)
