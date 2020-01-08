@@ -1,15 +1,239 @@
-let audio = new Audio("/static/sound/chime.mp3");
+//let audio = new Audio("/static/sound/chime.mp3");
 
 function scrollMessages() {
   /* Set focus on the input box from the form, and rolls to show the
         the most recent message.
     */
   $("textarea[name='message']").focus();
-  var d = $("#conversation");
-  d.scrollTop(d.prop("scrollHeight"));
+  $("#conversation").scrollTop(99999999999);
 }
 
 $(function() {
+  //scroll when on textarea
+  var div = document.querySelector(".message-scroll");
+  var ta = document.querySelector("textarea");
+
+  ta.addEventListener("keydown", autosize);
+
+  function autosize() {
+    setTimeout(function() {
+      var height = Math.min(20 * 5, ta.scrollHeight);
+      div.style.cssText = "height:" + height + "px";
+      ta.style.cssText = "height:" + height + "px";
+    }, 0);
+  }
+  var setCookie = function(name, value, days) {
+    if (!name && !value) {
+      return false;
+    } else if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+      var expires = "; expires=" + date.toGMTString();
+    } else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/";
+    return true;
+  };
+  var getCookie = function(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(";");
+    for (var i = 0; i < ca.length; i++) {
+      var c = ca[i];
+      while (c.charAt(0) == " ") c = c.substring(1, c.length);
+      if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+  };
+
+  var deleteCookie = function(name) {
+    if (name) {
+      setCookie(name, "", -1);
+      return true;
+    }
+  };
+  function loadMessages(chat) {
+    var chatURL = chat;
+    //Load messages
+    $.ajax({
+      type: "get",
+      url: chatURL,
+      success: function(response) {
+        var activeUserThumbnail =
+          response.active_thumbnail == null
+            ? "/static/img/user.png"
+            : response.active_thumbnail;
+
+        $(".avatar-container").append(
+          `<img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
+                        style="width:30px;height:30px;border-radius: 50%;"
+                        class=" user-avatar rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                    `
+        );
+        $(".username").append(`  <span>${response.active_username}</span>`);
+        response.msgs.map(function(el) {
+          if (el.sender_username == response.active_username) {
+            if (el.image != null) {
+              $("#conversation").append(`<div class="chat-message is-received">
+        
+                          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
+                              style="width:30px;height:30px;border-radius: 50%;"
+                              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                          
+                          <div class="message-block">
+                              <span>${moment(el.timestamp).format(
+                                "MMM. Do h:mm"
+                              )}</span>
+                              <a data-fancybox="gallery" style="width: 250px; height: 250px;"
+                href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
+                  el.image
+                }"><img
+                    style="width: 250px; height: 250px;"
+                    src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
+                      el.img_preview
+                    } " /></a>
+                          </div>
+                      </div > `);
+            }
+            if (el.classified_title != null) {
+              $("#conversation")
+                .append(`<div class="chat-message is-received" style="background-color: transparent;"> <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
+                          style="width:30px;height:30px;border-radius: 50%;"
+                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+    
+                          <div class="message-block">
+                            <span>${moment(el.timestamp).format(
+                              "MMM. Do h:mm"
+                            )}</span>
+                            <div class="message-text"><div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
+            <a href="${
+              el.classified_url
+            }" style="color:black; text-decoration:none; background-color:none" class="is-flex">
+              <div class="card-img-top img-responsive column" style="max-width: 70px">
+                               <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
+                                 el.classified_thumbnail
+                               }" alt="${el.classified_title}">
+
+              </div>
+              <div class="column">
+                <h6 class="card-title"> ${el.classified_title} </h6>
+                <p class="card-subtitle O-cl-red"> CNY ${
+                  el.classified_price
+                } </p>
+              </div>
+            </a>
+          </div></div>
+                          </div>
+                      </div>`);
+            }
+            if (el.message != null) {
+              $("#conversation")
+                .append(`<div class="chat-message is-received" ><img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
+                          style="width:30px;height:30px;border-radius: 50%;"
+                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+    
+                          <div class="message-block">
+                            <span>${moment(el.timestamp).format(
+                              "MMM. Do h:mm"
+                            )}</span>
+                            <div class="message-text">${el.message}</div>
+                          </div>
+                      </div>`);
+            }
+          } else {
+            if (el.image != null) {
+              $("#conversation").append(`<div class="chat-message is-sent">
+        
+                          <img src="${currentUserThumbnail}" alt="Picture Profile"
+                              style="width:30px;height:30px;border-radius: 50%;"
+                              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                          
+                          <div class="message-block">
+                              <span>${moment(el.timestamp).format(
+                                "MMM. Do h:mm"
+                              )}</span>
+                              <a data-fancybox="gallery" style="width: 250px; height: 250px;"
+                href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
+                  el.image
+                }"><img
+                    style="width: 250px; height: 250px;"
+                    src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
+                      el.img_preview
+                    } " /></a>
+                          </div>
+                      </div > `);
+            }
+            if (el.classified_title != null) {
+              $("#conversation")
+                .append(`<div class="chat-message is-sent "style="background-color: transparent;"><img src="${currentUserThumbnail}" alt="Picture Profile"
+                          style="width:30px;height:30px;border-radius: 50%;"
+                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+    
+                          <div class="message-block">
+                            <span>${moment(el.timestamp).format(
+                              "MMM. Do h:mm"
+                            )}</span>
+                            <div class="message-text"><div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
+            <a href="${
+              el.classified_url
+            }" style="color:black; text-decoration:none; background-color:none" class="is-flex">
+              <div class="card-img-top img-responsive column" style="max-width: 70px">
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
+                  el.classified_thumbnail
+                }" alt="${el.classified_title}">
+              </div>
+              <div class="column">
+                <h6 class="card-title"> ${el.classified_title} </h6>
+                <p class="card-subtitle O-cl-red"> CNY ${
+                  el.classified_price
+                } </p>
+              </div>
+            </a>
+          </div></div></div></div>`);
+            }
+            if (el.message != null) {
+              $("#conversation")
+                .append(`<div class="chat-message is-sent" ><img src="${currentUserThumbnail}" alt="Picture Profile"
+                          style="width:30px;height:30px;border-radius: 50%;"
+                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+    
+                          <div class="message-block">
+                            <span>${moment(el.timestamp).format(
+                              "MMM. Do h:mm"
+                            )}</span>
+                            <div class="message-text">${el.message}</div>
+                          </div>
+                      </div>`);
+            }
+          }
+        });
+
+        $(".sendTo").val(response.active_username);
+        activeUser = response.active_username;
+        $("#conversation").scrollTop(99999999999);
+      }
+    });
+  }
+
+  //This will only run once and then delete the cookies
+  if (getCookie("active-chat")) {
+    jQuery.noConflict();
+    $("#chat-window").modal("show");
+    loadMessages(getCookie("active-chat"));
+    //Clear the cookies obtained from the classified details
+    deleteCookie("active-chat");
+  }
+
+  $(".open-chat").click(function() {
+    loadMessages($(this).data("url"));
+  });
+
+  $(".delete").click(function(e) {
+    //Clear previous chat
+    $("#conversation").html("");
+    $(".avatar-container").html("");
+    $(".username").html("");
+    $("body").removeClass("modal-open");
+    $("body").removeClass("is-frozen");
+  });
   function setUserOnlineOffline(username, status) {
     /* This function enables the client to switch the user connection
         status, allowing to show if an user is connected or not.
@@ -38,8 +262,8 @@ $(function() {
       success: function(data) {
         $("#conversation").append(data);
         setTimeout(function() {
-          scrollMessages();
-        }, 1000);
+          $("#conversation").scrollTop(99999999999);
+        }, 200);
       }
     });
     scrollMessages();
@@ -57,6 +281,7 @@ $(function() {
   );
   $("textarea[name='message']").on("focus", function(e) {
     $("#addBtn").removeClass("is-hidden");
+    $("#conversation").scrollTop(99999999999);
   });
 
   $("#send").submit(function(e) {
@@ -86,10 +311,10 @@ $(function() {
           $("#send")[0].reset();
           $("textarea").val("");
           $("textarea[name='message']").focus();
-          scrollMessages();
+          $("#conversation").scrollTop(99999999999);
         },
         fail: function() {
-          console.log("failed to send the message");
+          bootbox.alert("failed to send the message");
         }
       });
     }
@@ -109,11 +334,10 @@ $(function() {
       !e.shiftKey &&
       !$(".send-btn").is('[disabled="disabled"]')
     ) {
-      $(this)
-        .closest("form")
-        .submit();
-      e.preventDefault();
-      return false;
+      $("#send").trigger("submit");
+      setTimeout(function(e) {
+        $("#conversation").scrollTop(99999999999);
+      }, 0);
     }
   });
 
@@ -162,7 +386,6 @@ $(function() {
   };
 
   webSocket.listen(function(event) {
-    console.log(event);
     if (event.key === undefined) event = JSON.parse(event);
     switch (event.key) {
       case "message":
@@ -187,8 +410,7 @@ $(function() {
       default:
         break;
     }
-    var d = $(".messages");
-    d.scrollTop(d.prop("scrollHeight"));
+    scrollMessages();
   });
 });
 
@@ -243,7 +465,7 @@ OssUpload.prototype = {
             reader.result
           }"></a></div></div>`;
           $("#conversation").append(image);
-          scrollMessages();
+          $("#conversation").scrollTop(99999999999);
         };
         reader.readAsDataURL(e.target.files[0]);
       }

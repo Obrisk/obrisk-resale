@@ -410,8 +410,8 @@ Navbar styles
             position: absolute;
             top: 90%;
 
-            //left: calc(50% - 170px);
-            left: 0;
+            right: 0;
+            //left: 0;
             width: 340px;
             background: $white;
             border: 1px solid $fade-grey;
@@ -435,7 +435,7 @@ Navbar styles
             &:after,
             &:before {
                 bottom: 100%;
-                left: 7%;
+                right: 7%;
                 border: solid transparent;
                 content: " ";
                 height: 0;
@@ -506,6 +506,12 @@ Navbar styles
 
                 &:after {
                     display: none !important;
+                }
+            }
+            &.is-navbarTop{
+                 right: 0 !important;
+                  &:before {
+                     left: 7%!important;
                 }
             }
 
@@ -756,6 +762,7 @@ Navbar styles
                 }
             }
         }
+
     }
 
     //Search area

@@ -170,16 +170,15 @@
 
 
           <!-- Chat body -->
-          <div id="chat-body" class="chat-body">
+          <div id="chat-body" class="chat-body" style="display: flex;height: 100vh;flex-direction: column;">
             <!-- Conversation with Dan -->
-            <div id="conversation" class="chat-body-inner has-slimscroll" style="padding-bottom: 7rem!important">
+            <div id="conversation" class="chat-body-inner has-slimscroll" style="flex-grow: 1;">
 
 
               <div class="send-message"> </div>
             </div>
-
             <!-- Compose message area -->
-            <div class="chat-action">
+            <div class="chat-action" style="z-index: 9999;position: relative; bottom: 0;">
               <div class="message-box">
 
 
@@ -213,8 +212,8 @@
                               <i class="mdi mdi-camera" style="color: white;"></i>
                             </div>
                           </div>
-                          <button id="send-text" class="add-button button is-solid accent-button is-bold raised"
-                            type="submit">
+                          <button id="send-text"
+                            class="add-button button is-hidden-mobile is-solid accent-button is-bold raised">
                             <small><strong>Send</strong></small>
                           </button>
 
@@ -228,6 +227,7 @@
                 </div>
               </div>
             </div>
+
 
           </div>
 
@@ -258,209 +258,8 @@
 
 
 
-      //scroll when on textarea
-      var div = document.querySelector('.message-scroll');
-      var ta = document.querySelector('textarea');
-
-      ta.addEventListener('keydown', autosize);
-
-      function autosize() {
-        setTimeout(function () {
-
-          var height = Math.min(20 * 5, ta.scrollHeight);
-          div.style.cssText = 'height:' + height + 'px';
-          ta.style.cssText = 'height:' + height + 'px';
-        }, 0);
-      }
-      var setCookie = function (name, value, days) {
-        if (!name && !value) {
-          return false;
-        } else if (days) {
-          var date = new Date();
-          date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-          var expires = "; expires=" + date.toGMTString();
-        }
-        else var expires = "";
-        document.cookie = name + "=" + value + expires + "; path=/";
-        return true;
-      }
-      var getCookie = function (name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for (var i = 0; i < ca.length; i++) {
-          var c = ca[i];
-          while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-          if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-        }
-        return null;
-      }
-
-      var deleteCookie = function (name) {
-        if (name) {
-          setCookie(name, "", -1);
-          return true;
-        }
-      }
 
 
-      $(document).ready(function () {
-
-        function loadMessages(chat) {
-          var chatURL = chat;
-          console.log(chatURL)
-
-          //Load messages
-          $.ajax({
-            type: "get",
-            url: chatURL,
-            success: function (response) {
-              var activeUserThumbnail = (response.active_thumbnail == null) ? "/static/img/user.png" : response.active_thumbnail;
-
-              $(".avatar-container").append(
-                `<img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
-                        style="width:30px;height:30px;border-radius: 50%;"
-                        class=" user-avatar rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                    `
-              )
-              $(".username").append(
-                `  <span>${response.active_username}</span>`
-              )
-              response.msgs.map(function (el) {
-                if (el.sender_username == response.active_username) {
-                  if (el.image != null) {
-                    $("#conversation").append(`<div class="chat-message is-received">
-        
-                          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
-                              style="width:30px;height:30px;border-radius: 50%;"
-                              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                          
-                          <div class="message-block">
-                              <span>${moment(el.timestamp).format("MMM. Do h:mm")}</span>
-                              <a data-fancybox="gallery" style="width: 250px; height: 250px;"
-                href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${el.image}"><img
-                    style="width: 250px; height: 250px;"
-                    src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${el.img_preview} " /></a>
-                          </div>
-                      </div > `)
-                  }
-                  if (el.classified_title != null) {
-                    $("#conversation").append(`<div class="chat-message is-received" style="background-color: transparent;"> <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
-                          style="width:30px;height:30px;border-radius: 50%;"
-                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
-                          <div class="message-block">
-                            <span>${moment(el.timestamp).format("MMM. Do h:mm")}</span>
-                            <div class="message-text"><div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="${el.classified_url}" style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
-                               <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${el.classified_thumbnail}" alt="${el.classified_title}">
-
-              </div>
-              <div class="column">
-                <h6 class="card-title"> ${el.classified_title} </h6>
-                <p class="card-subtitle O-cl-red"> CNY ${el.classified_price} </p>
-              </div>
-            </a>
-          </div></div>
-                          </div>
-                      </div>`)
-                  }
-                  if (el.message != null) {
-                    $("#conversation").append(`<div class="chat-message is-received" ><img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
-                          style="width:30px;height:30px;border-radius: 50%;"
-                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
-                          <div class="message-block">
-                            <span>${moment(el.timestamp).format("MMM. Do h:mm")}</span>
-                            <div class="message-text">${el.message}</div>
-                          </div>
-                      </div>`)
-                  }
-
-                } else {
-                  if (el.image != null) {
-
-                    $("#conversation").append(`<div class="chat-message is-sent">
-        
-                          <img src="${currentUserThumbnail}" alt="Picture Profile"
-                              style="width:30px;height:30px;border-radius: 50%;"
-                              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                          
-                          <div class="message-block">
-                              <span>${moment(el.timestamp).format("MMM. Do h:mm")}</span>
-                              <a data-fancybox="gallery" style="width: 250px; height: 250px;"
-                href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${el.image}"><img
-                    style="width: 250px; height: 250px;"
-                    src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${el.img_preview} " /></a>
-                          </div>
-                      </div > `)
-                  }
-                  if (el.classified_title != null) {
-                    $("#conversation").append(`<div class="chat-message is-sent "style="background-color: transparent;"><img src="${currentUserThumbnail}" alt="Picture Profile"
-                          style="width:30px;height:30px;border-radius: 50%;"
-                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
-                          <div class="message-block">
-                            <span>${moment(el.timestamp).format("MMM. Do h:mm")}</span>
-                            <div class="message-text"><div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="${el.classified_url}" style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${el.classified_thumbnail}" alt="${el.classified_title}">
-              </div>
-              <div class="column">
-                <h6 class="card-title"> ${el.classified_title} </h6>
-                <p class="card-subtitle O-cl-red"> CNY ${el.classified_price} </p>
-              </div>
-            </a>
-          </div></div></div></div>`)
-                  }
-                  if (el.message != null) {
-                    $("#conversation").append(`<div class="chat-message is-sent" ><img src="${currentUserThumbnail}" alt="Picture Profile"
-                          style="width:30px;height:30px;border-radius: 50%;"
-                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
-                          <div class="message-block">
-                            <span>${moment(el.timestamp).format("MMM. Do h:mm")}</span>
-                            <div class="message-text">${el.message}</div>
-                          </div>
-                      </div>`)
-                  }
-
-                }
-              });
-
-              $(".sendTo").val(response.active_username);
-              activeUser = response.active_username
-              //This scrolls the div #messages only to the bottom
-              var d = $('#conversation');
-              d.scrollTop(d.prop("scrollHeight"));
-            }
-          });
-
-        }
-
-        //This will only run once and then delete the cookies 
-        if (getCookie("active-chat")) {
-          jQuery.noConflict();
-          $('#chat-window').modal('show');
-          loadMessages(getCookie("active-chat"));
-          //Clear the cookies obtained from the classified details 
-          deleteCookie("active-chat");
-        }
-
-        $(".open-chat").click(function () {
-          loadMessages($(this).data("url"))
-        });
-
-        $(".delete").click(function (e) {
-          //Clear previous chat
-          $("#conversation").html("");
-          $(".avatar-container").html("");
-          $(".username").html("");
-          $("body").removeClass("modal-open");
-          $("body").removeClass("is-frozen");
-        });
-      });
     </script>
     <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>

@@ -33,7 +33,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classified-details.css",
-    "revision": "7c22ccaf4acf4f89e4864bce4be0936a"
+    "revision": "b81c72755bf18f81fbb2c15448c288ec"
   },
   {
     "url": "/static/css/classifieds-list.css",
@@ -137,7 +137,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/uploader.css",
-    "revision": "69e4e0597b63ad8ae24897e96b9333bf"
+    "revision": "6dad78f4bf12863167d281dccaef1300"
   },
   {
     "url": "/static/css/user_form.css",
@@ -178,10 +178,6 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/frontend/assets/css/bulma.css",
     "revision": "5853a1a9df4005500d5690e0f4ff50bd"
-  },
-  {
-    "url": "/static/frontend/assets/css/core.css",
-    "revision": "5f11c075e190210704487ef5d5acd88b"
   },
   {
     "url": "/static/frontend/assets/css/materialdesignicons.min.css",
@@ -541,7 +537,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "b7337252ae9382cfc5fb5006faa2eba4"
+    "revision": "67ad5fb2f17ec420e5c9effebb5404cf"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -597,7 +593,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "68b48088c0e93b44fc1985f6f1ecdbf4"
+    "revision": "1c7166c4411e5bea74876bc9b36c3315"
   },
   {
     "url": "/static/js/swiper.min.js",
@@ -614,6 +610,10 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/js/user-form.js",
     "revision": "c2326ba12422ce75194316fa2fa3db18"
+  },
+  {
+    "url": "/static/js/videoUploader.js",
+    "revision": "b9739fb017a6fc9ced896d674ebc470d"
   },
   {
     "url": "/static/js/websocketbridge.js",
