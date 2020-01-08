@@ -83,6 +83,7 @@ class Notification(models.Model):
         <Sebastian> <Logged In> <1 minute ago>
         <Sebastian> <commented> <Classified> <2 hours ago>
     """
+    NEW_REQUEST = 'N'
     LIKED = 'L'
     COMMENTED = 'C'
     FAVORITED = 'F'
@@ -97,6 +98,7 @@ class Notification(models.Model):
     SIGNUP = 'U'
     REPLY = 'R'
     NOTIFICATION_TYPES = (
+        (NEW_REQUEST, _('new connection request')),
         (LIKED, _('liked')),
         (COMMENTED, _('commented')),
         (FAVORITED, _('cavorited')),
@@ -180,7 +182,7 @@ class Notification(models.Model):
         elif self.verb == 'E':
             return '✍'
 
-        elif self.verb == 'V':
+        elif self.verb == 'V' or self.verb == 'N':
             return '➕'
 
         elif self.verb == 'S':
@@ -200,7 +202,7 @@ class Notification(models.Model):
             self.save()
 
 
-def notification_handler(actor, recipient, verb, **kwargs):
+def notification_handler(actor, recipient, verb, new_connection=False, **kwargs):
     """
     Handler function to create a Notification instance.
     :requires:
@@ -216,6 +218,8 @@ def notification_handler(actor, recipient, verb, **kwargs):
     """
     key = kwargs.pop('key', 'notification')
     id_value = kwargs.pop('id_value', None)
+    if new_connection:
+        notification_broadcast(actor, key, new_connection)
     if recipient == 'global':
         users = get_user_model().objects.all().exclude(username=actor.username)
         for user in users:
@@ -250,7 +254,7 @@ def notification_handler(actor, recipient, verb, **kwargs):
         pass
 
 
-def notification_broadcast(actor, key, **kwargs):
+def notification_broadcast(actor, key, new_connection=False, **kwargs):
     """Notification handler to broadcast calls to the recieve layer of the
     WebSocket consumer of this app.
     :requires:
@@ -271,6 +275,7 @@ def notification_broadcast(actor, key, **kwargs):
         'key': key,
         'actor_name': actor.username,
         'id_value': id_value,
-        'recipient': recipient
+        'recipient': recipient,
+        'new_connecion' : new_connection
     }
     async_to_sync(channel_layer.group_send)('notifications', payload)

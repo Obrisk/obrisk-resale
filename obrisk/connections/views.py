@@ -5,7 +5,7 @@ from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import JsonResponse
-
+from obrisk.notifications.models import Notification, notification_handler
 try:
     from django.contrib.auth import get_user_model
 
@@ -95,8 +95,10 @@ def friendship_add_friend(
                     {"status": "301", "message": "This user is already your connection"}
                 )
             else:
+                notification_handler(from_user, to_user, Notification.NEW_REQUEST)
                 return JsonResponse(
                     {"status": "200", "message": "Successfully sent connection request"}
+                    
                 )
 
     return JsonResponse({"status": "400", "message": "This method is not allowed"})
