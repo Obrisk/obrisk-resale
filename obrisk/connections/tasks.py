@@ -20,11 +20,5 @@ def build_recommended_users():
         if user.is_authenticated():
             #Will improve this to consider connections of connections.
             recommended_users = users.filter(city=user.city).exclude(thumbnail=None)
-            
-            if recommended_users.count > 20:
-                TAGS_TIMEOUT = getattr(settings, 'CONNECTS_RECOMMENDATION_TIMEOUT', DEFAULT_TIMEOUT)
-                cache.set(f'recommended_connects_{user.id}', recommended_users, timeout=TAGS_TIMEOUT)
-            else:
-                TAGS_TIMEOUT = getattr(settings, 'CONNECTS_RECOMMENDATION_TIMEOUT', DEFAULT_TIMEOUT)
-                cache.set(f'recommended_connects_{user.id}', recommended_users, timeout=TAGS_TIMEOUT)
-        
+            TAGS_TIMEOUT = getattr(settings, 'CONNECTS_RECOMMENDATION_TIMEOUT', DEFAULT_TIMEOUT)
+            cache.set(f'recommended_connects_{user.id}', recommended_users, timeout=TAGS_TIMEOUT)

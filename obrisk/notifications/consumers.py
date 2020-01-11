@@ -19,23 +19,17 @@ class NotificationsConsumer(AsyncWebsocketConsumer):
         else:
             username = self.scope['user'].username
             await self.update_user_status_to_online(username)
-
+            
             # Accept the connection
             await self.channel_layer.group_add(
-                'notifications', self.channel_name)
-            u = User.objects.get(username=username)
-            print(u.status)
-            
+                'notifications', self.channel_name)            
             await self.accept()
-
+            
     async def disconnect(self, close_code):
         """Consumer implementation to leave behind the group at the moment the
         closes the connection."""
         username = self.scope['user'].username
-        await self.update_user_status_to_offline(username)
-
-        u = User.objects.get(username=username)
-        print(u.status)
+        await self.update_user_status_to_offline(username)      
         await self.channel_layer.group_discard(
            'notifications', self.channel_name)
 
@@ -47,18 +41,21 @@ class NotificationsConsumer(AsyncWebsocketConsumer):
     
     @database_sync_to_async
     def update_user_status_to_online(self, username):
-        # username = slugify(self.scope['user'].username)
-        # print(username)
-        current_status = User.objects.filter(username=username)
-        if current_status.status != 1:
-            new_status = new_status.update(status=F('status') == 1)
-            return new_status
-        else:    
-            return current_status
+        """
+        checks and updates the current status if is offline update the status to online 
+        """
+        return User.objects.filter(username=username).update(status=F('status') == 1)
+        # current_status = current_status.status
+        # if current_status != 1:
+        #     return current_status
+        # else:    
+        #     return current_status
 
 
     @database_sync_to_async
     def update_user_status_to_offline(self, username):
         #in the future users logged in with more than one device or browsers at th same time should be handled
-        new_status = User.objects.get(username=username).update(status=F('status') == 0)
-        return new_status
+        """checks and updates the current status if is online update the status to offline """
+
+        
+        return User.objects.filter(pk=username.pk).update(status=F('status') == 0)

@@ -26,7 +26,7 @@ from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required 
 from obrisk.utils.images_upload import bucket, bucket_name
-
+from obrisk.users.models import User
 try:
     from django.contrib.auth import get_user_model
     user_model = get_user_model()
@@ -184,6 +184,17 @@ def send_message(request):
         recipient = get_user_model().objects.get(username=recipient_username)
     except get_user_model().DoesNotExist:
         return HttpResponseNotFound("The user account appears to not exist or it has been freezed!")
+
+    # online_users = User.objects.filter(status>0)
+    # if recipient_username in online_users:
+        
+    #     notification_handler()
+    
+    # else:
+    u = User.objects.all()
+    for r in u:
+        print(r.is_chatting, "and status is", r.status)
+
 
     #Django-channels doesn't accept group names that are chinese characters
     #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters

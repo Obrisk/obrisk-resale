@@ -56,6 +56,7 @@ class User(AbstractUser):
     #https://stackoverflow.com/questions/42703059/how-to-create-a-8-digit-unique-id-in-python
     # online_devices = models.IntegerField(default=0)
     status = models.IntegerField(default=0)
+    is_chatting = models.IntegerField(default=0)
 
     def __str__(self):
         return self.username
