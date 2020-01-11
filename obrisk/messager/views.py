@@ -193,7 +193,7 @@ def send_message(request):
     # else:
     u = User.objects.all()
     for r in u:
-        print(r.is_chatting, "and status is", r.status)
+        print(r.username, r.is_chatting, "and status is", r.status)
 
 
     #Django-channels doesn't accept group names that are chinese characters

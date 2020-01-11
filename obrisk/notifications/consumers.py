@@ -44,7 +44,7 @@ class NotificationsConsumer(AsyncWebsocketConsumer):
         """
         checks and updates the current status if is offline update the status to online 
         """
-        return User.objects.filter(username=username).update(status=F('status') == 1)
+        return User.objects.filter(username=username).update(status=1)
         # current_status = current_status.status
         # if current_status != 1:
         #     return current_status
@@ -58,4 +58,4 @@ class NotificationsConsumer(AsyncWebsocketConsumer):
         """checks and updates the current status if is online update the status to offline """
 
         
-        return User.objects.filter(pk=username.pk).update(status=F('status') == 0)
+        return User.objects.filter(username=username).update(status=0)

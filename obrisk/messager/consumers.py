@@ -16,23 +16,20 @@ class MessagerConsumer(AsyncWebsocketConsumer):
 
         else:
             user = self.scope['user'].username
-            username = slugify()
+            username = slugify(user)
             # Accept the connection
             await self.channel_layer.group_add(f"{username}", self.channel_name)
             await self.accept()
             await self.is_chatting(user)
-            u = User.objects.get(username=username)
-            print(u.username, u.status, u.is_chatting, 'connected')
-
+            
     async def disconnect(self, close_code):
         user = self.scope['user'].username
         username = slugify(user)
         """Consumer implementation to leave behind the group at the moment the
         closes the connection."""
         await self.channel_layer.group_discard(f"{username}", self.channel_name)
-        await self.is_chatting(user)
-        u = User.objects.get(username=user)
-        print(u.username, u.status, u.is_chatting, 'disconnected')
+        await self.is_not_chatting(user)
+        
 
     async def receive(self, text_data):
         """Receive method implementation to redirect any new message received
@@ -44,13 +41,19 @@ class MessagerConsumer(AsyncWebsocketConsumer):
         """
         checks and updates the user if is chatting or not 
         """
-        chatting = User.objects.filter(pk=username.pk)
-        chatting = chatting.is_chatting
+        chatting = User.objects.filter(username=username).update(is_chatting=1)
 
-        if chatting > 0:
-            not_chatting = chatting.update(is_chatting == 0)
-            return not_chatting
-        elif chatting < 1:
-            is_chatting = chatting.update(is_chatting == 1)
-            return is_chatting
+        # if chatting > 0:
+        #     not_chatting = chatting
+        #     return not_chatting
+        # elif chatting < 1:
+        #     is_chatting = chatting.update(is_chatting == 1)
+        return chatting
 
+    @database_sync_to_async
+    def is_not_chatting(self, username):
+        """
+        checks and updates the user if is chatting or not 
+        """
+        not_chatting = User.objects.filter(username=username).update(is_chatting=0)
+        return not_chatting
