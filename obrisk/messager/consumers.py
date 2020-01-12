@@ -4,6 +4,9 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from django.db.models import F
 from channels.db import database_sync_to_async
 from obrisk.users.models import User
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
+
 class MessagerConsumer(AsyncWebsocketConsumer):
     """Consumer to manage WebSocket connections for the Messager app.
     """
@@ -25,6 +28,7 @@ class MessagerConsumer(AsyncWebsocketConsumer):
     async def disconnect(self, close_code):
         user = self.scope['user'].username
         username = slugify(user)
+
         """Consumer implementation to leave behind the group at the moment the
         closes the connection."""
         await self.channel_layer.group_discard(f"{username}", self.channel_name)
@@ -37,23 +41,21 @@ class MessagerConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps(text_data))
 
     @database_sync_to_async
-    def is_chatting(self, username):
+    def is_chatting(self, user):
         """
         checks and updates the user if is chatting or not 
         """
-        chatting = User.objects.filter(username=username).update(is_chatting=1)
+        return User.objects.filter(username=user).update(is_chatting=1)
 
-        # if chatting > 0:
-        #     not_chatting = chatting
-        #     return not_chatting
-        # elif chatting < 1:
-        #     is_chatting = chatting.update(is_chatting == 1)
-        return chatting
-
+        
     @database_sync_to_async
-    def is_not_chatting(self, username):
+    def is_not_chatting(self, user):
         """
         checks and updates the user if is chatting or not 
         """
-        not_chatting = User.objects.filter(username=username).update(is_chatting=0)
-        return not_chatting
+        return User.objects.filter(username=user).update(is_chatting=0)
+
+
+
+
+

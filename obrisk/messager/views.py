@@ -26,6 +26,7 @@ from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required 
 from obrisk.utils.images_upload import bucket, bucket_name
+from obrisk.notifications.models import Notification, notification_handler
 from obrisk.users.models import User
 try:
     from django.contrib.auth import get_user_model
@@ -185,13 +186,14 @@ def send_message(request):
     except get_user_model().DoesNotExist:
         return HttpResponseNotFound("The user account appears to not exist or it has been freezed!")
 
-    # online_users = User.objects.filter(status>0)
+    u = User.objects.all()
     # if recipient_username in online_users:
         
     #     notification_handler()
     
     # else:
-    u = User.objects.all()
+    
+    
     for r in u:
         print(r.username, r.is_chatting, "and status is", r.status)
 
@@ -237,6 +239,10 @@ def send_message(request):
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
         
+        if recipient.is_chatting == 0:       
+            notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
+  
+
         return render(request, 'messager/single_message.html', {'message': msg})
 
     return HttpResponse()

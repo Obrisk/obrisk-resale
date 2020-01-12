@@ -281,4 +281,5 @@ def notification_broadcast(actor, key, is_msg=False, **kwargs):
         'recipient': recipient,
         'is_msg' : is_msg
     }
+    print(payload)
     async_to_sync(channel_layer.group_send)('notifications', payload)
