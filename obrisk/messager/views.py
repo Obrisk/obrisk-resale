@@ -186,18 +186,6 @@ def send_message(request):
     except get_user_model().DoesNotExist:
         return HttpResponseNotFound("The user account appears to not exist or it has been freezed!")
 
-    u = User.objects.all()
-    # if recipient_username in online_users:
-        
-    #     notification_handler()
-    
-    # else:
-    
-    
-    for r in u:
-        print(r.username, r.is_chatting, "and status is", r.status)
-
-
     #Django-channels doesn't accept group names that are chinese characters
     #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
     recipient.username = slugify(recipient_username)
