@@ -23,7 +23,7 @@
         <span><span>{{ notification.actor.get_profile_name | title }}</span>
           {{ notification.get_verb_display }}
           {% if notification.action_object %}
-          {{ notification.action_object }}
+          {{ notification.action_object|truncatechars:30 }}
           {% endif %}
         </span>
         <span class="time">{{ notification.time_since }}</span>

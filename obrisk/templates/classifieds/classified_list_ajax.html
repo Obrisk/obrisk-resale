@@ -27,14 +27,37 @@
       <h6 class="card-title"> {{ classified.title}} </h6>
       <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
       <div class="card-meta d-flex justify-content-between">
-        <div class="d-flex location">
-          <small>📍</small>
-          <span class="card-text small "> {{ classified.city|safe }}</span>
+
+        <small>📍</small>
+        <span class="card-text small "> {{ classified.city|safe }}</span>
+
+
+      </div>
+      <div class="card-meta d-flex justify-content-between mt-2">
+
+        <div class="chat-button">
+          <small class="button p-1 share"
+            onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
+            ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-message-square">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+            Chat</small>
+
         </div>
-        <div class="share-card">
-          <small class="share"
-            onclick="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')"
-            ontouchstart="share('{{ classified.title }}','{{ classified.city|safe }} {{ classified.price|title }} ','{% url 'classifieds:classified' classified.slug %}')">🔗</small>
+        <div class="share-button">
+          <small class="button p-1 share"
+            onclick="shareMe('Bing is blocked in China','Hangzhou 0.00 ','/classifieds/boni-bing-is-blocked-in-china-2019-12-09-1/')"
+            ontouchstart="shareMe('Bing is blocked in China','Hangzhou 0.00 ','/classifieds/boni-bing-is-blocked-in-china-2019-12-09-1/')"><svg
+              xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3EC4E2"
+              stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg> Share</small>
         </div>
       </div>
 

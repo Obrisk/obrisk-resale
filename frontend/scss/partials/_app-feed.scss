@@ -478,7 +478,7 @@ Main feed styles
 
         //Highlighted state
         &.is-highlighted {
-            position: relative !important;
+            position: relative;
             z-index: 1001 !important;
 
             .close-publish {
@@ -494,6 +494,8 @@ Main feed styles
             }
         }
     }
+    //Mobile
+
 
     //Post card modifier
     &.is-post {
@@ -2118,4 +2120,23 @@ Main feed styles
             min-width: 38px !important;
         }
     }
+}
+
+// Composed card on mobile
+@media (max-width: 767px) {
+  .card {
+      &.is-highlighted{
+
+            height: 100%;
+            position: fixed!important;
+            width: 100%;
+            left: 0px;
+            right: 0px;
+            bottom: 0px;
+            top: 0px;
+            overflow: scroll;
+        
+      }
+
+  }
 }
