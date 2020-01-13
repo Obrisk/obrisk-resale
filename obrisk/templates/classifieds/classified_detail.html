@@ -90,11 +90,36 @@
               <h3 class="O-cl-red price">
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
+
               {% if classified.user != request.user %}
-              <a href="#" data-url="{% url 'messager:classified_chat' classified.user classified.id %}"
-                class="btn btn-action go-to-chat">
-                🗪 <strong> {% trans ' Chat with the seller' %} </strong></a> <br>
-              <br>
+              <div class="action d-flex justify-content-between w-100 mt-2">
+                <div class="chat-button mr-2 col-6 p-0">
+                  <div class=" button p-1 w-100"
+                    onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
+                    ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-message-square">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Chat</div>
+
+                </div>
+                <div class="share-button col-6 p-0">
+                  <div class="button p-1 share w-100"
+                    onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-share-2">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg> Share</div>
+                </div>
+              </div>
+
               {% endif %}
             </div>
 
@@ -281,6 +306,8 @@
    }
 }
 </script>
+<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
+<link rel="stylesheet" href="{% static 'css/share.css' %}">
 <script type="text/javascript">
 
   var setCookie = function (name, value, days) {
@@ -302,6 +329,18 @@
 
   });
 
+  function shareMe(title, text) {
+    navigator.share({
+      title: title,
+      text: text,
+      url: location.href,
+    })
+  }
+
+  function gotochat(url) {
+    setCookie("active-chat", url, 1);
+    location.href = "/ws/messages";
+  }
   var image_count = {{ images| length}}
 
   if (image_count > 1) {
