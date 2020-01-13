@@ -90,9 +90,9 @@
               <h3 class="O-cl-red price">
                 <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
               </h3>
-
-              {% if classified.user != request.user %}
               <div class="action d-flex justify-content-between w-100 mt-2">
+                {% if classified.user != request.user %}
+
                 <div class="chat-button mr-2 col-6 p-0">
                   <div class=" button p-1 w-100"
                     onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
@@ -105,6 +105,10 @@
                     Chat</div>
 
                 </div>
+
+
+
+                {% endif %}
                 <div class="share-button col-6 p-0">
                   <div class="button p-1 share w-100"
                     onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
@@ -119,8 +123,6 @@
                     </svg> Share</div>
                 </div>
               </div>
-
-              {% endif %}
             </div>
 
           </div>
