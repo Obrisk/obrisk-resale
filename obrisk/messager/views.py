@@ -13,6 +13,7 @@ from django.urls import reverse
 from django.db.models import Q
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 from django.core import serializers
+from django.core.cache import cache
 
 import time
 import os
@@ -226,10 +227,18 @@ def send_message(request):
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
+
         
-        if recipient.is_chatting == 0:       
+        if recipient.is_chatting == 1:
+            sender_conv = cache.get(f'joint_chat_{sender.pk}')
+            recipient_conv = cache.get(f'joint_chat_{recipient.pk}')
+            print ("sender_conv: ", sender_conv)
+            print ("recipient_conv: ", recipient_conv)
+
+            if sender_conv != recipient_conv:
+                notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
+        else:
             notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
-  
 
         return render(request, 'messager/single_message.html', {'message': msg})
 
