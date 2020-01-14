@@ -95,7 +95,7 @@ def friendship_add_friend(
                     {"status": "301", "message": "This user is already your connection"}
                 )
             else:
-                notification_handler(from_user, to_user, Notification.NEW_REQUEST, new_connection=True)
+                notification_handler(from_user, Notification.NEW_REQUEST, recipient=to_user, new_connection=True, key='connection_notification')
                 return JsonResponse(
                     {"status": "200", "message": "Successfully sent connection request"}
                 )
@@ -110,7 +110,11 @@ def friendship_accept(request, friendship_request_id):
         f_request = get_object_or_404(
             request.user.friendship_requests_received, id=friendship_request_id
         )
+        recipient = f_request.from_user
+        sender = f_request.to_user
         f_request.accept()
+        notification_handler(sender, recipient, Notification.ACCEPTED_REQUEST, new_connection=True, key='connection_notification')
+
         return JsonResponse({"status": "200", "message": "Successfully connected!"})
 
     return JsonResponse({"status": "400", "message": "This method is not allowed"})
@@ -124,6 +128,10 @@ def friendship_reject(request, friendship_request_id):
             request.user.friendship_requests_received, id=friendship_request_id
         )
         f_request.reject()
+        recipient = f_request.from_user
+        sender = f_request.to_user
+        notification_handler(sender, recipient, Notification.REJECTED_REQUEST, new_connection=True, key='connection_notification')
+
         return JsonResponse({"status": "200", "message": "Successfully declined!"})
 
     return JsonResponse({"status": "400", "message": "This method is not allowed"})
@@ -137,6 +145,8 @@ def friendship_cancel(request, friendship_request_id):
             request.user.friendship_requests_sent, id=friendship_request_id
         )
         f_request.cancel()
+        # from_user = 
+        # to
         return redirect("connections:friendship_request_list")
 
     return redirect(
@@ -219,12 +229,12 @@ def follower_add(
         follower = request.user
         try:
             Follow.objects.add_follower(follower, followee)
+            notification_handler(follower, Notification.NEW_FOLLOWER, recipient=followee, new_connection=True, key='connection_notification')
+
         except AlreadyExistsError:
             return following(request, followee)
         else:
-            return redirect(
-                "connections:friendship_following", username=follower.username
-            )
+            return redirect("connections:friendship_following")
 
     return render(request, template_name, ctx)
 
@@ -238,7 +248,7 @@ def follower_remove(
         followee = user_model.objects.get(username=followee_username)
         follower = request.user
         Follow.objects.remove_follower(follower, followee)
-        return redirect("connections:friendship_following", username=follower.username)
+        return redirect("connections:friendship_following")
 
     return render(request, template_name, {"followee_username": followee_username})
 

@@ -83,6 +83,9 @@ class Notification(models.Model):
         <Sebastian> <Logged In> <1 minute ago>
         <Sebastian> <commented> <Classified> <2 hours ago>
     """
+    ACCEPTED_REQUEST = 'Y'
+    REJECTED_REQUEST = 'J'
+    NEW_FOLLOWER = 'P'
     NEW_REQUEST = 'N'
     NEW_MESSAGE = 'M'
     LIKED = 'L'
@@ -99,6 +102,9 @@ class Notification(models.Model):
     SIGNUP = 'U'
     REPLY = 'R'
     NOTIFICATION_TYPES = (
+        (ACCEPTED_REQUEST, _('connection accepted')),
+        (REJECTED_REQUEST, _('connection rejected')),
+        (NEW_FOLLOWER, _('started following you')),
         (NEW_REQUEST, _('new connection request')),
         (NEW_MESSAGE, _('new message')),
         (LIKED, _('liked')),
@@ -178,16 +184,16 @@ class Notification(models.Model):
         elif self.verb == 'F':
             return '⭐'
 
-        elif self.verb == 'W':
+        elif self.verb == 'W' or self.verb == 'Y':
             return '✔️'
 
         elif self.verb == 'E':
             return '✍'
 
-        elif self.verb == 'V'or self.verb == 'N':
+        elif self.verb == 'V' or self.verb == 'N' or self.verb == 'P' :
             return '➕'
 
-        elif self.verb == 'S':
+        elif self.verb == 'S' or self.verb == 'J':
             return '🔗'
 
         elif self.verb == 'R':
@@ -286,4 +292,5 @@ def notification_broadcast(actor, key, is_msg=False, new_connection=False, **kwa
         'is_msg' : is_msg,
         'new_connection' : new_connection
     }
+    print(payload)
     async_to_sync(channel_layer.group_send)('notifications', payload)
