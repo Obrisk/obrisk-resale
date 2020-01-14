@@ -292,5 +292,4 @@ def notification_broadcast(actor, key, is_msg=False, new_connection=False, **kwa
         'is_msg' : is_msg,
         'new_connection' : new_connection
     }
-    print(payload)
     async_to_sync(channel_layer.group_send)('notifications', payload)
