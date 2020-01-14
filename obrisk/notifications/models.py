@@ -227,7 +227,7 @@ def notification_handler(actor, recipient, verb, is_msg=False, new_connection=Fa
     key = kwargs.pop('key', 'notification')
     id_value = kwargs.pop('id_value', None)
     if new_connection:
-        notification_broadcast(actor, key, new_connection)
+        notification_broadcast(actor, key, new_connection, recipient=recipient.username)
     
     elif is_msg:
         
