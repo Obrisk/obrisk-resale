@@ -228,17 +228,18 @@ def send_message(request):
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
 
-        
-        if recipient.is_chatting == 1:
-            sender_conv = cache.get(f'joint_chat_{sender.pk}')
-            recipient_conv = cache.get(f'joint_chat_{recipient.pk}')
-            print ("sender_conv: ", sender_conv)
-            print ("recipient_conv: ", recipient_conv)
+        notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
 
-            if sender_conv != recipient_conv:
-                notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
-        else:
-            notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
+        # if recipient.status == 1:
+        #     sender_conv = cache.get(f'joint_chat_{sender.pk}')
+        #     recipient_conv = cache.get(f'joint_chat_{recipient.pk}')
+        #     print ("sender_conv: ", sender_conv)
+        #     print ("recipient_conv: ", recipient_conv)
+
+        #     if sender_conv != recipient_conv:
+        #         notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
+        # else:
+        #     notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
 
         return render(request, 'messager/single_message.html', {'message': msg})
 

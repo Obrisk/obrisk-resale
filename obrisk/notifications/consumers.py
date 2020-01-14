@@ -45,12 +45,7 @@ class NotificationsConsumer(AsyncWebsocketConsumer):
         checks and updates the current status if is offline update the status to online 
         """
         return User.objects.filter(username=username).update(status=1)
-        # current_status = current_status.status
-        # if current_status != 1:
-        #     return current_status
-        # else:    
-        #     return current_status
-
+        
 
     @database_sync_to_async
     def update_user_status_to_offline(self, username):

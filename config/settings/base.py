@@ -338,6 +338,7 @@ TAGS_CACHE_TIMEOUT = 60 * 60 * 24 * 7 #7 days.
 
 CONNECTS_RECOMMENDATION_TIMEOUT = 60 * 60 * 24 # 24 Hours. 
 
+
 PWA_APP_NAME = 'Obrisk'
 PWA_APP_DESCRIPTION = 'English and location based social network for foreigners in China'
 PWA_APP_THEME_COLOR = '#3ec4e2'
