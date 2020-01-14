@@ -10,7 +10,6 @@
 .stream li {
   list-style: none;
   border-style: solid none solid none;
-
 }
 
 .stream li:last-child {
@@ -34,10 +33,9 @@
   float: left;
 }
 
-
 .interaction {
   padding-left: 1.5em;
-  margin-bottom: 1em
+  margin-bottom: 1em;
 }
 
 .interaction a {
@@ -58,7 +56,7 @@
 
 .stream-update a {
   display: block;
-  padding: .6em 0;
+  padding: 0.6em 0;
   background-color: #f5f8fa;
 }
 
@@ -82,7 +80,6 @@ a:hover {
   color: #424247;
 }
 
-
 .col-centered {
   float: none;
   margin-right: auto;
@@ -94,13 +91,13 @@ a:hover {
 }
 
 .comments {
-  margin-top: .6em;
+  margin-top: 0.6em;
   display: none;
 }
 
 .comments ol {
-  margin: .8em 0 0;
-  padding: .2em 0;
+  margin: 0.8em 0 0;
+  padding: 0.2em 0;
   background-color: #f4f4f4;
   border-radius: 3px;
   overflow-x: auto;
@@ -120,29 +117,29 @@ a:hover {
 
 .comments ol li div {
   margin-left: 45px;
-  padding: 0 .8em;
-  font-size: .9em;
+  padding: 0 0.8em;
+  font-size: 0.9em;
 }
 
 .comments ol li {
-  padding: .6em .6em .6em 0;
+  padding: 0.6em 0.6em 0.6em 0;
   border-bottom: none;
 }
 
 .comments ol li h4 {
   margin: 0;
   margin-left: 45px;
-  padding: 0 0 .2em .8em;
-  font-size: .9em;
+  padding: 0 0 0.2em 0.8em;
+  font-size: 0.9em;
 }
 
 .comments ol li h4 small {
-  margin-left: .3em;
+  margin-left: 0.3em;
 }
 
 .empty {
-  margin: 0 .8em;
-  font-size: .9em;
+  margin: 0 0.8em;
+  font-size: 0.9em;
 }
 
 .load {
@@ -159,8 +156,8 @@ a:hover {
 
 .remove-stories {
   color: #bbbbbb;
-  font-size: .8em;
-  padding-top: .2em;
+  font-size: 0.8em;
+  padding-top: 0.2em;
   float: right;
   cursor: pointer;
 }
@@ -170,8 +167,8 @@ a:hover {
 }
 
 .infinite-item {
-  border: 1px solid #A1DBD2 !important;
-  box-shadow: 2px 2px 0px #3EC4E2 !important;
+  border: 1px solid #a1dbd2 !important;
+  box-shadow: 2px 2px 0px #3ec4e2 !important;
   background: #fff;
 }
 
@@ -179,12 +176,12 @@ a:hover {
   position: sticky;
   top: 0px;
   z-index: 99999;
-  background: #3EC4E2;
+  background: #3ec4e2;
 }
 
 .tabs.is-toggle li.is-active a {
-  background: #3EC4E2;
-  background-color: #3EC4E2;
+  background: #3ec4e2;
+  background-color: #3ec4e2;
 }
 
 .block-scroll {
@@ -193,7 +190,6 @@ a:hover {
   overflow: hidden !important;
   position: fixed !important;
 }
-
 
 .img1 {
   grid-area: img1;
@@ -229,17 +225,17 @@ a:hover {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  grid-template-areas: "img1 img2""img3 .";
+  grid-template-areas: "img1 img2" "img3 .";
 }
 
 .grid-4 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr;
-  grid-template-areas: "img1 img2""img3 img4";
+  grid-template-areas: "img1 img2" "img3 img4";
 }
 
-@media all and (-ms-high-contrast:none) {
+@media all and (-ms-high-contrast: none) {
   .grid-container {
     display: -ms-grid;
     -ms-grid-columns: 1fr 1fr;
@@ -273,7 +269,6 @@ a:hover {
     -ms-grid-column: 2;
     -ms-grid-column-span: 1;
   }
-
 }
 
 .card.is-post .content-wrap .card-footer .likers-group a {

@@ -106,6 +106,19 @@
 
 {% block extra_js %}
 <script src="{% static 'js/listing.js' %}" type="text/javascript"></script>
+
+<script>
+  function shareMe(title, text, url) {
+    navigator.share({
+      title: title,
+      text: text,
+      url: location.host + url,
+    })
+  }
+
+
+</script>
+
 <script>
   var page = 1;
   var empty_page = false;

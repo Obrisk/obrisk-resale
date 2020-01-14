@@ -116,7 +116,7 @@ body {
   width: 70%;
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1200px) and (max-width: 1408px) {
   .is-9-fullhd {
     margin-left: 7%;
   }
