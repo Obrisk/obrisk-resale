@@ -28,12 +28,12 @@
       <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
       <div class="card-meta d-flex justify-content-between">
 
-        <small>📍</small>
-        <span class="card-text small "> {{ classified.city|safe }}</span>
+
+        <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
 
 
       </div>
-      <div class="card-meta d-flex justify-content-between mt-2">
+      <!-- <div class="card-meta d-flex justify-content-between mt-2">
 
         <div class="chat-button">
           <small class="button p-1 share"
@@ -59,7 +59,7 @@
               <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
             </svg> Share</small>
         </div>
-      </div>
+      </div> -->
 
     </div>
     {% if classified.priority > 0 %}
