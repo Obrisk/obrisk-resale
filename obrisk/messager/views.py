@@ -26,6 +26,9 @@ from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required 
 from obrisk.utils.images_upload import bucket, bucket_name
+from obrisk.notifications.models import Notification, notification_handler
+
+from config.settings.base import SESSION_COOKIE_AGE
 
 try:
     from django.contrib.auth import get_user_model
@@ -33,6 +36,10 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
     user_model = User
+
+from django.core.cache import cache	
+
+
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -187,6 +194,7 @@ def send_message(request):
 
     #Django-channels doesn't accept group names that are chinese characters
     #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
+   
     recipient.username = slugify(recipient_username)
     sender.username = slugify(request.user.username)
 
@@ -225,7 +233,19 @@ def send_message(request):
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
+            
+        # creating a key for the chatting users and updating a value for the key
+        value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
+        cache.set(f'joint_chat_{sender.pk}', value, timeout=SESSION_COOKIE_AGE)
         
+        # keys from caches
+        sender_key = cache.get(f'joint_chat_{sender.pk}')
+        recipient_key = cache.get(f'joint_chat_{recipient.pk}')
+        print('sender key:', sender_key, "and recipient key", recipient_key )
+        
+        if recipient_key is None and recipient_key !=sender_key:
+            #notification
+            notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='message')            
         return render(request, 'messager/single_message.html', {'message': msg})
 
     return HttpResponse()
