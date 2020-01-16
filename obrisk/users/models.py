@@ -52,6 +52,7 @@ class User(AbstractUser):
     no_of_jobs_applied =  models.IntegerField( default=0)
     no_of_jobs_posted =  models.IntegerField( default=0)
     no_of_events_registered =  models.IntegerField( default=0)
+    status = models.IntegerField(default=0)
     # near future please add unique 12 digit ID to use instead of username for url's especially in chat.
     #https://stackoverflow.com/questions/42703059/how-to-create-a-8-digit-unique-id-in-python
 

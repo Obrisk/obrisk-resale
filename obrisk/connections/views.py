@@ -95,7 +95,7 @@ def friendship_add_friend(
                     {"status": "301", "message": "This user is already your connection"}
                 )
             else:
-                notification_handler(from_user, Notification.NEW_REQUEST, recipient=to_user, new_connection=True, key='connection_notification')
+                notification_handler(actor=from_user, verb=Notification.NEW_REQUEST, recipient=to_user, key='connection_notification')
                 return JsonResponse(
                     {"status": "200", "message": "Successfully sent connection request"}
                 )
@@ -113,7 +113,7 @@ def friendship_accept(request, friendship_request_id):
         recipient = f_request.from_user
         sender = f_request.to_user
         f_request.accept()
-        notification_handler(sender, recipient, Notification.ACCEPTED_REQUEST, new_connection=True, key='connection_notification')
+        notification_handler(sender, recipient, Notification.ACCEPTED_REQUEST, key='connection_notification')
 
         return JsonResponse({"status": "200", "message": "Successfully connected!"})
 
@@ -130,7 +130,7 @@ def friendship_reject(request, friendship_request_id):
         f_request.reject()
         recipient = f_request.from_user
         sender = f_request.to_user
-        notification_handler(sender, recipient, Notification.REJECTED_REQUEST, new_connection=True, key='connection_notification')
+        notification_handler(sender, recipient, Notification.REJECTED_REQUEST, key='connection_notification')
 
         return JsonResponse({"status": "200", "message": "Successfully declined!"})
 
@@ -229,7 +229,7 @@ def follower_add(
         follower = request.user
         try:
             Follow.objects.add_follower(follower, followee)
-            notification_handler(follower, Notification.NEW_FOLLOWER, recipient=followee, new_connection=True, key='connection_notification')
+            notification_handler(actor=follower, verb=Notification.NEW_FOLLOWER, recipient=followee, key='connection_notification')
 
         except AlreadyExistsError:
             return following(request, followee)
