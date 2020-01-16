@@ -210,7 +210,7 @@ class Notification(models.Model):
             self.save()
 
 
-def notification_handler(actor, recipient, verb, is_msg=False, new_connection=False, **kwargs):
+def notification_handler(actor, recipient, verb, is_msg=False, **kwargs):
     """
     Handler function to create a Notification instance.
     :requires:
@@ -226,10 +226,8 @@ def notification_handler(actor, recipient, verb, is_msg=False, new_connection=Fa
     """
     key = kwargs.pop('key', 'notification')
     id_value = kwargs.pop('id_value', None)
-    if new_connection:
-        notification_broadcast(actor, key, new_connection, recipient=recipient.username)
     
-    elif is_msg:
+    if is_msg:
         
         notification_broadcast(actor, key, is_msg, recipient=recipient.username)
         
@@ -267,7 +265,7 @@ def notification_handler(actor, recipient, verb, is_msg=False, new_connection=Fa
         pass
 
 
-def notification_broadcast(actor, key, is_msg=False, new_connection=False, **kwargs):
+def notification_broadcast(actor, key, is_msg=False, **kwargs):
     """Notification handler to broadcast calls to the recieve layer of the
     WebSocket consumer of this app.
     :requires:
@@ -290,6 +288,5 @@ def notification_broadcast(actor, key, is_msg=False, new_connection=False, **kwa
         'id_value': id_value,
         'recipient': recipient,
         'is_msg' : is_msg,
-        'new_connection' : new_connection
     }
     async_to_sync(channel_layer.group_send)('notifications', payload)

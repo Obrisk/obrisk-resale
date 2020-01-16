@@ -11,7 +11,6 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 from obrisk.classifieds.models import Classified
-from obrisk.notifications.models import Notification, notification_handler
 
 
 class ConversationQuerySet(models.query.QuerySet):
@@ -183,6 +182,5 @@ class Message(models.Model):
                 'img_preview': img_preview, 
                 'attachment': attachment
             }
-        notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key=message)        
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
         return new_message
