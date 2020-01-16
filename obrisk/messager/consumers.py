@@ -6,13 +6,15 @@ from channels.db import database_sync_to_async
 from django.core.cache import cache	
 from django.core.cache.backends.base import DEFAULT_TIMEOUT	
 from config.settings.base import SESSION_COOKIE_AGE
+from asgiref.sync import sync_to_async
 
+ 
 from obrisk.users.models import User
 
 
 class MessagerConsumer(AsyncWebsocketConsumer):
-    """Consumer to manage WebSocket connections for the Messager app.
-    """
+    """Consumer to manage WebSocket connections for the Messager app. """
+    
     async def connect(self):
         """Consumer Connect implementation, to validate user status and prevent
         non authenticated user to take advante from the connection."""
@@ -25,6 +27,7 @@ class MessagerConsumer(AsyncWebsocketConsumer):
             await self.update_user_status_to_online(user)
             username = slugify(self.scope['user'].username)
             # Accept the connection
+            
             await self.channel_layer.group_add(f"{username}", self.channel_name)
             await self.accept()
 
@@ -48,10 +51,6 @@ class MessagerConsumer(AsyncWebsocketConsumer):
         checks and updates the current status if is offline update the status to online //
         storing the current user to redis key is his id and value is none then later being updated when sending the msg
         """
-        # current_user = User.objects.filter(username=user)	
-        # cache.get_or_set(f'joint_chat_{current_user.pk}', 'no value', timeout=SESSION_COOKIE_AGE)
-        # print(current_user)
-        
         return User.objects.filter(username=user).update(status=1)
         
 
@@ -60,8 +59,4 @@ class MessagerConsumer(AsyncWebsocketConsumer):
         #in the future users logged in with more than one device or browsers at th same time should be handled
         """checks and updates the current status if is online update the status to offline and remove the key from redis dictionery
         """
-
-        user = User.objects.filter(username=user)	
-        # cache.delete(f'joint_chat_{user.pk}')
-        
         return User.objects.filter(username=user).update(status=0)

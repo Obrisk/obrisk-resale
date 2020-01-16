@@ -233,19 +233,21 @@ def send_message(request):
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
-            
+        notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='new_message')            
+        
         # creating a key for the chatting users and updating a value for the key
-        value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
-        cache.set(f'joint_chat_{sender.pk}', value, timeout=SESSION_COOKIE_AGE)
+        # value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
+        # cache.set(f'joint_chat_{sender.pk}', value, timeout=SESSION_COOKIE_AGE)
         
-        # keys from caches
-        sender_key = cache.get(f'joint_chat_{sender.pk}')
-        recipient_key = cache.get(f'joint_chat_{recipient.pk}')
-        print('sender key:', sender_key, "and recipient key", recipient_key )
+        # # keys from caches
+        # sender_key = cache.get(f'joint_chat_{sender.pk}')
+        # recipient_key = cache.get(f'joint_chat_{recipient.pk}')
+        # print('sender key:', sender_key, "and recipient key", recipient_key )
         
-        if recipient_key is None and recipient_key !=sender_key:
-            #notification
-            notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='message')            
+        # if recipient_key is None and recipient_key !=sender_key:
+        #     #notification
+        #     notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='message')            
+        
         return render(request, 'messager/single_message.html', {'message': msg})
 
     return HttpResponse()
