@@ -1,35 +1,31 @@
-obrisk
+Obrisk
 ========
 
-An enterprise oriented social network
+A location-based social network for foreigners in China.
 
-.. image:: https://travis-ci.org/vitorfs/obrisk.svg?branch=master
-    :target: https://travis-ci.org/vitorfs/obrisk
+.. image:: https://travis-ci.com/elshaddae/obdev2018.svg?branch=master
+    :target: https://travis-ci.com/elshaddae/obdev2018
     :alt: TravisCI Status
 
-.. image:: https://coveralls.io/repos/github/vitorfs/obrisk/badge.svg?branch=master
-    :target: https://coveralls.io/github/vitorfs/obrisk?branch=master
+.. image:: https://coveralls.io/github/elshaddae/obdev2018/badge.svg?branch=master
+    :target: https://coveralls.io/github/elshaddae/obdev2018?branch=master
     :alt: Coverage
-
-.. image:: https://requires.io/github/vitorfs/obrisk/requirements.svg?branch=master
-    :target: https://requires.io/github/vitorfs/obrisk/requirements/?branch=master
-    :alt: Requirements
 
 .. image:: https://img.shields.io/badge/built%20with-Cookiecutter%20Django-ff69b4.svg
     :target: https://github.com/pydanny/cookiecutter-django/
     :alt: Built with Cookiecutter Django
 
-:License: MIT
 
 A **location based** social network
 
 The project has 5 apps:
 
-Post (A blogging app)
-Stories (A Twitter-like microblog)
+Articles/blogging (A blogging app)
+Stories (A news-feed like app)
 Classifieds (Second-handed selling)
-Question & Answers (A Stack Overflow-like platform)
 Messeger (A basic chat for communication.)
+Question & Answers (A Stack Overflow-like platform)
+
 
 
 Basic Instructions
