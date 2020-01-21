@@ -144,12 +144,6 @@ def post_stories(request):
             content=post,
             viewers=viewers
         )
-        html = render_to_string(
-            'stories/stories_single.html',
-            {
-                'stories': story,
-                'request': request
-            })
         
         if images:            
             # split one long string of images into a list of string each for one JSON img_obj
@@ -169,13 +163,6 @@ def post_stories(request):
                                 story.img4 = imgs_objs[3].image_thumb
                 except IndexError:
                     pass 
-                html = render_to_string(
-                    'stories/stories_single.html',
-                    {
-                        'stories': story,
-                        'request': request
-                    })
-                return HttpResponse(html)
             else:
                 return HttpResponseBadRequest(
                     content=_('Sorry, the image(s) were not uploaded successfully!'))
@@ -183,15 +170,15 @@ def post_stories(request):
         if video:
             #First clean the user input.
             story.video = video
-            html = render_to_string(
-                'stories/stories_single.html',
-                {
-                    'stories': story,
-                    'request': request
-                })
-            return HttpResponse(html)
-        else:
-            return HttpResponse(html)
+
+        html = render_to_string(
+            'stories/stories_single.html',
+            {
+                'stories': story,
+                'request': request
+            })
+        
+        return HttpResponse(html)
 
     else:
         return HttpResponseBadRequest(
@@ -206,7 +193,7 @@ def post_stories(request):
 def like(request):
     """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""
-    stories_id = request.GET['stories']
+    stories_id = request.GET.get('stories')
     try:
         stories = Stories.objects.get(pk=stories_id)
     except:

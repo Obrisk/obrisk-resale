@@ -8,6 +8,10 @@ env:
 branches:
   only:
     - master
+# Start docker services.
+services:
+  - redis-server
+  - postgresql
 # command to install dependencies
 install:
   - pip install -q Django==$DJANGO_VERSION
