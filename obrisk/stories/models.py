@@ -11,11 +11,35 @@ from channels.layers import get_channel_layer
 from obrisk.notifications.models import Notification, notification_handler
 
 from taggit.managers import TaggableManager
-from taggit.models import TaggedItemBase
+from taggit.models import TaggedItemBase, TagBase, GenericTaggedItemBase, CommonGenericTaggedItemBase, GenericUUIDTaggedItemBase
 
 
-class TaggedStories(TaggedItemBase):
-    content_object = models.ForeignKey('Stories', on_delete=models.CASCADE)
+
+class StoryTags(TagBase):
+    class Meta:
+        verbose_name = _("Tag")
+        verbose_name_plural = _("Tags")
+
+
+
+class TaggedStory(GenericUUIDTaggedItemBase, TaggedItemBase):
+    tag = models.ForeignKey(
+        StoryTags,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items")
+
+    class Meta:
+        verbose_name = _("Tagged stories")
+        verbose_name_plural = _("Tagged stories")
+
+
+
+
+
+
+
+# class TaggedStories(TaggedItemBase):
+#     content_object = models.ForeignKey('Stories', on_delete=models.CASCADE)
 
 
 class Stories(models.Model):
@@ -43,7 +67,7 @@ class Stories(models.Model):
     content = models.TextField(max_length=400, null=True)
     viewers =  models.CharField(max_length=1, choices=VIEWERS, default=PUBLIC)
     priority = models.IntegerField(default=0)
-    tags = TaggableManager(through=TaggedStories)
+    tags = TaggableManager(through=TaggedStory)
     city = models.CharField (max_length=100, null=True)
     video = models.CharField (max_length=300, null=True)
     province_region = models.CharField(max_length= 100, null=True)
