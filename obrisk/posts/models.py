@@ -21,8 +21,8 @@ from taggit.models import TagBase, GenericTaggedItemBase
 
 class PostTags(TagBase):
     class Meta:
-        verbose_name = _("Tag")
-        verbose_name_plural = _("Tags")
+        verbose_name = _("Post Tag")
+        verbose_name_plural = _("Post Tags")
 
 
 

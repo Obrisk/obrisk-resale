@@ -17,13 +17,13 @@ from taggit.models import TaggedItemBase, TagBase, GenericTaggedItemBase, Common
 
 class StoryTags(TagBase):
     class Meta:
-        verbose_name = _("Tag")
-        verbose_name_plural = _("Tags")
+        verbose_name = _("Story Tag")
+        verbose_name_plural = _("Story Tags")
 
 
 
 class TaggedStory(GenericUUIDTaggedItemBase, TaggedItemBase):
-    tag = models.ForeignKey(
+    tags = models.ForeignKey(
         StoryTags,
         on_delete=models.CASCADE,
         related_name="%(app_label)s_%(class)s_items")
