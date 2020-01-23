@@ -1,6 +1,7 @@
 from django.contrib import admin
-from obrisk.posts.models import Post, Comment
+from obrisk.posts.models import Post, Comment, PostTags
 
+admin.site.register(PostTags)
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
