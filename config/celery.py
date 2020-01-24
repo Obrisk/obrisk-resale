@@ -1,6 +1,12 @@
 from __future__ import absolute_import, unicode_literals
-import os
 from celery import Celery
+import os, sys
+
+# This allows easy placement of apps within the interior
+# obrisk directory.
+app_path = os.path.abspath(os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), os.pardir))
+sys.path.append(os.path.join(app_path, 'obrisk'))
 
 # set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
