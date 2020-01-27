@@ -129,78 +129,110 @@ $(function() {
     }
   });
 
-  $("#phone-verify").click(function() {
-    if (
-      isNaN($("input[name='code']").val()) ||
-      $("input[name='code']").val().length != 6 ||
-      isNaN($("#id_phone_number").val()) ||
-      $("#id_phone_number").val().length != 11 ||
-      $("#id_phone_number")
-        .val()
-        .charAt(0) != 1
-    ) {
-      event.preventDefault();
-      bootbox.alert("The code you entered is wrong!");
-    } else {
-      $.ajax({
-        url: "/users/phone-verify/",
-        data: {
-          phone_no: $("#id_phone_number").val(),
-          code: $("input[name='code']").val()
-        },
-        cache: false,
-        type: "GET",
-        success: function(data) {
-          //enable send button after message is sent
-          if (data.success == true) {
-            // $('#send-code').removeAttr("disabled");
-            if (data.url) {
-              $("#results")
-                .empty()
-                .append(
-                  "<p class='blue-link'> You have successfully verified your phone number! Please wait to be redirected <p>"
-                );
-              window.location.href = data.url;
+  $("input[name='code']").keyup(function(e) {
+    if (e.target.value.length == 6) {
+      $(".loading").toggleClass("d-none");
+      if (
+        isNaN($("input[name='code']").val()) ||
+        $("input[name='code']").val().length != 6 ||
+        isNaN($("#id_phone_number").val()) ||
+        $("#id_phone_number").val().length != 11 ||
+        $("#id_phone_number")
+          .val()
+          .charAt(0) != 1
+      ) {
+        event.preventDefault();
+      } else {
+        $.ajax({
+          url: "/users/phone-verify/",
+          data: {
+            phone_no: $("#id_phone_number").val(),
+            code: $("input[name='code']").val()
+          },
+          cache: false,
+          type: "GET",
+          success: function(data) {
+            //enable send button after message is sent
+            if (data.success == true) {
+              // $('#send-code').removeAttr("disabled");
+              if (data.url) {
+                $("#results")
+                  .empty()
+                  .append(
+                    "<p class='blue-link'> You have successfully verified your phone number! Please wait to be redirected <p>"
+                  );
+                window.location.href = data.url;
+              } else {
+                $("#results")
+                  .empty()
+                  .append(
+                    "<p class='blue-link'> You have successfully verified your phone number! <p>"
+                  );
+                $("input[name='verified_no']").val("YES");
+
+                //I should hide the phone number label that says don't enter country code
+                $("#phone_label").hide();
+
+                $("#code-notice").empty();
+
+                $("#code").hide();
+                $("#send-code").hide();
+                $("#email-request").hide();
+                $("#signup-panel-1").hide();
+                $(".process-panel-wrap").removeClass("is-active");
+                $(".step-title").removeClass("is-active");
+              }
+              $(".step-dot-2").addClass("is-active");
             } else {
               $("#results")
                 .empty()
                 .append(
-                  "<p class='blue-link'> You have successfully verified your phone number! <p>"
+                  "<p class='text-error '>" + data.error_message + "</p>"
                 );
-              $("input[name='verified_no']").val("YES");
+              $("#send-code").attr("disabled", false);
+              code_counter = code_counter + 1;
 
-              //I should hide the phone number label that says don't enter country code
-              $("#phone_label").hide();
-
-              $("#code-notice").empty();
-
-              $("#code").hide();
-              $("#send-code").hide();
-              $("#email-request").hide();
-              $("#id_phone_number").attr("disabled", true);
-              $("#name_and_psword").toggleClass("d-none");
+              if (code_counter >= 5) {
+                $("#phone-verify").attr("disabled", true);
+                bootbox.alert(
+                  "Maximum number of code retrial has reached, you can't retry anymore!"
+                );
+              }
             }
-          } else {
-            $("#results")
-              .empty()
-              .append("<p class='text-error '>" + data.error_message + "</p>");
-            $("#send-code").attr("disabled", false);
-            code_counter = code_counter + 1;
-
-            if (code_counter >= 5) {
-              $("#phone-verify").attr("disabled", true);
-              bootbox.alert(
-                "Maximum number of code retrial has reached, you can't retry anymore!"
-              );
-            }
+            $(".loading").toggleClass("d-none");
+          },
+          error: function(error) {
+            bootbox.alert(error);
           }
-        },
-        error: function(error) {
-          bootbox.alert(error);
-        }
-      });
-      return false;
+        });
+        return false;
+      }
     }
+  });
+
+  $("#phone-verify").click(function() {});
+
+  //Updated form to be use steps
+
+  $(".process-button").on("click", function() {
+    var $this = $(this);
+    var targetStepDot = $this.attr("data-step");
+    $this.addClass("is-loading");
+    setTimeout(function() {
+      $this.removeClass("is-loading");
+      $(".process-panel-wrap").removeClass("is-active");
+      $(".step-title").removeClass("is-active");
+      $("." + targetStepDot).addClass("is-active");
+    }, 500);
+  });
+
+  $("#signup-finish").on("click", function() {
+    var $this = $(this);
+    var url = "/stories";
+    $this.addClass("is-loading");
+    setTimeout(function() {
+      window.location = url;
+    }, 800);
   });
 
   $("#phone-signup-submit").click(function(event) {
@@ -214,6 +246,9 @@ $(function() {
       !$("select[name='province']")
     ) {
       event.preventDefault();
+      $(".process-panel-wrap").removeClass("is-active");
+      $(".step-title").removeClass("is-active");
+      $(".step-dot-3").addClass("is-active");
       bootbox.alert("Please enter your city and province!");
     } else if (
       !$("input[name='username']").val() ||
@@ -221,6 +256,9 @@ $(function() {
       !$("input[name='password2']")
     ) {
       event.preventDefault();
+      $(".process-panel-wrap").removeClass("is-active");
+      $(".step-title").removeClass("is-active");
+      $(".step-dot-2").addClass("is-active");
       bootbox.alert(
         "Please fill in all of the info. Also verify your phone number!"
       );
@@ -228,6 +266,9 @@ $(function() {
       $("input[name='password1']").val() != $("input[name='password2']").val()
     ) {
       event.preventDefault();
+      $(".process-panel-wrap").removeClass("is-active");
+      $(".step-title").removeClass("is-active");
+      $(".step-dot-2").addClass("is-active");
       bootbox.alert("Your password's inputs don't match!");
     } else {
       $("#id_phone_number").attr("disabled", false);
