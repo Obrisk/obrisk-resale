@@ -61,6 +61,14 @@ class ConnectionsViewsTests(TestCase):
         first_user = self.User
 
         second_user = self.other_user
+        url = reverse(
+            "connections:friendship_add_friend", kwargs={"to_username": second_user}
+        )
+        # assert user = self.User
+        # test that the view requires authentication to access it
+        response = self.client.get(url)
+        self.assertResponse200(response)
+
 
         "users are not friends yet"
         self.assertFalse(Friend.objects.are_friends(first_user, second_user))
@@ -71,4 +79,15 @@ class ConnectionsViewsTests(TestCase):
         Friend.objects.add_friend(first_user, second_user)
 
         self.assertTrue(Friend.objects.can_request_send(first_user, second_user))
+    def test_connections_count(self):
+        "checking connection sent& recieved"
+        first_user = self.User
+        second_user = self.other_user
+        self.assertEqual(len(Friend.objects.requests(first_user)), 0)
+        self.assertEqual(len(Friend.objects.requests(second_user)), 0)
+        self.assertEqual(len(Friend.objects.sent_requests(first_user)), 0)
+        self.assertEqual(len(Friend.objects.sent_requests(second_user)), 0)
 
+
+
+  
