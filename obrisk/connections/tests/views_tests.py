@@ -38,7 +38,7 @@ class ConnectionsViewsTests(TestCase):
 
     def assertResponse404(self, response):
         self.assertEqual(response.status_code, 404)
-
+    
 
     def test_friendship_view_friends(self):
         url = reverse(
@@ -57,4 +57,18 @@ class ConnectionsViewsTests(TestCase):
             self.assertResponse200(response)
             self.assertTrue("object" in response.context)
 
+    def test_add_friends(self):
+        first_user = self.User
+
+        second_user = self.other_user
+
+        "users are not friends yet"
+        self.assertFalse(Friend.objects.are_friends(first_user, second_user))
+        
+        "second user havent send any request to 1st user or vice versa"
+        self.assertFalse(Friend.objects.can_request_send(first_user, second_user))
+        
+        Friend.objects.add_friend(first_user, second_user)
+
+        self.assertTrue(Friend.objects.can_request_send(first_user, second_user))
 
