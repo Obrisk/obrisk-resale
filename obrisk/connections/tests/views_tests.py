@@ -79,7 +79,14 @@ class ConnectionsViewsTests(TestCase):
                 recommended_connects,
                 timeout=RECOMMENDATION_TIMEOUT,
             )
-        
+            url = reverse(
+            "connections:friendship_view_friends"
+        )
+
+            response = self.client.get(url)
+            self.assertResponse200(response)
+            self.assertTrue("object" in response.context)
+ 
 
 
     def test_add_friends(self):
