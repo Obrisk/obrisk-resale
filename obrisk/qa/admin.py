@@ -1,6 +1,8 @@
 from django.contrib import admin
-from obrisk.qa.models import Question, Answer
+from obrisk.qa.models import Question, Answer, TaggedQuestion
 
+
+admin.site.register(TaggedQuestion)
 
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):

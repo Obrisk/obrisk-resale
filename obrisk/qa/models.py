@@ -14,6 +14,24 @@ from slugify import slugify
 from taggit.managers import TaggableManager
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from taggit.managers import TaggableManager
+from taggit.models import TaggedItemBase, TagBase, GenericTaggedItemBase, CommonGenericTaggedItemBase, GenericUUIDTaggedItemBase
+
+class QuestionTags(TagBase):
+    class Meta:
+        verbose_name = _("QuestionTag")
+        verbose_name_plural = _("QuestionTags")
+
+class TaggedQuestion(GenericTaggedItemBase):
+    tag = models.ForeignKey(
+        QuestionTags,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items")
+
+    class Meta:
+        verbose_name = _("Tagged question")
+        verbose_name_plural = _("Tagged question")
+
 
 
 class Vote(models.Model):
@@ -86,7 +104,7 @@ class Question(models.Model):
     has_answer = models.BooleanField(default=False)
     total_votes = models.IntegerField(default=0)
     votes = GenericRelation(Vote)
-    tags = TaggableManager()
+    tags = TaggableManager(through=TaggedQuestion)
     objects = QuestionQuerySet.as_manager()
 
     class Meta:
