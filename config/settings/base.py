@@ -2,6 +2,7 @@
 Base settings to build other settings files upon.
 """
 import environ, os
+from celery.schedules import crontab
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path('obrisk')
@@ -449,4 +450,26 @@ CELERY_BEAT_SCHEDULE = {
        'schedule': 86400.0,
         # If you're using any arguments
     },
+ 'classified-tags-migrate': {
+       'task': 'obrisk.classifieds.tasks.migrate_classifieds_tags', 
+       'schedule': crontab(0, 0, day_of_month='11',
+    month_of_year='2'),
+    },
+ 'posts-tags-migrate': {
+       'task': 'obrisk.posts.tasks.migrate_posts_tags', 
+       'schedule': crontab(0, 0, day_of_month='11',
+    month_of_year='2'),
+    },
+ 'stories-tags-migrate': {
+       'task': 'obrisk.stories.tasks.migrate_stories_tags', 
+       'schedule': crontab(0, 0, day_of_month='11',
+    month_of_year='2'),
+    },
+
+ 'qa-tags-migrate': {
+       'task': 'obrisk.qa.tasks.migrate_qa_tags', 
+       'schedule': crontab(0, 0, day_of_month='11',
+    month_of_year='2'),
+    },
+
 }

@@ -24,7 +24,6 @@ from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
 from obrisk.utils.images_upload import multipleImagesPersist
-
 # For images
 import json
 import re
