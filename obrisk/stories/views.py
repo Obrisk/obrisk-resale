@@ -17,12 +17,10 @@ from obrisk.stories.models import Stories, StoryImages
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
 
 
-
 class StoriesListView(ListView):
     """A really simple ListView, with some JS magic on the UI."""
     model = Stories
     paginate_by = 50
-
     def get_context_data(self, *args, **kwargs):
         context = super(StoriesListView, self).get_context_data(**kwargs)
         context["base_active"] = "stories"
