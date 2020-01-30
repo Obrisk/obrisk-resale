@@ -13,7 +13,6 @@ from obrisk.utils.helpers import ajax_required
 from obrisk.qa.models import Question, Answer
 from obrisk.qa.forms import QuestionForm
 
-
 class QuestionsIndexListView(ListView):
     """CBV to render a list view with all the registered questions."""
     model = Question
