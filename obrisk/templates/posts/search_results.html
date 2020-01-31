@@ -1,0 +1,115 @@
+
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load humanize thumbnail %}
+
+{% block title %} {% trans 'Search Results' %} {% endblock %}
+
+{% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds-list.css' %}?v=1908301" rel="stylesheet">
+<link href="{% static 'css/stories.css' %}?v=1" rel="stylesheet">
+<link href="{% static 'css/qa.css' %}" rel="stylesheet">
+{% endblock head %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="container search-results">
+  <!-- This search bar should be displayed with pre-filled in values that user searched for. -->
+  <!-- currently it is not doing so -->
+  <div class="col-md-3 mb-5 mt-5">
+    <div class="justify-content-end ml-auto d-flex flex-row">
+      <form class="searchbar" id="classifiedsearch" action="{% url 'posts:results' %}" style="display:inline;">
+        <input type="text" name="query" placeholder="Search...">
+        <div class="search"></div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- row -->
+  <div class="row">
+    <div class="col-md-3">
+      <div class="list-group" id="list-tab" role="tablist">
+        <a class="list-group-item list-group-item-action" id="list-stories-list" data-toggle="list" href="#list-stories"
+          role="tab" aria-controls="stories">{% trans 'Articles '%}<span
+            class="badge btn-dark pull-right">{{ posts_count }}</span></a>
+	<div   class="badge btn-dark pull-right">{{ tags_count }}</span></a>
+      </div>
+    </div>
+    <div class="col-md-9 p-0">
+      <div class="tab-content" id="nav-tabContent">
+        </div>
+        <div class="tab-pane fade my-4" id="list-stories" role="tabpanel" aria-labelledby="list-stories-list">
+          {% for posts in posts_list %}
+          <div class="single-post mt-4 mb-4">
+        <div class="single-post-body p-0">
+          <!-- Card image -->
+          <div class="row">
+            <div class="col-12">
+              <a href="{% url 'posts:post' post.slug %}"
+                style="color:black; text-decoration:none; background-color:none">
+                {% if post.image %}
+                <div class="card-img-top"
+                  style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
+                </div>
+                {% else %}
+                <div class="card-img-top"
+                  style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="col-12 pl-5 pr-5 pt-4 pb-4">
+              <h3 class="pr-3 title"> {{ post.title|title|truncatechars:60 }} </h3>
+              <div class="card-details">
+                {% if post.user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
+                  style="width:30px;height:30px;border-radius: 50%;"
+                  class="rounded-circle  mb-0 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                {% else %}
+                <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
+                  alt="No Profile Picture" />
+                {% endif %}
+                <div id="post-user">
+                  <div class="d-flex flex-row mt-2">
+                    <strong class="ml-0 mr-3">{{ post.user.get_profile_name|title|truncatechars:12 }}</strong>
+                  </div>
+                </div>
+                <span class="time pull-right"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></span>
+              </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {% empty %}
+      <h4 class="no-data">
+        {% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}.
+        <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
+          <h4 class="card-body card">{% trans 'There are no results related to your search in the articles' %}.</h4>
+	    <div>You can get more assistance <a href="{% url 'qa:ask_question' %}" >here </div>
+          {% endfor %}
+        </div>
+        </div>
+        <div class="tab-pane fade my-4 " id="list-tags" role="tabpanel" aria-labelledby="list-tags-list">
+          <div class="card">
+            <div class="card-body">
+              {% for tag in tags_list %}
+              <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
+              {% empty %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.container -->
+
+{% endblock content %}

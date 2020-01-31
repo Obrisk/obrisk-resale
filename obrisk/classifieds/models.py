@@ -171,3 +171,14 @@ class OfficialAdImages(models.Model):
 
     def __str__(self):
         return str(self.image)
+
+
+class InDemand(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True,
+                             related_name='indemand_user', on_delete=models.CASCADE)
+    item = models.CharField(max_length=100)
+    description = models.CharField(max_length=500)
+    date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.item

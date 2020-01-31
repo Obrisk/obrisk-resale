@@ -6,10 +6,16 @@ from obrisk.utils.images_upload import bulk_update_classifieds_mid_images
 from obrisk.classifieds.search import SearchListView, get_suggestions
 from obrisk.classifieds.views import (classified_list, set_popular_tags, CreateOfficialAdView, TagsAutoComplete,
                                       CreateClassifiedView, EditClassifiedView, ClassifiedDeleteView,
-                                      ReportClassifiedView, DetailClassifiedView)
+                                      ReportClassifiedView, DetailClassifiedView, IndemandListView,
+                                      CreateIndemandView, DetailIndemandView
+
+                                     )
 app_name = 'classifieds'
 urlpatterns = [
     url(r'^$', classified_list, name='list'),
+    url(r'^classifieds-on-demand/$', IndemandListView.as_view(), name='demand_list'),
+    url(r'^add-new-demand/$', CreateIndemandView.as_view(), name='new_demand'),
+    url(r'^dmands/(?P<pk>\d+)/$', DetailIndemandView.as_view(), name='demands_details'),
     url(r'^write-new-classified/$', CreateClassifiedView.as_view(), name='write_new'),
     url( r'^tags-autocomplete/$', TagsAutoComplete.as_view(), name='tags_autocomplete'),
     url(r'^new-official-classified/$', CreateOfficialAdView.as_view(), name='new_official_ad'),

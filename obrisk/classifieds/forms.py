@@ -1,7 +1,14 @@
 from django import forms
 from dal import autocomplete
-from obrisk.classifieds.models import Classified, OfficialAd
+from obrisk.classifieds.models import Classified, OfficialAd, InDemand
 from phonenumber_field.formfields import PhoneNumberField
+
+
+class InDemandForm(forms.ModelForm):
+    class Meta:
+        model = InDemand
+        fields = ['item', 'description']
+
 
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput(), required=False)

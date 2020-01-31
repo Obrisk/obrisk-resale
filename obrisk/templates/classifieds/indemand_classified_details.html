@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load crispy_forms_tags humanize %}
+
+{% block head %}
+<link href="{% static 'css/notifications.css' %}" rel="stylesheet">
+<link href="{% static 'css/post-details.css' %}" rel="stylesheet">
+<title>{{ post.title|title }}</title>
+{% endblock head %}
+
+{% block content %}
+<!-- Page Content -->
+<div class="container mt-5 pt-4 pb-4 mb-5">
+  <div class="row">
+    <!-- Post Content Column -->
+    <div class="post-wrapper col-lg-8 col-md-10 m-auto">
+      <div class="classified-meta mb-4">
+        <!-- Title -->
+        <h1 class="mt-4 title text-center">{{ demand.item|title }}</h1>
+
+        <div class="meta-details mt-4 d-flex justify-content-center">
+
+          <div class="meta-right d-flex flex-column align-items-center">
+            <a href="{% url 'users:detail' demand.user.get_profile_name %}">
+              {% if demand.user.thumbnail %}
+              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{demand.user.thumbnail}}" alt="Picture Profile"
+                style="width:30px;height:30px;border-radius: 50%;"
+                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+              {% else %}
+              <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
+                alt="No Profile Picture" />
+              {% endif %}
+            </a>
+            <div class="d-flex flex-column align-items-center">
+              <a href="{% url 'users:detail' demand.user.get_profile_name %}"><strong id="classified-user">
+                  {{ demand.user.get_profile_name|title }} </strong></a>
+              <!-- Date/Time -->
+              <div class="time"><small>⏲️ </small><span>{{ demand.date|naturaltime }} </span></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <hr>
+      <!-- Post Content -->
+      <p class="card-text text-justify">{{ demand.description|safe }}</p>
+      <hr>
+      <div class="d-flex justify-content-between">
+        <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i class="fa fa-chevron-left"
+            aria-hidden="true"></i> BACK</button>
+        
+        {% comment %}    <a href="#" class="share btn btn-dark"
+          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+          🔗{% trans 'share' %} </a > {% endcomment %}
+      </div>
+      <!-- Cloud Tag Widget -->
+      <div class="card my-4">
+        <h5 class="card-header text-dark" style="background-color: #3EC4E2;">{% trans 'Tags' %}</h5>
+      </div>
+
+    </div>
+    <!-- /.row -->
+
+
+
+
+      <div class="col-md-4">
+
+        <!-- As of now, I don't want to encourage users to write posts thus
+                    Don't preview option to write new article unless user was the author -->
+
+        <div class="row align-items-center mt-4 mb-4">
+
+          <a class="btn btn-dark m-2" href="{% url 'classifieds:new_demand' %}" title="{% trans 'add yours here' %}">
+            <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'add yours' %}</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<!-- /.container -->
+{% endblock content %}
+

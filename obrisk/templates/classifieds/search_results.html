@@ -79,6 +79,7 @@
             {% empty %}
             <h4 class="card-body card card">{% trans 'There are no results related to your search in classifieds' %}.
             </h4>
+	    <a href="{% url 'classifieds:new_demand' %}">get more assistance</a>
             {% endfor %}
           </div>
         </div>

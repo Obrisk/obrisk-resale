@@ -21,8 +21,8 @@ from slugify import slugify
 
 from taggit.models import Tag
 from obrisk.utils.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
-from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
+from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages, InDemand
+from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm, InDemandForm
 from obrisk.utils.images_upload import multipleImagesPersist
 
 # For images
@@ -372,3 +372,44 @@ class DetailClassifiedView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+        
+class DetailIndemandView(DetailView):
+    """Basic DetailView implementation to call an individual classified."""
+    model = InDemand
+    template_name = 'classifieds/indemand_classified_details.html'
+    context_object_name = 'demand'
+class IndemandListView(ListView):
+    model = InDemand
+    template_name = 'classifieds/indemand_classified_list.html'
+    context_object_name = 'indemands'
+
+class CreateIndemandView(LoginRequiredMixin, CreateView):
+    """Basic CreateView implementation to create new Posts."""
+    model = InDemand 
+    message = _("Your Need has been heard.")
+    form_class = InDemandForm 
+    template_name = 'classifieds/indemand_classified_create.html'
+ 
+    def __init__(self, **kwargs):
+        self.object = None
+        super().__init__(**kwargs)
+        
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        indemandform = form.save(commit=False)
+        indemandform.user = self.request.user
+
+        indemandform.save()
+
+
+        return super(CreateIndemandView, self).form_valid(form)
+
+    def get_success_url(self):
+        messages.success(self.request, self.message)
+        return reverse('classifieds:list')
+
+
+

@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load humanize %}
+
+{% block title %} {% trans 'In Demands' %} {% endblock %}
+
+{% block head %}
+<link href="{% static 'css/listing.css' %}" rel="stylesheet">
+<link href="{% static 'css/post-list.css' %}?v=200719" rel="stylesheet">
+<title>Obrisk Post</title>
+
+{% endblock head %}
+
+{% block content %}
+
+<!-- Page Content -->
+<div class="sidebar-overlay"></div>
+<div class="container pt-4 pb-4 mb-5">
+
+
+
+<div>
+
+  {% comment %}
+  <div
+    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
+    <div class="toggle-tags d-lg-none">
+      <a href=""></a>
+      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+    </div>
+  </div>
+  {% endcomment %}
+
+  <!-- Write Classified Widget -->
+  {% if request.user.is_official%}
+  <div class="author-buttons">
+    <a class="btn btn-dark" href="{% url 'classifieds:new_demand' %}"
+      title="{% trans 'New Need' %}">{% trans 'your need' %}</a>
+      📚 {% trans ' Drafts' %}</a>
+  </div>
+  {% endif %}
+
+
+  {% comment %}
+  <div
+    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
+    <div class="toggle-tags d-lg-none">
+      <a href=""></a>
+      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
+    </div>
+  </div>
+  <!-- Sidebar Widgets Column -->
+
+  <div id="sidebar" class="sidebar mr-4">
+    <!-- Cloud Tag Widget -->
+
+    <div class="card">
+      <div class="card-header">
+        <h5>{% trans 'Popular tags' %}</h5>
+      </div>
+
+      <div class="card-body">
+        {% for tag, count in popular_tags %}
+        <!--When adding the href, remember the tag url to have tag.slug and not tag itself-->
+        <a href="#"><span class="badge badge-info"> {{ count }} {{ tag }}</span></a>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endcomment %}
+
+  <div class="row">
+    <!-- Blog Entries Column -->
+    <div class="post-wrapper col-lg-6">
+      {% for demand in indemands %}
+      <!-- Blog Post -->
+      <div class="single-post mt-4 mb-4">
+        <div class="single-post-body p-0">
+          <!-- Card image -->
+          <div class="row">
+            <div class="col-12">
+              <a href="{% url 'classifieds:demands_details' demand.pk %}"
+
+            <div class="col-12 pl-5 pr-5 pt-4 pb-4">
+              <h3 class="pr-3 title"> {{ demand.item|title|truncatechars:60 }} </h3>
+              <div class="card-details">
+                {% if demand.user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{demand.user.thumbnail}}" alt="Picture Profile"
+                  style="width:30px;height:30px;border-radius: 50%;"
+                  class="rounded-circle  mb-0 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                {% else %}
+                <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
+                  alt="No Profile Picture" />
+                {% endif %}
+                <div id="/ost-user">
+                  <div class="d-flex flex-row mt-2">
+                    <strong class="ml-0 mr-3">{{ demand.user.get_profile_name|title|truncatechars:12 }}</strong>
+                  </div>
+                </div>
+                <span class="time pull-right"><small>⏲️</small><span>{{ demand.date|naturaltime }} </span></span>
+              </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      {% empty %}
+      <h4 class="no-data">
+        {% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}.
+        <a href="{% url 'classified:new_demand' %}">{% trans 'add your need' %}!</a></h4>
+      {% endfor %}
+
+
+    </div>
+
+  </div>
+  <!-- /.row -->
+</div>
+<!-- /.row -->
+</div>
+<!-- /.container -->
+{% endblock content %}
