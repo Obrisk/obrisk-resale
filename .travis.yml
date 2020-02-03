@@ -1,9 +1,10 @@
   
 language: python
+dist: bionic
 python:
   - "3.6"
 env:
-  - DJANGO_VERSION=2.2.7
+  - DJANGO_VERSION=2.2.9
 branches:
   only:
     - master
@@ -16,11 +17,23 @@ install:
   - pip install -q Django==$DJANGO_VERSION
   - pip install -r requirements/local.txt
   - pip install python-coveralls
+
+addons:
+  postgresql: "10"
+  apt:
+    packages:
+    - postgresql-10
+    - postgresql-client-10
+env:
+  global:
+  - PGPORT=5433
+
 before_script:
-  - psql -c "CREATE DATABASE obrisk;" -U postgres
+  - psql -c "CREATE DATABASE obdev;" -U postgres
   - cp .env.example .env
   - python manage.py migrate --settings=config.settings.local
   - python manage.py collectstatic --noinput --settings=config.settings.local
+
 # command to run tests
 script:
   - pytest
