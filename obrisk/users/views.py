@@ -446,4 +446,12 @@ def bulk_update_user_phone_no(request):
 
 
 
+@ajax_required
+@require_http_methods(["GET"])
+def username_exists(request):
+    """A function view to check if the username exists"""
+    prefered_name = request.GET.get('username')
+    if User.objects.filter(username__contains=prefered_name.lower()):
+        return JsonResponse( {"status": "301","username":prefered_name, "message": "This username is taken"})
+
 
