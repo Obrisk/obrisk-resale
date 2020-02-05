@@ -30,7 +30,7 @@ env:
 
 before_script:
   - psql -c "CREATE DATABASE obdev;" -U postgres
-  - cp .env.example .env
+  - cp travis.env .env
   - python manage.py migrate --settings=config.settings.local
   - python manage.py collectstatic --noinput --settings=config.settings.local
 
