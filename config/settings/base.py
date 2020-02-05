@@ -89,7 +89,7 @@ THIRD_PARTY_APPS = [
     # 'allauth.socialaccount.providers.amazon',
     # 'allauth.socialaccount.providers.github',
     # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.linkedin',
+    'allauth.socialaccount.providers.linkedin_oauth2',
     # 'allauth.socialaccount.providers.slack',
     'channels',
     'graphene_django',
@@ -450,3 +450,34 @@ CELERY_BEAT_SCHEDULE = {
         # If you're using any arguments
     },
 }
+
+
+
+# linkedin social authentication
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_PROVIDERS = {
+    'linkedin_oauth2': {
+
+        'SCOPE': [
+            'r_liteprofile',
+            'r_emailaddress',
+            'w_member_social'
+        ],
+        'PROFILE_FIELDS': [
+            'id',
+            'first-name',
+            'last-name',
+            'email-address',
+            'picture-url',
+            'public-profile-url',
+        ]#,
+       # 'LOCATION_FIELDS': [
+       #    'location',
+       # ],
+       # 'POSITION_FIELDS': [
+       #     'company',
+       # ]
+    }
+}
+#SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = env('LINKEDIN_KEY') 
+#SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = env('LINKEDIN_SECRET')

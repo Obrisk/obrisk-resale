@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load static %}
 {% load account socialaccount %}
+{% load socialaccount %}
 {% load crispy_forms_tags %}
 {% block head %}
 <title>{% trans 'Account Signup' %}</title>
@@ -37,7 +38,7 @@
 					<div class="">
 
 						<span class="login100-form-title p-b-32">{% trans 'Account Creation' %}</span>
-
+						
 						{% if form.errors %}
 						<div class="alert alert-error">
 							<strong>Your form is having invalid input(s)</strong>
@@ -47,9 +48,11 @@
 						<span class="txt3">
 							<p>Already have an account? <a class="blue-link" href="{% url 'account_login' %}">
 									SIGN IN HERE </a></p>
+							   <h3>signup with 
+							   <a href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">Linkedin </a><h3>
 						</span>
 
-						<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
+							<form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
 							{% csrf_token %}
 							<div class="step-one">
 
