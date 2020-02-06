@@ -5,33 +5,89 @@
 {% load static %}
 {% load crispy_forms_tags %}
 
+{% block head %}
+<title>{% trans 'Account Login' %}</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
 
+{% endblock head %}
 {% block content %}
 <div class="view-wrapper">
     <div class="container">
         <div id="" class="view-wrap true-dom">
             <div class="columns is-centered">
                 <div class="column is-half is-one-third-desktop has-background-white p-4">
-                    {% if messages %}
-                    <ul class="messages">
-                        {% for message in messages %}
-                        {% endfor %}
-                        {% endif %}
-                    </ul>
 
-                    <!-- Form rendering code for template -->
-                    <form action="" method="post">
+                    <div class="hero-body p-0">
+                        <div class="form-wrapper">
+                            <!--Form-->
+                            <div class="login-form">
 
-                        {% csrf_token %}
-                        {{ form|crispy }}
+                                <div class="login-wrapper">
+                                    <div class="outer-panel">
+                                        <div class="outer-panel-inner">
+                                            {% if messages %}
+                                            <ul class="messages">
+                                                {% for message in messages %}
+                                                {% endfor %}
 
-                        <input type="submit" value="Submit" class="btn btn-dark" />
-                    </form>
+                                            </ul>
+                                            {% endif %}
 
-                    <br /> <br />
-                    <small>{% blocktrans %}If you have any problem, please
-                        <a href="mailto:support@obrisk.com"> click here </a> to contact us or via WechatID:
-                        <span style="font-weight:bold; color: #0aeee3"> Obrisk </span>{% endblocktrans %}</small>
+                                            <!-- Form rendering code for template -->
+                                            <form action="" method="post">
+
+                                                {% csrf_token %}
+
+                                                <div class="form-panel">
+                                                    <div class="form-row">
+
+                                                        <div class="form-group col-md-12 mb-0">
+                                                            <div class="input-group">
+                                                                <label for="new_password1">
+                                                                    New password
+                                                                </label>
+                                                            </div>
+                                                            {{ form.new_password1 }}
+
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-row">
+
+                                                        <div class="form-group col-md-12 mb-0">
+                                                            <div class="input-group">
+                                                                <label for="new_password2">
+                                                                    New password confirmation
+                                                                </label>
+
+                                                            </div>
+                                                            {{ form.new_password2 }}
+                                                        </div>
+                                                    </div>
+                                                    <div class="mt-2">
+                                                        <button type="submit" value=""
+                                                            class="button is-rounded is-solid accent-button raised is-fullwidth">
+                                                            Confirm
+                                                        </button>
+                                                    </div>
+
+
+                                                </div>
+                                            </form>
+
+                                            <br /> <br />
+                                            <small>{% blocktrans %}If you have any problem, please
+                                                <a href="mailto:support@obrisk.com"> click here </a> to contact us or
+                                                via WechatID:
+                                                <span style="font-weight:bold; color: #0aeee3"> Obrisk
+                                                </span>{% endblocktrans %}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                 </div>
             </div>
