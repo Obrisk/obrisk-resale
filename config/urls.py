@@ -50,8 +50,6 @@ urlpatterns = [
 
     # User management
     url(r'^users/', include('obrisk.users.urls', namespace='users')),
-    #This accounts/ url is  for django and soon should be deprecated and use only allauth.
-    url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts-authorization/', include('allauth.urls')),
     url(r'^auto-login-obdev2018-wsguatpotlfwccdi/', AutoLoginView.as_view(), name="auto_login"),
     # Third party apps here
