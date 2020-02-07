@@ -287,8 +287,12 @@ ACCOUNT_PRESERVE_USERNAME_CASING = True
 USERNAME_MIN_LENGTH = 3
 
 ACCOUNT_FORMS = {
-    'signup': 'users.forms.PhoneSignupForm', 
+    'signup': 'users.forms.PhoneSignupForm',
     'login': 'users.forms.CustomLoginForm'
+}
+
+SOCIALACCOUNT_FORMS = {
+    'signup': 'allauth.socialaccount.forms.SignupForm',
 }
 
 ACCOUNT_USERNAME_BLACKLIST = ['AnonymousUser', 'admin', 'obrisk']
@@ -297,7 +301,7 @@ ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 
-#SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
+SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 # SOCIALACCOUNT_PROVIDERS = {
 #     'weixin': {
 #         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
@@ -460,16 +464,10 @@ SOCIALACCOUNT_PROVIDERS = {
 
         'SCOPE': [
             'r_liteprofile',
-            'r_emailaddress',
-            'w_member_social'
+            'r_emailaddress'
         ],
         'PROFILE_FIELDS': [
-            'id',
-            'first-name',
-            'last-name',
-            'email-address',
-            'picture-url',
-            'public-profile-url',
+            'email-address'
         ]#,
        # 'LOCATION_FIELDS': [
        #    'location',
