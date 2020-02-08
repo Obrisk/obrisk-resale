@@ -99,6 +99,7 @@ THIRD_PARTY_APPS = [
     'pwa_webpush',
     'django_elasticsearch_dsl',
     'friendship',
+    'sslserver',
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
