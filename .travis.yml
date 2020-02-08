@@ -14,7 +14,7 @@ services:
   - postgresql
 # command to install dependencies
 install:
-  - pip install -q Django==$DJANGO_VERSION
+  - pip install -q Django==2.2.9
   - pip install -r requirements/local.txt
   - pip install python-coveralls
 
