@@ -13,10 +13,13 @@ services:
   - redis-server
   - postgresql
 # command to install dependencies
-install:
-  - pip install -q Django==2.2.9
-  - pip install -r requirements/local.txt
+
+before_install:
+  - pip install -U pip
   - pip install python-coveralls
+
+install:
+  - pip install -r requirements/local.txt
 
 addons:
   postgresql: "10"
