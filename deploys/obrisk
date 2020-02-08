@@ -4,11 +4,11 @@ map $http_upgrade $connection_upgrade {
 }
 
 upstream app_server {
-    server unix:/run/gunicorn.sock fail_timeout=0;
+    server unix:/home/obdev-user/run/gunicorn.sock fail_timeout=0;
 }
 
 upstream websocket_server {
-    server unix:/run/uvicorn.sock;
+    server unix:/home/obdev-user/run/uvicorn.sock;
 
 }
 
@@ -24,8 +24,8 @@ server {
     keepalive_timeout 5;
     client_max_body_size 4G;
 
-    access_log /tmp/logs/nginx-access.log;
-    error_log /tmp/logs/nginx-error.log;
+    access_log /home/obdev-user/logs/nginx-access.log;
+    error_log /home/obdev-user/logs/nginx-error.log;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {

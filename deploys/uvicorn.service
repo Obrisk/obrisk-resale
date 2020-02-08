@@ -12,8 +12,10 @@ Environment="DJANGO_SETTINGS_MODULE=config.settings.production"
 ExecStart=/home/obdev-user/venv_obrisk/bin/gunicorn \
           -k uvicorn.workers.UvicornWorker \
           --workers 6 \
-          --bind unix:/run/gunicorn.sock \
+          --bind unix:/home/obdev-user/gunicorn.sock \
           --log-level critical \
+	  --access-logfile '/home/obdev-user/logs/gunicorn-error.log' \
+	  --error-logfile '/home/obdev-user/logs/gunicorn-error.log' \
           config.asgi:application
 
 [Install]
