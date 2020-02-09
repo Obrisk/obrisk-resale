@@ -5,7 +5,6 @@ python:
   - "3.6"
 env:
   global:
-  - PGPORT=5433
   - DJANGO_VERSION=2.2.9
 branches:
   only:
