@@ -4,6 +4,8 @@ dist: bionic
 python:
   - "3.6"
 env:
+  global:
+  - PGPORT=5433
   - DJANGO_VERSION=2.2.9
 branches:
   only:
@@ -22,20 +24,25 @@ install:
   - pip install -r requirements/local.txt
 
 addons:
-  postgresql: "10"
+  postgresql: "11"
   apt:
     packages:
-    - postgresql-10
-    - postgresql-client-10
-env:
-  global:
-  - PGPORT=5433
+    - postgresql-11
+    - postgresql-client-11
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get --yes remove postgresql\*
+  - sudo apt-get install -y postgresql-11 postgresql-client-11
+  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
+  - sudo service postgresql restart 11  
 
 before_script:
+  - psql --version
   - psql -c "CREATE DATABASE obdev;" -U postgres
+  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres  
   - cp travis.env .env
   - python manage.py migrate --settings=config.settings.local
-  - python manage.py collectstatic --noinput --settings=config.settings.local
 
 # command to run tests
 script:
