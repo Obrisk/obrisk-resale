@@ -11,7 +11,7 @@ timeout = 30
 #This number is for 2 vCPU instance. I have to deploy same instances for easy managing.
 workers = 6
 
-pidfile = '/run/gunicorn/pid'
+pidfile = '/home/obdev-user/run/gunicorn/pid'
 
 #logs
 #If trying to catch some errors and warnings then it is info
