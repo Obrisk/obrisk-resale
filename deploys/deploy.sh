@@ -37,6 +37,12 @@ RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
 curl -u "REPLACE-WITH-USERNAME:REPLACE-WITH-PS" --data '{"title":"EC2-instance<REPLACE-WITH-NUM>","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
 
 git clone https://github.com/elshaddae/obdev2018.git  #Psword required.
+
+#Create them here so that they are out of git VCS
+mkdir ./logs ./run
+chmod 664 -R ./logs ./run
+touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log 
+
 cd obdev2018
 python -m venv venv_obrisk
 pip install -r requirements/production.txt
@@ -46,9 +52,6 @@ pip install -r requirements/production.txt
 python manage.py migrate
 python manage.py collectstatic 
 
-mkdir ./logs ./run
-chmod 664 -R ./logs ./run
-touch ./logs/gunicorn-access.log ./tmp/logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log 
 
 sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
