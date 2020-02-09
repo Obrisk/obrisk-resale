@@ -1,10 +1,14 @@
 #!/bin/bash -xe
 # These are the list of commands on how to deploy obrisk on a fresh Ubuntu 18.04 OS running on AWS Lightsail.
+# Some command requires raw password input and they can't be automated
+# Examples are creating linux user, and github keys. In such cases raw values can be passed when script is started by someone
+# sudo vim /etc/redis/redis.conf #Then change line 147 from 'supervised no' to 'supervised systemd'
+# Also check for safe ways to inject .env in the middle of this script
 
+sudo apt-get -y update
 sudo apt-get -y upgrade
 
 #First, install codedeploy agent.
-sudo apt-get -y update
 sudo apt-get -y install ruby
 sudo apt-get -y install wget
 cd /home/ubuntu
@@ -16,34 +20,35 @@ chmod +x ./install
 sudo vim /etc/codedeploy-agent/conf/codedeploy.onpremises.yml
 sudo service codedeploy-agent restart
 
-sudo apt install python3-pip python3-dev libpq-dev nginx curl redis-server -y
-#sudo apt install postgresql if you will want to access DB with psql
-sudo vim /etc/redis/redis.conf #Then change line 147 from 'supervised no' to 'supervised systemd'
-sudo -H pip3 install --upgrade pip
-sudo -H pip3 install virtualenv
-sudo adduser obdev-user  #Interactive step
+sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel nginx curl redis-server -y
+
+sudo -H pip3 install --upgrade pip wheel setuptools
+
+useradd -m -p "$(python -c "import crypt; print crypt.crypt(\"REPLACE-WITH-RAW-PS\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")")" -s /bin/bash obdev-user
 sudo gpasswd -a obdev-user sudo
 sudo su - obdev-user
 
+ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "REPLACE-WITH-EMAIL"
 
-virtualenv venv_obrisk
-source venv_obrisk/bin/activate
+ssh-add -k ~/.ssh/id_rsa
+
+RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
+
+curl -u "REPLACE-WITH-USERNAME:REPLACE-WITH-PS" --data '{"title":"EC2-instance<REPLACE-WITH-NUM>","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
+
 git clone https://github.com/elshaddae/obdev2018.git  #Psword required.
 cd obdev2018
+python -m venv venv_obrisk
 pip install -r requirements/production.txt
-vim .env #Add all the settings parameters.
+
+#This step onwards needs the env variables loaded
+#vim .env #Add all the settings parameters.
 python manage.py migrate
-python manage.py collectstatic --settings=config.settings.static #Pass the settings parameter only when django-storages is not working
+python manage.py collectstatic 
 
-#Install the aliyun CLI for static assets
-wget https://github.com/aliyun/aliyun-cli/releases/download/v3.0.16/aliyun-cli-linux-3.0.16-amd64.tgz
-tar xzvf aliyun-cli-linux-3.0.16-amd64.tgz
-sudo mv aliyun /usr/local/bin
-
-sudo mkdir /tmp/logs
-sudo chmod 664 -R /tmp/logs
-sudo touch /tmp/logs/gunicorn-access.log /tmp/logs/gunicorn-error.log /tmp/logs/nginx-access.log /tmp/logs/nginx-error.log 
-
+mkdir ./logs ./run
+chmod 664 -R ./logs ./run
+touch ./logs/gunicorn-access.log ./tmp/logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log 
 
 sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
@@ -53,9 +58,6 @@ sudo cp deploys/gulp.service /etc/systemd/system
 
 sudo systemctl start gunicorn.socket uvicorn.socket
 sudo systemctl enable gunicorn.socket uvicorn.socket
-
-curl --unix-socket /run/gunicorn.sock localhost #Not a must, just activate socket.
-curl --unix-socket /run/uvicorn.sock localhost
 
 sudo cp deploys/obrisk /etc/nginx/sites-available 
 sudo ln -s /etc/nginx/sites-available/obrisk /etc/nginx/sites-enabled
@@ -77,32 +79,6 @@ sudo certbot --nginx  #interactive step
 
 #To copy data from one db instance to another.
 #pg_dump -C -h localhost -U obrisk -P obrisk_db | psql -h ls-475c8c9aa913ef145c97aecda604ec8b6ae7a92f.ccyq1xb49cwb.ap-northeast-2.rds.amazonaws.com -U dbobdevuser2018 obrisk_db
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
