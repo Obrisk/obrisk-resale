@@ -4,7 +4,7 @@
 #Full example can be found here
 #https://github.com/benoitc/gunicorn/blob/29f0394cdd381df176a3df3c25bb3fdd2486a173/examples/example_config.py
 
-#This is strict but the best, let the user retry on a dead request connection
+#This is default. Strict but the best, let users retry on dead request connections
 timeout = 30
 
 #Depending on the number of cpu, also remember uvicorn is running so requests are split
@@ -21,7 +21,7 @@ errorlog = '/home/obdev-user/logs/gunicorn-error.log'
 accesslog = '/home/obdev-user/logs/gunicorn-acess.log'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
-bind = 'unix:/home/obdev-user/run/gunicorn.sock'
+bind = 'unix:/run/gunicorn.sock'
 
 #This worker class needs patching for some libraries
 #Can't use gevent with celery or other libraries in this same configuration
