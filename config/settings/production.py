@@ -83,8 +83,9 @@ if os.getenv('USE_S3_STATICFILES'):
     AWS_S3_HOST=os.getenv('AWS_S3_HOST_NAME')
 
     AWS_DEFAULT_ACL = 'public-read'
-
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.{AWS_S3_REGION_NAME}.s3.amazonaws.com.cn'
+    
+    #https://obdev-ac-default-s3.s3.cn-northwest-1.amazonaws.com.cn/
+    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com.cn'
 
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
