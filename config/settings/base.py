@@ -435,7 +435,7 @@ TAGGIT_CASE_INSENSITIVE = True
 
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
-#USER_AGENTS_CACHE = 'default'
+# USER_AGENTS_CACHE = 'default'
 
 ELASTICSEARCH_DSL = {
     'default': {
@@ -445,18 +445,16 @@ ELASTICSEARCH_DSL = {
 
 
 CELERY_BROKER_URL = 'redis://localhost:6379' 
-CELERY_TIMEZONE = 'Asia/Chongqing'   
-# Let's make things happen 
+CELERY_TIMEZONE = 'Asia/Chongqing'
+# Let's make things happen
 CELERY_BEAT_SCHEDULE = {
  'classified-tags-update-24-hours': {
-        'task': 'obrisk.classifieds.tasks.update_classified_tags', 
-        # Every 24 hours 
-       'schedule': 86400.0,
+        'task': 'obrisk.classifieds.tasks.update_classified_tags',
+        # Every 24 hours
+        'schedule': 86400.0,
         # If you're using any arguments
     },
 }
-
-
 
 # linkedin social authentication
 SOCIALACCOUNT_QUERY_EMAIL = True
@@ -476,20 +474,14 @@ SOCIALACCOUNT_PROVIDERS = {
             'email-address',
             'profilePicture',
             'public-profile-url',
+        ],
+        'LOCATION_FIELDS': [
+          'location',
+        ],
+        'POSITION_FIELDS': [
+            'company',
         ]
-       #'PROFILE_FIELDS': [
-       #    'id',
-       #    'first-name',
-       #    'last-name',
-       #    'email-address',
-       #]#,
-       # 'LOCATION_FIELDS': [
-       #    'location',
-       # ],
-       # 'POSITION_FIELDS': [
-       #     'company',
-       # ]
     }
 }
-#SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = env('LINKEDIN_KEY') 
-#SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = env('LINKEDIN_SECRET')
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = env('LINKEDIN_KEY')
+# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = env('LINKEDIN_SECRET')
