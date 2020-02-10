@@ -466,14 +466,23 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': [
             'r_liteprofile',
             'r_emailaddress',
-            'w_member_social'
+            'w_member_social',
         ],
         'PROFILE_FIELDS': [
             'id',
-            'first-name',
-            'last-name',
+            'firstName',
+            'lastName',
+            'emailAddress',
             'email-address',
-        ]#,
+            'profilePicture',
+            'public-profile-url',
+        ]
+       #'PROFILE_FIELDS': [
+       #    'id',
+       #    'first-name',
+       #    'last-name',
+       #    'email-address',
+       #]#,
        # 'LOCATION_FIELDS': [
        #    'location',
        # ],
