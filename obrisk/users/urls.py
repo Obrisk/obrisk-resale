@@ -6,6 +6,7 @@ app_name = 'users'
 urlpatterns = [
     url(regex=r'^$', view=views.UserListView.as_view(), name='list'),
     url(regex=r'^signup/$', view=views.EmailSignUp.as_view(), name='email_signup'),
+    url(regex=r'^username-exists/$', view=views.username_exists, name='username_exists'),
     url(regex=r'^verification-code/$', view=views.send_code_sms, name='verification_code'),
     url(regex=r'^phone-verify/$', view=views.phone_verify, name='phone_verify'),
     url(regex=r'^bulk-phone-update/$', view=views.bulk_update_user_phone_no, name='bulk_phone_update'),
