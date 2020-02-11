@@ -149,7 +149,7 @@
 										<div id="signup-panel-2" class=" step-dot-2 process-panel-wrap is-narrow ">
 											<div class="form-panel">
 												<div class="form-row mt-3">
-													<div class="form-group col-md-12 mb-0">
+													<div class="form-group col-md-12 mb-0" id="username">
 														<div class="input-group">
 															<label for="username">
 																User name
@@ -182,7 +182,7 @@
 											</div>
 
 											<div class="buttons">
-												<a class="button is-rounded process-button is-next"
+												<a class="button is-rounded process-button is-next is-hidden"
 													data-step="step-dot-3">Next</a>
 											</div>
 										</div>
@@ -248,9 +248,16 @@
 	{% else %}
 	$("#id_phone_number").attr("disabled", true);
 	$("input[name='verified_no']").val("VAL");
-	$(".step-one").hide();
+	$("#signup-panel-1").removeClass("is-active");
+	$("#signup-panel-2").addClass("is-active");
 	{% endif %}
 	{% endif %}
+	{% if "username" in form.errors %}
+	$("#username").append(`<small class="pass-text red">Username taken, please try another username.</small>`)
+	{% endif %}
+
+
+
 </script>
 
 <script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
