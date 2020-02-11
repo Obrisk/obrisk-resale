@@ -44,7 +44,10 @@ chmod 664 -R ./logs ./run
 touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log 
 
 cd obdev2018
-python -m venv venv_obrisk
+#Use this for smooth intergration with vim-virtualenv
+sudo -H pip3 install --upgrade pip
+sudo -H pip3 install virtualenv
+virtualenv venv_obrisk
 pip install -r requirements/production.txt
 
 #This step onwards needs the env variables loaded
@@ -52,12 +55,13 @@ pip install -r requirements/production.txt
 python manage.py migrate
 python manage.py collectstatic 
 
-
 sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
 sudo cp deploys/uvicorn.socket /etc/systemd/system
 sudo cp deploys/uvicorn.service /etc/systemd/system
 sudo cp deploys/gulp.service /etc/systemd/system
+sudo cp deploys/celery.service /etc/systemd/system
+sudo cp deploys/celerybeat.service /etc/systemd/system
 
 sudo systemctl start gunicorn.socket uvicorn.socket
 sudo systemctl enable gunicorn.socket uvicorn.socket
