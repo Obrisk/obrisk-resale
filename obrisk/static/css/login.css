@@ -129,3 +129,27 @@ label {
   text-transform: uppercase;
   width: 100%;
 }
+
+.pass-graybar {
+  height: 3px;
+  background-color: #ccc;
+  width: 100%;
+  position: relative;
+}
+.pass-colorbar {
+  height: 3px;
+  background-image: url(/static/img/passwordstrength.jpg);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.pass-percent,
+.pass-text {
+  font-size: 12px;
+}
+.pass-percent {
+  margin-right: 5px;
+}
+.red {
+  color: #ff5f59;
+}
