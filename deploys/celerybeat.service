@@ -4,7 +4,7 @@ Description=Celery beat daemon
 After=network.target
 
 [Service]
-Type=forking
+Type=simple
 User=obdev-user
 Group=www-data
 WorkingDirectory=/home/obdev-user/obdev2018
