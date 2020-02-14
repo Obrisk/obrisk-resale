@@ -471,15 +471,13 @@ SOCIALACCOUNT_PROVIDERS = {
             'firstName',
             'lastName',
             'emailAddress',
-            'email-address',
+            'profilePicture(displayImage~:playableStreams)',
+            'url',
             'profilePicture',
             'public-profile-url',
-        ],
-        'LOCATION_FIELDS': [
-          'location',
-        ],
-        'POSITION_FIELDS': [
+            'location',
             'company',
+            'phoneNumber',
         ]
     }
 }
