@@ -14,18 +14,15 @@ from obrisk.users.models import User
 from allauth.socialaccount.models import SocialAccount, SocialAccount, SocialLogin
 
 #@shared_task
-def update_social_user_profile_picture():
+def update_social_user_profile_picture(request):
     '''
     required to add the background task to update user picture download it from
     Linkedin and save it to our bucket using requests package
     '''
-    # Try to Get the list from cache
-    # token = cache.get(f"")
-    # get social user
-
-    user = User.objects.all()
-     
-     # get  the user info from linkedin
+    # get  the user info from linkedin
+    user = request.user 
+    
+    # get  the user info from linkedin
     for ac in user.socialaccount_set.all():
         user_info = ac.extra_data
         mid_size = user_info['profilePicture']['displayImage~']['elements'][2]['identifiers'][0]['identifier']
@@ -39,19 +36,17 @@ def update_social_user_profile_picture():
         
         # naming them in our oss
         d = str(datetime.datetime.now())
-        thumb_name = "media/socialaccount/linkedin/thumb/profile_pics/" + slugify(str(user)) + "/thumbnails/" + "thumb-" + d 
-        pic_name = "media/socialaccount/linkedin/pic/profile_pics/" + slugify(str(user)) + "/thumbnails" + "dp-" + d 
-        name = "media/socialaccount/linkedin/org_pic/profile_pics/" + slugify(str(user)) + "/thumbnails" + "dp-" + d 
-        org_pic_name
-         
-        # uploding them to the s3 buckect  
-        bucket.put_object(thumbnail, thumb_name)
-        bucket.put_object(picture, pic_name)
-        bucket.put_object(org_pic, org_pic_name)
-            
+        thumb_name = "media/linkedin/thumb/profile_pics/" + slugify(str(user)) + "/thumbnails/" + "thumb-" + d 
+        pic_name = "media/linkedin/pic/profile_pics/" + slugify(str(user)) + "/thumbnails" + "dp-" + d 
+        org_pic_name = "media/linkedin/org_pic/profile_pics/" + slugify(str(user)) + "/thumbnails" + "dp-" + d 
+       
+       # upoad them in our oss
+        bucket.put_object(thumb_name, thumbnail.content)
+        bucket.put_object(pic_name, picture.content)
+        bucket.put_object(org_pic_name, org_picture.content)
+        
         # saving and updating user credentials .
         user.thumbnail = thumb_name
         user.picture = pic_name
         user.org_picture = picture
         user.save()
-            
