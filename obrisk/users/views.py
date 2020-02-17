@@ -20,8 +20,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.shortcuts import get_current_site
 from slugify import slugify
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-
-import os
 import base64
 import datetime
 import oss2
@@ -192,12 +190,16 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         followers = Follow.objects.followers(user)
         # pending = FriendshipRequest.objects.filter(from_user=user)
         sent_requests = Friend.objects.sent_requests(user)
+        in_coming_reqst = Friend.objects.requests(user)
         pending = [u.to_user for u in sent_requests]
+        pended = [u.from_user for u in in_coming_reqst]
+        
 
         context['friends'] = friends
         context['followers'] = followers
         context['following'] = following
         context['pending'] = pending
+        context['pended'] = pended
 
         return context
 
@@ -445,5 +447,15 @@ def bulk_update_user_phone_no(request):
 
 
 
+
+@ajax_required
+@require_http_methods(["GET"])
+def username_exists(request):
+    """A function view to check if the username exists"""
+    prefered_name = request.GET.get('username')
+    if User.objects.filter(username__contains=prefered_name.lower()):
+        return JsonResponse( {"status": "201", "username":prefered_name, "message": "This username is taken"})
+    else:
+        return JsonResponse( {"status": "200", "username":prefered_name, "message": "This username is available"})
 
 
