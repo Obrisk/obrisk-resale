@@ -454,6 +454,12 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 86400.0,
         # If you're using any arguments
     },
+ 'update-social-user-profile-picure': {
+        'task': 'obrisk.users.tasks.update_social_user_profile_picture',
+        # tenseconds after authentication 
+        'schedule': 10.0,
+        # If you're using any arguments
+    },
 }
 
 # linkedin social authentication
@@ -472,14 +478,8 @@ SOCIALACCOUNT_PROVIDERS = {
             'lastName',
             'emailAddress',
             'profilePicture(displayImage~:playableStreams)',
-            'url',
-            'profilePicture',
-            'public-profile-url',
-            'location',
-            'company',
-            'phoneNumber',
         ]
     }
 }
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_KEY = env('LINKEDIN_KEY')
-# SOCIAL_AUTH_LINKEDIN_OAUTH2_SECRET = env('LINKEDIN_SECRET')
+LINKEDIN_OAUTH2_KEY = env('LINKEDIN_KEY')
+LINKEDIN_OAUTH2_SECRET = env('LINKEDIN_SECRET')

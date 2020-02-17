@@ -16,10 +16,11 @@ class AccountAdapter(DefaultAccountAdapter):
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def authentication_error(self, request, provider_id, error, exception, extra_context):
-        print(provider_id)
-        print(error.__str__())
-        print(exception.__str__())
-        print(extra_context)
+        # print(provider_id)
+        # print(error.__str__())
+        # print(exception.__str__())
+        # print(extra_context)
+        pass
 
     def is_open_for_signup(self, request, sociallogin):
         return getattr(settings, 'ACCOUNT_ALLOW_REGISTRATION', True)
@@ -29,8 +30,6 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
                       sociallogin,
                       data,
                       **kwargs):
-        ad = data.keys()
-        print(ad)
         first_name = data.get('first_name')
         last_name = data.get('last_name')
         name = data.get('name')
@@ -39,7 +38,7 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         user_field(user, 'first_name', first_name or name_parts[0])
         user_field(user, 'last_name', last_name or name_parts[2])
         user_field(user, 'name',
-                   (str(first_name) + str(last_name)) or (str(name_parts[0]) + str(name_parts[2])))
+                   (str(first_name ) + str(last_name)) or (str(name_parts[0]) + str(name_parts[2])))
         # user_field(user, 'linkedin_account', last_name or name_parts[2])
 
         return DefaultSocialAccountAdapter.populate_user(self, request, sociallogin, data)
