@@ -75,7 +75,7 @@ def friendship_add_friend(
     if request.method == "POST":
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
-
+        
         if Friend.objects.can_request_send(from_user, to_user) == True:
             return JsonResponse(
                 {

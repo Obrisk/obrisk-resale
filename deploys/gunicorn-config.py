@@ -4,19 +4,21 @@
 #Full example can be found here
 #https://github.com/benoitc/gunicorn/blob/29f0394cdd381df176a3df3c25bb3fdd2486a173/examples/example_config.py
 
-#This is to not allow nginx to return timeout so soon
-timeout = 300
+#This is default. Strict but the best, let users retry on dead request connections
+timeout = 30
 
 #Depending on the number of cpu, also remember uvicorn is running so requests are split
 #This number is for 2 vCPU instance. I have to deploy same instances for easy managing.
 workers = 6
 
+pidfile = '/home/obdev-user/run/gunicorn/pid'
+
 #logs
 #If trying to catch some errors and warnings then it is info
 #if everything settle down then change to critical
 loglevel = 'critical'
-#errorlog = '/tmp/logs/gunicorn-error.log'
-#accesslog = '/tmp/logs/gunicorn-acess.log'
+errorlog = '/home/obdev-user/logs/gunicorn-error.log'
+accesslog = '/home/obdev-user/logs/gunicorn-acess.log'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
 bind = 'unix:/run/gunicorn.sock'

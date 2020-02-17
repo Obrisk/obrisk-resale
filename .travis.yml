@@ -1,9 +1,11 @@
   
 language: python
+dist: bionic
 python:
   - "3.6"
 env:
-  - DJANGO_VERSION=2.2.7
+  global:
+  - DJANGO_VERSION=2.2.9
 branches:
   only:
     - master
@@ -12,15 +14,35 @@ services:
   - redis-server
   - postgresql
 # command to install dependencies
-install:
-  - pip install -q Django==$DJANGO_VERSION
-  - pip install -r requirements/local.txt
+
+before_install:
+  - pip install -U pip
   - pip install python-coveralls
+
+install:
+  - pip install -r requirements/local.txt
+
+addons:
+  postgresql: "11"
+  apt:
+    packages:
+    - postgresql-11
+    - postgresql-client-11
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get --yes remove postgresql\*
+  - sudo apt-get install -y postgresql-11 postgresql-client-11
+  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
+  - sudo service postgresql restart 11  
+
 before_script:
-  - psql -c "CREATE DATABASE obrisk;" -U postgres
-  - cp .env.example .env
+  - psql --version
+  - psql -c "CREATE DATABASE obdev;" -U postgres
+  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres  
+  - cp travis.env .env
   - python manage.py migrate --settings=config.settings.local
-  - python manage.py collectstatic --noinput --settings=config.settings.local
+
 # command to run tests
 script:
   - pytest

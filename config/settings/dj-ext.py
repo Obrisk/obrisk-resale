@@ -15,7 +15,6 @@ ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
 # DATABASES
 # ------------------------------------------------------------------------------
 DATABASES['default'] = env.db('DATABASE_URL')  # noqa F405
-DATABASES['default']['ENGINE'] = 'django_db_geventpool.backends.postgresql_psycopg2'
 DATABASES['default']['ATOMIC_REQUESTS'] = False  # From django-db-geventpool
 DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=0)  # From django-db-geventpool
 
@@ -179,7 +178,7 @@ ADMIN_URL = env('ADMIN_URL')
 # Anymail (Mailgun)
 # ------------------------------------------------------------------------------
 # https://anymail.readthedocs.io/en/stable/installation/#installing-anymail
-INSTALLED_APPS += ['anymail']  # noqa F405
+INSTALLED_APPS += ['anymail', 'django_extensions']  # noqa F405
 EMAIL_BACKEND = 'anymail.backends.mailgun.EmailBackend'
 # https://anymail.readthedocs.io/en/stable/installation/#anymail-settings-reference
 ANYMAIL = {
