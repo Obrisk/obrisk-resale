@@ -10,7 +10,7 @@ def migrate_classifieds_tags():
 
     classifieds = Classified.objects.all()
     for classified in classifieds:
-        classified.new_tags = classified.tags
+        classified.new_tags = classified.tags.all()
 
 
 @shared_task
