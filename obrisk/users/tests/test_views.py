@@ -1,6 +1,7 @@
 from allauth.socialaccount.models import SocialAccount
 # from obrisk.users.serializers import UserSerializer 
-
+from django.contrib.auth import get_user_model
+User = get_user_model()
 from django.test import RequestFactory
 from test_plus.test import TestCase
 
@@ -19,6 +20,10 @@ class BaseUserTestCase(TestCase):
     def setUp(self):
         self.user = self.make_user()
         self.factory = RequestFactory()
+
+    def test_username_exists(self):
+        self.user1 = self.make_user('bob')
+        self.assertTrue(User.objects.filter(username__contains=('Bob').lower()))
 
 
 class TestUserRedirectView(BaseUserTestCase):
@@ -53,6 +58,7 @@ class TestUserUpdateView(BaseUserTestCase):
         request.user = self.user
         # Attach the request to the view
         self.view.request = request
+        
 
     def test_get_success_url(self):
         # Expect: '/users/testuser/', as that is the default username for

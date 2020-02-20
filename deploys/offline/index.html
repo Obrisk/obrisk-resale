@@ -1,0 +1,106 @@
+<html>
+<head>
+	<title>Coming Soon Template</title>
+
+	<link class="gf-headline" href='https://fonts.googleapis.com/css?family=Pacifico:400&subset=' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/font-awesome.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+
+
+</head>
+
+<body>
+
+
+	<div class="container">	
+		<div class="heading-section">
+			<h1> We will be back online soon...</h1>
+			<i class="fa fa-ellipsis-h" aria-hidden="true"></i>
+			<p>We are upgrading our services </p>
+		</div>
+	</div>
+
+	<p id="demo"></p>
+
+	
+		<form id="email-form" action="" method="post">
+			<div id="from-wrapper">
+				<div class="row">
+					<div class="col-md-12 seperate">
+						<div class="input-group">
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+			
+		
+		<div class="social-icon">
+		<ul>
+			<li>
+			<span class="top-tringle"></span>
+			<a href=""><i class="fa fa-wechat"></i></a>
+			<span class="btn-tringle"></span>
+			</li>
+
+			<li>
+			<span class="top-tringle"></span>
+			<a href="https://www.instagram.com/obrisk"><i class="fa fa-instagram"></i></a>
+			<span class="btn-tringle"></span>
+			</li>
+
+			<li>
+			<span class="top-tringle"></span>	
+			<a href="https://www.linkedin.com/company/briskest/"><i class="fa fa-linkedin"></i></a>
+			<span class="btn-tringle"></span>
+			</li>
+
+		</ul>
+		</div>
+
+		<div class="footer">
+   			 <p >&copy;Obrisk.com</p>
+  		</div>
+
+<script>
+// Set the date we're counting down to
+var countDownDate = new Date("Feb 8, 2020 1:30:00").getTime();
+
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+    // Get todays date and time
+    var now = new Date().getTime();
+    
+    // Find the distance between now an the count down date
+    var distance = countDownDate - now;
+    
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    
+    // Output the result in an element with id="demo"
+    document.getElementById("demo").innerHTML = days + "D " + hours + "H "
+    + minutes + "M " + seconds + "S ";
+    
+    // If the count down is over, write some text 
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo").innerHTML = "EXPIRED";
+    }
+}, 1000);
+</script>
+
+
+</body>
+
+<script type="text/javascript" src="js/jquery-3.2.1.slim.min.js"></script>
+<script type="text/javascript" src="js/jquery-bootstrap.min.js"></script>
+<script type="text/javascript" src="js/jquery-main.js"></script>
+<script type="text/javascript" src="js/popper.min.js"></script>
+
+	
+
+</html>

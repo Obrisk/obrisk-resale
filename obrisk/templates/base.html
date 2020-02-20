@@ -95,7 +95,7 @@
   {% endblock head %}
 </head>
 
-<body class="O-bg has-slimscroll">
+<body class="O-bg has-slimscroll is-white">
   <!-- Pageloader -->
   {% block body %}
   <div class="m-b-1">
@@ -127,9 +127,12 @@
             <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'chat' %} is-active {% endif %} "
                 href="{% url 'messager:contacts_list' %}">
-                {% if new_msgs %}
-                <i class=" fa fa-envelope" style="color: #dc3545;position: absolute;font-size: 15px;"></i>
-                {% endif %}
+
+                <span class="msg-notification" style="position:relative">
+                  <i class="fa fa-circle" aria-hidden="true"
+                    style="display: none;position: absolute;right: 20px;position: absolute;left: 40px;color: #c5062c;"></i>
+                </span>
+
                 {% trans 'Chat' %}</a>
             </li>
           </ul>
@@ -276,8 +279,13 @@
           </li>
           <li class="message-list {% if base_active == 'chat' %} is-active {% endif %}">
             <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'messager:contacts_list' %}">
-              <span class="nav-icons"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              <span class="nav-icons">
+                <span class="msg-notification" style="position:relative">
+                  <i class="fa fa-circle" aria-hidden="true"
+                    style="display: none;position: absolute;right: 20px;position: absolute;left: 25px;color: #c5062c;"></i>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-message-square">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg> </span>
@@ -561,8 +569,13 @@
           </li>
           <li class="{% if base_active == 'chat' %} is-active {% endif %}">
             <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'messager:contacts_list' %}">
-              <span class="nav-icons"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"
-                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+              <span class="nav-icons">
+                <span class="msg-notification" style="position:relative">
+                  <i class="fa fa-circle" aria-hidden="true"
+                    style="display: none;position: absolute;right: 20px;position: absolute;left: 25px;color: #c5062c;"></i>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                   class="feather feather-message-square">
                   <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg> </span>
@@ -843,6 +856,32 @@
     ) {
       $("#navbarBottom").addClass("pb-4");
     }
+  </script>
+
+  <script>
+    // WebSocket connection management block.
+    // Correctly decide between ws:// and wss://
+    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+    var notif = new Audio('/static/sound/knock_brush.ogg');
+    var ws_path =
+      ws_scheme +
+      "://" +
+      window.location.host +
+      "/ws/notifications/";
+    var webSocket = new channels.WebSocketBridge();
+    webSocket.connect(ws_path);
+
+    webSocket.listen(function (event) {
+      if (event.key === undefined) event = JSON.parse(event);
+      switch (event.key) {
+        case "new_message":
+          $(".msg-notification i").show();
+          notif.play();
+          break;
+        default:
+          break;
+      }
+    });
   </script>
 
 </body>

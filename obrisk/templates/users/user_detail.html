@@ -59,6 +59,10 @@
           data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
         {% elif object in pending %}
         <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
+        {% elif object in pended%}
+        {{object.username|title }} wants to connect with you! 🔌
+         
+         <a href="{% url 'connections:friendship_request_list' %}">view all requests</a>
         {% else %}
         <a class="connect-btn button has-min-width m-auto" href="#">{% trans '➕Connect' %}</a>
         {% endif %}
