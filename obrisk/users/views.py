@@ -1,4 +1,13 @@
 import uuid, os
+import base64
+import datetime
+import oss2
+import ast
+import json
+import boto3
+import io
+
+# django imports
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView,DetailView, ListView, RedirectView, UpdateView, FormView
@@ -15,29 +24,30 @@ from django.utils.decorators import method_decorator
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
-from obrisk.utils.helpers import ajax_required
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.shortcuts import get_current_site
-from slugify import slugify
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-import base64
-import datetime
-import oss2
-import ast
-import json
-import boto3
 
-from allauth.account.views import SignupView, LoginView, PasswordResetView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView
+# third parties imports
+from allauth.account.views import (SignupView, LoginView, PasswordResetView, _ajax_response, 
+                                    PasswordResetFromKeyView as AllauthPasswordResetFromKeyView)
 from allauth.account.forms import  UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
+from slugify import slugify
+from phonenumbers import PhoneNumber   
+from friendship.models import Friend, Follow, FriendshipRequest
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+from rest_framework.decorators import api_view
+
+# obrisk imports
+from obrisk.users.serializers import UserSerializer
+from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from .forms import UserForm, EmailSignupForm, PhoneRequestPasswordForm, PhoneSignupForm, PhoneResetPasswordForm
 from .models import User
 from .phone_verification import send_sms, verify_counter
-from phonenumbers import PhoneNumber
-    
-from friendship.models import Friend, Follow, FriendshipRequest
 
 try:
     from django.contrib.auth import get_user_model
@@ -47,6 +57,7 @@ except ImportError:
     from django.contrib.auth.models import User
 
     user_model = User
+
 
 #There is no need to override this view. By default All-auth directly login users when they signup.
 class EmailSignUp(SignupView):
@@ -258,7 +269,7 @@ def update_profile_pic(request):
                 bucket.process_object(picture, process1)
                 bucket.process_object(picture, process2)
             except:
-                #Since the image exists just save the profile, it is our problem. 
+                #Since the image exists just save the profile, it is our problem.
                 return JsonResponse({'success': False,
                                 'error_message': "Oops we are sorry! Your image was not uploaded successfully. Try again later!."})
 
@@ -268,7 +279,7 @@ def update_profile_pic(request):
             profile.picture = pic_name
             profile.org_picture = picture
             profile.save()
-                    
+                   
             return JsonResponse({'success': True})
 
 
@@ -286,9 +297,9 @@ class UserListView(LoginRequiredMixin, ListView):
 def send_code_sms(request):
     if request.method == "GET":
         phone_no = request.GET.get("phone_no")
-        
+ 
         if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1' and phone_no != '13300000000':
-            
+ 
             full_number = "+86" + phone_no
             check_phone = User.objects.filter(phone_number=full_number).exists()
 
@@ -296,12 +307,12 @@ def send_code_sms(request):
                 return send_code(full_number, "signup")
 
             else:
-                return JsonResponse({'success': False, 'error_message': "This phone number already exists!"} )
+                return JsonResponse({'success': False, 'error_message': "This phone number already exists!"})
 
         else:
             return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"})
     else:
-        return JsonResponse({'success': False, 'error_message':"This request is invalid!"} )
+        return JsonResponse({'success': False, 'error_message':"This request is invalid!"})
 
 
 @ajax_required
@@ -311,25 +322,25 @@ def phone_verify(request):
         code = request.GET.get("code")
         phone_no = request.GET.get("phone_no")
         full_number = "+86" + phone_no
-        
+
         if phone_no is not None and code is not None:
             try:
                 saved_code = cache.get(str(full_number))
             except:
-                return JsonResponse({'error_message': "The verification code has expired or it is invalid!" } )
+                return JsonResponse({'error_message': "The verification code has expired or it is invalid!"})
             else:
                 if saved_code == code:
                     if str(request.META.get('HTTP_REFERER')).endswith("/users/phone-password-reset/") == True:
                         try:
                             user = get_users(full_number)
                         except:
-                            return JsonResponse({'success': False, 
+                            return JsonResponse({'success': False,
                                                 'error_message': "Sorry there is a problem with this account. Please contact us!",
                                                 'phone_no': full_number })
                         else:
                             if user:
                                 token = default_token_generator.make_token(user)
-                                #current_site = get_current_site(request)
+                                # current_site = get_current_site(request)
                                 # save it to the password reset model
                                 # password_reset = PasswordReset(user=user, temp_key=temp_key)
                                 # password_reset.save()
@@ -341,17 +352,18 @@ def phone_verify(request):
                                 url = build_absolute_uri(request, path)
                                 return JsonResponse({'success': True, 'url':url })
                             else:
-                                return JsonResponse({'success': False, 'error_message': "Sorry there is a problem with this account. Please contact us!"})
+                                return JsonResponse({'success': False, 
+                                                     'error_message': "Sorry there is a problem with this account. Please contact us!"})
                     else:
                         return JsonResponse({'success': True})
-                
+
                 else:
-                    return JsonResponse({'success': False, 'error_message': "The verification code is not correct!" })                    
+                    return JsonResponse({'success': False, 'error_message': "The verification code is not correct!"})
             return JsonResponse({'success': False})
         else:
-            return JsonResponse({'success': False, 'error_message': "The phone number or the code is empty!"} )
+            return JsonResponse({'success': False, 'error_message': "The phone number or the code is empty!"})
     else:
-        return JsonResponse({'success': False, 'error_message': "This request is invalid!"} )
+        return JsonResponse({'success': False, 'error_message': "This request is invalid!"})
 
 
 class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
@@ -360,8 +372,8 @@ class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
         self.request = request
         self.key = key
         token_form = UserTokenForm(
-            data={'uidb36': uidb36, 'key': self.key})    
-            
+            data={'uidb36': uidb36, 'key': self.key})
+
         if token_form.is_valid():
             # Store the key in the session and redirect to the
             # password reset form at a URL without the key. That
@@ -372,7 +384,7 @@ class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
                 data={'uidb36': uidb36, 'key': self.key})
             if token_form.is_valid():
                 self.reset_user = token_form.reset_user
-                #The super must be called with FormView or the link will be invalid. Ignore the linter
+                # The super must be called with FormView or the link will be invalid. Ignore the linter
                 return super(FormView, self).dispatch(request, uidb36, self.key, **kwargs)
 
         else:
@@ -386,7 +398,6 @@ class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):
             )
 
             return _ajax_response(self.request, response, form=token_form)
-
 
 
 class PhonePasswordResetConfirmView(FormView):
@@ -423,13 +434,10 @@ class PhonePasswordResetConfirmView(FormView):
         else:
             messages.error(request,'The reset password link is no longer valid.')
             return self.form_invalid(form)
-    
-        
+       
 
 class AutoLoginView(LoginView):
     pass
-
-
 
 @login_required
 @require_http_methods(["GET"])
@@ -454,8 +462,33 @@ def username_exists(request):
     """A function view to check if the username exists"""
     prefered_name = request.GET.get('username')
     if User.objects.filter(username__contains=prefered_name.lower()):
-        return JsonResponse( {"status": "201", "username":prefered_name, "message": "This username is taken"})
+        return JsonResponse({"status": "201", "username":prefered_name, "message": "This username is taken"})
     else:
-        return JsonResponse( {"status": "200", "username":prefered_name, "message": "This username is available"})
+        return JsonResponse({"status": "200", "username":prefered_name, "message": "This username is available"})
 
 
+@ajax_required
+@api_view(['GET'])
+def complete_authentication(request):
+    ''' This view is to upadate social users' phone number and password
+        as they are required to be authorized completely
+    '''
+
+    usr = request.user
+    user = User.objects.get(username=usr)
+    
+    # getting socialusers without phone_number
+    if user.socialaccount_set.all() and not user.phone_number:
+        user_inputs = request.query_params
+        serializer = UserSerializer(user, data=user_inputs)
+
+        if serializer.is_valid():
+            serializer.save()
+            return redirect("stories:list")
+
+        else:
+            return JsonResponse({"status": "404", "message": "Please enter valid inputs"})
+   
+    else:
+
+        return redirect("stories:list")

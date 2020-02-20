@@ -77,6 +77,8 @@ DJANGO_APPS = [
     'django.contrib.admin',
     'django.forms',
     'django.contrib.postgres',
+    'rest_framework',
+
 ]
 THIRD_PARTY_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -99,7 +101,7 @@ THIRD_PARTY_APPS = [
     'pwa_webpush',
     'django_elasticsearch_dsl',
     'friendship',
-    'sslserver',
+
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
