@@ -20,7 +20,7 @@ chmod +x ./install
 sudo vim /etc/codedeploy-agent/conf/codedeploy.onpremises.yml
 sudo service codedeploy-agent restart
 
-sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel nginx curl redis-server -y
+sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel nginx curl redis-server npm -y
 
 sudo -H pip3 install --upgrade pip wheel setuptools
 
@@ -54,6 +54,8 @@ pip install -r requirements/production.txt
 #vim .env #Add all the settings parameters.
 python manage.py migrate
 python manage.py collectstatic 
+python manage.py collectstatic --settings=config.settings.static 
+#static files on the local(static) to be served by Nginx for PWA features.
 
 sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
@@ -73,9 +75,16 @@ sudo ufw allow 'Nginx Full'
 sudo ufw allow 22
 sudo ufw enable -y
 
-sudo add-apt-repository ppa:certbot/certbot
-sudo apt-get update
-sudo apt-get install python-certbot-nginx -y
+npm install cnpm -g
+cnpm install
+cnpm install gulp
+sudo systemctl start gulp.service
+gulp build
+
+#These steps aren't used when spinning server behind NLB
+#sudo add-apt-repository ppa:certbot/certbot
+#sudo apt-get update
+#sudo apt-get install python-certbot-nginx -y
 
 #If you want to change the IP of the server to a static one for quick provision
 #then you have to logout the ssh mode before performing the next step.
