@@ -1,4 +1,4 @@
-   
+from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
@@ -17,8 +17,12 @@ class SearchListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         query = self.request.GET.get("query")
+
+        search_vector = SearchVector('username') 
+        search_query = SearchQuery(query) 
+        results = User.objects.annotate(search=search_vector).filter(search=search_query)
         context['query'] = query
-        context["users_list"] = User.objects.filter(username__icontains=query).distinct()
+        context["users_list"] = results
         context["users_count"] = context["users_list"].count()
         return context
 
