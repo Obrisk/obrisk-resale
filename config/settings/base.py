@@ -455,13 +455,7 @@ CELERY_BEAT_SCHEDULE = {
         # Every 24 hours
         'schedule': 86400.0,
         # If you're using any arguments
-    },
- 'update-social-user-profile-picure': {
-        'task': 'obrisk.users.tasks.update_social_user_profile_picture',
-        # tenseconds after authentication 
-        'schedule': 10.0,
-        # If you're using any arguments
-    },
+    }
 }
 
 # linkedin social authentication
