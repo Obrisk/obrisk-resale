@@ -431,7 +431,7 @@ TAGGIT_CASE_INSENSITIVE = True
 
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
-#USER_AGENTS_CACHE = 'default'
+# USER_AGENTS_CACHE = 'default'
 
 ELASTICSEARCH_DSL = {
     'default': {
@@ -440,36 +440,14 @@ ELASTICSEARCH_DSL = {
 }
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379' 
-CELERY_TIMEZONE = 'Asia/Chongqing'   
-# Let's make things happen 
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_TIMEZONE = 'Asia/Chongqing'
+# Let's make things happen
 CELERY_BEAT_SCHEDULE = {
  'classified-tags-update-24-hours': {
-        'task': 'obrisk.classifieds.tasks.update_classified_tags', 
-        # Every 24 hours 
-       'schedule': 86400.0,
+        'task': 'obrisk.classifieds.tasks.update_classified_tags',
+        # Every 24 hours
+        'schedule': 86400.0,
         # If you're using any arguments
-    },
- 'classified-tags-migrate': {
-       'task': 'obrisk.classifieds.tasks.migrate_classifieds_tags', 
-       'schedule': crontab(0, 0, day_of_month='11',
-    month_of_year='2'),
-    },
- 'posts-tags-migrate': {
-       'task': 'obrisk.posts.tasks.migrate_posts_tags', 
-       'schedule': crontab(0, 0, day_of_month='11',
-    month_of_year='2'),
-    },
- 'stories-tags-migrate': {
-       'task': 'obrisk.stories.tasks.migrate_stories_tags', 
-       'schedule': crontab(0, 0, day_of_month='11',
-    month_of_year='2'),
-    },
-
- 'qa-tags-migrate': {
-       'task': 'obrisk.qa.tasks.migrate_qa_tags', 
-       'schedule': crontab(0, 0, day_of_month='11',
-    month_of_year='2'),
-    },
-
-}
+    }
+ }
