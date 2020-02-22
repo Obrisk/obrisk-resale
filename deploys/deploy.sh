@@ -79,7 +79,8 @@ npm install cnpm -g
 cnpm install
 cnpm install gulp
 sudo systemctl start gulp.service
-gulp build
+cd ./frontend
+/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
 
 #These steps aren't used when spinning server behind NLB
 #sudo add-apt-repository ppa:certbot/certbot
