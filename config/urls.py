@@ -16,6 +16,7 @@ from obrisk.classifieds.sitemaps import ClassifiedsSitemap
 from obrisk.posts.sitemaps import PostsSitemap
 from obrisk.qa.sitemaps import QASitemap
 from config.sitemaps import StaticSitemap
+from obrisk.utils.sentry import trigger_error
 
 sitemaps = {
     'pages': StaticSitemap,
@@ -73,6 +74,7 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
+    url(r'^obdev2018-wsguatpotlfwccdi-sentry-error/', trigger_error, namespace='sentry_debug'),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

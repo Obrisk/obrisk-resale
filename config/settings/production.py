@@ -3,6 +3,9 @@ import logging,os
 from .base import *  # noqa
 from .base import env
 
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
@@ -190,13 +193,24 @@ ANYMAIL = {
 # raven
 # ------------------------------------------------------------------------------
 # https://docs.sentry.io/clients/python/integrations/django/
-INSTALLED_APPS += ['raven.contrib.django.raven_compat']  # noqa F405
-MIDDLEWARE = ['raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware'] + MIDDLEWARE
+#INSTALLED_APPS += ['raven.contrib.django.raven_compat']  # noqa F405
+#MIDDLEWARE = ['raven.contrib.django.raven_compat.middleware.SentryResponseErrorIdMiddleware'] + MIDDLEWARE
 
 #Sentry
 #------------------------------------------------------------------------------
-SENTRY_DSN = env('SENTRY_DSN')
-SENTRY_CLIENT = env('SENTRY_CLIENT', default='raven.contrib.django.raven_compat.DjangoClient')
+#SENTRY_CLIENT = env('SENTRY_CLIENT', default='raven.contrib.django.raven_compat.DjangoClient')
+
+
+sentry_sdk.init(
+    dsn=env('SENTRY_DSN'),
+    integrations=[DjangoIntegration()],
+
+    # If you wish to associate users to errors (assuming you are using
+    # django.contrib.auth) you may enable sending PII data.
+    send_default_pii=True
+)
+
+
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': True,
