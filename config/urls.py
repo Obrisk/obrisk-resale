@@ -74,7 +74,7 @@ urlpatterns = [
         include('obrisk.messager.urls', namespace='messager')),
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
-    url(r'^obdev2018-wsguatpotlfwccdi-sentry-error/', trigger_error, namespace='sentry_debug'),
+    url(r'^obdev2018-wsguatpotlfwccdi-sentry-error/', trigger_error, name='sentry_debug'),
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
