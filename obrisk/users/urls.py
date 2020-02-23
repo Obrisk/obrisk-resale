@@ -12,6 +12,10 @@ urlpatterns = [
         view=views.EmailSignUp.as_view(),
         name='email_signup'),
 
+    url(regex=r'^complete_login/$',
+        view=views.complete_authentication,
+        name='complete_auth'),
+
     url(regex=r'^verification-code/$',
         view=views.send_code_sms,
         name='verification_code'),
