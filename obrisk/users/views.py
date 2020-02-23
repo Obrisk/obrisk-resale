@@ -21,7 +21,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator    
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode

@@ -39,7 +39,7 @@
 #         bucket.put_object(pic_name, picture.content)
 #         bucket.put_object(org_pic_name, org_picture.content)
         
-        # saving and updating user credentials .
+#          saving and updating user credentials .
 #         user.thumbnail = thumb_name
 #         user.picture = pic_name
 #         user.org_picture = picture
