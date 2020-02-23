@@ -20,9 +20,9 @@ class SearchListView(LoginRequiredMixin, ListView):
 
         search_vector = SearchVector('username') 
         search_query = SearchQuery(query) 
-        results = User.objects.annotate(search=search_vector).filter(search=search_query)
+        
         context['query'] = query
-        context["users_list"] = results
+        context["users_list"] = User.objects.annotate(search=search_vector).filter(search=search_query)
         context["users_count"] = context["users_list"].count()
         return context
 
