@@ -1,11 +1,9 @@
-import uuid, os
+# import uuid
+import  os
 import base64
 import datetime
 import oss2
-import ast
-import json
 import boto3
-import io
 
 # django imports
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -36,9 +34,7 @@ from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
 from slugify import slugify
 from phonenumbers import PhoneNumber   
-from friendship.models import Friend, Follow, FriendshipRequest
-from rest_framework.renderers import JSONRenderer
-from rest_framework.parsers import JSONParser
+from friendship.models import Friend, Follow
 from rest_framework.decorators import api_view
 
 # obrisk imports

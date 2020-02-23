@@ -1,10 +1,7 @@
 import requests
-import base64
 import datetime
-import oss2
 
-from django.shortcuts import redirect
-from obrisk.utils.images_upload import bucket, bucket_name
+from obrisk.utils.images_upload import bucket
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.forms import ValidationError
