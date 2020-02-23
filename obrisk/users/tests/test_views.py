@@ -110,5 +110,3 @@ class TestUserUpdateView(BaseUserTestCase):
 
 #             self.assertTrue(user.phone_number is not None) 
 #             self.assertTrue(json.validated_data)
-    
-

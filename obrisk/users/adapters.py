@@ -34,9 +34,10 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         social_user = sociallogin.user
         if not social_user.picture:
             # downloading the images
-            thumbnail = sociallogin.user.socialaccount_set.all()[0].extra_data['profilePicture']['displayImage~']['elements'][0]['identifiers'][0]['identifier']
-            mid_size = sociallogin.user.socialaccount_set.all()[0].extra_data['profilePicture']['displayImage~']['elements'][2]['identifiers'][0]['identifier']
-            full_image = sociallogin.user.socialaccount_set.all()[0].extra_data['profilePicture']['displayImage~']['elements'][3]['identifiers'][0]['identifier']
+            usr = social_user.socialaccount_set.all()[0].extra_data['profilePicture']
+            thumbnail = usr['displayImage~']['elements'][0]['identifiers'][0]['identifier']
+            mid_size = usr['displayImage~']['elements'][2]['identifiers'][0]['identifier']
+            full_image = usr['displayImage~']['elements'][3]['identifiers'][0]['identifier']
 
             thumbnail = requests.get(thumbnail)
             picture = requests.get(mid_size)

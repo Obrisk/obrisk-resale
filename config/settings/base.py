@@ -255,7 +255,8 @@ FIXTURE_DIRS = (
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_BACKEND = env(
+    'EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -305,12 +306,6 @@ ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
-# SOCIALACCOUNT_PROVIDERS = {
-#     'weixin': {
-#         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
-#         'SCOPE': ['snsapi_base'],
-#     }
-# }
 
 
 # Other stuff...
