@@ -20,7 +20,6 @@ import os
 import base64
 import datetime
 
-
 import oss2
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
@@ -30,7 +29,6 @@ class PostsListView(ListView):
     model = Post
     paginate_by = 30
     context_object_name = "posts"
-
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
         #This query could be slowing the posts

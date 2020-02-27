@@ -15,6 +15,17 @@ from taggit.managers import TaggableManager
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 
+from taggit.models import TagBase, GenericTaggedItemBase
+
+class QaTags(TagBase):
+    class Meta:
+        verbose_name = _("Qa Tag")
+        verbose_name_plural = _("Qa Tags")
+class TaggedQa(GenericTaggedItemBase):
+    tag = models.ForeignKey(
+        QaTags,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items")
 
 class Vote(models.Model):
     """Model class to host every vote, made with ContentType framework to
@@ -87,6 +98,7 @@ class Question(models.Model):
     total_votes = models.IntegerField(default=0)
     votes = GenericRelation(Vote)
     tags = TaggableManager()
+    new_tags = TaggableManager(through=TaggedQa, blank=True)
     objects = QuestionQuerySet.as_manager()
 
     class Meta:

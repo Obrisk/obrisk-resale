@@ -15,6 +15,21 @@ from taggit.managers import TaggableManager
 
 
 from obrisk.notifications.models import Notification, notification_handler
+from taggit.models import TagBase, GenericTaggedItemBase
+
+
+class PostTags(TagBase):
+    class Meta:
+        verbose_name = _("Post Tag")
+        verbose_name_plural = _("Post Tags")
+
+
+
+class TaggedPost(GenericTaggedItemBase):
+    tag = models.ForeignKey(
+        PostTags,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items")
 
 
 class PostQuerySet(models.query.QuerySet):
@@ -75,6 +90,7 @@ class Post(models.Model):
     category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager()
+    new_tags = TaggableManager(through=TaggedPost, blank=True)
     date = models.DateField(default=datetime.date.today) #Just for slug.
     objects = PostQuerySet.as_manager()
 

@@ -2,6 +2,7 @@
 Base settings to build other settings files upon.
 """
 import environ, os
+from celery.schedules import crontab
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path('obrisk')
@@ -430,7 +431,7 @@ TAGGIT_CASE_INSENSITIVE = True
 
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
-#USER_AGENTS_CACHE = 'default'
+# USER_AGENTS_CACHE = 'default'
 
 ELASTICSEARCH_DSL = {
     'default': {
@@ -439,14 +440,14 @@ ELASTICSEARCH_DSL = {
 }
 
 
-CELERY_BROKER_URL = 'redis://localhost:6379' 
-CELERY_TIMEZONE = 'Asia/Chongqing'   
-# Let's make things happen 
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_TIMEZONE = 'Asia/Chongqing'
+# Let's make things happen
 CELERY_BEAT_SCHEDULE = {
  'classified-tags-update-24-hours': {
-        'task': 'obrisk.classifieds.tasks.update_classified_tags', 
-        # Every 24 hours 
-       'schedule': 86400.0,
+        'task': 'obrisk.classifieds.tasks.update_classified_tags',
+        # Every 24 hours
+        'schedule': 86400.0,
         # If you're using any arguments
-    },
-}
+    }
+ }
