@@ -19,12 +19,11 @@ from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from slugify import slugify
 
-from taggit.models import Tag
+from taggit.models import Tag, TaggedItemBase
 from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
 from obrisk.utils.images_upload import multipleImagesPersist
-
 # For images
 import json
 import re
@@ -58,6 +57,7 @@ def set_popular_tags():
 #People can view without login
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
+
     if request.user.is_authenticated:
         city = request.user.city
     else:
@@ -233,7 +233,8 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
         img_errors = form.cleaned_data['img_error']
-
+        show_phone = form.cleaned_data['show_phone']
+        
         failure_data = {
             'status': '400',
             'error_message': 'Sorry, the image(s) were not successful uploaded, please try again'
@@ -250,13 +251,13 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         #Phone number needs no backend verification, it is just a char field. 
         form.instance.user = self.request.user
         classified = form.save(commit=False)
-        classified.user = self.request.user
-
-        #Empty phone number is +8613300000000 for all old users around 150 users
-        if not classified.phone_number and classified.user.phone_number.national_number != 13300000000:
-            classified.phone_number = classified.user.phone_number
         
-        if not classified.address and classified.user.address:
+        #Empty phone number is +8613300000000 for all old users around 150 users
+        if self.request.user.phone_number != '' and show_phone == True: 
+            if not classified.phone_number and self.request.user.phone_number.national_number != 13300000000:
+                classified.phone_number = self.request.user.phone_number
+            
+        if not classified.address and self.request.user.address:
             classified.address = self.request.user.address
         
         classified.save()
@@ -346,8 +347,7 @@ class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
 
 class DetailClassifiedView(DetailView):
     """Basic DetailView implementation to call an individual classified."""
-    model = Classified
-
+            
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
