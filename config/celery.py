@@ -1,8 +1,7 @@
 from __future__ import absolute_import, unicode_literals
-import os, environ
+import os, environ, sys
 from celery import Celery
 from config.settings.base import ROOT_DIR
-
 
 env = environ.Env()
 env.read_env(str(ROOT_DIR.path('.env')))
