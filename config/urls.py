@@ -17,6 +17,8 @@ from obrisk.posts.sitemaps import PostsSitemap
 from obrisk.qa.sitemaps import QASitemap
 from config.sitemaps import StaticSitemap
 from obrisk.utils.sentry import trigger_error
+from obrisk.tags_migrate import migrate_all_tags
+
 
 sitemaps = {
     'pages': StaticSitemap,
@@ -55,6 +57,9 @@ urlpatterns = [
     url(r'^accounts/', include('django.contrib.auth.urls')),
     url(r'^accounts-authorization/', include('allauth.urls')),
     url(r'^auto-login-obdev2018-wsguatpotlfwccdi/', AutoLoginView.as_view(), name="auto_login"),
+    
+    url(r'^migrate-tags/', migrate_all_tags),
+
     # Third party apps here
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
     url(r'^markdownx/', include('markdownx.urls')),
