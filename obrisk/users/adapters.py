@@ -7,7 +7,7 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.forms import ValidationError
 from django.conf import settings
 from allauth.account.utils import user_field
-# from django.contrib.auth import get_user_model
+from django.contrib.auth import get_user_model
 from slugify import slugify
 # from django.http import JsonResponse
 
@@ -29,37 +29,18 @@ class SocialAccountAdapter(DefaultSocialAccountAdapter):
         # print(extra_context)
         pass
 
-    def pre_social_login(self, request, sociallogin):
-
-        social_user = sociallogin.user
-        if not social_user.picture:
-            # downloading the images
-            usr = social_user.socialaccount_set.all()[0].extra_data['profilePicture']
-            thumbnail = usr['displayImage~']['elements'][0]['identifiers'][0]['identifier']
-            mid_size = usr['displayImage~']['elements'][2]['identifiers'][0]['identifier']
-            full_image = usr['displayImage~']['elements'][3]['identifiers'][0]['identifier']
-
-            thumbnail = requests.get(thumbnail)
-            picture = requests.get(mid_size)
-            org_picture = requests.get(full_image)
-
-            # naming them in our oss
-            d = str(datetime.datetime.now())
-            thumb_name = "media/profile_pics/" + slugify(str(social_user)) + "/thumbnails/" + "thumb-" + d
-            pic_name = "media/profile_pics/" + slugify(str(social_user)) + "/thumbnails" + "dp-" + d
-            org_pic_name = "media/profile_pics/" + slugify(str(social_user)) + "/thumbnails" + "org-dp-" + d
-
-            # upoad them in our oss
-            bucket.put_object(thumb_name, thumbnail.content)
-            bucket.put_object(pic_name, picture.content)
-            bucket.put_object(org_pic_name, org_picture.content)
-
-            # saving and updating user credentials .
-            social_user.thumbnail = thumb_name
-            social_user.picture = pic_name
-            social_user.org_picture = picture
-            social_user.save()
-
+#    #def pre_social_login(self, request, sociallogin):
+#        try:
+#            get_user_model().objects.get(email=sociallogin.user.email)
+#            print(get_user_model().objects.get(email=sociallogin.user.email), 'its from the email')
+#        except get_user_model().DoesNotExist:
+#            from django.contrib import messages
+#            messages.add_message(request, messages.ERROR, 'Social logon from this account not allowed.') 
+#           raise ImmediateHttpResponse(HttpResponse(status=500))
+#        else:
+#            user = get_user_model().objects.get(email=sociallogin.user.email)
+#            if not sociallogin.is_existing:
+#                sociallogin.connect(request, user) 
 
     def is_open_for_signup(self, request, sociallogin):
         return getattr(settings, 'ACCOUNT_ALLOW_REGISTRATION', True)

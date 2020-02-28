@@ -25,7 +25,7 @@ ALLOWED_HOSTS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
-      default': {
+    'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
         'LOCATION': 'redis://127.0.0.1:6379/',
         'OPTIONS': {
@@ -35,7 +35,7 @@ CACHES = {
 }
 
 
-#STATIC
+# STATIC
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
