@@ -23,24 +23,14 @@ class AccountAdapter(DefaultAccountAdapter):
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def authentication_error(self, request, provider_id, error, exception, extra_context):
+        ''' This is for debugging when there is a failure
+        linked with the provider'''
+
         # print(provider_id)
         # print(error.__str__())
         # print(exception.__str__())
         # print(extra_context)
         pass
-
-#    #def pre_social_login(self, request, sociallogin):
-#        try:
-#            get_user_model().objects.get(email=sociallogin.user.email)
-#            print(get_user_model().objects.get(email=sociallogin.user.email), 'its from the email')
-#        except get_user_model().DoesNotExist:
-#            from django.contrib import messages
-#            messages.add_message(request, messages.ERROR, 'Social logon from this account not allowed.') 
-#           raise ImmediateHttpResponse(HttpResponse(status=500))
-#        else:
-#            user = get_user_model().objects.get(email=sociallogin.user.email)
-#            if not sociallogin.is_existing:
-#                sociallogin.connect(request, user) 
 
     def is_open_for_signup(self, request, sociallogin):
         return getattr(settings, 'ACCOUNT_ALLOW_REGISTRATION', True)
