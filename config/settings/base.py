@@ -12,15 +12,15 @@ env.read_env(str(ROOT_DIR.path('.env')))
 
 # READ_DOT_ENV_FILE = env.bool('DJANGO_READ_DOT_ENV_FILE', default=False)
 # if READ_DOT_ENV_FILE:
-    # OS environment variables take precedence over variables from .env
-    # env.read_env(str(ROOT_DIR.path('.env')))
+#    OS environment variables take precedence over variables from .env
+#    env.read_env(str(ROOT_DIR.path('.env')))
 
 # GENERAL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#debug
 DEBUG = env.bool('DJANGO_DEBUG', False)
 
-#INTERNATIONALIZATION 
+# INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
 # Local time zone. Choices are
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -78,6 +78,8 @@ DJANGO_APPS = [
     'django.contrib.admin',
     'django.forms',
     'django.contrib.postgres',
+    'rest_framework',
+
 ]
 THIRD_PARTY_APPS = [
     'obrisk.users.apps.UsersConfig',
@@ -90,7 +92,7 @@ THIRD_PARTY_APPS = [
     # 'allauth.socialaccount.providers.amazon',
     # 'allauth.socialaccount.providers.github',
     # 'allauth.socialaccount.providers.google',
-    # 'allauth.socialaccount.providers.linkedin',
+    'allauth.socialaccount.providers.linkedin_oauth2',
     # 'allauth.socialaccount.providers.slack',
     'channels',
     'graphene_django',
@@ -100,6 +102,7 @@ THIRD_PARTY_APPS = [
     'pwa_webpush',
     'django_elasticsearch_dsl',
     'friendship',
+
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
@@ -253,7 +256,8 @@ FIXTURE_DIRS = (
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
-EMAIL_BACKEND = env('EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
+EMAIL_BACKEND = env(
+    'EMAIL_BACKEND', default='django.core.mail.backends.smtp.EmailBackend')
 
 # ADMIN
 # ------------------------------------------------------------------------------
@@ -288,8 +292,12 @@ ACCOUNT_PRESERVE_USERNAME_CASING = True
 USERNAME_MIN_LENGTH = 3
 
 ACCOUNT_FORMS = {
-    'signup': 'users.forms.PhoneSignupForm', 
+    'signup': 'users.forms.PhoneSignupForm',
     'login': 'users.forms.CustomLoginForm'
+}
+
+SOCIALACCOUNT_FORMS = {
+    'signup': 'allauth.socialaccount.forms.SignupForm',
 }
 
 ACCOUNT_USERNAME_BLACKLIST = ['AnonymousUser', 'admin', 'obrisk']
@@ -298,13 +306,7 @@ ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 
-#SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
-# SOCIALACCOUNT_PROVIDERS = {
-#     'weixin': {
-#         'AUTHORIZE_URL': 'https://open.weixin.qq.com/connect/oauth2/authorize',  # for media platform
-#         'SCOPE': ['snsapi_base'],
-#     }
-# }
+SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
 
 
 # Other stuff...
@@ -439,8 +441,8 @@ ELASTICSEARCH_DSL = {
     },
 }
 
+CELERY_BROKER_URL = 'redis://localhost:6379' 
 
-CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_TIMEZONE = 'Asia/Chongqing'
 # Let's make things happen
 CELERY_BEAT_SCHEDULE = {
@@ -450,4 +452,26 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': 86400.0,
         # If you're using any arguments
     }
- }
+}
+
+# linkedin social authentication
+SOCIALACCOUNT_QUERY_EMAIL = True
+SOCIALACCOUNT_PROVIDERS = {
+    'linkedin_oauth2': {
+
+        'SCOPE': [
+            'r_liteprofile',
+            'r_emailaddress',
+            'w_member_social',
+        ],
+        'PROFILE_FIELDS': [
+            'id',
+            'firstName',
+            'lastName',
+            'emailAddress',
+            'profilePicture(displayImage~:playableStreams)',
+        ]
+    }
+}
+LINKEDIN_OAUTH2_KEY = env('LINKEDIN_KEY')
+LINKEDIN_OAUTH2_SECRET = env('LINKEDIN_SECRET')

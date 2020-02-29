@@ -1,10 +1,14 @@
 import os
-import sys
+import sys, environ
+from config.settings.base import ROOT_DIR
 
+env = environ.Env()
+env.read_env(str(ROOT_DIR.path('.env')))
+#
 #os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings.production'
 
 if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+    os.environ.setdefault(env('DJANGO_SETTINGS_MODULE'), 'config.settings.production')
 
     try:
         from django.core.management import execute_from_command_line
