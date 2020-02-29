@@ -1,7 +1,8 @@
 from django.contrib import admin
-from obrisk.qa.models import Question, Answer
+from obrisk.qa.models import Question, Answer, QaTags
 
 
+admin.site.register(QaTags)
 @admin.register(Question)
 class QuestionAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'status')

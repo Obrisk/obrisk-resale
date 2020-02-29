@@ -85,5 +85,6 @@ node_modules/
 *.out
 
 celerybeat*
-*.swp
-*.swo
+
+*.sw*
+

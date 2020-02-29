@@ -14,6 +14,9 @@ from obrisk.classifieds.sitemaps import ClassifiedsSitemap
 from obrisk.posts.sitemaps import PostsSitemap
 from obrisk.qa.sitemaps import QASitemap
 from config.sitemaps import StaticSitemap
+from obrisk.utils.sentry import trigger_error
+from obrisk.utils.tags_migrate import migrate_all_tags
+
 
 sitemaps = {
     'pages': StaticSitemap,
@@ -71,10 +74,9 @@ urlpatterns = [
     # User management
     url(r'^users/',
         include('obrisk.users.urls', namespace='users')),
-
     url(r'^accounts-authorization/', include('allauth.urls')),
-
     url(r'^auto-login-obdev2018-wsguatpotlfwccdi/', AutoLoginView.as_view(), name="auto_login"),
+    url(r'^migrate-tags/', migrate_all_tags),
 
     # Third party apps here
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),
@@ -96,6 +98,8 @@ urlpatterns = [
     url(r'^qa/', include('obrisk.qa.urls', namespace='qa')),
 
     url(r'^search/', include('obrisk.search.urls', namespace='search')),
+
+    url(r'^obdev2018-wsguatpotlfwccdi-sentry-error/', trigger_error, name='sentry_debug'),
 
     url(r'^sitemap\.xml$', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap')
 

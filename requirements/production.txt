@@ -12,6 +12,9 @@ django-db-geventpool>=3.1.0   #https://github.com/jneight/django-db-geventpool
 # Django
 # ------------------------------------------------------------------------------
 django-anymail>=2.0  # https://github.com/anymail/django-anymail
+sentry_sdk>=0.14.1 #https://sentry.io/obrisk/obrisk-e7/getting-started/python-django/
+iocontextvars #https://docs.sentry.io/platforms/python/django/#a-note-on-django-channels
+
 #Below oss package will install django-oss-storage 1.2 better than aliyun package
 git+https://gitee.com/enlangs/django-oss-storage.git #https://gitee.com/enlangs/django-oss-storage
 django-storages>=1.6.5  # https://github.com/jschneier/django-storages

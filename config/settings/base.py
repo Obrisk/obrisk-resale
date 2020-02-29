@@ -2,6 +2,7 @@
 Base settings to build other settings files upon.
 """
 import environ, os
+from celery.schedules import crontab
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path('obrisk')
@@ -440,8 +441,8 @@ ELASTICSEARCH_DSL = {
     },
 }
 
-
 CELERY_BROKER_URL = 'redis://localhost:6379' 
+
 CELERY_TIMEZONE = 'Asia/Chongqing'
 # Let's make things happen
 CELERY_BEAT_SCHEDULE = {

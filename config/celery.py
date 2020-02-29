@@ -1,10 +1,11 @@
 from __future__ import absolute_import, unicode_literals
+import os, environ, sys
 from celery import Celery
-import os, sys, environ
 from config.settings.base import ROOT_DIR
 
 env = environ.Env()
 env.read_env(str(ROOT_DIR.path('.env')))
+
 # This allows easy placement of apps within the interior
 # obrisk directory.
 app_path = os.path.abspath(os.path.join(

@@ -89,13 +89,20 @@ map <leader>g  :YcmCompleter GoToDefinitionElseDeclaration<CR>
 let NERDTreeIgnore=['\.pyc$', '\~$'] "ignore files in NERDTree
 
 "python with virtualenv support
-py3 << EOF
+python3 <<EOF
 import os
+import pathlib
+import site
 import sys
-if 'VIRTUAL_ENV' in os.environ:
-  project_base_dir = os.environ['VIRTUAL_ENV']
-  activate_this = os.path.join(project_base_dir, 'bin/activate_this.py')
-  exec(activate_this, dict(__file__=activate_this)).read()
+VIRTUAL_ENV = os.environ.get("VIRTUAL_ENV")
+if VIRTUAL_ENV:
+    venv_path = pathlib.Path(VIRTUAL_ENV)
+    os.environ["PATH"] = str(venv_path / "bin") + os.pathsep + os.environ["PATH"]
+    for child in (venv_path / "lib").iterdir():
+        site_path = child / "site-packages"
+        if site_path.is_dir():
+            site.addsitedir(site_path)
+    sys.prefix = VIRTUAL_ENV
 EOF
 
 

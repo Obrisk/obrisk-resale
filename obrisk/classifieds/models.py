@@ -10,6 +10,26 @@ from django.contrib.postgres.search import SearchVectorField
 
 from slugify import slugify
 from taggit.managers import TaggableManager
+from taggit.models import TagBase, GenericTaggedItemBase
+
+
+class ClassifiedTags(TagBase):
+    class Meta:
+        verbose_name = _("Classifieds Tag")
+        verbose_name_plural = _("Classifieds Tags")
+
+
+
+class TaggedClassifieds(GenericTaggedItemBase):
+    tag = models.ForeignKey(
+        ClassifiedTags,
+        on_delete=models.CASCADE,
+        related_name="%(app_label)s_%(class)s_items")
+    class Meta:
+        verbose_name = _("Classified tag")
+        verbose_name_plural = _("Classified Tags")
+
+
 
 class ClassifiedQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
@@ -67,6 +87,7 @@ class Classified(models.Model):
     edited = models.BooleanField(default=False)
     show_phone = models.BooleanField(default=True)
     tags = TaggableManager()
+    new_tags = TaggableManager(through=TaggedClassifieds, blank=True)
     priority = models.IntegerField(default=0)
     #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)
