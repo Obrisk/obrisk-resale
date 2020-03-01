@@ -1,3 +1,5 @@
+//localStorage.debug = 'ali-oss';
+
 $(function() {
   function getCookie(name) {
     // Function to get any cookie available in the session.

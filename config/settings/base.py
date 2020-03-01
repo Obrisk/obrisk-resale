@@ -431,6 +431,7 @@ WEBPUSH_SETTINGS = {
 
 TAGGIT_CASE_INSENSITIVE = True
 
+APPEND_SLASH = True
 # Name of cache backend to cache user agents. If it not specified default
 # cache alias will be used. Set to `None` to disable caching.
 # USER_AGENTS_CACHE = 'default'

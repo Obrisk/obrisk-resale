@@ -6,7 +6,7 @@ from phonenumber_field.formfields import PhoneNumberField
 class ClassifiedForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput(), required=False)
     edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
-    show_phone = forms.BooleanField( widget=forms.HiddenInput(), initial=True)
+    show_phone = forms.BooleanField(widget=forms.HiddenInput(), initial=True, required=False)
     #100 for each image.
     images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False)
     #Store images error for later debugging.
@@ -21,7 +21,6 @@ class ClassifiedForm(forms.ModelForm):
                                     )
                                 )
 
-
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "address", "phone_number", "show_phone"]
@@ -34,7 +33,7 @@ class ClassifiedForm(forms.ModelForm):
 
         help_texts = {
             "title": "Short description of your product",
-            "price": "Leave 0 if you're giving away for free. Input numbers only",
+            "price": "Numbers only. 0 means FREE.",
             "details": "Please provide detailed information, it easily convinces someone to buy.",
         }
 

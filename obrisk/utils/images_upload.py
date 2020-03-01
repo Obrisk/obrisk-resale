@@ -155,7 +155,7 @@ def multipleImagesPersist(request, images_list, app, obj):
     #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
     img_mid_name = None
     saved_objs = []
-
+    
     for index, str_result in enumerate(images_list):
         if str_result.startswith(f'{app}/{request.user.username}') == False:
             #Check if it was default image as it has no username.
@@ -269,10 +269,9 @@ def bulk_update_classifieds_mid_images(request):
 
         
         except oss2.exceptions.NoSuchKey as e:
-            print('status={0}, request_id={1}'.format(e.status, e.request_id ))
-
+            messages.error(request, f"Object with details doesn't exist {e}")
+            return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         except Exception as e:
-            print (e)
             messages.error(request, "This is trouble, restart the process!")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         else:

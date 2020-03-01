@@ -40,8 +40,7 @@
         <div class="field d-flex justify-content-between">
           <div class="">
             <label>Price*</label>
-            <small class="form-text text-muted" id="hint_id_price">Leave 0 if you're giving away for free, Enter numbers
-              only</small>
+            <small class="form-text text-muted" id="hint_id_price">Numbers only. 0 means FREE</small>
           </div>
           <div class="control">
             <input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price" required
@@ -49,7 +48,15 @@
           </div>
         </div>
 
-        {% if request.user.phone_number.national_number != 13300000000 %}
+
+        <div class="hidden-fields">
+            <input type="hidden" id="id_images" name="images" maxlength="3000" class="input" required>
+            <input type="hidden" id="id_img_errors" name="img_errors" maxlength="2000" class="input">
+            <input type="hidden" id="id_edited" name="edited" class="input">
+            <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
+        </div>
+
+        {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
         <div class="field is-flex justify-content-between">
           <label> Include your phone no? </label>
           <label class="f-switch is-accent">
