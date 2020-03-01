@@ -343,11 +343,10 @@ class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
         self.object.save()
         return HttpResponseRedirect(success_url)
 
-
-
 class DetailClassifiedView(DetailView):
     """Basic DetailView implementation to call an individual classified."""
-            
+    model = Classified       
+    
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
