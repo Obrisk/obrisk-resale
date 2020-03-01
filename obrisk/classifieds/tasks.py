@@ -2,7 +2,6 @@ from celery import shared_task
 from obrisk.classifieds.models import Classified
 from obrisk.classifieds.views import set_popular_tags
 
-
 @shared_task
 def migrate_classifieds_tags():
     '''this function is to update the
@@ -10,7 +9,10 @@ def migrate_classifieds_tags():
 
     classifieds = Classified.objects.all()
     for classified in classifieds:
-        classified.new_tags = classified.tags.all()
+        tags = classified.tags.all()
+        for tag in tags:
+            classified.new_tags.add(tag)
+
         classified.save()
 
 

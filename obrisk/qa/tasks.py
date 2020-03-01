@@ -9,5 +9,8 @@ def migrate_qa_tags():
     questions = Question.objects.all()
 
     for question in questions:
-        question.new_tags = question.tags.all()
+        tags = question.tags.all()
+
+        for tag in tags:
+            question.new_tags.add(tag)
         question.save()

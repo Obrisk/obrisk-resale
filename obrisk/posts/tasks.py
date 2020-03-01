@@ -8,5 +8,9 @@ def migrate_posts_tags():
 
     posts = Post.objects.all()
     for post in posts:
-        post.new_tags = post.tags.all()
+        tags = post.tags.all()
+        for tag in tags:
+            post.new_tags.add(tag)
         post.save()
+
+
