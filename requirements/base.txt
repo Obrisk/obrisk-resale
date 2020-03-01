@@ -34,6 +34,7 @@ django_user_agents>=0.4.0 #https://github.com/selwin/django-user_agents
 django-elasticsearch-dsl>=7.1.0 #https://github.com/sabricot/django-elasticsearch-dsl
 django-friendship>=1.8.2 #https://github.com/revsys/django-friendship
 django_celery_beat>=1.5.0 #https://github.com/celery/django-celery-beat
+djangorestframework #https://github.com/encode/django-rest-framework
 
 # Channels
 # ------------------------------------------------------------------------------

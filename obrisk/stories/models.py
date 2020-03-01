@@ -13,17 +13,13 @@ from obrisk.notifications.models import Notification, notification_handler
 from taggit.managers import TaggableManager
 from taggit.models import TaggedItemBase, TagBase, GenericTaggedItemBase, CommonGenericTaggedItemBase, GenericUUIDTaggedItemBase
 
-
-
 class StoryTags(TagBase):
     class Meta:
         verbose_name = _("Story Tag")
         verbose_name_plural = _("Story Tags")
 
-
-
-class TaggedStory(GenericUUIDTaggedItemBase, TaggedItemBase):
-    tags = models.ForeignKey(
+class TaggedStory(GenericUUIDTaggedItemBase):
+    tag = models.ForeignKey(
         StoryTags,
         on_delete=models.CASCADE,
         related_name="tags")
@@ -31,7 +27,6 @@ class TaggedStory(GenericUUIDTaggedItemBase, TaggedItemBase):
     class Meta:
         verbose_name = _("Tagged story")
         verbose_name_plural = _("Tagged stories")
-
 
 class TaggedStories(TaggedItemBase):
     content_object = models.ForeignKey('Stories', on_delete=models.CASCADE)
@@ -50,7 +45,6 @@ class Stories(models.Model):
         (AROUND, _("around")),
         (CONNECTS, _("Connects")),
     )
-
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="publisher",
         on_delete=models.CASCADE)
