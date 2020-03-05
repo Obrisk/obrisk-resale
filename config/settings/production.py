@@ -1,10 +1,9 @@
 import logging,os
-
-from .base import *  # noqa
-from .base import env
-
 import sentry_sdk
 from sentry_sdk.integrations.django import DjangoIntegration
+from django.utils import timezone
+from .base import *  # noqa
+from .base import env
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -93,8 +92,13 @@ if os.getenv('USE_S3_STATICFILES'):
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
     # s3 static settings
-    AWS_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+    if not STATIC_VERSION:
+        STATIC_VERSION=str(timezone.now().date())
+    STATIC_URL = f'https://dist.obrisk.com/static/{STATIC_VERSION}/'
+         
+    if not os.getenv('CLOUDFRONT'):
+        STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/{STATIC_VERSION}/'
+
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     
     # General optimization for faster delivery
