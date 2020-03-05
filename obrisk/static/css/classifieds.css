@@ -131,3 +131,13 @@ body {
 .sp-arrow::after {
   background-color: #0aacec !important;
 }
+/* .card.is-highlighted {
+  height: 100%;
+  position: fixed !important;
+  width: 100%;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  top: 0px;
+  overflow: scroll;
+} */

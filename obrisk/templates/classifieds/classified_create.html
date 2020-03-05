@@ -6,9 +6,6 @@
 <link rel="stylesheet" href="/static/css/uploader.css" />
 <link rel="stylesheet" href="/static/css/classified-create.css" />
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/css/bootstrap4-toggle.min.css"
-  rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.5.0/js/bootstrap4-toggle.min.js"></script>
 {% endblock head %}
 
 {% block content %}
@@ -50,10 +47,10 @@
 
 
         <div class="hidden-fields">
-            <input type="hidden" id="id_images" name="images" maxlength="3000" class="input" required>
-            <input type="hidden" id="id_img_errors" name="img_errors" maxlength="2000" class="input">
-            <input type="hidden" id="id_edited" name="edited" class="input">
-            <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
+          <input type="hidden" id="id_images" name="images" maxlength="3000" class="input" required>
+          <input type="hidden" id="id_img_errors" name="img_errors" maxlength="2000" class="input">
+          <input type="hidden" id="id_edited" name="edited" class="input">
+          <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
         </div>
 
         {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
