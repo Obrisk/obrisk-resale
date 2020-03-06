@@ -1,10 +1,23 @@
-from django_elasticsearch_dsl import Document
+from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 from .models import Classified
+from elasticsearch_dsl import analyzer, tokenizer
+
+html_strip = analyzer(
+    'html_strip',
+    tokenizer="standard",
+    filter=["lowercase", "stop", "snowball"],
+    char_filter=["html_strip"]
+)
 
 
 @registry.register_document
 class ClassifiedDocument(Document):
+    details = fields.TextField(
+                analyzer=html_strip,
+                fields={'raw': fields.KeywordField()}
+            )
+
     class Index:
         # Name of the Elasticsearch index
         name = 'classifieds'
@@ -17,10 +30,7 @@ class ClassifiedDocument(Document):
 
         # The fields of the model you want to be indexed in Elasticsearch
         fields = [
-            'name',
-            'color',
-            'description',
-            'type',
+            'title',
         ]
 
         # Ignore auto updating of Elasticsearch when a model is saved
