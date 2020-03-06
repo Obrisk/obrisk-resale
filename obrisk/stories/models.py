@@ -56,7 +56,7 @@ class Stories(models.Model):
     content = models.TextField(max_length=400, null=True)
     viewers =  models.CharField(max_length=1, choices=VIEWERS, default=PUBLIC)
     priority = models.IntegerField(default=0)
-    new_tags = TaggableManager(through=TaggedStory, blank=True)
+    tags = TaggableManager(through=TaggedStory, blank=True)
     city = models.CharField (max_length=100, null=True)
     video = models.CharField (max_length=300, null=True)
     province_region = models.CharField(max_length= 100, null=True)

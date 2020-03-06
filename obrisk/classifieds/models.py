@@ -83,7 +83,7 @@ class Classified(models.Model):
     total_responses = models.IntegerField(default=0)
     edited = models.BooleanField(default=False)
     show_phone = models.BooleanField(default=True)
-    new_tags = TaggableManager(through=TaggedClassifieds, blank=True)
+    tags = TaggableManager(through=TaggedClassifieds, blank=True)
     priority = models.IntegerField(default=0)
     #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)

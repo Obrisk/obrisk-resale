@@ -97,7 +97,7 @@ class Question(models.Model):
     has_answer = models.BooleanField(default=False)
     total_votes = models.IntegerField(default=0)
     votes = GenericRelation(Vote)
-    new_tags = TaggableManager(through=TaggedQa, blank=True)
+    tags = TaggableManager(through=TaggedQa, blank=True)
     objects = QuestionQuerySet.as_manager()
 
     class Meta:
