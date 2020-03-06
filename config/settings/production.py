@@ -1,10 +1,16 @@
 import logging,os
+import sentry_sdk
 
-from .base import *  # noqa
+from .base import *
 from .base import env
 
-import sentry_sdk
+from django.utils import timezone
+from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
+
+#from obrisk.utils.cloudfront import STATIC_VERSION or None
+#e.g TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
+STATIC_VERSION = None
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -74,6 +80,10 @@ INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
 
 # STATIC
 # ----------------------------------------------------------------------------
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
+#STATIC_ROOT = str(ROOT_DIR('staticfiles'))
+
 if os.getenv('USE_S3_STATICFILES'):
     AWS_ACCESS_KEY_ID = os.getenv('AWS_STATIC_S3_KEY_ID')
 
@@ -87,21 +97,31 @@ if os.getenv('USE_S3_STATICFILES'):
 
     AWS_DEFAULT_ACL = 'public-read'
     
-    #https://obdev-ac-default-s3.s3.cn-northwest-1.amazonaws.com.cn/
-    AWS_S3_CUSTOM_DOMAIN = f'{AWS_STORAGE_BUCKET_NAME}.s3.{AWS_S3_REGION_NAME}.amazonaws.com.cn'
-
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
     # s3 static settings
-    AWS_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
-    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    if STATIC_VERSION is None:
+        STATIC_VERSION=str(timezone.now().date())
     
+    STATIC_URL = f'https://dist.obrisk.com/static/{STATIC_VERSION}/'
+         
+    if not os.getenv('CLOUDFRONT'):
+        STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/{STATIC_VERSION}/'
+
+    AWS_S3_CUSTOM_DOMAIN= 'dist.obrisk.com'
+
     # General optimization for faster delivery
     AWS_IS_GZIPPED = True
     AWS_S3_OBJECT_PARAMETERS = {
         'CacheControl': 'max-age=86400',
     }
+
+    #https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/
+    #If this import goes before secret key, raises errors
+    STATICFILES_LOCATION = f'static/{STATIC_VERSION}'
+    
+    #The value from docs is 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 
 else:
     STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
@@ -132,8 +152,6 @@ else:
 
     STATIC_URL =  '/static/'
 
-# https://docs.djangoproject.com/en/dev/ref/settings/#static-root
-STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
 
 # MEDIA
