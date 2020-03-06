@@ -306,7 +306,7 @@ OssUpload.prototype = {
                   if (/^video/.test(type)) {
                     url = obrisk_oss_url + res.name;
                   } else {
-                    obrisk_oss_url +
+                    url = obrisk_oss_url +
                       res.name +
                       "?x-oss-process=image/average-hue";
                   }
