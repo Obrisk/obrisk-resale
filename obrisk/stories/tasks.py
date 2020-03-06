@@ -10,5 +10,5 @@ def migrate_stories_tags():
     for story in stories:
         tags = story.tags.all()
         for tag in tags:
-            story.new_tags.add(tag)
+            story.new_tags.add(str(tag))
         story.save()

@@ -12,5 +12,5 @@ def migrate_qa_tags():
         tags = question.tags.all()
 
         for tag in tags:
-            question.new_tags.add(tag)
+            question.new_tags.add(str(tag))
         question.save()

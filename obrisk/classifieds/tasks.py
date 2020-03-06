@@ -11,8 +11,7 @@ def migrate_classifieds_tags():
     for classified in classifieds:
         tags = classified.tags.all()
         for tag in tags:
-            classified.new_tags.add(tag)
-
+            classified.new_tags.add(str(tag))
         classified.save()
 
 

@@ -10,7 +10,7 @@ def migrate_posts_tags():
     for post in posts:
         tags = post.tags.all()
         for tag in tags:
-            post.new_tags.add(tag)
+            post.new_tags.add(str(tag))
         post.save()
 
 
