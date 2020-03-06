@@ -11,7 +11,7 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 import json
 
-from obrisk.utils.images_upload import multipleImagesPersist
+from obrisk.utils.images_upload import multipleImagesPersist, videoPersist
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.stories.models import Stories, StoryImages
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
@@ -166,8 +166,8 @@ def post_stories(request):
                     content=_('Sorry, the image(s) were not uploaded successfully!'))
         
         if video:
-            #First clean the user input.
-            story.video = video
+            if videoPersist(request, video, 'stories', story):
+                story.video = video
 
         html = render_to_string(
             'stories/stories_single.html',

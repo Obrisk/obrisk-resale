@@ -201,22 +201,10 @@ def multipleImagesPersist(request, images_list, app, obj):
                                                                 oss2.compat.to_bytes(img_mid_name))),
                                                             oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(str_result, process)
-        except oss2.exceptions.OssError as e:
-            #Most likely this is our problem so save the image without the thumbnail:
-            if index+1 == tot_img_objs:
-                #To-do:
-                #Take this image object to background task (celery) and retry to generate thumbnail
-                #Send alert email to the developers
-                messages.error(request, f"We are having difficulty processing your image(s), \
-                    check your post if everything is fine. \
-                    status= f{e.status}, requestID= f{e.request_id}")
-                
-            img_obj.image_thumb = str_result 
-            if img_mid_name:
-                img_obj.image_mid_size = str_result
-            img_obj.save()
-            saved_objs.append(img_obj)
-            continue   
+        
+        except oss2.exceptions.NoSuchKey as e:
+            obj.delete()
+            return False
 
         except Exception:
             #If there is a problem with the thumbnail generation, most likely our code is wrong... 
@@ -244,6 +232,33 @@ def multipleImagesPersist(request, images_list, app, obj):
 
     return saved_objs 
 
+def videoPersist(request, video, app, obj):
+    ''' Function takes the request, video string, app name (string) and app object
+    and it validates the video string and stores them to the database. 
+    It returns True if the video is authentic
+    False if there is a validation problem '''
+
+    if video.startswith(f'{app}/videos/{request.user.username}') == False or len(video) < 10:
+        obj.delete()
+        return False
+
+    try:
+        simplifiedmeta = bucket.get_object_meta(video)
+        print(simplifiedmeta.headers['Last-Modified'])
+        print(simplifiedmeta.headers['Content-Length'])
+    
+    except oss2.exceptions.NoSuchKey:
+        obj.delete() 
+        return False
+
+    except Exception:
+        obj.video = video
+        obj.save()
+        return True
+
+    obj.video = video
+    obj.save()
+    return True
 
 @login_required
 @require_http_methods(["GET"])
