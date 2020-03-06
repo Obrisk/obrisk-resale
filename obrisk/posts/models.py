@@ -89,7 +89,6 @@ class Post(models.Model):
     content = MarkdownxField()
     category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
-    tags = TaggableManager()
     new_tags = TaggableManager(through=TaggedPost, blank=True)
     date = models.DateField(default=datetime.date.today) #Just for slug.
     objects = PostQuerySet.as_manager()

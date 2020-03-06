@@ -46,7 +46,7 @@ class ClassifiedEditForm(forms.ModelForm):
     #images = forms.CharField(widget=forms.HiddenInput(), max_length=1500) #100 for each image.
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "tags",
+        fields = ["title", "details", "status", "edited", "price", #"tags",
          "address", "wechat_id", "phone_number" ]
 
         widgets = {

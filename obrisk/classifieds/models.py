@@ -12,12 +12,10 @@ from slugify import slugify
 from taggit.managers import TaggableManager
 from taggit.models import TagBase, GenericTaggedItemBase
 
-
 class ClassifiedTags(TagBase):
     class Meta:
         verbose_name = _("Classifieds Tag")
         verbose_name_plural = _("Classifieds Tags")
-
 
 
 class TaggedClassifieds(GenericTaggedItemBase):
@@ -28,7 +26,6 @@ class TaggedClassifieds(GenericTaggedItemBase):
     class Meta:
         verbose_name = _("Classified tag")
         verbose_name_plural = _("Classified Tags")
-
 
 
 class ClassifiedQuerySet(models.query.QuerySet):
@@ -86,7 +83,6 @@ class Classified(models.Model):
     total_responses = models.IntegerField(default=0)
     edited = models.BooleanField(default=False)
     show_phone = models.BooleanField(default=True)
-    tags = TaggableManager()
     new_tags = TaggableManager(through=TaggedClassifieds, blank=True)
     priority = models.IntegerField(default=0)
     #This date is used only for the slug and the timestamp for creation time.
