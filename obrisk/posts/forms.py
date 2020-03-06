@@ -12,7 +12,7 @@ class PostForm(forms.ModelForm):
 
     class Meta:
         model = Post
-        fields = ["title", "content", "image", #"tags"
+        fields = ["title", "content", "image", "tags"
                 "status", "edited", "category"]
         help_texts = {
             "title": "Make it short but descriptive, the maximum is 80 characters.",

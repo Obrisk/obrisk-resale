@@ -11,5 +11,4 @@ class QuestionForm(forms.ModelForm):
 
     class Meta:
         model = Question
-        fields = ["title", "content", #"tags",
-                "status"]
+        fields = ["title", "content", "tags", "status"]
