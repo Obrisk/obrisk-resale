@@ -54,8 +54,8 @@ var uploader = {
 var Buffer = OSS.Buffer;
 var STS = OSS.STS;
 var FileMaxSize = 13000000;
-var TotalFilesMaxSize = 8;
 var images = "";
+var videos = "";
 var img_error; //Records the errors happened during upload.
 var client;
 var imgClient; //If we'll  be checking the file size.
@@ -63,7 +63,8 @@ var ossUpload = "";
 var obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
 var hasErrors = false;
 var retryCount = 0;
-const retryCountMax = 5;
+var retryCountMax = 5;
+var TotalFilesMaxSize = 8;
 
 OssUpload.prototype = {
   constructor: OssUpload,
@@ -74,8 +75,11 @@ OssUpload.prototype = {
     $("#chooseFile, #addBtn").click(function() {
       document.getElementById("image-file").click();
     });
+    $("#addVideo").click(function() {
+      document.getElementById("video-file").click();
+    });
 
-    $('input[type="file"]').change(function(e) {
+    $("#image-file").change(function(e) {
       $("#wrapper .container").css("display", "block");
       $(".submit-button").removeClass("is-disabled");
       //console.log(e)
@@ -109,6 +113,7 @@ OssUpload.prototype = {
                 "image" + (curIndex + i + 1); //Add id to each file
               uploader.fileStats.totalFilesSize += file.size; //Statistical file size
               _this.addFile(file); //Add to control view
+              $("#addVideo").hide();
             } else {
               bootbox.alert(
                 file.name +
@@ -131,6 +136,7 @@ OssUpload.prototype = {
                 "image" + (curIndex + i + 1); //Add id to each file
               uploader.fileStats.totalFilesSize += file.size; //Statistical file size
               _this.addFile(file); //Add to control view
+              $("#addVideo").hide();
             } else {
               bootbox.alert(
                 file.name +
@@ -139,7 +145,76 @@ OssUpload.prototype = {
             }
           }
           bootbox.alert("Only " + TotalFilesMaxSize + " images are allowed");
-          $("#addBtn").hide();
+        }
+      }
+      uploader.fileStats.totalFilesNum = uploader.fileList.length;
+    });
+
+    $("#video-file").change(function(e) {
+      $("#wrapper .container").css("display", "block");
+      $(".submit-button").removeClass("is-disabled");
+      //console.log(e)
+      var files = e.target.files;
+      var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
+      var NumberOfSelectedFiles = files.length;
+      //console.log("total files selected " + NumberOfSelectedFiles);
+      var file = null;
+      $("#uploader .placeholder").hide();
+
+      var AllowUploadQuantity = 1 - curIndex;
+
+      //check if the upload quantity has reach max
+      if (AllowUploadQuantity == 0) {
+        bootbox.alert("Only " + 1 + " video is allowed");
+        $("#addVideo").hide();
+      } else if (files.length == 0) {
+        bootbox.alert("No video selected , Please select one or more videos");
+      } else {
+        //Add only the allow # of files to upload qeue
+        if (
+          NumberOfSelectedFiles <= AllowUploadQuantity &&
+          NumberOfSelectedFiles > 0
+        ) {
+          for (var i = 0; i < NumberOfSelectedFiles; i++) {
+            file = files[i];
+            //don't upload files with size greater than 13MB
+            if (file.size <= FileMaxSize) {
+              uploader.fileList[curIndex + i] = file;
+              file.id = uploader.fileList[curIndex + i].id =
+                "video" + (curIndex + i + 1); //Add id to each file
+              uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+              _this.addFile(file); //Add to control view
+              $("#addBtn").hide();
+            } else {
+              bootbox.alert(
+                file.name +
+                  " is larger than 13MB, please select videos small than 13MB "
+              );
+            }
+          }
+        } else {
+          for (
+            var i = 0;
+            i < NumberOfSelectedFiles && uploader.fileList.length < 1;
+            i++
+          ) {
+            file = files[i];
+            //don't upload files with size greater than 13MB
+            if (file.size <= FileMaxSize) {
+              uploader.fileList[curIndex + i] = file;
+              file.id = uploader.fileList[curIndex + i].id =
+                "video" + (curIndex + i + 1); //Add id to each file
+              uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+              _this.addFile(file); //Add to control view
+              $("#addBtn").hide();
+            } else {
+              bootbox.alert(
+                file.name +
+                  " is larger than 13MB, please select videos small than 13MB "
+              );
+            }
+          }
+          bootbox.alert("Only " + 1 + " video is allowed");
         }
       }
       uploader.fileStats.totalFilesNum = uploader.fileList.length;
@@ -154,9 +229,9 @@ OssUpload.prototype = {
         .css("width", "40%")
         .html("Upload Started please wait...");
       for (var i = 0; i < length; i++) {
-        var filename = genKey();
         file = uploader.fileList[i];
-        _this.uploadFile(file, filename);
+        var filename = genKey(file.type);
+        _this.uploadFile(file, filename, file.type);
       }
     });
 
@@ -167,6 +242,10 @@ OssUpload.prototype = {
       var list = uploader.fileList;
       var len = list.length;
       for (var i = 0; i < len; i++) {
+        if (len <= 0) {
+          $("#addBtn").show();
+          $("#addVideo").hide();
+        }
         if (uploader.fileList[i].id == id) {
           uploader.fileStats.totalFilesSize -= uploader.fileList[i].size; //Statistical file size
           uploader.fileList.splice(i, 1); //Delete a file from the file list
@@ -178,6 +257,8 @@ OssUpload.prototype = {
       $li.remove();
       if (uploader.fileList.length == 0) {
         $("#wrapper .placeholder").css("display", "block");
+        $("#addBtn").show();
+        $("#addVideo").show();
       }
     });
   },
@@ -188,7 +269,7 @@ OssUpload.prototype = {
    * @param filename to which location to upload the file. According to the official statement is the key
    * oss is object storage, there is no path path concept, but personally think this can be better understood as a path
    */
-  uploadFile: function(file, filename) {
+  uploadFile: function(file, filename, type) {
     $totalProgressbar.css("width", "30%").html("Uploading...");
     applyTokenDo()
       .then(result => {
@@ -222,11 +303,15 @@ OssUpload.prototype = {
                 .then(function(res) {
                   //Try to get the dominat color from the uploaded image, if it fails it means the image
                   //was corrupted during upload
-                  $.ajax({
-                    url:
-                      obrisk_oss_url +
+                  if (/^video/.test(type)) {
+                    url = obrisk_oss_url + res.name;
+                  } else {
+                    obrisk_oss_url +
                       res.name +
-                      "?x-oss-process=image/average-hue",
+                      "?x-oss-process=image/average-hue";
+                  }
+                  $.ajax({
+                    url: url,
                     success: function() {
                       $("#" + file.id)
                         .children(".success-span")
@@ -249,11 +334,20 @@ OssUpload.prototype = {
                           100 +
                         "%";
 
-                      if (images == "") {
-                        images += res.name;
+                      if (/^image/.test(type)) {
+                        if (images == "") {
+                          images += res.name;
+                        } else {
+                          images += "," + res.name;
+                        }
                       } else {
-                        images += "," + res.name;
+                        if (videos == "") {
+                          videos += res.name;
+                        } else {
+                          videos += "," + res.name;
+                        }
                       }
+
                       if (progressBarNum == 100) {
                         $totalProgressbar
                           .css("width", progressBar)
@@ -261,9 +355,9 @@ OssUpload.prototype = {
 
                         $("body").trigger("uploadComplete");
                       } else {
-                       progressBar = parseFloat(progressBar);
+                        progressBar = parseFloat(progressBar);
 
-                          $totalProgressbar
+                        $totalProgressbar
                           .css("width", progressBar.toFixed(0))
                           .html(progressBar);
                       }
@@ -473,6 +567,49 @@ OssUpload.prototype = {
         };
       })(img);
       reader.readAsDataURL(file);
+    } else {
+      var fileReader = new FileReader();
+      fileReader.onload = function() {
+        var blob = new Blob([fileReader.result], { type: file.type });
+        var url = URL.createObjectURL(blob);
+        var video = document.createElement("video");
+        var timeupdate = function() {
+          if (snapImage()) {
+            video.removeEventListener("timeupdate", timeupdate);
+            video.pause();
+          }
+        };
+        video.addEventListener("loadeddata", function() {
+          if (snapImage()) {
+            video.removeEventListener("timeupdate", timeupdate);
+          }
+        });
+        var snapImage = function() {
+          var canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          canvas
+            .getContext("2d")
+            .drawImage(video, 0, 0, canvas.width, canvas.height);
+          var image = canvas.toDataURL();
+          var success = image.length > 100000;
+          if (success) {
+            var img = document.createElement("img");
+            img.src = image;
+            $wrap.empty().append($(img));
+            URL.revokeObjectURL(url);
+          }
+          return success;
+        };
+        video.addEventListener("timeupdate", timeupdate);
+        video.preload = "metadata";
+        video.src = url;
+        // Load video in Safari / IE11
+        video.muted = true;
+        video.playsInline = true;
+        video.play();
+      };
+      fileReader.readAsArrayBuffer(file);
     }
     $li.appendTo($queue);
   }
@@ -532,23 +669,60 @@ function OssUpload() {
  * @return  {string}
  */
 
-function genKey() {
+function genKey(type) {
   if (app == "stories") {
     if (
       $("#publish")
         .val()
         .substring(0, 20).length != 0
     ) {
+      if (/^video/.test(type)) {
+        return (
+          app +
+          "/videos/" +
+          user +
+          "/" +
+          slugify(
+            $("#publish")
+              .val()
+              .substring(0, 20)
+          ) +
+          "/" +
+          "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+            var r = (Math.random() * 16) | 0,
+              v = c == "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          })
+        );
+      } else {
+        return (
+          app +
+          "/" +
+          user +
+          "/" +
+          slugify(
+            $("#publish")
+              .val()
+              .substring(0, 20)
+          ) +
+          "/" +
+          "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+            var r = (Math.random() * 16) | 0,
+              v = c == "x" ? r : (r & 0x3) | 0x8;
+            return v.toString(16);
+          })
+        );
+      }
+    } else if (/^video/.test(type)) {
       return (
-        app +
-        "/" +
+        "stories/videos/" +
         user +
         "/" +
-        slugify(
-          $("#publish")
-            .val()
-            .substring(0, 20)
-        ) +
+        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+          var r = (Math.random() * 16) | 0,
+            v = c == "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        }) +
         "/" +
         "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
           var r = (Math.random() * 16) | 0,
