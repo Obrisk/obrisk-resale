@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView
+from django.views.decorators.http import require_http_methods
 
 from taggit.models import Tag
 
@@ -90,3 +91,61 @@ def get_suggestions(request):
         results.append(data_json)
 
     return JsonResponse(results, safe=False)
+
+
+
+@require_http_methods(["GET"])
+def all_search(request, **kwargs):
+    ''' 
+    s means (search in) stories
+    p means (search in) posts
+    q means (search in) qa
+    u means (search in) users
+    c means (search in) classifieds
+    '''
+    
+    connections.create_connection()
+    query = request.GET.get('query')
+    stories_results = StoriesDocument.search().filter("term", content=query)
+
+    if request.GET.get('c') is 1:
+        classifieds_results = ClassifiedDocument.search().filter("term",
+                                                                title=query,
+                                                                details=query)
+                                                               
+        return render(request, 'classifieds/search_results.html', 
+                {'classifieds_results': classifieds_results,
+                 'stories_results': stories_results})
+
+    elif request.GET.get('u') is 1:
+        users_results = UsersDocument.search().filter("term", username = query)
+        return render(request, 'connections/search_results.html', 
+                {'users_results': users_results,
+                 'stories_results': stories_results})
+
+    elif request.GET.get('q') is 1:
+        qa_results = QaDocument.search().filter("term",
+                                                title=query,
+                                                details=query)
+
+        return render(request, 'qa/search_results.html', 
+                {'qa_results': qa_results,
+                 'stories_results': stories_results})
+                
+    elif request.GET.get('p') is 1:
+        posts_results = PostDocument.search().filter("term",
+                                                     title=query,
+                                                     content=query
+                                                    )
+        return render(request, 'posts/search_results.html', 
+                {'posts_results': posts_results,
+                 'stories_results': stories_results})
+
+    else:
+        return render(request, 'search/search_results.html', 
+                {'stories_results': stories_results })
+
+    return render(request, 'search/search_results.html', 
+                {'stories_results': stories_results })
+
+
