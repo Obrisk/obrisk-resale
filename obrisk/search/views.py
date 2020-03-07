@@ -13,6 +13,14 @@ from obrisk.stories.models import Stories
 from obrisk.utils.helpers import ajax_required
 from obrisk.qa.models import Question
 
+#documents
+from obrisk.users.documents import UsersDocument
+from obrisk.stories.documents import StoriesDocument
+from obrisk.classifieds.document import ClassifiedDocument
+from obrisk.posts.documents import PostDocument
+from obrisk.qa.documents import QaDocument
+
+from elasticsearch_dsl.connections import connections
 
 class SearchListView(LoginRequiredMixin, ListView):
     """CBV to contain all the search results"""
@@ -93,9 +101,15 @@ def get_suggestions(request):
     return JsonResponse(results, safe=False)
 
 
+#creating a connection to Elastic search
+connections.create_connection()
 
+
+@login_required
 @require_http_methods(["GET"])
 def all_search(request, **kwargs):
+    #to avoid name collision,Q is imported here
+    from elasticsearch_dsl import Q
     ''' 
     s means (search in) stories
     p means (search in) posts
@@ -104,39 +118,50 @@ def all_search(request, **kwargs):
     c means (search in) classifieds
     '''
     
-    connections.create_connection()
     query = request.GET.get('query')
-    stories_results = StoriesDocument.search().filter("term", content=query)
+    # The commented part will be used if search on will involve more than one field
+    # stories_results = [{'content':t.content,
+    #                     'tags':t.tags} for t in StoriesDocument.search().filter(
+    #                             Q("match", title='query') |
+    #                             Q("match", details='ahaain'))]
+
+
+    stories_results = [{'content': t.content, 'tags':t.tags} for t in StoriesDocument.search().filter("term",
+                                                                username = query)]
 
     if request.GET.get('c') is 1:
-        classifieds_results = ClassifiedDocument.search().filter("term",
-                                                                title=query,
-                                                                details=query)
-                                                               
+        classifieds_results = [{'title':t.title, 'details':t.details, 'price':t.price, 'tags':t.tags} for t in ClassifiedDocument.search().filter(
+                                                                                                                                    Q("match", title=query) |
+                                                                                                                                    Q("match", price=query) |
+                                                                                                                                    Q("match", details=query))]
+
         return render(request, 'classifieds/search_results.html', 
                 {'classifieds_results': classifieds_results,
                  'stories_results': stories_results})
 
     elif request.GET.get('u') is 1:
-        users_results = UsersDocument.search().filter("term", username = query)
+        users_results = [{'username': t.username} for t in UsersDocument.search().filter("term", username = query)]
+       
         return render(request, 'connections/search_results.html', 
                 {'users_results': users_results,
                  'stories_results': stories_results})
 
     elif request.GET.get('q') is 1:
-        qa_results = QaDocument.search().filter("term",
-                                                title=query,
-                                                details=query)
+       
+        qa_results = [{'title':t.title, 'content':t.content, 'tags':t.tags} for t in QaDocument.search().filter(
+                                                                                                        Q("match", title=query) |
+                                                                                                        Q("match", content=query))]
 
         return render(request, 'qa/search_results.html', 
                 {'qa_results': qa_results,
                  'stories_results': stories_results})
                 
     elif request.GET.get('p') is 1:
-        posts_results = PostDocument.search().filter("term",
-                                                     title=query,
-                                                     content=query
-                                                    )
+
+        posts_results = [{'title':t.content, 'content':t.content, 'tags':t.tags} for t in PostDocument.search().filter(
+                                                                                                        Q("match", title=query) |
+                                                                                                        Q("match", content=query))]
+
         return render(request, 'posts/search_results.html', 
                 {'posts_results': posts_results,
                  'stories_results': stories_results})
@@ -145,7 +170,6 @@ def all_search(request, **kwargs):
         return render(request, 'search/search_results.html', 
                 {'stories_results': stories_results })
 
-    return render(request, 'search/search_results.html', 
-                {'stories_results': stories_results })
-
+#    return render(request, 'search/search_results.html', 
+#                {'stories_results': stories_results })
 

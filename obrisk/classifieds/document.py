@@ -51,8 +51,9 @@ class ClassifiedDocument(Document):
 @registry.register_document
 class ClassifiedTagsDocument(Document):
 
-    name = fields.TextField(analyzer=html_strip)
-            
+    name = fields.NestedField(properties={
+        'name': fields.TextField(analyzer=html_strip),
+        })        
     class Index:
        
         name = 'classified_tags'
