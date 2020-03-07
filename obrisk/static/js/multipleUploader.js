@@ -53,7 +53,9 @@ var uploader = {
 //Upload instance object
 var Buffer = OSS.Buffer;
 var STS = OSS.STS;
-var FileMaxSize = 13000000;
+var MaxImageSize = 13000000;
+var MaxVideoSize = 200000000;
+
 var images = "";
 var videos = "";
 var img_error; //Records the errors happened during upload.
@@ -107,7 +109,7 @@ OssUpload.prototype = {
           for (var i = 0; i < NumberOfSelectedFiles; i++) {
             file = files[i];
             //don't upload files with size greater than 13MB
-            if (file.size <= FileMaxSize) {
+            if (file.size <= MaxImageSize) {
               uploader.fileList[curIndex + i] = file;
               file.id = uploader.fileList[curIndex + i].id =
                 "image" + (curIndex + i + 1); //Add id to each file
@@ -130,7 +132,7 @@ OssUpload.prototype = {
           ) {
             file = files[i];
             //don't upload files with size greater than 13MB
-            if (file.size <= FileMaxSize) {
+            if (file.size <= MaxImageSize) {
               uploader.fileList[curIndex + i] = file;
               file.id = uploader.fileList[curIndex + i].id =
                 "image" + (curIndex + i + 1); //Add id to each file
@@ -178,7 +180,7 @@ OssUpload.prototype = {
           for (var i = 0; i < NumberOfSelectedFiles; i++) {
             file = files[i];
             //don't upload files with size greater than 13MB
-            if (file.size <= FileMaxSize) {
+            if (file.size <= MaxVideoSize) {
               uploader.fileList[curIndex + i] = file;
               file.id = uploader.fileList[curIndex + i].id =
                 "video" + (curIndex + i + 1); //Add id to each file
@@ -200,7 +202,7 @@ OssUpload.prototype = {
           ) {
             file = files[i];
             //don't upload files with size greater than 13MB
-            if (file.size <= FileMaxSize) {
+            if (file.size <= MaxVideoSize) {
               uploader.fileList[curIndex + i] = file;
               file.id = uploader.fileList[curIndex + i].id =
                 "video" + (curIndex + i + 1); //Add id to each file
@@ -306,7 +308,8 @@ OssUpload.prototype = {
                   if (/^video/.test(type)) {
                     url = obrisk_oss_url + res.name;
                   } else {
-                    url = obrisk_oss_url +
+                    url =
+                      obrisk_oss_url +
                       res.name +
                       "?x-oss-process=image/average-hue";
                   }
@@ -832,6 +835,8 @@ $(function() {
     images = "";
     $totalProgressbar.css("width", "0%").html("");
     hasErrors = false;
+    $("#addVideo").show();
+    $("#addBtn").show();
   });
   //Reset Button
   $("#retry-button").click(function(e) {

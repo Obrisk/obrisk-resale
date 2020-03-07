@@ -60,7 +60,15 @@ $(function() {
     ) {
       $("body").trigger("uploadComplete");
     } else {
-      bootbox.alert("Please, Upload an image or write something!");
+      error = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error!</strong>Please, Upload an image or write something!
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+      $(".compose").prepend(error);
     }
   });
 
@@ -176,7 +184,15 @@ $(function() {
           }, 200);
         },
         error: function(data) {
-          bootbox.alert(data.responseText);
+          error = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error!</strong>Sorry we can't handle new comments, please try again later.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+          post.find(".card-footer .media-content").append(error);
         }
       });
     } else {
@@ -220,6 +236,8 @@ $(function() {
     $(".is-new-content").removeClass("is-highlighted");
     $(".close-wrap").addClass("d-none");
     $(".all-stories ").removeClass("block-scroll");
+    $("#addVideo").show();
+    $("#addBtn").show();
   });
 
   //Show comments
@@ -258,7 +276,6 @@ $(function() {
       type: "POST",
       cache: false,
       success: function(data) {
-        //window.location.reload();
         $('[name="post"]').val("");
         $(".app-overlay").removeClass("is-active");
         $(".is-new-content").removeClass("is-highlighted");
@@ -266,13 +283,20 @@ $(function() {
         feather.replace();
         $("#postStoriesForm")[0].reset();
         $("input, textarea").val("");
-        $(".stream");
         $(".stream").prepend(data);
         lazyload();
         $("body").trigger("resetUpload");
       },
       error: function(data) {
-        bootbox.alert(data.responseText);
+        error = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error!</strong>Sorry we can't handle new posts, please try again later.
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+        $(".compose").prepend(error);
       }
     });
   });
