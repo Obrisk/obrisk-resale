@@ -89,9 +89,9 @@ def send_code(full_number, theme, user=None):
         try: 
             client = boto3.client(
                 "sns",
-                aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-                aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
-                region_name=os.getenv('AWS_REGION')
+                aws_access_key_id=os.getenv('AWS_SMS_ACCESS_KY'),
+                aws_secret_access_key=os.getenv('AWS_SMS_S3KT_KY'),
+                region_name=os.getenv('AWS_SMS_REGION')
             )
 
             if theme == "signup":
@@ -113,7 +113,7 @@ def send_code(full_number, theme, user=None):
                     },
                     'AWS.SNS.SMS.SenderID': {
                             'DataType': 'String',
-                            'StringValue': os.getenv('AWS_SENDER_ID')
+                            'StringValue': os.getenv('AWS_SMS_SENDER_ID')
                         }
                     }
                 )
@@ -121,7 +121,7 @@ def send_code(full_number, theme, user=None):
         except Exception:
             #AWS has failed, retry with Aliyun 
             ret = aliyun_send_code(random, full_number)
-            print(ret)
+            
             if ret['Code'] == 'OK':
                 cache.set(str(full_number), random , 600)
 
@@ -508,7 +508,7 @@ def complete_authentication(request):
             return redirect("stories:list")
 
         else:
-            return JsonResponse({"status": "404", "message": "Please enter valid inputs"})
+            return JsonResponse({"status": "403", "message": "Please enter valid inputs"})
    
     else:
 

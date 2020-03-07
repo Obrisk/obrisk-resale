@@ -67,16 +67,15 @@ urlpatterns = [
     url(settings.ADMIN_URL, admin.site.urls),
 
     url(
-        r'^accounts-authorization/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$',
+        r'^auth/password/reset/key/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$',
         PasswordResetFromKeyView.as_view(),
         name="account_reset_password_from_key"),
 
     # User management
     url(r'^users/',
         include('obrisk.users.urls', namespace='users')),
-    url(r'^accounts-authorization/', include('allauth.urls')),
+    url(r'^auth/', include('allauth.urls')),
     url(r'^auto-login-obdev2018-wsguatpotlfwccdi/', AutoLoginView.as_view(), name="auto_login"),
-    url(r'^migrate-tags/', migrate_all_tags),
 
     # Third party apps here
     url(r'^graphql', GraphQLView.as_view(graphiql=True)),

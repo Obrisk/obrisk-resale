@@ -29,32 +29,30 @@ $(function() {
   $("#send-code").click(function(event) {
     if (!$("#id_phone_number").val()) {
       event.preventDefault();
-      bootbox.alert(
-        "It looks like you didn't enter your phone number. Please enter a valid phone number!"
-      );
+            $("#code-notice").empty()
+                .append("<p class='blue-link'>Empty input. Please enter a valid phone number!<p>");
     } else {
       var num = parseInt($("#id_phone_number").val());
       var str = num.toString();
 
       if (isNaN(num) || str.length != 11 || str.charAt(0) != 1) {
         event.preventDefault();
-        bootbox.alert(
-          "The phone number you entered is not correct. Please don't include the country code or spaces or any character!"
-        );
+            $("#code-notice").empty()
+                .append("<p class='blue-link'> Incorrect number. Don't include country code, spaces or any character!<p>");
       } else {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
 
-        if (current_url == "/accounts-authorization/signup/") {
+        if (current_url == "/auth/signup/") {
           url = "/users/verification-code/";
           req = "GET";
         } else if (current_url == "/users/phone-password-reset/") {
           url = "/users/phone-password-reset/";
           req = "POST";
         } else {
-          bootbox.alert(
-            "We are sorry, we can't handle users registration at the moment. Please try again later"
-          );
+            event.preventDefault();
+            $("#code-notice").empty()
+                .append("<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>");
         }
 
         $.ajax({
@@ -71,9 +69,12 @@ $(function() {
               $("#phone_label").hide();
               $("#code").toggleClass("d-none");
               $("#email-request").toggleClass("d-none");
-              $("#code-notice")
-                .empty()
-                .append("<p class='blue-link'>" + data.message + "<p>");
+
+              if (data.message != undefined) {
+                  $("#code-notice")
+                    .empty()
+                    .append("<p class='blue-link'>" + data.message + "<p>");
+              }
 
               function updateSec() {
                 timeout--;
@@ -103,9 +104,11 @@ $(function() {
 
               //$("#send-code").attr("disabled", false);
             } else {
-              $("#code-notice")
-                .empty()
-                .append("<p class='blue-link'>" + data.error_message + "</p>");
+              if (data.error_message != undefined) {
+                  $("#code-notice")
+                    .empty()
+                    .append("<p class='blue-link'>" + data.error_message + "<p>");
+              }
               if (data.messageId != undefined) {
                 console.log(data.messageId);
               }

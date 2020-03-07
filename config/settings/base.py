@@ -266,7 +266,7 @@ ADMIN_URL = env('ADMIN_URL', default='admin/')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = [
-     ('Elisha Kingdom', 'el@obrisk.com'),
+     ('Elisha Kingdom', 'monitor@obrisk.com'),
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#managers
 MANAGERS = ADMINS
@@ -300,14 +300,15 @@ SOCIALACCOUNT_FORMS = {
     'signup': 'allauth.socialaccount.forms.SignupForm',
 }
 
-ACCOUNT_USERNAME_BLACKLIST = ['AnonymousUser', 'admin', 'obrisk']
+ACCOUNT_USERNAME_BLACKLIST = ['AnonymousUser', 'admin', 'obrisk',
+                        'password', '13300000000', '+8613291863081',
+                        'username', 'user', 'god', 'policeman']
 
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 ACCOUNT_ADAPTER = 'obrisk.users.adapters.AccountAdapter'
 
 SOCIALACCOUNT_ADAPTER = 'obrisk.users.adapters.SocialAccountAdapter'
-
 
 # Other stuff...
 # ------------------------------------------------------------------------------
