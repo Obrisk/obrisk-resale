@@ -6,7 +6,6 @@ from aliyunsdkcore.request import RpcRequest
 from aliyunsdkcore.http import method_type as MT
 from aliyunsdkcore.http import format_type as FT
 
-
 REGION = os.getenv('SMS_REGION') 
 PRODUCT_NAME = "SMSapi"
 SMS_DOMAIN = os.getenv('SMS_DOMAIN') 
@@ -117,8 +116,4 @@ def send_sms(business_id, phone_numbers, sign_name, template_code,template_param
 
     sms_response = acs_client.do_action_with_exception(sms_request)  # Call the SMS send interface and return json
     return sms_response
-
-
-
-    
 

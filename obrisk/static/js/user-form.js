@@ -121,6 +121,8 @@ $(function() {
             }
           },
           error: function(err) {
+            $("#code-notice").empty()
+                .append("<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>");
             console.log(err);
           }
         });

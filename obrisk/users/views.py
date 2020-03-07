@@ -1,5 +1,5 @@
 # import uuid
-import  os
+import  os, uuid, ast
 import base64
 import datetime
 import oss2
@@ -60,6 +60,17 @@ class EmailSignUp(SignupView):
     template_name = 'account/email_signup.html'
 
 
+def aliyun_send_code(random, full_number):
+    phone_no = str(full_number).strip('+86')
+    params = " {\"code\":\""+ random + "\"} " 
+    __business_id = uuid.uuid1()
+    ret = send_sms( __business_id, phone_no, os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
+    ret = ret.decode("utf-8")
+
+    #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"] 
+    return ast.literal_eval(ret)
+
+
 def send_code(full_number, theme, user=None):
     random = get_random_string(length=6, allowed_chars='0123456789')
 
@@ -74,69 +85,85 @@ def send_code(full_number, theme, user=None):
         })
 
     else:
-            # Create an SNS client
-        client = boto3.client(
-            "sns",
-            aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-            aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
-            region_name=os.getenv('AWS_REGION')
-        )
-
-        if theme == "signup":
-            msg = f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!"
-
-        elif theme == "password-reset" and user:
-            msg = f"[Obrisk] Verification code:{random} and Username:{user}"
-        else:
-            msg = f"[Obrisk] Your verification code is {random}, valid for 10 minutes!"
-
-        # Send your sms message.
-        ret = client.publish(
-            PhoneNumber=str(full_number),
-            Message=msg,
-            MessageAttributes={
-                'string': {
-                    'DataType': 'String',
-                    'StringValue': 'String',
-                },
-                'AWS.SNS.SMS.SenderID': {
-                        'DataType': 'String',
-                        'StringValue': os.getenv('AWS_SENDER_ID')
-                    }
-                }
+        # Create an SNS client
+        try: 
+            client = boto3.client(
+                "sns",
+                aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
+                aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY'),
+                region_name=os.getenv('AWS_REGION')
             )
 
-        #For alibaba.
-        #params = " {\"code\":\""+ random + "\"} " 
-        # __business_id = uuid.uuid1()                                        
-        # ret = send_sms( __business_id , str(phone_no), os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
-        #ret = ret.decode("utf-8")
-        #ret = ast.literal_eval(ret)
-        #if ret['Code'] == 'OK'
-        
-        response = ret['ResponseMetadata'] 
+            if theme == "signup":
+                msg = f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!"
 
+            elif theme == "password-reset" and user:
+                msg = f"[Obrisk] Verification code:{random} and Username:{user}"
+            else:
+                msg = f"[Obrisk] Your verification code is {random}, valid for 10 minutes!"
+
+            # Send your sms message.
+            ret = client.publish(
+                PhoneNumber=str(full_number),
+                Message=msg,
+                MessageAttributes={
+                    'string': {
+                        'DataType': 'String',
+                        'StringValue': 'String',
+                    },
+                    'AWS.SNS.SMS.SenderID': {
+                            'DataType': 'String',
+                            'StringValue': os.getenv('AWS_SENDER_ID')
+                        }
+                    }
+                )
+
+        except Exception:
+            #AWS has failed, retry with Aliyun 
+            ret = aliyun_send_code(random, full_number)
+            print(ret)
+            if ret['Code'] == 'OK':
+                cache.set(str(full_number), random , 600)
+
+                return JsonResponse({
+                    'success': True,
+                    'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
+                })
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error_message': "Sorry we couldn't send the verification code please try again later!", 
+                    'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"],
+                    'requestId':response["RequestId"], 'retries': response["RetryAttempts"]
+                })  
+
+        response = ret['ResponseMetadata'] 
         if response['HTTPStatusCode'] == 200:
             cache.set(str(full_number), random , 600)
 
-            if user:
-                return JsonResponse({
-                    'success': True,
-                    'message': "The SMS is sent. Enter the code only if you want to reset your password, it is valid for 10 minutes"
-                })
             return JsonResponse({
                 'success': True,
                 'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
             })
             
         else:
-            return JsonResponse({
-                'success': False,
-                'error_message': "Sorry we couldn't send the verification code please try again later!", 
-                'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"], 'requestId':response["RequestId"], 
-                'retries': response["RetryAttempts"]
-            })  
-            #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"] 
+            #AWS has failed without exception, retry with Aliyun 
+            ret = aliyun_send_code(random, full_number)
+            if ret['Code'] == 'OK':
+                cache.set(str(full_number), random , 600)
+
+                return JsonResponse({
+                    'success': True,
+                    'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
+                })
+            
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error_message': "Sorry we couldn't send the verification code please try again later!", 
+                    'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"], 'requestId':response["RequestId"], 
+                    'retries': response["RetryAttempts"]
+                })  
 
 
 def get_users(full_number):
@@ -149,7 +176,6 @@ def get_users(full_number):
         return get_user_model().objects.get(phone_number=full_number,is_active=True)
     except get_user_model().DoesNotExist:
         return None
-
 
 
 @require_http_methods(["GET", "POST"])
