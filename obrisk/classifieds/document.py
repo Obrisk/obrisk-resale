@@ -1,12 +1,23 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
-from .models import Classified
-from elasticsearch_dsl import analyzer, tokenizer
+from elasticsearch_dsl import analyzer
+from obrisk.classifieds.models import Classified, ClassifiedTags
+# from elasticsearch_dsl import analysis
+
 
 html_strip = analyzer(
     'html_strip',
     tokenizer="standard",
-    filter=["lowercase", "stop", "snowball"],
+    filter=[
+        "lowercase",
+        "stop",
+        "snowball"
+        #analysis.token_filter("custom_nGram",
+        #                      "nGram",
+        #                      min_gram=3,
+        #                      max_gram=3)
+    ],
+
     char_filter=["html_strip"]
 )
 
@@ -17,29 +28,38 @@ class ClassifiedDocument(Document):
                 analyzer=html_strip,
                 fields={'raw': fields.KeywordField()}
             )
-
+    
+    tags = fields.NestedField(properties={
+                'name': fields.TextField(analyzer=html_strip),
+            })
     class Index:
-        # Name of the Elasticsearch index
+        
         name = 'classifieds'
-        # See Elasticsearch Indices API reference for available settings
+       
         settings = {'number_of_shards': 1,
                     'number_of_replicas': 0}
 
     class Django:
-        model = Classified # The model associated with this Document
+        model = Classified
 
-        # The fields of the model you want to be indexed in Elasticsearch
+       
         fields = [
             'title',
+            'price',
         ]
 
-        # Ignore auto updating of Elasticsearch when a model is saved
-        # or deleted:
-        # ignore_signals = True
+@registry.register_document
+class ClassifiedTagsDocument(Document):
 
-        # Don't perform an index refresh after every update (overrides global setting):
-        # auto_refresh = False
+    name = fields.TextField(analyzer=html_strip)
+            
+    class Index:
+       
+        name = 'classified_tags'
+        
+        settings = {'number_of_shards': 1,
+                    'number_of_replicas': 0}
 
-        # Paginate the django queryset used to populate the index with the specified size
-        # (by default it uses the database driver's default setting)
-        # queryset_pagination = 5000
+    class Django:
+        model = ClassifiedTags
+
