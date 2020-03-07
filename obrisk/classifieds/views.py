@@ -21,7 +21,7 @@ from slugify import slugify
 
 from taggit.models import Tag, TaggedItemBase
 from obrisk.utils.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages
+from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages, ClassifiedTags
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
 from obrisk.utils.images_upload import multipleImagesPersist
 # For images
@@ -108,7 +108,7 @@ def classified_list(request, tag_slug=None):
     tag = None
     if tag_slug:
 
-        tag = get_object_or_404(Tag, slug=tag_slug)
+        tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
         classifieds = Classified.objects.get_active().filter(tags__in=[tag]).annotate (
             image_thumb = Subquery (
                 ClassifiedImages.objects.filter(
