@@ -26,6 +26,7 @@ gulp.task("reset", function() {
   rimraf("scss/*");
   rimraf("../obrisk/static/frontend/assets/css/*");
   rimraf("../obrisk/static/frontend/assets/fonts/*");
+  rimraf("images/*");
 });
 
 // Erases the dist folder
@@ -228,10 +229,11 @@ gulp.task("copy-js", function() {
 });
 
 //Copy images to production site
-// gulp.task('copy-images', function () {
-//     gulp.src('images/**/*')
-//         .pipe(gulp.dest('../obrisk/static/frontend/assets/images/'));
-// });
+gulp.task("copy-images", function() {
+  gulp
+    .src("images/**/*")
+    .pipe(gulp.dest("../obrisk/static/frontend/assets/images/"));
+});
 gulp.task("update-sw", function(cb) {
   exec("workbox injectManifest config.js", function(err, stdout, stderr) {
     console.log(stdout);
@@ -248,6 +250,7 @@ gulp.task("build", [
   "copy-js",
   "compile-sass",
   "compile-scss",
+  "copy-images",
   "update-sw"
 ]);
 gulp.task("default", ["watch", "update-sw"]);

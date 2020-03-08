@@ -29,7 +29,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classified-create.css",
-    "revision": "36ff5e54c3dbe754c7cad54a70e7a95d"
+    "revision": "a06cbd408b88eb787c36513382e8f32e"
   },
   {
     "url": "/static/css/classified-details.css",
@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "82bef65d2772dff792bd77781d75b7d4"
+    "revision": "2e8cf3ed2c0064953906d30556233e41"
   },
   {
     "url": "/static/css/colors.css",
@@ -73,7 +73,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/login.css",
-    "revision": "e8d7f8ce72703b8d49fd74aad7cb0cac"
+    "revision": "3e3667a300731d4cf842594a0166bb29"
   },
   {
     "url": "/static/css/messages.css",
@@ -81,7 +81,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/nav.css",
-    "revision": "8348ee23460aa81ecfb494b2b64cc5af"
+    "revision": "f6015156064b3bbd74b03319f24dcaca"
   },
   {
     "url": "/static/css/notifications.css",
@@ -129,7 +129,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/stories.css",
-    "revision": "c2cac86e85b3a8aafb3d394c93859b5b"
+    "revision": "73815943d67f7293811400801316c8d8"
   },
   {
     "url": "/static/css/swiper.min.css",
@@ -154,6 +154,10 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/css/util.css",
     "revision": "9cabf2d2ce5a30ae04a9a78140e4b73e"
+  },
+  {
+    "url": "/static/css/video.min.css",
+    "revision": "1aaef5b226942a76c6b00ab041b56674"
   },
   {
     "url": "/static/fonts/font-awesome-4.7.0/css/font-awesome.css",
@@ -412,6 +416,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "fd1ee0bd91da9f0aa6a423f957e63565"
   },
   {
+    "url": "/static/img/passwordstrength.jpg",
+    "revision": "442e476bf50e3da0cdae8c7bc1fa069d"
+  },
+  {
     "url": "/static/img/posts.png",
     "revision": "02e998427ad52fe984c93562ba91bc54"
   },
@@ -493,7 +501,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/classifieds.js",
-    "revision": "bfcb79f117d2e1b09980120762bb61c1"
+    "revision": "3827c5cf64ba650e28268f6108263268"
   },
   {
     "url": "/static/js/fancybox.min.js",
@@ -529,7 +537,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/listing.js",
-    "revision": "548da0625fb5256127b9a7ffab8aed3e"
+    "revision": "bba1e2a1087b07fcc489ad71ca09a40e"
   },
   {
     "url": "/static/js/location.js",
@@ -545,7 +553,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "836733f7d133cf24a12f38cab06fa5dd"
+    "revision": "f62bfc91f970c17b77df9abcf3468223"
   },
   {
     "url": "/static/js/nav.js",
@@ -557,7 +565,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/obrisk.js",
-    "revision": "74ea2840b2d6944215e8bdf22bf2e7ca"
+    "revision": "8e255c8099d593209814c9d631c9f222"
   },
   {
     "url": "/static/js/photoswipe-ui-default.min.js",
@@ -593,7 +601,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "1c7166c4411e5bea74876bc9b36c3315"
+    "revision": "52eaf8cf8eaaa1e46603e16e25151afd"
   },
   {
     "url": "/static/js/swiper.min.js",
@@ -609,11 +617,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/user-form.js",
-    "revision": "c2326ba12422ce75194316fa2fa3db18"
+    "revision": "e80ca47d09ccfcfc1c5a977412ad482b"
   },
   {
-    "url": "/static/js/videoUploader.js",
-    "revision": "b9739fb017a6fc9ced896d674ebc470d"
+    "url": "/static/js/video.min.js",
+    "revision": "5f2947734492b5181b34b86f106c0d35"
   },
   {
     "url": "/static/js/websocketbridge.js",
