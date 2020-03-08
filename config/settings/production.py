@@ -9,8 +9,7 @@ from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
 #from obrisk.utils.cloudfront import STATIC_VERSION or None
-#e.g TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
-STATIC_VERSION = None
+STATIC_VERSION = 'ver08032001' 
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -99,10 +98,6 @@ if os.getenv('USE_S3_STATICFILES'):
     
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-    # s3 static settings
-    if STATIC_VERSION is None:
-        STATIC_VERSION=str(timezone.now().date())
-    
     STATIC_URL = f'https://dist.obrisk.com/static/{STATIC_VERSION}/'
          
     if not os.getenv('CLOUDFRONT'):
