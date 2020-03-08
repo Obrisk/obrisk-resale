@@ -104,7 +104,7 @@
                           <small class="form-text text-muted" id="hint_id_price">Numbers only. 0 means FREE</small>
                         </div>
                         <div class="control">
-                          <input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
+                          CNY<input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
                             required step="1.00" value="0" placeholder="Enter your item price">
                         </div>
                       </div>
@@ -186,13 +186,26 @@
                     </div>
                   </div>
 
-                  <div class="buttons">
-                    <button id="create-btn" type="button"
-                      class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
-                    <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
-                    <a href="{% url 'classifieds:list' %}"
-                      class="ml-4 button is-solid dark-grey-button raised">{% trans 'Cancel' %}</a>
-                  </div>
+
+                <div class="buttons">
+                  {% if request.user.is_authenticated %}
+                      <button id="create-btn" type="button"
+                        class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
+                  {% else %}
+                      <button id="create-btn" type="button" onclick="window.location.href='/auth/login/'"
+                        class="button is-solid accent-button raised"> 
+                        Login & Post 
+                     </button>
+                  {% endif %}
+
+                  <span type="button"
+                    class="ml-4 button is-solid dark-grey-button raised">     
+                        <li class="close-wrap d-none"> 
+                            <span class="close-publish"> {% trans 'Cancel' %} </span> </li>
+                  </span>
+
+                </div>
+
                 </form>
 
                 {{ form.media }}
