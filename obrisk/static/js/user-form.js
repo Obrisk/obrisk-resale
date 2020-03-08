@@ -1,3 +1,20 @@
+/* -------------------------------------------------------------------------- */
+/*                               utils and libs                               */
+/* -------------------------------------------------------------------------- */
+
+//Print error message
+function printError(msg) {
+  template = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error! </strong>${msg}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+  $(".form-panel").prepend(template);
+}
+
 $(document).ready(function() {
   // adding a crsf token
   function csrfSafeMethod(method) {
@@ -29,16 +46,22 @@ $(function() {
   $("#send-code").click(function(event) {
     if (!$("#id_phone_number").val()) {
       event.preventDefault();
-            $("#code-notice").empty()
-                .append("<p class='blue-link'>Empty input. Please enter a valid phone number!<p>");
+      $("#code-notice")
+        .empty()
+        .append(
+          "<p class='blue-link'>Empty input. Please enter a valid phone number!<p>"
+        );
     } else {
       var num = parseInt($("#id_phone_number").val());
       var str = num.toString();
 
       if (isNaN(num) || str.length != 11 || str.charAt(0) != 1) {
         event.preventDefault();
-            $("#code-notice").empty()
-                .append("<p class='blue-link'> Incorrect number. Don't include country code, spaces or any character!<p>");
+        $("#code-notice")
+          .empty()
+          .append(
+            "<p class='blue-link'> Incorrect number. Don't include country code, spaces or any character!<p>"
+          );
       } else {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
@@ -50,9 +73,12 @@ $(function() {
           url = "/users/phone-password-reset/";
           req = "POST";
         } else {
-            event.preventDefault();
-            $("#code-notice").empty()
-                .append("<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>");
+          event.preventDefault();
+          $("#code-notice")
+            .empty()
+            .append(
+              "<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>"
+            );
         }
 
         $.ajax({
@@ -71,9 +97,9 @@ $(function() {
               $("#email-request").toggleClass("d-none");
 
               if (data.message != undefined) {
-                  $("#code-notice")
-                    .empty()
-                    .append("<p class='blue-link'>" + data.message + "<p>");
+                $("#code-notice")
+                  .empty()
+                  .append("<p class='blue-link'>" + data.message + "<p>");
               }
 
               function updateSec() {
@@ -97,7 +123,7 @@ $(function() {
 
               if (verify_counter >= 5) {
                 $("#send-code").attr("disabled", true);
-                bootbox.alert(
+                printError(
                   "Maximum number of sending code trials has reached, we can't send anymore!"
                 );
               }
@@ -105,9 +131,9 @@ $(function() {
               //$("#send-code").attr("disabled", false);
             } else {
               if (data.error_message != undefined) {
-                  $("#code-notice")
-                    .empty()
-                    .append("<p class='blue-link'>" + data.error_message + "<p>");
+                $("#code-notice")
+                  .empty()
+                  .append("<p class='blue-link'>" + data.error_message + "<p>");
               }
               if (data.messageId != undefined) {
                 console.log(data.messageId);
@@ -124,8 +150,11 @@ $(function() {
             }
           },
           error: function(err) {
-            $("#code-notice").empty()
-                .append("<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>");
+            $("#code-notice")
+              .empty()
+              .append(
+                "<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>"
+              );
             console.log(err);
           }
         });
@@ -199,7 +228,7 @@ $(function() {
 
               if (code_counter >= 5) {
                 $("#phone-verify").attr("disabled", true);
-                bootbox.alert(
+                printError(
                   "Maximum number of code retrial has reached, you can't retry anymore!"
                 );
               }
@@ -207,7 +236,7 @@ $(function() {
             $(".loading").toggleClass("d-none");
           },
           error: function(error) {
-            bootbox.alert(error);
+            printError(error);
           }
         });
         return false;
@@ -232,17 +261,10 @@ $(function() {
     }
     if (targetStepDot == "step-dot-3") {
       var pw1 = $("#id_password1").val();
-      var pw2 = $("#id_password2").val();
-      if (pw1 != "" && pw2 != "" && pw1 == pw2) {
-        if (checkPassword(pw2)) {
-          goToNextStep();
-        } else {
-          //weak password
-          bootbox.alert("Pass");
-        }
+      if (checkPassword(pw1)) {
+        goToNextStep();
       } else {
-        //wrong password
-        bootbox.alert("Your Passwords do not match");
+        //weak password
       }
     } else {
       goToNextStep();
@@ -261,7 +283,7 @@ $(function() {
   $("#phone-signup-submit").click(function(event) {
     if (!$("input[name='verified_no']").val()) {
       event.preventDefault();
-      bootbox.alert(
+      printError(
         "Please verify your phone number by requesting the verification code, before signing up!"
       );
     } else if (
@@ -272,27 +294,18 @@ $(function() {
       $(".process-panel-wrap").removeClass("is-active");
       $(".step-title").removeClass("is-active");
       $(".step-dot-3").addClass("is-active");
-      bootbox.alert("Please enter your city and province!");
+      printError("Please enter your city and province!");
     } else if (
       !$("input[name='username']").val() ||
-      !$("input[name='password1']") ||
-      !$("input[name='password2']")
+      !$("input[name='password1']")
     ) {
       event.preventDefault();
       $(".process-panel-wrap").removeClass("is-active");
       $(".step-title").removeClass("is-active");
       $(".step-dot-2").addClass("is-active");
-      bootbox.alert(
+      printError(
         "Please fill in all of the info. Also verify your phone number!"
       );
-    } else if (
-      $("input[name='password1']").val() != $("input[name='password2']").val()
-    ) {
-      event.preventDefault();
-      $(".process-panel-wrap").removeClass("is-active");
-      $(".step-title").removeClass("is-active");
-      $(".step-dot-2").addClass("is-active");
-      bootbox.alert("Your password's inputs don't match!");
     } else {
       $("#id_phone_number").attr("disabled", false);
 
@@ -308,6 +321,8 @@ $(function() {
       $("input[name='province_region']").val(
         $("select[name='province']").val()
       );
+      $("input[name='password2']").val($("input[name='password1']").val()); //hack for second password
+
       $("#signup_form").submit();
     }
   });
@@ -318,31 +333,29 @@ $(function() {
   $("#email-signup-submit").click(function(event) {
     if (!$("select[name='city']").val() || !$("select[name='province']")) {
       event.preventDefault();
-      bootbox.alert("Please enter your city and province!");
+      printError("Please enter your city and province!");
     } else if (
       !$("input[name='username']").val() ||
       !$("input[name='email']").val() ||
-      !$("input[name='password1']") ||
-      !$("input[name='password2']")
+      !$("input[name='password1']")
     ) {
       event.preventDefault();
-      bootbox.alert("Please fill in all of the infomation");
-    } else if (
-      $("input[name='password1']").val() != $("input[name='password2']").val()
-    ) {
-      event.preventDefault();
-      bootbox.alert("Your password's inputs don't match!");
+      printError("Please fill in all of the infomation");
     } else {
       $("#id_phone_number").attr("disabled", false);
+      $("input[name='password2']").val($("input[name='password1']").val());
       $("input[name='city']").val($("select[name='city']").val());
       $("input[name='province_region']").val(
         $("select[name='province']").val()
-      );
+      ); //hack for second password
       $("#signup_form").submit();
     }
   });
 });
 
+/* -------------------------------------------------------------------------- */
+/*                              Password checker                              */
+/* -------------------------------------------------------------------------- */
 /**
  * @author Òscar Casajuana a.k.a. elboletaire <elboletaire at underave dot net>
  * @link https://github.com/elboletaire/password-strength-meter
@@ -504,7 +517,7 @@ $(function() {
   };
 })(jQuery);
 
-$("#id_password1,#id_password2").password({
+$("#id_password1").password({
   shortPass: "The password is too short",
   badPass: "Weak; try combining letters & numbers",
   goodPass: "Medium; try using special characters",
@@ -521,26 +534,12 @@ $("#id_password1,#id_password2").password({
 });
 
 strongPass1 = false;
-strongPass2 = false;
 
 $("#id_password1").on("password.text", (e, text, score) => {
   if (score > 68) {
     strongPass1 = true;
-    $(document).trigger("strongPass");
-  } else strongPass1 = false;
-});
-
-$("#id_password2").on("password.text", (e, text, score) => {
-  if (score > 68) {
-    strongPass2 = true;
-    $(document).trigger("strongPass");
-  } else strongPass2 = false;
-});
-
-$(document).ready(function() {
-  $(document).on("strongPass", function() {
-    if (strongPass1 && strongPass2) {
-      $(".process-button").removeClass("is-hidden");
-    } else $(".process-button").addClass("is-hidden");
-  });
+    $(".process-button").removeClass("is-hidden");
+  } else {
+    $(".process-button").addClass("is-hidden");
+  }
 });
