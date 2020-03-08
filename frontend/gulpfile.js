@@ -26,7 +26,6 @@ gulp.task("reset", function() {
   rimraf("scss/*");
   rimraf("../obrisk/static/frontend/assets/css/*");
   rimraf("../obrisk/static/frontend/assets/fonts/*");
-  rimraf("images/*");
 });
 
 // Erases the dist folder
