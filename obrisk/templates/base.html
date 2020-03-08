@@ -28,16 +28,17 @@
 
   <!-- Icon can be replace to show icon on share -->
   {% block icon %}
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=1">
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
-  <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}?v=1">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=2">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=2">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=2">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=2">
+  <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=2" color="#5bbad5">
   {% endblock icon%}
 
   <!-- PWA settings -->
   {% progressive_web_app_meta %}
+  <meta name="apple-mobile-web-app-capable" content="yes">
 
   {% block meta %}
   {% endblock meta %}

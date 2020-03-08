@@ -297,15 +297,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/img/android-chrome-192x192.png",
-    "revision": "5de38bb634e3365ccad6a5808cbfbe22"
+    "revision": "83763c96d4a2dfbaa0bc84739a464659"
   },
   {
     "url": "/static/img/android-chrome-512x512.png",
-    "revision": "382e988c80d4b854aaccbb149c5f4b98"
+    "revision": "61678795edacc3db463077102233608e"
   },
   {
     "url": "/static/img/apple-touch-icon.png",
-    "revision": "df28f0ba4dd3a8bd08f39269d6e686e2"
+    "revision": "f784ffd3e5494fcd8c7047a35e3638d5"
   },
   {
     "url": "/static/img/bg.png",
@@ -333,15 +333,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/img/favicon-16x16.png",
-    "revision": "333313efcf24c4341fe3315cb71a264d"
+    "revision": "791bf66fe880c78d3af46782af534b2f"
   },
   {
     "url": "/static/img/favicon-32x32.png",
-    "revision": "e317d20287c3df252fa904b8d9e27324"
+    "revision": "9862950cc40e5ce4becd79238cceafcc"
   },
   {
     "url": "/static/img/favicon.ico",
-    "revision": "402f6510d7a32c2be9dd508de3aac6f1"
+    "revision": "c4af0a13685a8c7b5c4a89b0357c32cf"
   },
   {
     "url": "/static/img/favicon.png",
@@ -401,7 +401,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/img/mstile-150x150.png",
-    "revision": "4a8ef4624beca0e213045d529e3a5541"
+    "revision": "e19502cab20336b9188fdf9b87a6e0f5"
   },
   {
     "url": "/static/img/mstile-310x150.png",
@@ -429,43 +429,43 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/img/splashscreens/ipad_splash.png",
-    "revision": "df7171a93c5a2ab28d4011270552d2de"
+    "revision": "a44a9f2a323fc44105c960ad4032a59f"
   },
   {
     "url": "/static/img/splashscreens/ipadpro1_splash.png",
-    "revision": "46a7dc1cb23a7a27eb3e971c14a10a4b"
+    "revision": "642c441ec8313a3547ef98462c15138a"
   },
   {
     "url": "/static/img/splashscreens/ipadpro2_splash.png",
-    "revision": "c223af204360e620fca989ed7be2c320"
+    "revision": "2dce0f0e649fc0f447886e78cf123e8b"
   },
   {
     "url": "/static/img/splashscreens/ipadpro3_splash.png",
-    "revision": "33863983c6e16f1444a0835ccf52dd4d"
+    "revision": "4d2f8df0042c6ac20ba59c9118551a65"
   },
   {
     "url": "/static/img/splashscreens/iphone5_splash.png",
-    "revision": "5f3497cea1628ec2dd1a5f01e6c9ebaa"
+    "revision": "d0ac57dcc13ce9cd08718452ac6d63a5"
   },
   {
     "url": "/static/img/splashscreens/iphone6_splash.png",
-    "revision": "54d184fd4a2077605b92b8969ef61881"
+    "revision": "1b08ee90693fc08f2fcd739649fb1570"
   },
   {
     "url": "/static/img/splashscreens/iphoneplus_splash.png",
-    "revision": "2ff520b9ccab49ae3c5fb3a6e97497eb"
+    "revision": "1b6c2a1d1a5b7202fc28965c61726e11"
   },
   {
     "url": "/static/img/splashscreens/iphonex_splash.png",
-    "revision": "814b71a601c8d9e5dee7c8fb8ba833a8"
+    "revision": "2f9f59a6b1a8b21e2d916d6f04154799"
   },
   {
     "url": "/static/img/splashscreens/iphonexr_splash.png",
-    "revision": "007b1bb0e8e02cd12cd24ca17787f9e6"
+    "revision": "3cb448df5e5a3802551d66e5c925eceb"
   },
   {
     "url": "/static/img/splashscreens/iphonexsmax_splash.png",
-    "revision": "a34f53814d16ee3a7aae497f09f32eee"
+    "revision": "566144ae53db57307db0826fc19043c6"
   },
   {
     "url": "/static/img/stories.png",
