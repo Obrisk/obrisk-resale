@@ -17,8 +17,8 @@ from obrisk.qa.models import Question
 from obrisk.users.documents import UsersDocument
 from obrisk.stories.documents import StoriesDocument
 from obrisk.classifieds.document import ClassifiedDocument
-from obrisk.posts.documents import PostDocument
-from obrisk.qa.documents import QaDocument
+from obrisk.posts.documents import PostsDocument
+from obrisk.qa.documents import QuestionDocument
 
 from elasticsearch_dsl.connections import connections
 
@@ -148,7 +148,7 @@ def all_search(request, **kwargs):
 
     elif request.GET.get('q') is 1:
        
-        qa_results = [{'title':t.title, 'content':t.content, 'tags':t.tags} for t in QaDocument.search().filter(
+        qa_results = [{'title':t.title, 'content':t.content, 'tags':t.tags} for t in QuestionDocument.search().filter(
                                                                                                         Q("match", title=query) |
                                                                                                         Q("match", content=query))]
 
@@ -172,4 +172,5 @@ def all_search(request, **kwargs):
 
 #    return render(request, 'search/search_results.html', 
 #                {'stories_results': stories_results })
+
 

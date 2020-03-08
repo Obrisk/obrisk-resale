@@ -1,11 +1,22 @@
 from django.urls import reverse
 from django.test import Client
 
+from elasticsearch_dsl.connections import connections
 from test_plus.test import TestCase
 
 from obrisk.classifieds.models import Classified
 from obrisk.qa.models import Question
 from obrisk.stories.models import Stories
+from obrisk.search.views import all_search
+
+#documents
+from obrisk.users.documents import UsersDocument
+from obrisk.stories.documents import StoriesDocument
+from obrisk.classifieds.document import ClassifiedDocument
+from obrisk.posts.documents import PostsDocument
+from obrisk.qa.documents import QuestionDocument
+
+
 
 
 class SearchViewsTests(TestCase):
@@ -69,3 +80,34 @@ class SearchViewsTests(TestCase):
         #assert response.json()[2]['value'] == "A really nice first title"
         #assert response.json()[3]['value'] == "The first shortes title"
         #assert response.json()[4]['value'] == "This is the first sample question"
+
+
+
+#class ElasticSearchViewsTests(TestCase):
+#    model = Classified
+#    """
+#    Includes tests for all the functionality
+#    associated with Views
+#    """
+#    def setUp(self):
+#        connections.create_connection()
+#                
+#        self.user = self.make_user("sele")
+#        self.other_user = self.make_user("emma")
+#        self.client = Client()
+#        self.other_client = Client()
+#        self.client.login(username="sele", password="password")
+#        self.other_client.login(username="emma", password="password")
+#        self.title = "A really nice to-be first title "
+#        self.details = "This is a really good content, just if somebody\
+#        published it, that would be awesome, but no, nobody wants to publish\
+#        it, because they know this is just a test, and you know than nobody\
+#        wants to publish a test, just a test; everybody always wants the real\
+#        deal."
+#        UsersDocument.init() 
+#        self.classified = UsersDocument(username=self.user)
+#
+#
+#    def test_all_search(self):
+#        response = self.client.get(reverse("search:elastic_results"))
+#        assert self.user == self.classified
