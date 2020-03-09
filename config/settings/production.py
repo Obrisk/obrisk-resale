@@ -42,7 +42,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            'hosts': [PRIMARY_REDIS_URL, ],
+            'hosts': [REDIS_URL, ],
         },
     }
 }
@@ -55,9 +55,9 @@ CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
-            env(PRIMARY_REDIS_URL),
-            env(SLAVE_REDIS_URL),
-        ]
+            REDIS_URL,
+            env('SLAVE_REDIS_URL'),
+        ],
         "OPTIONS": {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             # Mimicing memcache behavior.
