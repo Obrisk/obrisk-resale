@@ -61,8 +61,8 @@
         <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
         {% elif object in pended%}
         {{object.username|title }} wants to connect with you! 🔌
-         
-         <a href="{% url 'connections:friendship_request_list' %}">view all requests</a>
+
+        <a href="{% url 'connections:friendship_request_list' %}">view all requests</a>
         {% else %}
         <a class="connect-btn button has-min-width m-auto" href="#">{% trans '➕Connect' %}</a>
         {% endif %}
@@ -213,7 +213,7 @@
   $(".go-to-chat").click(function (e) {
     e.preventDefault();
     setCookie("active-chat", $(this).data("url"), 1);
-    location.href = "/ws/messages";
+    location.href = "/ws/messages/";
 
   });
 </script>

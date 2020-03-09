@@ -228,17 +228,6 @@
       </div>
     </div>
     <!-- /Header -->
-
-    <!-- Comments body -->
-    <div class="comments-body has-slimscroll">
-      <div class="comments-placeholder">
-        <img src="{% static 'frontend/assets/images/icons/feed/bubble.svg' %}" alt="">
-        <h3>Nothing in here yet</h3>
-        <p>Be the first to post a comment.</p>
-      </div>
-    </div>
-    <!-- /Comments body -->
-
     <!-- Comments footer -->
     <div class="card-footer">
       <div class="media post-comment">
@@ -252,9 +241,9 @@
               <form role="form" method="post" action="#" onsubmit="return false" class="replyStoriesForm">
                 {% csrf_token %}
                 <input type="hidden" name="parent" value="">
-                <textarea class="textarea" name="reply" rows="2" class="textarea comment-textarea"
+                <textarea class="textarea" name="reply" rows="1" class="textarea comment-textarea"
                   placeholder="Write a comment...">
-                  </textarea>
+                      </textarea>
 
               </form>
             </p>
@@ -267,6 +256,17 @@
       </div>
     </div>
     <!-- /Comments footer -->
+    <!-- Comments body -->
+    <div class="comments-body has-slimscroll">
+      <div class="comments-placeholder">
+        <img src="{% static 'frontend/assets/images/icons/feed/bubble.svg' %}" alt="">
+        <h3>Nothing in here yet</h3>
+        <p>Be the first to post a comment.</p>
+      </div>
+    </div>
+    <!-- /Comments body -->
+
+
   </div>
   <!-- /Post #6 comments -->
 </div>
