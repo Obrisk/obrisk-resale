@@ -1,5 +1,4 @@
 $(function() {
-
   function csrfSafeMethod(method) {
     // These HTTP methods do not require CSRF protection
     return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
@@ -12,7 +11,6 @@ $(function() {
       }
     }
   });
-
 
   function offset(el) {
     var rect = el.getBoundingClientRect(),
@@ -75,7 +73,7 @@ $(function() {
         }
       });
     } else {
-      window.location.href = "/accounts-authorization/login/";
+      window.location.href = "/auth/login/";
     }
 
     return false;
@@ -180,7 +178,7 @@ $(function() {
         }
       });
     } else {
-      window.location.href = "/accounts-authorization/login/";
+      window.location.href = "/auth/login/";
     }
   });
 

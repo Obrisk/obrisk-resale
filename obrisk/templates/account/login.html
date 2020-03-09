@@ -171,7 +171,7 @@
           }
         }
 
-        ajax.open("POST", "/accounts-authorization/login/");
+        ajax.open("POST", "/auth/login/");
         ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
 
@@ -198,12 +198,12 @@
             //try auto login only once
             localStorage.setItem('autologintry', true);
             alert('Autologin failed please try manual login');
-            location.replace('/accounts-authorization/login/');
+            location.replace('/auth/login/');
           }
         }
       }
       var auth = JSON.parse(localStorage.getItem('auth'));
-      ajax.open("POST", "/accounts-authorization/login/");
+      ajax.open("POST", "/auth/login/");
       ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
     }
