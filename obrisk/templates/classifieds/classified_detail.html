@@ -380,7 +380,10 @@
       try {
         var successful = document.execCommand('copy');
         var msg = successful ? 'Copied!' : 'Whoops, not copied!';
-        bootbox.alert("Copied")
+        $.wnoty({
+          type: "success",
+          message: "Copied"
+        })
       } catch (err) {
         console.log('Oops, unable to copy');
       }

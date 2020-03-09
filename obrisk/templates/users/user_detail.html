@@ -163,36 +163,36 @@
   var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val()
 
   $(".connect-btn").click(function (e) {
-    bootbox.confirm("Send friend request ?", function (result) {
-      if (result) {
-        $.ajax({
-          beforeSend: function (xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-          },
-          type: "POST",
-          url: "/connections/friend/add/" + username + "/",
-          data: {
-            to_username: username
-          },
-          dataType: "json",
-          success: function (response) {
-            if (response) {
-              bootbox.alert({
-                message: response.message,
-                size: 'small'
-              });
-            } else {
-              bootbox.alert({
-                message: "Sorry something went wrong , Please try again later.",
-                size: 'small'
-              });
-            }
 
-          }
+    $.ajax({
+      beforeSend: function (xhr, settings) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      },
+      type: "POST",
+      url: "/connections/friend/add/" + username + "/",
+      data: {
+        to_username: username
+      },
+      dataType: "json",
+      success: function (response) {
+        if (response) {
+          $.wnoty({
+            type: "success",
+            message: response.message,
+          });
+        } else {
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "Sorry something went wrong , Please try again later.",
+          });
+        }
 
-        });
       }
+
     });
+
+
 
   });
 

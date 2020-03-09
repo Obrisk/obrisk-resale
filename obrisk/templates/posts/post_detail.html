@@ -67,10 +67,10 @@
       <div class="d-flex justify-content-between">
         <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i class="fa fa-chevron-left"
             aria-hidden="true"></i> BACK</button>
-        
-        {% comment %}    <a href="#" class="share btn btn-dark"
+
+        {% comment %} <a href="#" class="share btn btn-dark"
           onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
-          🔗{% trans 'share' %} </a > {% endcomment %}
+          🔗{% trans 'share' %} </a> {% endcomment %}
       </div>
       <!-- Cloud Tag Widget -->
       <div class="card my-4">
@@ -179,8 +179,7 @@
   var url = "{% url 'posts:post' post.slug %}"
 </script>
 <script src="{% static 'js/posts.js' %}"> </script>
-<script src="{% static 'js/bootbox.min.js' %}"> </script>
-
+<link rel="stylesheet" href="{% static 'css/wnoty.css' %}">
 
 <!-- Need to fix issues parsing markdown to plain text to use here for articlebody and others -->
 <script type="application/ld+json">
@@ -233,7 +232,10 @@
         });
     } else {
       window.navigator.clipboard.writeText(url);
-      bootbox.alert("copied to clipboard");
+      $.wnoty({
+        type: "success",
+        message: "copied to clipboard"
+      });
 
     }
   }
@@ -241,4 +243,7 @@
     e.preventDefault();
   })
 </script>
+
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
+
 {% endblock javascript %}

@@ -96,10 +96,18 @@ OssUpload.prototype = {
 
       //check if the upload quantity has reach max
       if (AllowUploadQuantity == 0) {
-        bootbox.alert("Only " + TotalFilesMaxSize + " images are allowed");
+        $.wnoty({
+          type: "error",
+          autohide: false,
+          message: "Only " + TotalFilesMaxSize + " images are allowed"
+        });
         $("#addBtn").hide();
       } else if (files.length == 0) {
-        bootbox.alert("No image selected , Please select one or more images");
+        $.wnoty({
+          type: "error",
+          autohide: false,
+          message: "No image selected , Please select one or more images"
+        });
       } else {
         //Add only the allow # of files to upload qeue
         if (
@@ -117,10 +125,13 @@ OssUpload.prototype = {
               _this.addFile(file); //Add to control view
               $("#addVideo").hide();
             } else {
-              bootbox.alert(
-                file.name +
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message:
+                  file.name +
                   " is larger than 13MB, please select images small than 13MB "
-              );
+              });
             }
           }
         } else {
@@ -140,13 +151,20 @@ OssUpload.prototype = {
               _this.addFile(file); //Add to control view
               $("#addVideo").hide();
             } else {
-              bootbox.alert(
-                file.name +
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message:
+                  file.name +
                   " is larger than 13MB, please select images small than 13MB "
-              );
+              });
             }
           }
-          bootbox.alert("Only " + TotalFilesMaxSize + " images are allowed");
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "Only " + TotalFilesMaxSize + " images are allowed"
+          });
         }
       }
       uploader.fileStats.totalFilesNum = uploader.fileList.length;
@@ -167,10 +185,18 @@ OssUpload.prototype = {
 
       //check if the upload quantity has reach max
       if (AllowUploadQuantity == 0) {
-        bootbox.alert("Only " + 1 + " video is allowed");
+        $.wnoty({
+          type: "error",
+          autohide: false,
+          message: "Only " + 1 + " video is allowed"
+        });
         $("#addVideo").hide();
       } else if (files.length == 0) {
-        bootbox.alert("No video selected , Please select one or more videos");
+        $.wnoty({
+          type: "error",
+          autohide: false,
+          message: "No video selected , Please select one or more videos"
+        });
       } else {
         //Add only the allow # of files to upload qeue
         if (
@@ -188,10 +214,13 @@ OssUpload.prototype = {
               _this.addFile(file); //Add to control view
               $("#addBtn").hide();
             } else {
-              bootbox.alert(
-                file.name +
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message:
+                  file.name +
                   " is larger than 13MB, please select videos small than 13MB "
-              );
+              });
             }
           }
         } else {
@@ -210,13 +239,20 @@ OssUpload.prototype = {
               _this.addFile(file); //Add to control view
               $("#addBtn").hide();
             } else {
-              bootbox.alert(
-                file.name +
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message:
+                  file.name +
                   " is larger than 13MB, please select videos small than 13MB "
-              );
+              });
             }
           }
-          bootbox.alert("Only " + 1 + " video is allowed");
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "Only " + 1 + " video is allowed"
+          });
         }
       }
       uploader.fileStats.totalFilesNum = uploader.fileList.length;
@@ -416,14 +452,20 @@ OssUpload.prototype = {
                         if (!images) {
                           if (app == "classifieds") {
                             images = "classifieds/error-img.jpg";
-                            bootbox.alert(
-                              "Oops! an error occured when uploading your image(s). \
+                            $.wnoty({
+                              type: "error",
+                              autohide: false,
+                              message:
+                                "Oops! an error occured when uploading your image(s). \
                                                     But you can submit this post without images ."
-                            );
+                            });
                           } else {
-                            bootbox.alert(
-                              "Sorry! an error occured when uploading your image(s). You can post without images"
-                            );
+                            $.wnoty({
+                              type: "error",
+                              autohide: false,
+                              message:
+                                "Sorry! an error occured when uploading your image(s). You can post without images"
+                            });
                           }
                         }
                       }
@@ -469,10 +511,13 @@ OssUpload.prototype = {
                           //don't add error images to stories
                         }
 
-                        bootbox.alert(
-                          "Oops! an error occured when uploading your image(s). \
+                        $.wnoty({
+                          type: "error",
+                          autohide: false,
+                          message:
+                            "Oops! an error occured when uploading your image(s). \
                                             But you can submit this post without images ."
-                        );
+                        });
                       }
                     }
                   } else {
@@ -496,10 +541,13 @@ OssUpload.prototype = {
                       }
                       console.log(hasErrors);
                       if (!hasErrors) {
-                        bootbox.alert(
-                          "Oops! an error occured when uploading your image(s). \
+                        $.wnoty({
+                          type: "error",
+                          autohide: false,
+                          message:
+                            "Oops! an error occured when uploading your image(s). \
                                             But you can submit this post without images ."
-                        );
+                        });
                         hasErrors = true;
                       }
                     }
@@ -507,27 +555,36 @@ OssUpload.prototype = {
                 });
               return results;
             } catch (e) {
-              bootbox.alert(
-                "Oops! an error occured when uploading your image(s), \
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message:
+                  "Oops! an error occured when uploading your image(s), \
                     Please try again later or contact us via support@obrisk.com. "
-              );
+              });
               $(".start-uploader").css("display", "block");
               console.log(e);
             }
           };
           return upload();
         } else {
-          bootbox.alert(
-            "Oops!, it looks like there is a network problem, \
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message:
+              "Oops!, it looks like there is a network problem, \
             Please try again later or contact us at support@obrisk.com"
-          );
+          });
           $(".start-uploader").css("display", "block");
         }
       })
       .catch(e => {
-        bootbox.alert(
-          "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
-        );
+        $.wnoty({
+          type: "error",
+          autohide: false,
+          message:
+            "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
+        });
         console.log(e);
       });
   },

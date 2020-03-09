@@ -314,7 +314,11 @@ $(function() {
           $("#conversation").scrollTop(99999999999);
         },
         fail: function() {
-          bootbox.alert("failed to send the message");
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "failed to send the message"
+          });
         }
       });
     }
