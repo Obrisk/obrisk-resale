@@ -55,7 +55,7 @@ $(function() {
   });
 
   //Liker
-  $(".infinite-container").on("click", ".like-wrapper", function() {
+  $(document.body).on("click", ".like-wrapper", function() {
     // Ajax call on action on like button.
     var li = $(this).closest(".card");
     var stories = $(li).attr("stories-id");
@@ -70,6 +70,7 @@ $(function() {
         cache: false,
         success: function(data) {
           li.find(".likes-count .count").text(data.likes);
+          li.find(".like-button").toggleClass("is-active");
         }
       });
     } else {
@@ -80,21 +81,19 @@ $(function() {
   });
 
   //Cose comments
-  $(".infinite-container").on("click", ".close-comments", function() {
+  $(document.body).on("click", ".close-comments", function() {
     // Ajax call to request a given Stories object detail and thread, and to
     // show it in a modal.
     var post = $(this).closest(".card");
     var stories = $(post).attr("stories-id");
-    post.find(".content-wrap").toggleClass("is-hidden");
     post.find(".comments-wrap").toggleClass("is-hidden");
   });
 
   //Show comments
-  $(".infinite-container").on("click", ".is-comment", function() {
+  $(document.body).on("click", ".is-comment", function() {
     // Ajax call to request a given Stories object detail and thread, and to
     var post = $(this).closest(".card");
     var stories = $(post).attr("stories-id");
-    post.find(".content-wrap").toggleClass("is-hidden");
     post.find(".comments-wrap").toggleClass("is-hidden");
     window.scrollTo({
       top: offset(post[0]).top,
@@ -118,8 +117,9 @@ $(function() {
 
       success: function(data) {
         if (data.thread) {
-          if (data.thread.trim() != "")
+          if (data.thread.trim() != "") {
             post.find(".comments-body").html(data.thread);
+          }
         }
         post.find("input[name=parent]").val(data.uuid);
       }
@@ -128,7 +128,7 @@ $(function() {
   });
 
   //Comment on a story
-  $("a#post-comment-button").click(function() {
+  $(document.body).on("click", "a#post-comment-button", function() {
     // Ajax call to register a reply to any given Stories object.
     post = $(this).closest(".card");
 
@@ -143,8 +143,11 @@ $(function() {
           post
             .find(".comments-count .count")
             .html(parseInt(post.find(".comments-count .count").html(), 10) + 1);
-          post.find(".content-wrap").toggleClass("is-hidden");
-          post.find(".comments-wrap").toggleClass("is-hidden");
+          var comment_count = Number(
+            post.find(".comments-heading small").text()
+          );
+          post.find(".comments-heading small").text(comment_count + 1);
+
           var stories = $(post).attr("stories-id");
           $("input, textarea").val("");
           setTimeout(function() {
@@ -161,8 +164,6 @@ $(function() {
                 post.find("input[name=parent]").val(data.uuid);
               }
             });
-            post.find(".content-wrap").toggleClass("is-hidden");
-            post.find(".comments-wrap").toggleClass("is-hidden");
           }, 200);
         },
         error: function(data) {
@@ -223,12 +224,11 @@ $(function() {
   });
 
   //Show comments
-  $(".infinite-container").on("click", ".is-comment", function() {
+  $(document.body).on("click", ".is-comment", function() {
     // Ajax call to request a given Stories object detail and thread, and to
     // show it in a modal.
     var post = $(this).closest(".card");
     var stories = $(post).attr("stories-id");
-    post.find(".content-wrap").addClass("is-hidden");
     post.find(".comments-wrap").removeClass("is-hidden");
     post.find("textarea").focus();
 
