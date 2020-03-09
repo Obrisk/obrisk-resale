@@ -18,7 +18,12 @@ SECRET_KEY = env('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 #https://stackoverflow.com/questions/16676314/should-server-ip-address-be-in-allowed-hosts-django-setting
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com', '63.0.0.14', '63.0.0.6', '52.82.70.154', '161.189.161.69' ]
+=======
+#Remember to add the subdomains when applying for SSL cert and also add it in nginx file
+ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
+>>>>>>> fixing travic basics errors
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -29,11 +34,31 @@ DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=0)  # Fro
 
 # CACHES
 # ------------------------------------------------------------------------------
-CACHES = {
+
+# REDIS setup
+REDIS_URL = f'{env("PRIMARY_REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'
+
+CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_URL,
-        'OPTIONS': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [PRIMARY_REDIS_URL, ],
+        },
+    }
+}
+
+
+CELERY_BROKER_URL = REDIS_URL
+
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            env(PRIMARY_REDIS_URL),
+            env(SLAVE_REDIS_URL),
+        ]
+        "OPTIONS": {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             # Mimicing memcache behavior.
             # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
@@ -41,6 +66,9 @@ CACHES = {
         }
     }
 }
+
+
+
 
 # SECURITY
 # ------------------------------------------------------------------------------

@@ -180,9 +180,15 @@ MIDDLEWARE = [
 # -------------------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
+<<<<<<< HEAD
     str(APPS_DIR.path("static")),
     ("frontend/assets", str(ROOT_DIR.path("frontend/assets"))),
+=======
+    str(APPS_DIR.path('static')),
+    ('frontend/assets', str(ROOT_DIR.path('frontend/assets'))),
+>>>>>>> fixing travic basics errors
 ]
+
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -304,6 +310,7 @@ ACCOUNT_ADAPTER = "obrisk.users.adapters.AccountAdapter"
 
 SOCIALACCOUNT_ADAPTER = "obrisk.users.adapters.SocialAccountAdapter"
 
+<<<<<<< HEAD
 # Other stuff...
 # ------------------------------------------------------------------------------
 
@@ -319,6 +326,9 @@ CHANNEL_LAYERS = {
         "CONFIG": {"hosts": [REDIS_URL,],},
     }
 }
+=======
+
+>>>>>>> fixing travic basics errors
 
 # GraphQL settings
 GRAPHENE = {"SCHEMA": "obrisk.schema.schema"}
@@ -411,7 +421,23 @@ ELASTICSEARCH_DSL = {
     "default": {"hosts": "elasticsearch:9200"},
 }
 
-CELERY_BROKER_URL = "redis://localhost:6379"
+# REDIS setup
+REDIS_URL = f'{env("REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'
+
+# django-channels setup
+ASGI_APPLICATION = 'config.routing.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL, ],
+        },
+    }
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379' 
+
 
 CELERY_TIMEZONE = "Asia/Chongqing"
 # Let's make things happen
