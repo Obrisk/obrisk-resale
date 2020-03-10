@@ -2,7 +2,7 @@ $(function() {
   $("body").on("uploadComplete", function(event) {
     //Todo check if images where uploaded or empty
     $("input[name='status']").val("A");
-    console.log(images)
+    console.log(images);
     $("#id_images").val(images);
     $("#id_img_error").val(img_error);
 
@@ -25,7 +25,7 @@ $(function() {
         }
       },
       error: function(data) {
-        bootbox.alert(data.responseText);
+        printError(data.responseText, "#classified-form");
       }
     });
   });
@@ -41,7 +41,26 @@ $(function() {
         $("body").trigger("submitClicked");
       }
     } else {
-      bootbox.alert("Please upload at least one image for your post");
+      printError(
+        "Please upload at least one image for your post",
+        "#classified-form"
+      );
     }
   });
 });
+
+/* -------------------------------------------------------------------------- */
+/*                                    utils                                   */
+/* -------------------------------------------------------------------------- */
+
+function printError(msg, target) {
+  template = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          <strong>Error! </strong>${msg}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+  $(`${target}`).prepend(template);
+}

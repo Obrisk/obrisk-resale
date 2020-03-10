@@ -386,18 +386,6 @@ https: //nzbin.github.io/three-dots
   padding-right: 20px;
 }
 
-.bootbox .btn-primary {
-  background: #3ec4e2;
-  background-color: #3ec4e2;
-  border-color: #3ec4e2;
-}
-
-.bootbox .btn-primary:hover {
-  background: #3ec4e2;
-  background-color: #3ec4e2;
-  border-color: #3ec4e2;
-}
-
 #loading {
   background: url("https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/loading-anti-clockwise.gif")
     no-repeat center center;

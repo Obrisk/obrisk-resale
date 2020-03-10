@@ -9,8 +9,7 @@
 <link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-<script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
-
+<link rel="stylesheet" href="{% static 'css/wnoty.css' %}">
 {% endblock head %}
 
 {% block content %}
@@ -166,7 +165,11 @@
               location.replace('/stories')
             }
             else {
-              bootbox.alert('Failed to login, please verify your username or password');
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message: 'Failed to login, please verify your username or password'
+              });
             }
           }
         }
@@ -180,9 +183,9 @@
     }
     else {
 
-      var dialog = bootbox.dialog({
+      var dialog = $.wnoty({
+        type: "info",
         message: '<p class="text-center mb-0"><i class="fa fa-spin fa-cog"></i> Autologin</p>',
-        closeButton: false
       });
 
       var auth = JSON.parse(localStorage.getItem('auth'));
@@ -215,4 +218,6 @@
   {% endif %}
 
 </script>
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
+
 {% endblock content %}

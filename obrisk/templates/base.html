@@ -90,6 +90,7 @@
   }}
   </script>
 
+  <link rel="stylesheet" href="{% static 'css/wnoty.css' %}">
   {% endblock cdn %}
 
   {% block head %}
@@ -816,8 +817,8 @@
 
   </script>
 
-  <!-- bootbox for alert-->
-  <script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
+
+
 
   {% endblock javascript %}
 
@@ -864,6 +865,7 @@
 </body>
 {% endblock body %}
 <!-- /.container -->
-
+<!-- wnoty for alert-->
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 
 </html>

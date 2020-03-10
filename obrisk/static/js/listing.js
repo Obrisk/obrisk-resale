@@ -47,7 +47,7 @@ function share(title, text, url) {
       });
   } else {
     window.navigator.clipboard.writeText(url);
-    bootbox.alert("copied to clipboard");
+    // alert("copied to clipboard");
   }
 }
 jQuery(".share").click(function(e) {
