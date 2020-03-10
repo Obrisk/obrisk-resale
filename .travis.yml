@@ -44,7 +44,6 @@ install:
 before_script:
   - psql --version
   - psql -c "CREATE DATABASE obdev;" -U postgres
-  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres  
   - cp travis.env .env
   - python manage.py migrate --settings=config.settings.test
 
