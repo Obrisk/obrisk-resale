@@ -14,13 +14,19 @@ upstream websocket_server {
 
 
 server {
+
     listen 80;
+    listen 443 ssl;
 
     server_name obrisk.com www.obrisk.com; 
-    
-    if ($http_x_forwarded_proto = "http") {
-        return 301 https://$server_name$request_uri;
-    }
+
+    ssl_certificate /etc/letsencrypt/live/obrisk.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/obrisk.com/privkey.pem;
+
+#    #If the lines below are uncommented, the redirect to https keeps redirecting  (too many redirects)
+#    if ($scheme != "https") {
+#        return 301 https://$host$request_uri;
+#    } 
 
     keepalive_timeout 5;
     client_max_body_size 4G;
@@ -29,6 +35,8 @@ server {
     error_log /home/obdev-user/logs/nginx-error.log;
 
     location = /favicon.ico { access_log off; log_not_found off; }
+    location = /favicon.png { access_log off; log_not_found off; }
+
     location /static/ {
         autoindex on;
         alias /home/obdev-user/obdev2018/staticfiles/;
@@ -71,6 +79,23 @@ server {
     location /ws/ {
           try_files $uri @proxy_to_ws;
     }
+
+    location /ISQ0WEjQggWlyXT1FIxvZe1Cfsa7Ov-G0RfNQnHptR0/ {
+        proxy_pass http://localhost:9005/;
+        proxy_redirect off;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Protocol $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_http_version 1.1;
+
+        #auth_basic  "Restricted";
+        #auth_basic_user_file  /etc/nginx/.htpasswd;
+    }
+
+
 
 }
 
