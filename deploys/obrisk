@@ -18,7 +18,7 @@ server {
     listen 80;
     listen 443 ssl;
 
-    server_name obrisk.com www.obrisk.com; 
+    server_name obrisk.com www.obrisk.com 63.0.0.14 63.0.0.6 52.82.70.154 161.189.161.69; 
 
     ssl_certificate /etc/letsencrypt/live/obrisk.com/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/obrisk.com/privkey.pem;
