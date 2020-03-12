@@ -1,6 +1,4 @@
-import datetime
-import itertools
-import operator
+import datetime, itertools, operator
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
@@ -105,7 +103,7 @@ class Classified(models.Model):
     def save(self, *args, **kwargs):
         
         if not self.slug:
-            self.slug = first_slug = slugify(f"{self.user.username}-{self.title}-{self.date}", allow_unicode=True,
+            self.slug = first_slug = slugify(f"{self.user.username}-{self.title}", 
                                 to_lower=True, max_length=300)
             
             for x in itertools.count(1):

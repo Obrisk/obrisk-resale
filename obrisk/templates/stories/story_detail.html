@@ -1,0 +1,413 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load crispy_forms_tags thumbnail humanize %}
+
+{% block head %}
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+<link href="{% static 'css/classified-details.css' %} " rel="stylesheet">
+<link href="{% static 'css/colors.css' %}" rel="stylesheet">
+<script src="{% static 'js/fancybox.min.js' %}"></script>
+<link rel="stylesheet" href="{% static 'css/slider-pro.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
+<script src="{% static 'js/jquery.sliderPro.min.js' %}"></script>
+
+
+<title>{{ classified.title|title }}</title>
+
+{% endblock head %}
+
+
+{% block icon %}
+<link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="apple-touch-icon" sizes="180x180"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="icon" type="image/png" sizes="32x32"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="icon" type="image/png" sizes="16x16"
+  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="mask-icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}" color="#5bbad5">
+{% endblock %}
+
+
+{% block meta %}
+<meta name="author" content="{{ classified.user.get_profile_name }}">
+<meta name="keywords" content="{{ classified.title }} ,{{ classified.address }}, {{ classified.city }}">
+<meta name="description" content="{{ classified.details }}">
+{% endblock %}
+
+
+{% block content %}
+<!-- Page Content -->
+<div class="container mt-5 mb-md-5">
+
+  <div class="row">
+    <!-- Post Content Column -->
+
+    <div class="classified-wrapper col-lg-8 col-md-10 m-auto">
+
+      <section class="col">
+        <div class="classified-meta mb-4">
+          <!-- Title -->
+          <h3 class="mt-4 text-left">{{ classified.title|title }}</h3>
+
+          <div class="meta-details mt-4 d-flex justify-content-between flex-column flex-md-row">
+
+            <div class="meta-right d-flex">
+              <a href="{% url 'users:detail' classified.user.username %}" class="mr-2">
+                {% if classified.user.thumbnail %}
+                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+                  alt="Picture Profile" style="height:35px; max-width:35px; border-radius: 50%;" id="pic">
+                {% else %}
+                <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
+                {% endif %}
+              </a>
+              <!-- Location -->
+              <div class="meta-left d-flex flex-column">
+                <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                  href="{% url 'users:detail' classified.user.username %}">
+                  <strong itemprop="name" id="classified-user">
+                    {{ classified.user.get_profile_name|title }} </strong>
+                </a>
+                <div class="location">
+                  <small class="card-subtitle mb-2">📍</small>
+                  <span class="card-subtitle mb-2">
+                    {% if classified.address  %}
+                    {{ classified.address }}, {{ classified.city }}
+                    {% else %}
+                    {{ classified.user.city }}
+                    {% endif %} </span>
+                </div>
+                <!-- Date/Time -->
+                <div class="time mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
+
+              </div>
+            </div>
+
+            <div
+              class="align-items-baseline align-items-md-end d-flex flex-column meta-right ml-xl-0 mr-xl-0 mt-4 mt-md-0 ml-0 mr-0">
+              <!-- Price -->
+              <h3 class="O-cl-red price">
+                <strong>{% trans 'CNY' %} {{ classified.price }}</strong>
+              </h3>
+              <div class="action d-flex justify-content-between w-100 mt-2">
+                {% if classified.user != request.user %}
+
+                <div class="chat-button mr-2 col-6 p-0">
+                  <div class=" button p-1 w-100"
+                    onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
+                    ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-message-square">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Chat</div>
+
+                </div>
+
+
+
+                {% endif %}
+                <div class="share-button col-6 p-0">
+                  <div class="button p-1 share w-100"
+                    onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-share-2">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg> Share</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+        <div class="col-lg-9 m-auto h-50">
+
+          <div class="slider-pro mt-4 mb-4" id="image-slider">
+            <div class="sp-slides">
+              {% for image in images %}
+              <div class="sp-slide">
+                <a href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ image.image }} "
+                  data-fancybox="classified-gallery">
+                  <img class="sp-image" src=""
+                    data-src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ image.image_mid_size }}" />
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+
+
+        </div>
+
+        <div class="card-text text-justify">{{ classified.details }}</div>
+
+
+
+
+        {% if user.is_authenticated %}
+        <div class="flex-column flex-md-row d-flex">
+
+          {% if classified.phone_number %}
+
+
+          <small class="seller-contacts w-75"><strong>Seller's contacts :</strong>
+            <div class="btn-group">
+              <a class="btn btn-primary btn-email btn-dark " href="tel:{{ classified.phone_number }}">📞
+                {{ classified.phone_number }}</a>
+              <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
+                data-placement="bottom" data-copy=" {{ classified.phone_number }}" title=""
+                data-original-title="Copy to clipboard">
+                📋
+              </button>
+            </div>
+            <br />
+          </small>
+          {% endif %}
+          {%if classified.wechat_id %}
+          <small class="seller-contacts w-75">
+            <strong>Seller's WechatID :</strong>
+            <div class="btn-group">
+              <a class="btn btn-primary btn-email btn-dark " href="#"><i class="fa fa-weixin"></i>
+                {{ classified.wechat_id }}</a>
+              <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
+                data-placement="bottom" data-copy="{{ classified.wechat_id }}" title=""
+                data-original-title="Copy to clipboard">
+                📋
+              </button>
+            </div>
+          </small>
+          {% endif %}
+
+        </div>
+
+        {% else %}
+        <h6> Please login to view seller's contacts: </h6>
+        <a class="btn btn-dark btn-xl js-scroll-trigger text-white"
+          href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+
+        {% endif %}
+      </section>
+
+
+      <!-- Cloud Tag Widget -->
+      {% if classified.tags.all %}
+      <div class="card my-4">
+        <h5 class="card-header O-bg-blue-ns">{% trans 'Tags' %}</h5>
+        <div class="card-body">
+          {% for tag in classified.tags.all %}
+          <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="badge badge-info">{{ tag }}</span></a>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Navigation buttons -->
+      {% if request.user == classified.user%}
+      <div class="m-3">
+        <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
+          title="{% trans 'Edit this classified' %}">
+          <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+      </div>
+      {% else %}
+      <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
+      {% endif %}
+      <div class="m-3 d-flex justify-content-between">
+        <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
+        {% comment  %}
+        <a href="#" class="share btn btn-dark"
+          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+          🔗{% trans 'share' %} </a>
+
+        {% endcomment %}
+      </div>
+    </div>
+
+
+    <!-- Similar lassified -->
+    {% if similar_classifieds %}
+    <div class="col-lg-8 col-md-10 mr-auto ml-auto related-card mt-4 pt-4 mb-4">
+      <h5 class="card-header O-bg-blue-ns">Related Classifieds</h5>
+      <div class=" related mt-4 mb-4">
+        <!-- Classified Entries Column -->
+        <!-- <div class="col-md-8"> -->
+        {% for classified in similar_classifieds %}
+        <!-- Classified ad. -->
+        <div class="card classified-card mr-2 mb-3">
+          <!--Display image-->
+          <div class="card-img-top img-responsive">
+
+            {% if classified.image_thumb %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+            {% else %}
+            <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+            {% endif %}
+          </div>
+
+          <div class="card-body">
+            <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
+            <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+            <div class="card-meta d-flex justify-content-between">
+              <div class="location">
+                <small>📍</small>
+                <span class="card-text small "> {{ classified.city|safe }}</span>
+              </div>
+              <div class="share-card">
+                <small>🔗</small>
+              </div>
+            </div>
+
+          </div>
+          <a class="streched-link" href="{% url 'classifieds:classified' classified.slug %}"
+            style="color:black; text-decoration:none; background-color:none"> </a>
+        </div>
+        {% endfor %}
+      </div>
+
+    </div>
+
+  </div>
+  {% endif %}
+
+
+</div>
+<script type="application/ld+json">
+{
+   "@context":"http://schema.org/",
+   "@type":"Product",
+   "name":"{{ classified.title|title }}",
+   "description":"{{ classified.details }}",
+   "image":[
+      "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}"
+   ],
+   "brand":"",
+   "offers":{
+      "@type":"Offer",
+      "priceCurrency":"CNY",
+      "price":{{ classified.price }},
+      "availability":"http://schema.org/InStock",
+      "itemCondition":"http://schema.org/UsedCondition",
+      "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}",
+      "seller":{
+         "@type":"Person",
+         "name":"{{ classified.user.get_profile_name }}",
+         {% if classified.user.thumbnail %}
+         "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+         {% else %}
+        "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+         {% endif %}
+         
+      }
+   }
+}
+</script>
+<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
+<link rel="stylesheet" href="{% static 'css/share.css' %}">
+<script type="text/javascript">
+
+  var setCookie = function (name, value, days) {
+    if (!name && !value) {
+      return false;
+    } else if (days) {
+      var date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      var expires = "; expires=" + date.toGMTString();
+    }
+    else var expires = "";
+    document.cookie = name + "=" + value + expires + "; path=/";
+    return true;
+  }
+  $(".go-to-chat").click(function (e) {
+    e.preventDefault();
+    setCookie("active-chat", $(this).data("url"), 1);
+    location.href = "/ws/messages/";
+
+  });
+
+  function shareMe(title, text) {
+    navigator.share({
+      title: title,
+      text: text,
+      url: location.href,
+    })
+  }
+
+  function gotochat(url) {
+    setCookie("active-chat", url, 1);
+    location.href = "/ws/messages/";
+  }
+  var image_count = {{ images| length}}
+
+  if (image_count > 1) {
+    $(".slider-pro").sliderPro({
+      arrows: true,
+      width: 960,
+      fade: true,
+      autoplay: false,
+      autoScaleLayers: false,
+      autoHeight: true,
+
+    });
+  } else {
+    $(".slider-pro").sliderPro({
+      arrows: true,
+      width: 960,
+      fade: true,
+      autoplay: false,
+      autoScaleLayers: false,
+      autoHeight: true,
+      touchSwipe: false,//disable touch swipe if we have only one image
+
+
+    });
+  }
+  function copyToClipboard(text, el) {
+    var copyTest = document.queryCommandSupported('copy');
+    var elOriginalText = el.attr('data-original-title');
+
+    if (copyTest === true) {
+      var copyTextArea = document.createElement("textarea");
+      copyTextArea.value = text;
+      document.body.appendChild(copyTextArea);
+      copyTextArea.select();
+      try {
+        var successful = document.execCommand('copy');
+        var msg = successful ? 'Copied!' : 'Whoops, not copied!';
+        $.wnoty({
+          type: "success",
+          message: "Copied"
+        })
+      } catch (err) {
+        console.log('Oops, unable to copy');
+      }
+      document.body.removeChild(copyTextArea);
+      el.attr('data-original-title', elOriginalText);
+    } else {
+      // Fallback if browser doesn't support .execCommand('copy')
+      window.prompt("Copy to clipboard: Ctrl+C or Command+C, Enter", text);
+    }
+  }
+
+  $(document).ready(function () {
+    // Initialize
+    // ---------------------------------------------------------------------
+
+
+    // Copy to clipboard
+    // Grab any text in the attribute 'data-copy' and pass it to the 
+    // copy function
+    $('.js-copy').click(function () {
+      var text = $(this).attr('data-copy');
+      var el = $(this);
+      copyToClipboard(text, el);
+    });
+  });
+</script>
+{% endblock content %}

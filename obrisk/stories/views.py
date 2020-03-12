@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DeleteView
+from django.views.generic import ListView, DeleteView, DetailView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 import json
@@ -54,7 +54,54 @@ class StoriesListView(ListView):
                 )[3:4])
 
         ).prefetch_related('liked', 'parent', 'user__thumbnail__username').order_by('-priority', '-timestamp')
+
+
+class DetailStoryView(DetailView):
+    """Basic DetailView implementation to call an individual story."""
+    model = Stories 
+    slug_url_kwarg = 'slug'
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(DetailStoryView, self).get_context_data(**kwargs)
+
+        story_tags_ids = self.object.tags.values_list('id', flat=True)
+        similar_stories = Story.objects.get_active().filter(tags__in=story_tags_ids)\
+            .exclude(id=self.object.id).annotate (
+                img1 = Subquery (
+                        StoryImages.objects.filter(
+                            story=OuterRef('pk'),
+                    ).values_list(
+                       'image_thumb', flat=True
+                        )[:1]),
+                img2 = Subquery (
+                    StoryImages.objects.filter(
+                        story=OuterRef('pk'),
+                    ).values_list(
+                       'image_thumb', flat=True
+                    )[1:2]),
+                img3 = Subquery (
+                    StoryImages.objects.filter(
+                        story=OuterRef('pk'),
+                    ).values_list(
+                       'image_thumb', flat=True
+                    )[2:3]),
+                img4 =  Subquery (
+                    StoryImages.objects.filter(
+                        story=OuterRef('pk'),
+                    ).values_list(
+                       'image_thumb', flat=True
+                    )[3:4])
+            ).prefetch_related('liked', 'parent', 'user__thumbnail__username')
+
+        # Add in a QuerySet of all the images
+        context['images'] = StoryImages.objects.filter(story=self.object.id)
         
+        context['images_no'] = len(context['images'])
+        context['similar_stories'] = similar_stories.annotate(same_tags=Count('tags'))\
+            .order_by('-same_tags', '-timestamp')[:10]
+
+        return context
 
 @require_http_methods(["GET"])
 def get_story_images(request):
