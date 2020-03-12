@@ -1,4 +1,4 @@
-import uuid
+import uuid, itertools
 from slugify import slugify
 from django.conf import settings
 from django.db import models
@@ -32,7 +32,7 @@ class TaggedStories(TaggedItemBase):
     content_object = models.ForeignKey('Stories', on_delete=models.CASCADE)
 
 
-class ClassifiedQuerySet(models.query.QuerySet):
+class StoriesQuerySet(models.query.QuerySet):
     """Personalized queryset created to improve model usability"""
 
     def get_public(self):
@@ -99,6 +99,8 @@ class Stories(models.Model):
     #This will help to only show the liked users when needed, otherwise don't load all of them.
     likes_count = models.IntegerField(default=0)  
     thread_count = models.IntegerField(default=0)
+    
+    objects = StoriesQuerySet.as_manager()
 
     class Meta:
         verbose_name = _("Stories")
@@ -107,16 +109,6 @@ class Stories(models.Model):
 
     def __str__(self):
         #This if statement is temporal to help create slug field for all tables.
-        if not self.slug:
-            self.slug = first_slug = slugify(f"{self.user.username}-{uuid.uuid4().hex[:6]}",
-                                to_lower=True, max_length=300)
-            
-            for x in itertools.count(1):
-                if not Stories.objects.filter(slug=self.slug).exists():
-                    break
-                self.slug = '%s-%d' % (first_slug, x)
-                self.save()
-        
         if self.content:
             return str(self.content)
         else:
@@ -154,8 +146,6 @@ class Stories(models.Model):
 
                 }
             async_to_sync(channel_layer.group_send)('notifications', payload)
-
-
 
 
     def switch_like(self, user):

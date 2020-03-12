@@ -17,5 +17,6 @@ urlpatterns = [
     url(r'^stories-suggestions/$', get_suggestions, name='suggestions'),
     url(r'^delete/(?P<pk>[-\w]+)/$',
         views.StoriesDeleteView.as_view(), name='delete_stories'),
+    url(r'create-slugs/$', views.stories_create_slugs, name='create_stories'),
     url(r'^i/(?P<slug>[-\w]+)/$', views.DetailStoryView.as_view(), name='story'),
 ]

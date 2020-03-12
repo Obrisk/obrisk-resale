@@ -5,16 +5,15 @@ from django.views import View
 from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView, DeleteView
 from django.views.generic.edit import BaseFormView
 from django.urls import reverse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, HttpResponseRedirect
-from django.db.models import Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django import forms
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
+from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField, Count
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from slugify import slugify

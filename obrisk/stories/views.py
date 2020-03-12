@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, Http404
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -8,13 +8,14 @@ from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import ListView, DeleteView, DetailView
 from django.core.mail import send_mail
-from django.shortcuts import get_object_or_404
-import json
+from django.shortcuts import get_object_or_404, redirect
+import json, uuid, itertools
+from slugify import slugify
 
 from obrisk.utils.images_upload import multipleImagesPersist, videoPersist
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.stories.models import Stories, StoryImages
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
+from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField, Count
 
 
 class StoriesListView(ListView):
@@ -59,15 +60,15 @@ class StoriesListView(ListView):
 class DetailStoryView(DetailView):
     """Basic DetailView implementation to call an individual story."""
     model = Stories 
-    slug_url_kwarg = 'slug'
+    context_object_name = 'story'
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailStoryView, self).get_context_data(**kwargs)
 
         story_tags_ids = self.object.tags.values_list('id', flat=True)
-        similar_stories = Story.objects.get_active().filter(tags__in=story_tags_ids)\
-            .exclude(id=self.object.id).annotate (
+        similar_stories = Stories.objects.get_stories().filter(tags__in=story_tags_ids)\
+            .exclude(uuid_id=self.object.uuid_id).annotate (
                 img1 = Subquery (
                         StoryImages.objects.filter(
                             story=OuterRef('pk'),
@@ -95,13 +96,29 @@ class DetailStoryView(DetailView):
             ).prefetch_related('liked', 'parent', 'user__thumbnail__username')
 
         # Add in a QuerySet of all the images
-        context['images'] = StoryImages.objects.filter(story=self.object.id)
+        context['images'] = StoryImages.objects.filter(story=self.object.uuid_id)
         
         context['images_no'] = len(context['images'])
         context['similar_stories'] = similar_stories.annotate(same_tags=Count('tags'))\
             .order_by('-same_tags', '-timestamp')[:10]
 
         return context
+
+
+def stories_create_slugs(request):
+    for self in Stories.objects.all():
+        if not self.slug:
+            self.slug = first_slug = slugify(f"{self.user.username}-{uuid.uuid4().hex[:6]}",
+                                to_lower=True, max_length=300)
+
+
+            for x in itertools.count(1):
+                if not Stories.objects.filter(slug=self.slug).exists():
+                    break
+                self.slug = '%s-%d' % (first_slug, x)
+            self.save()
+
+    return redirect('stories:list')
 
 @require_http_methods(["GET"])
 def get_story_images(request):

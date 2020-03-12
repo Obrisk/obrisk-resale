@@ -20,19 +20,12 @@
 {% block icon %}
 <link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
 <link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
-<link rel="apple-touch-icon" sizes="180x180"
-  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
-<link rel="icon" type="image/png" sizes="32x32"
-  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
-<link rel="icon" type="image/png" sizes="16x16"
-  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
-<link rel="mask-icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}" color="#5bbad5">
 {% endblock %}
 
 
 {% block meta %}
 <meta name="author" content="{{ story.user.get_profile_name }}">
-<meta name="keywords" content="{{ story.title }} ,{{ story.address }}, {{ story.city }}">
+<meta name="keywords" content="{{ story.content }} ,{{ story.address }}, {{ story.city }}">
 <meta name="description" content="{{ story.content }}">
 {% endblock %}
 
@@ -86,32 +79,10 @@
 
             <div
               class="align-items-baseline align-items-md-end d-flex flex-column meta-right ml-xl-0 mr-xl-0 mt-4 mt-md-0 ml-0 mr-0">
-              <!-- Price -->
-              <h3 class="O-cl-red price">
-                <strong>{% trans 'CNY' %} {{ story.price }}</strong>
-              </h3>
-              <div class="action d-flex justify-content-between w-100 mt-2">
-                {% if story.user != request.user %}
 
-                <div class="chat-button mr-2 col-6 p-0">
-                  <div class=" button p-1 w-100"
-                    onclick="gotochat('{% url "messager:story_chat" story.user story.id %}')"
-                    ontouchstart="gotochat('{% url "messager:story_chat" story.user story.id %}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                      class="feather feather-message-square">
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    Chat</div>
-
-                </div>
-
-
-
-                {% endif %}
                 <div class="share-button col-6 p-0">
                   <div class="button p-1 share w-100"
-                    onclick="shareMe('{{ story.title }}','{{ story.address }}, {{ story.city }} {{ story.price }}')">
+                    onclick="shareMe('{{ story.content }}','{{ story.address }}, {{ story.city }} {{ story.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-share-2">
@@ -134,10 +105,10 @@
             <div class="sp-slides">
               {% for image in images %}
               <div class="sp-slide">
-                <a href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ image.image }} "
+                <a href="{{ image.image }} "
                   data-fancybox="story-gallery">
                   <img class="sp-image" src=""
-                    data-src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ image.image_mid_size }}" />
+                    data-src="{{ image.image }}" />
                 </a>
               </div>
               {% endfor %}
@@ -172,8 +143,6 @@
           title="{% trans 'Edit this story' %}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
       </div>
-      {% else %}
-      <!-- <a href="{% url 'stories:report_story' story.id %}" class="btn btn-danger" title="{% trans 'Report this story' %}">{% trans 'Report' %} </a> -->
       {% endif %}
       <div class="m-3 d-flex justify-content-between">
         <a href="{% url 'stories:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
