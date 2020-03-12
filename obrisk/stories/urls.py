@@ -4,7 +4,7 @@ from obrisk.stories import views
 from obrisk.stories.search import SearchListView, get_suggestions
 app_name = 'stories'
 urlpatterns = [
-    url(r'^$', views.StoriesListView.as_view(), name='list'),
+    url(r'^$', views.stories_list, name='list'),
     url(r'^post-stories/$', views.post_stories, name='post_stories'),
     url(r'^story-images/$', views.get_story_images, name='story_images'), 
     url(r'^like/$', views.like, name='like_post'),
