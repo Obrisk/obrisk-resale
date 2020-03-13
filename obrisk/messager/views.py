@@ -24,7 +24,7 @@ from collections import OrderedDict
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
-from obrisk.utils.helpers import ajax_required 
+from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.notifications.models import Notification, notification_handler
 
@@ -37,7 +37,7 @@ except ImportError:
     from django.contrib.auth.models import User
     user_model = User
 
-from django.core.cache import cache	
+from django.core.cache import cache
 
 
 
@@ -51,7 +51,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        #Instead of running this query, be storing the last image on every conversation. 
+        #Instead of running this query, be storing the last image on every conversation.
         context['convs'] = Conversation.objects.get_conversations(
                         self.request.user
                     ).select_related('first_user','second_user').annotate(
@@ -59,7 +59,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
                         ).values_list('timestamp', flat=True).order_by('-timestamp')[:1]
-                    ), 
+                    ),
                     last_msg = Subquery (
                         Message.objects.filter(
                             conversation=OuterRef('pk'),
@@ -106,7 +106,7 @@ def messagesView(request, username):
     """CBV to render the inbox, showing a specific conversation with a given
     user, who requires to be active too."""
     if request.method == 'GET':
-        try:   
+        try:
             active_user = get_user_model().objects.get(
                         username=username)
 
@@ -115,10 +115,10 @@ def messagesView(request, username):
                 'status': '404',
                 'message': 'This user does not exist'
             })
-        
+
         else:
             key = "{}.{}".format(*sorted([request.user.pk, active_user.pk]))
-           
+
             conv, is_created = Conversation.objects.get_or_create(key=key)
             if is_created:
                 conv.first_user = request.user
@@ -129,8 +129,8 @@ def messagesView(request, username):
                     'sender',
                     'recipient',
                     'classified'
-                ).values('message', 
-                        'timestamp', 
+                ).values('message',
+                        'timestamp',
                         'classified_thumbnail',
                         'img_preview',
                         'image',
@@ -162,22 +162,25 @@ def messagesView(request, username):
                     )[:100]
 
             msgs_data = list(msgs_100)
-            #Celery task: This query takes some time 
+            #Celery task: This query takes some time
             conv.messages.all().update(unread=False)
+            if cache.get('msg_{active_user.pk}') is not None:
+                values = values.remove(key)
+                cache.set('msg_{active_user.pk}', values, SESSION_COOKIE_AGE)
 
             return JsonResponse({
-                'msgs': msgs_data, 
+                'msgs': msgs_data,
                 'active_username': active_user.username,
                 'active_thumbnail': active_user.thumbnail
             })
-    
+
     else:
         return JsonResponse ({
             'status': '403',
             'message': 'Invalid request'
         })
 
-         
+
 @login_required
 @ajax_required
 @require_http_methods(["POST"])
@@ -194,7 +197,7 @@ def send_message(request):
 
     #Django-channels doesn't accept group names that are chinese characters
     #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
-   
+
     recipient.username = slugify(recipient_username)
     sender.username = slugify(request.user.username)
 
@@ -205,15 +208,15 @@ def send_message(request):
 
     if not message and not image and not attachment:
         return HttpResponse()
-    
+
     if image:
         if image.startswith(f'messages/{sender.username}/{recipient.username}') == False:
-            print(f'messages/{sender.username}/{recipient.username}')             
+            print(f'messages/{sender.username}/{recipient.username}')
             image = None
 
         else:
             d = str(datetime.datetime.now())
-            img_preview = "messages/" + slugify(str(request.user.username)) + slugify(str(recipient_username)) + "/preview/" + "prv-" + d 
+            img_preview = "messages/" + slugify(str(request.user.username)) + slugify(str(recipient_username)) + "/preview/" + "prv-" + d
             style1 = 'image/resize,m_fill,h_250,w_250'
 
             try:
@@ -225,29 +228,39 @@ def send_message(request):
             except:
                 image = None
                 img_preview = None
-    
+
     if message:
         if len(message.strip()) == 0:
             return HttpResponse()
-  
+
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
-        notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='new_message')            
-        
+        notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='new_message')
+
+        key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
+        values = []
+        if cache.get('msg_{recipient.id}') is None:
+            values.append(key)
+            cache.set('msg_{recipient.id}', values, SESSION_COOKIE_AGE)
+        else:
+            values = list(cache.get('msg_{recipient.id}'))
+            values = values.append(key)
+            cache.set('msg_{recipient.id}', values, SESSION_COOKIE_AGE)
+
         # creating a key for the chatting users and updating a value for the key
         # value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
         # cache.set(f'joint_chat_{sender.pk}', value, timeout=SESSION_COOKIE_AGE)
-        
+
         # # keys from caches
         # sender_key = cache.get(f'joint_chat_{sender.pk}')
         # recipient_key = cache.get(f'joint_chat_{recipient.pk}')
         # print('sender key:', sender_key, "and recipient key", recipient_key )
-        
+
         # if recipient_key is None and recipient_key !=sender_key:
         #     #notification
-        #     notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='message')            
-        
+        #     notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='message')
+
         return render(request, 'messager/single_message.html', {'message': msg})
 
     return HttpResponse()
@@ -272,13 +285,13 @@ def receive_message(request):
 @login_required
 @require_http_methods(["GET"])
 def classified_chat(request, to, classified):
-    """ Create a Conversation object btn 2 users with 
+    """ Create a Conversation object btn 2 users with
     classified post as the initial message """
     try:
         to_user = get_user_model().objects.get(username=to)
         from_user = request.user
         classified = Classified.objects.get(id=classified)
-    
+
     except get_user_model().DoesNotExist:
         messages.error(request, f"Sorry, The user {to}, doesn't exist!")
         return redirect('messager:contacts_list')
@@ -287,7 +300,7 @@ def classified_chat(request, to, classified):
         #This error message assumes that the classifieds items are never deleted completely.
         #If the user reaches here then he/she was playing with url parameters.
         messages.error(request, f"Hello there, your request is invalid!")
-        return redirect('messager:contacts_list')  
+        return redirect('messager:contacts_list')
 
     else:
         classified_thumbnail = ClassifiedImages.objects.values_list(
@@ -303,7 +316,7 @@ def classified_chat(request, to, classified):
                 classified_thumbnail=str(classified_thumbnail[0])
             )
             return redirect("messager:conversation_detail" , to)
-        
+
         else:
             #This condition assumes classified parameter should never be null.
             if classified.user == to_user:
@@ -312,7 +325,7 @@ def classified_chat(request, to, classified):
                                 second_user=to_user,
                                 key=key)
                 conv.save()
-                
+
                 Message.objects.create(
                     conversation=conv,
                     sender=from_user,
@@ -325,7 +338,7 @@ def classified_chat(request, to, classified):
                 messages.error(request, f"Hey you there, it looks like you're trying to do something bad. \
                     Your account { from_user}, has been flagged, and if this happens again, you will be blocked!")
                 return redirect('messager:contacts_list')
-            
+
 
 
 @login_required
@@ -348,7 +361,7 @@ def make_conversations(request):
             #the undelying problem of why the conversation had no key
             message.conversation = Conversation.objects.get(key=key)
             message.save()
-            continue            
+            continue
         else:
             key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
             conv = Conversation(first_user=from_user, second_user=to_user, key=key)
@@ -356,7 +369,7 @@ def make_conversations(request):
 
             message.conversation = conv
             message.save()
-        
+
     return redirect('messager:contacts_list')
 
 
