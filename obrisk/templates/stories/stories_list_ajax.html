@@ -1,0 +1,6 @@
+<!-- Page Content -->
+{% load static i18n %}
+{% load humanize thumbnail %}
+{% for story in stories %}
+{% include 'stories/stories_single.html' with stories=story %}
+{% endfor %}

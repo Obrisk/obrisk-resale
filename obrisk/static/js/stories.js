@@ -300,7 +300,7 @@ $(function() {
     e.preventDefault();
     $(".dropdown-trigger").toggleClass("is-active");
   });
-  $("img").on("click", function() {
+  $(document.body).on("click", "img", function() {
     $.ajax({
       type: "get",
       url:
