@@ -1,13 +1,9 @@
+import requests, time, datetime
 from celery import shared_task
-from obrisk.users.models import User
-import requests
 from slugify import slugify
-# from django.http import JsonResponse
-# import base64
-import datetime
-# import oss2
 from allauth.socialaccount.models import SocialAccount, SocialLogin
 from obrisk.utils.images_upload import bucket
+from obrisk.users.models import User
 
 
 @shared_task
@@ -16,9 +12,10 @@ def update_profile_picture(user_id):
     A function to add the background task to update user picture download it from
     Linkedin and save it to our bucket using requests package
     '''
-    
+
+    time.sleep(1)
     # get  the user object
-    user = SocialAccount.objects.get(user=User.objects.get(id=user_id))
+    user = User.objects.get(id=user_id)
 
     # check if the user is a social user and get the info from linkedin
     if user.socialaccount_set.all() and not user.picture:
