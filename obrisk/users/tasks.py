@@ -14,7 +14,7 @@ def update_profile_picture(user_id):
     A function to add the background task to update user picture download it from
     Linkedin and save it to our bucket using requests package
     '''
-    time.sleep(5)
+    time.sleep(1)
     # get  the user object
     user = User.objects.get(id=user_id)
     # check if the user is a social user and get the info from linkedin
