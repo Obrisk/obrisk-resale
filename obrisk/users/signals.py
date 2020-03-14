@@ -10,7 +10,9 @@ def social_user_connected(user, **kwargs):
         backgroundnd task and redirects to the homepage
     '''
     if user.socialaccount_set.all():
-        update_profile_picture.delay(user.id)
+
+        update_profile_picture.delay(user_id=user.id)
+
         return redirect("stories:list")
     else:
         return redirect("stories:list")
