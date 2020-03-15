@@ -6,31 +6,30 @@
 # Also check for safe ways to inject .env in the middle of this script
 
 sudo apt-get -y update
-sudo apt-get -y upgrade
 
 #First, install codedeploy agent.
 sudo apt-get -y install ruby
 sudo apt-get -y install wget
 cd /home/ubuntu
-wget https://aws-codedeploy-ap-northeast-2.s3.amazonaws.com/latest/install
+#wget https://bucket-name.s3.region-identifier.amazonaws.com/latest/install
+wget https://aws-codedeploy-cn-northwest-1.s3.cn-northwest-1.amazonaws.com.cn/latest/install
 chmod +x ./install
-./install auto
+sudo ./install auto
 
-#This command is to add the config files then restart the service
-sudo vim /etc/codedeploy-agent/conf/codedeploy.onpremises.yml
-sudo service codedeploy-agent restart
+sudo service codedeploy-agent start
+sudo service codedeploy-agent status
 
 sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel nginx curl redis-server npm -y
 
 sudo -H pip3 install --upgrade pip wheel setuptools
 
-useradd -m -p "$(python -c "import crypt; print crypt.crypt(\"REPLACE-WITH-RAW-PS\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")")" -s /bin/bash obdev-user
+sudo useradd -m -p "$(python -c "import crypt; print crypt.crypt(\"REPLACE-WITH-RAW-PS\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")")" -s /bin/bash obdev-user
 sudo gpasswd -a obdev-user sudo
 sudo su - obdev-user
 
 ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "REPLACE-WITH-EMAIL"
 
-ssh-add -k ~/.ssh/id_rsa
+sudo ssh-add -k ~/.ssh/id_rsa
 
 RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
 
