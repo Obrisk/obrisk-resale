@@ -283,6 +283,10 @@ $(function() {
     });
   });
 
+  $("video-js").each(function(index, element) {
+    // element == this
+    videojs($this);
+  });
   $(".select-status button").click(function(e) {
     $("#selected-status #viewer-icon").html(
       $(this)
