@@ -62,12 +62,14 @@
       {% if stories.video %}
       <div class="grid-1">
 
-        <video
+        <video id="vid-{{ stories.uuid_id }}"
           class="video-js vjs-fluid vjs-big-play-centered video-js vjs-16-9 vjs-paused vjs-controls-enabled vjs-workinghover vjs-v7 vjs-user-active vjs-theme-sea vjs_video_3221-dimensions"
-          width="640px" height="267px" controls preload="meta"
-          data-setup='{"aspectRatio":"640:267", "playbackRates": [1, 1.5, 2] }'>
+          width="640px" height="267px" controls preload="meta" data-setup='{}'>
           <source src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.video}}" type="video/mp4">
           Your browser doesn' t support HTML5 video tag. </video>
+        <script>
+          videojs("vid-{{ stories.uuid_id }}", { aspectRatio: "640:267", playbackRates: [1, 1.5, 2] })
+        </script>
       </div>
       {% else %}
 

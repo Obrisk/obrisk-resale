@@ -273,9 +273,8 @@
       </div>
       <div class="infinite-container">
         <ul class="stream">
-          {% for stories in stories_list %}
-          {% include 'stories/stories_single.html' with stories=stories %}
-          {% endfor %}
+          {% include "stories/stories_list_ajax.html" %}
+
         </ul>
       </div>
       <div class="load">
@@ -293,6 +292,37 @@
 {% endblock content %}
 
 {% block extra_js %}
+<script>
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  var is_tag_page = "{{tag}}";
+  if (is_tag_page == "None") {
+    $(window).scroll(function () {
+      if (empty_page == false && block_request == false) {
+        block_request = true;
+        page += 1;
+        $('.loading').removeClass('d-none')
+        $.when(
+          $.get('?page=' + page, function (data) {
+            if (data == '') {
+              empty_page = true;
+              $('.loading').addClass('d-none')
+              $('.stream').append('<div class="m-auto"> End of Stories</div>')
+            } else {
+              $('.loading').addClass('d-none');
+              block_request = false;
+              $('.stream').append(data);
+            }
+          })
+        ).done(
+          lazyload()
+        )
+
+      }
+    });
+  }
+</script>
 <script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
