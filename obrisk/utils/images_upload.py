@@ -168,14 +168,19 @@ def create_presigned_url_expanded(client_method_name, method_parameters=None,
 
 @login_required
 @require_http_methods(["GET"])
-def get_oss_auth(request):
+def get_oss_auth(request, object_name=None):
     """AJAX Functional view to recieve just the minimum information, process
     and create the new message and return the new data to be attached to the
     conversation stream."""
-    obj = request.GET.get('object-name')
     
     if os.getenv('AWS_S3_MEDIA'):
-        data = create_presigned_post(os.getenv('AWS_S3_MEDIA_BUCKET_NAME'), obj,
+        if object_name is None:
+            data = {'status': 'failed',
+                    'errorMessage': 'The request requires the object name to be uploaded \
+                    but no name was supplied'}
+            return JsonResponse(data)
+
+        data = create_presigned_post(os.getenv('AWS_S3_MEDIA_BUCKET_NAME'), object_name,
                             fields=None, conditions=None, expiration=3600)
         
         return JsonResponse(data)
