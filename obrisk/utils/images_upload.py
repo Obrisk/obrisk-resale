@@ -121,7 +121,11 @@ def create_presigned_post(bucket_name, object_name,
     """
 
     # Generate a presigned S3 POST URL
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client('s3',
+                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
+                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
+                          region_name=os.getenv('AWS_S3_REGION_NAME')
+                      )
     try:
         response = s3_client.generate_presigned_post(bucket_name,
                                                      object_name,
@@ -151,7 +155,11 @@ def create_presigned_url_expanded(client_method_name, method_parameters=None,
     """
 
     # Generate a presigned URL for the S3 client method
-    s3_client = boto3.client('s3')
+    s3_client = boto3.client('s3', 
+                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
+                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
+                          region_name=os.getenv('AWS_S3_REGION_NAME')
+                      )
     try:
         response = s3_client.generate_presigned_url(ClientMethod=client_method_name,
                                                     Params=method_parameters,
@@ -269,47 +277,52 @@ def multipleImagesPersist(request, images_list, app, obj):
         else:
             return False
 
-        try:
-            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                            oss2.compat.to_bytes(thumb_name))),
-                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            bucket.process_object(str_result, process)
-        
-            if app == 'classifieds':
-                process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(img_mid_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                bucket.process_object(str_result, process)
-        
-        except oss2.exceptions.NoSuchKey as e:
-            obj.delete()
-            return False
 
-        except Exception:
-            #If there is a problem with the thumbnail generation, most likely our code is wrong... 
-            if index+1 == tot_img_objs:
-                #To-do 
-                #Pass the image object to background task and verify if image exist
-                #and retry thumbnail creation
-                #Send email to the developers
-                messages.error(request, f"We are having difficulty processing your image(s), \
-                    check your post if everything is fine.")
-                
-            img_obj.image_thumb = str_result 
-            if img_mid_name:
-                img_obj.image_mid_size = str_result
-            img_obj.save()
-            saved_objs.append(img_obj)
-            continue   
+        if os.getenv('AWS_S3_MEDIA'):
+            return True
 
         else:
-            img_obj.image_thumb = thumb_name
-            if img_mid_name:
-                img_obj.image_mid_size = img_mid_name
-            img_obj.save()
-            saved_objs.append(img_obj)
+            try:
+                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(thumb_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(str_result, process)
+            
+                if app == 'classifieds':
+                    process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                    oss2.compat.to_bytes(img_mid_name))),
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                    bucket.process_object(str_result, process)
+            
+            except oss2.exceptions.NoSuchKey as e:
+                obj.delete()
+                return False
+
+            except Exception:
+                #If there is a problem with the thumbnail generation, most likely our code is wrong... 
+                if index+1 == tot_img_objs:
+                    #To-do 
+                    #Pass the image object to background task and verify if image exist
+                    #and retry thumbnail creation
+                    #Send email to the developers
+                    messages.error(request, f"We are having difficulty processing your image(s), \
+                        check your post if everything is fine.")
+                    
+                img_obj.image_thumb = str_result 
+                if img_mid_name:
+                    img_obj.image_mid_size = str_result
+                img_obj.save()
+                saved_objs.append(img_obj)
+                continue   
+
+            else:
+                img_obj.image_thumb = thumb_name
+                if img_mid_name:
+                    img_obj.image_mid_size = img_mid_name
+                img_obj.save()
+                saved_objs.append(img_obj)
 
     return saved_objs 
 
