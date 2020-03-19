@@ -14,9 +14,9 @@ def update_profile_picture(user_id):
     '''
 
     time.sleep(0.1)
-    if User.objects.get(id=user_id) DoesNotExists:
+    if User.objects.filter(id=user_id).exists():
         # get  the user object
-        time.sleep(2)
+
         user = User.objects.get(id=user_id)
 
         # check if the user is a social user and get the info from linkedin
@@ -47,6 +47,8 @@ def update_profile_picture(user_id):
             user.org_picture = picture
             user.save()
     else:
+
+        time.sleep(2)
         user = User.objects.get(id=user_id)
 
         # check if the user is a social user and get the info from linkedin
