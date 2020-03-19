@@ -1,3 +1,11 @@
+import uuid
+import json
+import base64
+import re
+import os
+import datetime
+import logging
+
 from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -6,13 +14,6 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from slugify import slugify
 
-import json
-import base64
-import re
-import os
-import datetime
-
-import logging
 import boto3
 from botocore.exceptions import ClientError
 
@@ -22,8 +23,6 @@ from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from obrisk.classifieds.models import ClassifiedImages
 from obrisk.stories.models import StoryImages
 
-# STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
-# STS's official documentation can be found at https://help.aliyun.com/document_detail/28627.html
 
 # Initialize the information such as AccessKeyId, AccessKeySecret, and Endpoint.
 # Get through environment variables, or replace something like "< your AccessKeyId>" with a real AccessKeyId.
@@ -104,6 +103,38 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
 
 
+def generate_sts_credentials(request):
+    '''By default it returns the sts to perform put on s3 bucket'''
+
+    # create an STS client object that represents a live connection to the 
+    # STS service
+    sts_client = boto3.client('sts',
+                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
+                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
+                          region_name=os.getenv('AWS_S3_REGION_NAME')
+                      )
+
+    try:
+        # Call the assume_role method of the STSConnection object and pass the role
+        # ARN and a role session name.
+        session_name = slugify(f"{request.user.username}-{uuid.uuid4().hex[:8]}")
+
+        assumed_role_object=sts_client.assume_role(
+            RoleArn=os.getenv('AWS_S3_MEDIA_BUCKET_ARN'),
+            RoleSessionName=session_name,
+            ExternalId=os.getenv('AWS_S3_ROLE_EXTERNALID'),
+            DurationSeconds=1800
+        )
+
+    except ClientError as e:
+        logging.error(e)
+        return None
+    # From the response that contains the assumed role, get the temporary 
+    # credentials that can be used to make subsequent API calls
+    # credentials are as a Python dictionary, so can be served to JS directly
+    return assumed_role_object['Credentials']
+
+
 
 def create_presigned_post(bucket_name, object_name,
                           fields=None, conditions=None, expiration=3600):
@@ -140,40 +171,6 @@ def create_presigned_post(bucket_name, object_name,
     return response
 
 
-
-def create_presigned_url_expanded(client_method_name, method_parameters=None,
-                                  expiration=3600, http_method=None):
-    """Generate a presigned URL to invoke an S3.Client method
-
-    Not all the client methods provided in the AWS Python SDK are supported.
-
-    :param client_method_name: Name of the S3.Client method, e.g., 'list_buckets'
-    :param method_parameters: Dictionary of parameters to send to the method
-    :param expiration: Time in seconds for the presigned URL to remain valid
-    :param http_method: HTTP method to use (GET, etc.)
-    :return: Presigned URL as string. If error, returns None.
-    """
-
-    # Generate a presigned URL for the S3 client method
-    s3_client = boto3.client('s3', 
-                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
-                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
-                          region_name=os.getenv('AWS_S3_REGION_NAME')
-                      )
-    try:
-        response = s3_client.generate_presigned_url(ClientMethod=client_method_name,
-                                                    Params=method_parameters,
-                                                    ExpiresIn=expiration,
-                                                    HttpMethod=http_method)
-    except ClientError as e:
-        logging.error(e)
-        return None
-
-    # The response contains the presigned URL
-    return response
-
-
-
 @login_required
 @require_http_methods(["GET"])
 def get_oss_auth(request, object_name=None):
@@ -181,16 +178,17 @@ def get_oss_auth(request, object_name=None):
     and create the new message and return the new data to be attached to the
     conversation stream."""
     
-    if os.getenv('AWS_S3_MEDIA'):
-        if object_name is None:
-            data = {'status': 'failed',
-                    'errorMessage': 'The request requires the object name to be uploaded \
-                    but no name was supplied'}
-            return JsonResponse(data)
+    error_data = {
+        'status': 'failed',
+        'errorMessage': 'The request requires the object name to be uploaded \
+        but no name was supplied'
+    }
 
-        data = create_presigned_post(os.getenv('AWS_S3_MEDIA_BUCKET_NAME'), object_name,
-                            fields=None, conditions=None, expiration=3600)
+    if os.getenv('AWS_S3_MEDIA'):
+        data = generate_sts_credentials(request)
         
+        if data is None:
+            return JsonResponse(error_data)
         return JsonResponse(data)
 
     else:
@@ -198,7 +196,7 @@ def get_oss_auth(request, object_name=None):
         
         if token == False:
             #This is very bad, but we'll do it until we move the servers to China.
-            #Send the alert email to developers (via celery) instead of logging.
+            #logging this event
             key_id = str(access_key_id)
             scrt = str(access_key_secret)
             data = {
