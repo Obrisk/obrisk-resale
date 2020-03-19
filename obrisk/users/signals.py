@@ -1,7 +1,7 @@
 from django.shortcuts import redirect
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
-
+from obrisk.users.tasks import update_profile_picture
 import requests
 from slugify import slugify
 import datetime
@@ -17,11 +17,8 @@ def social_user_connected(user, **kwargs):
 
     if user.socialaccount_set.all() and not user.picture:
         # Checking if the user's provider is linkedin
-        if u.socialaccount_set.all()[0].provider is 'linkedin_oauth2'
-            update_profile_picture.delay(user_id=user.id)
-            return redirect("stories:list")
+        update_profile_picture.delay(user_id=user.id)
+        return redirect("stories:list")
 
-        else:
-            return redirect("stories:list")
     else:
         return redirect("stories:list")
