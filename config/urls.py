@@ -40,7 +40,7 @@ urlpatterns = [
         TemplateView.as_view(template_name='offline.html'),
         name='offline'),
 
-    url(r'^get-oss-auth/$',
+    url(r'^get-oss-auth/([\w\.%+-]+)/$',
         get_oss_auth,
         name='get_oss_auth'),
 

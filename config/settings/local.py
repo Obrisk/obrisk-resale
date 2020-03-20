@@ -1,10 +1,32 @@
-    
-import logging
-
-from django.utils.log import DEFAULT_LOGGING
+import os
+import logging, logging.config
+#from django.utils.log import DEFAULT_LOGGING
 
 from .base import *  # noqa
 from .base import env
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+    },
+}
+
 
 # GENERAL
 # ------------------------------------------------------------------------------
