@@ -68,11 +68,12 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
     try:        
         #Default timeout is 5 secs, but the server is far from alibaba data centers so increase it.
-        #This is Tokyo data center.
-        clt = client.AcsClient(access_key_id, access_key_secret, 'ap-northeast-1',
+        #This is north China, there are 3 more data centers. I can try others
+        clt = client.AcsClient(access_key_id, access_key_secret, 'cn-beijing',
                              timeout=30, max_retry_time=3)
         
-    except:
+    except Exception as e:
+        logging.error(e)
         return False
     
     else:
@@ -84,7 +85,9 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
             req.set_RoleSessionName('obriskdev-1330-oss-sts')
             body = clt.do_action_with_exception(req)
             j = json.loads(oss2.to_unicode(body))
-        except:
+
+        except Exception as e:
+            logging.error(e)
             return False
         
         else:
@@ -173,7 +176,7 @@ def create_presigned_post(bucket_name, object_name,
 
 @login_required
 @require_http_methods(["GET"])
-def get_oss_auth(request, object_name=None):
+def get_oss_auth(request, app_name=None):
     """AJAX Functional view to recieve just the minimum information, process
     and create the new message and return the new data to be attached to the
     conversation stream."""
@@ -183,8 +186,8 @@ def get_oss_auth(request, object_name=None):
         'errorMessage': 'The request requires the object name to be uploaded \
         but no name was supplied'
     }
-
-    if os.getenv('AWS_S3_MEDIA'):
+    
+    if app_name == 'stories.video':
         data = generate_sts_credentials(request)
         
         if data is None:
@@ -330,23 +333,24 @@ def videoPersist(request, video, app, obj):
     It returns True if the video is authentic
     False if there is a validation problem '''
 
-    if video.startswith(f'{app}/videos/{request.user.username}') == False or len(video) < 10:
+    if video.startswith('f{media/videos/{app}/{request.user.username}/') == False or len(video) < 10:
         obj.delete()
         return False
 
-    try:
-        simplifiedmeta = bucket.get_object_meta(video)
-        print(simplifiedmeta.headers['Last-Modified'])
-        print(simplifiedmeta.headers['Content-Length'])
-    
-    except oss2.exceptions.NoSuchKey:
-        obj.delete() 
-        return False
+    response = client.head_object(
+        Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
+        Key=video,
+    )
 
-    except Exception:
-        obj.video = video
-        obj.save()
-        return True
+    print(response)
+    #For Aliyun OSS try:
+    #   simplifiedmeta = bucket.get_object_meta(video)
+    #   print(simplifiedmeta.headers['Last-Modified'])
+    #   print(simplifiedmeta.headers['Content-Length'])
+    
+    #except oss2.exceptions.NoSuchKey:
+    #    obj.delete() 
+    #    return False
 
     obj.video = video
     obj.save()
