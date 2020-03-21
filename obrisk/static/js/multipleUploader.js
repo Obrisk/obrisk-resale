@@ -67,7 +67,8 @@ var hasErrors = false;
 var retryCount = 0;
 var retryCountMax = 5;
 var TotalFilesMaxSize = 8;
-
+const s3Upload = false;
+const aliyunUpload = true;
 OssUpload.prototype = {
   constructor: OssUpload,
   // Binding event
@@ -309,111 +310,52 @@ OssUpload.prototype = {
    */
   uploadFile: function(file, filename, type) {
     $totalProgressbar.css("width", "30%").html("Uploading...");
-    applyTokenDo()
-      .then(result => {
-        if (!result.direct) {
-          client = new OSS({
-            region: result.region,
-            accessKeyId: result.accessKeyId,
-            accessKeySecret: result.accessKeySecret,
-            stsToken: result.SecurityToken,
-            bucket: result.bucket
-          });
-        } else {
-          client = new OSS({
-            region: result.region,
-            accessKeyId: result.accessId,
-            accessKeySecret: result.stsTokenKey,
-            bucket: result.bucket
-          });
-        }
-
-        //make sure we get the sts token
-        if (client !== undefined) {
-          const upload = async () => {
-            try {
-              const results = await client
-                .multipartUpload(filename, file, {
-                  progress: progress,
-                  partSize: 200 * 1024, //Minimum is 100*1024
-                  timeout: 120000 // 2 minutes timeout
-                })
-                .then(function(res) {
-                  //Try to get the dominat color from the uploaded image, if it fails it means the image
-                  //was corrupted during upload
-                  if (/^video/.test(type)) {
-                    url = obrisk_oss_url + res.name;
-                  } else {
-                    url =
-                      obrisk_oss_url +
-                      res.name +
-                      "?x-oss-process=image/average-hue";
-                  }
-                  $.ajax({
-                    url: url,
-                    success: function() {
-                      $("#" + file.id)
-                        .children(".success-span")
-                        .addClass("success");
-                      $("#" + file.id)
-                        .children(".file-panel")
-                        .hide();
-                      uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                      uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                      progressBarNum =
-                        (
-                          uploader.fileStats.curFileSize /
-                          uploader.fileStats.totalFilesSize
-                        ).toFixed(2) * 100;
-                      progressBar =
-                        (
-                          uploader.fileStats.curFileSize /
-                          uploader.fileStats.totalFilesSize
-                        ).toFixed(2) *
-                          100 +
-                        "%";
-
-                      if (/^image/.test(type)) {
-                        if (images == "") {
-                          images += res.name;
-                        } else {
-                          images += "," + res.name;
-                        }
-                      } else {
-                        if (videos == "") {
-                          videos += res.name;
-                        } else {
-                          videos += "," + res.name;
-                        }
-                      }
-
-                      if (progressBarNum == 100) {
-                        $totalProgressbar
-                          .css("width", progressBar)
-                          .html("Upload complete");
-
-                        $("body").trigger("uploadComplete");
-                      } else {
-                        progressBar = parseFloat(progressBar);
-
-                        $totalProgressbar
-                          .css("width", progressBar.toFixed(0))
-                          .html(progressBar);
-                      }
-                    },
-                    error: function(e) {
-                      // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
-                      if (retryCount < retryCountMax) {
-                        retryCount++;
-                        console.error(`retryCount : ${retryCount}`);
-                        upload();
-                      } else {
-                        //We have retried to the max and there is nothing we can do
-                        //Allow the users to submit the form atleast with default image.
-
+    if (aliyunUpload) {
+      applyTokenDo()
+        .then(result => {
+          if (!result.direct) {
+            client = new OSS({
+              region: result.region,
+              accessKeyId: result.accessKeyId,
+              accessKeySecret: result.accessKeySecret,
+              stsToken: result.SecurityToken,
+              bucket: result.bucket
+            });
+          } else {
+            client = new OSS({
+              region: result.region,
+              accessKeyId: result.accessId,
+              accessKeySecret: result.stsTokenKey,
+              bucket: result.bucket
+            });
+          }
+          //make sure we get the sts token
+          if (client !== undefined) {
+            const upload = async () => {
+              try {
+                const results = await client
+                  .multipartUpload(filename, file, {
+                    progress: progress,
+                    partSize: 200 * 1024, //Minimum is 100*1024
+                    timeout: 120000 // 2 minutes timeout
+                  })
+                  .then(function(res) {
+                    //Try to get the dominat color from the uploaded image, if it fails it means the image
+                    //was corrupted during upload
+                    if (/^video/.test(type)) {
+                      url = obrisk_oss_url + res.name;
+                    } else {
+                      url =
+                        obrisk_oss_url +
+                        res.name +
+                        "?x-oss-process=image/average-hue";
+                    }
+                    $.ajax({
+                      url: url,
+                      success: function() {
                         $("#" + file.id)
                           .children(".success-span")
-                          .addClass("fail");
+                          .addClass("success");
                         $("#" + file.id)
                           .children(".file-panel")
                           .hide();
@@ -432,71 +374,159 @@ OssUpload.prototype = {
                             100 +
                           "%";
 
+                        if (/^image/.test(type)) {
+                          if (images == "") {
+                            images += res.name;
+                          } else {
+                            images += "," + res.name;
+                          }
+                        } else {
+                          if (videos == "") {
+                            videos += res.name;
+                          } else {
+                            videos += "," + res.name;
+                          }
+                        }
+
                         if (progressBarNum == 100) {
                           $totalProgressbar
                             .css("width", progressBar)
                             .html("Upload complete");
+
+                          $("body").trigger("uploadComplete");
                         } else {
+                          progressBar = parseFloat(progressBar);
+
                           $totalProgressbar
-                            .css("width", progressBar)
+                            .css("width", progressBar.toFixed(0))
                             .html(progressBar);
                         }
-                        img_error =
-                          res.name +
-                          ", Message: " +
-                          "Corrupted image" +
-                          ", RequestID: " +
-                          res.name;
-                        $("#retry-button").removeClass("is-hidden");
+                      },
+                      error: function(e) {
+                        // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
+                        if (retryCount < retryCountMax) {
+                          retryCount++;
+                          console.error(`retryCount : ${retryCount}`);
+                          upload();
+                        } else {
+                          //We have retried to the max and there is nothing we can do
+                          //Allow the users to submit the form atleast with default image.
 
-                        if (!images) {
-                          if (app == "classifieds") {
-                            images = "classifieds/error-img.jpg";
-                            $.wnoty({
-                              type: "error",
-                              autohide: false,
-                              message:
-                                "Oops! an error occured when uploading your image(s). \
-                                                    But you can submit this post without images ."
-                            });
+                          $("#" + file.id)
+                            .children(".success-span")
+                            .addClass("fail");
+                          $("#" + file.id)
+                            .children(".file-panel")
+                            .hide();
+                          uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                          uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                          progressBarNum =
+                            (
+                              uploader.fileStats.curFileSize /
+                              uploader.fileStats.totalFilesSize
+                            ).toFixed(2) * 100;
+                          progressBar =
+                            (
+                              uploader.fileStats.curFileSize /
+                              uploader.fileStats.totalFilesSize
+                            ).toFixed(2) *
+                              100 +
+                            "%";
+
+                          if (progressBarNum == 100) {
+                            $totalProgressbar
+                              .css("width", progressBar)
+                              .html("Upload complete");
                           } else {
-                            $.wnoty({
-                              type: "error",
-                              autohide: false,
-                              message:
-                                "Sorry! an error occured when uploading your image(s). You can post without images"
-                            });
+                            $totalProgressbar
+                              .css("width", progressBar)
+                              .html(progressBar);
+                          }
+                          img_error =
+                            res.name +
+                            ", Message: " +
+                            "Corrupted image" +
+                            ", RequestID: " +
+                            res.name;
+                          $("#retry-button").removeClass("is-hidden");
+
+                          if (!images) {
+                            if (app == "classifieds") {
+                              images = "classifieds/error-img.jpg";
+                              $.wnoty({
+                                type: "error",
+                                autohide: false,
+                                message:
+                                  "Oops! an error occured when uploading your image(s). \
+                                                    But you can submit this post without images ."
+                              });
+                            } else {
+                              $.wnoty({
+                                type: "error",
+                                autohide: false,
+                                message:
+                                  "Sorry! an error occured when uploading your image(s). You can post without images"
+                              });
+                            }
                           }
                         }
                       }
-                    }
-                  }); //End of ajax function
-                })
-                .catch(err => {
-                  console.error(err);
-                  console.log(`err.name : ${err.name}`);
-                  console.log(`err.message : ${err.message}`);
-                  console.log(`err.request : ${err.requestId}`);
+                    }); //End of ajax function
+                  })
+                  .catch(err => {
+                    console.error(err);
+                    console.log(`err.name : ${err.name}`);
+                    console.log(`err.message : ${err.message}`);
+                    console.log(`err.request : ${err.requestId}`);
 
-                  $totalProgressbar.css("width", "40%").html("Retrying...");
+                    $totalProgressbar.css("width", "40%").html("Retrying...");
 
-                  if (
-                    err.name.toLowerCase().indexOf("connectiontimeout") !== -1
-                  ) {
-                    if (retryCount < retryCountMax) {
-                      retryCount++;
-                      console.error(`retryCount : ${retryCount}`);
-                      upload();
+                    if (
+                      err.name.toLowerCase().indexOf("connectiontimeout") !== -1
+                    ) {
+                      if (retryCount < retryCountMax) {
+                        retryCount++;
+                        console.error(`retryCount : ${retryCount}`);
+                        upload();
+                      } else {
+                        //We have retried to the max and there is nothing we can do
+                        //Allow the users to submit the form atleast with default image.
+                        $totalProgressbar
+                          .css("width", "94%")
+                          .html("Completed with minor errors!");
+                        $("ul.filelist li")
+                          .children(".success-span")
+                          .addClass("fail");
+                        $("#addBtn").hide();
+                        img_error =
+                          err.name +
+                          ", Message: " +
+                          err.message +
+                          ", RequestID: " +
+                          err.requestId;
+                        $("#retry-button").removeClass("is-hidden");
+                        if (!images) {
+                          if (app == "classifieds") {
+                            images = "classifieds/error-img.jpg";
+                          } else {
+                            //don't add error images to stories
+                          }
+
+                          $.wnoty({
+                            type: "error",
+                            autohide: false,
+                            message:
+                              "Oops! an error occured when uploading your image(s). \
+                                            But you can submit this post without images ."
+                          });
+                        }
+                      }
                     } else {
-                      //We have retried to the max and there is nothing we can do
+                      //Not timeout out error and there is nothing we can do
                       //Allow the users to submit the form atleast with default image.
                       $totalProgressbar
                         .css("width", "94%")
                         .html("Completed with minor errors!");
-                      $("ul.filelist li")
-                        .children(".success-span")
-                        .addClass("fail");
-                      $("#addBtn").hide();
                       img_error =
                         err.name +
                         ", Message: " +
@@ -508,85 +538,220 @@ OssUpload.prototype = {
                         if (app == "classifieds") {
                           images = "classifieds/error-img.jpg";
                         } else {
-                          //don't add error images to stories
+                          //Don't add error message for stories
                         }
-
-                        $.wnoty({
-                          type: "error",
-                          autohide: false,
-                          message:
-                            "Oops! an error occured when uploading your image(s). \
+                        console.log(hasErrors);
+                        if (!hasErrors) {
+                          $.wnoty({
+                            type: "error",
+                            autohide: false,
+                            message:
+                              "Oops! an error occured when uploading your image(s). \
                                             But you can submit this post without images ."
-                        });
+                          });
+                          hasErrors = true;
+                        }
                       }
                     }
-                  } else {
-                    //Not timeout out error and there is nothing we can do
-                    //Allow the users to submit the form atleast with default image.
-                    $totalProgressbar
-                      .css("width", "94%")
-                      .html("Completed with minor errors!");
-                    img_error =
-                      err.name +
-                      ", Message: " +
-                      err.message +
-                      ", RequestID: " +
-                      err.requestId;
-                    $("#retry-button").removeClass("is-hidden");
-                    if (!images) {
-                      if (app == "classifieds") {
-                        images = "classifieds/error-img.jpg";
-                      } else {
-                        //Don't add error message for stories
-                      }
-                      console.log(hasErrors);
-                      if (!hasErrors) {
-                        $.wnoty({
-                          type: "error",
-                          autohide: false,
-                          message:
-                            "Oops! an error occured when uploading your image(s). \
-                                            But you can submit this post without images ."
-                        });
-                        hasErrors = true;
-                      }
-                    }
-                  }
-                });
-              return results;
-            } catch (e) {
-              $.wnoty({
-                type: "error",
-                autohide: false,
-                message:
-                  "Oops! an error occured when uploading your image(s), \
+                  });
+                return results;
+              } catch (e) {
+                $.wnoty({
+                  type: "error",
+                  autohide: false,
+                  message:
+                    "Oops! an error occured when uploading your image(s), \
                     Please try again later or contact us via support@obrisk.com. "
-              });
-              $(".start-uploader").css("display", "block");
-              console.log(e);
-            }
-          };
-          return upload();
-        } else {
+                });
+                $(".start-uploader").css("display", "block");
+                console.log(e);
+              }
+            };
+            return upload();
+          } else {
+            $.wnoty({
+              type: "error",
+              autohide: false,
+              message:
+                "Oops!, it looks like there is a network problem, \
+            Please try again later or contact us at support@obrisk.com"
+            });
+            $(".start-uploader").css("display", "block");
+          }
+        })
+        .catch(e => {
           $.wnoty({
             type: "error",
             autohide: false,
             message:
-              "Oops!, it looks like there is a network problem, \
-            Please try again later or contact us at support@obrisk.com"
+              "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
           });
-          $(".start-uploader").css("display", "block");
-        }
-      })
-      .catch(e => {
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message:
-            "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
+          console.log(e);
         });
-        console.log(e);
+    }
+    if (s3Upload) {
+      getPresignedURL().then(result => {
+        const s3 = new AWS.S3({
+          credentials: new AWS.Credentials({
+            accessKeyId: result.AccessKeyId,
+            secretAccessKey: result.SecretAccessKey
+          }),
+          region: "cn-northwest-1"
+        });
+        const params = {
+          Bucket: "obdev-ac-media-s3",
+          ContentType: file.type,
+          Expires: 60 * 10,
+          Key: genKey(type)
+        };
+        const upload = async () => {
+          try {
+            s3.getSignedUrl("putObject", params, function(err, presignedURL) {
+              if (err) {
+                console.error("Presigning encountered an error", err);
+                showError();
+              } else {
+                $.ajax({
+                  type: "PUT",
+                  url: presignedURL,
+                  contentType: file.type,
+                  processData: false,
+                  data: file,
+                  success: function() {
+                    $("#" + file.id)
+                      .children(".success-span")
+                      .addClass("success");
+                    $("#" + file.id)
+                      .children(".file-panel")
+                      .hide();
+                    uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                    uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                    progressBarNum =
+                      (
+                        uploader.fileStats.curFileSize /
+                        uploader.fileStats.totalFilesSize
+                      ).toFixed(2) * 100;
+                    progressBar =
+                      (
+                        uploader.fileStats.curFileSize /
+                        uploader.fileStats.totalFilesSize
+                      ).toFixed(2) *
+                        100 +
+                      "%";
+
+                    if (/^image/.test(type)) {
+                      if (images == "") {
+                        images += res.name;
+                      } else {
+                        images += "," + res.name;
+                      }
+                    } else {
+                      if (videos == "") {
+                        videos += res.name;
+                      } else {
+                        videos += "," + res.name;
+                      }
+                    }
+
+                    if (progressBarNum == 100) {
+                      $totalProgressbar
+                        .css("width", progressBar)
+                        .html("Upload complete");
+
+                      $("body").trigger("uploadComplete");
+                    } else {
+                      progressBar = parseFloat(progressBar);
+
+                      $totalProgressbar
+                        .css("width", progressBar.toFixed(0))
+                        .html(progressBar);
+                    }
+                  },
+                  error: function(e) {
+                    // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
+                    if (retryCount < retryCountMax) {
+                      retryCount++;
+                      console.error(`retryCount : ${retryCount}`);
+                      upload();
+                    } else {
+                      //We have retried to the max and there is nothing we can do
+                      //Allow the users to submit the form atleast with default image.
+
+                      $("#" + file.id)
+                        .children(".success-span")
+                        .addClass("fail");
+                      $("#" + file.id)
+                        .children(".file-panel")
+                        .hide();
+                      uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
+                      uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                      progressBarNum =
+                        (
+                          uploader.fileStats.curFileSize /
+                          uploader.fileStats.totalFilesSize
+                        ).toFixed(2) * 100;
+                      progressBar =
+                        (
+                          uploader.fileStats.curFileSize /
+                          uploader.fileStats.totalFilesSize
+                        ).toFixed(2) *
+                          100 +
+                        "%";
+
+                      if (progressBarNum == 100) {
+                        $totalProgressbar
+                          .css("width", progressBar)
+                          .html("Upload complete");
+                      } else {
+                        $totalProgressbar
+                          .css("width", progressBar)
+                          .html(progressBar);
+                      }
+                      img_error =
+                        res.name +
+                        ", Message: " +
+                        "Corrupted image" +
+                        ", RequestID: " +
+                        res.name;
+                      $("#retry-button").removeClass("is-hidden");
+
+                      if (!images) {
+                        if (app == "classifieds") {
+                          images = "classifieds/error-img.jpg";
+                          $.wnoty({
+                            type: "error",
+                            autohide: false,
+                            message:
+                              "Oops! an error occured when uploading your image(s). \
+                                                    But you can submit this post without images ."
+                          });
+                        } else {
+                          $.wnoty({
+                            type: "error",
+                            autohide: false,
+                            message:
+                              "Sorry! an error occured when uploading your image(s). You can post without images"
+                          });
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          } catch (error) {
+            $.wnoty({
+              type: "error",
+              autohide: false,
+              message:
+                "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
+            });
+            console.log(e);
+          }
+        };
+        return upload();
       });
+    }
   },
 
   /**
@@ -674,7 +839,6 @@ OssUpload.prototype = {
     $li.appendTo($queue);
   }
 };
-
 /**
  * Create progress bar
  */
@@ -703,8 +867,23 @@ var applyTokenDo = function() {
   return new Promise((resolve, reject) => {
     $.ajax({
       url: url,
-      success: function(result) {
-        resolve(result);
+      success: function(response) {
+        resolve(response);
+      },
+      error: function(e) {
+        reject(e);
+      }
+    });
+  });
+};
+
+var getPresignedURL = function() {
+  var url = "/get-oss-auth/stories.video/"; //Request background to obtain authorization address url
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: url,
+      success: function(response) {
+        resolve(response);
       },
       error: function(e) {
         reject(e);
@@ -729,120 +908,38 @@ function OssUpload() {
  * @return  {string}
  */
 
-function genKey(type) {
+function genKey(extension) {
+  var filename =
+    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c == "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    }) +
+    "." +
+    extension.split("/")[1] +
+    "/";
+
+  console.log(filename);
+
+  var date = new Date().toISOString().split("T")[0];
+
   if (app == "stories") {
-    if (
-      $("#publish")
-        .val()
-        .substring(0, 20).length != 0
-    ) {
-      if (/^video/.test(type)) {
-        return (
-          app +
-          "/videos/" +
-          user +
-          "/" +
-          slugify(
-            $("#publish")
-              .val()
-              .substring(0, 20)
-          ) +
-          "/" +
-          "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-            var r = (Math.random() * 16) | 0,
-              v = c == "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-          })
-        );
-      } else {
-        return (
-          app +
-          "/" +
-          user +
-          "/" +
-          slugify(
-            $("#publish")
-              .val()
-              .substring(0, 20)
-          ) +
-          "/" +
-          "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-            var r = (Math.random() * 16) | 0,
-              v = c == "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-          })
-        );
-      }
-    } else if (/^video/.test(type)) {
+    if (/^video/.test(extension)) {
       return (
-        "stories/videos/" +
-        user +
-        "/" +
-        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-          var r = (Math.random() * 16) | 0,
-            v = c == "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        }) +
-        "/" +
-        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-          var r = (Math.random() * 16) | 0,
-            v = c == "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        })
+        "media/videos" + "/" + app + "/" + user + "/" + date + "/" + filename
       );
     } else {
       return (
-        "stories/" +
-        user +
-        "/" +
-        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-          var r = (Math.random() * 16) | 0,
-            v = c == "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        }) +
-        "/" +
-        "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-          var r = (Math.random() * 16) | 0,
-            v = c == "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        })
+        "media/images" + "/" + app + "/" + user + "/" + date + "/" + filename
       );
     }
   } else if (app == "classifieds") {
     return (
-      "classifieds/" +
-      user +
-      "/" +
-      slugify($("#id_title").val()) +
-      "/" +
-      "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-        var r = (Math.random() * 16) | 0,
-          v = c == "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      })
+      "media/images" + "/" + app + "/" + user + "/" + date + "/" + filename
     );
   } else if (app == "articles") {
     return (
-      "articles/" +
-      user +
-      "/" +
-      slugify($("#id_title").val()) +
-      "/" +
-      "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-        var r = (Math.random() * 16) | 0,
-          v = c == "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      })
-    );
-  } else {
-    return (
-      "junk/" +
-      "/" +
-      "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-        var r = (Math.random() * 16) | 0,
-          v = c == "x" ? r : (r & 0x3) | 0x8;
-        return v.toString(16);
-      })
+      "media/images" + "/" + app + "/" + user + "/" + date + "/" + filename
     );
   }
 }
@@ -869,7 +966,7 @@ function slugify(string) {
     .replace(/^-+/, "") // Trim - from start of text
     .replace(/-+$/, ""); // Trim - from end of text
 }
-
+// Upload file to a private S3 bucket, using a presigned URL
 $(function() {
   //create and initialize upload object
   ossUpload = new OssUpload();
