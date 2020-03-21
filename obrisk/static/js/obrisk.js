@@ -94,10 +94,17 @@ $(function() {
       switch (event.key) {
           case "new_message":
 
+<<<<<<< Updated upstream
           //if (event.recipient == currentUser) {
               $(".msg-notification i").show();
               notif.play();
           //}
+=======
+          if (event.recipient == currentUser) {
+              $(".msg-notification i").show();
+              notif.play();
+          }
+>>>>>>> Stashed changes
           break;
         default:
           break;
