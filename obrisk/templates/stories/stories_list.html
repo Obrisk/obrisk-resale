@@ -292,6 +292,11 @@
 {% endblock content %}
 
 {% block extra_js %}
+
+<script>
+  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+</script>
+
 <script>
   var page = 1;
   var empty_page = false;
@@ -325,17 +330,19 @@
     });
   }
 </script>
+
+
+<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
 <script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
-<link rel="stylesheet" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/css/fancybox.min.css">
 <script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/plyr.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/aws-sdk.js' %}"></script>
+<script src="{% static 'js/aws-sdk.js' %}" type="text/javascript"></script>
+
 <script>
 
-  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const app = "stories";
   const user = "{{ request.user.username }}";
