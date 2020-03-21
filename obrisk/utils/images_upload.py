@@ -170,8 +170,7 @@ def create_presigned_post(bucket_name, object_name,
         logging.error(e)
         return None
 
-    # The response contains the presigned URL and required fields
-    return response
+    # The response contains the presigned URL and required fields return response
 
 
 @login_required
@@ -187,7 +186,7 @@ def get_oss_auth(request, app_name=None):
         but no name was supplied'
     }
     
-    if app_name == 'stories.video':
+    if app_name == 'stories.video' and os.getenv('VIDEO_USE_AWS_MEDIA'):
         data = generate_sts_credentials(request)
         
         if data is None:
@@ -333,28 +332,36 @@ def videoPersist(request, video, app, obj):
     It returns True if the video is authentic
     False if there is a validation problem '''
 
-    if video.startswith('f{media/videos/{app}/{request.user.username}/') == False or len(video) < 10:
-        obj.delete()
-        return False
+    if os.getenv('VIDEO_USE_AWS_MEDIA') == True:
+        if video.startswith('f{media/videos/{app}/{request.user.username}/') == False:
+            obj.delete()
+            return False
 
-    response = client.head_object(
-        Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
-        Key=video,
-    )
+        response = client.head_object(
+            Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
+            Key=video,
+        )
 
-    print(response)
-    #For Aliyun OSS try:
-    #   simplifiedmeta = bucket.get_object_meta(video)
-    #   print(simplifiedmeta.headers['Last-Modified'])
-    #   print(simplifiedmeta.headers['Content-Length'])
-    
-    #except oss2.exceptions.NoSuchKey:
-    #    obj.delete() 
-    #    return False
+        #if something in print(response)
+        obj.video = video
+        obj.save()
+        return True
 
-    obj.video = video
-    obj.save()
-    return True
+    else:
+        #For Aliyun OSS:
+        try:
+            simplifiedmeta = bucket.get_object_meta(video)
+            #print(simplifiedmeta.headers['Last-Modified'])
+            if int(simplifiedmeta.headers['Content-Length']) > 0:
+                obj.video = video
+                obj.save()
+                return True
+
+        except oss2.exceptions.NoSuchKey:
+            obj.delete() 
+            return False
+
+    return False
 
 @login_required
 @require_http_methods(["GET"])

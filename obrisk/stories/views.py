@@ -290,12 +290,16 @@ def post_stories(request):
                 except IndexError:
                     pass 
             else:
-                return HttpResponseBadRequest(
-                    content=_('Sorry, the image(s) were not uploaded successfully!'))
+                return HttpResponse(
+                    'Sorry, the image(s) were not uploaded successfully!')
         
         if video:
             if videoPersist(request, video, 'stories', story):
                 story.video = video
+
+            else:
+                return HttpResponse(
+                    'Sorry, the video was not uploaded successfully!')
 
         html = render_to_string(
             'stories/stories_single.html',

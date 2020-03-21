@@ -1,4 +1,5 @@
 import uuid, itertools
+import logging
 from slugify import slugify
 from django.conf import settings
 from django.db import models
@@ -202,11 +203,20 @@ class Stories(models.Model):
         return parent.thread.all()
 
     def get_likers(self):
-        return self.liked.all()[:3]
+        #sometimes no one has liked anything
+        try: 
+            return self.liked.all()[:3]
+        except Exception as e:
+            logging.error(e)
+            return []
 
     def get_all_likers(self):
-        return self.liked.all()
-        
+        try: 
+            return self.liked.all()
+        except Exception as e:
+            logging.error(e)
+            return []
+
     def count_thread(self):
         return self.get_thread().count()
 
