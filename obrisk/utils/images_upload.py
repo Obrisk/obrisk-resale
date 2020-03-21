@@ -1,3 +1,11 @@
+import uuid
+import json
+import base64
+import re
+import os
+import datetime
+import logging
+
 from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -6,11 +14,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from slugify import slugify
 
-import json
-import base64
-import re
-import os
-import datetime
+import boto3
+from botocore.exceptions import ClientError
 
 import oss2
 from aliyunsdkcore import client
@@ -18,8 +23,6 @@ from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from obrisk.classifieds.models import ClassifiedImages
 from obrisk.stories.models import StoryImages
 
-# STSGetting Started Tutorial See https://yq.aliyun.com/articles/57895
-# STS's official documentation can be found at https://help.aliyun.com/document_detail/28627.html
 
 # Initialize the information such as AccessKeyId, AccessKeySecret, and Endpoint.
 # Get through environment variables, or replace something like "< your AccessKeyId>" with a real AccessKeyId.
@@ -65,11 +68,12 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
     try:        
         #Default timeout is 5 secs, but the server is far from alibaba data centers so increase it.
-        #This is Tokyo data center.
-        clt = client.AcsClient(access_key_id, access_key_secret, 'ap-northeast-1',
+        #This is north China, there are 3 more data centers. I can try others
+        clt = client.AcsClient(access_key_id, access_key_secret, 'cn-beijing',
                              timeout=30, max_retry_time=3)
         
-    except:
+    except Exception as e:
+        logging.error(e)
         return False
     
     else:
@@ -81,7 +85,9 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
             req.set_RoleSessionName('obriskdev-1330-oss-sts')
             body = clt.do_action_with_exception(req)
             j = json.loads(oss2.to_unicode(body))
-        except:
+
+        except Exception as e:
+            logging.error(e)
             return False
         
         else:
@@ -99,40 +105,124 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
 
 bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
 
+
+def generate_sts_credentials(request):
+    '''By default it returns the sts to perform put on s3 bucket'''
+
+    # create an STS client object that represents a live connection to the 
+    # STS service
+    sts_client = boto3.client('sts',
+                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
+                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
+                          region_name=os.getenv('AWS_S3_REGION_NAME')
+                      )
+
+    try:
+        # Call the assume_role method of the STSConnection object and pass the role
+        # ARN and a role session name.
+        session_name = slugify(f"{request.user.username}-{uuid.uuid4().hex[:8]}")
+
+        assumed_role_object=sts_client.assume_role(
+            RoleArn=os.getenv('AWS_S3_MEDIA_BUCKET_ARN'),
+            RoleSessionName=session_name,
+            ExternalId=os.getenv('AWS_S3_ROLE_EXTERNALID'),
+            DurationSeconds=1800
+        )
+
+    except ClientError as e:
+        logging.error(e)
+        return None
+    # From the response that contains the assumed role, get the temporary 
+    # credentials that can be used to make subsequent API calls
+    # credentials are as a Python dictionary, so can be served to JS directly
+    return assumed_role_object['Credentials']
+
+
+
+def create_presigned_post(bucket_name, object_name,
+                          fields=None, conditions=None, expiration=3600):
+    """Generate a presigned URL S3 POST request to upload a file
+
+    :param bucket_name: string
+    :param object_name: string
+    :param fields: Dictionary of prefilled form fields
+    :param conditions: List of conditions to include in the policy
+    :param expiration: Time in seconds for the presigned URL to remain valid
+    :return: Dictionary with the following keys:
+        url: URL to post to
+        fields: Dictionary of form fields and values to submit with the POST
+    :return: None if error.
+    """
+
+    # Generate a presigned S3 POST URL
+    s3_client = boto3.client('s3',
+                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
+                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
+                          region_name=os.getenv('AWS_S3_REGION_NAME')
+                      )
+    try:
+        response = s3_client.generate_presigned_post(bucket_name,
+                                                     object_name,
+                                                     Fields=fields,
+                                                     Conditions=conditions,
+                                                     ExpiresIn=expiration)
+    except ClientError as e:
+        logging.error(e)
+        return None
+
+    # The response contains the presigned URL and required fields
+    return response
+
+
 @login_required
 @require_http_methods(["GET"])
-def get_oss_auth(request):
+def get_oss_auth(request, app_name=None):
     """AJAX Functional view to recieve just the minimum information, process
     and create the new message and return the new data to be attached to the
     conversation stream."""
-    token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
     
-    if token == False:
-        #This is very bad, but we'll do it until we move the servers to China.
-        #Send the alert email to developers (via celery) instead of logging.
-        key_id = str(access_key_id)
-        scrt = str(access_key_secret)
-        data = {
-            'direct': "true",
-            'region': region,
-            'accessId': key_id,
-            'stsTokenKey': scrt,
-            'bucket': bucket_name
-        }
+    error_data = {
+        'status': 'failed',
+        'errorMessage': 'The request requires the object name to be uploaded \
+        but no name was supplied'
+    }
+    
+    if app_name == 'stories.video':
+        data = generate_sts_credentials(request)
+        
+        if data is None:
+            return JsonResponse(error_data)
         return JsonResponse(data)
 
     else:
-        key_id = str(token.access_key_id)
-        scrt = str(token.access_key_secret)
-        token_value = str(token.security_token)
-        data = {
-            'region': region,
-            'accessKeyId': key_id,
-            'accessKeySecret': scrt,
-            'SecurityToken': token_value,
-            'bucket': bucket_name
-        }       
-        return JsonResponse(data)
+        token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
+        
+        if token == False:
+            #This is very bad, but we'll do it until we move the servers to China.
+            #logging this event
+            key_id = str(access_key_id)
+            scrt = str(access_key_secret)
+            data = {
+                'direct': "true",
+                'region': region,
+                'accessId': key_id,
+                'stsTokenKey': scrt,
+                'bucket': bucket_name
+            }
+            return JsonResponse(data)
+
+        else:
+            key_id = str(token.access_key_id)
+            scrt = str(token.access_key_secret)
+            token_value = str(token.security_token)
+            data = {
+                'region': region,
+                'accessKeyId': key_id,
+                'accessKeySecret': scrt,
+                'SecurityToken': token_value,
+                'bucket': bucket_name
+            }       
+            return JsonResponse(data)
 
 
 def multipleImagesPersist(request, images_list, app, obj):
@@ -188,47 +278,52 @@ def multipleImagesPersist(request, images_list, app, obj):
         else:
             return False
 
-        try:
-            process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                            oss2.compat.to_bytes(thumb_name))),
-                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            bucket.process_object(str_result, process)
-        
-            if app == 'classifieds':
-                process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(img_mid_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-                bucket.process_object(str_result, process)
-        
-        except oss2.exceptions.NoSuchKey as e:
-            obj.delete()
-            return False
 
-        except Exception:
-            #If there is a problem with the thumbnail generation, most likely our code is wrong... 
-            if index+1 == tot_img_objs:
-                #To-do 
-                #Pass the image object to background task and verify if image exist
-                #and retry thumbnail creation
-                #Send email to the developers
-                messages.error(request, f"We are having difficulty processing your image(s), \
-                    check your post if everything is fine.")
-                
-            img_obj.image_thumb = str_result 
-            if img_mid_name:
-                img_obj.image_mid_size = str_result
-            img_obj.save()
-            saved_objs.append(img_obj)
-            continue   
+        if os.getenv('AWS_S3_MEDIA'):
+            return True
 
         else:
-            img_obj.image_thumb = thumb_name
-            if img_mid_name:
-                img_obj.image_mid_size = img_mid_name
-            img_obj.save()
-            saved_objs.append(img_obj)
+            try:
+                process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                oss2.compat.to_bytes(thumb_name))),
+                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                bucket.process_object(str_result, process)
+            
+                if app == 'classifieds':
+                    process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                                    oss2.compat.to_bytes(img_mid_name))),
+                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                    bucket.process_object(str_result, process)
+            
+            except oss2.exceptions.NoSuchKey as e:
+                obj.delete()
+                return False
+
+            except Exception:
+                #If there is a problem with the thumbnail generation, most likely our code is wrong... 
+                if index+1 == tot_img_objs:
+                    #To-do 
+                    #Pass the image object to background task and verify if image exist
+                    #and retry thumbnail creation
+                    #Send email to the developers
+                    messages.error(request, f"We are having difficulty processing your image(s), \
+                        check your post if everything is fine.")
+                    
+                img_obj.image_thumb = str_result 
+                if img_mid_name:
+                    img_obj.image_mid_size = str_result
+                img_obj.save()
+                saved_objs.append(img_obj)
+                continue   
+
+            else:
+                img_obj.image_thumb = thumb_name
+                if img_mid_name:
+                    img_obj.image_mid_size = img_mid_name
+                img_obj.save()
+                saved_objs.append(img_obj)
 
     return saved_objs 
 
@@ -238,23 +333,24 @@ def videoPersist(request, video, app, obj):
     It returns True if the video is authentic
     False if there is a validation problem '''
 
-    if video.startswith(f'{app}/videos/{request.user.username}') == False or len(video) < 10:
+    if video.startswith('f{media/videos/{app}/{request.user.username}/') == False or len(video) < 10:
         obj.delete()
         return False
 
-    try:
-        simplifiedmeta = bucket.get_object_meta(video)
-        print(simplifiedmeta.headers['Last-Modified'])
-        print(simplifiedmeta.headers['Content-Length'])
-    
-    except oss2.exceptions.NoSuchKey:
-        obj.delete() 
-        return False
+    response = client.head_object(
+        Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
+        Key=video,
+    )
 
-    except Exception:
-        obj.video = video
-        obj.save()
-        return True
+    print(response)
+    #For Aliyun OSS try:
+    #   simplifiedmeta = bucket.get_object_meta(video)
+    #   print(simplifiedmeta.headers['Last-Modified'])
+    #   print(simplifiedmeta.headers['Content-Length'])
+    
+    #except oss2.exceptions.NoSuchKey:
+    #    obj.delete() 
+    #    return False
 
     obj.video = video
     obj.save()
@@ -294,6 +390,7 @@ def bulk_update_classifieds_mid_images(request):
             img.save()
 
     return redirect('classifieds:list')
+
 
 
 
