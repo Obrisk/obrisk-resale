@@ -16,14 +16,14 @@ from obrisk.classifieds.models import Classified
 class ConversationQuerySet(models.query.QuerySet):
     """ Simply the queries in the views that check the conversations btn users """
     #https://docs.djangoproject.com/en/2.1/ref/models/querysets/#operators-that-return-new-querysets
-    
+
     def get_conversations(self, user):
         """ Get all conversations of a specific user """
         return self.filter( Q(first_user=user) | Q(second_user=user))
 
     def conversation_exists(self, user1, user2):
         """ Check if these 2 users had conversation before """
-        qs = self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1) 
+        qs = self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1)
 
         if qs:
             return True
@@ -31,9 +31,9 @@ class ConversationQuerySet(models.query.QuerySet):
 
 
     def get_conv_classified(self, user1, user2):
-        qs = self.filter(Q (first_user=user1, second_user=user2)) | self.filter(first_user=user2, second_user=user1) 
+        qs = self.filter(Q (first_user=user1, second_user=user2)) | self.filter(first_user=user2, second_user=user1)
         return qs.values_list('classified', flat=True)
-    
+
 class Conversation(models.Model):
     """Conversation information btn 2 users is stored here."""
     first_user = models.ForeignKey(
@@ -53,7 +53,7 @@ class Conversation(models.Model):
         verbose_name = _("Conversation")
         verbose_name_plural = _("Conversations")
         ordering = ("-timestamp", )
-    
+
     def save(self, *args, **kwargs):
         if not self.key:
             self.key = "{}.{}".format(*sorted([self.first_user.pk, self.second_user.pk]))
@@ -101,7 +101,7 @@ class Message(models.Model):
     classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='message', null=True, blank=True)
     classified_thumbnail = models.CharField(max_length=300, blank=True, null=True)
     attachment = models.CharField(max_length=300, blank=True, null=True)
-    has_link = models.BooleanField(default=False)  
+    has_link = models.BooleanField(default=False)
     objects = MessageQuerySet.as_manager()
 
     class Meta:
@@ -112,7 +112,7 @@ class Message(models.Model):
     def __str__(self):
         if self.message:
             return self.message
-        elif self.image: 
+        elif self.image:
             return self.image
         elif self.attachment:
             return self.attachment
@@ -124,11 +124,11 @@ class Message(models.Model):
         if self.unread:
             self.unread = False
             self.save()
-    
+
     def save(self, *args, **kwargs):
         """ Override to add conversation in the msg obj whenever a new message
         is sent btn users and update the empty conversation check.
-        This operation is only done here on model level."""   
+        This operation is only done here on model level."""
         if not self.conversation:
             key = "{}.{}".format(*sorted([self.sender.pk, self.recipient.pk]))
             try:
@@ -146,8 +146,8 @@ class Message(models.Model):
                 self.conversation = conv
         super().save(*args, **kwargs)
 
-    
-       
+
+
     @staticmethod
     def send_message(sender, recipient, message,
                     image=None, img_preview=None, attachment=None):
@@ -163,23 +163,23 @@ class Message(models.Model):
             sender=sender,
             recipient=recipient,
             message=message,
-            image=image, 
-            img_preview=img_preview, 
+            image=image,
+            img_preview=img_preview,
             attachment=attachment
         )
         channel_layer = get_channel_layer()
-        
+
         msg_sender = str(sender)
         msg_recip = str(recipient)
-        msg = str(new_message.uuid_id)
+        msg_id = str(new_message.uuid_id)
         payload = {
                 'type': 'receive',
                 'key': 'message',
-                'message_id': msg,
+                'message_id': msg_id,
                 'sender': msg_sender,
                 'recipient':  msg_recip,
-                'image': image, 
-                'img_preview': img_preview, 
+                'image': image,
+                'img_preview': img_preview,
                 'attachment': attachment
             }
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
