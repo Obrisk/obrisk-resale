@@ -92,9 +92,12 @@ $(function() {
     webSocket.listen(function (event) {
       if (event.key === undefined) event = JSON.parse(event);
       switch (event.key) {
-        case "new_message":
-          $(".msg-notification i").show();
-          notif.play();
+          case "new_message":
+
+          //if (event.recipient == currentUser) {
+              $(".msg-notification i").show();
+              notif.play();
+          //}
           break;
         default:
           break;
