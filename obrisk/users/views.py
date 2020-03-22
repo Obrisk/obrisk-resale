@@ -4,6 +4,7 @@ import base64
 import datetime
 import oss2
 import boto3
+import logging
 
 # django imports
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -127,7 +128,7 @@ def send_code(full_number, theme, user=None):
                 logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
                 return JsonResponse({
                     'success': False,
-                    'error_message': "Sorry we couldn't send the verification code please try again later!"
+                    'error_message': "Sorry we couldn't send the code please try again later!"
                 })  
 
         response = ret['ResponseMetadata'] 
@@ -136,7 +137,7 @@ def send_code(full_number, theme, user=None):
 
             return JsonResponse({
                 'success': True,
-                'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
+                'message': "We've send the code please wait, It is valid for 10 minutes!"
             })
             
         else:
@@ -147,14 +148,14 @@ def send_code(full_number, theme, user=None):
 
                 return JsonResponse({
                     'success': True,
-                    'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
+                    'message': "We've send the code please wait, It is valid for 10 minutes!"
                 })
             
             else:
                 logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
                 return JsonResponse({
                     'success': False,
-                    'error_message': "Sorry we couldn't send the verification code please try again later!"
+                    'error_message': "Sorry we couldn't send the code please try again later!"
                 })  
 
 
@@ -343,7 +344,9 @@ def phone_verify(request):
                 return JsonResponse({'error_message': "The verification code has expired or it is invalid!"})
             else:
                 if saved_code == code:
-                    if str(request.META.get('HTTP_REFERER')).endswith("/users/phone-password-reset/"):
+                    if str(request.META.get(
+                            'HTTP_REFERER'
+                            )).endswith("/users/phone-password-reset/"):
                         try:
                             user = get_users(full_number)
                         except:

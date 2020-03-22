@@ -180,13 +180,8 @@ MIDDLEWARE = [
 # -------------------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
-<<<<<<< HEAD
-    str(APPS_DIR.path("static")),
-    ("frontend/assets", str(ROOT_DIR.path("frontend/assets"))),
-=======
     str(APPS_DIR.path('static')),
     ('frontend/assets', str(ROOT_DIR.path('frontend/assets'))),
->>>>>>> fixing travic basics errors
 ]
 
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
@@ -310,7 +305,6 @@ ACCOUNT_ADAPTER = "obrisk.users.adapters.AccountAdapter"
 
 SOCIALACCOUNT_ADAPTER = "obrisk.users.adapters.SocialAccountAdapter"
 
-<<<<<<< HEAD
 # Other stuff...
 # ------------------------------------------------------------------------------
 
@@ -326,9 +320,6 @@ CHANNEL_LAYERS = {
         "CONFIG": {"hosts": [REDIS_URL,],},
     }
 }
-=======
-
->>>>>>> fixing travic basics errors
 
 # GraphQL settings
 GRAPHENE = {"SCHEMA": "obrisk.schema.schema"}
@@ -436,8 +427,7 @@ CHANNEL_LAYERS = {
     }
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379' 
-
+CELERY_BROKER_URL = 'redis://localhost:6379'
 
 CELERY_TIMEZONE = "Asia/Chongqing"
 # Let's make things happen

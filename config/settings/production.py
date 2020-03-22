@@ -18,12 +18,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 #https://stackoverflow.com/questions/16676314/should-server-ip-address-be-in-allowed-hosts-django-setting
-<<<<<<< HEAD
 ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com', '63.0.0.14', '63.0.0.6', '52.82.70.154', '161.189.161.69' ]
-=======
-#Remember to add the subdomains when applying for SSL cert and also add it in nginx file
-ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
->>>>>>> fixing travic basics errors
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -66,9 +61,6 @@ CACHES = {
         }
     }
 }
-
-
-
 
 # SECURITY
 # ------------------------------------------------------------------------------

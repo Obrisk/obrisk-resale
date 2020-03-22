@@ -77,13 +77,12 @@ class ConnectionsViewsTests(TestCase):
                 timeout=RECOMMENDATION_TIMEOUT,
             )
             url = reverse(
-            "connections:friendship_view_friends"
-        )
+                "connections:friendship_view_friends"
+            )
 
             response = self.client.get(url)
             self.assertResponse200(response)
             self.assertTrue("object" in response.context)
-
 
     def test_add_friends(self):
         first_user = self.User
@@ -116,6 +115,3 @@ class ConnectionsViewsTests(TestCase):
         self.assertEqual(len(Friend.objects.requests(second_user)), 1)
         self.assertEqual(len(Friend.objects.sent_requests(first_user)), 1)
         self.assertEqual(len(Friend.objects.sent_requests(second_user)), 0)
-        
-         
-       
