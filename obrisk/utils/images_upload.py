@@ -195,7 +195,7 @@ def get_oss_auth(request, app_name=None):
     else:
         token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
         
-        if token == False:
+        if token is False:
             #This is very bad, but we'll do it until we move the servers to China.
             #logging this event
             key_id = str(access_key_id)

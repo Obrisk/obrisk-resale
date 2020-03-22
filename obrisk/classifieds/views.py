@@ -50,7 +50,7 @@ def classified_list(request, tag_slug=None):
     #Try to Get the popular tags from cache
     popular_tags = cache.get('popular_tags')
 
-    if popular_tags == None:
+    if popular_tags is None:
         popular_tags = Classified.objects.get_counted_tags()
     
     #Get classifieds
@@ -237,7 +237,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified = form.save(commit=False)
         
         #Empty phone number is +8613300000000 for all old users around 150 users
-        if self.request.user.phone_number != '' and show_phone == True: 
+        if self.request.user.phone_number is not '' and show_phone:
             if not classified.phone_number and self.request.user.phone_number.national_number != 13300000000:
                 classified.phone_number = self.request.user.phone_number
             

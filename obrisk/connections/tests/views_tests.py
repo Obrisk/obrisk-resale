@@ -61,7 +61,7 @@ class ConnectionsViewsTests(TestCase):
         # Try to Get the recommendation list from cache
         recommended_connects = cache.get(f"recommended_connects_{first_user.id}")
 
-        if recommended_connects == None:
+        if recommended_connects is None:
             recommended_connects = (
                User.objects.filter(city=first_user.city)
                 .exclude(thumbnail=None)
@@ -83,7 +83,6 @@ class ConnectionsViewsTests(TestCase):
             response = self.client.get(url)
             self.assertResponse200(response)
             self.assertTrue("object" in response.context)
- 
 
 
     def test_add_friends(self):

@@ -261,7 +261,7 @@ def update_profile_pic(request):
         return JsonResponse({'success': False, 'error_message': "No profile picture submitted!"} )
 
     else:
-        if picture.startswith('media/profile_pics/') == False:                
+        if picture.startswith('media/profile_pics/') is False:                
             return JsonResponse({'success': False, 
                                 'error_message': "Oops! your profile picture, wasn't uploaded successfully, please upload again!"})
 
@@ -345,7 +345,7 @@ def phone_verify(request):
                 return JsonResponse({'error_message': "The verification code has expired or it is invalid!"})
             else:
                 if saved_code == code:
-                    if str(request.META.get('HTTP_REFERER')).endswith("/users/phone-password-reset/") == True:
+                    if str(request.META.get('HTTP_REFERER')).endswith("/users/phone-password-reset/"):
                         try:
                             user = get_users(full_number)
                         except:

@@ -39,7 +39,7 @@ def view_friends(request, template_name="connections/friends.html"):
     # Try to Get the recommendation list from cache
     recommended_connects = cache.get(f"recommended_connects_{user.id}")
 
-    if recommended_connects == None:
+    if recommended_connects is None:
         recommended_connects = (
             user_model.objects.filter(city=user.city)
             .exclude(thumbnail=None)
@@ -76,7 +76,7 @@ def friendship_add_friend(
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
         
-        if Friend.objects.can_request_send(from_user, to_user) == True:
+        if Friend.objects.can_request_send(from_user, to_user):
             return JsonResponse(
                 {
                     "status": "200",
