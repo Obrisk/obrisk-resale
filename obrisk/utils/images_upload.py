@@ -20,6 +20,7 @@ from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from obrisk.classifieds.models import ClassifiedImages
 from obrisk.stories.models import StoryImages
+from config.settings.base import env
 
 
 # Initialize the information such as AccessKeyId, AccessKeySecret, and Endpoint.
@@ -184,7 +185,7 @@ def get_oss_auth(request, app_name=None):
         but no name was supplied'
     }
     
-    if app_name == 'stories.video' and os.getenv('VIDEO_USE_AWS_MEDIA'):
+    if app_name == 'stories.video' and env.bool('VIDEO_USE_AWS_MEDIA'):
         data = generate_sts_credentials(request)
         
         if data is None:
@@ -276,7 +277,14 @@ def multipleImagesPersist(request, images_list, app, obj):
             return False
 
 
-        if os.getenv('AWS_S3_MEDIA'):
+        if env.bool('AWS_S3_MEDIA'):
+            #First verify that the lambda has finish creating thumbnail
+            #Then save
+            #img_obj.image_thumb = thumb_name
+            if img_mid_name:
+                img_obj.image_mid_size = img_mid_name
+            img_obj.save()
+            saved_objs.append(img_obj)
             return True
 
         else:
@@ -330,8 +338,8 @@ def videoPersist(request, video, app, obj):
     It returns True if the video is authentic
     False if there is a validation problem '''
 
-    if os.getenv('VIDEO_USE_AWS_MEDIA') == True:
-        if video.startswith('f{media/videos/{app}/{request.user.username}/') == False:
+    if env.bool('VIDEO_USE_AWS_MEDIA'):
+        if video.startswith('f{media/videos/{app}/{request.user.username}/') is False:
             obj.delete()
             return False
 
@@ -388,6 +396,7 @@ def bulk_update_classifieds_mid_images(request):
             messages.error(request, f"Object with details doesn't exist {e}")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         except Exception as e:
+            logging.error(e)
             messages.error(request, "This is trouble, restart the process!")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         else:
