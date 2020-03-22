@@ -1,22 +1,13 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
-from django.utils.translation import pgettext, ugettext, ugettext_lazy as _
+from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 
 from allauth.account.forms import (
-    SignupForm,
-    LoginForm,
-    ResetPasswordForm,
-    PasswordField,
-)
+    SignupForm, LoginForm, PasswordField)
 from allauth.utils import (
-    build_absolute_uri,
-    get_username_max_length,
-    set_form_field_order,
-)
-from allauth.account import app_settings
+    set_form_field_order)
 from phonenumber_field.formfields import PhoneNumberField
-from obrisk.users import models
 
 from django.contrib.auth import get_user_model
 

@@ -1,7 +1,6 @@
 import uuid
 import json
 import base64
-import re
 import os
 import datetime
 import logging
@@ -10,7 +9,6 @@ from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from slugify import slugify
 

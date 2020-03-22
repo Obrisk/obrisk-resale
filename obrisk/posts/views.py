@@ -6,23 +6,19 @@ from django.utils.translation import ugettext_lazy as _
 
 from django.shortcuts import redirect
 from obrisk.utils.helpers import AuthorRequiredMixin
-from obrisk.posts.models import Post, Comment
+from obrisk.posts.models import Post
 from obrisk.posts.forms import PostForm, CommentForm
 #For comments
 from django.http import JsonResponse 
-from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from slugify import slugify
-
-import os
 import base64
 import datetime
 
 import oss2
 from aliyunsdkcore import client
-from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 
 class PostsListView(ListView):
     """Basic ListView implementation to call the published Posts list."""

@@ -8,26 +8,20 @@ import boto3
 # django imports
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
-from django.views.generic import CreateView,DetailView, ListView, RedirectView, UpdateView, FormView
+from django.views.generic import DetailView, ListView, RedirectView, UpdateView, FormView
 from django.utils.crypto import get_random_string
-from django.http import JsonResponse, HttpResponse
+from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.cache import cache
-from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect, get_object_or_404, render
-from django.contrib.auth import login, authenticate
+from django.shortcuts import redirect, render
+from django.contrib.auth import login
 from django.conf import settings
-from django.views.decorators.csrf import csrf_exempt
-from django.utils.decorators import method_decorator    
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.sites.shortcuts import get_current_site
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.contrib.auth.decorators import login_required
 
 # third parties imports
-from allauth.account.views import (SignupView, LoginView, PasswordResetView, _ajax_response, 
-                                    PasswordResetFromKeyView as AllauthPasswordResetFromKeyView)
+from allauth.account.views import (SignupView, LoginView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView)
 from allauth.account.forms import  UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
@@ -40,9 +34,9 @@ from rest_framework.decorators import api_view
 from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
-from .forms import UserForm, EmailSignupForm, PhoneRequestPasswordForm, PhoneSignupForm, PhoneResetPasswordForm
+from .forms import UserForm, EmailSignupForm, PhoneRequestPasswordForm, PhoneResetPasswordForm
 from .models import User
-from .phone_verification import send_sms, verify_counter
+from .phone_verification import send_sms
 
 try:
     from django.contrib.auth import get_user_model
