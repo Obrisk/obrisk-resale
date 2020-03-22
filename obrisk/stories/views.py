@@ -68,22 +68,21 @@ def stories_list(request, tag_slug=None):
         # If page is not an integer deliver the first page
         stories = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():            
+        if request.is_ajax():
             # If the request is AJAX and the page is out of range
             # return an empty page            
             return HttpResponse('')
         # If page is out of range deliver last page of results
-        stories = paginator.page(paginator.num_pages)     
-        
+        stories = paginator.page(paginator.num_pages)
+    
     # Deal with tags in the end to override other_stories.
     tag = None
 
     if tag_slug:
-
         tag = get_object_or_404(StoryTags, slug=tag_slug)
         
         stories = Stories.objects.get_stories().filter(tags__in=[tag])\
-                .exclude(uuid_id=self.object.uuid_id).annotate (
+                .annotate (
                     img1 = Subquery (
                             StoryImages.objects.filter(
                                 story=OuterRef('pk'),
