@@ -6,7 +6,7 @@ python:
 env:
   global:
   - PGPORT=5432
-  - DJANGO_VERSION=2.2.9
+  - DJANGO_VERSION=2.2.11
   - DJANGO_SETTINGS_MODULE="config.settings.test"
 # - PYTHONPATH="/home/travis/build/my_github_name/my_github_project"
   - PIP_USE_MIRRORS=true
@@ -31,7 +31,7 @@ before_install:
   - pip install python-coveralls
 
 install:
-  - pip install -q Django==2.2.9
+  - pip install -q Django==2.2.11
   - pip install -r requirements/local.txt
 
 #before_install:
