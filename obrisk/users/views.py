@@ -124,11 +124,10 @@ def send_code(full_number, theme, user=None):
                     'message': "The code has been sent, please wait for it. It is valid for 10 minutes!"
                 })
             else:
+                logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
                 return JsonResponse({
                     'success': False,
-                    'error_message': "Sorry we couldn't send the verification code please try again later!", 
-                    'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"],
-                    'requestId':response["RequestId"], 'retries': response["RetryAttempts"]
+                    'error_message': "Sorry we couldn't send the verification code please try again later!"
                 })  
 
         response = ret['ResponseMetadata'] 
@@ -152,11 +151,10 @@ def send_code(full_number, theme, user=None):
                 })
             
             else:
+                logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
                 return JsonResponse({
                     'success': False,
-                    'error_message': "Sorry we couldn't send the verification code please try again later!", 
-                    'messageId':ret["MessageId"], 'returnedCode':response["HTTPStatusCode"], 'requestId':response["RequestId"], 
-                    'retries': response["RetryAttempts"]
+                    'error_message': "Sorry we couldn't send the verification code please try again later!"
                 })  
 
 

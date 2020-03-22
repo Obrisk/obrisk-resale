@@ -1,4 +1,4 @@
-import uuid, itertools
+import uuid, itertools, operator
 import logging
 from slugify import slugify
 from django.conf import settings
@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import F
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.db.models import Count
 
 from obrisk.notifications.models import Notification, notification_handler
 from taggit.managers import TaggableManager
