@@ -1,4 +1,3 @@
-from celery import shared_task
 from config.celery import app
 from obrisk.users.models import User
 from django.conf import settings

@@ -11,7 +11,7 @@ from channels.layers import get_channel_layer
 
 from obrisk.notifications.models import Notification, notification_handler
 from taggit.managers import TaggableManager
-from taggit.models import TaggedItemBase, TagBase, GenericTaggedItemBase, CommonGenericTaggedItemBase, GenericUUIDTaggedItemBase
+from taggit.models import TaggedItemBase, TagBase, GenericUUIDTaggedItemBase
 
 class StoryTags(TagBase):
     class Meta:

@@ -1,14 +1,8 @@
-import requests
-import datetime
-
-from obrisk.utils.images_upload import bucket
 from allauth.account.adapter import DefaultAccountAdapter
 from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.forms import ValidationError
 from django.conf import settings
 from allauth.account.utils import user_field
-from django.contrib.auth import get_user_model
-from slugify import slugify
 # from django.http import JsonResponse
 
 

@@ -1,9 +1,4 @@
-from django.core.cache import cache
-from django.db.models import Subquery, OuterRef
-from obrisk.classifieds.models import Classified
-from obrisk.messager.models import Conversation, Message
 from django.conf import settings
-import environ 
 
 
 def cached_queries(request):

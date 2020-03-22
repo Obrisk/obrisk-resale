@@ -2,16 +2,16 @@ import json, uuid, itertools
 from slugify import slugify
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DeleteView, DetailView
+from django.views.generic import DeleteView, DetailView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField, Count
+from django.db.models import OuterRef, Subquery, Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from obrisk.utils.images_upload import multipleImagesPersist, videoPersist

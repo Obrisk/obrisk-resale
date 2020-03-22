@@ -1,16 +1,13 @@
 import os
 from django.core.cache import cache
-from django.core.exceptions import ValidationError
-from django.db import IntegrityError
 from django.urls import reverse
-from django.test import Client, override_settings
+from django.test import Client
 from test_plus.test import TestCase
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.conf import settings
-from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
-from friendship.models import Friend, Follow, FriendshipRequest, Block
+from friendship.models import Friend, FriendshipRequest
 from django.contrib.auth import get_user_model
 User = get_user_model()
 
