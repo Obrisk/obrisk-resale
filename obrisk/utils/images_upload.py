@@ -239,13 +239,14 @@ def multipleImagesPersist(request, images_list, app, obj):
 
     #from here if you return form invalid then you have to prior delete the obj, obj.delete()
     #The current implementation will sucessfully create obj even when there are error on images
-    #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
-    #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
+    #This is just to help to increase the app post on the website.
+    #Also most errors are caused by our frontend when uploading so don't return invalid form.
     img_mid_name = None
     saved_objs = []
     
     for index, str_result in enumerate(images_list):
-        if str_result.startswith(f'{app}/{request.user.username}') == False:
+        if str_result.startswith(
+              f'media/images/{app}/{request.user.username}') is False:
             #Check if it was default image as it has no username.
             #This is the same default on all multiple upload apps
             #Though stories shouldn't have this, form shouldn't be submitted without images
@@ -257,10 +258,10 @@ def multipleImagesPersist(request, images_list, app, obj):
 
         if app == 'classifieds':
             img_obj = ClassifiedImages(classified=obj, image=str_result)
-            thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+            thumb_name = "media/images/classifieds/" + slugify(str(obj.user)) + "/" + \
+                    slugify(str(obj.title), to_lower=True) + "/thumbnails/" + d + str(index)
             img_mid_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
+                    slugify(str(obj.title), to_lower=True) + "/mid-size/" + d + str(index)
             style = 'image/resize,m_fill,h_156,w_156'
             style_mid = 'image/resize,m_fill,h_400'
 
@@ -270,14 +271,13 @@ def multipleImagesPersist(request, images_list, app, obj):
                     story=obj, 
                     image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
                 )
-            thumb_name = "stories/" + slugify(str(obj.user)) + "/thumbnails/" + d + str(index)
+            thumb_name = "media/images/stories/" + slugify(str(obj.user)) + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_456,w_456'
 
         else:
             return False
 
-
-        if env.bool('AWS_S3_MEDIA'):
+        if env.bool('USE_AWS_S3_MEDIA', default=False):
             #First verify that the lambda has finish creating thumbnail
             #Then save
             #img_obj.image_thumb = thumb_name
@@ -285,7 +285,7 @@ def multipleImagesPersist(request, images_list, app, obj):
                 img_obj.image_mid_size = img_mid_name
             img_obj.save()
             saved_objs.append(img_obj)
-            return True
+            return saved_objs
 
         else:
             try:

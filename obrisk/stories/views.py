@@ -275,7 +275,7 @@ def post_stories(request):
             images_list = images.split(",")
 
             imgs_objs = multipleImagesPersist(request, images_list, 'stories', story)
-            if imgs_objs[0]:
+            if imgs_objs:
                 story.img1 = imgs_objs[0].image_thumb
                 story.img2 = story.img3 = story.img4 = None 
                 #Find a way to return a list in a subquery
