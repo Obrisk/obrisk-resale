@@ -11,6 +11,7 @@ from obrisk.posts.forms import PostForm, CommentForm
 #For comments
 from django.http import JsonResponse 
 from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from slugify import slugify
@@ -133,6 +134,7 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 @method_decorator(login_required, name='post')
+@method_decorator(ensure_csrf_cookie, name='get')
 class DetailPostView(DetailView):
     """Basic DetailView implementation to call an individual Post."""
     model = Post
@@ -184,5 +186,3 @@ class DetailPostView(DetailView):
         context['comments'] = self.object.comments.all()
         context['new_comment'] = None
         return context
-    
-

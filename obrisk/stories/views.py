@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
@@ -18,6 +18,7 @@ from obrisk.utils.images_upload import multipleImagesPersist, videoPersist
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.stories.models import Stories, StoryImages, StoryTags
 
+@ensure_csrf_cookie
 @require_http_methods(["GET"])
 def stories_list(request, tag_slug=None):
     #Try to Get the popular tags from cache
@@ -199,8 +200,6 @@ def get_story_images(request):
                 content=_('The story post is invalid'))
     return HttpResponse(json.dumps(images), content_type='application/json')
 
-
-
 @require_http_methods(["GET"])
 def get_story_likers(request):
     """A function view that returns all people that liked the story"""
@@ -214,7 +213,6 @@ def get_story_likers(request):
     users = list(story.liked.all().values_list('username', flat=True))
 
     return HttpResponse(json.dumps(users), content_type='application/json')
-
 
 
 @ajax_required
@@ -313,7 +311,6 @@ def post_stories(request):
         return HttpResponseBadRequest(
                 content=_('Text length is longer than accepted characters.'))
 
-@csrf_exempt
 @login_required
 @ajax_required
 @require_http_methods(["GET"])

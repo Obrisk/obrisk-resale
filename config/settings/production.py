@@ -42,9 +42,7 @@ CHANNEL_LAYERS = {
     }
 }
 
-
 CELERY_BROKER_URL = REDIS_URL
-
 
 CACHES = {
     "default": {
@@ -76,11 +74,16 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
+# This is not so important but added here to avoid confusion
+# when generating CSRF token on Ajax requests
+#https://docs.djangoproject.com/en/2.2/ref/csrf/#django.views.decorators.csrf.ensure_csrf_cookie
+#https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-CSRF_USE_SESSIONS
+CSRF_USE_SESSIONS = True
 
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
-SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_SECONDS = 518400
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
@@ -93,9 +96,7 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
 # https://github.com/aliyun/django-oss-storage
-
 INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
-
 
 # STATIC
 # ----------------------------------------------------------------------------

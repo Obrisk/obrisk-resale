@@ -1,6 +1,5 @@
 #Please ignore pylint hint on Classified.DoesNotExist
 #This code is valid
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -29,8 +28,6 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
     user_model = User
-
-
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -78,7 +75,6 @@ class ContactsListView(LoginRequiredMixin, ListView):
                     )
                 ).order_by('-time')
 
-
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
 
@@ -91,6 +87,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
                 context['active'] = context['convs'][0].first_user.username
         return context
 
+@ensure_csrf_cookie
 @login_required
 @require_http_methods(["GET"])
 def messagesView(request, username):

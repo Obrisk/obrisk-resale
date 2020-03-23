@@ -13,6 +13,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField, Count
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from taggit.models import Tag
 from obrisk.utils.helpers import AuthorRequiredMixin
@@ -37,8 +38,8 @@ def set_popular_tags():
 
     return HttpResponse("Successfully sorted the popular tags!", content_type='text/plain')
 
-
 #People can view without login
+@ensure_csrf_cookie
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
 
@@ -118,8 +119,6 @@ def classified_list(request, tag_slug=None):
 
 #     def get_queryset(self, **kwargs):
 #         return Classified.objects.get_expired()
-
-
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
