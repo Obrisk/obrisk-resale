@@ -18,15 +18,6 @@ $(function() {
       scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
   }
-
-  // This sets up every ajax call with proper headers.
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
   $("input, textarea").val("");
 
   //Submit stories
@@ -85,7 +76,9 @@ $(function() {
     // Ajax call to request a given Stories object detail and thread, and to
     // show it in a modal.
     var post = $(this).closest(".card");
+
     var stories = $(post).attr("stories-id");
+    post.find(".post-media").removeClass("smaller");
     post.find(".comments-wrap").toggleClass("is-hidden");
   });
 
@@ -229,6 +222,7 @@ $(function() {
     // show it in a modal.
     var post = $(this).closest(".card");
     var stories = $(post).attr("stories-id");
+    post.find(".post-media").addClass("smaller");
     post.find(".comments-wrap").removeClass("is-hidden");
     post.find("textarea").focus();
 
