@@ -359,6 +359,7 @@
   var loadvideo = function () {
     Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p, {
       ratio: '16:9',
+      controls: ['play-large', 'progress', 'mute', 'volume', 'fullscreen']
     }));
   }
   loadvideo();

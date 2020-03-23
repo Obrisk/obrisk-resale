@@ -298,3 +298,49 @@ a:hover {
   height: 100%;
   width: 100%;
 }
+
+.post-media {
+  transition: all 0.2s;
+}
+.post-media.smaller {
+  width: auto;
+  height: 300px;
+  transform: scale(0.5);
+  transform-origin: left top;
+  margin-bottom: -150px;
+  margin-right: -150px;
+}
+.post-media.grid-1.smaller {
+  width: 300px;
+  height: 300px;
+  transform: scale(0.5);
+  transform-origin: left top;
+  margin-bottom: -150px;
+  margin-right: -150px;
+}
+.grid-4.smaller {
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: ". . . .";
+}
+.grid-3.smaller {
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: ". . .";
+}
+.grid-2.smaller {
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: ". .";
+}
+.grid-1.smaller {
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: ".";
+}
+.smaller .img1,
+.smaller .img2,
+.smaller .img3,
+.smaller .img4 {
+  grid-area: auto;
+}
