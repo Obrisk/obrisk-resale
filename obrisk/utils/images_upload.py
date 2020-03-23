@@ -1,7 +1,6 @@
 import uuid
 import json
 import base64
-import re
 import os
 import datetime
 import logging
@@ -10,7 +9,6 @@ from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from slugify import slugify
 
@@ -22,6 +20,7 @@ from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from obrisk.classifieds.models import ClassifiedImages
 from obrisk.stories.models import StoryImages
+from config.settings.base import env
 
 
 # Initialize the information such as AccessKeyId, AccessKeySecret, and Endpoint.
@@ -170,8 +169,7 @@ def create_presigned_post(bucket_name, object_name,
         logging.error(e)
         return None
 
-    # The response contains the presigned URL and required fields
-    return response
+    # The response contains the presigned URL and required fields return response
 
 
 @login_required
@@ -187,7 +185,7 @@ def get_oss_auth(request, app_name=None):
         but no name was supplied'
     }
     
-    if app_name == 'stories.video':
+    if app_name == 'stories.video' and env.bool('VIDEO_USE_AWS_MEDIA'):
         data = generate_sts_credentials(request)
         
         if data is None:
@@ -197,7 +195,7 @@ def get_oss_auth(request, app_name=None):
     else:
         token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
         
-        if token == False:
+        if token is False:
             #This is very bad, but we'll do it until we move the servers to China.
             #logging this event
             key_id = str(access_key_id)
@@ -279,7 +277,14 @@ def multipleImagesPersist(request, images_list, app, obj):
             return False
 
 
-        if os.getenv('AWS_S3_MEDIA'):
+        if env.bool('AWS_S3_MEDIA'):
+            #First verify that the lambda has finish creating thumbnail
+            #Then save
+            #img_obj.image_thumb = thumb_name
+            if img_mid_name:
+                img_obj.image_mid_size = img_mid_name
+            img_obj.save()
+            saved_objs.append(img_obj)
             return True
 
         else:
@@ -333,28 +338,36 @@ def videoPersist(request, video, app, obj):
     It returns True if the video is authentic
     False if there is a validation problem '''
 
-    if video.startswith('f{media/videos/{app}/{request.user.username}/') == False or len(video) < 10:
-        obj.delete()
-        return False
+    if env.bool('VIDEO_USE_AWS_MEDIA'):
+        if video.startswith('f{media/videos/{app}/{request.user.username}/') is False:
+            obj.delete()
+            return False
 
-    response = client.head_object(
-        Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
-        Key=video,
-    )
+        response = client.head_object(
+            Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
+            Key=video,
+        )
 
-    print(response)
-    #For Aliyun OSS try:
-    #   simplifiedmeta = bucket.get_object_meta(video)
-    #   print(simplifiedmeta.headers['Last-Modified'])
-    #   print(simplifiedmeta.headers['Content-Length'])
-    
-    #except oss2.exceptions.NoSuchKey:
-    #    obj.delete() 
-    #    return False
+        #if something in print(response)
+        obj.video = video
+        obj.save()
+        return True
 
-    obj.video = video
-    obj.save()
-    return True
+    else:
+        #For Aliyun OSS:
+        try:
+            simplifiedmeta = bucket.get_object_meta(video)
+            #print(simplifiedmeta.headers['Last-Modified'])
+            if int(simplifiedmeta.headers['Content-Length']) > 0:
+                obj.video = video
+                obj.save()
+                return True
+
+        except oss2.exceptions.NoSuchKey:
+            obj.delete() 
+            return False
+
+    return False
 
 @login_required
 @require_http_methods(["GET"])
@@ -383,6 +396,7 @@ def bulk_update_classifieds_mid_images(request):
             messages.error(request, f"Object with details doesn't exist {e}")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         except Exception as e:
+            logging.error(e)
             messages.error(request, "This is trouble, restart the process!")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         else:

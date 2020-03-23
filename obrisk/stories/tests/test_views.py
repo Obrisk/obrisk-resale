@@ -32,9 +32,9 @@ class StoriesViewsTest(TestCase):
     def test_stories_list(self):
         response = self.client.get(reverse("stories:list"))
         assert response.status_code == 200
-        assert self.first_stories in response.context["stories_list"]
-        assert self.second_stories in response.context["stories_list"]
-        assert self.third_stories not in response.context["stories_list"]
+        assert self.first_stories in response.context["stories"]
+        assert self.second_stories in response.context["stories"]
+        assert self.third_stories not in response.context["stories"]
 
     def test_delete_stories(self):
         initial_count = Stories.objects.count()

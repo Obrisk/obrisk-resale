@@ -2,16 +2,16 @@ import json, uuid, itertools
 from slugify import slugify
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, Http404
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import ListView, DeleteView, DetailView
+from django.views.generic import DeleteView, DetailView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField, Count
+from django.db.models import OuterRef, Subquery, Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from obrisk.utils.images_upload import multipleImagesPersist, videoPersist
@@ -68,22 +68,21 @@ def stories_list(request, tag_slug=None):
         # If page is not an integer deliver the first page
         stories = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():            
+        if request.is_ajax():
             # If the request is AJAX and the page is out of range
             # return an empty page            
             return HttpResponse('')
         # If page is out of range deliver last page of results
-        stories = paginator.page(paginator.num_pages)     
-        
+        stories = paginator.page(paginator.num_pages)
+    
     # Deal with tags in the end to override other_stories.
     tag = None
 
     if tag_slug:
-
         tag = get_object_or_404(StoryTags, slug=tag_slug)
         
         stories = Stories.objects.get_stories().filter(tags__in=[tag])\
-                .exclude(uuid_id=self.object.uuid_id).annotate (
+                .annotate (
                     img1 = Subquery (
                             StoryImages.objects.filter(
                                 story=OuterRef('pk'),
@@ -290,12 +289,16 @@ def post_stories(request):
                 except IndexError:
                     pass 
             else:
-                return HttpResponseBadRequest(
-                    content=_('Sorry, the image(s) were not uploaded successfully!'))
+                return HttpResponse(
+                    'Sorry, the image(s) were not uploaded successfully!')
         
         if video:
             if videoPersist(request, video, 'stories', story):
                 story.video = video
+
+            else:
+                return HttpResponse(
+                    'Sorry, the video was not uploaded successfully!')
 
         html = render_to_string(
             'stories/stories_single.html',

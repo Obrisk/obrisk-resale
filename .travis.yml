@@ -5,8 +5,11 @@ python:
   - "3.6"
 env:
   global:
-  - PGPORT=5433
-  - DJANGO_VERSION=2.2.9
+  - PGPORT=5432
+  - DJANGO_VERSION=2.2.11
+  - DJANGO_SETTINGS_MODULE="config.settings.test"
+# - PYTHONPATH="/home/travis/build/my_github_name/my_github_project"
+  - PIP_USE_MIRRORS=true
 branches:
   only:
     - master
@@ -16,34 +19,33 @@ services:
   - postgresql
 # command to install dependencies
 
-addons:
-  postgresql: "11"
-  apt:
-    packages:
-    - postgresql-11
-    - postgresql-client-11
+#addons:
+  #postgresql: "11"
+  #apt:
+    #packages:
+    # - postgresql-11
+    # - postgresql-client-11
 
 before_install:
   - pip install -U pip
   - pip install python-coveralls
 
 install:
+  - pip install -q Django==2.2.11
   - pip install -r requirements/local.txt
 
-
-before_install:
-  - sudo apt-get update
-  - sudo apt-get --yes remove postgresql\*
-  - sudo apt-get install -y postgresql-11 postgresql-client-11
-  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
-  - sudo service postgresql restart 11  
+#before_install:
+#  - sudo apt-get update
+#  - sudo apt-get --yes remove postgresql\*
+#  - sudo apt-get install -y postgresql-11 postgresql-client-11
+#  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
+#  - sudo service postgresql restart 11  
 
 before_script:
   - psql --version
   - psql -c "CREATE DATABASE obdev;" -U postgres
-  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres  
   - cp travis.env .env
-  - python manage.py migrate --settings=config.settings.local
+  - python manage.py migrate --settings=config.settings.test
 
 # command to run tests
 script:

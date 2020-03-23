@@ -1,12 +1,8 @@
 from django.views.generic.base import TemplateView
 from django.conf.urls import url
 from django.views.generic import TemplateView
-
-from obrisk.utils.images_upload import bulk_update_classifieds_mid_images
 from obrisk.classifieds.search import SearchListView, get_suggestions
-from obrisk.classifieds.views import (classified_list, set_popular_tags, CreateOfficialAdView, TagsAutoComplete,
-                                      CreateClassifiedView, EditClassifiedView, ClassifiedDeleteView,
-                                      ReportClassifiedView, DetailClassifiedView)
+from obrisk.classifieds.views import (classified_list, CreateOfficialAdView, TagsAutoComplete, CreateClassifiedView, EditClassifiedView, ClassifiedDeleteView, ReportClassifiedView, DetailClassifiedView)
 app_name = 'classifieds'
 urlpatterns = [
     url(r'^$', classified_list, name='list'),

@@ -15,7 +15,6 @@ from obrisk.posts.sitemaps import PostsSitemap
 from obrisk.qa.sitemaps import QASitemap
 from config.sitemaps import StaticSitemap
 from obrisk.utils.sentry import trigger_error
-from obrisk.utils.tags_migrate import migrate_all_tags
 
 
 sitemaps = {

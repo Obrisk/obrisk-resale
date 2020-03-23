@@ -1,45 +1,30 @@
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.views import View
-from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView, DeleteView
-from django.views.generic.edit import BaseFormView
+from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from django.template import RequestContext
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django import forms
 from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField, Count
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
-from slugify import slugify
 
-from taggit.models import Tag, TaggedItemBase
+from taggit.models import Tag
 from obrisk.utils.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages, ClassifiedTags
+from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, ClassifiedTags
 from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
 from obrisk.utils.images_upload import multipleImagesPersist
-# For images
-import json
-import re
-import base64
-import datetime
-
-import oss2
-from aliyunsdkcore import client
-from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_http_methods
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from obrisk.utils.helpers import ajax_required
 
 from dal import autocomplete
 
@@ -65,7 +50,7 @@ def classified_list(request, tag_slug=None):
     #Try to Get the popular tags from cache
     popular_tags = cache.get('popular_tags')
 
-    if popular_tags == None:
+    if popular_tags is None:
         popular_tags = Classified.objects.get_counted_tags()
     
     #Get classifieds
@@ -252,7 +237,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
         classified = form.save(commit=False)
         
         #Empty phone number is +8613300000000 for all old users around 150 users
-        if self.request.user.phone_number != '' and show_phone == True: 
+        if self.request.user.phone_number is not '' and show_phone:
             if not classified.phone_number and self.request.user.phone_number.national_number != 13300000000:
                 classified.phone_number = self.request.user.phone_number
             

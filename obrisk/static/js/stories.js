@@ -1,16 +1,27 @@
 $(function() {
-  function csrfSafeMethod(method) {
-    // These HTTP methods do not require CSRF protection
-    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-  }
-
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
+    $.ajaxSetup({ 
+         beforeSend: function(xhr, settings) {
+             function getCookie(name) {
+                 var cookieValue = null;
+                 if (document.cookie && document.cookie != '') {
+                     var cookies = document.cookie.split(';');
+                     for (var i = 0; i < cookies.length; i++) {
+                         var cookie = jQuery.trim(cookies[i]);
+                         // Does this cookie string begin with the name we want?
+                         if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                             break;
+                         }
+                     }
+                 }
+                 return cookieValue;
+             }
+             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                 // Only send the token to relative URLs i.e. locally.
+                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+             }
+         } 
+    });
 
   function offset(el) {
     var rect = el.getBoundingClientRect(),
@@ -35,7 +46,7 @@ $(function() {
     } else {
       error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error!</strong>Please, Upload an image or write something!
+          Please, Upload an image or write something!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -162,7 +173,7 @@ $(function() {
         error: function(data) {
           error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error!</strong>Sorry we can't handle new comments, please try again later.
+          Sorry we can't handle new comments, please try again later.
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -266,7 +277,7 @@ $(function() {
       error: function(data) {
         error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error!</strong>Sorry we can't handle new posts, please try again later.
+          Sorry we can't handle new posts, please try again later.
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
