@@ -9,7 +9,7 @@ from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
 #from obrisk.utils.cloudfront import STATIC_VERSION or None
-STATIC_VERSION = 'ver10032001' 
+STATIC_VERSION = 'ver23032001' 
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -103,7 +103,7 @@ INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 #STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
-if os.getenv('USE_S3_STATICFILES'):
+if env.bool('USE_S3_STATICFILES'):
     AWS_ACCESS_KEY_ID = os.getenv('AWS_STATIC_S3_KEY_ID')
 
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_STATIC_S3_S3KT')
@@ -120,7 +120,7 @@ if os.getenv('USE_S3_STATICFILES'):
 
     STATIC_URL = f'https://dist.obrisk.com/static/{STATIC_VERSION}/'
          
-    if not os.getenv('CLOUDFRONT'):
+    if not env.bool('CLOUDFRONT'):
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/{STATIC_VERSION}/'
 
     AWS_S3_CUSTOM_DOMAIN= 'dist.obrisk.com'
