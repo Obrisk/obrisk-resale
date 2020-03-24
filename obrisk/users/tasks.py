@@ -1,4 +1,6 @@
-import requests, datetime, time
+import requests
+import datetime
+import time
 
 from celery import shared_task
 from slugify import slugify
