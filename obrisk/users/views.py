@@ -27,7 +27,7 @@ from allauth.account.forms import  UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
 from slugify import slugify
-from phonenumbers import PhoneNumber   
+from phonenumbers import PhoneNumber
 from friendship.models import Friend, Follow
 from rest_framework.decorators import api_view
 
@@ -57,12 +57,12 @@ class EmailSignUp(SignupView):
 
 def aliyun_send_code(random, full_number):
     phone_no = str(full_number).strip('+86')
-    params = " {\"code\":\""+ random + "\"} " 
+    params = " {\"code\":\""+ random + "\"} "
     __business_id = uuid.uuid1()
     ret = send_sms( __business_id, phone_no, os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
     ret = ret.decode("utf-8")
 
-    #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"] 
+    #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"]
     return ast.literal_eval(ret)
 
 
@@ -81,7 +81,7 @@ def send_code(full_number, theme, user=None):
 
     else:
         # Create an SNS client
-        try: 
+        try:
             client = boto3.client(
                 "sns",
                 aws_access_key_id=os.getenv('AWS_SMS_ACCESS_KY'),
@@ -114,9 +114,9 @@ def send_code(full_number, theme, user=None):
                 )
 
         except Exception:
-            #AWS has failed, retry with Aliyun 
+            #AWS has failed, retry with Aliyun
             ret = aliyun_send_code(random, full_number)
-            
+
             if ret['Code'] == 'OK':
                 cache.set(str(full_number), random , 600)
 
@@ -129,9 +129,9 @@ def send_code(full_number, theme, user=None):
                 return JsonResponse({
                     'success': False,
                     'error_message': "Sorry we couldn't send the code please try again later!"
-                })  
+                })
 
-        response = ret['ResponseMetadata'] 
+        response = ret['ResponseMetadata']
         if response['HTTPStatusCode'] == 200:
             cache.set(str(full_number), random , 600)
 
@@ -139,9 +139,9 @@ def send_code(full_number, theme, user=None):
                 'success': True,
                 'message': "We've send the code please wait, It is valid for 10 minutes!"
             })
-            
+
         else:
-            #AWS has failed without exception, retry with Aliyun 
+            #AWS has failed without exception, retry with Aliyun
             ret = aliyun_send_code(random, full_number)
             if ret['Code'] == 'OK':
                 cache.set(str(full_number), random , 600)
@@ -150,13 +150,13 @@ def send_code(full_number, theme, user=None):
                     'success': True,
                     'message': "We've send the code please wait, It is valid for 10 minutes!"
                 })
-            
+
             else:
                 logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
                 return JsonResponse({
                     'success': False,
                     'error_message': "Sorry we couldn't send the code please try again later!"
-                })  
+                })
 
 
 def get_users(full_number):
@@ -177,22 +177,22 @@ def phone_password_reset(request):
         phone_number = request.POST.get("phone_no")
 
         if phone_number is not None and len(phone_number) == 11 and phone_number[0] == '1':
-            
-            full_number = "+86" + phone_number           
+
+            full_number = "+86" + phone_number
             user = get_users(full_number)
             if user:
                 return send_code(full_number, "password-reset", user=user)
 
             else:
                 return JsonResponse({'success': False, 'error_message': "This phone number doesn't exist!"})
-        
+
         else:
             return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"} )
-    
+
     else:
         form = PhoneRequestPasswordForm()
         return render(request, 'account/phone_password_reset.html', {'form': form})
-        
+
 
 
 class UserDetailView(LoginRequiredMixin, DetailView):
@@ -218,7 +218,7 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         in_coming_reqst = Friend.objects.requests(user)
         pending = [u.to_user for u in sent_requests]
         pended = [u.from_user for u in in_coming_reqst]
-        
+
 
         context['friends'] = friends
         context['followers'] = followers
@@ -255,19 +255,19 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 @require_http_methods(["POST"])
 def update_profile_pic(request):
     picture = request.POST.get("profile_pic")
-    
+
     if not picture:
         return JsonResponse({'success': False, 'error_message': "No profile picture submitted!"} )
 
     else:
-        if picture.startswith('media/profile_pics/') is False:                
-            return JsonResponse({'success': False, 
+        if picture.startswith('media/profile_pics/') is False:
+            return JsonResponse({'success': False,
                                 'error_message': "Oops! your profile picture, wasn't uploaded successfully, please upload again!"})
 
         else:
             d = str(datetime.datetime.now())
-            thumb_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails/" + "thumb-" + d 
-            pic_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails" + "dp-" + d 
+            thumb_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails/" + "thumb-" + d
+            pic_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails" + "dp-" + d
             style1 = 'image/resize,m_fill,h_60,w_60'
             style2 = 'image/resize,m_fill,h_250,w_250'
 
@@ -293,7 +293,7 @@ def update_profile_pic(request):
             profile.picture = pic_name
             profile.org_picture = picture
             profile.save()
-                   
+
             return JsonResponse({'success': True})
 
 
@@ -304,16 +304,14 @@ class UserListView(LoginRequiredMixin, ListView):
     slug_url_kwarg = 'username'
 
 
-
-
 @ajax_required
 @require_http_methods(["GET", "POST"])
 def send_code_sms(request):
     if request.method == "GET":
         phone_no = request.GET.get("phone_no")
- 
+
         if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1' and phone_no != '13300000000':
- 
+
             full_number = "+86" + phone_no
             check_phone = User.objects.filter(phone_number=full_number).exists()
 
@@ -368,7 +366,7 @@ def phone_verify(request):
                                 url = build_absolute_uri(request, path)
                                 return JsonResponse({'success': True, 'url':url })
                             else:
-                                return JsonResponse({'success': False, 
+                                return JsonResponse({'success': False,
                                                      'error_message': "Sorry there is a problem with this account. Please contact us!"})
                     else:
                         return JsonResponse({'success': True})
@@ -450,7 +448,7 @@ class PhonePasswordResetConfirmView(FormView):
         else:
             messages.error(request,'The reset password link is no longer valid.')
             return self.form_invalid(form)
-       
+
 
 class AutoLoginView(LoginView):
     pass
@@ -468,8 +466,6 @@ def bulk_update_user_phone_no(request):
                 user.save()
 
     return redirect('stories:list')
-
-
 
 
 @ajax_required
@@ -492,7 +488,7 @@ def complete_authentication(request):
 
     usr = request.user
     user = User.objects.get(username=usr)
-    
+
     # getting socialusers without phone_number
     if user.socialaccount_set.all() and not user.phone_number:
         user_inputs = request.query_params
@@ -504,7 +500,7 @@ def complete_authentication(request):
 
         else:
             return JsonResponse({"status": "403", "message": "Please enter valid inputs"})
-   
+
     else:
 
         return redirect("stories:list")
