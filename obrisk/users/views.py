@@ -481,8 +481,9 @@ def username_exists(request):
 @ajax_required
 @api_view(['GET'])
 def complete_authentication(request):
-    ''' This view is to upadate social users' phone number and password
-        as they are required to be authorized completely
+    '''
+    This view is to upadate social users' phone number and password
+    as they are required to be authorized completely
     '''
 
     usr = request.user
