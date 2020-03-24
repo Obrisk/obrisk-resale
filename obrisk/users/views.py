@@ -194,7 +194,6 @@ def phone_password_reset(request):
         return render(request, 'account/phone_password_reset.html', {'form': form})
 
 
-
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     # These next two lines tell the view to index lookups by username
@@ -218,7 +217,6 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         in_coming_reqst = Friend.objects.requests(user)
         pending = [u.to_user for u in sent_requests]
         pended = [u.from_user for u in in_coming_reqst]
-
 
         context['friends'] = friends
         context['followers'] = followers
@@ -452,6 +450,7 @@ class PhonePasswordResetConfirmView(FormView):
 
 class AutoLoginView(LoginView):
     pass
+
 
 @login_required
 @require_http_methods(["GET"])

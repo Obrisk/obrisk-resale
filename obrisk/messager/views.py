@@ -8,6 +8,7 @@ from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.cache import cache
 
 from django.views.generic import ListView
 from django.db.models import OuterRef, Subquery
@@ -31,9 +32,6 @@ try:
 except ImportError:
     from django.contrib.auth.models import User
     user_model = User
-
-from django.core.cache import cache
-
 
 
 class ContactsListView(LoginRequiredMixin, ListView):
@@ -93,6 +91,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
             else:
                 context['active'] = context['convs'][0].first_user.username
         return context
+
 
 @ensure_csrf_cookie
 @login_required
@@ -259,6 +258,7 @@ def send_message(request):
         return render(request, 'messager/single_message.html', {'message': msg})
 
     return HttpResponse()
+
 
 @login_required
 @ajax_required
