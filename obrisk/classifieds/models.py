@@ -4,7 +4,6 @@ from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
-from django.contrib.postgres.search import SearchVectorField
 
 from slugify import slugify
 from taggit.managers import TaggableManager

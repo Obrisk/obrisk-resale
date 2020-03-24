@@ -1,25 +1,21 @@
 #Please ignore pylint hint on Classified.DoesNotExist
 #This code is valid
-
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import ensure_csrf_cookie
+
 from django.views.generic import ListView
-from django.urls import reverse
-from django.db.models import Q
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
-from django.core import serializers
+from django.db.models import OuterRef, Subquery
 
 import time
-import os
 import base64
 import datetime
 import oss2
-from collections import OrderedDict
 
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
@@ -28,18 +24,12 @@ from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.notifications.models import Notification, notification_handler
 
-from config.settings.base import SESSION_COOKIE_AGE
-
 try:
     from django.contrib.auth import get_user_model
     user_model = get_user_model()
 except ImportError:
     from django.contrib.auth.models import User
     user_model = User
-
-from django.core.cache import cache	
-
-
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -87,7 +77,6 @@ class ContactsListView(LoginRequiredMixin, ListView):
                     )
                 ).order_by('-time')
 
-
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
 
@@ -100,6 +89,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
                 context['active'] = context['convs'][0].first_user.username
         return context
 
+@ensure_csrf_cookie
 @login_required
 @require_http_methods(["GET"])
 def messagesView(request, username):

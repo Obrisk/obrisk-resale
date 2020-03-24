@@ -2,10 +2,6 @@ from django.shortcuts import redirect
 from allauth.account.signals import user_signed_up
 from django.dispatch import receiver
 from obrisk.users.tasks import update_profile_picture
-import requests
-from slugify import slugify
-import datetime
-from obrisk.utils.images_upload import bucket
 
 
 @receiver(user_signed_up)

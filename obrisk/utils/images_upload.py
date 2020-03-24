@@ -1,7 +1,6 @@
 import uuid
 import json
 import base64
-import re
 import os
 import datetime
 import logging
@@ -10,7 +9,6 @@ from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
-from django.contrib.auth import get_user_model
 from django.shortcuts import redirect
 from slugify import slugify
 
@@ -22,6 +20,7 @@ from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from obrisk.classifieds.models import ClassifiedImages
 from obrisk.stories.models import StoryImages
+from config.settings.base import env
 
 
 # Initialize the information such as AccessKeyId, AccessKeySecret, and Endpoint.
@@ -170,8 +169,7 @@ def create_presigned_post(bucket_name, object_name,
         logging.error(e)
         return None
 
-    # The response contains the presigned URL and required fields
-    return response
+    # The response contains the presigned URL and required fields return response
 
 
 @login_required
@@ -187,7 +185,7 @@ def get_oss_auth(request, app_name=None):
         but no name was supplied'
     }
     
-    if app_name == 'stories.video':
+    if app_name == 'stories.video' and env.bool('VIDEO_USE_AWS_MEDIA'):
         data = generate_sts_credentials(request)
         
         if data is None:
@@ -197,7 +195,7 @@ def get_oss_auth(request, app_name=None):
     else:
         token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
         
-        if token == False:
+        if token is False:
             #This is very bad, but we'll do it until we move the servers to China.
             #logging this event
             key_id = str(access_key_id)
@@ -241,13 +239,14 @@ def multipleImagesPersist(request, images_list, app, obj):
 
     #from here if you return form invalid then you have to prior delete the obj, obj.delete()
     #The current implementation will sucessfully create obj even when there are error on images
-    #This is just to help to increase the app post on the website. The user shouldn't be discourage with errors
-    #Also most of errors are caused by our frontend OSS when uploading the images so don't return invalid form to user.
+    #This is just to help to increase the app post on the website.
+    #Also most errors are caused by our frontend when uploading so don't return invalid form.
     img_mid_name = None
     saved_objs = []
     
     for index, str_result in enumerate(images_list):
-        if str_result.startswith(f'{app}/{request.user.username}') == False:
+        if str_result.startswith(
+              f'media/images/{app}/{request.user.username}') is False:
             #Check if it was default image as it has no username.
             #This is the same default on all multiple upload apps
             #Though stories shouldn't have this, form shouldn't be submitted without images
@@ -259,10 +258,10 @@ def multipleImagesPersist(request, images_list, app, obj):
 
         if app == 'classifieds':
             img_obj = ClassifiedImages(classified=obj, image=str_result)
-            thumb_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d + str(index)
+            thumb_name = "media/images/classifieds/" + slugify(str(obj.user)) + "/" + \
+                    slugify(str(obj.title), to_lower=True) + "/thumbnails/" + d + str(index)
             img_mid_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
+                    slugify(str(obj.title), to_lower=True) + "/mid-size/" + d + str(index)
             style = 'image/resize,m_fill,h_156,w_156'
             style_mid = 'image/resize,m_fill,h_400'
 
@@ -272,15 +271,21 @@ def multipleImagesPersist(request, images_list, app, obj):
                     story=obj, 
                     image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
                 )
-            thumb_name = "stories/" + slugify(str(obj.user)) + "/thumbnails/" + d + str(index)
+            thumb_name = "media/images/stories/" + slugify(str(obj.user)) + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_456,w_456'
 
         else:
             return False
 
-
-        if os.getenv('AWS_S3_MEDIA'):
-            return True
+        if env.bool('USE_AWS_S3_MEDIA', default=False):
+            #First verify that the lambda has finish creating thumbnail
+            #Then save
+            #img_obj.image_thumb = thumb_name
+            if img_mid_name:
+                img_obj.image_mid_size = img_mid_name
+            img_obj.save()
+            saved_objs.append(img_obj)
+            return saved_objs
 
         else:
             try:
@@ -333,28 +338,36 @@ def videoPersist(request, video, app, obj):
     It returns True if the video is authentic
     False if there is a validation problem '''
 
-    if video.startswith('f{media/videos/{app}/{request.user.username}/') == False or len(video) < 10:
-        obj.delete()
-        return False
+    if env.bool('VIDEO_USE_AWS_MEDIA'):
+        if video.startswith('f{media/videos/{app}/{request.user.username}/') is False:
+            obj.delete()
+            return False
 
-    response = client.head_object(
-        Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
-        Key=video,
-    )
+        response = client.head_object(
+            Bucket=os.getenv('AWS_S3_MEDIA_BUCKET_NAME'),
+            Key=video,
+        )
 
-    print(response)
-    #For Aliyun OSS try:
-    #   simplifiedmeta = bucket.get_object_meta(video)
-    #   print(simplifiedmeta.headers['Last-Modified'])
-    #   print(simplifiedmeta.headers['Content-Length'])
-    
-    #except oss2.exceptions.NoSuchKey:
-    #    obj.delete() 
-    #    return False
+        #if something in print(response)
+        obj.video = video
+        obj.save()
+        return True
 
-    obj.video = video
-    obj.save()
-    return True
+    else:
+        #For Aliyun OSS:
+        try:
+            simplifiedmeta = bucket.get_object_meta(video)
+            #print(simplifiedmeta.headers['Last-Modified'])
+            if int(simplifiedmeta.headers['Content-Length']) > 0:
+                obj.video = video
+                obj.save()
+                return True
+
+        except oss2.exceptions.NoSuchKey:
+            obj.delete() 
+            return False
+
+    return False
 
 @login_required
 @require_http_methods(["GET"])
@@ -383,6 +396,7 @@ def bulk_update_classifieds_mid_images(request):
             messages.error(request, f"Object with details doesn't exist {e}")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         except Exception as e:
+            logging.error(e)
             messages.error(request, "This is trouble, restart the process!")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         else:

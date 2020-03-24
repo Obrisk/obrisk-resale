@@ -1,7 +1,6 @@
 import requests, time, datetime
 from celery import shared_task
 from slugify import slugify
-from allauth.socialaccount.models import SocialAccount, SocialLogin
 from django.core.exceptions import ObjectDoesNotExist
 from obrisk.utils.images_upload import bucket
 from obrisk.users.models import User

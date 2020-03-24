@@ -1,4 +1,5 @@
-import uuid, itertools
+import uuid, itertools, operator
+import logging
 from slugify import slugify
 from django.conf import settings
 from django.db import models
@@ -7,10 +8,11 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.models import F
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from django.db.models import Count
 
 from obrisk.notifications.models import Notification, notification_handler
 from taggit.managers import TaggableManager
-from taggit.models import TaggedItemBase, TagBase, GenericTaggedItemBase, CommonGenericTaggedItemBase, GenericUUIDTaggedItemBase
+from taggit.models import TaggedItemBase, TagBase, GenericUUIDTaggedItemBase
 
 class StoryTags(TagBase):
     class Meta:
@@ -202,11 +204,20 @@ class Stories(models.Model):
         return parent.thread.all()
 
     def get_likers(self):
-        return self.liked.all()[:3]
+        #sometimes no one has liked anything
+        try: 
+            return self.liked.all()[:3]
+        except Exception as e:
+            logging.error(e)
+            return []
 
     def get_all_likers(self):
-        return self.liked.all()
-        
+        try: 
+            return self.liked.all()
+        except Exception as e:
+            logging.error(e)
+            return []
+
     def count_thread(self):
         return self.get_thread().count()
 
