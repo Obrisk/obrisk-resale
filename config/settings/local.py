@@ -1,6 +1,9 @@
 import os
 import logging
 import logging.config
+
+import socket
+
 #from django.utils.log import DEFAULT_LOGGING
 
 from .base import *  # noqa
@@ -95,8 +98,6 @@ DEBUG_TOOLBAR_CONFIG = {
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2']
 
-import socket
-import os
 if os.environ.get('USE_DOCKER') == 'yes':
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
