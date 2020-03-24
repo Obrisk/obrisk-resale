@@ -6,10 +6,10 @@ from django.dispatch import receiver
 
 @receiver(user_signed_up)
 def social_user_connected(user, **kwargs):
-    '''
+    """
     when triggerd, it initiates update profile picture
     backgroundnd task and redirects to the homepage
-    '''
+    """
     if user.socialaccount_set.all():
 
         update_profile_picture.delay(user_id=user.id)

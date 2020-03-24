@@ -12,10 +12,10 @@ from obrisk.users.models import User
 
 @shared_task
 def update_profile_picture(user_id):
-    '''
+    """
     A function to add the background task to update user picture download it from
     Linkedin and save it to our bucket using requests package
-    '''
+    """
     time.sleep(1)
     # get  the user object
     user = User.objects.get(id=user_id)

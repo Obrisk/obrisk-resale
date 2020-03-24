@@ -17,8 +17,8 @@ class AccountAdapter(DefaultAccountAdapter):
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def authentication_error(self, request, provider_id, error, exception, extra_context):
-        ''' This is for debugging when there is a failure
-        linked with the provider'''
+        """ This is for debugging when there is a failure
+        linked with the provider"""
 
         # print(provider_id)
         # print(error.__str__())
