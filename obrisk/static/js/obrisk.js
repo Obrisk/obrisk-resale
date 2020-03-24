@@ -89,9 +89,9 @@ $(function() {
     if (event.key === undefined) event = JSON.parse(event);
     switch (event.key) {
       case "new_message":
-        $(".msg-notification i").show();
         if (event.recipient == currentUser) {
           notif.play();
+          $(".msg-notification i").show();
         }
         break;
       default:
