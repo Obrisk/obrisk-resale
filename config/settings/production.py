@@ -9,7 +9,7 @@ from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
 #from obrisk.utils.cloudfront import STATIC_VERSION or None
-STATIC_VERSION = 'ver10032001' 
+STATIC_VERSION = 'ver23032001' 
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -29,11 +29,29 @@ DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=0)  # Fro
 
 # CACHES
 # ------------------------------------------------------------------------------
-CACHES = {
+
+# REDIS setup
+REDIS_URL = f'{env("PRIMARY_REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'
+
+CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_URL,
-        'OPTIONS': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL, ],
+        },
+    }
+}
+
+CELERY_BROKER_URL = REDIS_URL
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            REDIS_URL,
+            env('SLAVE_REDIS_URL'),
+        ],
+        "OPTIONS": {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             # Mimicing memcache behavior.
             # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
@@ -56,11 +74,16 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
+# This is not so important but added here to avoid confusion
+# when generating CSRF token on Ajax requests
+#https://docs.djangoproject.com/en/2.2/ref/csrf/#django.views.decorators.csrf.ensure_csrf_cookie
+#https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-CSRF_USE_SESSIONS
+CSRF_USE_SESSIONS = True
 
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
-SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_SECONDS = 518400
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
@@ -73,9 +96,7 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
 # https://github.com/aliyun/django-oss-storage
-
 INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
-
 
 # STATIC
 # ----------------------------------------------------------------------------
@@ -83,7 +104,7 @@ INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 #STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
-if os.getenv('USE_S3_STATICFILES'):
+if env.bool('USE_S3_STATICFILES'):
     AWS_ACCESS_KEY_ID = os.getenv('AWS_STATIC_S3_KEY_ID')
 
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_STATIC_S3_S3KT')
@@ -100,7 +121,7 @@ if os.getenv('USE_S3_STATICFILES'):
 
     STATIC_URL = f'https://dist.obrisk.com/static/{STATIC_VERSION}/'
          
-    if not os.getenv('CLOUDFRONT'):
+    if not env.bool('CLOUDFRONT'):
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/{STATIC_VERSION}/'
 
     AWS_S3_CUSTOM_DOMAIN= 'dist.obrisk.com'

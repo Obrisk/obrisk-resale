@@ -3,10 +3,6 @@ import json
 from slugify import slugify
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async	
-from django.core.cache import cache	
-from django.core.cache.backends.base import DEFAULT_TIMEOUT	
-from config.settings.base import SESSION_COOKIE_AGE
-from asgiref.sync import sync_to_async
 
  
 from obrisk.users.models import User

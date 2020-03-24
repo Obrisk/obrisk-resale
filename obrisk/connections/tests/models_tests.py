@@ -2,7 +2,6 @@ import os
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.urls import reverse
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 User = get_user_model()

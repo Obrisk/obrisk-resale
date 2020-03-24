@@ -1,10 +1,8 @@
 from django.contrib.postgres.search import SearchQuery, SearchVector
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView
-from taggit.models import Tag
 from obrisk.users.models import User
 from obrisk.utils.helpers import ajax_required
 

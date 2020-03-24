@@ -321,3 +321,4 @@ var shareMe = function shareMe(title, url) {
 $(document.body).on("click", ".delete-story", function() {
   location.href = $(this).attr("href");
 });
+

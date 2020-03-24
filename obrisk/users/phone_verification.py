@@ -3,8 +3,6 @@ from django.conf import settings
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.profile import region_provider
 from aliyunsdkcore.request import RpcRequest
-from aliyunsdkcore.http import method_type as MT
-from aliyunsdkcore.http import format_type as FT
 
 REGION = os.getenv('SMS_REGION') 
 PRODUCT_NAME = "SMSapi"
