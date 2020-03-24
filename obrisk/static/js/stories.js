@@ -311,3 +311,10 @@ $(function() {
     });
   });
 });
+var shareMe = function shareMe(title, url) {
+  navigator.share({
+    title: title,
+    text: title,
+    url: location.href + url
+  });
+};
