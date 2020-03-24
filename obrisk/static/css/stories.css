@@ -303,30 +303,22 @@ a:hover {
   transition: all 0.2s;
 }
 .post-media.smaller {
-  width: auto;
-  height: 300px;
   transform: scale(0.5);
   transform-origin: left top;
-  margin-bottom: -150px;
-  margin-right: -150px;
 }
-.post-media.grid-4.smaller {
-  width: 100%;
-  height: 100%;
-  transform: scale(0.5);
-  transform-origin: left top;
-  margin-bottom: -50px;
-}
+
 .grid-4.smaller {
-  width: auto;
-  height: 300px;
+  width: 200%;
+  height: 100%;
+  margin-bottom: -50px;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: ". . . .";
 }
 .grid-3.smaller {
-  width: auto;
-  height: 300px;
+  width: 200%;
+  height: 100%;
+  margin-bottom: -150px;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: ". . .";
@@ -335,8 +327,12 @@ a:hover {
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: ". .";
+  margin-bottom: -50px;
 }
 .grid-1.smaller {
+  width: auto;
+  height: 300px;
+  margin-bottom: -50px;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: ".";

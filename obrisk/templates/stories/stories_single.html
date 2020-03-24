@@ -25,6 +25,7 @@
         </div>
       </div>
       <!-- /includes/pages/feed/dropdowns/feed-post-dropdown.html -->
+      {% if story.user == request.user %}
       <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
         <div>
           <div class="button">
@@ -33,8 +34,7 @@
         </div>
         <div class="dropdown-menu" role="menu">
           <div class="dropdown-content border-0">
-            {% if reply.user == request.user %}
-            <a href="#" class="dropdown-item">
+            <a href="{% url 'stories:delete_stories' story.uuid_id %}" class="dropdown-item delete-story">
               <div class="media">
                 <i data-feather="trash-2"></i>
                 <div class="media-content">
@@ -43,10 +43,10 @@
                 </div>
               </div>
             </a>
-            {% endif %}
           </div>
         </div>
       </div>
+      {% endif %}
     </div>
     <!-- /Header -->
 
@@ -126,7 +126,7 @@
         <div class="left align-items-center d-flex">
           <div class="fab-wrapper is-share">
             <a href="javascript:void(0);" class="small-fab share-fab share-stories"
-              onclick="shareMe('{{stories }}','i{{ story.slug }}')">
+              onclick="shareMe('{{stories }}','i/{{ story.slug }}/')">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="feather feather-link-2">

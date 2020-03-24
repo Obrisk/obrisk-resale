@@ -318,3 +318,6 @@ var shareMe = function shareMe(title, url) {
     url: location.href + url
   });
 };
+$(document.body).on("click", ".delete-story", function() {
+  location.href = $(this).attr("href");
+});
