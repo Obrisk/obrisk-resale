@@ -23,6 +23,7 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.notifications.models import Notification, notification_handler
+from config.settings.base import SESSION_COOKIE_AGE
 
 try:
     from django.contrib.auth import get_user_model

@@ -15,14 +15,6 @@ class NotificationUnreadListView(LoginRequiredMixin, ListView):
     context_object_name = 'notification_list'
     template_name = 'notifications/notification_list.html'
 
-    def get_context_data(self, **kwargs):
-        context = super(NotificationUnreadListView, self).get_context_data(**kwargs)
-
-        user = User.objects.get(username=request.user)
-        context['msg_notif'] = cache.get('msg_{user.pk}')
-
-        return context
-
 
     def get_queryset(self, **kwargs):
         return self.request.user.notifications.unread()
