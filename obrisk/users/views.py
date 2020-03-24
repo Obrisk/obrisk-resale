@@ -23,7 +23,7 @@ from django.contrib.auth.decorators import login_required
 
 # third parties imports
 from allauth.account.views import (SignupView, LoginView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView)
-from allauth.account.forms import  UserTokenForm
+from allauth.account.forms import UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
 from slugify import slugify
