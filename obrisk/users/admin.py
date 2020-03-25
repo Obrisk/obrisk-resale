@@ -33,6 +33,7 @@ class MyUserCreationForm(CustomUserCreationForm):
 
 @admin.register(User)
 class MyUserAdmin(AuthUserAdmin):
+    ordering = ('-date_joined', )
     form = MyUserChangeForm
     add_form = MyUserCreationForm
     fieldsets = (
@@ -44,5 +45,6 @@ class MyUserAdmin(AuthUserAdmin):
                     )
                 }),
     ) + AuthUserAdmin.fieldsets
-    list_display = ('username', 'is_seller', 'city','province_region', 'points')
-    search_fields = ['username', 'phone_number', 'email']
+    list_display = ('username', 'date_joined','last_login', 'city','province_region', 'thumbnail','points')
+    search_fields = ['username', 'phone_number', 'email', 'city']
+
