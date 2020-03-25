@@ -224,6 +224,7 @@ def get_thread(request):
         stories = Stories.objects.get(pk=stories_id)
     except:
         return JsonResponse({"error":"Story post is not valid"})
+
     stories_html = render_to_string("stories/stories_single.html", {"stories": stories})
     thread_html = render_to_string(
         "stories/stories_thread.html", {"thread": stories.get_thread()})
