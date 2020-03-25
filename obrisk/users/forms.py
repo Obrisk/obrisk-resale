@@ -9,10 +9,10 @@ from allauth.account.forms import (
 from allauth.utils import (
     set_form_field_order)
 from phonenumber_field.formfields import PhoneNumberField
-
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
@@ -47,12 +47,14 @@ class UserForm(forms.ModelForm):
 # This form inherits all-auth.
 class PhoneSignupForm(SignupForm):
     username = forms.CharField(label=_("Username"),
-                               min_length=getattr(settings, 'ACCOUNT_USERNAME_MIN_LENGTH', 3),
-                               max_length=getattr(settings, 'ACCOUNT_USERNAME_MAX_LENGTH', 16),
-                               widget=forms.TextInput(
-                                   attrs={'placeholder':
-                                          _('Permanent action. < 16 letters.'),
-                                          'autofocus': 'autofocus'}))
+                   min_length=getattr(settings, 
+                       'ACCOUNT_USERNAME_MIN_LENGTH', 3),
+                   max_length=getattr(settings,
+                       'ACCOUNT_USERNAME_MAX_LENGTH', 16),
+                   widget=forms.TextInput(
+                       attrs={'placeholder':
+                              _('Permanent action. < 16 letters.'),
+                              'autofocus': 'autofocus'}))
     province_region = forms.CharField(widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
     phone_number = PhoneNumberField(
@@ -81,7 +83,7 @@ class PhoneSignupForm(SignupForm):
        
         username_field = self.fields['username']
         username_field.max_length = getattr(settings,
-                'ACCOUNT_USERNAME_MAX_LENGTH', 16)
+            'ACCOUNT_USERNAME_MAX_LENGTH', 16)
         username_field.validators.append(
             validators.MaxLengthValidator(username_field.max_length))
         username_field.widget.attrs['maxlength'] = str(

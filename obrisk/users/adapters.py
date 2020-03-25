@@ -4,6 +4,7 @@ from django.forms import ValidationError
 from django.conf import settings
 from allauth.account.utils import user_field
 
+
 class AccountAdapter(DefaultAccountAdapter):
 
     def clean_username(self, username, **kwargs):

@@ -76,7 +76,7 @@ def send_code(full_number, theme, user=None):
         cache.set(str(full_number), random , 600)
         return JsonResponse({
             'success': True,
-            'message': "We've sent the code please wait. It is valid for 10 minutes!"
+            'message': "We've sent the code, it is valid for 10 minutes!"
         })
 
     else:
@@ -122,7 +122,7 @@ def send_code(full_number, theme, user=None):
 
                 return JsonResponse({
                     'success': True,
-                    'message': "We've sent the code please wait. It is valid for 10 minutes!"
+                    'message': "We've sent the code It is valid for 10 minutes!"
                 })
             else:
                 logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
@@ -137,7 +137,7 @@ def send_code(full_number, theme, user=None):
 
             return JsonResponse({
                 'success': True,
-                'message': "We've sent the code please wait. It is valid for 10 minutes!"
+                'message': "We've sent the code, it is valid for 10 minutes!"
             })
             
         else:
@@ -148,7 +148,7 @@ def send_code(full_number, theme, user=None):
 
                 return JsonResponse({
                     'success': True,
-                    'message': "We've sent the code please wait. It is valid for 10 minutes!"
+                    'message': "We've sent the code, it is valid for 10 minutes!"
                 })
             
             else:
