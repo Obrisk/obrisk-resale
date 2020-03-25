@@ -38,7 +38,7 @@ var phone_no;
 $(function() {
   function checkPassword(str) {
     // at least one number, one lowercase and one uppercase letter
-    // at least six characters
+    // at least eight characters
     var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
     return re.test(str);
   }
@@ -60,8 +60,7 @@ $(function() {
         $("#code-notice")
           .empty()
           .append(
-            "<p class='blue-link'> Incorrect number. Don't include country code, spaces or any character!<p>"
-          );
+            "<p class='blue-link'> Wrong number. Don't include country code,spaces or any special character!<p>");
       } else {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
@@ -93,8 +92,13 @@ $(function() {
               timeout = 60;
               $("#send-code").attr("disabled", true);
               $("#phone_label").hide();
-              $("#code").toggleClass("d-none");
-              $("#email-request").toggleClass("d-none");
+
+              if ($("#code").hasClass("d-none")) {
+                  $("#code").toggleClass("d-none");
+              }
+              if ($("#email-request").hasClass("d-none")) {
+                  $("#email-request").toggleClass("d-none");
+              }
 
               if (data.message != undefined) {
                 $("#code-notice")
