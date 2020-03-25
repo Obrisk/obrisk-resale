@@ -30,8 +30,8 @@
           </ul>
         </div>
 
-        <div class="col-lg-10 users-list">
-          {% for con in convs %}
+    <div class="col-lg-10 users-list">
+      {% for con in convs %}
           {% if con.first_user.username == request.user.username %}
           <a href="#chat-window" data-toggle="modal"
             data-url="{% url 'messager:conversation_detail' con.second_user.username %}"
@@ -100,8 +100,7 @@
           </a>
           {% endif %}
 
-          {% empty %}
-
+      {% empty %}
 
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb" style="background-color: #3EC4E2;">
@@ -115,8 +114,9 @@
             {% trans "Start a chat from the classifieds details or invite friends, Or you can chat with the available Obrisk team member" %}
           </p>
 
-          <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
-            class="list-group-item list-group-item-action ">
+          <a href="#chat-window" data-toggle="modal"
+            data-url="{% url 'messager:conversation_detail' super_users.first.username  %}"
+            class="card flex-row mb-1 pb-2 pl-3 pr-3 pt-2 open-chat ">
             {% if super_users.first.thumbnail %}
             <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{super_users.first.thumbnail}}" alt="Picture Profile"
               style="width:40px;height:40px;border-radius: 50%;"
@@ -129,6 +129,8 @@
 
           {% endfor %}
         </div>
+
+
         <div class="has-text-centered col-12 col-md-10 m-auto">
 
           <span onclick="shareMe()" class="button has-min-width">

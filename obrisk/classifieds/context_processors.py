@@ -1,5 +1,14 @@
 from django.conf import settings
+import environ
+import environ
+from django.core.cache import cache
+from django.db.models import Subquery, OuterRef
+from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
+from obrisk.classifieds.models import Classified
+from obrisk.messager.models import Conversation, Message
+from obrisk.users.models import User
 
 def cached_queries(request):
     new_msgs = None
@@ -27,6 +36,11 @@ def cached_queries(request):
                 #if request.user.id == con.recipient and con.unread:
                     #new_msgs = True
                     #break
-
     oss = 'https://obrisk.oss-cn-hangzhou.aliyuncs.com'
-    return { 'new_msgs': new_msgs, 'vapid_key':vapid_key, 'oss':oss}
+    try:
+        user = User.objects.get(username=request.user)
+        msg_notifications = cache.get(f'msg_{user.pk}')
+        return { 'new_msgs': new_msgs, 'vapid_key':vapid_key, 'oss':oss, 'msg_notifications':msg_notifications}
+    except ObjectDoesNotExist:
+
+        return { 'new_msgs': new_msgs, 'vapid_key':vapid_key, 'oss':oss}
