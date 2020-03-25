@@ -2,13 +2,13 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.core import validators
 
 from allauth.account.forms import (
     SignupForm, LoginForm, PasswordField)
 from allauth.utils import (
     set_form_field_order)
 from phonenumber_field.formfields import PhoneNumberField
-
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
@@ -46,6 +46,15 @@ class UserForm(forms.ModelForm):
 
 # This form inherits all-auth.
 class PhoneSignupForm(SignupForm):
+    username = forms.CharField(label=_("Username"),
+                   min_length=getattr(settings, 
+                       'ACCOUNT_USERNAME_MIN_LENGTH', 3),
+                   max_length=getattr(settings,
+                       'ACCOUNT_USERNAME_MAX_LENGTH', 16),
+                   widget=forms.TextInput(
+                       attrs={'placeholder':
+                              _('Permanent action. < 16 letters.'),
+                              'autofocus': 'autofocus'}))
     province_region = forms.CharField(widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
     phone_number = PhoneNumberField(
@@ -69,9 +78,18 @@ class PhoneSignupForm(SignupForm):
 
     def __init__(self, *args, **kwargs):
         super(PhoneSignupForm, self).__init__(*args, **kwargs)
+        
         self.fields["password1"] = PasswordField(label=_("Password"))
+       
+        username_field = self.fields['username']
+        username_field.max_length = getattr(settings,
+            'ACCOUNT_USERNAME_MAX_LENGTH', 16)
+        username_field.validators.append(
+            validators.MaxLengthValidator(username_field.max_length))
+        username_field.widget.attrs['maxlength'] = str(
+            username_field.max_length)
 
-        if getattr(settings, "SIGNUP_PASSWORD_ENTER_TWICE", True):
+        if getattr(settings, "SIGNUP_PASSWORD_ENTER_TWICE", False):
             self.fields["password2"] = PasswordField(label=_("Password (again)"))
 
         if hasattr(self, "field_order"):
@@ -81,7 +99,7 @@ class PhoneSignupForm(SignupForm):
             self.fields[
                 fieldname
             ].help_text = (
-                "At least 8 character, can't be too common or entirely numeric"
+                "At least 8 letters & numbers"
             )
 
     def save(self, request):
@@ -131,7 +149,7 @@ class EmailSignupForm(SignupForm):
         )
         self.fields["password1"] = PasswordField(label=_("Password"))
 
-        if getattr(settings, "SIGNUP_PASSWORD_ENTER_TWICE", True):
+        if getattr(settings, "SIGNUP_PASSWORD_ENTER_TWICE", False):
             self.fields["password2"] = PasswordField(label=_("Password (again)"))
 
         if hasattr(self, "field_order"):

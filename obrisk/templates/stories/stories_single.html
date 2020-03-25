@@ -25,7 +25,8 @@
         </div>
       </div>
       <!-- /includes/pages/feed/dropdowns/feed-post-dropdown.html -->
-      <!-- <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
+      {% if story.user == request.user %}
+      <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
         <div>
           <div class="button">
             <i data-feather="more-vertical"></i>
@@ -33,8 +34,7 @@
         </div>
         <div class="dropdown-menu" role="menu">
           <div class="dropdown-content border-0">
-            {% if reply.user == request.user %}
-            <a href="#" class="dropdown-item">
+            <a href="{% url 'stories:delete_stories' stories.uuid_id %}" class="dropdown-item delete-story">
               <div class="media">
                 <i data-feather="trash-2"></i>
                 <div class="media-content">
@@ -43,10 +43,10 @@
                 </div>
               </div>
             </a>
-            {% endif %}
           </div>
         </div>
-      </div> -->
+      </div>
+      {% endif %}
     </div>
     <!-- /Header -->
 
@@ -122,26 +122,42 @@
 
       <!-- Post actions -->
       <div class="d-flex justify-content-between post-actions">
-        <div class="align-items-center d-flex like-wrapper">
 
-          {% if request.user in stories.get_all_likers %}
-          <a href="javascript:void(0);" class="like-button is-active">
-            <i class="mdi mdi-heart not-liked bouncy"></i>
-            <i class="mdi mdi-heart is-liked bouncy"></i>
-            <span class="like-overlay"></span>
-          </a>
-          {% else %}
-          <a href="javascript:void(0);" class="like-button">
-            <i class="mdi mdi-heart not-liked bouncy"></i>
-            <i class="mdi mdi-heart is-liked bouncy"></i>
-            <span class="like-overlay"></span>
-          </a>
-          {% endif %}
+        <div class="left align-items-center d-flex">
+          <div class="fab-wrapper is-share">
+            <a href="javascript:void(0);" class="small-fab share-fab share-stories"
+              onclick="shareMe('{{stories }}','i/{{ story.slug }}/')">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-link-2">
+                <path d="M15 7h3a5 5 0 0 1 5 5 5 5 0 0 1-5 5h-3m-6 0H6a5 5 0 0 1-5-5 5 5 0 0 1 5-5h3"></path>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+              </svg>
+            </a>
+          </div>
+
+          <div class="align-items-center d-flex like-wrapper">
+
+            {% if request.user in stories.get_all_likers %}
+            <a href="javascript:void(0);" class="like-button is-active">
+              <i class="mdi mdi-heart not-liked bouncy"></i>
+              <i class="mdi mdi-heart is-liked bouncy"></i>
+              <span class="like-overlay"></span>
+            </a>
+            {% else %}
+            <a href="javascript:void(0);" class="like-button">
+              <i class="mdi mdi-heart not-liked bouncy"></i>
+              <i class="mdi mdi-heart is-liked bouncy"></i>
+              <span class="like-overlay"></span>
+            </a>
+            {% endif %}
 
 
-          <small class="likes-count ml-2">
-            <span class="count">{{ stories.likes_count }}</span> <span class="m-0">Liked</span>
-          </small></div>
+            <small class="likes-count ml-2">
+              <span class="count">{{ stories.likes_count }}</span> <span class="m-0">Liked</span>
+            </small>
+          </div>
+        </div>
 
         <div class="align-items-center d-flex fab-wrapper is-comment">
           <a href="javascript:void(0);" class="small-fab comment-button">

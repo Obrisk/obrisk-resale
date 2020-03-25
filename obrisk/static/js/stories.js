@@ -1,16 +1,16 @@
 $(function() {
+  function csrfSafeMethod(method) {
+    // These HTTP methods do not require CSRF protection
+    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
+  }
 
-    function csrfSafeMethod(method) {
-        // these HTTP methods do not require CSRF protection
-        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
     }
-    $.ajaxSetup({
-        beforeSend: function(xhr, settings) {
-            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                xhr.setRequestHeader("X-CSRFToken", csrftoken);
-            }
-        }
-    });
+  });
 
   function offset(el) {
     var rect = el.getBoundingClientRect(),
@@ -35,7 +35,7 @@ $(function() {
     } else {
       error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          Please, Upload an image or write something!
+          <strong>Error!</strong>Please, Upload an image or write something!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -162,7 +162,7 @@ $(function() {
         error: function(data) {
           error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          Sorry we can't handle new comments, please try again later.
+          <strong>Error!</strong>Sorry we can't handle new comments, please try again later.
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -266,7 +266,7 @@ $(function() {
       error: function(data) {
         error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          Sorry we can't handle new posts, please try again later.
+          <strong>Error!</strong>Sorry we can't handle new posts, please try again later.
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -310,4 +310,14 @@ $(function() {
       }
     });
   });
+});
+var shareMe = function shareMe(title, url) {
+  navigator.share({
+    title: title,
+    text: title,
+    url: location.href + url
+  });
+};
+$(document.body).on("click", ".delete-story", function() {
+  location.href = $(this).attr("href");
 });

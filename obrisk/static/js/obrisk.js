@@ -79,37 +79,25 @@ $(function() {
 
   // Code block to manage WebSocket connections
   // Try to correctly decide between ws:// and wss://
-    var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-    var notif = new Audio('/static/sound/knock_brush.ogg');
-    var ws_path =
-      ws_scheme +
-      "://" +
-      window.location.host +
-      "/ws/notifications/";
-    var webSocket = new channels.WebSocketBridge();
-    webSocket.connect(ws_path);
+  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  var notif = new Audio("/static/sound/knock_brush.ogg");
+  var ws_path = ws_scheme + "://" + window.location.host + "/ws/notifications/";
+  var webSocket = new channels.WebSocketBridge();
+  webSocket.connect(ws_path);
 
-    webSocket.listen(function (event) {
-      if (event.key === undefined) event = JSON.parse(event);
-      switch (event.key) {
-          case "new_message":
-
-<<<<<<< Updated upstream
-          //if (event.recipient == currentUser) {
-              $(".msg-notification i").show();
-              notif.play();
-          //}
-=======
-          if (event.recipient == currentUser) {
-              $(".msg-notification i").show();
-              notif.play();
-          }
->>>>>>> Stashed changes
-          break;
-        default:
-          break;
-      }
-    });
+  webSocket.listen(function(event) {
+    if (event.key === undefined) event = JSON.parse(event);
+    switch (event.key) {
+      case "new_message":
+        if (event.recipient == currentUser) {
+          notif.play();
+          $(".msg-notification i").show();
+        }
+        break;
+      default:
+        break;
+    }
+  });
 
   // When debugging websockets uncomment these lines.
   // webSocket.socket.onopen = function () {

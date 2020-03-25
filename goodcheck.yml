@@ -1,0 +1,19 @@
+#https://github.com/sider/goodcheck
+#
+#This is useful when we are refactoring
+#And there are certains names or pattern we don't want
+#in our codebase
+
+rules:
+  - id: obdev201801
+    pattern: regex-that-is-bad
+    message: |
+      This too is an example of the message that the developer
+      should see when above pattern is detected on the code
+      and the build will fail
+    justification:
+      - The bad regex can be allowed in these conditions
+    pass:
+      - regex-that-is-very-good-is-like-this
+    fail:
+      - regex-that-is-bad-should-be-catched
