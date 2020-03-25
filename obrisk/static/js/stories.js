@@ -35,7 +35,7 @@ $(function() {
     } else {
       error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error!</strong>Please, Upload an image or write something!
+          Please, Upload an image or write something!
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -162,7 +162,7 @@ $(function() {
         error: function(data) {
           error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error!</strong>Sorry we can't handle new comments, please try again later.
+          Sorry we can't handle new comments, please try again later.
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -266,7 +266,7 @@ $(function() {
       error: function(data) {
         error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error!</strong>Sorry we can't handle new posts, please try again later.
+          Sorry we can't handle new posts, please try again later.
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>

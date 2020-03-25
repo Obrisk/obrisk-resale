@@ -1,14 +1,11 @@
 import os
 import logging
 import logging.config
-
 import socket
 
 #from django.utils.log import DEFAULT_LOGGING
-
 from .base import *  # noqa
 from .base import env
-
 
 LOGGING = {
     'version': 1,
@@ -110,8 +107,6 @@ INSTALLED_APPS += ['django_extensions']  # noqa F405
 # Your stuff...
 # ------------------------------------------------------------------------------
 PHONE_SIGNUP_DEBUG = True
-
-APPEND_SLASH = False
 
 # These are added to pass deepsource fails
 #SOCIALACCOUNT_ADAPTER = SOCIALACCOUNT_ADAPTER
