@@ -301,6 +301,8 @@ ACCOUNT_USERNAME_BLACKLIST = [
     "policeman",
 ]
 
+SIGNUP_PASSWORD_ENTER_TWICE = False
+
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 
 ACCOUNT_ADAPTER = "obrisk.users.adapters.AccountAdapter"
