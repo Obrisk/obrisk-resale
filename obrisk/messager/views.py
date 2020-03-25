@@ -9,7 +9,6 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
-
 from django.views.generic import ListView
 from django.db.models import OuterRef, Subquery
 
@@ -24,7 +23,6 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.notifications.models import Notification, notification_handler
-from config.settings.base import SESSION_COOKIE_AGE
 
 try:
     from django.contrib.auth import get_user_model
@@ -156,11 +154,6 @@ def messagesView(request, username):
                     )[:100]
 
             msgs_data = list(msgs_100)
-            #Celery task: This query takes some time
-            conv.messages.all().update(unread=False)
-            if cache.get('msg_{active_user.pk}') is not None:
-                values = values.remove(key)
-                cache.set('msg_{active_user.pk}', values, SESSION_COOKIE_AGE)
 
             return JsonResponse({
                 'msgs': msgs_data,
@@ -173,6 +166,33 @@ def messagesView(request, username):
             'status': '403',
             'message': 'Invalid request'
         })
+
+
+
+@login_required
+@ajax_required
+@require_http_methods(["GET"])
+def mark_messages_read(request, second_username):
+    """CBV to mark the inbox messages of a specific chat as read"""
+    try:
+        active_user = get_user_model().objects.get(
+                    username=second_username)
+
+    except get_user_model().DoesNotExist:
+        return JsonResponse({
+            'status': '404',
+            'message': 'This user does not exist'
+        })
+
+    else:
+        key = "{}.{}".format(*sorted([request.user.pk, active_user.pk]))
+        conv = Conversation.objects.get(key=key)
+        conv.messages.all().update(unread=False)
+
+    if cache.get(f'msg_{request.user.pk}') is not None:
+        values = list(cache.get(f'msg_{request.user.pk}'))
+        values = values.remove(key)
+        cache.set(f'msg_{request.user.pk}', values, None)
 
 
 @login_required
@@ -204,20 +224,24 @@ def send_message(request):
         return HttpResponse()
 
     if image:
-        if image.startswith(f'messages/{sender.username}/{recipient.username}') == False:
-            print(f'messages/{sender.username}/{recipient.username}')
+        if image.startswith(f'media/images/messages/{sender.username}/{recipient.username}') == False:
             image = None
 
         else:
             d = str(datetime.datetime.now())
-            img_preview = "messages/" + slugify(str(request.user.username)) + slugify(str(recipient_username)) + "/preview/" + "prv-" + d
+            img_preview = "messages/" + slugify(
+                    str(request.user.username)) + slugify(
+                            str(recipient_username)) + "/preview/" + "prv-" + d
             style1 = 'image/resize,m_fill,h_250,w_250'
 
             try:
                 process1 = "{0}|sys/saveas,o_{1},b_{2}".format(style1,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                            oss2.compat.to_string(
+                                                                base64.urlsafe_b64encode(
                                                                 oss2.compat.to_bytes(img_preview))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                                                            oss2.compat.to_string(
+                                                                base64.urlsafe_b64encode(
+                                                                    oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(image, process1)
             except:
                 image = None
@@ -230,17 +254,20 @@ def send_message(request):
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
                             image=image, img_preview=img_preview, attachment=attachment)
-        notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='new_message')
+        notification_handler(actor=sender,
+                recipient=recipient,
+                verb=Notification.NEW_MESSAGE,
+                is_msg=True, key='new_message')
 
         key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
         values = []
-        if cache.get('msg_{recipient.id}') is None:
+        if cache.get(f'msg_{recipient.id}') is None:
             values.append(key)
-            cache.set('msg_{recipient.id}', values, SESSION_COOKIE_AGE)
+            cache.set(f'msg_{recipient.id}', values, None)
         else:
-            values = list(cache.get('msg_{recipient.id}'))
+            values = list(cache.get(f'msg_{recipient.id}'))
             values = values.append(key)
-            cache.set('msg_{recipient.id}', values, SESSION_COOKIE_AGE)
+            cache.set(f'msg_{recipient.id}', values, None)
 
         # creating a key for the chatting users and updating a value for the key
         # value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
