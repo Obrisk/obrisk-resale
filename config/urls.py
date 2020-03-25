@@ -5,6 +5,8 @@ from django.contrib import admin
 from django.views.generic import TemplateView
 from django.views import defaults as default_views
 from django.contrib.sitemaps.views import sitemap
+from django.shortcuts import redirect
+from django.views.generic import RedirectView
 
 from graphene_django.views import GraphQLView
 from pwa_webpush.views import save_info
@@ -69,6 +71,8 @@ urlpatterns = [
         name="account_reset_password_from_key",
     ),
     # User management
+    url(r'^accounts-authorization/signup/', RedirectView.as_view(pattern_name='account_signup', permanent=False)),
+    url(r'^accounts-authorization/login/', RedirectView.as_view(pattern_name='account_login', permanent=False)),
     url(r"^users/", include("obrisk.users.urls", namespace="users")),
     url(r"^auth/", include("allauth.urls")),
     url(
