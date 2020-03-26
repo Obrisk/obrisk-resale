@@ -161,11 +161,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/frontend/assets/css/app.css",
-    "revision": "741f71fc4a9d5780c8feef9dfe9390f5"
+    "revision": "03efa11960fbf317addbf8b9dc1a59c4"
   },
   {
     "url": "/static/frontend/assets/css/bulma.css",
     "revision": "4a9a178adeac28389492e5963f30efe6"
+  },
+  {
+    "url": "/static/frontend/assets/css/core.css",
+    "revision": "55e368fd4f1d73cdaa3ae96d89a14f0b"
   },
   {
     "url": "/static/frontend/assets/css/materialdesignicons.min.css",
@@ -177,7 +181,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/frontend/assets/js/app.js",
-    "revision": "cdd7cda4f14ab735f2d1fb8895dc9911"
+    "revision": "35c13a015cbf82e2693c33796eb78e3d"
   },
   {
     "url": "/static/frontend/assets/js/chat.js",
@@ -198,6 +202,10 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/frontend/assets/js/global.js",
     "revision": "aacebb1f448797470ccad76067d8ac83"
+  },
+  {
+    "url": "/static/frontend/assets/js/highlight.min.js",
+    "revision": "9a7f83e578e9800e85279f2231b0e7b0"
   },
   {
     "url": "/static/frontend/assets/js/main.js",
@@ -433,7 +441,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/obrisk.js",
-    "revision": "5252e8a20acd6d12aee616761a55808d"
+    "revision": "48739b99bdb0b389d420ecb48080e22f"
   },
   {
     "url": "/static/js/photoswipe-ui-default.min.js",

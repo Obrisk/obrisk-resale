@@ -15,161 +15,316 @@
 
 {% block content %}
 <!-- Page Content -->
-<div class="container mt-5 pt-4 pb-4 mb-5">
-  <div class="row">
-    <!-- Post Content Column -->
-    <div class="post-wrapper col-lg-8 col-md-10 m-auto">
-      <div class="classified-meta mb-4">
-        <!-- Title -->
-        <h1 class="mt-4 title text-center">{{ post.title|title }}</h1>
+<div class="container pt-4 pb-4 mb-5">
+  <div class="stories-wrapper">
+    <!-- Posts -->
+    <div class="inner-wrapper">
+      <!-- Post -->
+      <div class="story-post-wrapper">
+        <div class="story-post">
+          <div class="post-title">
+            <h2>{{ post.title|title }}</h2>
+            <!--Dropdown-->
+            <div class="dropdown is-spaced is-right is-accent dropdown-trigger">
 
-        <div class="meta-details mt-4 d-flex justify-content-center">
-
-          <div class="meta-right d-flex flex-column align-items-center">
-            <a href="{% url 'users:detail' post.user.get_profile_name %}">
-              {% if post.user.thumbnail %}
-              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
-                style="width:30px;height:30px;border-radius: 50%;"
-                class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-              {% else %}
-              <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
-                alt="No Profile Picture" />
-              {% endif %}
-            </a>
-            <div class="d-flex flex-column align-items-center">
-              <a href="{% url 'users:detail' post.user.get_profile_name %}"><strong id="classified-user">
-                  {{ post.user.get_profile_name|title }} </strong></a>
-              <!-- Date/Time -->
-              <div class="time"><small>⏲️ </small><span>{{ post.timestamp|naturaltime }} </span></div>
+              <!-- <div class="dropdown-menu" role="menu">
+                <div class="dropdown-content">
+                  <a href="#" class="dropdown-item">
+                    <div class="media">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-wind">
+                        <path
+                          d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2">
+                        </path>
+                      </svg>
+                      <div class="media-content">
+                        <h3>Today</h3>
+                        <small>View today's posts.</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a class="dropdown-item">
+                    <div class="media">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-calendar">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                      </svg>
+                      <div class="media-content">
+                        <h3>This Week</h3>
+                        <small>View this week's posts.</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a class="dropdown-item">
+                    <div class="media">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-archive">
+                        <polyline points="21 8 21 21 3 21 3 8"></polyline>
+                        <rect x="1" y="3" width="22" height="5"></rect>
+                        <line x1="10" y1="12" x2="14" y2="12"></line>
+                      </svg>
+                      <div class="media-content">
+                        <h3>This Month</h3>
+                        <small>View this month's posts.</small>
+                      </div>
+                    </div>
+                  </a>
+                  <hr class="dropdown-divider">
+                  <a href="#" class="dropdown-item">
+                    <div class="media">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-users">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="9" cy="7" r="4"></circle>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                      </svg>
+                      <div class="media-content">
+                        <h3>Close Friends</h3>
+                        <small>Restrict to close friends.</small>
+                      </div>
+                    </div>
+                  </a>
+                  <a href="#" class="dropdown-item">
+                    <div class="media">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-heart">
+                        <path
+                          d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                        </path>
+                      </svg>
+                      <div class="media-content">
+                        <h3>Popular</h3>
+                        <small>Show popular posts.</small>
+                      </div>
+                    </div>
+                  </a>
+                </div>
+              </div> -->
             </div>
           </div>
-        </div>
-
-      </div>
-      <!-- Featured Image -->
-      {% if post.image %}
-      <div class="card-img-top"
-        style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
-
-      </div>
-      {% else %}
-      <div class="card-img-top"
-        style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
-
-      </div>
-
-      {% endif %}
-      <!-- <img src="{{ MEDIA_URL }}{{ post.image }}" lt="{% trans 'Featured Image' %}" class="card-img-top"> -->
-      <hr>
-      <!-- Post Content -->
-      <p class="card-text text-justify">{{ post.get_markdown|safe }}</p>
-      <hr>
-      <div class="d-flex justify-content-between">
-        <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i class="fa fa-chevron-left"
-            aria-hidden="true"></i> BACK</button>
-
-        {% comment %} <a href="#" class="share btn btn-dark"
-          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
-          🔗{% trans 'share' %} </a> {% endcomment %}
-      </div>
-      <!-- Cloud Tag Widget -->
-      <div class="card my-4">
-        <h5 class="card-header text-dark" style="background-color: #3EC4E2;">{% trans 'Tags' %}</h5>
-        <div class="card-body">
-          {% for tag in post.tags.all %}
-          <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
-          {% endfor %}
-        </div>
-      </div>
-
-    </div>
-    <!-- /.row -->
-
-    <div class="col-lg-8 col-md-10 mr-auto ml-auto post-comment mt-4 pt-4 mb-4">
-      <!-- Comments Form  -->
-      {% with comments.count as total_comments %}
-      <h4>
-        {{ total_comments }} comment{{ total_comments|pluralize }}
-      </h4>
-      {% endwith %}
-
-
-      {% for comment in comments %}
-      <div class="comment-wrapper d-flex align-items-center p-2 m-4">
-        <div class="autor-avatar">
-          <a href="{% url 'users:detail' post.user.username %}">
-            {% if comment.user.thumbnail %}
-            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{comment.user.thumbnail}}" alt="Picture Profile"
-              style="width:30px;height:30px;border-radius: 50%;"
-              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+          <div class="post-image-wrap">
+            <!-- Featured Image -->
+            {% if post.image %}
+            <div class="card-img-top post-image"
+              style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
+            </div>
             {% else %}
-            <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
-              alt="No Profile Picture" />
+            <div class="card-img-top post-image"
+              style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
+            </div>
             {% endif %}
-        </div>
-        <div class="comment-body">
-          <div class="comment-author">
-            <a href="{% url 'users:detail' post.user.username %}" class="">
-              <strong class="mt-0">{{ comment.user.get_profile_name|title }}- </strong>
-            </a>
-            <small> {{ comment.created }} </small>
           </div>
-          <div class="comment-body"> {{ comment.body|linebreaks }} </div>
-        </div>
-      </div>
-      {% empty %}
-      <p>There are no comments yet.</p>
-      {% endfor %}
+          <div class="post-meta">
+            <div class="post-author">
+              <div class="story-avatar">
+                {% if post.user.thumbnail %}
 
+                <img class="avatar img-fluid" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}"
+                  style="width:100%;height:100%;border-radius: 50%;" alt="">
+                {% else %}
+                <img class="avatar img-fluid" style="width:100%;height:100%;" src="{% static 'img/user.png' %}"
+                  alt="No Profile Picture" />
+                {% endif %}
 
-      {% if new_comment %}
-      <h2>Your comment has been added.</h2>
-      {% else %}
+              </div>
+              <div class="meta">
+                <span>{{ post.user.get_profile_name|title }}</span>
+                <span>{{ post.timestamp|naturaltime }}</span>
 
-      <div id="comment-notify"> </div>
+              </div>
+            </div>
+            <!-- 
+          <div class="post-stats">
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-heart">
+                <path
+                  d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z">
+                </path>
+              </svg>
+              <span>265</span>
+            </div>
+            <div class="stat-item">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-message-circle">
+                <path
+                  d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                </path>
+              </svg>
+              <span>56</span>
+            </div>
+          </div> -->
+          </div>
+          <div class="post-text content">
+            {{ post.get_markdown|safe }}
+          </div>
+          <!-- <div class="post-tags">
+          <div class="tags">
+            <span class="tag" data-user-popover="1">@Dan Walker</span>
+            <span class="tag" data-user-popover="6">@Elise Walker</span>
+            <span class="tag" data-user-popover="8">@Bobby Brown</span>
+          </div>
+        </div> -->
+          <div class="post-compose">
 
-      <div class="card my-4">
-        <h4 class="m-3">{% trans 'Leave a Comment' %}:</h4>
-        <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
+                  class="fa fa-chevron-left" aria-hidden="true"></i> BACK</button>
 
-          <form method="post" id="commentForm">
-            {% csrf_token %}
-            {{ comment_form|crispy }}
-            {% if user.is_authenticated %}
-            <input class="btn btn-dark comment-btn" type="button" value="Add comment">
+              {% comment %} <a href="#" class="share btn btn-dark"
+                onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
+                🔗{% trans 'share' %} </a> {% endcomment %}
+            </div>
+            <!-- Cloud Tag Widget -->
+            <div class="card my-4">
+              <h5 class="card-header text-dark" style="background-color: #3EC4E2;">{% trans 'Tags' %}</h5>
+              <div class="card-body">
+                {% for tag in post.tags.all %}
+                <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
+                {% endfor %}
+              </div>
+            </div>
+
+            {% if new_comment %}
+            <h2>Your comment has been added.</h2>
             {% else %}
-            <h6> Please login to post your comment: </h6>
-            <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
-              href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-          </form>
-          {% endif %}
+
+            <div id="comment-notify"> </div>
+            <h3>Leave a Comment: </h3>
+            <div class="card my-4">
+              <div class="card-body">
+
+                <form method="post" id="commentForm">
+                  {% csrf_token %}
+                  <div class="control">
+                    {{ comment_form|crispy }}
+                  </div>
+                  <div class="compose-controls">
+                    {% if user.is_authenticated %}
+                    <button class="button is-solid accent-button raised"> Post Comment</button>
+                    {% else %}
+                    <h6> Please login to post your comment: </h6>
+                    <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+                      href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+                  </div>
+                </form>
+                {% endif %}
+              </div>
+            </div>
+            {% endif %}
+
+
+
+          </div>
+
+          <div class="comments-wrap">
+            <div class="comments-count">
+              {% with comments.count as total_comments %}
+              <h3>
+                Comment {{ total_comments|pluralize }} ({{ total_comments }})
+
+              </h3>
+              {% endwith %}
+            </div>
+            {% for comment in comments %}
+            <!-- Comment -->
+            <div class="media is-comment">
+              <figure class="media-left">
+                <div class="avatar-wrap is-smaller">
+                  {% if comment.user.thumbnail %}
+                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{comment.user.thumbnail}}"
+                    style="border-radius: 50%;" alt="">
+                  {% else %}
+                  <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" alt="">
+                  {% endif %}
+
+                </div>
+              </figure>
+              <div class="media-content">
+                <div class="comment-meta">
+                  <h4><a>{{ comment.user.get_profile_name|title }}</a> <small> · {{ comment.created }}</small></h4>
+                  <p>{{ comment.body|linebreaks }}</p>
+                </div>
+                <!-- <div class="comment-stats-wrap">
+                <div class="comment-stats">
+                  <div class="stat is-likes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-thumbs-up">
+                      <path
+                        d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3">
+                      </path>
+                    </svg>
+                    <span>8</span>
+                  </div>
+                  <div class="stat is-dislikes">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-thumbs-down">
+                      <path
+                        d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17">
+                      </path>
+                    </svg>
+                    <span>0</span>
+                  </div>
+                </div>
+                <div class="comment-actions">
+                  <a class="comment-action is-like">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-thumbs-up">
+                      <path
+                        d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3">
+                      </path>
+                    </svg>
+                  </a>
+                  <a class="comment-action is-dislike">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-thumbs-down">
+                      <path
+                        d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17">
+                      </path>
+                    </svg>
+                  </a>
+                  <a class="comment-action is-reply">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-message-circle">
+                      <path
+                        d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z">
+                      </path>
+                    </svg>
+                  </a>
+                </div>
+              </div> -->
+              </div>
+            </div>
+            {% empty %}
+            <p>There are no comments yet.</p>
+            {% endfor %}
+
+          </div>
         </div>
       </div>
-      {% endif %}
 
-      <!-- Sidebar Widgets Column -->
-      <div class="col-md-4">
 
-        <!-- As of now, I don't want to encourage users to write posts thus
-                    Don't preview option to write new article unless user was the author -->
-
-        {% if request.user == post.user %}
-        <div class="row align-items-center mt-4 mb-4">
-
-          <a class="btn btn-dark m-2" href="{% url 'posts:write_new' %}" title="{% trans 'Write a new post' %}">
-            <i class="fa fa-pencil" aria-hidden="true"></i> {% trans 'New post' %}</a>
-          <a class="btn btn-dark m-2" href="{% url 'posts:edit_post' post.id %}" title="{% trans 'Edit this post' %}">
-            <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-        </div>
-        {% endif %}
-      </div>
     </div>
-
   </div>
 </div>
 <!-- /.container -->
 {% endblock content %}
-
 
 
 {% block javascript %}

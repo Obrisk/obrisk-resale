@@ -170,7 +170,7 @@ gulp.task("compile-css", function() {
       //nodepath + 'path/to/file.min.css',
       nodepath + "webui-popover/dist/jquery.webui-popover.min.css",
       nodepath + "quill/dist/quill.core.css",
-      nodepath + "quill/dist/quill.bubble.css",
+      nodepath + "quill/dist/quill.snow.css",
       nodepath + "plyr/dist/plyr.css",
       //Other external css
       assetspath + "css/fancybox.min.css"
@@ -189,7 +189,6 @@ gulp.task("compile-js", function() {
       nodepath + "quill/dist/quill.min.js",
       nodepath + "plyr/dist/plyr.min.js",
       //Get external js assets
-      assetspath + "js/highlight.min.js",
       assetspath + "js/fancybox.min.js"
     ])
     .pipe(concat("app.js"))
