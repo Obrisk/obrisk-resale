@@ -155,6 +155,12 @@ def messagesView(request, username):
 
             msgs_data = list(msgs_100)
 
+            conv.messages.all().update(unread=False)
+            if cache.get(f'msg_{request.user.pk}') is not None:
+                values = list(cache.get(f'msg_{request.user.pk}'))
+                values = values.remove(key)
+                cache.set(f'msg_{request.user.pk}', values, None)
+
             return JsonResponse({
                 'msgs': msgs_data,
                 'active_username': active_user.username,
@@ -166,33 +172,6 @@ def messagesView(request, username):
             'status': '403',
             'message': 'Invalid request'
         })
-
-
-
-@login_required
-@ajax_required
-@require_http_methods(["GET"])
-def mark_messages_read(request, second_username):
-    """CBV to mark the inbox messages of a specific chat as read"""
-    try:
-        active_user = get_user_model().objects.get(
-                    username=second_username)
-
-    except get_user_model().DoesNotExist:
-        return JsonResponse({
-            'status': '404',
-            'message': 'This user does not exist'
-        })
-
-    else:
-        key = "{}.{}".format(*sorted([request.user.pk, active_user.pk]))
-        conv = Conversation.objects.get(key=key)
-        conv.messages.all().update(unread=False)
-
-    if cache.get(f'msg_{request.user.pk}') is not None:
-        values = list(cache.get(f'msg_{request.user.pk}'))
-        values = values.remove(key)
-        cache.set(f'msg_{request.user.pk}', values, None)
 
 
 @login_required
@@ -261,13 +240,13 @@ def send_message(request):
 
         key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
         values = []
-        if cache.get(f'msg_{recipient.id}') is None:
+        if cache.get(f'msg_{recipient.pk}') is None:
             values.append(key)
-            cache.set(f'msg_{recipient.id}', values, None)
+            cache.set(f'msg_{recipient.pk}', values, None)
         else:
-            values = list(cache.get(f'msg_{recipient.id}'))
+            values = list(cache.get(f'msg_{recipient.pk}'))
             values = values.append(key)
-            cache.set(f'msg_{recipient.id}', values, None)
+            cache.set(f'msg_{recipient.pk}', values, None)
 
         # creating a key for the chatting users and updating a value for the key
         # value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
@@ -297,7 +276,7 @@ def receive_message(request):
         message_id = request.GET.get('message_id')
         message = Message.objects.get(pk=message_id)
     except:
-        time.sleep(5)
+        time.sleep(2)
         message_id = request.GET.get('message_id')
         message = Message.objects.get(pk=message_id)
     return render(request,

@@ -783,7 +783,8 @@
         var currentUser = "{{ request.user.username}}";
         var new_messages = "{{ new_msgs }}";
 
-        if (new_messages != None ) {
+        if ( new_messages != "None" ) {
+            console.log("here");
             $(".msg-notification i").show();
         }
 
