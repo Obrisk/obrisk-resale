@@ -331,7 +331,8 @@ a:hover {
 }
 .grid-1.smaller {
   width: auto;
-  height: 300px;
+  max-height: 300px;
+  min-height: 50px;
   margin-bottom: -50px;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
