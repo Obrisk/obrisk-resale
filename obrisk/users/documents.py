@@ -1,6 +1,5 @@
 from django_elasticsearch_dsl.registries import registry
-from django_elasticsearch_dsl import Document, fields
-from elasticsearch_dsl import analyzer, tokenizer
+from django_elasticsearch_dsl import Document
 from obrisk.users.models import User
 
 

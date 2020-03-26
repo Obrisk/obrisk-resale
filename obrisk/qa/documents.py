@@ -22,6 +22,7 @@ class QuestionDocument(Document):
     tags = fields.NestedField(properties={
                 'name': fields.TextField(analyzer=html_strip),
             })
+
     class Index:
         name = 'qa'
 
@@ -39,9 +40,9 @@ class QuestionDocument(Document):
 class QaTagsDocument(Document):
 
     name = fields.TextField(analyzer=html_strip)
-            
+
     class Index:
-       
+
         name = 'qa_tags'
 
         settings = {'number_of_shards': 1,
@@ -49,4 +50,3 @@ class QaTagsDocument(Document):
 
     class Django:
         model = QaTags
-

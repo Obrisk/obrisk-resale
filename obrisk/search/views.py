@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView
 from django.views.decorators.http import require_http_methods
+from django.shortcuts import render
 
 from taggit.models import Tag
 
@@ -13,7 +14,7 @@ from obrisk.stories.models import Stories
 from obrisk.utils.helpers import ajax_required
 from obrisk.qa.models import Question
 
-#documents
+# documents
 from obrisk.users.documents import UsersDocument
 from obrisk.stories.documents import StoriesDocument
 from obrisk.classifieds.document import ClassifiedDocument
@@ -21,6 +22,7 @@ from obrisk.posts.documents import PostsDocument
 from obrisk.qa.documents import QuestionDocument
 
 from elasticsearch_dsl.connections import connections
+
 
 class SearchListView(LoginRequiredMixin, ListView):
     """CBV to contain all the search results"""
@@ -44,8 +46,8 @@ class SearchListView(LoginRequiredMixin, ListView):
         # context["users_list"] = get_user_model().objects.filter(
         #     Q(username__icontains=query) | Q(
         #         name__icontains=query)).distinct()
-            
-        context["images"]  = ClassifiedImages.objects.all()
+
+        context["images"] = ClassifiedImages.objects.all()
 
         context["stories_count"] = context["stories_list"].count()
         context["classifieds_count"] = context["classifieds_list"].count()
@@ -101,23 +103,23 @@ def get_suggestions(request):
     return JsonResponse(results, safe=False)
 
 
-#creating a connection to Elastic search
+# creating a connection to Elastic search
 connections.create_connection()
 
 
 @login_required
 @require_http_methods(["GET"])
 def all_search(request, **kwargs):
-    #to avoid name collision,Q is imported here
+    # to avoid name collision,Q is imported here
     from elasticsearch_dsl import Q
-    ''' 
+    '''
     s means (search in) stories
     p means (search in) posts
     q means (search in) qa
     u means (search in) users
     c means (search in) classifieds
     '''
-    
+
     query = request.GET.get('query')
     # The commented part will be used if search on will involve more than one field
     # stories_results = [{'content':t.content,
@@ -125,52 +127,48 @@ def all_search(request, **kwargs):
     #                             Q("match", title='query') |
     #                             Q("match", details='ahaain'))]
 
-
-    stories_results = [{'content': t.content, 'tags':t.tags} for t in StoriesDocument.search().filter("term",
-                                                                username = query)]
+    stories_results = [{'content': t.content, 'tags': t.tags} for t in StoriesDocument.search().filter("term", username = query)]
 
     if request.GET.get('c') is 1:
-        classifieds_results = [{'title':t.title, 'details':t.details, 'price':t.price, 'tags':t.tags} for t in ClassifiedDocument.search().filter(
+        classifieds_results = [{'title': t.title, 'details': t.details, 'price': t.price, 'tags': t.tags} for t in ClassifiedDocument.search().filter(
                                                                                                                                     Q("match", title=query) |
                                                                                                                                     Q("match", price=query) |
                                                                                                                                     Q("match", details=query))]
 
-        return render(request, 'classifieds/search_results.html', 
+        return render(request, 'classifieds/search_results.html',
                 {'classifieds_results': classifieds_results,
                  'stories_results': stories_results})
 
     elif request.GET.get('u') is 1:
         users_results = [{'username': t.username} for t in UsersDocument.search().filter("term", username = query)]
-       
-        return render(request, 'connections/search_results.html', 
+
+        return render(request, 'connections/search_results.html',
                 {'users_results': users_results,
                  'stories_results': stories_results})
 
     elif request.GET.get('q') is 1:
-       
-        qa_results = [{'title':t.title, 'content':t.content, 'tags':t.tags} for t in QuestionDocument.search().filter(
+
+        qa_results = [{'title': t.title, 'content': t.content, 'tags': t.tags} for t in QuestionDocument.search().filter(
                                                                                                         Q("match", title=query) |
                                                                                                         Q("match", content=query))]
 
-        return render(request, 'qa/search_results.html', 
+        return render(request, 'qa/search_results.html',
                 {'qa_results': qa_results,
                  'stories_results': stories_results})
-                
+
     elif request.GET.get('p') is 1:
 
-        posts_results = [{'title':t.content, 'content':t.content, 'tags':t.tags} for t in PostDocument.search().filter(
+        posts_results = [{'title': t.content, 'content': t.content, 'tags':t.tags} for t in PostsDocument.search().filter(
                                                                                                         Q("match", title=query) |
                                                                                                         Q("match", content=query))]
 
-        return render(request, 'posts/search_results.html', 
+        return render(request, 'posts/search_results.html',
                 {'posts_results': posts_results,
                  'stories_results': stories_results})
 
     else:
-        return render(request, 'search/search_results.html', 
-                {'stories_results': stories_results })
+        return render(request, 'search/search_results.html',
+                {'stories_results': stories_results})
 
-#    return render(request, 'search/search_results.html', 
+#    return render(request, 'search/search_results.html',
 #                {'stories_results': stories_results })
-
-

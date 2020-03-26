@@ -22,9 +22,11 @@ class PostsDocument(Document):
     tags = fields.NestedField(properties={
                 'name': fields.TextField(analyzer=html_strip),
             })
+
     class Index:
+
         name = 'posts'
-        
+
         settings = {'number_of_shards': 1,
                     'number_of_replicas': 0}
 
@@ -39,14 +41,13 @@ class PostsDocument(Document):
 class PostTagsDocument(Document):
 
     name = fields.TextField(analyzer=html_strip)
-            
+
     class Index:
-       
+
         name = 'post_tags'
-      
+
         settings = {'number_of_shards': 1,
                     'number_of_replicas': 0}
 
     class Django:
         model = PostTags
-

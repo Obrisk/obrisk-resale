@@ -48,4 +48,3 @@ class StoryTagsDocument(Document):
 
     class Django:
         model = StoryTags
-

@@ -1,22 +1,20 @@
 from django.urls import reverse
 from django.test import Client
 
-from elasticsearch_dsl.connections import connections
+# from elasticsearch_dsl.connections import connections
 from test_plus.test import TestCase
 
 from obrisk.classifieds.models import Classified
 from obrisk.qa.models import Question
 from obrisk.stories.models import Stories
-from obrisk.search.views import all_search
+# from obrisk.search.views import all_search
 
-#documents
-from obrisk.users.documents import UsersDocument
-from obrisk.stories.documents import StoriesDocument
-from obrisk.classifieds.document import ClassifiedDocument
-from obrisk.posts.documents import PostsDocument
-from obrisk.qa.documents import QuestionDocument
-
-
+# documents
+# from obrisk.users.documents import UsersDocument
+# from obrisk.stories.documents import StoriesDocument
+# from obrisk.classifieds.document import ClassifiedDocument
+# from obrisk.posts.documents import PostsDocument
+# from obrisk.qa.documents import QuestionDocument
 
 
 class SearchViewsTests(TestCase):
@@ -71,19 +69,17 @@ class SearchViewsTests(TestCase):
         assert self.question_two in response.context["questions_list"]
         assert self.classified in response.context["classifieds_list"]
 
-    #def test_questions_suggestions_results(self):
-        #response = self.client.get(
-            #reverse("search:suggestions"), {'term': 'first'})
-            #HTTP_X_REQUESTED_WITH='XMLHttpRequest')
-        #assert response.json()[0]['value'] == "first_user"
-        #assert response.json()[1]['value'] == "A first bad title"
-        #assert response.json()[2]['value'] == "A really nice first title"
-        #assert response.json()[3]['value'] == "The first shortes title"
-        #assert response.json()[4]['value'] == "This is the first sample question"
+    # def test_questions_suggestions_results(self):
+        # response = self.client.get(
+            # reverse("search:suggestions"), {'term': 'first'})
+            # HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+        # assert response.json()[0]['value'] == "first_user"
+        # assert response.json()[1]['value'] == "A first bad title"
+        # assert response.json()[2]['value'] == "A really nice first title"
+        # assert response.json()[3]['value'] == "The first shortes title"
+        # assert response.json()[4]['value'] == "This is the first sample question"
 
-
-
-#class ElasticSearchViewsTests(TestCase):
+# class ElasticSearchViewsTests(TestCase):
 #    model = Classified
 #    """
 #    Includes tests for all the functionality
@@ -91,7 +87,7 @@ class SearchViewsTests(TestCase):
 #    """
 #    def setUp(self):
 #        connections.create_connection()
-#                
+#
 #        self.user = self.make_user("sele")
 #        self.other_user = self.make_user("emma")
 #        self.client = Client()
@@ -104,7 +100,7 @@ class SearchViewsTests(TestCase):
 #        it, because they know this is just a test, and you know than nobody\
 #        wants to publish a test, just a test; everybody always wants the real\
 #        deal."
-#        UsersDocument.init() 
+#        UsersDocument.init()
 #        self.classified = UsersDocument(username=self.user)
 #
 #
