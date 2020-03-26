@@ -1,19 +1,44 @@
 $(function() {
-  $(".publish").click(function() {
+  $("#post-submit").click(function(event) {
     $("input[name='status']").val("P");
-    $("#posts-form").submit();
+    event.preventDefault();
+    if ($("#id_title").val() == "") {
+      event.preventDefault();
+      $.wnoty({
+        type: "error",
+        autohide: false,
+        message: "Please fill in all the required fields."
+      });
+    } else {
+      $("#posts-form").submit();
+    }
   });
-
   $(".update").click(function() {
     $("input[name='status']").val("P");
     //$("input[name='edited']").prop("checked");
     $("input[name='edited']").val("True");
-    $("#posts-form").submit();
+    if ($("#id_title").val() == "") {
+      $.wnoty({
+        type: "error",
+        autohide: false,
+        message: "Please fill in all the required fields."
+      });
+    } else {
+      $("#posts-form").submit();
+    }
   });
 
   $(".draft").click(function() {
     $("input[name='status']").val("D");
-    $("#posts-form").submit();
+    if ($("#id_title").val() == "") {
+      $.wnoty({
+        type: "error",
+        autohide: false,
+        message: "Please fill in all the required fields."
+      });
+    } else {
+      $("#posts-form").submit();
+    }
   });
 
   $("#chooseFile").click(function() {
@@ -62,6 +87,21 @@ $.ajaxSetup({
 });
 
 $(document).ready(function() {
+  $.fn.serializeToJSON = function() {
+    var o = {};
+    var a = this.serializeArray();
+    $.each(a, function() {
+      if (o[this.name]) {
+        if (!o[this.name].push) {
+          o[this.name] = [o[this.name]];
+        }
+        o[this.name].push(this.value || "");
+      } else {
+        o[this.name] = this.value || "";
+      }
+    });
+    return o;
+  };
   $(function() {
     $(".comment-btn").click(function(event) {
       event.preventDefault();
