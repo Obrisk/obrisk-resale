@@ -4,7 +4,9 @@ import itertools
 from slugify import slugify
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (
+        HttpResponse, JsonResponse,
+        HttpResponseBadRequest)
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.translation import ugettext_lazy as _
@@ -13,16 +15,22 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic import DeleteView, DetailView
 from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
-from django.db.models import OuterRef, Subquery, Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import (
+        OuterRef, Subquery, Case,
+        When, Value, IntegerField, Count)
+from django.core.paginator import (
+        Paginator, EmptyPage,
+        PageNotAnInteger)
 
-from obrisk.utils.images_upload import multipleImagesPersist, videoPersist
+from obrisk.utils.images_upload import (
+        multipleImagesPersist, videoPersist)
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.stories.models import Stories, StoryImages, StoryTags
 
+
 @ensure_csrf_cookie
 @require_http_methods(["GET"])
-def stories_list(request, tag_slug=None):
+def stories_list(request, slug=None):
     #Try to Get the popular tags from cache
     #This will be there when I've started to add tags on stories
     #popular_tags = cache.get('stories_popular_tags')
@@ -58,33 +66,28 @@ def stories_list(request, tag_slug=None):
                    'image_thumb', flat=True
                 )[3:4])
 
-        ).prefetch_related('liked', 'parent', 'user__thumbnail__username').order_by('-priority', '-timestamp')
-
-    #official_ads = OfficialAd.objects.all() 
-
-    paginator = Paginator(stories_list, 30)  # 30 stories in each page
-    page = request.GET.get('page')
-
-    try:
-        stories = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer deliver the first page
-        stories = paginator.page(1)
-    except EmptyPage:
-        if request.is_ajax():
-            # If the request is AJAX and the page is out of range
-            # return an empty page            
-            return HttpResponse('')
-        # If page is out of range deliver last page of results
-        stories = paginator.page(paginator.num_pages)
+        ).prefetch_related(
+            'liked', 'parent',
+            'user__thumbnail__username').order_by(
+                    '-priority', '-timestamp')
 
     # Deal with tags in the end to override other_stories.
     tag = None
 
-    if tag_slug:
-        tag = get_object_or_404(StoryTags, slug=tag_slug)
+    if str(request.META.get(
+                'PATH_INFO')).startswith('/stories/i/'):
+        stories_list = stories_list.annotate(
+                order = Case (
+                    When(slug=slug, then=Value(1)),
+                    default=Value(2),
+                    output_field=IntegerField(),
+                )
+            ).order_by('order', '-priority', '-timestamp')
 
-        stories = Stories.objects.get_stories().filter(tags__in=[tag])\
+    elif slug:
+        tag = get_object_or_404(StoryTags, slug=slug)
+
+        stories_list = Stories.objects.get_stories().filter(tags__in=[tag])\
                 .annotate (
                     img1 = Subquery (
                             StoryImages.objects.filter(
@@ -111,6 +114,22 @@ def stories_list(request, tag_slug=None):
                            'image_thumb', flat=True
                         )[3:4])
                 ).prefetch_related('liked', 'parent', 'user__thumbnail__username')
+
+    paginator = Paginator(stories_list, 30)  # 30 stories in each page
+    page = request.GET.get('page')
+
+    try:
+        stories = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        stories = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            # If the request is AJAX and the page is out of range
+            # return an empty page            
+            return HttpResponse('')
+        # If page is out of range deliver last page of results
+        stories = paginator.page(paginator.num_pages)
 
 
     if request.is_ajax():
@@ -158,16 +177,45 @@ class DetailStoryView(DetailView):
                         story=OuterRef('pk'),
                     ).values_list(
                        'image_thumb', flat=True
-                    )[3:4])
-            ).prefetch_related('liked', 'parent', 'user__thumbnail__username')
+                    )[3:4])).prefetch_related(
+                            'liked', 'parent',
+                            'user__thumbnail__username')
 
-        # Add in a QuerySet of all the images
-        context['images'] = StoryImages.objects.filter(story=self.object.uuid_id)
-
-        context['images_no'] = len(context['images'])
-        context['similar_stories'] = similar_stories.annotate(same_tags=Count('tags'))\
+        context['similar_stories'] = similar_stories.annotate(
+                same_tags=Count('tags'))\
             .order_by('-same_tags', '-timestamp')[:10]
 
+        if context['similar_stories'].count() < 6:
+            latest_stories = Stories.objects.filter(reply=False).annotate(
+                    img1 = Subquery (
+                            StoryImages.objects.filter(
+                                story=OuterRef('pk'),
+                        ).values_list(
+                           'image_thumb', flat=True
+                            )[:1]),
+                    img2 = Subquery (
+                        StoryImages.objects.filter(
+                            story=OuterRef('pk'),
+                        ).values_list(
+                           'image_thumb', flat=True
+                        )[1:2]),
+                    img3 = Subquery (
+                        StoryImages.objects.filter(
+                            story=OuterRef('pk'),
+                        ).values_list(
+                           'image_thumb', flat=True
+                        )[2:3]),
+                    img4 =  Subquery (
+                        StoryImages.objects.filter(
+                            story=OuterRef('pk'),
+                        ).values_list(
+                           'image_thumb', flat=True
+                        )[3:4])
+                    ).prefetch_related('liked', 'parent',
+                            'user__thumbnail__username').order_by(
+                                '-priority', '-timestamp')[:6]
+
+            context['similar_stories'].union(latest_stories)
         return context
 
 
