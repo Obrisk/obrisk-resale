@@ -9,7 +9,7 @@ from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
 #from obrisk.utils.cloudfront import STATIC_VERSION or None
-STATIC_VERSION = 'ver23032001' 
+STATIC_VERSION = 'ver26032001' 
 
 # GENERAL
 # ------------------------------------------------------------------------------

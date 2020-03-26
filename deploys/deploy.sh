@@ -52,6 +52,7 @@ mkdir ./logs ./run
 chmod 764 -R ./logs ./run
 
 touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log ./logs/celery-access.log ./logs/celery-error.log
+mkdir ./run/gunicorn ./run/uvicorn ./run/celery
 
 cd obdev2018
 #it turns out that I still can't access the virtual-env files inside vim.
@@ -95,14 +96,21 @@ sudo ufw allow 'Nginx Full'
 sudo ufw allow 22
 #sudo ufw enable -y
 
+# Gulp should be run locally to help update the static files for Nginx root
+# These files are called by service worker from / of Obrisk.com
+cd ./frontend
 sudo npm install cnpm -g
 cnpm install
 cnpm install gulp
 sudo systemctl start gulp.service
-cd ./frontend
+
 /home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
 
-
+#DONE!
+#In case of errors check below commands 
+#sudo systemctll status <service-name.service>
+#journalctl -u <service-name.service>
+#sudo systemctl restart gunicorn.service uvicorn.service celery.service celerybeat.service
 #-------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------
 #These steps aren't used when spinning server behind NLB

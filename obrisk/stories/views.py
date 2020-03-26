@@ -1,4 +1,6 @@
-import json, uuid, itertools
+import json
+import uuid
+import itertools
 from slugify import slugify
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -24,11 +26,11 @@ def stories_list(request, tag_slug=None):
     #Try to Get the popular tags from cache
     #This will be there when I've started to add tags on stories
     #popular_tags = cache.get('stories_popular_tags')
-    popular_tags = None 
+    popular_tags = None
 
     #if popular_tags == None:
     #    popular_tags = Stories.objects.get_counted_tags()
-    
+
     #Get stories
     stories_list = Stories.objects.filter(reply=False).annotate (
             img1 = Subquery (
@@ -75,13 +77,13 @@ def stories_list(request, tag_slug=None):
             return HttpResponse('')
         # If page is out of range deliver last page of results
         stories = paginator.page(paginator.num_pages)
-    
+
     # Deal with tags in the end to override other_stories.
     tag = None
 
     if tag_slug:
         tag = get_object_or_404(StoryTags, slug=tag_slug)
-        
+
         stories = Stories.objects.get_stories().filter(tags__in=[tag])\
                 .annotate (
                     img1 = Subquery (
@@ -110,20 +112,20 @@ def stories_list(request, tag_slug=None):
                         )[3:4])
                 ).prefetch_related('liked', 'parent', 'user__thumbnail__username')
 
-    
-    if request.is_ajax():        
+
+    if request.is_ajax():
        return render(request,'stories/stories_list_ajax.html',
                     {'page': page, 'popular_tags': popular_tags,
-                    'stories': stories, 'base_active': 'stories'})   
-    
-    return render(request, 'stories/stories_list.html', 
+                    'stories': stories, 'base_active': 'stories'})
+
+    return render(request, 'stories/stories_list.html',
                 {'page': page, 'popular_tags': popular_tags,
                 'stories': stories, 'tag': tag, 'base_active': 'stories'})
 
 
 class DetailStoryView(DetailView):
     """Basic DetailView implementation to call an individual story."""
-    model = Stories 
+    model = Stories
     context_object_name = 'story'
 
     def get_context_data(self, **kwargs):
@@ -161,7 +163,7 @@ class DetailStoryView(DetailView):
 
         # Add in a QuerySet of all the images
         context['images'] = StoryImages.objects.filter(story=self.object.uuid_id)
-        
+
         context['images_no'] = len(context['images'])
         context['similar_stories'] = similar_stories.annotate(same_tags=Count('tags'))\
             .order_by('-same_tags', '-timestamp')[:10]
@@ -172,9 +174,9 @@ class DetailStoryView(DetailView):
 def stories_create_slugs(request):
     for self in Stories.objects.all():
         if not self.slug:
-            self.slug = first_slug = slugify(f"{self.user.username}-{uuid.uuid4().hex[:6]}",
-                                to_lower=True, max_length=300)
-
+            self.slug = first_slug = slugify(
+                    f"{self.user.username}-{uuid.uuid4().hex[:6]}",
+                    to_lower=True, max_length=300)
 
             for x in itertools.count(1):
                 if not Stories.objects.filter(slug=self.slug).exists():

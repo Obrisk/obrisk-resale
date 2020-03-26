@@ -135,10 +135,7 @@
 												<div class="mt-2">
 													I Agree to <a href="{% url 'terms_and_conditions' %}">Terms &
 														Conditions
-													</a> and to
-													abide
-													with
-													the
+													</a> and the
 													regulations of the country residing.</a>
 
 													<br />
@@ -245,23 +242,24 @@
 	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 	var current_url = "{{ request.path }}";
 	var errors = false;
+
 	{% if form.errors %}
-	errors = true;
-	{% if "phone_number" in form.errors %}
-	$("#id_phone_number").attr("disabled", false);
-	$("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
-	{% else %}
-	$("#id_phone_number").attr("disabled", true);
-	$("input[name='verified_no']").val("VAL");
-	$("#signup-panel-1").removeClass("is-active");
-	$("#signup-panel-2").addClass("is-active");
-	{% endif %}
-	{% endif %}
-	{% if "username" in form.errors %}
-	$("#username").append(`<small class="pass-text red">Username taken, please try another username.</small>`)
-	{% endif %}
+        errors = true;
+        {% if "phone_number" in form.errors %}
+            $("#id_phone_number").attr("disabled", false);
+            $("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
+            {% else %}
+            $("#id_phone_number").attr("disabled", true);
+            $("input[name='verified_no']").val("VAL");
+            $("#signup-panel-1").removeClass("is-active");
+            $("#signup-panel-2").addClass("is-active");
+        {% endif %}
 
-
+    {% endif %}
+    
+    {% if "username" in form.errors %}
+        $("#username").append(`<small class="pass-text red"> {{form.errors.username}} </small>`)
+    {% endif %}
 
 </script>
 

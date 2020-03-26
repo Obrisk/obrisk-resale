@@ -3,13 +3,12 @@ from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.forms import ValidationError
 from django.conf import settings
 from allauth.account.utils import user_field
-# from django.http import JsonResponse
 
 
 class AccountAdapter(DefaultAccountAdapter):
 
     def clean_username(self, username, **kwargs):
-        if len(username) > 16:
+        if len(username) > getattr(settings, 'ACCOUNT_USERNAME_MAX_LENGTH', 16):
             raise ValidationError('The username length must be less than 16 characters')
         return DefaultAccountAdapter.clean_username(self, username, **kwargs)
 
@@ -17,8 +16,8 @@ class AccountAdapter(DefaultAccountAdapter):
 class SocialAccountAdapter(DefaultSocialAccountAdapter):
 
     def authentication_error(self, request, provider_id, error, exception, extra_context):
-        ''' This is for debugging when there is a failure
-        linked with the provider'''
+        """ This is for debugging when there is a failure
+        linked with the provider"""
 
         # print(provider_id)
         # print(error.__str__())

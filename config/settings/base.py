@@ -275,7 +275,9 @@ SOCIALACCOUNT_EMAIL_VERIFICATION = "none"
 # This will avoid the duplicates in usernames with diff casing
 ACCOUNT_PRESERVE_USERNAME_CASING = True
 
-USERNAME_MIN_LENGTH = 3
+ACCOUNT_USERNAME_MIN_LENGTH = 3
+
+ACCOUNT_USERNAME_MAX_LENGTH = 18
 
 ACCOUNT_FORMS = {
     "signup": "users.forms.PhoneSignupForm",
@@ -292,12 +294,14 @@ ACCOUNT_USERNAME_BLACKLIST = [
     "obrisk",
     "password",
     "13300000000",
-    "+8613291863081",
+    "+8613300000000",
     "username",
     "user",
     "god",
     "policeman",
 ]
+
+SIGNUP_PASSWORD_ENTER_TWICE = False
 
 ACCOUNT_LOGIN_ON_PASSWORD_RESET = True
 

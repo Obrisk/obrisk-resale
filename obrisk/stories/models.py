@@ -119,14 +119,12 @@ class Stories(models.Model):
     def get_absolute_url(self):
         return reverse('stories:story', args=[self.slug])
 
-        
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-
         if not self.slug:
-            self.slug = first_slug = slugify(f"{self.user.username}-{uuid.uuid4().hex[:6]}",
-                                to_lower=True, max_length=300)
-            
+            self.slug = first_slug = slugify(
+                    f"{self.user.username}-{uuid.uuid4().hex[:6]}",
+                    to_lower=True, max_length=300)
+
             for x in itertools.count(1):
                 if not Stories.objects.filter(slug=self.slug).exists():
                     break
@@ -149,6 +147,7 @@ class Stories(models.Model):
                 }
             async_to_sync(channel_layer.group_send)('notifications', payload)
 
+        super().save(*args, **kwargs)
 
     def switch_like(self, user):
         """The object update here is not saved, monitor this implementation so see if likes counts

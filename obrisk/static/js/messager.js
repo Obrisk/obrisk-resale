@@ -73,11 +73,11 @@ $(function() {
           if (el.sender_username == response.active_username) {
             if (el.image != null) {
               $("#conversation").append(`<div class="chat-message is-received">
-        
+
                           <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
                               style="width:30px;height:30px;border-radius: 50%;"
                               class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                          
+
                           <div class="message-block">
                               <span>${moment(el.timestamp).format(
                                 "MMM. Do h:mm"
@@ -98,7 +98,7 @@ $(function() {
                 .append(`<div class="chat-message is-received" style="background-color: transparent;"> <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
                           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
+
                           <div class="message-block">
                             <span>${moment(el.timestamp).format(
                               "MMM. Do h:mm"
@@ -129,7 +129,7 @@ $(function() {
                 .append(`<div class="chat-message is-received" ><img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
                           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
+
                           <div class="message-block">
                             <span>${moment(el.timestamp).format(
                               "MMM. Do h:mm"
@@ -141,11 +141,11 @@ $(function() {
           } else {
             if (el.image != null) {
               $("#conversation").append(`<div class="chat-message is-sent">
-        
+
                           <img src="${currentUserThumbnail}" alt="Picture Profile"
                               style="width:30px;height:30px;border-radius: 50%;"
                               class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                          
+
                           <div class="message-block">
                               <span>${moment(el.timestamp).format(
                                 "MMM. Do h:mm"
@@ -166,7 +166,7 @@ $(function() {
                 .append(`<div class="chat-message is-sent "style="background-color: transparent;"><img src="${currentUserThumbnail}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
                           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
+
                           <div class="message-block">
                             <span>${moment(el.timestamp).format(
                               "MMM. Do h:mm"
@@ -194,7 +194,7 @@ $(function() {
                 .append(`<div class="chat-message is-sent" ><img src="${currentUserThumbnail}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
                           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
+
                           <div class="message-block">
                             <span>${moment(el.timestamp).format(
                               "MMM. Do h:mm"
@@ -289,12 +289,12 @@ $(function() {
     //make sure the textarea isn't empty before submitting the form
     if ($("textarea").val() != "") {
       var msg = `<div class="chat-message is-sent">
-    
+
     <img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-    
+
     <div class="message-block">
         <span>${moment().format("MMM. Do h:mm")}</span>
-        
+
         <div class="message-text">${$("#sendText").val()}</div>
     </div>
 </div>`;
@@ -418,7 +418,7 @@ $(function() {
   });
 });
 
-localStorage.debug = "ali-oss";
+//localStorage.debug = "ali-oss";
 /**
  * fileStats: File statistics
  * filename: The address of the uploaded file

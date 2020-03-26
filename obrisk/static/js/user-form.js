@@ -6,7 +6,7 @@
 function printError(msg) {
   template = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          <strong>Error! </strong>${msg}
+          ${msg}
           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -38,7 +38,7 @@ var phone_no;
 $(function() {
   function checkPassword(str) {
     // at least one number, one lowercase and one uppercase letter
-    // at least six characters
+    // at least eight characters
     var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
     return re.test(str);
   }
@@ -60,8 +60,7 @@ $(function() {
         $("#code-notice")
           .empty()
           .append(
-            "<p class='blue-link'> Incorrect number. Don't include country code, spaces or any character!<p>"
-          );
+            "<p class='blue-link'> Wrong number. Don't include country code,spaces or any special character!<p>");
       } else {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
@@ -93,8 +92,13 @@ $(function() {
               timeout = 60;
               $("#send-code").attr("disabled", true);
               $("#phone_label").hide();
-              $("#code").toggleClass("d-none");
-              $("#email-request").toggleClass("d-none");
+
+              if ($("#code").hasClass("d-none")) {
+                  $("#code").toggleClass("d-none");
+              }
+              if ($("#email-request").hasClass("d-none")) {
+                  $("#email-request").toggleClass("d-none");
+              }
 
               if (data.message != undefined) {
                 $("#code-notice")
@@ -121,10 +125,10 @@ $(function() {
 
               verify_counter = verify_counter + 1;
 
-              if (verify_counter >= 5) {
+              if (verify_counter >= 7) {
                 $("#send-code").attr("disabled", true);
                 printError(
-                  "Maximum number of sending code trials has reached, we can't send anymore!"
+                  "Maximum number of sending SMS has reached, Try again later!"
                 );
               }
 
@@ -193,7 +197,7 @@ $(function() {
                 $("#results")
                   .empty()
                   .append(
-                    "<p class='blue-link'> You have successfully verified your phone number! Please wait to be redirected <p>"
+                    "<p class='blue-link'>Successfully verified your number! Redirecting... <p>"
                   );
                 window.location.href = data.url;
               } else {
@@ -284,7 +288,7 @@ $(function() {
     if (!$("input[name='verified_no']").val()) {
       event.preventDefault();
       printError(
-        "Please verify your phone number by requesting the verification code, before signing up!"
+        "Please verify your phone number by requesting the code before signing up!"
       );
     } else if (
       !$("select[name='city']").val() ||
@@ -297,15 +301,35 @@ $(function() {
       printError("Please enter your city and province!");
     } else if (
       !$("input[name='username']").val() ||
-      !$("input[name='password1']")
+      !$("input[name='password1']").val()
     ) {
       event.preventDefault();
       $(".process-panel-wrap").removeClass("is-active");
       $(".step-title").removeClass("is-active");
       $(".step-dot-2").addClass("is-active");
       printError(
-        "Please fill in all of the info. Also verify your phone number!"
+        "Please provide your username and password!"
       );
+    } else if ( $("input[name=username").val().length < 3 ||
+       $("input[name=username").val().length > 16  ) {
+
+      event.preventDefault();
+      $(".process-panel-wrap").removeClass("is-active");
+      $(".step-title").removeClass("is-active");
+      $(".step-dot-2").addClass("is-active");
+      printError(
+        "Username must be more than 3 letters, less than 16"
+      );
+    } else if ( $("input[name=password1").val().length < 8) {
+
+      event.preventDefault();
+      $(".process-panel-wrap").removeClass("is-active");
+      $(".step-title").removeClass("is-active");
+      $(".step-dot-2").addClass("is-active");
+      printError(
+        "The password is too weak!"
+      );
+
     } else {
       $("#id_phone_number").attr("disabled", false);
 
@@ -321,6 +345,7 @@ $(function() {
       $("input[name='province_region']").val(
         $("select[name='province']").val()
       );
+
       $("input[name='password2']").val($("input[name='password1']").val()); //hack for second password
 
       $("#signup_form").submit();
@@ -378,11 +403,11 @@ $(function() {
         {},
         {
           shortPass: "The password is too short",
-          badPass: "Weak; try combining letters & numbers",
-          goodPass: "Medium; try using special characters",
-          strongPass: "Strong password",
+          badPass: "Weak; Try combining letters & numbers",
+          goodPass: "Medium; Medium stength!",
+          strongPass: "Strong password!",
           containsField: "The password contains your username",
-          enterPass: "Type your password",
+          enterPass: "Not less than 8 letters & numbers",
           showPercent: !1,
           showText: !0,
           animate: !0,
@@ -518,12 +543,14 @@ $(function() {
 })(jQuery);
 
 $("#id_password1").password({
+
   shortPass: "The password is too short",
-  badPass: "Weak; try combining letters & numbers",
-  goodPass: "Medium; try using special characters",
-  strongPass: "Strong password",
+  badPass: "Weak; Try combining letters & numbers",
+  goodPass: "Medium; Medium stength password!",
+  strongPass: "Strong password!",
   containsField: "The password contains your username",
-  enterPass: "Type your password",
+  enterPass: "Type carefully, ensure there are no mistakes!",
+
   showPercent: false,
   showText: true, // shows the text tips
   animate: true, // whether or not to animate the progress bar on input blur/focus
