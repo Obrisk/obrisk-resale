@@ -169,21 +169,11 @@ gulp.task("compile-css", function() {
     .src([
       //nodepath + 'path/to/file.min.css',
       nodepath + "webui-popover/dist/jquery.webui-popover.min.css",
-      nodepath + "easy-autocomplete/dist/easy-autocomplete.min.css",
-      nodepath + "slick-carousel/slick/slick.css",
-      nodepath + "slick-carousel/slick/slick-theme.css",
-      nodepath + "izitoast/dist/css/iziToast.min.css",
       nodepath + "quill/dist/quill.core.css",
       nodepath + "quill/dist/quill.bubble.css",
-      nodepath + "croppie/croppie.css",
       nodepath + "plyr/dist/plyr.css",
-      nodepath + "dropzone/dist/min/dropzone.min.css",
-      nodepath + "cropperjs/dist/cropper.min.css",
-      nodepath + "hopscotch/dist/css/hopscotch.min.css",
-      nodepath + "glider-js/glider.min.css",
       //Other external css
-      assetspath + "css/fancybox.min.css",
-      nodepath + "modal-video/css/modal-video.min.css"
+      assetspath + "css/fancybox.min.css"
     ])
     .pipe(concat("app.css"))
     .pipe(gulp.dest("../obrisk/static/frontend/assets/css/"));
@@ -195,27 +185,12 @@ gulp.task("compile-js", function() {
     .src([
       nodepath + "jquery/dist/jquery.min.js",
       nodepath + "feather-icons/dist/feather.min.js",
-      nodepath + "vivid-icons/dist/vivid-icons.min.js",
-      nodepath + "slick-carousel/slick/slick.min.js",
       nodepath + "webui-popover/dist/jquery.webui-popover.min.js",
-      nodepath + "easy-autocomplete/dist/jquery.easy-autocomplete.min.js",
-      nodepath + "dropzone/dist/min/dropzone.min.js",
-      nodepath + "@fengyuanchen/datepicker/dist/datepicker.min.js",
-      nodepath + "izitoast/dist/js/iziToast.min.js",
       nodepath + "quill/dist/quill.min.js",
-      nodepath + "croppie/croppie.min.js",
-      nodepath + "cropperjs/dist/cropper.min.js",
-      nodepath + "dropzone/dist/min/dropzone.min.js",
-      nodepath + "modal-video/js/jquery-modal-video.min.js",
       nodepath + "plyr/dist/plyr.min.js",
-      nodepath + "hammerjs/hammer.min.js",
-      nodepath + "scrollreveal/dist/scrollreveal.min.js",
-      nodepath + "hopscotch/dist/js/hopscotch.min.js",
-      nodepath + "glider-js/glider.min.js",
       //Get external js assets
       assetspath + "js/highlight.min.js",
-      assetspath + "js/fancybox.min.js",
-      assetspath + "js/ggtooltip.js"
+      assetspath + "js/fancybox.min.js"
     ])
     .pipe(concat("app.js"))
     .pipe(gulp.dest("../obrisk/static/frontend/assets/js/"));

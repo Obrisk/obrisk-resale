@@ -161,7 +161,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/frontend/assets/css/app.css",
-    "revision": "66a6c56626dab6102f8c96108fdbe646"
+    "revision": "741f71fc4a9d5780c8feef9dfe9390f5"
   },
   {
     "url": "/static/frontend/assets/css/bulma.css",
@@ -177,7 +177,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/frontend/assets/js/app.js",
-    "revision": "078d3c2798f8d3ab9a8a28cfad63310e"
+    "revision": "cdd7cda4f14ab735f2d1fb8895dc9911"
   },
   {
     "url": "/static/frontend/assets/js/chat.js",
