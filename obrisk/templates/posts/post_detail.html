@@ -118,9 +118,9 @@
               style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
             </div>
             {% else %}
-            <div class="card-img-top post-image"
+            <!-- <div class="card-img-top post-image"
               style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
-            </div>
+            </div> -->
             {% endif %}
           </div>
           <div class="post-meta">
@@ -167,7 +167,11 @@
           </div> -->
           </div>
           <div class="post-text content">
-            {{ post.get_markdown|safe }}
+            {{ post.content_html|safe}}
+
+            <!-- support lagacy posts -->
+            {{ post.content|safe}}
+
           </div>
           <!-- <div class="post-tags">
           <div class="tags">
