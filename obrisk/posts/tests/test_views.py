@@ -1,11 +1,9 @@
 import tempfile
 
-from PIL import Image
-
 from django.test import Client, override_settings
 from django.urls import reverse
-
 from test_plus.test import TestCase
+from PIL import Image
 
 from obrisk.posts.models import Post
 
@@ -31,6 +29,8 @@ class PostsViewsTest(TestCase):
         self.post = Post.objects.create(
             title="A really nice title",
             content="This is a really good content",
+            content_html="<p> This is awesome </p>",
+            content_json="{ 'title': 'bold'}",
             status="P",
             user=self.user,
         )
@@ -41,6 +41,8 @@ class PostsViewsTest(TestCase):
             publish it, because they know this is just a test, and you
             know than nobody wants to publish a test, just a test;
             everybody always wants the real deal.""",
+            content_html="<p> This is draft </p>",
+            content_json="{ 'title': 'bold'}",
             user=self.user,
         )
         self.test_image = get_temp_img()
@@ -62,6 +64,8 @@ class PostsViewsTest(TestCase):
         response = self.client.post(reverse("posts:write_new"),
                                     {"title": "A not that really nice title",
                                      "content": "Whatever works for you",
+                                     "content_html": "<p> This is awesome </p>",
+                                     "content_json": "{ 'title': 'bold'}",
                                      "tags": "list, lists",
                                      "status": "P",
                                      "image": self.test_image})
@@ -73,6 +77,8 @@ class PostsViewsTest(TestCase):
         response = self.client.post(reverse("posts:write_new"),
                                     {"title": "A not that really nice title",
                                      "content": "Whatever works for you",
+                                     "content_html": "<p> This is awesome </p>",
+                                     "content_json": "{ 'title': 'bold' }",
                                      "tags": "list, lists",
                                      "status": "P",
                                      "image": self.test_image})
@@ -88,6 +94,8 @@ class PostsViewsTest(TestCase):
         response = self.client.post(reverse("posts:write_new"),
                                     {"title": "A not that really nice title",
                                      "content": "Whatever works for you",
+                                     "content_html": "<p> This is awesome </p>",
+                                     "content_json": "{ 'title': 'bold' }",
                                      "tags": "list, lists",
                                      "status": "D",
                                      "image": self.test_image})
