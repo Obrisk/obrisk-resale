@@ -1,28 +1,28 @@
 import datetime
 import itertools
+from slugify import slugify
 
 from django.conf import settings
 from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
-
-from slugify import slugify
+from django.contrib.postgres.fields import JSONField
 
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 from taggit.managers import TaggableManager
-
-
-from obrisk.notifications.models import Notification, notification_handler
 from taggit.models import TagBase, GenericTaggedItemBase
+
+from obrisk.notifications.models import (
+        Notification, notification_handler)
+from obrisk.utils.fields import RichTextField
 
 
 class PostTags(TagBase):
     class Meta:
         verbose_name = _("Post Tag")
         verbose_name_plural = _("Post Tags")
-
 
 
 class TaggedPost(GenericTaggedItemBase):
@@ -67,7 +67,7 @@ class Post(models.Model):
         (DRAFT, _("Draft")),
         (PUBLISHED, _("Published")),
     )
-    
+
     ARTICLE = "A"
     EVENT = "E"
     JOBS = "J"
@@ -87,6 +87,8 @@ class Post(models.Model):
     slug = models.SlugField(max_length=150, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
     content = MarkdownxField()
+    content_html = RichTextField(null=True, blank=True)
+    content_json = JSONField(null=True, blank=True)
     category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
     edited = models.BooleanField(default=False)
     tags = TaggableManager(through=TaggedPost, blank=True)
@@ -108,7 +110,7 @@ class Post(models.Model):
         if not self.slug:
             self.slug = first_slug = slugify(f"{self.user.username}-{self.title}",
                                 to_lower=True, max_length=150)
-            
+
             for x in itertools.count(1):
                 if not Post.objects.filter(slug=self.slug).exists():
                     break
@@ -118,6 +120,7 @@ class Post(models.Model):
 
     def get_markdown(self):
         return markdownify(self.content)
+
 
 class Comment(models.Model):
     post = models.ForeignKey(Post,
@@ -143,6 +146,4 @@ def notify_comment(**kwargs):
     obj = kwargs['comment'].content_object
     notification_handler(
         actor, receiver, Notification.COMMENTED, action_object=obj
-        )
-
-
+    )
