@@ -14,6 +14,6 @@ if [ "$EC2_INSTANCE_ID" = "i-09290a52964419c47" ]; then
     echo "This is instance-1"
     echo "Migrating and collectstatic"
     python /home/obdev-user/obdev2018/manage.py migrate
-    python /home/obdev-user/obdev2018/manage.py collectstatic
+    python /home/obdev-user/obdev2018/manage.py collectstatic --noinput
 fi
-python /home/obdev-user/obdev2018/manage.py collectstatic --settings=config.settings.static
+python /home/obdev-user/obdev2018/manage.py collectstatic --noinput --settings=config.settings.static
