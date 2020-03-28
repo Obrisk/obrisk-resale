@@ -17,10 +17,6 @@ connections.create_connection()
 @registry.register_document
 class StoriesDocument(Document):
 
-    tags = fields.NestedField(properties={
-                'name': fields.TextField(analyzer=html_strip),
-            })
-
     class Index:
         name = 'stories'
 

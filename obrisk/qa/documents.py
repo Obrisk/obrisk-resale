@@ -19,10 +19,6 @@ class QuestionDocument(Document):
                 fields={'raw': fields.KeywordField()}
             )
 
-    tags = fields.NestedField(properties={
-                'name': fields.TextField(analyzer=html_strip),
-            })
-
     class Index:
         name = 'qa'
 
@@ -31,9 +27,6 @@ class QuestionDocument(Document):
 
     class Django:
         model = Question
-        fields = [
-            'title',
-        ]
 
 
 @registry.register_document
