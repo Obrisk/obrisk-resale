@@ -293,6 +293,12 @@
 {% block extra_js %}
 
 <script>
+  //Hide create card on stories details, let use focus on shared content  
+  if ('{{request.path}}'.startsWith('/stories/i/') &&
+    !$('#compose-card').hasClass('d-none')) {
+        $('#compose-card').remove();
+  }
+
   var page = 1;
   var empty_page = false;
   var block_request = false;
@@ -324,6 +330,7 @@
       }
     });
   }
+
 </script>
 <link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
 <script src="{% static 'js/fancybox.min.js' %}"></script>
@@ -364,6 +371,7 @@
   }
   $(document).ready(function () {
     loadvideo();
+
   });
 </script>
 {% endblock extra_js %}

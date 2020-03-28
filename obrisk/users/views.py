@@ -1,15 +1,17 @@
-# import uuid
-import  os, uuid, ast
+import  os
+import uuid
+import ast
 import base64
 import datetime
 import oss2
 import boto3
 import logging
 
-# django imports
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
-from django.views.generic import DetailView, ListView, RedirectView, UpdateView, FormView
+from django.views.generic import (
+        DetailView, ListView,
+        RedirectView, UpdateView, FormView)
 from django.utils.crypto import get_random_string
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
@@ -21,8 +23,10 @@ from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
 
-# third parties imports
-from allauth.account.views import (SignupView, LoginView, _ajax_response, PasswordResetFromKeyView as AllauthPasswordResetFromKeyView)
+from allauth.account.views import (
+        SignupView, LoginView,
+        _ajax_response,
+        PasswordResetFromKeyView as AllauthPasswordResetFromKeyView)
 from allauth.account.forms import UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
@@ -31,11 +35,12 @@ from phonenumbers import PhoneNumber
 from friendship.models import Friend, Follow
 from rest_framework.decorators import api_view
 
-# obrisk imports
 from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
-from .forms import UserForm, EmailSignupForm, PhoneRequestPasswordForm, PhoneResetPasswordForm
+from .forms import (
+        UserForm, EmailSignupForm,
+        PhoneRequestPasswordForm, PhoneResetPasswordForm)
 from .models import User
 from .phone_verification import send_sms
 
@@ -49,7 +54,8 @@ except ImportError:
     user_model = User
 
 
-#There is no need to override this view. By default All-auth directly login users when they signup.
+#There is no need to override this view. 
+#By default All-auth directly login users when they signup.
 class EmailSignUp(SignupView):
     form_class = EmailSignupForm
     template_name = 'account/email_signup.html'
@@ -59,10 +65,14 @@ def aliyun_send_code(random, full_number):
     phone_no = str(full_number).strip('+86')
     params = " {\"code\":\""+ random + "\"} "
     __business_id = uuid.uuid1()
-    ret = send_sms( __business_id, phone_no, os.getenv('SMS_SIGNATURE') , os.getenv('SMS_TEMPLATE'), params)
+    ret = send_sms(
+            __business_id, phone_no,
+            os.getenv('SMS_SIGNATURE'),
+            os.getenv('SMS_TEMPLATE'), params)
     ret = ret.decode("utf-8")
 
-    #'SMSAPIresponse':ret["Message"], 'returnedCode':ret["Code"], 'requestId':ret["RequestId"]
+    #'SMSAPIresponse':ret["Message"],
+    #'returnedCode':ret["Code"], 'requestId':ret["RequestId"]
     return ast.literal_eval(ret)
 
 
@@ -176,7 +186,8 @@ def phone_password_reset(request):
     if request.method == "POST":
         phone_number = request.POST.get("phone_no")
 
-        if phone_number is not None and len(phone_number) == 11 and phone_number[0] == '1':
+        if phone_number is not None and len(
+                phone_number) == 11 and phone_number[0] == '1':
 
             full_number = "+86" + phone_number
             user = get_users(full_number)
@@ -184,10 +195,12 @@ def phone_password_reset(request):
                 return send_code(full_number, "password-reset", user=user)
 
             else:
-                return JsonResponse({'success': False, 'error_message': "This phone number doesn't exist!"})
+                return JsonResponse({'success': False,
+                    'error_message': "This phone number doesn't exist!"})
 
         else:
-            return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"} )
+            return JsonResponse({'success': False,
+                'error_message': "The phone number is not correct please re-enter!"} )
 
     else:
         form = PhoneRequestPasswordForm()
@@ -255,35 +268,47 @@ def update_profile_pic(request):
     picture = request.POST.get("profile_pic")
 
     if not picture:
-        return JsonResponse({'success': False, 'error_message': "No profile picture submitted!"} )
+        return JsonResponse({
+            'success': False,
+            'error_message': "No profile picture submitted!"})
 
     else:
         if picture.startswith('media/profile_pics/') is False:
             return JsonResponse({'success': False,
-                                'error_message': "Oops! your profile picture, wasn't uploaded successfully, please upload again!"})
+                                'error_message': "Your picture, \
+                                        wasn't uploaded successfully, \
+                                        Please upload again!"})
 
         else:
             d = str(datetime.datetime.now())
-            thumb_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails/" + "thumb-" + d
-            pic_name = "media/profile_pics/" + slugify(str(request.user)) + "/thumbnails" + "dp-" + d
+            thumb_name = "media/profile_pics/" + slugify(
+                    str(request.user)) + "/thumbnails/" + "thumb-" + d
+            pic_name = "media/profile_pics/" + slugify(
+                    str(request.user))+ "/thumbnails" + "dp-" + d
             style1 = 'image/resize,m_fill,h_60,w_60'
             style2 = 'image/resize,m_fill,h_250,w_250'
 
             try:
                 process1 = "{0}|sys/saveas,o_{1},b_{2}".format(style1,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(thumb_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                                            oss2.compat.to_string(
+                                                base64.urlsafe_b64encode(
+                                                oss2.compat.to_bytes(thumb_name))),
+                                            oss2.compat.to_string(
+                                                base64.urlsafe_b64encode(
+                                                    oss2.compat.to_bytes(bucket_name))))
                 process2 = "{0}|sys/saveas,o_{1},b_{2}".format(style2,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(pic_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                oss2.compat.to_bytes(pic_name))),
+                                            oss2.compat.to_string(
+                                                base64.urlsafe_b64encode(
+                                                    oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(picture, process1)
                 bucket.process_object(picture, process2)
             except:
                 #Since the image exists just save the profile, it is our problem.
                 return JsonResponse({'success': False,
-                                'error_message': "Oops we are sorry! Your image was not uploaded successfully. Try again later!."})
+                                'error_message': "Sorry! \
+                                        Your image was not uploaded successfully. Try again later!."})
 
             #Only save the new image when you have the thumbnail.
             profile = get_user_model().objects.get(username=request.user)
@@ -337,7 +362,8 @@ def phone_verify(request):
             try:
                 saved_code = cache.get(str(full_number))
             except:
-                return JsonResponse({'error_message': "The verification code has expired or it is invalid!"})
+                return JsonResponse({
+                    'error_message': "The verification code has expired or it is invalid!"})
             else:
                 if saved_code == code:
                     if str(request.META.get(
@@ -347,7 +373,9 @@ def phone_verify(request):
                             user = get_users(full_number)
                         except:
                             return JsonResponse({'success': False,
-                                                'error_message': "Sorry there is a problem with this account. Please contact us!",
+                                                'error_message': "Sorry \
+                                                        there is a problem with this account. \
+                                                        Please contact us!",
                                                 'phone_no': full_number })
                         else:
                             if user:
@@ -365,17 +393,22 @@ def phone_verify(request):
                                 return JsonResponse({'success': True, 'url':url })
                             else:
                                 return JsonResponse({'success': False,
-                                                     'error_message': "Sorry there is a problem with this account. Please contact us!"})
+                                                     'error_message': "Sorry \
+                                                             there is a problem with this account. \
+                                                             Please contact us!"})
                     else:
                         return JsonResponse({'success': True})
 
                 else:
-                    return JsonResponse({'success': False, 'error_message': "The verification code is not correct!"})
+                    return JsonResponse({'success': False,
+                        'error_message': "The verification code is not correct!"})
             return JsonResponse({'success': False})
         else:
-            return JsonResponse({'success': False, 'error_message': "The phone number or the code is empty!"})
+            return JsonResponse({'success': False,
+                'error_message': "The phone number or the code is empty!"})
     else:
-        return JsonResponse({'success': False, 'error_message': "This request is invalid!"})
+        return JsonResponse({'success': False,
+            'error_message': "This request is invalid!"})
 
 
 class PasswordResetFromKeyView(AllauthPasswordResetFromKeyView):

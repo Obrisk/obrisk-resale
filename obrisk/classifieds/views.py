@@ -2,23 +2,33 @@ from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.views import View
-from django.views.generic import CreateView, UpdateView, DetailView, DeleteView
+from django.views.generic import (
+        CreateView, UpdateView,
+        DetailView, DeleteView)
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, HttpResponseRedirect
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField, Count
+from django.core.paginator import (
+        Paginator, EmptyPage,
+        PageNotAnInteger)
+from django.db.models import (
+        OuterRef, Subquery, Case,
+        When, Value, IntegerField, Count)
 from django.urls import reverse_lazy
 from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from taggit.models import Tag
 from obrisk.utils.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, ClassifiedTags
-from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
+from obrisk.classifieds.models import (
+        Classified, OfficialAd,
+        ClassifiedImages, ClassifiedTags)
+from obrisk.classifieds.forms import (
+        ClassifiedForm, OfficialAdForm,
+        ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
 
 from django.http import JsonResponse
@@ -36,7 +46,9 @@ def set_popular_tags():
 
     cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
-    return HttpResponse("Successfully sorted the popular tags!", content_type='text/plain')
+    return HttpResponse(
+            "Successfully sorted the popular tags!",
+            content_type='text/plain')
 
 #People can view without login
 @ensure_csrf_cookie
@@ -46,14 +58,17 @@ def classified_list(request, tag_slug=None):
     if request.user.is_authenticated:
         city = request.user.city
     else:
+        #Find the way to get their city using IP Address
+        #request.user.IPAddress find in cities tables.
+        #If not in China?
         city = "Hangzhou"
-    
+
     #Try to Get the popular tags from cache
     popular_tags = cache.get('popular_tags')
 
     if popular_tags is None:
         popular_tags = Classified.objects.get_counted_tags()
-    
+
     #Get classifieds
     classifieds_list = Classified.objects.get_active().annotate(
         order = Case (

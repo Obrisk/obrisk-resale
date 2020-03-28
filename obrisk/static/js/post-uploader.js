@@ -310,42 +310,4 @@ $(function() {
   //create and initialize upload object
   ossUpload = new OssUpload();
   ossUpload.init();
-
-  $("#post-submit").click(function(event) {
-    if (
-      $("#id_title").val() == "" ||
-      $("#id_details").val() == "" ||
-      $("#id_tags").val() == ""
-    ) {
-      event.preventDefault();
-      $.wnoty({
-        type: "error",
-        autohide: false,
-        message:
-          "Please fill in all of the information before uploading the images!"
-      });
-    } else if (uploader.fileStats.totalFilesNum == 0) {
-      event.preventDefault();
-      $.wnoty({
-        type: "error",
-        autohide: false,
-        message: "Please select images to upload!"
-      });
-      $(".start-uploader").css("display", "block");
-    } else {
-      var file;
-      var filename = genKey();
-      file = uploader.fileList[i];
-      _this.uploadFile(file, filename);
-    }
-
-    $("input[name='status']").val("A");
-    $("#oss_image").val(image);
-    $("#classified-form").submit();
-  });
-
-  $("#post-draft").click(function() {
-    $("input[name='status']").val("E");
-    $("#classified-form").submit();
-  });
 });
