@@ -7,7 +7,6 @@
 
 #It is possible to store all passwords in a separate script that will echo them when runnning specific commands.
 #https://serverfault.com/questions/815043/how-to-give-username-password-to-git-clone-in-a-script-but-not-store-credential
- 
 
 sudo apt-get -y update
 
@@ -26,7 +25,7 @@ sudo service codedeploy-agent status
 echo 'alias python="python3.6"' >> ~/.bashrc
 source ~/.bashrc
 
-sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel nginx curl redis-server npm -y
+sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel nginx curl npm -y
 
 sudo -H pip3 install --upgrade pip wheel setuptools
 
@@ -101,10 +100,18 @@ sudo ufw allow 22
 cd ./frontend
 sudo npm install cnpm -g
 cnpm install
-cnpm install gulp
+cnpm install gulp -g
+cnpm install workbox-cli -g
 sudo systemctl start gulp.service
 
-/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
+#/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
+#installed globally so...
+gulp.js build
+
+#Allow continuous auto-deployment
+# sudo vim /etc/sudoers.d/allowsystemd
+#Add line below:
+#obdev-user ALL=NOPASSWD: /bin/systemctl restart gunicorn.service uvicorn.service celery.service celerybeat.service
 
 #DONE!
 #In case of errors check below commands 
@@ -127,6 +134,3 @@ sudo systemctl start gulp.service
 
 #To copy data from one db instance to another.
 #pg_dump -C -h localhost -U obrisk -P obrisk_db | psql -h ls-475c8c9aa913ef145c97aecda604ec8b6ae7a92f.ccyq1xb49cwb.ap-northeast-2.rds.amazonaws.com -U dbobdevuser2018 obrisk_db
-
-
-
