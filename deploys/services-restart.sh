@@ -1,3 +1,4 @@
 #!/bin/bash
+#Nginx should be restarted manually because a lot can go wrong at least for now!
 
-systemctl restart gunicorn.service uvicorn.service celery.service celerybeat.service
+sudo systemctl restart gunicorn.service uvicorn.service celery.service celerybeat.service
