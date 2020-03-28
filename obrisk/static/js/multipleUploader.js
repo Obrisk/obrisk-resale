@@ -919,8 +919,6 @@ function genKey(extension) {
     extension.split("/")[1] +
     "/";
 
-  console.log(filename);
-
   var date = new Date().toISOString().split("T")[0];
 
   if (app == "stories") {
