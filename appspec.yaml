@@ -1,10 +1,13 @@
-version: 0.0
+version: 0.1
 os: linux
 files:
   - source: /
     destination: /home/obdev-user/obdev2018
-  - source: requirements.txt
-    destination: /tmp
+permissions:
+  - object: /home/obdev-user
+    pattern: "**"
+    owner: obdev-user
+    group: obdev-user 
 hooks:
   AfterInstall:
     - location: deploys/python-setup.sh
@@ -12,6 +15,6 @@ hooks:
       runas: root
 
   ApplicationStart:
-      - location: restarts.sh
+      - location: deploys/services-restart.sh
         timeout: 300
         runas: root
