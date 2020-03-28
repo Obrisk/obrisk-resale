@@ -24,6 +24,6 @@ rules:
       The calls to cloudflare CDN sometimes are too slow
       and they block the whole DOM execution
     pass:
-      - {% static 'js/sdk.min.js' %} type="text/javascript"
+      - "{% static 'js/sdk.min.js' %} type='text/javascript'"
     fail:
       - https://cdnjs.cloudflare.com/ajax/libs/aws-sdk/2.642.0/aws-sdk.min.js
