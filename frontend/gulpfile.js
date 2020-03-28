@@ -225,6 +225,6 @@ gulp.task("build", [
   "compile-sass",
   "compile-scss",
   "copy-images",
-  "update-sw"
+  //"update-sw"
 ]);
 gulp.task("default", ["watch", "update-sw"]);
