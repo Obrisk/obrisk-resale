@@ -18,6 +18,7 @@ from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404, redirect, render
 from django.db.models import OuterRef, Subquery, Count
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.utils.decorators import method_decorator
 
 from obrisk.utils.images_upload import multipleImagesPersist, videoPersist
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
@@ -274,6 +275,13 @@ def post_stories(request):
             viewers=viewers
         )
 
+
+        # Creating tags automatically when user's content has a hash tag
+        list_of_tags = [tgs for tgs in post.split() if tgs.lower().startswith('#')]
+
+        for tag in list_of_tags:
+            story.tags.add(str(tag.strip('#')))
+
         if images:
             # split one long string of images into a list of string each for one JSON img_obj
             images_list = images.split(",")
@@ -320,6 +328,9 @@ def post_stories(request):
 
 @method_decorator(login_required, name='dispatch')
 class StoryTagsAutoComplete(autocomplete.Select2QuerySetView):
+    """
+    autocompletes story tags
+    """
     def get_queryset(self):
         qs = StoryTags.objects.all()
 
