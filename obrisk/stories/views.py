@@ -1,7 +1,10 @@
 import json
 import uuid
 import itertools
+
 from slugify import slugify
+from dal import autocomplete
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
@@ -60,7 +63,7 @@ def stories_list(request, tag_slug=None):
 
         ).prefetch_related('liked', 'parent', 'user__thumbnail__username').order_by('-priority', '-timestamp')
 
-    #official_ads = OfficialAd.objects.all() 
+    #official_ads = OfficialAd.objects.all()
 
     paginator = Paginator(stories_list, 30)  # 30 stories in each page
     page = request.GET.get('page')
@@ -73,7 +76,7 @@ def stories_list(request, tag_slug=None):
     except EmptyPage:
         if request.is_ajax():
             # If the request is AJAX and the page is out of range
-            # return an empty page            
+            # return an empty page
             return HttpResponse('')
         # If page is out of range deliver last page of results
         stories = paginator.page(paginator.num_pages)
@@ -194,7 +197,7 @@ def get_story_images(request):
     try:
         images = list(StoryImages.objects.filter(
                             story=story_id,
-                        ).extra( 
+                        ).extra(
                             select={ 'src': 'image'}).values('src')
                         )
     except:
@@ -263,22 +266,22 @@ def post_stories(request):
         if img_errors:
             #In the near future, send a message like sentry to our mailbox to notify about the error!
             send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
-        
+
         #Before saving the user inputs to the database, clean everything.
         story = Stories.objects.create(
             user=user,
             content=post,
             viewers=viewers
         )
-        
-        if images:            
+
+        if images:
             # split one long string of images into a list of string each for one JSON img_obj
             images_list = images.split(",")
 
             imgs_objs = multipleImagesPersist(request, images_list, 'stories', story)
             if imgs_objs:
                 story.img1 = imgs_objs[0].image_thumb
-                story.img2 = story.img3 = story.img4 = None 
+                story.img2 = story.img3 = story.img4 = None
                 #Find a way to return a list in a subquery
                 try:
                     if imgs_objs[1]:
@@ -288,11 +291,11 @@ def post_stories(request):
                             if imgs_objs[3]:
                                 story.img4 = imgs_objs[3].image_thumb
                 except IndexError:
-                    pass 
+                    pass
             else:
                 return HttpResponse(
                     'Sorry, the image(s) were not uploaded successfully!')
-        
+
         if video:
             if videoPersist(request, video, 'stories', story):
                 story.video = video
@@ -307,12 +310,27 @@ def post_stories(request):
                 'stories': story,
                 'request': request
             })
-        
+
         return HttpResponse(html)
 
     else:
         return HttpResponseBadRequest(
                 content=_('Text length is longer than accepted characters.'))
+
+
+@method_decorator(login_required, name='dispatch')
+class StoryTagsAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = StoryTags.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__icontains=self.q)
+
+            return qs
+
+
+
+
 
 @login_required
 @ajax_required
@@ -326,7 +344,7 @@ def like(request):
     try:
         stories = Stories.objects.get(pk=stories_id)
     except:
-        return JsonResponse({"error":"The story post is invalid!"}) 
+        return JsonResponse({"error":"The story post is invalid!"})
     user = request.user
     stories.switch_like(user)
 
