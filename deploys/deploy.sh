@@ -13,7 +13,7 @@ sudo apt-get -y update
 #First, install codedeploy agent.
 sudo apt-get -y install ruby
 sudo apt-get -y install wget
-cd /home/ubuntu
+#cd /home/ubuntu
 #wget https://bucket-name.s3.region-identifier.amazonaws.com/latest/install
 wget https://aws-codedeploy-cn-northwest-1.s3.cn-northwest-1.amazonaws.com.cn/latest/install
 chmod +x ./install
@@ -29,16 +29,13 @@ sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-whee
 
 sudo -H pip3 install --upgrade pip wheel setuptools
 
-sudo useradd -m -p "$(python -c "import crypt; print crypt.crypt(\"REPLACE-WITH-RAW-PS\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")")" -s /bin/bash obdev-user
-sudo gpasswd -a obdev-user sudo
-sudo su - obdev-user
 
 #Beware of the space btn file name and -q to mean quiet
 #Make sure the key is created as id_rsa the default name
 ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "REPLACE-WITH-EMAIL"
 
 eval "$(ssh-agent -s)"
-ssh-add -k ~/.ssh/id_rsa
+ssh-add -k ~/.ssh/id_rsa
 
 RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
 
@@ -134,3 +131,7 @@ gulp.js build
 
 #To copy data from one db instance to another.
 #pg_dump -C -h localhost -U obrisk -P obrisk_db | psql -h ls-475c8c9aa913ef145c97aecda604ec8b6ae7a92f.ccyq1xb49cwb.ap-northeast-2.rds.amazonaws.com -U dbobdevuser2018 obrisk_db
+
+#sudo useradd -m -p "$(python -c "import crypt; print crypt.crypt(\"REPLACE-WITH-RAW-PS\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")")" -s /bin/bash obdev-user
+#sudo gpasswd -a obdev-user sudo
+#sudo su - obdev-user
