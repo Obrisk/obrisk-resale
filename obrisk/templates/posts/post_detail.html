@@ -167,10 +167,14 @@
           </div> -->
           </div>
           <div class="post-text content">
+            {% if post.content_html %}
             {{ post.content_html|safe}}
-
+            {%else %}
             <!-- support lagacy posts -->
             {{ post.get_markdown|safe }}
+            {%endif%}
+
+
 
           </div>
           <!-- <div class="post-tags">
