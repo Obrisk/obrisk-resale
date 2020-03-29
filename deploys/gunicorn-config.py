@@ -11,14 +11,14 @@ timeout = 30
 #This number is for 2 vCPU instance. I have to deploy same instances for easy managing.
 workers = 6
 
-pidfile = '/home/obdev-user/run/gunicorn/pid'
+pidfile = '/home/ubuntu/run/gunicorn/pid'
 
 #logs
 #If trying to catch some errors and warnings then it is info
 #if everything settle down then change to critical
 loglevel = 'critical'
-errorlog = '/home/obdev-user/logs/gunicorn-error.log'
-accesslog = '/home/obdev-user/logs/gunicorn-acess.log'
+errorlog = '/home/ubuntu/logs/gunicorn-error.log'
+accesslog = '/home/ubuntu/logs/gunicorn-acess.log'
 access_log_format = '%(h)s %(l)s %(u)s %(t)s "%(r)s" %(s)s %(b)s "%(f)s" "%(a)s"'
 
 bind = 'unix:/run/gunicorn.sock'

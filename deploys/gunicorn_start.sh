@@ -1,11 +1,11 @@
 #!/bin/bash
 
 NAME="obrisk"
-DIR=/home/obdev-user/obdev2018
-USER=obdev-user
-GROUP=obdev-user
+DIR=/home/ubuntu/obdev2018
+USER=ubuntu
+GROUP=ubuntu
 WORKERS=3
-BIND=unix:/home/obdev-user/run/gunicorn.sock
+BIND=unix:/home/ubuntu/run/gunicorn.sock
 DJANGO_SETTINGS_MODULE=config.settings.production
 DJANGO_WSGI_MODULE=config.wsgi
 LOG_LEVEL=error

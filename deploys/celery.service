@@ -4,11 +4,12 @@ Description=Celery daemon
 After=network.target
 
 [Service]
+PIDFile=/home/ubuntu/run/celery/pid
 Type=simple
-User=obdev-user
+User=ubuntu
 Group=www-data
-WorkingDirectory=/home/obdev-user/obdev2018
-ExecStart=/home/obdev-user/obdev2018/venv_obrisk/bin/celery -A config worker -l CRITICAL -P gevent
+WorkingDirectory=/home/ubuntu/obdev2018
+ExecStart=/home/ubuntu/obdev2018/venv_obrisk/bin/celery -A config worker -l CRITICAL -P gevent
 
 
 [Install]

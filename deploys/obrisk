@@ -14,32 +14,22 @@ upstream websocket_server {
 
 
 server {
-
     listen 80;
-    listen 443 ssl;
 
-    server_name obrisk.com www.obrisk.com 63.0.0.14 63.0.0.6 52.82.70.154 161.189.161.69; 
-
-    ssl_certificate /etc/letsencrypt/live/obrisk.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/obrisk.com/privkey.pem;
-
-#    #If the lines below are uncommented, the redirect to https keeps redirecting  (too many redirects)
-#    if ($scheme != "https") {
-#        return 301 https://$host$request_uri;
-#    } 
+    server_name obrisk.com www.obrisk.com; 
 
     keepalive_timeout 5;
     client_max_body_size 4G;
 
-    access_log /home/obdev-user/logs/nginx-access.log;
-    error_log /home/obdev-user/logs/nginx-error.log;
+    access_log /home/ubuntu/logs/nginx-access.log;
+    error_log /home/ubuntu/logs/nginx-error.log;
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location = /favicon.png { access_log off; log_not_found off; }
 
     location /static/ {
         autoindex on;
-        alias /home/obdev-user/obdev2018/staticfiles/;
+        alias /home/ubuntu/obdev2018/staticfiles/;
         expires 1M;
         access_log off;
         add_header Cache-Control "public";
@@ -95,8 +85,4 @@ server {
         #auth_basic_user_file  /etc/nginx/.htpasswd;
     }
 
-
-
 }
-
-

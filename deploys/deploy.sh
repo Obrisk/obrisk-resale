@@ -50,7 +50,7 @@ mkdir ./logs ./run
 chmod 764 -R ./logs ./run
 
 touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log ./logs/celery-access.log ./logs/celery-error.log
-mkdir ./run/gunicorn ./run/uvicorn ./run/celery ~/.pip
+mkdir ./run/gunicorn ./run/uvicorn ./run/celery ./run/celerybeat ./run/gulp ~/.pip
 
 cd obdev2018
 #it turns out that I still can't access the virtual-env files inside vim.
