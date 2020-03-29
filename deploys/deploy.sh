@@ -39,7 +39,9 @@ ssh-add -k ~/.ssh/id_rsa
 
 RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
 
-curl -u "REPLACE-WITH-USERNAME:REPLACE-WITH-PS" --data '{"title":"EC2-instance<REPLACE-WITH-NUM>","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
+#Copy and pasting these lines to other editors turns to destroy the spacing encoding and the bash can't parse spaces
+
+curl -H 'Authorization: token <MY-TOKEN>' --data '{"title":"EC2-instance<REPLACE-WITH-NUM>","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
 
 git clone git@github.com:elshaddae/obdev2018.git
 
@@ -48,12 +50,11 @@ mkdir ./logs ./run
 chmod 764 -R ./logs ./run
 
 touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log ./logs/celery-access.log ./logs/celery-error.log
-mkdir ./run/gunicorn ./run/uvicorn ./run/celery
+mkdir ./run/gunicorn ./run/uvicorn ./run/celery ~/.pip
 
 cd obdev2018
 #it turns out that I still can't access the virtual-env files inside vim.
 #but  this behaviour is not required in production (so comment virualenv)
-sudo -H pip3 install --upgrade pip
 #sudo -H pip3 install virtualenv
 #virtualenv venv_obrisk
 cp utility/pip.conf ~/.pip/pip.conf
@@ -63,6 +64,7 @@ source venv_obrisk/bin/activate
 
 #It is not a guarantee that this process will pass smoothly
 #Always when there is a failure update the req files and rerun the command.
+pip install wheel
 pip install -r requirements/production.txt
 
 #This step onwards needs the env variables loaded
@@ -86,6 +88,7 @@ sudo systemctl start gunicorn.socket uvicorn.socket
 sudo systemctl enable gunicorn.socket uvicorn.socket
 
 sudo cp deploys/obrisk /etc/nginx/sites-available 
+#MUST open this file and update the server_name with IP addresses
 sudo ln -s /etc/nginx/sites-available/obrisk /etc/nginx/sites-enabled
 sudo nginx -t && sudo systemctl restart nginx
 sudo ufw allow 'Nginx Full'
