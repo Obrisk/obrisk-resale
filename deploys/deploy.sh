@@ -100,22 +100,16 @@ sudo ufw allow 22
 cd ./frontend
 sudo npm install cnpm -g
 cnpm install
-cnpm install gulp -g
-cnpm install workbox-cli -g
+sudo cnpm install gulp workbox-cli -g
 sudo systemctl start gulp.service
 
 #/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
 #installed globally so...
-gulp.js build
-
-#Allow continuous auto-deployment
-# sudo vim /etc/sudoers.d/allowsystemd
-#Add line below:
-#obdev-user ALL=NOPASSWD: /bin/systemctl restart gunicorn.service uvicorn.service celery.service celerybeat.service
+gulp build
 
 #DONE!
 #In case of errors check below commands 
-#sudo systemctll status <service-name.service>
+#sudo systemctl status <service-name.service>
 #journalctl -u <service-name.service>
 #sudo systemctl restart gunicorn.service uvicorn.service celery.service celerybeat.service
 #-------------------------------------------------------------------------------------------------------
