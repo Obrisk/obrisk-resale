@@ -170,7 +170,7 @@
             {{ post.content_html|safe}}
 
             <!-- support lagacy posts -->
-            {{ post.content|safe}}
+            {{ post.get_markdown|safe}}
 
           </div>
           <!-- <div class="post-tags">
