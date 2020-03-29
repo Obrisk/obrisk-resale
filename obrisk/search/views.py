@@ -127,13 +127,17 @@ def all_search(request, **kwargs):
     #                             Q("match", title='query') |
     #                             Q("match", details='ahaain'))]
 
-    stories_results = [{'content': t.content, 'tags': t.tags} for t in StoriesDocument.search().filter("term", username = query)]
+    stories_results = [{'content': t.content} for t in StoriesDocument.search().filter("term", content=query)]
 
     if request.GET.get('c') is 1:
-        classifieds_results = [{'title': t.title, 'details': t.details, 'price': t.price, 'tags': t.tags} for t in ClassifiedDocument.search().filter(
-                                                                                                                                    Q("match", title=query) |
-                                                                                                                                    Q("match", price=query) |
-                                                                                                                                    Q("match", details=query))]
+        classifieds_results = [{
+            'title': t.title,
+            'details': t.details,
+            'price': t.price} for t in ClassifiedDocument.search().filter(
+                                                    Q("match", title=query) |
+                                                    Q("match", price=query) |
+                                                    Q("match", details=query)
+                                                    )]
 
         return render(request, 'classifieds/search_results.html',
                 {'classifieds_results': classifieds_results,
