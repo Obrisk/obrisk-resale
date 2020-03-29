@@ -2,6 +2,8 @@ import json
 import uuid
 import itertools
 from slugify import slugify
+from dal import autocomplete
+from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import (
@@ -31,15 +33,15 @@ from obrisk.stories.models import Stories, StoryImages, StoryTags
 @ensure_csrf_cookie
 @require_http_methods(["GET"])
 def stories_list(request, slug=None):
-    #Try to Get the popular tags from cache
-    #This will be there when I've started to add tags on stories
-    #popular_tags = cache.get('stories_popular_tags')
+    # Try to Get the popular tags from cache
+    # This will be there when I've started to add tags on stories
+    # popular_tags = cache.get('stories_popular_tags')
     popular_tags = None
 
-    #if popular_tags == None:
+    # if popular_tags == None:
     #    popular_tags = Stories.objects.get_counted_tags()
 
-    #Get stories
+    # Get stories
     stories_list = Stories.objects.filter(reply=False).annotate (
             img1 = Subquery (
                     StoryImages.objects.filter(
@@ -126,7 +128,7 @@ def stories_list(request, slug=None):
     except EmptyPage:
         if request.is_ajax():
             # If the request is AJAX and the page is out of range
-            # return an empty page            
+            # return an empty page
             return HttpResponse('')
         # If page is out of range deliver last page of results
         stories = paginator.page(paginator.num_pages)
@@ -242,13 +244,14 @@ def get_story_images(request):
     try:
         images = list(StoryImages.objects.filter(
                             story=story_id,
-                        ).extra( 
+                        ).extra(
                             select={ 'src': 'image'}).values('src')
                         )
     except:
         return HttpResponseBadRequest(
                 content=_('The story post is invalid'))
     return HttpResponse(json.dumps(images), content_type='application/json')
+
 
 @require_http_methods(["GET"])
 def get_story_likers(request):
@@ -301,6 +304,7 @@ def post_stories(request):
     user = request.user
     post = request.POST.get('post')
     post = post.strip()
+
     images = request.POST.get('images')
     video = request.POST.get('story_video')
     viewers = request.POST.get('viewers')
@@ -309,25 +313,30 @@ def post_stories(request):
     if len(post) <= 400 or images or video:
 
         if img_errors:
-            #In the near future, send a message like sentry to our mailbox to notify about the error!
+             #In the near future, send a message like sentry to our mailbox to notify about the error!
             send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
-        
-        #Before saving the user inputs to the database, clean everything.
+
+        # Before saving the user inputs to the database, clean everything.
         story = Stories.objects.create(
             user=user,
             content=post,
             viewers=viewers
         )
-        
-        if images:            
+
+        # Adding stories tags by hash tags
+        list_of_tags = [tgs for tgs in post.split() if tgs.lower().startswith('#')]
+        for tag in list_of_tags:
+            story.tags.add(str(tag.strip('#')))
+
+        if images:
             # split one long string of images into a list of string each for one JSON img_obj
             images_list = images.split(",")
 
             imgs_objs = multipleImagesPersist(request, images_list, 'stories', story)
             if imgs_objs:
                 story.img1 = imgs_objs[0].image_thumb
-                story.img2 = story.img3 = story.img4 = None 
-                #Find a way to return a list in a subquery
+                story.img2 = story.img3 = story.img4 = None
+                # Find a way to return a list in a subquery
                 try:
                     if imgs_objs[1]:
                         story.img2 = imgs_objs[1].image_thumb
@@ -336,11 +345,11 @@ def post_stories(request):
                             if imgs_objs[3]:
                                 story.img4 = imgs_objs[3].image_thumb
                 except IndexError:
-                    pass 
+                    pass
             else:
                 return HttpResponse(
                     'Sorry, the image(s) were not uploaded successfully!')
-        
+
         if video:
             if videoPersist(request, video, 'stories', story):
                 story.video = video
@@ -355,18 +364,30 @@ def post_stories(request):
                 'stories': story,
                 'request': request
             })
-        
+
         return HttpResponse(html)
 
     else:
         return HttpResponseBadRequest(
                 content=_('Text length is longer than accepted characters.'))
 
+
+@method_decorator(login_required, name='dispatch')
+class StoryTagsAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = StoryTags.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__icontains=self.q)
+
+            return qs
+
+
 @login_required
 @ajax_required
 @require_http_methods(["GET"])
-#The only reason this method is GET is because the server will return 403 on the live site,
-#even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
+# The only reason this method is GET is because the server will return 403 on the live site,
+# even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
 def like(request):
     """Function view to receive AJAX, returns the count of likes a given stories
     has recieved."""
@@ -374,15 +395,14 @@ def like(request):
     try:
         stories = Stories.objects.get(pk=stories_id)
     except:
-        return JsonResponse({"error":"The story post is invalid!"}) 
+        return JsonResponse({"error":"The story post is invalid!"})
     user = request.user
     stories.switch_like(user)
 
-    #Without this you will get error
-    #Object of type 'CombinedExpression' is not JSON serializable
+     # Without this you will get error
+     # Object of type 'CombinedExpression' is not JSON serializable
     stories.refresh_from_db()
     return JsonResponse({"likes": stories.likes_count})
-
 
 
 @login_required
@@ -399,13 +419,14 @@ def post_comment(request):
     post = post.strip()
     if post:
         parent.reply_this(user, post)
-        #Without this you will get error
-        #Object of type 'CombinedExpression' is not JSON serializable
+        # Without this you will get error
+        # Object of type 'CombinedExpression' is not JSON serializable
         parent.refresh_from_db()
         return JsonResponse({'comments': parent.thread_count, 'likes': parent.likes_count})
 
     else:
         return HttpResponseBadRequest()
+
 
 @ajax_required
 @require_http_methods(["POST"])
