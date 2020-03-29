@@ -13,7 +13,7 @@ sudo apt-get -y update
 #First, install codedeploy agent.
 sudo apt-get -y install ruby
 sudo apt-get -y install wget
-cd /home/ubuntu
+#cd /home/ubuntu
 #wget https://bucket-name.s3.region-identifier.amazonaws.com/latest/install
 wget https://aws-codedeploy-cn-northwest-1.s3.cn-northwest-1.amazonaws.com.cn/latest/install
 chmod +x ./install
@@ -29,20 +29,19 @@ sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-whee
 
 sudo -H pip3 install --upgrade pip wheel setuptools
 
-sudo useradd -m -p "$(python -c "import crypt; print crypt.crypt(\"REPLACE-WITH-RAW-PS\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")")" -s /bin/bash obdev-user
-sudo gpasswd -a obdev-user sudo
-sudo su - obdev-user
 
 #Beware of the space btn file name and -q to mean quiet
 #Make sure the key is created as id_rsa the default name
 ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "REPLACE-WITH-EMAIL"
 
 eval "$(ssh-agent -s)"
-ssh-add -k ~/.ssh/id_rsa
+ssh-add -k ~/.ssh/id_rsa
 
 RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
 
-curl -u "REPLACE-WITH-USERNAME:REPLACE-WITH-PS" --data '{"title":"EC2-instance<REPLACE-WITH-NUM>","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
+#Copy and pasting these lines to other editors turns to destroy the spacing encoding and the bash can't parse spaces
+
+curl -H 'Authorization: token <MY-TOKEN>' --data '{"title":"EC2-instance<REPLACE-WITH-NUM>","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
 
 git clone git@github.com:elshaddae/obdev2018.git
 
@@ -51,12 +50,11 @@ mkdir ./logs ./run
 chmod 764 -R ./logs ./run
 
 touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log ./logs/celery-access.log ./logs/celery-error.log
-mkdir ./run/gunicorn ./run/uvicorn ./run/celery
+mkdir ./run/gunicorn ./run/uvicorn ./run/celery ~/.pip
 
 cd obdev2018
 #it turns out that I still can't access the virtual-env files inside vim.
 #but  this behaviour is not required in production (so comment virualenv)
-sudo -H pip3 install --upgrade pip
 #sudo -H pip3 install virtualenv
 #virtualenv venv_obrisk
 cp utility/pip.conf ~/.pip/pip.conf
@@ -66,6 +64,7 @@ source venv_obrisk/bin/activate
 
 #It is not a guarantee that this process will pass smoothly
 #Always when there is a failure update the req files and rerun the command.
+pip install wheel
 pip install -r requirements/production.txt
 
 #This step onwards needs the env variables loaded
@@ -89,6 +88,7 @@ sudo systemctl start gunicorn.socket uvicorn.socket
 sudo systemctl enable gunicorn.socket uvicorn.socket
 
 sudo cp deploys/obrisk /etc/nginx/sites-available 
+#MUST open this file and update the server_name with IP addresses
 sudo ln -s /etc/nginx/sites-available/obrisk /etc/nginx/sites-enabled
 sudo nginx -t && sudo systemctl restart nginx
 sudo ufw allow 'Nginx Full'
@@ -134,3 +134,7 @@ gulp.js build
 
 #To copy data from one db instance to another.
 #pg_dump -C -h localhost -U obrisk -P obrisk_db | psql -h ls-475c8c9aa913ef145c97aecda604ec8b6ae7a92f.ccyq1xb49cwb.ap-northeast-2.rds.amazonaws.com -U dbobdevuser2018 obrisk_db
+
+#sudo useradd -m -p "$(python -c "import crypt; print crypt.crypt(\"REPLACE-WITH-RAW-PS\", \"\$6\$$(</dev/urandom tr -dc 'a-zA-Z0-9' | head -c 32)\$\")")" -s /bin/bash obdev-user
+#sudo gpasswd -a obdev-user sudo
+#sudo su - obdev-user
