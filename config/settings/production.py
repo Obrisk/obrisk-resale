@@ -1,5 +1,6 @@
 import logging,os
 import sentry_sdk
+import requests
 
 from .base import *
 from .base import env
@@ -8,7 +9,7 @@ from django.utils import timezone
 from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
-#from obrisk.utils.cloudfront import STATIC_VERSION or None
+#This has to be updated manually in cases we want rapid deployment
 STATIC_VERSION = 'ver26032001' 
 
 # GENERAL
@@ -17,8 +18,23 @@ STATIC_VERSION = 'ver26032001'
 SECRET_KEY = env('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-#https://stackoverflow.com/questions/16676314/should-server-ip-address-be-in-allowed-hosts-django-setting
-ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com', '63.0.0.14', '63.0.0.6', '52.82.70.154', '161.189.161.69' ]
+# ALB health check requests should be allowed, whitelist IP address 
+def get_ec2_instance_ip():
+    """
+    Try to obtain the IP address of the current EC2 instance in AWS
+    """
+    try:
+        ip = requests.get(
+          'http://169.254.169.254/latest/meta-data/local-ipv4',
+          timeout=1
+        ).text
+    except requests.exceptions.ConnectionError:
+        return None
+    return ip
+
+AWS_LOCAL_IP = get_ec2_instance_ip()
+
+ALLOWED_HOSTS = [AWS_LOCAL_IP, 'www.obrisk.com', 'obrisk.com']
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -110,17 +126,17 @@ if env.bool('USE_S3_STATICFILES'):
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_STATIC_S3_S3KT')
 
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-    
+
     AWS_S3_REGION_NAME=os.getenv('AWS_S3_REGION_NAME')
-    
+
     AWS_S3_HOST=os.getenv('AWS_S3_HOST_NAME')
 
     AWS_DEFAULT_ACL = 'public-read'
-    
+
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
     STATIC_URL = f'https://dist.obrisk.com/static/{STATIC_VERSION}/'
-         
+
     if not env.bool('CLOUDFRONT'):
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/{STATIC_VERSION}/'
 
@@ -135,7 +151,7 @@ if env.bool('USE_S3_STATICFILES'):
     #https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/
     #If this import goes before secret key, raises errors
     STATICFILES_LOCATION = f'static/{STATIC_VERSION}'
-    
+
     #The value from docs is 'storages.backends.s3boto3.S3Boto3Storage'
     STATICFILES_STORAGE = 'custom_storages.StaticStorage'
 
@@ -167,7 +183,6 @@ else:
     OSS_FILE_SAVE_AS_URL = False
 
     STATIC_URL =  '/static/'
-
 
 
 # MEDIA
@@ -252,11 +267,8 @@ sentry_sdk.init(
 #    'DSN': SENTRY_DSN
 #}
 
-# Other stuffs...
-# ------------------------------------------------------------------------------
-
 #SESSION
-#Improve performance
+#Improve performance #Support multiple servers
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 
