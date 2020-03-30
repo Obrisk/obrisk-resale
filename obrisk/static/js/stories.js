@@ -311,11 +311,11 @@ $(function() {
     });
   });
 });
-var shareMe = function shareMe(title, url) {
+var shareMe = function shareMe(username, text, url) {
   navigator.share({
-    title: title,
-    text: title,
-    url: location.href + url
+    title: `${username} shared a story on Obrisk`,
+    text: `Shared: ${text}`,
+    url: location.origin + "/stories/" + url
   });
 };
 $(document.body).on("click", ".delete-story", function() {

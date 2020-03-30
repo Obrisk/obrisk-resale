@@ -126,7 +126,7 @@
         <div class="left align-items-center d-flex">
           <div class="fab-wrapper is-share">
             <a href="javascript:void(0);" class="small-fab share-fab share-stories"
-              onclick="shareMe('{{stories }}','i/{{ stories.slug }}/')">
+              onclick='shareMe("{{stories.user}}","{{stories|truncatewords:30 }}","i/{{ stories.slug }}/")''>
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="feather feather-link-2">
@@ -289,8 +289,5 @@
 <!-- Todo: Create json ld for stories -->
 <script>
   $(document).ready(function () {
-    $('.post-text').linkify({
-      target: "_blank"
-    });
-  });
-</script>
+    $(' .post-text').linkify({ target: "_blank" });
+  }); </script>

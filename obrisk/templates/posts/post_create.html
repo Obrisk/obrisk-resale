@@ -108,19 +108,36 @@
       }
     }
     Quill.register('modules/blotFormatter', QuillBlotFormatter.default);
-    const quill = new Quill('#editor-container', {
-      modules: {
-        toolbar: toolbarOptions,
-        "emoji-toolbar": true,
-        "emoji-shortname": true,
-        "emoji-textarea": true,
-        magicUrl: true,
-        blotFormatter: {}
-      },
-      placeholder: 'Compose an epic...',
-      theme: 'snow',
+    if ($("#editor-container").length) {
+      const quill = new Quill('#editor-container', {
+        modules: {
+          toolbar: toolbarOptions,
+          "emoji-toolbar": true,
+          "emoji-shortname": true,
+          "emoji-textarea": true,
+          magicUrl: true,
+          blotFormatter: {}
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow',
 
-    });
+      });
+    } else {
+      const quill = new Quill('.markdownx', {
+        modules: {
+          toolbar: toolbarOptions,
+          "emoji-toolbar": true,
+          "emoji-shortname": true,
+          "emoji-textarea": true,
+          magicUrl: true,
+          blotFormatter: {}
+        },
+        placeholder: 'Compose an epic...',
+        theme: 'snow',
+
+      });
+    }
+
     quill.setContents("{{ form.data.content_json }}")
     quill.on('text-change', function (delta, oldDelta, source) {
       $("#id_content").val(quill.getContents());
