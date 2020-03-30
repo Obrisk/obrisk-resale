@@ -127,7 +127,9 @@ def all_search(request, **kwargs):
     #                             Q("match", title='query') |
     #                             Q("match", details='ahaain'))]
 
-    stories_results = [{'content': t.content} for t in StoriesDocument.search().filter("term", content=query)]
+    stories_results = [
+        {'content': t.content} for t in StoriesDocument.search().filter(
+            "term", content=query)]
 
     if request.GET.get('c') is 1:
         classifieds_results = [{
@@ -144,7 +146,9 @@ def all_search(request, **kwargs):
                  'stories_results': stories_results})
 
     elif request.GET.get('u') is 1:
-        users_results = [{'username': t.username} for t in UsersDocument.search().filter("term", username = query)]
+        users_results = [
+            {'username': t.username} for t in UsersDocument.search().filter(
+                "term", username=query)]
 
         return render(request, 'connections/search_results.html',
                 {'users_results': users_results,
@@ -152,9 +156,9 @@ def all_search(request, **kwargs):
 
     elif request.GET.get('q') is 1:
 
-        qa_results = [{'title': t.title, 'content': t.content, 'tags': t.tags} for t in QuestionDocument.search().filter(
-                                                                                                        Q("match", title=query) |
-                                                                                                        Q("match", content=query))]
+        qa_results = [
+            {'content': t.content} for t in QuestionDocument.search().filter(
+                ("term", content=query))]
 
         return render(request, 'qa/search_results.html',
                 {'qa_results': qa_results,
@@ -162,9 +166,9 @@ def all_search(request, **kwargs):
 
     elif request.GET.get('p') is 1:
 
-        posts_results = [{'title': t.content, 'content': t.content, 'tags':t.tags} for t in PostsDocument.search().filter(
-                                                                                                        Q("match", title=query) |
-                                                                                                        Q("match", content=query))]
+        posts_results = [
+            {'content': t.content} for t in PostsDocument.search().filter(
+                ("term", content=query))]
 
         return render(request, 'posts/search_results.html',
                 {'posts_results': posts_results,
