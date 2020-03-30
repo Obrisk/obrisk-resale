@@ -244,16 +244,16 @@
               <div class="more-wrap">
                 <!-- Publish button -->
                 {% if request.user.is_authenticated %}
-                    <button id="publish-button" type="button"
-                      class="submit-button button is-solid accent-button is-fullwidth is-disabled">
-                      Publish
-                    </button>
+                <button id="publish-button" type="button"
+                  class="submit-button button is-solid accent-button is-fullwidth is-disabled">
+                  Publish
+                </button>
                 {% else %}
-                    <a href="{% url 'account_login' %}">
-                        <button id="login-and-publish-button" type="button"
-                          class="button is-solid accent-button is-fullwidth is-disabled">
-                           Login & Post 
-                    </button> </a>
+                <a href="{% url 'account_login' %}">
+                  <button id="login-and-publish-button" type="button"
+                    class="button is-solid accent-button is-fullwidth is-disabled">
+                    Login & Post
+                  </button> </a>
                 {% endif %}
 
               </div>
@@ -296,7 +296,7 @@
   //Hide create card on stories details, let use focus on shared content  
   if ('{{request.path}}'.startsWith('/stories/i/') &&
     !$('#compose-card').hasClass('d-none')) {
-        $('#compose-card').remove();
+    $('#compose-card').remove();
   }
 
   var page = 1;
@@ -365,6 +365,9 @@
   //Load videos
   var loadvideo = function () {
     Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p, {
+      loadSprite: true,
+      iconPrefix: 'plyr',
+      iconUrl: "{% static 'css/plyr.svg' %}",
       ratio: '16:9',
       controls: ['play-large', 'progress', 'mute', 'volume', 'fullscreen']
     }));

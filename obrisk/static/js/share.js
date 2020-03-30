@@ -77,7 +77,8 @@ navigator.share =
       }
 
       _setPayload(payloadObj) {
-        let payload = payloadObj.text + " " + payloadObj.url;
+        let payload =
+          payloadObj.text + "  Click the link to view. " + payloadObj.url;
         let title = payloadObj.title;
         this.url = payloadObj.url;
         payload = encodeURIComponent(payload);
