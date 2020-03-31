@@ -32,7 +32,7 @@ sudo -H pip3 install --upgrade pip wheel setuptools
 
 #Beware of the space btn file name and -q to mean quiet
 #Make sure the key is created as id_rsa the default name
-ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "REPLACE-WITH-EMAIL"
+ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "$1"
 
 eval "$(ssh-agent -s)"
 ssh-add -k ~/.ssh/id_rsa
@@ -41,16 +41,16 @@ RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
 
 #Copy and pasting these lines to other editors turns to destroy the spacing encoding and the bash can't parse spaces
 
-curl -H 'Authorization: token <MY-TOKEN>' --data '{"title":"EC2-instance<REPLACE-WITH-NUM>","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
+curl -H "Authorization: token $2" --data '{"title":"EC2-ubuntu-instance-$3","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
 
 git clone git@github.com:elshaddae/obdev2018.git
 
 #Create them here so that they are out of git VCS
 mkdir ./logs ./run
-chmod 764 -R ./logs ./run
+chmod 764 -R ./logs ./run ~/.pip
 
 touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log ./logs/celery-access.log ./logs/celery-error.log
-mkdir ./run/gunicorn ./run/uvicorn ./run/celery ./run/celerybeat ./run/gulp ~/.pip
+mkdir ./run/gunicorn ./run/uvicorn ./run/celery ./run/celerybeat ./run/gulp
 
 cd obdev2018
 #it turns out that I still can't access the virtual-env files inside vim.
@@ -73,8 +73,6 @@ pip install -r requirements/production.txt
 #THE SERVERS SHARE DB AND S3 STORAGE THIS SHOULDN'T BE RUN ON EVERY SERVER
 #python manage.py migrate
 #python manage.py collectstatic 
-#static files on the local(static) to be served by Nginx for PWA features.
-python manage.py collectstatic --settings=config.settings.static 
 
 sudo cp deploys/gunicorn.socket /etc/systemd/system
 sudo cp deploys/gunicorn.service /etc/systemd/system
@@ -104,13 +102,16 @@ sudo cnpm install gulp workbox-cli -g
 sudo systemctl start gulp.service
 
 #/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
-#installed globally so...
-gulp build
+gulp build #Globally installed.
+cd ..
+#static files on the local(static) to be served by Nginx for PWA features.
+python manage.py collectstatic --noinput --settings=config.settings.static 
 
 #DONE!
 #In case of errors check below commands 
 #sudo systemctl status <service-name.service>
 #journalctl -u <service-name.service>
+#sudo systemctl daemon-reload
 #sudo systemctl restart gunicorn.service uvicorn.service celery.service celerybeat.service
 #-------------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------
