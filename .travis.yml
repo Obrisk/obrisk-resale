@@ -1,55 +1,52 @@
-  
 language: python
 dist: bionic
 python:
-  - "3.6"
+- '3.6'
 env:
   global:
   - PGPORT=5432
   - DJANGO_VERSION=2.2.11
   - DJANGO_SETTINGS_MODULE="config.settings.test"
-# - PYTHONPATH="/home/travis/build/my_github_name/my_github_project"
   - PIP_USE_MIRRORS=true
+
 branches:
   only:
-    - master
-# Start docker services.
-services:
-  - redis-server
-  - postgresql
-# command to install dependencies
+  - master
 
-#addons:
-  #postgresql: "11"
-  #apt:
-    #packages:
-    # - postgresql-11
-    # - postgresql-client-11
+services:
+- redis-server
+- postgresql
 
 before_install:
-  - pip install -U pip
-  - pip install python-coveralls
-
+- pip install -U pip
+- pip install python-coveralls
 install:
-  - pip install -q Django==2.2.11
-  - pip install -r requirements/local.txt
-
-#before_install:
-#  - sudo apt-get update
-#  - sudo apt-get --yes remove postgresql\*
-#  - sudo apt-get install -y postgresql-11 postgresql-client-11
-#  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
-#  - sudo service postgresql restart 11  
-
+- pip install -q Django==2.2.11
+- pip install -r requirements/local.txt
 before_script:
-  - psql --version
-  - psql -c "CREATE DATABASE obdev;" -U postgres
-  - cp travis.env .env
-  - python manage.py migrate --settings=config.settings.test
-
-# command to run tests
+- psql --version
+- psql -c "CREATE DATABASE obdev;" -U postgres
+- cp travis.env .env
+- python manage.py migrate --settings=config.settings.test
 script:
-  - pytest
+- pytest
 after_success:
-  - coveralls
+- coveralls
 
+deploy:
+- provider: codedeploy
+  revision_type: github
+  access_key_id:
+    secure: wzTyEEiz237d6LRWGLaWhE83HEvb0YcPxgw3pLeT8K9O720jdcdAoF2DAt4CF6taP/gVpnUhGZtH71EGZPUrkRf7iTYP96mw2saUp/hTu4THH4qLslgnPJvW44/MGTadwIoHjDjb8Wf7ahlVq6yUNOwQvFThBfMPKua5s+4M40A6uNMiUwtb2WdXql/D8CzfgLPnXv/9lYxLSBGd4g6tuUgdzQv1LRqiGlW/7U22g0csMSg0SkxgdP1gxv9zOe8ODtY9EUdq/Y6Gx2BrmhJ/AVZ0jSqNA8VRNPb1vx7FzpsIS4XFVfimL5gNv1uyrvQfD+I6hp3tkJpVnSZ3wDIQKu/Z8OTyuiGbEDL5eTLLlwihxZX2gv+t2tli+zSEHJwjxG/Fvf1XMoZ7Zcu/GTYb61ONVN5EYg/aOs6aikyG4Yv4vrBj0vqRXxsMCZbKfrdQ9GTCCIFCGhIWSWMlcVtFyLghVHYUVhQYuL1T8ZUMXMb+BXPrqzcnuMHhIRJFvVts/aLF0aCIMLgDWTlv46JHZZcA+dzwME+MrpAvlcj8q+VDXw5pho8IpascP8aoWRw+8K3/so+grbSU6vXd4+RpfGGSCOZm+5osh+qM7OQn2XwEigJ6KG6d2RFI3F32Ktm3CvJOM5uHvUZMbDDe2YnZIXhGj+n6Afrne84AzGvs9v4=
+  secret_access_key: 
+    secure: LYRE8foBXQFr/SIM4zZJjc6HpExSHWmJByG1k8fx1VAcO8PBNst3IjRcNOFmyxyRip7b0RxFT1FSYrI+FKemGpAxdeC3f7Ed2TLkzHEwCPzIXICDQPpnTdy1SjtLw744iH+2M2VAxuLqic0+ejqDye+iArXJw369B1Pe5BdCsPEfX7aSnQyFO9bkntblkY1m6hqT+psdLkZ862PHwlwPoOHCSnPMUZZnv99de6D3qcmnGw2wsiJI38iQX3sRn8CHaFIcw8khXKIaCVx1PXBNOyVMJFjahJdtGYWuSsBPEHvP90W2ODVFBpDbXNvN4X7pvrNKpPEI2NKPT80uKIFVG5PcbPdKAfmS5ajNEYCxosU/qQIxlQk7ezJnmIgzfFhno7gZ09uUWFkX8/g03+j8aWCMUXAtRs0RLkZItgFehSG/CUyoxwIW3qNFt2nlqyMl+Cc5z44H5sMgCqDmSxI5aLuo9Ny/qx4V1nhaEmoWkSvLil3tqvKFjEST9blMynT7epEk9MaRLknSwa5CQQNeynNO9HMWqZt69/acAZx8HGosBpvKu6x5rbaGf//IG1RzaGUKsULqrp8rKkJ9AZQyp4qKYssE5sVTtGqMyZrn8LohxQoGpT04i70h+RF0EJ2vnCRS7U4QMGgwX7TZGOUODDHAB7mc7dyx8LMgXmLxH/8=
+  application: "Obdev-ec2-deploy-app"
+  deployment_group: "Obdev-ec2-c5d-DepGrp"
+  region: "cn-northwest-1"
+  wait_until_deployed: true
+  on:
+    branch: master
+
+notifications:
+  slack:
+    secure: zlwBq1K9AIi0Rlb7eNjOieYfScLNVrK8FOFsM5QapeJ1Yw7hMR9DgWOKL14hL84tn2heQRmbTAXvKnzrA5XLT/O4hATWWPx6FRPwZibwLJ/qNmwaaqbERgzZu/attGA4eQgDwGO4z7FOAEj6jmpgvBtp67ilpUEY+bLbodOa9dRNDQySriQirXo3NyiwYYOZs5z3kQzl83coW9XQQ1zXUiczXVdNAYuK1cvWJdrowowpd3HF7SY5dcBNcTdienge9ipVItU4HkaB+LfC3mC7LstiJ74GSRbf2t9YfD7LP1bRpkIfPjXpYL2nN7MVCHutCmaHe6RakkkPPwl7NXW5TRPzjlOQZ8VjtCAc6SmKNw39FIf+CtbnJUlEjrRHG6tmx2WJD4zH3s2ad8eZd07lDTDkcnRJe0GhuQhKg8LXLhgd05LSzhnUY0J0OJa3BtWtBILknXB7a9T5jmtVaQMNlys2eNKsMNJGr1VwKDZnOXFcYGViO22qevIZxbBdHjLJgcGk0w67IjZq1mdEf4/dZiQ2ftBiykhokJ7e959Ft+8TEk91xgYU3fR22et7q5otUVBgbz+KLbhbb4sdfpuoxKDj5CzvB4TfjK+QgTf68gSOF0AFgj7a78GeKTXGvJ/C+fsdD3IDnvQgNheE2+io9SfrHWFPP4Qw44CMuokJdcg=
