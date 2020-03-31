@@ -3,7 +3,6 @@ import uuid
 import itertools
 from slugify import slugify
 from dal import autocomplete
-from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import (
@@ -372,7 +371,6 @@ def post_stories(request):
                 content=_('Text length is longer than accepted characters.'))
 
 
-@method_decorator(login_required, name='dispatch')
 class StoryTagsAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = StoryTags.objects.all()
