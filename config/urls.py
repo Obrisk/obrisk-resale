@@ -102,7 +102,7 @@ urlpatterns = [
     url(r"^ws/messages/", include("obrisk.messager.urls", namespace="messager")),
     url(r"^qa/", include("obrisk.qa.urls", namespace="qa")),
     url(r"^search/", include("obrisk.search.urls", namespace="search")),
-     url(r'^rosetta/', include('rosetta.urls')),
+    url(r'^obr-translation-with-rosetta/', include('rosetta.urls')),
     url(
         r"^obdev2018-wsguatpotlfwccdi-sentry-error/", trigger_error, name="sentry_debug"
     ),
