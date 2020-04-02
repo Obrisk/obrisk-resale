@@ -2,6 +2,8 @@
 Base settings to build other settings files upon.
 """
 import environ
+from django.utils.translation import gettext_lazy as _
+
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path("obrisk")
@@ -38,13 +40,25 @@ USE_L10N = True
 USE_TZ = True
 
 LANGUAGES = (
-    ("en", "English"),
-    ("sw", "Swahili"),
+    ("en", _("English")),
+    ("zh-hans", _("Simplified Chinese")),
 )
 
 LOCALE_PATHS = [
     str(ROOT_DIR.path("locale")),
 ]
+
+
+# Rosetta settings
+ROSETTA_MESSAGES_PER_PAGE: 20
+ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS: True
+ROSETTA_MESSAGES_SOURCE_LANGUAGE_CODE: "en"
+ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME: "English"
+ROSETTA_WSGI_AUTO_RELOAD: False
+ROSETTA_UWSGI_AUTO_RELOAD: False
+ROSETTA_REQUIRES_AUTH: True
+ROSETTA_AUTO_COMPILE: True
+ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -100,6 +114,7 @@ THIRD_PARTY_APPS = [
     "pwa_webpush",
     "django_elasticsearch_dsl",
     "friendship",
+    "rosetta",
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
@@ -433,7 +448,7 @@ CHANNEL_LAYERS = {
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
 
-CELERY_TIMEZONE = "Asia/Chongqing"
+CELERY_TIMEZONE = "Asia/Shanghai"
 # Let's make things happen
 CELERY_BEAT_SCHEDULE = {
     "classified-tags-update-24-hours": {
