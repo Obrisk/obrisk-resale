@@ -41,7 +41,7 @@ USE_TZ = True
 
 LANGUAGES = (
     ("en", _("English")),
-    ("zh-hans", _("Simplified Chinese")),
+    ("zh-hans", _(" Simplified Chinese")),
 )
 
 LOCALE_PATHS = [
@@ -49,10 +49,10 @@ LOCALE_PATHS = [
 ]
 
 # Phrase settings
-PHRASE_ENABLED = True
-PHRASE_PROJECT_ID = env("PHRASE_ID")
-PHRASE_PREFIX = '{{__'
-PHRASE_SUFFIX = '__}}'
+# PHRASE_ENABLED = True
+# PHRASE_PROJECT_ID = env("PHRASE_ID")
+# PHRASE_PREFIX = '{{__'
+# PHRASE_SUFFIX = '__}}'
 
 # Rosetta settings
 ROSETTA_MESSAGES_PER_PAGE: 20
@@ -62,6 +62,9 @@ ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME: "English"
 ROSETTA_WSGI_AUTO_RELOAD: False
 ROSETTA_UWSGI_AUTO_RELOAD: False
 ROSETTA_REQUIRES_AUTH: True
+ROSETTA_SHOW_AT_ADMIN_PANEL:True
+ROSETTA_EXCLUDED_APPLICATIONS: ()
+AZURE_CLIENT_SECRET : None
 ROSETTA_AUTO_COMPILE: True
 ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
 
@@ -120,7 +123,7 @@ THIRD_PARTY_APPS = [
     "django_elasticsearch_dsl",
     "friendship",
     "rosetta",
-    "phrase",
+    # "phrase",
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
