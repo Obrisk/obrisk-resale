@@ -49,10 +49,10 @@ LOCALE_PATHS = [
 ]
 
 # Phrase settings
-# PHRASE_ENABLED = True
-# PHRASE_PROJECT_ID = env("PHRASE_ID")
-# PHRASE_PREFIX = '{{__'
-# PHRASE_SUFFIX = '__}}'
+PHRASE_ENABLED = True
+PHRASE_PROJECT_ID = env("PHRASE_ID")
+PHRASE_PREFIX = '{{__'
+PHRASE_SUFFIX = '__}}'
 
 # Rosetta settings
 ROSETTA_MESSAGES_PER_PAGE= 20
@@ -123,7 +123,7 @@ THIRD_PARTY_APPS = [
     "django_elasticsearch_dsl",
     "friendship",
     "rosetta",
-    # "phrase",
+    "phrase",
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
