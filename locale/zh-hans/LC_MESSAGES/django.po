@@ -20,11 +20,11 @@ msgstr ""
 
 #: config/settings/base.py:43
 msgid "English"
-msgstr ""
+msgstr "英语"
 
 #: config/settings/base.py:44
 msgid "Simplified Chinese"
-msgstr ""
+msgstr "简体中文"
 
 #: obrisk/classifieds/apps.py:7 obrisk/classifieds/models.py:94
 #: obrisk/templates/classifieds/classified_list.html:4
@@ -33,31 +33,31 @@ msgstr ""
 #: obrisk/templates/search/search_results.html:36
 #: obrisk/templates/stories/search_results.html:36
 msgid "Classifieds"
-msgstr ""
+msgstr "二手平台"
 
 #: obrisk/classifieds/models.py:14
 msgid "Classifieds Tag"
-msgstr ""
+msgstr "分类标签"
 
 #: obrisk/classifieds/models.py:15
 msgid "Classifieds Tags"
-msgstr ""
+msgstr "分类标签"
 
 #: obrisk/classifieds/models.py:24
 msgid "Classified tag"
-msgstr ""
+msgstr "分类标签"
 
 #: obrisk/classifieds/models.py:25
 msgid "Classified Tags"
-msgstr ""
+msgstr "分类标签"
 
 #: obrisk/classifieds/models.py:60
 msgid "Active"
-msgstr ""
+msgstr "活性"
 
 #: obrisk/classifieds/models.py:61
 msgid "Expired"
-msgstr ""
+msgstr "关闭"
 
 #: obrisk/classifieds/models.py:93
 msgid "Classified"
@@ -117,7 +117,7 @@ msgstr ""
 
 #: obrisk/messager/models.py:108 obrisk/templates/messager/contact_list.html:6
 msgid "Messages"
-msgstr ""
+msgstr "短信"
 
 #: obrisk/notifications/apps.py:7 obrisk/notifications/models.py:146
 #: obrisk/templates/notifications/notification_dropdown.html:3
@@ -387,7 +387,7 @@ msgstr ""
 #: obrisk/templates/pages/home.html:77
 #: obrisk/templates/posts/post_detail.html:228
 msgid "Login"
-msgstr ""
+msgstr "登录"
 
 #: obrisk/templates/account/account_inactive.html:8
 msgid "Account Inactive"
@@ -510,34 +510,34 @@ msgstr ""
 #: obrisk/templates/account/signup.html:8
 #: obrisk/templates/account/signup.html:66
 msgid "Account Signup"
-msgstr ""
+msgstr "注册"
 
 #: obrisk/templates/account/email_signup.html:35
 msgid "Account Creation"
-msgstr ""
+msgstr "注册"
 
 #: obrisk/templates/account/email_signup.html:37
 #, python-format
 msgid ""
 "Already have an account? Then please sign in <a href=\"%(login_url)s\">\n"
 "\t\t\t\t\t\t\there</a>."
-msgstr ""
+msgstr "登录"
 
 #: obrisk/templates/account/email_signup.html:70
 #: obrisk/templates/account/signup.1.html:9
 #: obrisk/templates/account/signup.1.html:19
 #: obrisk/templates/account/signup.html:220
 msgid "Sign Up"
-msgstr ""
+msgstr "注册"
 
 #: obrisk/templates/account/login.html:8 obrisk/templates/account/login.html:25
 #: obrisk/templates/account/phone_ps_reset_confirm.html:9
 msgid "Account Login"
-msgstr ""
+msgstr "登录"
 
 #: obrisk/templates/account/login.html:76
 msgid "Sign up"
-msgstr ""
+msgstr "注册"
 
 #: obrisk/templates/account/login.html:78
 msgid "Reset Password"
@@ -546,11 +546,11 @@ msgstr ""
 #: obrisk/templates/account/logout.html:9
 #: obrisk/templates/account/logout.html:18
 msgid "Sign Out"
-msgstr ""
+msgstr "登出"
 
 #: obrisk/templates/account/logout.html:11
 msgid "Are you sure you want to sign out?"
-msgstr ""
+msgstr "您确定要注销吗？"
 
 #: obrisk/templates/account/logout.html:19
 #: obrisk/templates/classifieds/classified_create-old.html:150
@@ -564,7 +564,7 @@ msgstr ""
 #: obrisk/templates/qa/question_form.html:20
 #: obrisk/templates/stories/stories_form_modal.html:25
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: obrisk/templates/account/messages/email_confirmation_sent.txt:2
 #, python-format
@@ -579,7 +579,7 @@ msgstr ""
 #: obrisk/templates/account/password_reset_from_key.html:22
 #: obrisk/templates/account/password_reset_from_key_done.html:14
 msgid "Change Password"
-msgstr ""
+msgstr "更改密码"
 
 #: obrisk/templates/account/password_reset.html:8
 #: obrisk/templates/account/password_reset.html:31
@@ -693,19 +693,19 @@ msgstr ""
 
 #: obrisk/templates/account/signup.html:151
 msgid "Can't signup?"
-msgstr ""
+msgstr "联系客户支持"
 
 #: obrisk/templates/account/signup_closed.html:8
 msgid "Sign Up Closed"
-msgstr ""
+msgstr "注册已关闭"
 
 #: obrisk/templates/account/signup_closed.html:10
 msgid "We are sorry, but the sign up is currently closed."
-msgstr ""
+msgstr "非常抱歉，注册已关闭"
 
 #: obrisk/templates/account/verification_sent.html:18
 msgid "Please Verify Your E-mail Address"
-msgstr ""
+msgstr "请验证您的电子邮件地址"
 
 #: obrisk/templates/account/verification_sent.html:27
 msgid ""
@@ -755,16 +755,16 @@ msgstr ""
 #: obrisk/templates/base.html:127 obrisk/templates/base.html:277
 #: obrisk/templates/base.html:502 obrisk/templates/base.html:567
 msgid "Articles"
-msgstr ""
+msgstr "文章"
 
 #: obrisk/templates/base.html:137 obrisk/templates/base.html:294
 #: obrisk/templates/base.html:584
 msgid "Chat"
-msgstr ""
+msgstr "讯息"
 
 #: obrisk/templates/base.html:515
 msgid "Signup"
-msgstr ""
+msgstr "注册"
 
 #: obrisk/templates/classifieds/classified_confirm_delete.html:8
 msgid "Delete a classified post"
@@ -788,7 +788,7 @@ msgstr ""
 #: obrisk/templates/classifieds/official_ad_create.html:24
 #: obrisk/templates/connections/add_friends.html:24
 msgid "Submit"
-msgstr ""
+msgstr "确定"
 
 #: obrisk/templates/classifieds/classified_create-old.html:149
 #: obrisk/templates/classifieds/classified_update.html:18
@@ -802,7 +802,7 @@ msgstr ""
 #: obrisk/templates/classifieds/classified_detail.html:91
 #: obrisk/templates/stories/story_detail.html:91
 msgid "CNY"
-msgstr ""
+msgstr "¥"
 
 #: obrisk/templates/classifieds/classified_detail.html:203
 #: obrisk/templates/classifieds/search_results.html:39
@@ -811,7 +811,7 @@ msgstr ""
 #: obrisk/templates/stories/search_results.html:45
 #: obrisk/templates/stories/story_detail.html:159
 msgid "Tags"
-msgstr ""
+msgstr "标签"
 
 #: obrisk/templates/classifieds/classified_detail.html:216
 msgid "Edit this classified"
@@ -824,26 +824,26 @@ msgstr ""
 
 #: obrisk/templates/classifieds/classified_detail.html:220
 msgid "Report this classified"
-msgstr ""
+msgstr "举报此分类"
 
 #: obrisk/templates/classifieds/classified_detail.html:220
 #: obrisk/templates/stories/story_detail.html:176
 msgid "Report"
-msgstr ""
+msgstr "举报"
 
 #: obrisk/templates/classifieds/classified_detail.html:223
 #: obrisk/templates/stories/story_detail.html:179
 msgid "Home"
-msgstr ""
+msgstr "主页"
 
 #: obrisk/templates/classifieds/classified_list.html:34
 #: obrisk/templates/qa/question_list.html:37
 msgid "Popular tags"
-msgstr ""
+msgstr "热门标签"
 
 #: obrisk/templates/classifieds/classified_list_ajax.html:108
 msgid "😃 Welcome"
-msgstr ""
+msgstr "欢迎"
 
 #: obrisk/templates/classifieds/classified_list_ajax.html:109
 msgid "It looks like there are no items near you."
@@ -859,7 +859,7 @@ msgstr ""
 
 #: obrisk/templates/classifieds/classified_report.html:33
 msgid "Submit the report"
-msgstr ""
+msgstr "确定"
 
 #: obrisk/templates/classifieds/classified_update.html:17
 #: obrisk/templates/posts/post_update.html:19
@@ -908,37 +908,37 @@ msgstr ""
 #: obrisk/templates/users/user_list.html:3
 #: obrisk/templates/users/user_list.html:12
 msgid "Contacts"
-msgstr ""
+msgstr "通讯录"
 
 #: obrisk/templates/connections/add_friends.html:3
 msgid "Add connection"
-msgstr ""
+msgstr "加为好友"
 
 #: obrisk/templates/connections/followers.html:38
 #: obrisk/templates/messager/contact_list.html:25
 msgid "Discover"
-msgstr ""
+msgstr "发现"
 
 #: obrisk/templates/connections/following.html:41
 msgid "Keep Connecting"
-msgstr ""
+msgstr "继续加为好友"
 
 #: obrisk/templates/connections/friends.html:25
 #: obrisk/templates/users/user_detail.html:47
 msgid "Following"
-msgstr ""
+msgstr "关注"
 
 #: obrisk/templates/connections/friends.html:30
 msgid "Friend Requests"
-msgstr ""
+msgstr "邀请已收到"
 
 #: obrisk/templates/connections/friends.html:96
 msgid "Discover People"
-msgstr ""
+msgstr "发现"
 
 #: obrisk/templates/connections/friends.html:140
 msgid "Followers"
-msgstr ""
+msgstr " 位关注者"
 
 #: obrisk/templates/connections/search_results.html:44 obrisk/users/apps.py:7
 msgid "Users"
@@ -946,11 +946,11 @@ msgstr ""
 
 #: obrisk/templates/messager/contact_list.html:20
 msgid "Recent Messages"
-msgstr ""
+msgstr "最近的消息"
 
 #: obrisk/templates/messager/contact_list.html:108
 msgid "No contacts"
-msgstr ""
+msgstr "通讯录为空"
 
 #: obrisk/templates/messager/contact_list.html:114
 msgid ""
@@ -960,68 +960,68 @@ msgstr ""
 
 #: obrisk/templates/messager/contact_list.html:136
 msgid "Invite Friends"
-msgstr ""
+msgstr "邀请好友"
 
 #: obrisk/templates/messager/contact_list.html:193
 #: obrisk/templates/messager/message_list.html:156
 #: obrisk/templates/messager/message_list_old.html:106
 msgid "Write a message..."
-msgstr ""
+msgstr "输入讯息"
 
 #: obrisk/templates/messager/message_list.html:109
 #: obrisk/templates/messager/message_list_old.html:66
 msgid "Hello "
-msgstr ""
+msgstr "你好"
 
 #: obrisk/templates/messager/message_list.html:109
 #: obrisk/templates/messager/message_list_old.html:66
 msgid " nice to meet you"
-msgstr ""
+msgstr " 很高兴见到你"
 
 #: obrisk/templates/messager/message_list.html:110
 #: obrisk/templates/messager/message_list_old.html:67
 msgid "I am "
-msgstr ""
+msgstr " 我的名字是"
 
 #: obrisk/templates/messager/message_list.html:110
 #: obrisk/templates/messager/message_list_old.html:67
 msgid ", Let's talk!"
-msgstr ""
+msgstr ", 聊吧"
 
 #: obrisk/templates/notifications/most_recent.html:5
 msgid "Unread notifications"
-msgstr ""
+msgstr "最近通知"
 
 #: obrisk/templates/notifications/most_recent.html:61
 #: obrisk/templates/notifications/notification_dropdown.html:110
 #: obrisk/templates/notifications/notification_list.html:16
 msgid "Mark all as read"
-msgstr ""
+msgstr "标记为已读"
 
 #: obrisk/templates/notifications/most_recent.html:62
 msgid "View All"
-msgstr ""
+msgstr "查看全部"
 
 #: obrisk/templates/notifications/notification_dropdown.html:66
 #: obrisk/templates/notifications/notification_list.html:13
 msgid "Unread notifications for"
-msgstr ""
+msgstr "的未读通知"
 
 #: obrisk/templates/notifications/notification_list.html:42
 msgid "Mark as read"
-msgstr ""
+msgstr "标记为已读"
 
 #: obrisk/templates/pages/home.html:75
 msgid "Sign up now"
-msgstr ""
+msgstr "注册"
 
 #: obrisk/templates/pagination.html:7
 msgid "Previous"
-msgstr ""
+msgstr "以前"
 
 #: obrisk/templates/pagination.html:19
 msgid "Next"
-msgstr ""
+msgstr "下一个"
 
 #: obrisk/templates/posts/draft_list.html:22
 #: obrisk/templates/posts/post_list.html:35
