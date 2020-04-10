@@ -3,22 +3,23 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#: obrisk/users/forms.py:179 obrisk/users/forms.py:198
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2020-04-02 20:44+0800\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"PO-Revision-Date: 2020-04-07 16:22+0806\n"
+"Last-Translator: b'  <admin@admin.com>'\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.9.3\n"
 
 #: config/settings/base.py:43
+#, fuzzy
 msgid "English"
 msgstr ""
 
@@ -32,6 +33,7 @@ msgstr ""
 #: obrisk/templates/classifieds/search_results.html:36
 #: obrisk/templates/search/search_results.html:36
 #: obrisk/templates/stories/search_results.html:36
+#, fuzzy
 msgid "Classifieds"
 msgstr ""
 
@@ -437,7 +439,8 @@ msgstr ""
 #: obrisk/templates/account/email.html:52
 msgid ""
 "You currently do not have any e-mail address set up. You should really add "
-"an e-mail address so you can receive notifications, reset your password, etc."
+"an e-mail address so you can receive notifications, reset your password, "
+"etc."
 msgstr ""
 
 #: obrisk/templates/account/email.html:58
@@ -459,8 +462,7 @@ msgid ""
 "\n"
 "Hello %(user_display)s!\n"
 "\n"
-"First, we want to warmly welcome you!. You're receiving this e-mail because "
-"user %(user_display)s has given your e-mail address to sign-up for Obrisk.\n"
+"First, we want to warmly welcome you!. You're receiving this e-mail because user %(user_display)s has given your e-mail address to sign-up for Obrisk.\n"
 "\n"
 "To confirm this is correct, kindly go to %(activate_url)s\n"
 msgstr ""
@@ -469,9 +471,7 @@ msgstr ""
 msgid ""
 " and simply log-in to the website and you're good to go.\n"
 "\n"
-"Please not use this email to reply back to us. Please contact us via e-mail "
-"address, support@obrisk.com, incase you are facing any problem with signing "
-"up or getting started using the website. \n"
+"Please not use this email to reply back to us. Please contact us via e-mail address, support@obrisk.com, incase you are facing any problem with signing up or getting started using the website. \n"
 "We will reply back within the shortest time possible. \n"
 "\n"
 "Regards,\n"
@@ -489,8 +489,7 @@ msgstr ""
 #, python-format
 msgid ""
 "Please confirm that <a\n"
-"            href=\"mailto:%(email)s\">%(email)s</a> is an e-mail address for "
-"user\n"
+"            href=\"mailto:%(email)s\">%(email)s</a> is an e-mail address for user\n"
 "        %(user_display)s."
 msgstr ""
 
@@ -501,8 +500,7 @@ msgstr ""
 #: obrisk/templates/account/email_confirm.html:30
 #, python-format
 msgid ""
-"This e-mail confirmation link expired or is invalid. Please <a href="
-"\"%(email_url)s\">issue a new\n"
+"This e-mail confirmation link expired or is invalid. Please <a href=\"%(email_url)s\">issue a new\n"
 "            e-mail confirmation request</a>."
 msgstr ""
 
@@ -530,7 +528,8 @@ msgstr ""
 msgid "Sign Up"
 msgstr ""
 
-#: obrisk/templates/account/login.html:8 obrisk/templates/account/login.html:25
+#: obrisk/templates/account/login.html:8
+#: obrisk/templates/account/login.html:25
 #: obrisk/templates/account/phone_ps_reset_confirm.html:9
 msgid "Account Login"
 msgstr ""
@@ -569,8 +568,8 @@ msgstr ""
 #: obrisk/templates/account/messages/email_confirmation_sent.txt:2
 #, python-format
 msgid ""
-"E-mail sent to %(email)s. Please confirm your email address or this a/c will "
-"be terminated."
+"E-mail sent to %(email)s. Please confirm your email address or this a/c will"
+" be terminated."
 msgstr ""
 
 #: obrisk/templates/account/password_change.html:15
@@ -605,8 +604,7 @@ msgstr ""
 #: obrisk/templates/account/password_reset.html:53
 msgid ""
 "If you have any problem, please\n"
-"                        <a href=\"mailto:support@obrisk.com\"> click here </"
-"a> to contact us (support@obrisk.com)\n"
+"                        <a href=\"mailto:support@obrisk.com\"> click here </a> to contact us (support@obrisk.com)\n"
 "                        or add\n"
 "                        WechatID:\n"
 "                        <span class=\"blue-link\"> Obrisk."
@@ -614,16 +612,14 @@ msgstr ""
 
 #: obrisk/templates/account/password_reset_done.html:21
 msgid ""
-"We have sent you an e-mail with the link to reset your password. Please "
-"follow the link in\n"
+"We have sent you an e-mail with the link to reset your password. Please follow the link in\n"
 "            the\n"
 "            email to the reset password page. "
 msgstr ""
 
 #: obrisk/templates/account/password_reset_done.html:24
 msgid ""
-" Kindly note that the link is valid for only 72 hours (3 Day). be sure to "
-"use the link\n"
+" Kindly note that the link is valid for only 72 hours (3 Day). be sure to use the link\n"
 "            before it\n"
 "            expires. "
 msgstr ""
@@ -635,8 +631,7 @@ msgstr ""
 #: obrisk/templates/account/password_reset_from_key.html:39
 msgid ""
 " The password reset link was invalid, possibly because it\n"
-"                                                has already been used. "
-"Please\n"
+"                                                has already been used. Please\n"
 "                                                request a "
 msgstr ""
 
@@ -665,23 +660,19 @@ msgstr ""
 #: obrisk/templates/account/phone_password_reset.html:96
 msgid ""
 "Any problem?\n"
-"                                                <a href=\"mailto:"
-"support@obrisk.com\" class=\"blue-link\"> click here </a>\n"
+"                                                <a href=\"mailto:support@obrisk.com\" class=\"blue-link\"> click here </a>\n"
 "                                                to\n"
 "                                                contact us or\n"
 "                                                add WechatID:\n"
-"                                                <span class=\"blue-link\"> "
-"Obrisk </span>"
+"                                                <span class=\"blue-link\"> Obrisk </span>"
 msgstr ""
 
 #: obrisk/templates/account/phone_ps_reset_confirm.html:78
 msgid ""
 "If you have any problem, please\n"
-"                                                <a href=\"mailto:"
-"support@obrisk.com\"> click here </a> to contact us or\n"
+"                                                <a href=\"mailto:support@obrisk.com\"> click here </a> to contact us or\n"
 "                                                via WechatID:\n"
-"                                                <span style=\"font-weight:"
-"bold; color: #0aeee3\"> Obrisk\n"
+"                                                <span style=\"font-weight:bold; color: #0aeee3\"> Obrisk\n"
 "                                                </span>"
 msgstr ""
 
@@ -710,14 +701,10 @@ msgstr ""
 #: obrisk/templates/account/verification_sent.html:27
 msgid ""
 "We have sent an e-mail to the address you have provided for verification.\n"
-"                            Follow the link provided in the e-mail to "
-"finalize the sign-up process. </p>\n"
-"                        <p>If you do not receive the confirmation e-mail "
-"within a few minutes,\n"
-"                            be sure to check the <strong> spam/junk </"
-"strong> folder for the e-mail. <br>\n"
-"                            Please <a href=\"mailto:support@obrisk.com\"> "
-"click here </a> to contact us, incase you still\n"
+"                            Follow the link provided in the e-mail to finalize the sign-up process. </p>\n"
+"                        <p>If you do not receive the confirmation e-mail within a few minutes,\n"
+"                            be sure to check the <strong> spam/junk </strong> folder for the e-mail. <br>\n"
+"                            Please <a href=\"mailto:support@obrisk.com\"> click here </a> to contact us, incase you still\n"
 "                            have problems\n"
 "                            with signing up.\n"
 "                        </p> "
@@ -744,11 +731,9 @@ msgstr ""
 #: obrisk/templates/account/verified_email_required.html:22
 #, python-format
 msgid ""
-"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
-"mail address by\n"
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-mail address by\n"
 "            clicking here. </a>.\n"
-"        <br> <br>If you have any problem, Click <a href=\"mailto:"
-"support@obrisk.com\"> here </a> to contact us. Thank you!\n"
+"        <br> <br>If you have any problem, Click <a href=\"mailto:support@obrisk.com\"> here </a> to contact us. Thank you!\n"
 "        "
 msgstr ""
 
@@ -1063,8 +1048,8 @@ msgstr ""
 
 #: obrisk/templates/posts/post_list.html:155
 msgid ""
-"There is no published post yet. Do you have any important info, events ,jobs "
-"opportunities e.t.c?! Be the first one to"
+"There is no published post yet. Do you have any important info, events ,jobs"
+" opportunities e.t.c?! Be the first one to"
 msgstr ""
 
 #: obrisk/templates/posts/post_list.html:156
@@ -1242,7 +1227,8 @@ msgstr ""
 msgid "Permanent action. < 16 letters."
 msgstr ""
 
-#: obrisk/users/forms.py:61 obrisk/users/forms.py:216 obrisk/users/models.py:43
+#: obrisk/users/forms.py:61 obrisk/users/forms.py:216
+#: obrisk/users/models.py:43
 msgid "Phone number"
 msgstr ""
 
