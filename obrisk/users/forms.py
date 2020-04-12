@@ -176,7 +176,7 @@ class EmailSignupForm(SignupForm):
 
 
 class CustomLoginForm(LoginForm):
-    password = PasswordField(label=_(""))
+    password = PasswordField(label=(""))
 
     error_messages = {
         "account_inactive": _("This account is currently inactive."),
@@ -195,7 +195,7 @@ class CustomLoginForm(LoginForm):
 
         assert settings.ACCOUNT_AUTHENTICATION_METHOD == "username_email"
         login_widget = forms.TextInput(
-            attrs={"placeholder": _(""), "autofocus": "autofocus",}
+            attrs={"placeholder": (""), "autofocus": "autofocus",}
         )
 
         login_field = forms.CharField(

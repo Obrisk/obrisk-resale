@@ -28,8 +28,6 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
 TIME_ZONE = "Asia/Chongqing"
-# https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = "en-us"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
@@ -38,6 +36,9 @@ USE_I18N = True
 USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
+
+# https://docs.djangoproject.com/en/dev/ref/settings/#language-code
+LANGUAGE_CODE = "en-us"
 
 LANGUAGES = (
     ("en", _("English")),
@@ -48,27 +49,6 @@ LOCALE_PATHS = [
     str(ROOT_DIR.path("locale")),
 ]
 
-# Phrase settings
-PHRASE_ENABLED = True
-PHRASE_PROJECT_ID = env("PHRASE_ID")
-PHRASE_PREFIX = '{{__'
-PHRASE_SUFFIX = '__}}'
-
-# Rosetta settings
-ROSETTA_MESSAGES_PER_PAGE: 20
-ROSETTA_ENABLE_TRANSLATION_SUGGESTIONS: True
-ROSETTA_MESSAGES_SOURCE_LANGUAGE_CODE: "en"
-ROSETTA_MESSAGES_SOURCE_LANGUAGE_NAME: "English"
-ROSETTA_WSGI_AUTO_RELOAD: False
-ROSETTA_UWSGI_AUTO_RELOAD: False
-ROSETTA_REQUIRES_AUTH: True
-ROSETTA_SHOW_AT_ADMIN_PANEL:True
-ROSETTA_EXCLUDED_APPLICATIONS: ()
-AZURE_CLIENT_SECRET : None
-ROSETTA_AUTO_COMPILE: True
-ROSETTA_STORAGE_CLASS = 'rosetta.storage.CacheRosettaStorage'
-
-# DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
@@ -122,8 +102,6 @@ THIRD_PARTY_APPS = [
     "pwa_webpush",
     "django_elasticsearch_dsl",
     "friendship",
-    "rosetta",
-    "phrase",
 ]
 LOCAL_APPS = [
     # Your stuff: custom apps go here
@@ -249,7 +227,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "obrisk.classifieds.context_processors.cached_queries",
+                "obrisk.utils.context_processors.cached_queries",
             ],
         },
     },

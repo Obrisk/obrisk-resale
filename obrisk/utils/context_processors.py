@@ -1,14 +1,5 @@
 from django.conf import settings
-import environ
-import environ
 from django.core.cache import cache
-from django.db.models import Subquery, OuterRef
-from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
-
-from obrisk.classifieds.models import Classified
-from obrisk.messager.models import Conversation, Message
-from obrisk.users.models import User
 
 def cached_queries(request):
     webpush_settings = getattr(settings, 'WEBPUSH_SETTINGS', {})

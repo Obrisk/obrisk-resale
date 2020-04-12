@@ -370,6 +370,10 @@ header.masthead p {
   background-position: top center;
 }
 
+.welcome {
+    margin-top:15%;
+}
+
 .title h2 {
   color: #fff;
   font-size: 44px;

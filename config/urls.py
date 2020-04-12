@@ -29,6 +29,7 @@ sitemaps = {
 urlpatterns = [
     url(r"", include("pwa_webpush.urls")),
     url(r"^$", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(
         r"^download-pwa/$",
         TemplateView.as_view(template_name="pages/download.html"),
