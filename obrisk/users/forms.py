@@ -78,9 +78,9 @@ class PhoneSignupForm(SignupForm):
 
     def __init__(self, *args, **kwargs):
         super(PhoneSignupForm, self).__init__(*args, **kwargs)
-        
+
         self.fields["password1"] = PasswordField(label=_("Password"))
-       
+
         username_field = self.fields['username']
         username_field.max_length = getattr(settings,
             'ACCOUNT_USERNAME_MAX_LENGTH', 16)

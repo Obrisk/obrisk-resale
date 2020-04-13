@@ -115,30 +115,30 @@
 
           <div class="col-lg-4 mb-5">
             <div class="c_box_item">
-              <h4 class="p-0 m-0">Stories posts</h4>
-              <p>Read and share brief informative content</p>
+                <h4 class="p-0 m-0">  {% trans 'Stories posts' %} </h4>
+                <p>{% trans  'Read and share brief informative content' %}</p>
               <a href="{% url 'stories:list' %}" class="read-btn">
-                View Stories
+                  {% trans 'View Stories' %}
               </a>
             </div>
           </div>
 
           <div class="col-lg-4">
             <div class="c_box_item mb-5">
-              <h4 class="p-0 m-0">Secondhand platform</h4>
-              <p>Buy or sell secondhand items closer to your location.</p>
+                <h4 class="p-0 m-0">{% trans 'Secondhand platform' %}</h4>
+              <p>{% trans 'Buy or sell secondhand items closer to your location.' %}</p>
               <a href="{% url 'classifieds:list' %}" class="read-btn">
-                View Classifieds
+                  {% trans 'View Classifieds' %}
               </a>
             </div>
           </div>
 
           <div class="col-lg-4 mb-5">
             <div class="c_box_item">
-              <h4 class="p-0 m-0">Published articles</h4>
-              <p>Read, discuss and share helpful ideas</p>
+                <h4 class="p-0 m-0">{% trans 'Published articles' %}</h4>
+              <p>{% trans 'Read, discuss and share helpful ideas' %}</p>
               <a href="{% url 'posts:list' %}" class="read-btn">
-                View Post
+                  {% trans 'View Post' %}
               </a>
             </div>
           </div>
@@ -153,12 +153,12 @@
     <div class="container">
       <div class="text-secondary text-center text-muted">
         <!-- <a href="{% url 'about' %}"> about </a> -->
-        <a class="text-center text-muted p-2" href="{% url 'about' %}"> About </a>
-        <a class="text-center text-muted p-2" href="{% url 'terms_and_conditions' %}"> Terms and condition</a>
-        <a class="text-center text-muted p-2" href="{% url 'privacy_policy' %}"> Privacy policy </a>
+        <a class="text-center text-muted p-2" href="{% url 'about' %}"> {% trans 'About ' %}</a>
+        <a class="text-center text-muted p-2" href="{% url 'terms_and_conditions' %}"> {% trans 'Terms and condition' %} </a>
+        <a class="text-center text-muted p-2" href="{% url 'privacy_policy' %}"> {% trans 'Privacy policy ' %} </a>
       </div>
 
-      <div class="small text-center text-muted">Copyright &copy; 2020 - Obrisk </div>
+      <div class="small text-center text-muted"> Copyright &copy; 2020 - Obrisk </div>
       <div class="small text-center text-muted"> All rights reserved </div>
       <div class="small text-center text-muted"> <a href="http://www.beian.miit.gov.cn">  浙ICP备20003551号</a>  </div>
     </div>
