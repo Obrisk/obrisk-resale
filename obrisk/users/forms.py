@@ -176,7 +176,7 @@ class EmailSignupForm(SignupForm):
 
 
 class CustomLoginForm(LoginForm):
-    password = PasswordField(label=(""))
+    password = PasswordField(label= (""))
 
     error_messages = {
         "account_inactive": _("This account is currently inactive."),
@@ -199,9 +199,8 @@ class CustomLoginForm(LoginForm):
         )
 
         login_field = forms.CharField(
-            label="Phone or username or email", widget=login_widget
+            label= _("Phone or username or email"), widget=login_widget
         )
-
         self.fields["login"] = login_field
         set_form_field_order(self, ["login", "password", "remember"])
         if settings.SESSION_REMEMBER is not None:
@@ -213,7 +212,7 @@ class CustomLoginForm(LoginForm):
 
 class PhoneRequestPasswordForm(forms.Form):
     phone_number = forms.IntegerField(
-        label=_("Phone number"),
+        label= _("Phone number"),
         required=True,
         widget=forms.TextInput(
             attrs={"type": "tel", "placeholder": _("Phone number you registered with"),}

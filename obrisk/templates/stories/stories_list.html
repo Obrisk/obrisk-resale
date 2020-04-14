@@ -46,7 +46,9 @@
               <li class="is-active">
                 <a>
                   <i data-feather="edit-3"></i>
-                  <span>Publish</span>
+                  <span>
+                      {% trans 'Publish' %}
+                  </span>
                 </a>
               </li>
               <!-- Close X button -->
@@ -78,7 +80,9 @@
                   </p>
                   <div class="control textarea-parent">
                     <p class="counter" style="font-size: .8rem;color: #999;float: right;"> <span class="count">400
-                      </span> Characters</p>
+                      </span> 
+                      {% trans 'Characters' %}
+                    </p>
 
                     <textarea id="publish" name="post" class="textarea publish-textarea" rows="3"
                       placeholder="Share something..." maxlength="400">
@@ -184,7 +188,10 @@
                                 <circle cx="12" cy="10" r="3" /></svg>
                               <div class="media-content">
                                 <h3>Around</h3>
-                                <small>Only people in your city can see this post.</small>
+                                
+                                <small>
+                                    {% trans 'Only people in your city can see this post.' %}
+                                </small>
                               </div>
                             </div>
                           </button>
@@ -215,12 +222,12 @@
 
                         <div class="" style="clear: both;">
                           <p class="text-center">
-                            Notes:
-                            Not more than 8 images &amp; Max size per image is 13MB
+                          {% trans 'Notes:' %}
+                          {% trans 'Not more than 8 images &amp; Max size per image is 13MB' %}
                           </p>
                           <button id="retry-button" type="button"
                             class="button is-solid accent-button is-fullwidth is-hidden">
-                            Retry
+                              {% trans 'Retry' %}
                           </button>
                         </div>
                       </div>
@@ -246,13 +253,13 @@
                 {% if request.user.is_authenticated %}
                 <button id="publish-button" type="button"
                   class="submit-button button is-solid accent-button is-fullwidth is-disabled">
-                  Publish
+                    {% trans 'Publish' %}
                 </button>
                 {% else %}
                 <a href="{% url 'account_login' %}">
                   <button id="login-and-publish-button" type="button"
                     class="button is-solid accent-button is-fullwidth is-disabled">
-                    Login & Post
+                      {% trans 'Login & Post' %}
                   </button> </a>
                 {% endif %}
 

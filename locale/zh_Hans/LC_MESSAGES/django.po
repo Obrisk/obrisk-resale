@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ver120420001\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-12 18:39+0800\n"
+"POT-Creation-Date: 2020-04-13 14:32+0800\n"
 "PO-Revision-Date: 2020-04-12 19:07+0800\n"
 "Last-Translator: Elisha Kingdom <el@obrisk.com>\n"
 "Language-Team: Chinese <translation@jifeng.org>\n"
@@ -16,16 +16,17 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: config/settings/base.py:43
+#: config/settings/base.py:44
 msgid "English"
 msgstr "英语"
 
-#: config/settings/base.py:44
-#| msgid "Simplified Chinese"
+#: config/settings/base.py:45
 msgid " Simplified Chinese"
 msgstr "简体中文"
 
 #: obrisk/classifieds/apps.py:7 obrisk/classifieds/models.py:94
+#: obrisk/templates/base.html:125 obrisk/templates/base.html:275
+#: obrisk/templates/base.html:523 obrisk/templates/base.html:576
 #: obrisk/templates/classifieds/classified_list.html:4
 #: obrisk/templates/classifieds/official_ad_create.html:13
 #: obrisk/templates/classifieds/search_results.html:36
@@ -260,7 +261,7 @@ msgstr ""
 msgid "Your Post has been updated."
 msgstr ""
 
-#: obrisk/qa/apps.py:7 obrisk/templates/base.html:506
+#: obrisk/qa/apps.py:7 obrisk/templates/base.html:530
 msgid "Q&A"
 msgstr ""
 
@@ -320,15 +321,15 @@ msgstr ""
 msgid "Database integrity error."
 msgstr ""
 
-#: obrisk/search/apps.py:7 obrisk/templates/base.html:144
+#: obrisk/search/apps.py:7 obrisk/templates/base.html:146
 #: obrisk/templates/stories/search.html:6
 msgid "Search"
 msgstr ""
 
 #: obrisk/stories/apps.py:7 obrisk/stories/models.py:108
 #: obrisk/stories/models.py:109 obrisk/templates/base.html:121
-#: obrisk/templates/base.html:246 obrisk/templates/base.html:496
-#: obrisk/templates/base.html:536
+#: obrisk/templates/base.html:259 obrisk/templates/base.html:520
+#: obrisk/templates/base.html:560
 #: obrisk/templates/search/search_results.html:39
 #: obrisk/templates/stories/search_results.html:39
 msgid "Stories"
@@ -381,9 +382,9 @@ msgstr ""
 #: obrisk/templates/403_csrf.html:12 obrisk/templates/account/login.html:72
 #: obrisk/templates/account/password_reset_from_key.html:68
 #: obrisk/templates/account/password_reset_from_key_done.html:21
-#: obrisk/templates/account/signup.html:149 obrisk/templates/base.html:512
+#: obrisk/templates/account/signup.html:151 obrisk/templates/base.html:536
 #: obrisk/templates/classifieds/classified_detail.html:194
-#: obrisk/templates/pages/home.html:78
+#: obrisk/templates/pages/home.html:103
 #: obrisk/templates/posts/post_detail.html:228
 msgid "Login"
 msgstr "登录"
@@ -525,7 +526,7 @@ msgstr "<a href=\"%(login_url)s\">登录 </a>"
 #: obrisk/templates/account/email_signup.html:70
 #: obrisk/templates/account/signup.1.html:9
 #: obrisk/templates/account/signup.1.html:19
-#: obrisk/templates/account/signup.html:220
+#: obrisk/templates/account/signup.html:226
 msgid "Sign Up"
 msgstr "注册"
 
@@ -534,12 +535,34 @@ msgstr "注册"
 msgid "Account Login"
 msgstr "登录"
 
+#: obrisk/templates/account/login.html:48
+msgid "Phone number / Username / Email"
+msgstr ""
+
+#: obrisk/templates/account/login.html:59
+#: obrisk/templates/account/signup.html:186 obrisk/users/forms.py:82
+#: obrisk/users/forms.py:150
+msgid "Password"
+msgstr ""
+
 #: obrisk/templates/account/login.html:76
 msgid "Sign up"
 msgstr "注册"
 
 #: obrisk/templates/account/login.html:78
 msgid "Reset Password"
+msgstr ""
+
+#: obrisk/templates/account/login.html:93
+msgid "Login problem?"
+msgstr ""
+
+#: obrisk/templates/account/login.html:95
+msgid "click here "
+msgstr ""
+
+#: obrisk/templates/account/login.html:97
+msgid "to contact us or add WechatID:"
 msgstr ""
 
 #: obrisk/templates/account/logout.html:9
@@ -554,7 +577,7 @@ msgstr "您确定要注销吗？"
 #: obrisk/templates/account/logout.html:19
 #: obrisk/templates/classifieds/classified_create-old.html:150
 #: obrisk/templates/classifieds/classified_create.html:138
-#: obrisk/templates/classifieds/classified_list.html:204
+#: obrisk/templates/classifieds/classified_list.html:224
 #: obrisk/templates/classifieds/classified_update.html:19
 #: obrisk/templates/classifieds/official_ad_create.html:26
 #: obrisk/templates/posts/post_create.html:31
@@ -690,9 +713,53 @@ msgid ""
 "Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
 msgstr ""
 
-#: obrisk/templates/account/signup.html:151
+#: obrisk/templates/account/signup.html:76
+msgid "Phone Number"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:86
+msgid "Verify"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:91
+msgid "Don't include the country code!"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:100
+msgid "Code*"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:138
+msgid "I Agree to"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:140
+msgid "Terms & Conditions"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:142
+msgid "and the regulations of the country residing."
+msgstr ""
+
+#: obrisk/templates/account/signup.html:153
 msgid "Can't signup?"
 msgstr "联系客户支持"
+
+#: obrisk/templates/account/signup.html:158
+msgid "Any problem? add our WechatID:"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:175 obrisk/users/forms.py:49
+msgid "Username"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:199 obrisk/users/models.py:33
+msgid "Province"
+msgstr ""
+
+#: obrisk/templates/account/signup.html:209 obrisk/users/models.py:34
+msgid "City"
+msgstr ""
 
 #: obrisk/templates/account/signup_closed.html:8
 msgid "Sign Up Closed"
@@ -751,17 +818,37 @@ msgid ""
 "        "
 msgstr ""
 
-#: obrisk/templates/base.html:127 obrisk/templates/base.html:277
-#: obrisk/templates/base.html:502 obrisk/templates/base.html:567
+#: obrisk/templates/base.html:129 obrisk/templates/base.html:290
+#: obrisk/templates/base.html:526 obrisk/templates/base.html:591
 msgid "Articles"
 msgstr "文章"
 
-#: obrisk/templates/base.html:137 obrisk/templates/base.html:294
-#: obrisk/templates/base.html:584
+#: obrisk/templates/base.html:139 obrisk/templates/base.html:307
+#: obrisk/templates/base.html:608
 msgid "Chat"
 msgstr "讯息"
 
-#: obrisk/templates/base.html:515
+#: obrisk/templates/base.html:186 obrisk/templates/base.html:446
+msgid "CLOSE"
+msgstr ""
+
+#: obrisk/templates/base.html:203 obrisk/templates/base.html:463
+msgid "My Profile"
+msgstr ""
+
+#: obrisk/templates/base.html:206 obrisk/templates/base.html:466
+msgid "Access your profile."
+msgstr ""
+
+#: obrisk/templates/base.html:224 obrisk/templates/base.html:484
+msgid "Log out"
+msgstr ""
+
+#: obrisk/templates/base.html:227 obrisk/templates/base.html:487
+msgid "Log out from your account."
+msgstr ""
+
+#: obrisk/templates/base.html:539
 msgid "Signup"
 msgstr "注册"
 
@@ -783,7 +870,7 @@ msgstr ""
 
 #: obrisk/templates/classifieds/classified_create-old.html:148
 #: obrisk/templates/classifieds/classified_create.html:127
-#: obrisk/templates/classifieds/classified_list.html:193
+#: obrisk/templates/classifieds/classified_list.html:213
 #: obrisk/templates/classifieds/official_ad_create.html:24
 #: obrisk/templates/connections/add_friends.html:24
 msgid "Submit"
@@ -839,6 +926,65 @@ msgstr "主页"
 #: obrisk/templates/qa/question_list.html:37
 msgid "Popular tags"
 msgstr "热门标签"
+
+#: obrisk/templates/classifieds/classified_list.html:65
+#: obrisk/templates/posts/post_create.html:29
+#: obrisk/templates/qa/question_form.html:18
+msgid "Publish"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:91
+msgid "Title*"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:100
+msgid "Details*"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:110
+msgid "Price*"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:113
+msgid "Numbers only. 0 means FREE"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:133
+msgid "Include your phone no? "
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:144
+msgid "Phone number(optional)"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:154
+msgid "Images*"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:173
+msgid "Upload images"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:178
+#: obrisk/templates/classifieds/classified_list.html:186
+msgid "Add images"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:192
+msgid "Notes:"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:193
+msgid "Can select up to 8 multiple images & Max size per image is 13MB"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:217
+msgid "Login & Post "
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list.html:261
+msgid "Add new item"
+msgstr ""
 
 #: obrisk/templates/classifieds/classified_list_ajax.html:108
 msgid "😃 Welcome"
@@ -1010,17 +1156,67 @@ msgstr "的未读通知"
 msgid "Mark as read"
 msgstr "标记为已读"
 
-#: obrisk/templates/pages/home.html:70
+#: obrisk/templates/pages/home.html:94
 msgid "Hi! Welcome to Obrisk"
 msgstr "基于位置的社交网络"
 
-#: obrisk/templates/pages/home.html:71
+#: obrisk/templates/pages/home.html:95
 msgid "Socialize, Share and Stay Connected..."
 msgstr "社交，分享，保持联系"
 
-#: obrisk/templates/pages/home.html:75
+#: obrisk/templates/pages/home.html:100
 msgid "Sign up now"
 msgstr "注册"
+
+#: obrisk/templates/pages/home.html:118
+msgid "Stories posts"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:119
+msgid "Read and share brief informative content"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:121
+msgid "View Stories"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:128
+msgid "Secondhand platform"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:129
+msgid "Buy or sell secondhand items closer to your location."
+msgstr ""
+
+#: obrisk/templates/pages/home.html:131
+#, fuzzy
+#| msgid "Classifieds"
+msgid "View Classifieds"
+msgstr "二手平台"
+
+#: obrisk/templates/pages/home.html:138
+msgid "Published articles"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:139
+msgid "Read, discuss and share helpful ideas"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:141
+msgid "View Post"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:156
+msgid "About "
+msgstr ""
+
+#: obrisk/templates/pages/home.html:157
+msgid "Terms and condition"
+msgstr ""
+
+#: obrisk/templates/pages/home.html:158
+msgid "Privacy policy "
+msgstr ""
 
 #: obrisk/templates/pagination.html:7
 msgid "Previous"
@@ -1057,11 +1253,6 @@ msgstr ""
 
 #: obrisk/templates/posts/post_create.html:22
 msgid "Upload Cover Image"
-msgstr ""
-
-#: obrisk/templates/posts/post_create.html:29
-#: obrisk/templates/qa/question_form.html:18
-msgid "Publish"
 msgstr ""
 
 #: obrisk/templates/posts/post_list.html:37
@@ -1241,20 +1432,12 @@ msgstr ""
 msgid "Save Profile"
 msgstr ""
 
-#: obrisk/users/forms.py:49
-msgid "Username"
-msgstr ""
-
 #: obrisk/users/forms.py:56
 msgid "Permanent action. < 16 letters."
 msgstr ""
 
-#: obrisk/users/forms.py:61 obrisk/users/forms.py:216 obrisk/users/models.py:43
+#: obrisk/users/forms.py:61 obrisk/users/forms.py:215 obrisk/users/models.py:43
 msgid "Phone number"
-msgstr ""
-
-#: obrisk/users/forms.py:82 obrisk/users/forms.py:150
-msgid "Password"
 msgstr ""
 
 #: obrisk/users/forms.py:93 obrisk/users/forms.py:153
@@ -1281,7 +1464,11 @@ msgstr ""
 msgid "The e-mail address or password you specified are not correct."
 msgstr ""
 
-#: obrisk/users/forms.py:219
+#: obrisk/users/forms.py:202
+msgid "Phone or username or email"
+msgstr ""
+
+#: obrisk/users/forms.py:218
 msgid "Phone number you registered with"
 msgstr ""
 
@@ -1311,14 +1498,6 @@ msgstr ""
 
 #: obrisk/users/models.py:29
 msgid "Snapchat a/c profile name"
-msgstr ""
-
-#: obrisk/users/models.py:33
-msgid "Province"
-msgstr ""
-
-#: obrisk/users/models.py:34
-msgid "City"
 msgstr ""
 
 #: obrisk/users/models.py:35
