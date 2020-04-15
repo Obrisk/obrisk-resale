@@ -33,7 +33,6 @@ msgstr "简体中文"
 #: obrisk/templates/classifieds/search_results.html:36
 #: obrisk/templates/search/search_results.html:36
 #: obrisk/templates/stories/search_results.html:36
-#, fuzzy
 msgid "Classifieds"
 msgstr "二手交易"
 
@@ -1368,7 +1367,6 @@ msgid "Only people in your city can see this post."
 msgstr ""
 
 #: obrisk/templates/stories/stories_list.html:226
-#, fuzzy
 #| msgid "Can select up to 8 multiple images & Max size per image is 13MB"
 msgid "Not more than 8 images &amp; Max size per image is 13MB"
 msgstr "最多可以选择8张多张图像，每张图像的最大大小为13MB"
@@ -1378,7 +1376,6 @@ msgid "Retry"
 msgstr ""
 
 #: obrisk/templates/stories/stories_list.html:262
-#, fuzzy
 #| msgid "Login & Post "
 msgid "Login & Post"
 msgstr "登录并发布"
