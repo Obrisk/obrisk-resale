@@ -45,7 +45,7 @@
                               <div class="form-group col-md-12 mb-0">
                                 <div class="input-group">
                                   <label for="phone_number">
-                                    Phone number / Username / Email
+                                      {% trans 'Phone number / Username / Email' %}
                                   </label>
                                 </div>
                                 {{ form.login }}
@@ -56,7 +56,7 @@
                               <div class="form-group col-md-12 mb-0">
                                 <div class="input-group">
                                   <label for="password">
-                                    Password
+                                      {% trans 'Password' %}
                                   </label>
                                 </div>
                                 {{ form.password }}
@@ -89,8 +89,12 @@
             </div>
           </div>
 
-          <div> <small class="mt-5" id="support"> Login problem?
-              <a class="blue-link" href="mailto:support@obrisk.com"> click here </a> to contact us or add WechatID:
+          <div> <small class="mt-5" id="support"> 
+                  {% trans 'Login problem?' %}
+              <a class="blue-link" href="mailto:support@obrisk.com">
+                  {% trans 'click here ' %}
+              </a> 
+              {% trans 'to contact us or add WechatID:' %}
               <span class="blue-link"> Obrisk. </span> </small> </div>
 
         </div>

@@ -29,6 +29,7 @@ sitemaps = {
 urlpatterns = [
     url(r"", include("pwa_webpush.urls")),
     url(r"^$", TemplateView.as_view(template_name="pages/home.html"), name="home"),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(
         r"^download-pwa/$",
         TemplateView.as_view(template_name="pages/download.html"),
@@ -102,6 +103,7 @@ urlpatterns = [
     url(r"^ws/messages/", include("obrisk.messager.urls", namespace="messager")),
     url(r"^qa/", include("obrisk.qa.urls", namespace="qa")),
     url(r"^search/", include("obrisk.search.urls", namespace="search")),
+    url(r'^obr-translation-with-rosetta/', include('rosetta.urls')),
     url(
         r"^obdev2018-wsguatpotlfwccdi-sentry-error/", trigger_error, name="sentry_debug"
     ),

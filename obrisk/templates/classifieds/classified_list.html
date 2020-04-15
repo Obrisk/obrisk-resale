@@ -61,7 +61,9 @@
                     <li class="is-active">
                       <a>
                         <i data-feather="edit-3"></i>
-                        <span>Publish</span>
+                        <span>
+                            {% trans 'Publish' %}
+                        </span>
                       </a>
                     </li>
                     <!-- Close X button -->
@@ -85,14 +87,18 @@
                   <div class="column">
                     <div class="form-panel">
                       <div class="field">
-                        <label>Title*</label>
+                        <label>
+                            {% trans 'Title*' %}
+                        </label>
                         <div class="control">
                           <input type="text" id="id_title" name="title" maxlength="80" class="input" required
                             placeholder="Enter your item title">
                         </div>
                       </div>
                       <div class="field">
-                        <label>Details*</label>
+                        <label>
+                            {% trans 'Details*' %}
+                        </label>
                         <div class="control">
                           <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required
                             class="textarea" placeholder="Enter your item details"></textarea>
@@ -100,11 +106,15 @@
                       </div>
                       <div class="field d-flex justify-content-between">
                         <div class="">
-                          <label>Price*</label>
-                          <small class="form-text text-muted" id="hint_id_price">Numbers only. 0 means FREE</small>
+                          <label>
+                              {% trans 'Price*' %}
+                          </label>
+                          <small class="form-text text-muted" id="hint_id_price">
+                              {% trans 'Numbers only. 0 means FREE' %}
+                          </small>
                         </div>
                         <div class="control">
-                          CNY<input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
+                         ¥<input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
                             required step="1.00" value="0" placeholder="Enter your item price">
                         </div>
                       </div>
@@ -119,7 +129,9 @@
 
                       {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
                       <div class="field is-flex justify-content-between">
-                        <label> Include your phone no? </label>
+                        <label> 
+                            {% trans 'Include your phone no? ' %}
+                        </label>
                         <label class="f-switch is-accent">
                           <input type="checkbox" checked class="is-switch" name="show_phone" id="id_show_phone">
                           <i></i>
@@ -129,7 +141,7 @@
                       {% else %}
                       <div class="field">
                         <label for="id_phone_number" class="">
-                          Phone number(optional)
+                            {% trans 'Phone number(optional)' %}
                         </label>
                         <input type="tel" name="phone_number" placeholder="Don't enter country code" class="input"
                           id="id_phone_number">
@@ -138,7 +150,9 @@
                     </div>
                     <div class="field">
 
-                      <label>Images*</label>
+                      <label>
+                          {% trans 'Images*' %}
+                      </label>
                       <div class="control">
                         <div id="wrapper" class="mb-4">
                           <div id="container">
@@ -155,22 +169,28 @@
                               </div>
                               <div class="upload-btn d-flex flex-column flex-md-row">
                                 <div class="start-uploader startUploadBtn ml-2 mr-2">
-                                  <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
+                                  <a id="startUpload" href="javascript:void(0);" class="text">
+                                      {% trans 'Upload images' %}
+                                  </a>
                                 </div>
                                 <div class="start-uploader addBtn ml-2 mr-2">
-                                  <a id="addBtn" href="javascript:void(0);" class="text button">Add images</a>
+                                  <a id="addBtn" href="javascript:void(0);" class="text button">
+                                      {% trans 'Add images' %}
+                                  </a>
                                 </div>
                               </div>
                             </div>
                             <div class="m-auto justify-content-center d-flex ">
                               <div id="uploaderPick">
-                                <a id="chooseFile" href="javascript:void(0);" class="text m-auto button">Add images</a>
+                                <a id="chooseFile" href="javascript:void(0);" class="text m-auto button">
+                                    {% trans 'Add images' %}
+                                </a>
                               </div>
                             </div>
                             <div class="" style="clear: both;">
                               <p class="text-center">
-                                Notes:
-                                Can select up to 8 multiple images & Max size per image is 13MB
+                              {% trans 'Notes:' %}
+                              {% trans 'Can select up to 8 multiple images & Max size per image is 13MB' %}
                               </p>
                             </div>
                           </div>
@@ -194,7 +214,7 @@
                   {% else %}
                       <button id="create-btn" type="button" onclick="window.location.href='/auth/login/'"
                         class="button is-solid accent-button raised"> 
-                        Login & Post 
+                          {% trans 'Login & Post ' %}
                      </button>
                   {% endif %}
 
@@ -237,7 +257,9 @@
             <!-- Write Classified Widget -->
 
             <a class="button is-solid accent-button raised align-self-center" id="addNewClassified" href="#"
-              title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i> Add new item</a>
+              title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i> 
+              {% trans 'Add new item' %}
+            </a>
 
           </div>
           <div id="classifieds" class="p-0 row justify-content-center justify-content-lg-start">
@@ -266,8 +288,6 @@
     </div>
   </div>
 </div>
-
-
 
 
 {% endblock content %}
@@ -301,7 +321,6 @@
       url: location.host + url,
     })
   }
-
 
 </script>
 

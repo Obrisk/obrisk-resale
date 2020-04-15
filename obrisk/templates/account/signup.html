@@ -73,7 +73,7 @@
 												<div class=" mb-0">
 													<div class="input-group">
 														<label for="phone_number">
-															Phone Number
+                                                            {% trans 'Phone Number' %}
 														</label>
 													</div>
 													{{ form.phone_number }}
@@ -83,20 +83,22 @@
 													<button
 														class="button is-solid primary-button raised is-rounded is-fullwidth"
 														id="send-code" type="button">
-														Verify</button>
+                                                        {% trans 'Verify' %}
+                                                    </button>
 												</div>
 
-												<small class="text-muted phone_label" id="phone_label"> Don't include
-													the
-													country
-													code!</small>
+												<small class="text-muted phone_label" id="phone_label"> 
+                                                    {% trans "Don't include the country code!" %}
+                                                </small>
 
 												<div id="code-notice" style="font-weight:bold;"></div>
 
 												<div class="d-none" id="code">
 													<div class="form-group ">
 														<div class="input-group">
-															<label for="code"> Code* </label>
+															<label for="code">
+                                                                {% trans 'Code*' %}
+                                                            </label>
 														</div>
 														<div class="d-flex">
 															<input class="col-10" maxlength="6" minlength="6" type="tel"
@@ -133,11 +135,11 @@
 												<input type="checkbox" name="terms" id="terms"
 													onchange="activateButton(this)">
 												<div class="mt-2">
-													I Agree to <a href="{% url 'terms_and_conditions' %}">Terms &
-														Conditions
-													</a> and the
-													regulations of the country residing.</a>
-
+                                                    {% trans 'I Agree to' %}
+                                                    <a href="{% url 'terms_and_conditions' %}">
+                                                        {% trans 'Terms & Conditions' %}
+													</a> 
+                                                    {% trans 'and the regulations of the country residing.' %}</a>
 													<br />
 													<br />
 													<br />
@@ -152,8 +154,8 @@
 													</div>
 
 													<br />
-													<div> <small class="mt-5" id="support"> Any problem?
-															add our WechatID:
+													<div> <small class="mt-5" id="support"> 
+                                                            {% trans 'Any problem? add our WechatID:' %}
 															<span class="blue-link"> Obrisk. </span> </small> </div>
 
 													{% if redirect_field_value %}
@@ -170,7 +172,7 @@
 													<div class="form-group col-md-12 mb-0" id="username">
 														<div class="input-group">
 															<label for="username">
-																Username
+                                                                {% trans 'Username' %}
 															</label>
 														</div>
 														{{ form.username }}
@@ -181,7 +183,7 @@
 													<div class="form-group col-md-12 mb-0">
 														<div class="input-group">
 															<label for="password1">
-																Password
+                                                                {% trans 'Password' %}
 															</label>
 														</div>
 														{{ form.password1 }}
@@ -193,7 +195,9 @@
 												</div>
 												<div class="input-group mb-3 mt-4">
 													<div class="input-group">
-														<label class="" for="province">Province</label>
+														<label class="" for="province">
+                                                            {% trans 'Province' %}
+                                                        </label>
 													</div>
 													<select class="custom-select" id="province" name="province"
 														autocomplete="on"></select>
@@ -201,7 +205,9 @@
 
 												<div class="input-group mb-3">
 													<div class="input-group">
-														<label class="" for="city">City</label>
+														<label class="" for="city">
+                                                            {% trans 'City' %}
+                                                        </label>
 													</div>
 													<select class="custom-select" id="city" name="city"
 														autocomplete="on">
@@ -219,25 +225,19 @@
 													class="button is-rounded is-solid accent-button raised is-fullwidth"
 													data-step="step-dot-4">{% trans 'Sign Up' %}</a>
 											</div>
-
 										</div>
-
-
-
 									</form>
-
 
 								</div>
 							</div>
-
 						</div>
 					</div>
-
 				</div>
 			</div>
 		</div>
 	</div>
 </div>
+
 <script type="text/javascript">
 	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 	var current_url = "{{ request.path }}";

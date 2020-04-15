@@ -2,6 +2,8 @@
 Base settings to build other settings files upon.
 """
 import environ
+from django.utils.translation import gettext_lazy as _
+
 
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path("obrisk")
@@ -26,8 +28,6 @@ DEBUG = env.bool("DJANGO_DEBUG", False)
 # though not all of them may be available with every OS.
 # In Windows, this must be set to your system time zone.
 TIME_ZONE = "Asia/Chongqing"
-# https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = "en-us"
 # https://docs.djangoproject.com/en/dev/ref/settings/#site-id
 SITE_ID = 1
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-i18n
@@ -37,18 +37,22 @@ USE_L10N = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#use-tz
 USE_TZ = True
 
+# https://docs.djangoproject.com/en/dev/ref/settings/#language-code
+LANGUAGE_CODE = "en-us"
+
 LANGUAGES = (
-    ("en", "English"),
-    ("sw", "Swahili"),
+    ("en", _("English")),
+    ("zh-hans", _(" Simplified Chinese")),
 )
 
 LOCALE_PATHS = [
     str(ROOT_DIR.path("locale")),
 ]
 
+
 # DATABASES
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#databases
+# http://docs.djangoproject.com/en/dev/ref/settings/#databases
 DATABASES = {
     "default": env.db("DATABASE_URL"),
 }
@@ -225,7 +229,7 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "obrisk.classifieds.context_processors.cached_queries",
+                "obrisk.utils.context_processors.cached_queries",
             ],
         },
     },
@@ -433,7 +437,7 @@ CHANNEL_LAYERS = {
 
 CELERY_BROKER_URL = 'redis://localhost:6379'
 
-CELERY_TIMEZONE = "Asia/Chongqing"
+CELERY_TIMEZONE = "Asia/Shanghai"
 # Let's make things happen
 CELERY_BEAT_SCHEDULE = {
     "classified-tags-update-24-hours": {

@@ -121,7 +121,9 @@
                 href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
             <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'classifieds' %} is-active {% endif %} "
-                href="{% url 'classifieds:list' %}">Classifieds</a></li>
+                href="{% url 'classifieds:list' %}">
+                    {% trans 'Classifieds' %}
+                </a></li>
             <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
                 href="{% url 'posts:list' %}">{% trans 'Articles' %} <span class="sr-only">(current)</span></a></li>
@@ -180,7 +182,9 @@
                   <div class="inner">
                     <div class="nav-drop-header">
                       <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                      <a id="close">❌ CLOSE</a>
+                      <a id="close">❌ 
+                          {% trans 'CLOSE' %}
+                      </a>
                     </div>
                     <div class="nav-drop-body account-items">
 
@@ -195,8 +199,12 @@
                               <circle cx="12" cy="7" r="4" /></svg>
                           </div>
                           <div class="media-content">
-                            <h3>My Profile</h3>
-                            <small>Access your profile.</small>
+                            <h3>
+                                {% trans 'My Profile' %}
+                            </h3>
+                            <small>
+                                {% trans 'Access your profile.' %}
+                            </small>
                           </div>
                         </div>
                       </a>
@@ -212,8 +220,12 @@
                             </svg>
                           </div>
                           <div class="media-content">
-                            <h3>Log out</h3>
-                            <small>Log out from your account.</small>
+                            <h3>
+                                {% trans 'Log out' %}
+                            </h3>
+                            <small>
+                                {% trans 'Log out from your account.' %}
+                            </small>
                           </div>
                         </div>
                       </a>
@@ -230,6 +242,7 @@
         </div>
       </div>
     </nav>
+
     <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop fixed-bottom has-shadow w-100  p-0">
       <div class="tabs is-toggle is-fullwidth w-100">
         <ul>
@@ -259,7 +272,7 @@
                 </svg>
               </span>
               <span class="nav-label is-size-7	">
-                Classifieds
+                  {% trans 'Classifieds' %}
               </span>
             </a>
           </li>
@@ -298,6 +311,7 @@
         </ul>
       </div>
     </nav>
+
     <nav id="navbarTop" class="navbar mobile-navbar is-hidden-desktop is-fixed-top has-shadow w-100 p-0">
       <div class="tabs overflow-visible is-toggle is-fullwidth w-100 ml-2 mr-2">
         <ul class="justify-content-between">
@@ -428,7 +442,9 @@
                 <div class="inner">
                   <div class="nav-drop-header">
                     <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                    <a id="close">❌ CLOSE</a>
+                    <a id="close">❌ 
+                        {% trans 'CLOSE' %}
+                    </a>
                   </div>
                   <div class="nav-drop-body account-items">
 
@@ -443,8 +459,12 @@
                             <circle cx="12" cy="7" r="4" /></svg>
                         </div>
                         <div class="media-content">
-                          <h3>My Profile</h3>
-                          <small>Access your profile.</small>
+                            <h3>
+                                {% trans 'My Profile' %}
+                            </h3>
+                            <small>
+                                {% trans 'Access your profile.' %}
+                            </small>
                         </div>
                       </div>
                     </a>
@@ -460,8 +480,12 @@
                           </svg>
                         </div>
                         <div class="media-content">
-                          <h3>Log out</h3>
-                          <small>Log out from your account.</small>
+                            <h3>
+                                {% trans 'Log out' %}
+                            </h3>
+                            <small>
+                                {% trans 'Log out from your account.' %}
+                            </small>
                         </div>
                       </div>
                     </a>
@@ -496,7 +520,7 @@
                 href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
             <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'classifieds' %} is-active {% endif %} "
-                href="{% url 'classifieds:list' %}">Classifieds</a></li>
+                href="{% url 'classifieds:list' %}">{% trans 'Classifieds' %}</a></li>
             <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
                 class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
                 href="{% url 'posts:list' %}">{% trans 'Articles' %} <span class="sr-only">(current)</span></a></li>
@@ -549,7 +573,7 @@
                 </svg>
               </span>
               <span class="nav-label is-size-7	">
-                Classifieds
+                {% trans 'Classifieds' %}
               </span>
             </a>
           </li>

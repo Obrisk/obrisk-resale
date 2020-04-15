@@ -78,9 +78,9 @@ class PhoneSignupForm(SignupForm):
 
     def __init__(self, *args, **kwargs):
         super(PhoneSignupForm, self).__init__(*args, **kwargs)
-        
+
         self.fields["password1"] = PasswordField(label=_("Password"))
-       
+
         username_field = self.fields['username']
         username_field.max_length = getattr(settings,
             'ACCOUNT_USERNAME_MAX_LENGTH', 16)
@@ -176,7 +176,7 @@ class EmailSignupForm(SignupForm):
 
 
 class CustomLoginForm(LoginForm):
-    password = PasswordField(label=_(""))
+    password = PasswordField(label=(""))
 
     error_messages = {
         "account_inactive": _("This account is currently inactive."),
@@ -195,13 +195,12 @@ class CustomLoginForm(LoginForm):
 
         assert settings.ACCOUNT_AUTHENTICATION_METHOD == "username_email"
         login_widget = forms.TextInput(
-            attrs={"placeholder": _(""), "autofocus": "autofocus",}
+            attrs={"placeholder": (""), "autofocus": "autofocus", }
         )
 
         login_field = forms.CharField(
-            label="Phone or username or email", widget=login_widget
+            label=_("Phone or username or email"), widget=login_widget
         )
-
         self.fields["login"] = login_field
         set_form_field_order(self, ["login", "password", "remember"])
         if settings.SESSION_REMEMBER is not None:
