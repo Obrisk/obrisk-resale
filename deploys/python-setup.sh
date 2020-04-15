@@ -3,6 +3,10 @@
 source venv_obrisk/bin/activate
 pip install -r requirements/production.txt
 
+cd ./locale
+python /home/ubuntu/obdev2018/manage.py compilemessages
+cd ..
+
 cd ./frontend
 /home/ubuntu/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
 cd ..
