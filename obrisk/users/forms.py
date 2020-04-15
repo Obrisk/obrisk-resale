@@ -176,7 +176,7 @@ class EmailSignupForm(SignupForm):
 
 
 class CustomLoginForm(LoginForm):
-    password = PasswordField(label= (""))
+    password = PasswordField(label=(""))
 
     error_messages = {
         "account_inactive": _("This account is currently inactive."),
@@ -195,11 +195,11 @@ class CustomLoginForm(LoginForm):
 
         assert settings.ACCOUNT_AUTHENTICATION_METHOD == "username_email"
         login_widget = forms.TextInput(
-            attrs={"placeholder": (""), "autofocus": "autofocus",}
+            attrs={"placeholder": (""), "autofocus": "autofocus", }
         )
 
         login_field = forms.CharField(
-            label= _("Phone or username or email"), widget=login_widget
+            label=_("Phone or username or email"), widget=login_widget
         )
         self.fields["login"] = login_field
         set_form_field_order(self, ["login", "password", "remember"])
@@ -212,7 +212,7 @@ class CustomLoginForm(LoginForm):
 
 class PhoneRequestPasswordForm(forms.Form):
     phone_number = forms.IntegerField(
-        label= _("Phone number"),
+        label=_("Phone number"),
         required=True,
         widget=forms.TextInput(
             attrs={"type": "tel", "placeholder": _("Phone number you registered with"),}
