@@ -111,7 +111,9 @@
                           </path>
                           <circle cx="12" cy="13" r="4"></circle>
                         </svg>
-                        <span>Image</span>
+                        <span>
+                            {% trans 'Image' %}
+                        </span>
                       </div>
                       <div id="addVideo" class="compose-option mb-2" style="background:#fff;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -119,7 +121,9 @@
                           class="feather feather-video">
                           <polygon points="23 7 16 12 23 17 23 7" />
                           <rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></svg>
-                        <span>Video</span>
+                        <span>
+                            {% trans 'Video' %}
+                        </span>
                       </div>
                     </div>
                     <!-- Dropdown menu -->
@@ -136,7 +140,9 @@
                               d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
                             </path>
                           </svg>
-                          <span>Public</span>
+                          <span>
+                              {% trans 'Public' %}
+                          </span>
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-chevron-down caret">
@@ -158,8 +164,12 @@
                                 </path>
                               </svg>
                               <div class="media-content">
-                                <h3>Public</h3>
-                                <small>Anyone can see this post.</small>
+                                <h3>
+                                    {% trans 'Public' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Anyone can see this post.' %}
+                                </small>
                               </div>
                             </div>
                           </button>
@@ -174,8 +184,12 @@
                                 <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
                               </svg>
                               <div class="media-content">
-                                <h3>Connects</h3>
-                                <small>Only connects can see this post</small>
+                                <h3>
+                                    {% trans 'Connects' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Only connects can see this post' %}
+                                </small>
                               </div>
                             </div>
                           </button>
@@ -187,7 +201,9 @@
                                 <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
                                 <circle cx="12" cy="10" r="3" /></svg>
                               <div class="media-content">
-                                <h3>Around</h3>
+                                <h3>
+                                    {% trans 'Around' %}
+                                </h3>
                                 
                                 <small>
                                     {% trans 'Only people in your city can see this post.' %}
@@ -216,7 +232,9 @@
                             </div>
                           </div>
 
-                          <a id="startUpload" href="javascript:void(0);" class="is-hidden">Upload images</a>
+                          <a id="startUpload" href="javascript:void(0);" class="is-hidden">
+                              {% trans 'Upload images' %}
+                          </a>
 
                         </div>
 
