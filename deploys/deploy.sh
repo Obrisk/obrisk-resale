@@ -25,7 +25,7 @@ sudo service codedeploy-agent status
 echo 'alias python="python3.6"' >> ~/.bashrc
 source ~/.bashrc
 
-sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel nginx curl npm -y
+sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-wheel gettext nginx curl npm -y
 
 sudo -H pip3 install --upgrade pip wheel setuptools
 
