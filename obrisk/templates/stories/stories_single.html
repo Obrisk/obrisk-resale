@@ -62,8 +62,10 @@
       {% if stories.video %}
       <div class="post-media grid-1">
 
-        <video id="vid-{{ stories.uuid_id }}" class="js-player" width="640px" height="267px" controls preload="meta"
-          crossorigin playsinline data-plyr-config="{ 'title': 'Example Title' }"">
+        <video id="vid-{{ stories.uuid_id }}" class="js-player" width="640px" height="267px"
+        poster="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.video}}?x-oss-process=video/snapshot,t_5000,f_jpg,w_800,h_600,m_fast" 
+          controls preload="meta"
+          crossorigin playsinline data-plyr-config="{ 'title': 'Obrisk stories videos' }"">
           <source src=" https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{stories.video}}" type="video/mp4">
           Your browser doesn' t support HTML5 video tag. </video>
 
