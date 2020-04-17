@@ -28,6 +28,20 @@
         <div class="column is-3 is-hidden-mobile is-hidden-tablet-only is-hidden-desktop-only"
           style="height: 500px;position: sticky;top: 0px;">
           <!-- Sidebar Widgets Column -->
+
+
+          <div class="d-flex flex-end mb-4" style="justify-content: flex-end; position: absolute;top:-40px;right: 0px;">
+
+
+            <!-- Write Classified Widget -->
+
+            <a class="button is-solid accent-button raised align-self-center" id="addNewItem" href="#"
+              title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i> 
+              {% trans 'Add new item' %}
+            </a>
+
+          </div>
+
           <!-- Cloud Tag Widget -->
           <div class="card is-weather-card position-fixed" style="width: 300px;">
             <div class="card-heading">
@@ -220,8 +234,8 @@
 
                   <span type="button"
                     class="ml-4 button is-solid dark-grey-button raised">     
-                        <li class="close-wrap d-none"> 
-                            <span class="close-publish"> {% trans 'Cancel' %} </span> </li>
+                        <span class="close-wrap d-none"> 
+                            <span class="close-publish"> {% trans 'Cancel' %} </span> </span>
                   </span>
 
                 </div>
@@ -235,33 +249,7 @@
           </div>
 
 
-          <div class="d-flex flex-end mb-4" style="justify-content: flex-end; position: absolute;top:-40px;right: 0px;">
 
-            <!-- <div class="justify-content-center mt-5 mr-0">
-            <div class="justify-content-end ml-auto d-flex flex-row">
-            <form class="form-inline navbar-left" role="search" action="/classifieds/classifieds-search-results/">
-              <div class="input-group">
-                <input name="query" type="search" id="searchInput" class="form-control" aria-label="Search">
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-                </div>
-              </div>
-            </form>
-            </div>
-        
-            <div class="d-flex justify-content-center h-100">
-        
-            </div> -->
-
-
-            <!-- Write Classified Widget -->
-
-            <a class="button is-solid accent-button raised align-self-center" id="addNewClassified" href="#"
-              title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i> 
-              {% trans 'Add new item' %}
-            </a>
-
-          </div>
           <div id="classifieds" class="p-0 row justify-content-center justify-content-lg-start">
             {% include "classifieds/classified_list_ajax.html" %}
 

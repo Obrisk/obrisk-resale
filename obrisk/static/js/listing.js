@@ -68,7 +68,7 @@ $(".close-publish").click(function(e) {
   $(".all-stories ").removeClass("block-scroll");
 });
 
-$("#addNewClassified").click(function(e) {
+$("#addNewItem").click(function(e) {
   e.preventDefault();
   $(".app-overlay").addClass("is-active");
   $(".close-wrap").removeClass("d-none");
