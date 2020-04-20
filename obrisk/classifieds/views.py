@@ -97,19 +97,20 @@ def classified_list(request, tag_slug=None):
         # If page is not an integer deliver the first page
         classifieds = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():            
+        if request.is_ajax():
             # If the request is AJAX and the page is out of range
             # return an empty page            
             return HttpResponse('')
         # If page is out of range deliver last page of results
-        classifieds = paginator.page(paginator.num_pages)     
-        
+        classifieds = paginator.page(paginator.num_pages)
+
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
 
         tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
-        classifieds = Classified.objects.get_active().filter(tags__in=[tag]).annotate (
+        classifieds = Classified.objects.get_active().filter(
+                tags__in=[tag]).annotate (
             image_thumb = Subquery (
                 ClassifiedImages.objects.filter(
                     classified=OuterRef('pk'),
@@ -118,15 +119,16 @@ def classified_list(request, tag_slug=None):
                 )[:1]
             )
         ).order_by('-timestamp')
-    
-    if request.is_ajax():        
+
+    if request.is_ajax():
        return render(request,'classifieds/classified_list_ajax.html',
                     {'page': page, 'popular_tags': popular_tags,
-                    'classifieds': classifieds, 'base_active': 'classifieds'})   
-    
-    return render(request, 'classifieds/classified_list.html', 
-                {'page': page, 'popular_tags': popular_tags,
-                'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
+                    'classifieds': classifieds, 'base_active': 'classifieds'})
+
+    return render(request, 'classifieds/classified_list.html',
+            {'page': page, 'popular_tags': popular_tags,
+            'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
+
 
 # class ExpiredListView(ClassifiedsListView):
 #     """Overriding the original implementation to call the expired classifieds

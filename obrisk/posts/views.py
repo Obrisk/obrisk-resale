@@ -60,6 +60,10 @@ class CreatePostView(LoginRequiredMixin, CreateView):
         super().__init__(**kwargs)
 
     def form_valid(self, form):
+        print(form.cleaned_data['status'])
+        if self.request.user.is_official is False and form.cleaned_data['status'] is 'P':
+            print ('mafan')
+
         image = form.cleaned_data['image']
 
         if (image is None or (image.startswith(
@@ -114,7 +118,6 @@ class CreatePostView(LoginRequiredMixin, CreateView):
             return reverse('posts:list')
         else:
             return self.object.get_absolute_url()
-            #return reverse('posts:post', kwargs={"slug":request.})
 
 
 class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
