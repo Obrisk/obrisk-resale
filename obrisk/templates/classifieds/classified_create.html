@@ -3,8 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block head %}
-<link rel="stylesheet" href="/static/css/uploader.css" />
-<link rel="stylesheet" href="/static/css/classified-create.css" />
+<link href="{% static 'css/classified-create.css' %}" rel="stylesheet"/>
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
 {% endblock head %}
 
@@ -14,134 +13,152 @@
     <strong><span id="data-errors"> </span></strong>
   </div>
 
-  <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
-    id="classified-form" method="post" role="form">
-    {% csrf_token %}
+    <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
+          id="classified-form" method="post" role="form">
+          {% csrf_token %}
 
-    <div class="column is-8 ">
-      <div class="form-panel">
-        <div class="field">
-          <label>Title*</label>
-          <div class="control">
-            <input type="text" id="id_title" name="title" maxlength="80" class="input" required
-              placeholder="Enter your item title">
-          </div>
-        </div>
-        <div class="field">
-          <label>Details*</label>
-          <div class="control">
-            <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required class="textarea"
-              placeholder="Enter your item details"></textarea>
-          </div>
-        </div>
-        <div class="field d-flex justify-content-between">
-          <div class="">
-            <label>Price*</label>
-            <small class="form-text text-muted" id="hint_id_price">Numbers only. 0 means FREE</small>
-          </div>
-          <div class="control">
-           CNY <input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price" required
-              step="1.00" value="0" placeholder="Enter your item price">
-          </div>
-        </div>
-
-
-        <div class="hidden-fields">
-          <input type="hidden" id="id_images" name="images" maxlength="3000" class="input" required>
-          <input type="hidden" id="id_img_errors" name="img_errors" maxlength="2000" class="input">
-          <input type="hidden" id="id_edited" name="edited" class="input">
-          <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
-        </div>
-
-        {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
-        <div class="field is-flex justify-content-between">
-          <label> Include your phone no? </label>
-          <label class="f-switch is-accent">
-            <input type="checkbox" checked class="is-switch" name="show_phone" id="id_show_phone">
-            <i></i>
-          </label>
-        </div>
-
-        {% else %}
-        <div class="field">
-          <label for="id_phone_number" class="">
-            Phone number(optional)
-          </label>
-          <input type="tel" name="phone_number" placeholder="Don't enter country code" class="input"
-            id="id_phone_number">
-        </div>
-        {% endif %}
-      </div>
-      <div class="field">
-
-        <label>Images*</label>
-        <div class="control">
-          <div id="wrapper" class="mb-4">
-            <div id="container">
-              <div id="uploader">
-                <div class="queueList">
-                  <ul class="filelist"></ul>
+          <div class="column">
+            <div class="form-panel">
+              <div class="field">
+                <label>
+                    {% trans 'Title*' %}
+                </label>
+                <div class="control">
+                  <input type="text" id="id_title" name="title" maxlength="80" class="input" required
+                    placeholder="Enter your item title">
                 </div>
               </div>
-              <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
-                <div class="total-progress">
-                  <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
-                    aria-valuemin="0" aria-valuemax="100">
-                  </div>
-                </div>
-                <div class="upload-btn d-flex flex-column flex-md-row">
-                  <div class="start-uploader startUploadBtn ml-2 mr-2">
-                    <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
-                  </div>
-                  <div class="start-uploader addBtn ml-2 mr-2">
-                    <a id="addBtn" href="javascript:void(0);" class="text button">Add images</a>
-                  </div>
+              <div class="field">
+                <label>
+                    {% trans 'Details*' %}
+                </label>
+                <div class="control">
+                  <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required
+                    class="textarea" placeholder="Provide enough details"></textarea>
                 </div>
               </div>
-              <div class="m-auto justify-content-center d-flex ">
-                <div id="uploaderPick">
-                  <a id="chooseFile" href="javascript:void(0);" class="text m-auto button">Add images</a>
+              <div class="field d-flex justify-content-between">
+                <div class="">
+                  <label>
+                      {% trans 'Price*' %}
+                  </label>
+                  <small class="form-text text-muted" id="hint_id_price">
+                      {% trans '0 for GIVEAWAY' %} </small>
+                </div>
+                <div class="control">
+                 RMB<input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
+                    required step="1.00" value="0" placeholder="Item price">
                 </div>
               </div>
-              <div class="" style="clear: both;">
-                <p class="text-center">
-                  Notes:
-                  Can select up to 8 multiple images & Max size per image is 13MB
-                </p>
+
+
+              <div class="hidden-fields">
+                <input type="hidden" id="id_images" name="images" maxlength="3000" class="input" required>
+                <input type="hidden" id="id_img_errors" name="img_errors" maxlength="2000" class="input">
+                <input type="hidden" id="id_edited" name="edited" class="input">
+                <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
+              </div>
+
+              {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
+              <div class="field is-flex justify-content-between">
+                <label> 
+                    {% trans 'Include your phone no? ' %}
+                </label>
+                <label class="f-switch is-accent">
+                  <input type="checkbox" checked class="is-switch" name="show_phone" id="id_show_phone">
+                  <i></i>
+                </label>
+              </div>
+
+              {% else %}
+              <div class="field">
+                <label for="id_phone_number" class="">
+                    {% trans 'Phone number(optional)' %}
+                </label>
+                <input type="tel" name="phone_number" placeholder="Don't enter country code" class="input"
+                  id="id_phone_number">
+              </div>
+              {% endif %}
+            </div>
+
+            <div class="field mt-3">
+              <label>
+                  {% trans 'Images*' %}
+              </label>
+              <div class="control">
+                <div id="wrapper" class="mb-4">
+                  <div id="container">
+                    <div id="uploader">
+                      <div class="queueList">
+                        <ul class="filelist"></ul>
+                      </div>
+                    </div>
+                    <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
+                      <div class="total-progress">
+                        <div id="totalProgressBar" class="total-progress-bar" role="progressbar"
+                          aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+                        </div>
+                      </div>
+                      <div class="upload-btn d-flex flex-column flex-md-row">
+                        <div class="start-uploader startUploadBtn ml-2 mr-2">
+                          <a id="startUpload" href="javascript:void(0);" class="text">
+                              {% trans 'Upload images' %}
+                          </a>
+                        </div>
+                        <div class="start-uploader addBtn ml-2 mr-2">
+                          <a id="addBtn" href="javascript:void(0);" class="text button">
+                              {% trans 'Add images' %}
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="m-auto justify-content-center d-flex ">
+                      <div id="uploaderPick">
+                        <a id="chooseFile" href="javascript:void(0);" class="text m-auto button">
+                            {% trans 'Add images' %}
+                        </a>
+                      </div>
+                    </div>
+                    <div class="" style="clear: both;">
+                      <p class="text-center">
+                      {% trans 'Notes:' %}
+                      {% trans 'Can select up to 8 multiple images & Max size per image is 13MB' %}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="container bs-docs-container">
+                  <form id="form">
+                    <input id="image-file" type="file" style="display:none;" multiple="multiple"
+                      accept="image/*" />
+                  </form>
+                </div>
               </div>
             </div>
           </div>
 
-          <div class="container bs-docs-container">
-            <form id="form">
-              <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
-            </form>
-          </div>
-        </div>
-      </div>
-    </div>
-
         <div class="buttons">
-        {% if request.user.is_authenticated %}
-          <button id="create-btn" type="button"
-            class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
-        {% else %}
-          <button id="create-btn" type="button" onclick="window.location.href='/auth/login/'"
-            class="button is-solid accent-button raised"> 
-            Login & Post 
-         </button>
- 
-         {% endif %}
+          {% if request.user.is_authenticated %}
+              <button id="create-btn" type="button"
+                class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
+          {% else %}
+              <button id="create-btn" type="button" onclick="window.location.href='/auth/login/'"
+                class="button is-solid accent-button raised"> 
+                  {% trans 'Login & Post ' %}
+             </button>
+          {% endif %}
 
-        <button type="button"
-        class="ml-3 button is-solid dark-grey-button raised">     
-                <span class="close-publish"> {% trans 'Cncl' %} </span> 
+        <button type="button" class="ml-4 button is-solid dark-grey-button raised"
+            onclick="javascript:history.back()"> 
+            {% trans 'Cancel' %}
         </button>
 
-     </div>
-  </form>
+        </div>
+        </form>
 
-  {{ form.media }}
+        {{ form.media }}
+
 </div>
 
 <div id="error-modal" class="modal fade">

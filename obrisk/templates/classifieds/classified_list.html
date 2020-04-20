@@ -12,12 +12,10 @@
 <title>Obrisk Classifieds </title>
 {% endblock head %}
 
-
-
 {% block content %}
 <div class="app-overlay"></div>
 
-<div class="view-wrapper" style="padding-top: 75px;">
+<div class="view-wrapper">
   <!-- Container -->
   <div id="main-feed" class="container">
     <div id="" class="view-wrap true-dom">
@@ -29,21 +27,18 @@
           style="height: 500px;position: sticky;top: 0px;">
           <!-- Sidebar Widgets Column -->
 
-
-          <div class="d-flex flex-end mb-4" style="justify-content: flex-end; position: absolute;top:-40px;right: 0px;">
-
-
+          <div class="position-fixed">
             <!-- Write Classified Widget -->
-
-            <a class="button is-solid accent-button raised align-self-center" id="addNewItem" href="#"
+          <div class="d-flex mb-3">
+            <a class="button is-solid accent-button raised align-self-center" id="addNewClassified" href="#"
               title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i> 
               {% trans 'Add new item' %}
             </a>
 
-          </div>
+            </div>
 
           <!-- Cloud Tag Widget -->
-          <div class="card is-weather-card position-fixed" style="width: 300px;">
+          <div class="card is-weather-card" style="width: 300px;">
             <div class="card-heading">
               <h5 class="has-text-weight-medium	 has-text-white	">{% trans 'Popular tags' %}</h5>
 
@@ -62,6 +57,7 @@
             </div>
           </div>
         </div>
+      </div>
         <!-- /Left side column -->
 
         <!-- Middle column -->
@@ -233,7 +229,7 @@
 
                   <span type="button"
                     class="ml-4 button is-solid dark-grey-button raised">     
-                        <span class="close-wrap d-none"> 
+                        <span class="close-wrap"> 
                             <span class="close-publish"> {% trans 'Cancel' %} </span> </span>
                   </span>
 
@@ -246,8 +242,6 @@
               </div>
             </div>
           </div>
-
-
 
           <div id="classifieds" class="p-0 row justify-content-center justify-content-lg-start">
             {% include "classifieds/classified_list_ajax.html" %}
@@ -296,20 +290,9 @@
 <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/classifieds.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
-
 <script src="{% static 'js/listing.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/details.js' %}" type="text/javascript"></script>
 
-
-<script>
-  function shareMe(title, text, url) {
-    navigator.share({
-      title: title,
-      text: text,
-      url: location.host + url,
-    })
-  }
-
-</script>
 
 <script>
   var page = 1;

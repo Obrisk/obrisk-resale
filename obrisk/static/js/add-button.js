@@ -5,6 +5,10 @@ $("#addNewItem").click(function(e) {
 
   } else if (window.location.href.includes("ws/messages")) {
       window.location.href="/connections/friends/";
+
+  } else if (window.location.href.includes("classifieds") &&
+      (!window.location.href.endsWith("classifieds/"))) {
+      window.location.href="/classifieds/write-new-classified/";
   }
 });
 

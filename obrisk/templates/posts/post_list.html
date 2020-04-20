@@ -28,15 +28,12 @@
   {% endcomment %}
 
   <!-- Write Classified Widget -->
-  {% if request.user.is_official%}
   <div class="author-buttons">
     <a class="btn btn-dark" href="{% url 'posts:write_new' %}"
       title="{% trans 'New Post' %}">📝{% trans 'New Post' %}</a>
     <a class="btn btn-dark" href="{% url 'posts:drafts' %}" title="{% trans 'Draft' %}">
       📚 {% trans ' Drafts' %}</a>
   </div>
-  {% endif %}
-
 
   {% comment %}
   <div
@@ -79,13 +76,9 @@
               <a href="{% url 'posts:post' post.slug %}"
                 style="color:black; text-decoration:none; background-color:none">
                 {% if post.image %}
-                <div class="card-img-top"
-                  style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}); padding-top:42%; background-size: cover;">
-                </div>
-                {% else %}
-                <!-- <div class="card-img-top"
-                  style="background: url(https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default); padding-top:42%; background-size: cover;">
-                </div> -->
+                    <div class="card-img-top"
+                         style="background: url({{oss}}/{{post.image}}); padding-top:42%; background-size: cover;">
+                    </div>
                 {% endif %}
             </div>
 
@@ -93,7 +86,7 @@
               <h3 class="pr-3 title"> {{ post.title|title|truncatechars:60 }} </h3>
               <div class="card-details">
                 {% if post.user.thumbnail %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.user.thumbnail}}" alt="Picture Profile"
+                <img src="{{oss}}/{{post.user.thumbnail}}" alt="Picture Profile"
                   style="width:30px;height:30px;border-radius: 50%;"
                   class="rounded-circle  mb-0 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
                 {% else %}
@@ -119,9 +112,9 @@
             "@type": "BlogPosting",
             "headline": "{{ post.title|title|truncatechars:60 }}",
              {% if post.image %}
-              "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{post.image}}",
+              "image":"{{oss}}/{{post.image}}",
              {% else %}
-              "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/posts/default",
+              "image":"{{oss}}/posts/default",
             {% endif %}
             "url": "{% url 'posts:post' post.slug %}",
             "datePublished": "{{ post.timestamp }}",
@@ -149,7 +142,7 @@
 
       {% empty %}
       <h4 class="no-data">
-        {% trans 'There is no published post yet. Do you have any important info, events ,jobs opportunities e.t.c?! Be the first one to' %}.
+        {% trans 'There is no published post yet. Do you have any important info?' %}.
         <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
       {% endfor %}
 

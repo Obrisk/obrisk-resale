@@ -60,9 +60,12 @@ class CreatePostView(LoginRequiredMixin, CreateView):
         super().__init__(**kwargs)
 
     def form_valid(self, form):
-        print(form.cleaned_data['status'])
-        if self.request.user.is_official is False and form.cleaned_data['status'] is 'P':
-            print ('mafan')
+
+        if self.request.user.is_official is False and \
+        form.cleaned_data['status'] is 'P':
+            messages.error(self.request, "Sorry,\
+                You're not authorized to publish the article")
+            return self.form_invalid(form)
 
         image = form.cleaned_data['image']
 

@@ -6,6 +6,10 @@ body {
     align-content: center;
 }
 
+.view-wrapper {
+    padding-top: 0%;
+}
+
 .card-subtitle {
     font-size: 14px;
     font-family: 'Montserrat', sans-serif;
@@ -83,6 +87,9 @@ body {
         transition: all 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
     }
 
+    .view-wrapper {
+        padding-top: 6%;
+    }
     .sidebar .card-body {
         min-height: 480px;
     }

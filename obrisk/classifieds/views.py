@@ -183,7 +183,8 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         return reverse('classifieds:list')
 
 
-class CreateClassifiedView(LoginRequiredMixin, CreateView):
+@method_decorator(login_required, name='post')
+class CreateClassifiedView(CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = Classified
     message = _("Your classified has been created.")
@@ -259,16 +260,19 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             
         if not classified.address and self.request.user.address:
             classified.address = self.request.user.address
-        
+
         classified.save()
-        
+
         # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
-        if multipleImagesPersist(self.request, images_list, 'classifieds', classified):    
+        if multipleImagesPersist(
+                self.request, images_list, 'classifieds', classified):
             messages.success(self.request, self.message)
             data = {
                 'status': '200',
-                'success_message': 'Successfully created a new classified post'
+                'success_message': _(
+                    'Successfully created a new classified post'
+                )
             }
             return JsonResponse(data)
         else:
@@ -278,7 +282,7 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
     #def get_success_url(self):
         #This method is never called
 
-@method_decorator(login_required, name='dispatch')
+
 class TagsAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = Tag.objects.all()
@@ -345,8 +349,8 @@ class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
 
 class DetailClassifiedView(DetailView):
     """Basic DetailView implementation to call an individual classified."""
-    model = Classified       
-    
+    model = Classified
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailClassifiedView, self).get_context_data(**kwargs)
