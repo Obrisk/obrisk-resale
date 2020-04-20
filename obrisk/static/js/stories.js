@@ -246,6 +246,31 @@ $(function() {
     $("#id_images").val(images);
     $("#id_video").val(videos);
     $("#id_img_error").val(img_error);
+    
+     if (videos.length > 1) {
+         console.log(video);
+        $.ajax({
+          url: video + "?x-oss-process=video/snapshot,t_5000,f_jpg,w_800,h_600,m_fast",
+          type: "GET",
+          cache: false,
+          success: function(data) {
+              console.log("hurray!");
+              console.log(data);
+          },
+          error: function(data) {
+            error = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              Sorry we can't handle new posts, please try again later.
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            `;
+            $(".compose").prepend(error);
+          }
+        });
+     }
+
     $.ajax({
       url: "/stories/post-stories/",
       data: $("#postStoriesForm").serialize(),

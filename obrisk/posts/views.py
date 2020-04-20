@@ -1,3 +1,4 @@
+import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, ListView, UpdateView, DetailView
@@ -9,7 +10,7 @@ from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post
 from obrisk.posts.forms import PostForm, CommentForm
 #For comments
-from django.http import JsonResponse 
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
@@ -53,20 +54,19 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     message = _("Your Post has been created.")
     form_class = PostForm
     template_name = 'posts/post_create.html'
-    
+
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
-        
 
     def form_valid(self, form):
         image = form.cleaned_data['image']
 
         if (image == None):
-            messages.error(self.request, "Sorry, the image were not uploaded successfully. \
-                Please add the image again and submit the form!")
+            messages.error(self.request, "Sorry, the image was not uploaded. \
+                Please add the image and submit the form!")
             return self.form_invalid(form)
-        
+
         else:
             form.instance.user = self.request.user
             post = form.save(commit=False)
@@ -75,35 +75,32 @@ class CreatePostView(LoginRequiredMixin, CreateView):
 
             d = str(datetime.datetime.now())
             thumb_name = "posts/" + str(post.user) + "/" + \
-            slugify(str(post.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d 
+            slugify(str(post.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d
             style = 'image/resize,m_fill,h_300,w_430'
-            
+
             try:
                 process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(thumb_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                        oss2.compat.to_string(base64.urlsafe_b64encode(
+                            oss2.compat.to_bytes(thumb_name))),
+                        oss2.compat.to_string(
+                            base64.urlsafe_b64encode(
+                                oss2.compat.to_bytes(bucket_name)
+                            )
+                        )
+                    )
                 bucket.process_object(post.image, process)
 
             except oss2.exceptions.ServerError as e:
                 post.save()
-                messages.error(self.request, "Oops we are very sorry. \
-                Your image was not uploaded successfully. Please ensure that, \
-                your internet connection is stable and edit your item to add images. "
-                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                messages.error(self.request, "Sorry, \
+                    Your image was not uploaded. Please verify that, \
+                    your internet is stable and edit the post to add images."
+                )
+                logging.error(e)
                 # return self.form_invalid(form)
                 #I am not returning form errors because this is our problem and not user's
                 return redirect ('posts:list')
-            
-            except:
-                post.save()
-                messages.error(self.request, "Oops we are sorry! Your image \
-                    was not uploaded successfully. Please select your item, then edit, \
-                    and try again to upload the images.")
-                #return self.form_invalid(form)
-                #I am not returning form errors because this is our problem and not user's
-                return redirect ('posts:list')
-        
+
             else:
                 post.img_small = thumb_name
                 post.save()

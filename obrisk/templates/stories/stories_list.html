@@ -38,7 +38,7 @@
   <div class="row mt-4">
 
     <div class="col-md-6 m-auto mt-0 p-sm-0">
-      <div id="compose-card" class="card is-new-content">
+      <div id="compose-card" class="d-none card is-new-content">
         <!-- Top tabs -->
         <div class="tabs-wrapper">
           <div class="tabs is-boxed is-fullwidth">
@@ -318,10 +318,10 @@
 {% block extra_js %}
 
 <script>
-  //Hide create card on stories details, let use focus on shared content  
-  if ('{{request.path}}'.startsWith('/stories/i/') &&
-    !$('#compose-card').hasClass('d-none')) {
-    $('#compose-card').remove();
+  //Hide create card on stories details, to focus on shared content  
+  if ($('#compose-card').hasClass('d-none') &&
+  window.location.href.endsWith('/stories/'))  {
+        $('#compose-card').toggleClass('d-none');
   }
 
   var page = 1;

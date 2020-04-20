@@ -120,7 +120,7 @@
                       <circle cx="18" cy="19" r="3"></circle>
                       <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
                       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                    </svg> Share</div>
+                    </svg> 🔗Share</div>
                 </div>
               </div>
             </div>
@@ -221,12 +221,6 @@
       {% endif %}
       <div class="m-3 d-flex justify-content-between">
         <a href="{% url 'classifieds:list' %}" class="btn btn-dark"> &larr;{% trans 'Home' %} </a>
-        {% comment  %}
-        <a href="#" class="share btn btn-dark"
-          onclick="share('{{ classified.title|title }}','{{ classified.price|title }} ')">
-          🔗{% trans 'share' %} </a>
-
-        {% endcomment %}
       </div>
     </div>
 
@@ -253,7 +247,7 @@
 
           <div class="card-body">
             <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-            <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+            <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
             <div class="card-meta d-flex justify-content-between">
               <div class="location">
                 <small>📍</small>

@@ -13,23 +13,66 @@
 {% endblock head %}
 
 {% block content %}
-<div class="col-lg-8 ml-auto mr-auto mt-5 pt-4 pb-4 mb-5">
+<div class="col-lg-8 ml-auto mr-auto mt-5 pt-2 pb-4 mb-5">
   {{form.errors}}
   <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data" id="posts-form" method="post" role="form">
     {% csrf_token %}
-    {{ form|crispy }}
-    <button type="button" id="add-cover-image" class="btn btn-dark"
-      onclick="document.getElementById('cover-image').click();">{% trans 'Upload Cover Image' %}</button>
-    <div class="form-group">
 
-      <input class="d-none" name="coverimage" id="cover-image" type="file" onchange="uploadPreview(this)">
-      <img src="#" alt="cover image" id="cover" class="img-fluid d-none mt-2" style="max-width: 300px;max-height:100%;">
-    </div>
-    <div class="form-group">
-      <button type="button" id="post-submit" class="btn btn-dark publish">{% trans 'Publish' %}</button>
-      <button type="button" id="post-draft" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
-      <a href="{% url 'posts:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
-    </div>
+        <div class="form-row">
+          <div class="form-group col-md-12 mb-0">
+            {{ form.title|as_crispy_field }}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group" style="display: block; overflow: hidden;">
+            <button type="button" id="add-cover-image" class="pb-2 btn btn-dark"
+              onclick="document.getElementById('cover-image').click();">{% trans '➕Cover Photo' %}
+            </button>
+          </div>
+        </div>
+
+        <div class="form-row">
+            <input type="file" id="cover-image" name="coverimage"
+            style="font-size: 50px; width: 120px; opacity: 0; filter:alpha(opacity=0); position:relative; top: -40px;; left: -20px" />
+           <img src="#" alt="cover image" id="cover" class="img-fluid d-none mt-2" style="max-width: 300px;max-height:100%;">
+        </div>
+
+
+        <div id="editor">
+            <div class="form-row align-items-center" style="flex-wrap:nowrap">
+                <div  class="form-group col-xs-6 mb-0 ">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row align-items-center d-flex" style="flex-wrap:nowrap">
+            <div class="form-group col-xs-6 mb-0 ">
+                {{ form.tags|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="form-row align-items-center d-flex" style="flex-wrap:nowrap">
+            <div class="form-group col-xs-6 mb-0 ">
+                {{ form.category|as_crispy_field }}
+            </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group col-md-12 mb-0">
+            {{ form.status }}
+            {{ form.image }}
+            {{ form.edited }}
+            {{ form.content_html}}
+            {{ form.content_json }}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <button type="button" id="post-submit" class="btn btn-dark publish">{% trans 'Publish' %}</button>
+          <button type="button" id="post-draft" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
+          <a href="{% url 'posts:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
+        </div>
   </form>
 
 
@@ -49,6 +92,16 @@
 
   const title_id = "{{ form.title.auto_id }}";
 
+  if ("{{request.user.is_official}}" == false ) {
+        $.wnoty({
+            type: "info",
+            autohide: false,
+            message:
+            "Sorry, only verified authors can publish article.  \
+            You can still save your article as draft and share the link"
+        });
+   }
+
 </script>
 
 <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
@@ -58,97 +111,5 @@
 <script src="{% static 'js/quill-emoji.js' %}"></script>
 <script src="{% static 'js/quill-magic-url.js' %}"></script>
 <script src="{% static 'js/quill-blot-formatter.min.js' %}"></script>
-
-
-
-
-
-<script>
-  $(document).ready(function () {
-    var toolbarOptions = {
-      container: [
-        [{
-          'header': [1, 2, 3, 4, 5, 6, false]
-        }],
-        ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-        ['blockquote', 'code-block'],
-
-        [{
-          'header': 1
-        }, {
-          'header': 2
-        }], // custom button values
-        [{
-          'list': 'ordered'
-        }, {
-          'list': 'bullet'
-        }],
-
-        [{
-          'indent': '-1'
-        }, {
-          'indent': '+1'
-        }], // outdent/indent
-        [{
-          'color': []
-        }, {
-          'background': []
-        }], // dropdown with defaults from theme
-
-        [{
-          'align': []
-        }],
-        ['link', 'image'],
-
-
-        ['clean'] // remove formatting button
-
-      ], handlers: {
-        'emoji': function () { }
-      }
-    }
-    Quill.register('modules/blotFormatter', QuillBlotFormatter.default);
-    if ($("#editor-container").length) {
-      const quill = new Quill('#editor-container', {
-        modules: {
-          toolbar: toolbarOptions,
-          "emoji-toolbar": true,
-          "emoji-shortname": true,
-          "emoji-textarea": true,
-          magicUrl: true,
-          blotFormatter: {}
-        },
-        placeholder: 'Compose an epic...',
-        theme: 'snow',
-
-      });
-    } else {
-      const quill = new Quill('.markdownx', {
-        modules: {
-          toolbar: toolbarOptions,
-          "emoji-toolbar": true,
-          "emoji-shortname": true,
-          "emoji-textarea": true,
-          magicUrl: true,
-          blotFormatter: {}
-        },
-        placeholder: 'Compose an epic...',
-        theme: 'snow',
-
-      });
-    }
-
-    quill.setContents("{{ form.data.content_json }}")
-    quill.on('text-change', function (delta, oldDelta, source) {
-      $("#id_content").val(quill.getContents());
-    });
-    $("#posts-form").submit(function (e) {
-      e.preventDefault();
-      $("[name=content_html]").val(quill.root.innerHTML);
-      $("[name=content_json]").val(JSON.stringify(quill.getContents()))
-      $(this).unbind('submit').submit();
-    });
-
-  });
-</script>
+<script src="{% static 'js/post-create.js' %}"></script>
 {% endblock extra_js %}

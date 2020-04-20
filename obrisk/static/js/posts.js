@@ -1,18 +1,33 @@
 $(function() {
+
+
+    $("#posts-form").submit(function (e) {
+      e.preventDefault();
+      $(this).unbind('submit').submit();
+    });
+
+
   $("#post-submit").click(function(event) {
-    $("input[name='status']").val("P");
+    
     event.preventDefault();
+    $("input[name='status']").val("P");
+
     if ($("#id_title").val() == "") {
-      event.preventDefault();
-      $.wnoty({
-        type: "error",
-        autohide: false,
-        message: "Please fill in all the required fields."
-      });
+          event.preventDefault();
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "Please fill in all the required fields."
+          });
     } else {
-      $("#posts-form").submit();
+          $("#id_content_html").val(quill.root.innerHTML);
+          $("[name=content_json]").val(JSON.stringify(quill.getContents()))
+          $("#posts-form").submit();
     }
   });
+
+
+
   $(".update").click(function() {
     $("input[name='status']").val("P");
     //$("input[name='edited']").prop("checked");

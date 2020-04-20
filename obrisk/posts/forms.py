@@ -1,30 +1,31 @@
 from django import forms
 from django.contrib.postgres.forms import JSONField
-from markdownx.fields import MarkdownxFormField
 from obrisk.posts.models import Post, Comment
 from obrisk.utils.fields import RichTextFormField
-
+from django.utils.translation import ugettext_lazy as _
+from dal import autocomplete
 
 class PostForm(forms.ModelForm):
-    status = forms.CharField(widget=forms.HiddenInput())
+    status = forms.CharField(
+            widget=forms.HiddenInput(), required=False
+    )
     edited = forms.BooleanField(
         widget=forms.HiddenInput(), required=False, initial=False
     )
     image = forms.CharField(
         required=False,
         max_length=150,
-        label=("Cover photo URL"),
         widget=forms.HiddenInput(),
     )
-    content = MarkdownxFormField(required=False)
-    content_html = RichTextFormField(widget=forms.HiddenInput())
+    content_html = RichTextFormField(
+        widget=forms.HiddenInput(), required=False
+    )
     content_json = JSONField(widget=forms.HiddenInput())
 
     class Meta:
         model = Post
         fields = [
             "title",
-            "content",
             "content_html",
             "content_json",
             "image",
@@ -33,8 +34,12 @@ class PostForm(forms.ModelForm):
             "edited",
             "category",
         ]
+        widgets = {
+            'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
+        }
+
         help_texts = {
-            "title": "Make it short but descriptive, maximum 80 characters.",
+            "title": _("Make it short but descriptive, maximum 80 characters."),
         }
 
 

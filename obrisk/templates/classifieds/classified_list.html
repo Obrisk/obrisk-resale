@@ -115,7 +115,7 @@
                         </label>
                         <div class="control">
                           <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required
-                            class="textarea" placeholder="Enter your item details"></textarea>
+                            class="textarea" placeholder="Provide enough details"></textarea>
                         </div>
                       </div>
                       <div class="field d-flex justify-content-between">
@@ -124,12 +124,11 @@
                               {% trans 'Price*' %}
                           </label>
                           <small class="form-text text-muted" id="hint_id_price">
-                              {% trans 'Numbers only. 0 means FREE' %}
-                          </small>
+                              {% trans '0 for GIVEAWAY' %} </small>
                         </div>
                         <div class="control">
-                         ¥<input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
-                            required step="1.00" value="0" placeholder="Enter your item price">
+                         RMB<input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
+                            required step="1.00" value="0" placeholder="Item price">
                         </div>
                       </div>
 
