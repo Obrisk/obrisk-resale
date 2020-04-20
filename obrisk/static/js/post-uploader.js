@@ -20,8 +20,9 @@ var image; //holds all uploaded images as a string
 var client;
 var ossUpload = "";
 
-let retryCount = 0;
-const retryCountMax = 5;
+var uploadRetryCount = 0;
+const uploadRetryCountMax = 5;
+var obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
 
 OssUpload.prototype = {
   constructor: OssUpload,
@@ -31,10 +32,6 @@ OssUpload.prototype = {
 
     $('input[type="file"]').change(function(e) {
       var file = e.target.files[0];
-
-      $("#uploader .placeholder").hide();
-      $("#statusBar").css("display", "flex");
-
       //check if the upload quantity has reach max
       if (!file) {
         $.wnoty({
@@ -48,42 +45,28 @@ OssUpload.prototype = {
             type: "error",
             autohide: false,
             message:
-              "The file you've chosen is too small. Please choose a file greater than 5KB but lower than 13MB!"
+              "The image you've chosen is too small. Please choose a file greater than 5KB but lower than 13MB!"
           });
         }
-
         //don't upload files with size greater than 13MB
         if (file.size <= FileMaxSize) {
           uploader.file = file;
           uploader.totalFilesSize = file.size;
+          uploader.totalFilesNum = 1;
+          var filename = genKey(file.type);
+          $.wnoty({
+            type: "info",
+            message: "Uploading Cover Image please wait."
+          });
+          _this.uploadFile(file, filename);
         } else {
           $.wnoty({
             type: "error",
             autohide: false,
             message:
-              file.name +
-              " is larger than 13MB, please select images small than 13MB "
+              "This image/file is larger than 13MB, please select images small than 13MB "
           });
         }
-      }
-      uploader.totalFilesNum = 1;
-    });
-
-    $("#startUpload").click(function(event) {
-      if (uploader.totalFilesNum == 0) {
-        event.preventDefault();
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message:
-            "Please select the image to upload first by clicking the choose pic button!"
-        });
-      } else {
-        var filename = genKey();
-        var file = uploader.file;
-        $totalProgressbar.html("Upload has started, please wait...");
-        $("#startUpload").hide();
-        _this.uploadFile(file, filename);
       }
     });
   },
@@ -95,87 +78,144 @@ OssUpload.prototype = {
    * oss is object storage, there is no path path concept, but personally think this can be better understood as a path
    */
   uploadFile: function(file, filename) {
-    applyTokenDo();
+    applyTokenDo()
+      .then(result => {
+        if (!result.direct) {
+          client = new OSS({
+            region: result.region,
+            accessKeyId: result.accessKeyId,
+            accessKeySecret: result.accessKeySecret,
+            stsToken: result.SecurityToken,
+            bucket: result.bucket
+          });
+        } else {
+          client = new OSS({
+            region: result.region,
+            accessKeyId: result.accessId,
+            accessKeySecret: result.stsTokenKey,
+            bucket: result.bucket
+          });
+        }
 
-    //make sure we get the sts token
-    if (client !== undefined) {
-      const upload = async () => {
-        try {
-          const results = await client
-            .multipartUpload(filename, file, {
-              progress: progress,
-              partSize: 200 * 1024, //Minimum is 100*1024
-              timeout: 120000 // 2 minutes timeout
-            })
-            .then(function(res) {
-              uploader.uploadFinishedFilesNum++;
-              uploader.curFileSize += file.size;
+        //make sure we get the sts token
+        if (client !== undefined) {
+          const upload = async () => {
+            try {
+              const results = await client
+                .multipartUpload(filename, file, {
+                  progress: progress,
+                  partSize: 200 * 1024, //Minimum is 100*1024
+                  timeout: 120000 // 2 minutes timeout
+                })
+                .then(function(res) {
+                  uploader.uploadFinishedFilesNum++;
+                  uploader.curFileSize += file.size;
 
-              progressBarNum = (1).toFixed(2) * 100;
-              progressBar = (1).toFixed(2) * 100 + "%";
+                  progressBarNum = (1).toFixed(2) * 100;
+                  progressBar = (1).toFixed(2) * 100 + "%";
 
-              if (progressBarNum == 100) {
-                $totalProgressbar
-                  .css("width", progressBar)
-                  .html(
-                    "Upload has completed. Please save the changes at the bottom of the page!"
-                  );
-                $("#startUpload").hide();
-              }
-              image = res.name;
-            })
-            .catch(err => {
-              console.error(err);
-              console.log(`err.name : ${err.name}`);
-              console.log(`err.message : ${err.message}`);
+                  if (progressBarNum == 100) {
+                    $.wnoty({
+                      type: "success",
+                      message: "Cover Image uploaded Successfully."
+                    });
+                    //Try to edit the uploaded image, if it fails it means the image
+                    //was corrupted during upload
+                    $.ajax({
+                      url:
+                        obrisk_oss_url +
+                        res.name +
+                        "?x-oss-process=image/average-hue",
+                      success: function() {
+                        $('[name="image"]').val(res.name);
+                      },
+                      error: function(e) {
+                        // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
+                        if (uploadRetryCount < uploadRetryCountMax) {
+                          uploadRetryCount++;
+                          console.error(
+                            `uploadRetryCount : ${uploadRetryCount}`
+                          );
+                          upload();
+                        } else {
+                          //We have retried to the max and there is nothing we can do
+                          //Allow the users to submit the form atleast with default image.
+                          $.wnoty({
+                            type: "error",
+                            autohide: false,
+                            message:
+                              "Oops! an error occured when uploading your image, please try again later!"
+                          });
+                        }
+                      }
+                    }); //End of outer ajax call
+                  } //End of the if progress bar == 100
+                })
+                .catch(err => {
+                  console.error(err);
+                  console.log(`err.name : ${err.name}`);
+                  console.log(`err.message : ${err.message}`);
 
-              if (err.name.toLowerCase().indexOf("connectiontimeout") !== -1) {
-                // timeout retry
-                if (retryCount < retryCountMax) {
-                  retryCount++;
-                  console.error(`retryCount : ${retryCount}`);
-                  upload();
-                } else {
-                  //We have retried to the max and there is nothing we can do
-                  //Allow the users to submit the form atleast with default image.
-                  $totalProgressbar
-                    .css("width", "80%")
-                    .html("Upload facing errors!");
-                }
-              } else {
-                //Not timeout out error and there is nothing we can do
-                //Allow the users to submit the form atleast with default image.
-                $totalProgressbar
-                  .css("width", "80%")
-                  .html("Upload facing error!");
-              }
-            });
-          return results;
-        } catch (e) {
+                  if (
+                    err.name.toLowerCase().indexOf("connectiontimeout") !== -1
+                  ) {
+                    // timeout retry
+                    if (uploadRetryCount < uploadRetryCountMax) {
+                      uploadRetryCount++;
+                      console.error(`uploadRetryCount : ${uploadRetryCount}`);
+                      upload();
+                    } else {
+                      //We have retried to the max and there is nothing we can do
+                      //Allow the users to submit the form atleast with default image.
+                      $totalProgressbar
+                        .css("width", "100%")
+                        .html("Upload failed!");
+                    }
+                  } else {
+                    //Not timeout out error and there is nothing we can do
+                    //Allow the users to submit the form atleast with default image.
+                    $totalProgressbar
+                      .css("width", "100%")
+                      .html("Upload failed!");
+                  }
+                });
+              return results;
+            } catch (e) {
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message:
+                  "Oops! an error occured during the image upload, \
+                    Please try again later or contact us via support@obrisk.com" +
+                  e
+              });
+              $(".start-uploader").css("display", "block");
+              console.log(e);
+            }
+          };
+
+          return upload();
+        } else {
           $.wnoty({
             type: "error",
             autohide: false,
             message:
-              "Oops! an error occured during the image upload, \
-                    Please try again later or contact us via support@obrisk.com" +
-              e
+              "Oops!, it looks like there is a network problem, \
+            Please try again later or contact us at support@obrisk.com"
           });
           $(".start-uploader").css("display", "block");
-          console.log(e);
         }
-      };
-
-      return upload();
-    } else {
-      $.wnoty({
-        type: "error",
-        autohide: false,
-        message:
-          "Oops!, it looks like there is a network problem, \
-            Please try again later or contact us at support@obrisk.com"
+      })
+      .catch(e => {
+        $.wnoty({
+          type: "error",
+          autohide: false,
+          message:
+            "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com" +
+            e
+        });
+        console.log(e);
       });
-      $(".start-uploader").css("display", "block");
-    }
   }
 };
 
@@ -188,7 +228,8 @@ function uploadPreview(input) {
     var reader = new FileReader();
 
     reader.onload = function(e) {
-      $("#avatar").attr("src", e.target.result);
+      $("#cover").attr("src", e.target.result);
+      $("#cover").removeClass("d-none");
     };
 
     reader.readAsDataURL(input.files[0]);
@@ -208,7 +249,9 @@ var $wrap = $("#uploader"),
 var progress = function(p) {
   //p percentage 0~1
   return function(done) {
-    $totalProgressbar.html("Upload has started, please wait...");
+    $totalProgressbar
+      .css("width", "100%")
+      .html("Upload started, please wait...");
     done();
   };
 };
@@ -220,37 +263,16 @@ var progress = function(p) {
  */
 var applyTokenDo = function() {
   var url = oss_url; //Request background to obtain authorization address url
-  $.ajax({
-    url: url,
-    async: false,
-    success: function(result) {
-      if (!result.direct) {
-        client = new OSS({
-          region: result.region,
-          accessKeyId: result.accessKeyId,
-          accessKeySecret: result.accessKeySecret,
-          stsToken: result.SecurityToken,
-          bucket: result.bucket
-        });
-      } else {
-        client = new OSS({
-          region: result.region,
-          accessKeyId: result.accessId,
-          accessKeySecret: result.stsTokenKey,
-          bucket: result.bucket
-        });
+  return new Promise((resolve, reject) => {
+    $.ajax({
+      url: url,
+      success: function(result) {
+        resolve(result);
+      },
+      error: function(e) {
+        reject(e);
       }
-    },
-    error: function(e) {
-      $.wnoty({
-        type: "error",
-        autohide: false,
-        message:
-          "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com" +
-          e
-      });
-      console.log(e);
-    }
+    });
   });
 };
 
@@ -270,17 +292,19 @@ function OssUpload() {
  * @return  {string}
  */
 
-function genKey() {
-  return (
-    "media/profile_pics/" +
-    user +
-    "/pics/" +
+function genKey(extension) {
+  var filename =
     "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
       var r = (Math.random() * 16) | 0,
         v = c == "x" ? r : (r & 0x3) | 0x8;
       return v.toString(16);
-    })
-  );
+    }) +
+    "." +
+    extension.split("/")[1] +
+    "/";
+
+  var date = new Date().toISOString().split("T")[0];
+  return "media/images/" + app + "/" + user + "/" + date + "/" + filename;
 }
 
 /**

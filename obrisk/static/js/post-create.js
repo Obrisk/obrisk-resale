@@ -4,7 +4,7 @@ var toolbarOptions = {
       'header': [1, 2, 3, 4, 5, 6, false]
     }],
     ['bold', 'italic', 'underline', 'strike'], // toggled buttons
-    ['blockquote', 'code-block'],
+    ['blockquote'],
 
     [{
       'list': 'ordered'
@@ -35,7 +35,7 @@ Quill.register('modules/blotFormatter', QuillBlotFormatter.default);
 
   var quill = new Quill('#editor', {
     modules: {
-      //toolbar: toolbarOptions,
+      toolbar: toolbarOptions,
       "emoji-toolbar": true,
       "emoji-shortname": true,
       "emoji-textarea": true,

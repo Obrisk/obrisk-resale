@@ -62,7 +62,8 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         image = form.cleaned_data['image']
 
-        if (image == None):
+        if (image is None or (image.startswith(
+            f'media/images/posts/{self.request.user.username}') is False)):
             messages.error(self.request, "Sorry, the image was not uploaded. \
                 Please add the image and submit the form!")
             return self.form_invalid(form)
@@ -71,11 +72,11 @@ class CreatePostView(LoginRequiredMixin, CreateView):
             form.instance.user = self.request.user
             post = form.save(commit=False)
             post.user = self.request.user
-            post.image = post.image.replace('https://obrisk.oss-cn-hangzhou.aliyuncs.com/', '')
+            post.image = image
 
             d = str(datetime.datetime.now())
-            thumb_name = "posts/" + str(post.user) + "/" + \
-            slugify(str(post.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d
+            thumb_name = "media/images/posts/" + str(post.user) + "/" + \
+            slugify(str(post.title), to_lower=True) + "/thumbnails/" + d
             style = 'image/resize,m_fill,h_300,w_430'
 
             try:
@@ -92,25 +93,28 @@ class CreatePostView(LoginRequiredMixin, CreateView):
 
             except oss2.exceptions.ServerError as e:
                 post.save()
-                messages.error(self.request, "Sorry, \
+                messages.error(self.request, _("Sorry, \
                     Your image was not uploaded. Please verify that, \
-                    your internet is stable and edit the post to add images."
+                    your internet is stable and edit the post to add images.")
                 )
                 logging.error(e)
                 # return self.form_invalid(form)
-                #I am not returning form errors because this is our problem and not user's
+                #Dont return form because this is likely our problem
                 return redirect ('posts:list')
 
             else:
                 post.img_small = thumb_name
                 post.save()
 
-            #When the for-loop has ended return the results.        
             return super(CreatePostView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('posts:list')
+        if self.request.user.is_official:
+            return reverse('posts:list')
+        else:
+            return self.object.get_absolute_url()
+            #return reverse('posts:post', kwargs={"slug":request.})
 
 
 class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
@@ -139,7 +143,11 @@ class DetailPostView(DetailView):
     def render_to_response(self, context, **response_kwargs):
         """ Allow AJAX requests to be handled more gracefully """
         if self.request.is_ajax():
-            return JsonResponse('Your comment has been uploaded!',safe=False, **response_kwargs)
+            return JsonResponse(
+                _('Your comment has been uploaded!'),
+                safe=False,
+                **response_kwargs
+            )
         else:
             return super(DetailView,self).render_to_response(context, **response_kwargs)
 
@@ -149,7 +157,7 @@ class DetailPostView(DetailView):
         formsets with the passed POST variables and then checking them for
         validity.
         """
-        
+
         comment_form = CommentForm(self.request.POST)
         self.object = self.get_object()
 
@@ -167,13 +175,12 @@ class DetailPostView(DetailView):
             context['comments'] = self.object.comments.all()
             context['new_comment'] = None
             return self.render_to_response(context=context)
-        
+
         else:
             context = super(DetailPostView, self).get_context_data(**kwargs)
             #Return the form with errors.
             context['comment_form'] = comment_form
             return self.render_to_response(context)
-           
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
