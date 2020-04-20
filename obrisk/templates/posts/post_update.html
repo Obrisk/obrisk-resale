@@ -16,7 +16,9 @@
     {% csrf_token %}
     {{ form|crispy }}
     <div class="form-group">
-      <button type="button" class="btn btn-dark update">{% trans 'Update' %}</button>
+      {% if post.user.is_official %}
+          <button type="button" class="btn btn-dark update">{% trans 'Update' %}</button>
+      {% endif %}
       <button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button>
       <a href="{% url 'posts:list' %}" class="btn btn-default">{% trans 'Cancel' %}</a>
     </div>

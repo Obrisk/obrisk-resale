@@ -151,20 +151,30 @@
 
           </div>
 
-     
-           <div class="share-button col-6 p-0">
-              <div class="button p-1 share w-50"
-                onclick="shareMe('{{ post.title }}','{{ post.author }}')">
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                  stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-share-2">
-                  <circle cx="18" cy="5" r="3"></circle>
-                  <circle cx="6" cy="12" r="3"></circle>
-                  <circle cx="18" cy="19" r="3"></circle>
-                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                </svg> Share</div>
-            </div>
+           <div class="buttons" >     
+               <div class="share-button pr-2">
+                  <div class="button share w-100"
+                    onclick="shareMe('{{ post.title }}','{{ post.author }}')">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-share-2">
+                      <circle cx="18" cy="5" r="3"></circle>
+                      <circle cx="6" cy="12" r="3"></circle>
+                      <circle cx="18" cy="19" r="3"></circle>
+                      <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                      <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                    </svg> Share
+                  </div>
+                </div>
+
+              {% if request.user == post.user %}
+                <button type="button" onclick="goToEdit();"
+                    class="button is-solid accent-button raised"> 
+                      {% trans 'Edit ' %}
+                 </button>
+              {% endif %}
+          </div> 
+          
           </div> 
 
             <!-- Cloud Tag Widget -->
@@ -258,6 +268,7 @@
 <script type="text/javascript">
   var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   var url = "{% url 'posts:post' post.slug %}"
+  var editUrl = "{% url 'posts:edit_post' post.pk %}"
 </script>
 
 <link rel="stylesheet" href="{% static 'css/share.css' %}">
