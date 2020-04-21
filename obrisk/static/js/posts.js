@@ -19,10 +19,10 @@ $(function() {
     }
   });
 
-  $(".update").click(function() {
+  $("#post-update").click(function() {
     $("input[name='status']").val("P");
-    //$("input[name='edited']").prop("checked");
     $("input[name='edited']").val("True");
+
     if (($("#id_title").val() == "") || (
     $("#id_image").val() == "" )) {
       $.wnoty({
@@ -31,11 +31,14 @@ $(function() {
         message: "Please fill in all the required fields."
       });
     } else {
+
+      $("#id_content_html").val(quill.root.innerHTML);
+      $("#id_content_json").val(JSON.stringify(quill.getContents()))
       $("#posts-form").submit();
     }
   });
 
-  $(".draft").click(function() {
+  $("#post-draft").click(function() {
     $("input[name='status']").val("D");
 
     event.preventDefault();

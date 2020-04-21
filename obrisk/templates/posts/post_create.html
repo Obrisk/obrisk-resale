@@ -11,7 +11,6 @@
 
 {% block content %}
 <div class="col-lg-8 ml-auto mr-auto mt-5 pt-2 pb-4 mb-5">
-  {{form.errors}}
   <form action="{% url 'posts:write_new' %}" enctype="multipart/form-data" id="posts-form" method="post" role="form">
     {% csrf_token %}
 
@@ -85,16 +84,28 @@
   const app = "posts";
   const title_id = "{{ form.title.auto_id }}";
 
-  console.log("{{request.user.is_official}}");
-  if ("{{request.user.is_official}}" == false ) {
+  $( document ).ready(function() {
+
+      {% if request.user.is_official == False %}
+            $.wnoty({
+                type: "info",
+                autohide: false,
+                message:
+                "Sorry, only verified authors can publish articles.  \
+                You can still save your article as draft and share"
+            });
+      {% endif %}
+
+      {% if form.errors %}
         $.wnoty({
-            type: "info",
-            autohide: false,
+            type: "error",
             message:
-            "Sorry, only verified authors can publish article.  \
-            You can still save your article as draft and share the link"
+            "Your forms is having errors. \
+            Please fill in all fields correctly and re-submit"
         });
-   }
+      {% endif %}
+  });
+
 </script>
 
 <link rel="stylesheet" href="{% static 'css/quill-emoji.css' %}">

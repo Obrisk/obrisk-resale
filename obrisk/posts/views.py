@@ -1,14 +1,18 @@
 import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django.views.generic import (
+    CreateView, ListView, UpdateView, DetailView
+)
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from django.shortcuts import redirect
 from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post
-from obrisk.posts.forms import PostForm, CommentForm
+from obrisk.posts.forms import (
+    PostForm, PostEditForm, CommentForm
+)
 #For comments
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
@@ -18,6 +22,7 @@ from obrisk.utils.images_upload import bucket, bucket_name
 from slugify import slugify
 import base64
 import datetime
+import html2text
 
 import oss2
 from aliyunsdkcore import client
@@ -127,7 +132,7 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing Posts."""
     model = Post
     message = _("Your Post has been updated.")
-    form_class = PostForm
+    form_class = PostEditForm
     template_name = 'posts/post_update.html'
 
     def form_valid(self, form):
@@ -137,7 +142,6 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     def get_success_url(self):
         messages.success(self.request, self.message)
         return reverse('posts:list')
-
 
 
 @method_decorator(login_required, name='post')
@@ -191,7 +195,7 @@ class DetailPostView(DetailView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailPostView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the images
+        # Add in a QuerySet of comments 
         context['comment_form'] = CommentForm()
         context['comments'] = self.object.comments.all()
         context['new_comment'] = None
