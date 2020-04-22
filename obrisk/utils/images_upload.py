@@ -4,6 +4,7 @@ import base64
 import os
 import datetime
 import logging
+import requests
 
 from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
@@ -228,7 +229,8 @@ def get_oss_auth(request, app_name=None):
 
 
 def multipleImagesPersist(request, images_list, app, obj):
-    ''' This function takes the request, images list, app name (string) and app object
+    ''' This func takes request, images list,
+    app name (string) and app object
     and it validates the images list and stores them to the database.
     It returns images objects list if the images where saved to the db
     False if there is a validation problem '''
@@ -241,10 +243,11 @@ def multipleImagesPersist(request, images_list, app, obj):
         obj.delete()
         return False
 
-    #from here if you return form invalid then you have to prior delete the obj, obj.delete()
-    #The current implementation will sucessfully create obj even when there are error on images
+    #from here if you return form invalid
+    #then you have to prior delete the obj, obj.delete()
+    #The current implementation will sucessfully create obj
+    #even when there are error on images
     #This is just to help to increase the app post on the website.
-    #Also most errors are caused by our frontend when uploading so don't return invalid form.
     img_mid_name = None
     saved_objs = []
 
@@ -253,7 +256,7 @@ def multipleImagesPersist(request, images_list, app, obj):
               f'media/images/{app}/{request.user.username}') is False:
             #Check if it was default image as it has no username.
             #This is the same default on all multiple upload apps
-            #Though stories shouldn't have this, form shouldn't be submitted without images
+            #Though form shouldn't be submitted without images
             if (str_result != 'classifieds/error-img.jpg'):
                 obj.delete()
                 return False
@@ -262,20 +265,25 @@ def multipleImagesPersist(request, images_list, app, obj):
 
         if app == 'classifieds':
             img_obj = ClassifiedImages(classified=obj, image=str_result)
-            thumb_name = "media/images/classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), to_lower=True) + "/thumbnails/" + d + str(index)
-            img_mid_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), to_lower=True) + "/mid-size/" + d + str(index)
+            thumb_name = "media/images/classifieds/" + slugify(
+                    str(obj.user)) + "/" + slugify(
+                            str(obj.title), to_lower=True
+                        ) + "/thumbnails/" + d + str(index)
+            img_mid_name = "classifieds/" + slugify(
+                    str(obj.user)) + "/" + slugify(
+                        str(obj.title), to_lower=True) + "/mid-size/" + d + str(index)
             style = 'image/resize,m_fill,h_156,w_156'
             style_mid = 'image/resize,m_fill,h_400'
 
         elif app == 'stories':
-            #The image here is full url to the OSS bucket because of how it is consumed in the front-end
+            #The image here is full url to the OSS bucket
+            #because of how it is consumed in the front-end
             img_obj = StoryImages(
-                    story=obj,
-                    image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
-                )
-            thumb_name = "media/images/stories/" + slugify(str(obj.user)) + "/thumbnails/" + d + str(index)
+                story=obj,
+                image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
+            )
+            thumb_name = "media/images/stories/" + slugify(
+                    str(obj.user)) + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_456,w_456'
 
         else:
@@ -320,14 +328,16 @@ def multipleImagesPersist(request, images_list, app, obj):
                 obj.delete()
                 return False
 
-            except Exception:
-                #If there is a problem with the thumbnail generation, our code is wrong
+            except Exception as e:
+                #If there is a problem with the thumbnail generation,
+                #our code is wrong
                 if index+1 == tot_img_objs:
                     #To-do 
-                    #Pass the image object to background task and verify if image exist
-                    #and retry thumbnail creation
+                    #retry thumbnail creation
                     #Send email to the developers
-                    messages.error(request, f"We are having difficulty processing your image(s), \
+                    logging.error(e)
+                    messages.error(
+                        request, f"We are having difficulty processing your image(s), \
                         check your post if everything is fine.")
 
                 img_obj.image_thumb = str_result
@@ -346,14 +356,17 @@ def multipleImagesPersist(request, images_list, app, obj):
 
     return saved_objs
 
+
 def videoPersist(request, video, app, obj):
-    ''' Function takes the request, video string, app name (string) and app object
+    ''' Takes the request, video str, app name (str) and app object
     and it validates the video string and stores them to the database.
     It returns True if the video is authentic
     False if there is a validation problem '''
 
     if env.bool('VIDEO_USE_AWS_MEDIA'):
-        if video.startswith('f{media/videos/{app}/{request.user.username}/') is False:
+        if video.startswith(
+                'f{media/videos/{app}/{request.user.username}/'
+            ) is False:
             obj.delete()
             return False
 
@@ -370,18 +383,48 @@ def videoPersist(request, video, app, obj):
     else:
         #For Aliyun OSS:
         try:
-            simplifiedmeta = bucket.get_object_meta(video)
+            #simplifiedmeta = bucket.get_object_meta(video)
             #print(simplifiedmeta.headers['Last-Modified'])
-            if int(simplifiedmeta.headers['Content-Length']) > 0:
-                obj.video = video
-                obj.save()
-                return True
+            #if int(simplifiedmeta.headers['Content-Length']) > 0:
 
-        except oss2.exceptions.NoSuchKey:
-            obj.delete()
+            display_pic = requests.get(
+                "https://obrisk.oss-cn-hangzhou.aliyuncs.com/" + \
+                video + "?x-oss-process=video/snapshot,t_5000,f_jpg,w_800,h_600,m_fast", # noqa
+                timeout=5
+            )
+
+        except (requests.ConnectionError,
+                requests.RequestException,
+                requests.HTTPError,
+                requests.Timeout,
+                requests.TooManyRedirects) as e:
             return False
+            print( "mafan")
+            logging.error("Can't request thumbnail from video" + e)
 
-    return False
+        # naming them in our oss
+        pic_name = "media/images/{{app}}" + slugify(
+                str(request.user.username)
+            ) + "/video-display-thumb-" + uuid.uuid4().hex[:12]
+
+        # upoad them in our oss
+        try:
+            bucket.put_object(pic_name, display_pic.content)
+
+        except (oss2.exceptions.ClientError,
+                oss2.exceptions.RequestError) as e:
+            logging.error("Can't upload thumbnail for video" + e)
+
+        else:
+            StoryImages.objects.create(
+                 story=obj,
+                 image_thumb = pic_name
+            )
+
+        obj.video = video
+        obj.save()
+        return True
+
 
 @login_required
 @require_http_methods(["GET"])

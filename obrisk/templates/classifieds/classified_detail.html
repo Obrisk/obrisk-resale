@@ -18,15 +18,15 @@
 
 
 {% block icon %}
-<link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
-<link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+<link rel="icon" type="image/png" href="{{oss}}/{{images.0.image_thumb }}">
+<link rel="shortcut icon" href="{{oss}}/{{images.0.image_thumb }}">
 <link rel="apple-touch-icon" sizes="180x180"
-  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+  href="{{oss}}/{{images.0.image_thumb }}">
 <link rel="icon" type="image/png" sizes="32x32"
-  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
+  href="{{oss}}/{{images.0.image_thumb }}">
 <link rel="icon" type="image/png" sizes="16x16"
-  href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
-<link rel="mask-icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}" color="#5bbad5">
+  href="{{oss}}/{{images.0.image_thumb }}">
+<link rel="mask-icon" href="{{oss}}/{{images.0.image_thumb }}" color="#5bbad5">
 {% endblock %}
 
 
@@ -56,7 +56,7 @@
             <div class="meta-right d-flex">
               <a href="{% url 'users:detail' classified.user.username %}" class="mr-2">
                 {% if classified.user.thumbnail %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+                <img src="{{oss}}/{{classified.user.thumbnail}}"
                   alt="Picture Profile" style="height:35px; max-width:35px; border-radius: 50%;" id="pic">
                 {% else %}
                 <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
@@ -203,7 +203,7 @@
 
       <!-- Navigation buttons -->
       {% if request.user == classified.user%}
-      <div class="m-3">
+      <div class="my-3">
         <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
           title="{% trans 'Edit this classified' %}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
@@ -266,7 +266,7 @@
    "name":"{{ classified.title|title }}",
    "description":"{{ classified.details }}",
    "image":[
-      "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}"
+      "{{oss}}/{{images.0.image_thumb }}"
    ],
    "brand":"",
    "offers":{
@@ -280,9 +280,9 @@
          "@type":"Person",
          "name":"{{ classified.user.get_profile_name }}",
          {% if classified.user.thumbnail %}
-         "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{classified.user.thumbnail}}"
+         "image":"{{oss}}/{{classified.user.thumbnail}}"
          {% else %}
-        "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+        "image":"{{oss}}/classifieds/default.jpg"
          {% endif %}
          
       }

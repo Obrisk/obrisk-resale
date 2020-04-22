@@ -1,16 +1,38 @@
 $(function() {
-  function csrfSafeMethod(method) {
-    // These HTTP methods do not require CSRF protection
-    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-  }
 
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
+    $.ajaxSetup({ 
+         beforeSend: function(xhr, settings) {
+             function getCookie(name) {
+                 var cookieValue = null;
+                 if (document.cookie && document.cookie != '') {
+                     var cookies = document.cookie.split(';');
+                     for (var i = 0; i < cookies.length; i++) {
+                         var cookie = jQuery.trim(cookies[i]);
+                         // Does this cookie string begin with the name we want?
+                         if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                             cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                             break;
+                         }
+                     }
+                 }
+                 return cookieValue;
+             }
+             if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+                 // Only send the token to relative URLs i.e. locally.
+                 xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+             }
+         } 
+    });
+
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+        onBeforePageLoad: function () {
+          $('.load').show();
+        },
+        onAfterPageLoad: function ($items) {
+          $('.load').hide();
+        }
+    });
 
   function offset(el) {
     var rect = el.getBoundingClientRect(),
@@ -18,7 +40,9 @@ $(function() {
       scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
   }
+
   $("input, textarea").val("");
+
 
   //Submit stories
   $(".submit-button").click(function(e) {
@@ -241,35 +265,10 @@ $(function() {
     });
   });
 
-  //
   $("body").on("uploadComplete", function(event) {
     $("#id_images").val(images);
     $("#id_video").val(videos);
     $("#id_img_error").val(img_error);
-    
-     if (videos.length > 1) {
-         console.log(video);
-        $.ajax({
-          url: video + "?x-oss-process=video/snapshot,t_5000,f_jpg,w_800,h_600,m_fast",
-          type: "GET",
-          cache: false,
-          success: function(data) {
-              console.log("hurray!");
-              console.log(data);
-          },
-          error: function(data) {
-            error = `
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-              Sorry we can't handle new posts, please try again later.
-              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            `;
-            $(".compose").prepend(error);
-          }
-        });
-     }
 
     $.ajax({
       url: "/stories/post-stories/",

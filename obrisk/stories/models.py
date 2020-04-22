@@ -30,6 +30,7 @@ class TaggedStory(GenericUUIDTaggedItemBase):
         verbose_name = _("Tagged story")
         verbose_name_plural = _("Tagged stories")
 
+
 class TaggedStories(TaggedItemBase):
     content_object = models.ForeignKey('Stories', on_delete=models.CASCADE)
 
@@ -61,11 +62,14 @@ class StoriesQuerySet(models.query.QuerySet):
                 else: #smart
                     tag_dict[tag] += 1
 
-        return sorted(tag_dict.items(), key=operator.itemgetter(1), reverse=True)
+        return sorted(tag_dict.items(),
+                key=operator.itemgetter(1), reverse=True
+            )
+
 
 class Stories(models.Model):
-    """Stories model to contain small information snippets in the same manner as
-    Twitter does."""
+    """Stories model to contain small information snippets
+    in the same manner as Twitter does."""
 
     PUBLIC = "P"
     AROUND = "A"
@@ -85,23 +89,34 @@ class Stories(models.Model):
     uuid_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
     content = models.TextField(max_length=400, null=True)
-    viewers =  models.CharField(max_length=1, choices=VIEWERS, default=PUBLIC)
+    viewers =  models.CharField(
+            max_length=1, choices=VIEWERS, default=PUBLIC
+        )
     priority = models.IntegerField(default=0)
     tags = TaggableManager(through=TaggedStory, blank=True)
-    user_tags = models.BooleanField(verbose_name=_("User created tags?"), default=False)
+    user_tags = models.BooleanField(
+            verbose_name=_("User created tags?"),
+            default=False
+        )
     city = models.CharField (max_length=100, null=True)
     video = models.CharField (max_length=300, null=True)
     province_region = models.CharField(max_length= 100, null=True)
     address = models.CharField(max_length=255, null=True)
     liked = models.ManyToManyField(settings.AUTH_USER_MODEL,
         blank=True, related_name="liked_stories")
-    reply = models.BooleanField(verbose_name=_("Is a reply?"), default=False)
-    slug = models.SlugField(max_length=300, null=True, blank=True, unique=True, editable=False)
-    
+    reply = models.BooleanField(
+            verbose_name=_("Is a reply?"),
+            default=False
+        )
+    slug = models.SlugField(
+            max_length=300, null=True,
+            blank=True, unique=True, editable=False
+        )
+
     #This will help to only show the liked users when needed, otherwise don't load all of them.
-    likes_count = models.IntegerField(default=0)  
+    likes_count = models.IntegerField(default=0)
     thread_count = models.IntegerField(default=0)
-    
+
     objects = StoriesQuerySet.as_manager()
 
     class Meta:
@@ -204,14 +219,14 @@ class Stories(models.Model):
 
     def get_likers(self):
         #sometimes no one has liked anything
-        try: 
+        try:
             return self.liked.all()[:3]
         except Exception as e:
             logging.error(e)
             return []
 
     def get_all_likers(self):
-        try: 
+        try:
             return self.liked.all()
         except Exception as e:
             logging.error(e)
@@ -225,7 +240,10 @@ class Stories(models.Model):
 
 
 class StoryImages(models.Model):
-    story = models.ForeignKey(Stories, on_delete=models.CASCADE, related_name='images')
+    story = models.ForeignKey(Stories,
+            on_delete=models.CASCADE,
+            related_name='images'
+        )
     image = models.CharField(max_length=300)
     image_thumb = models.CharField(max_length=300)
 
