@@ -39,7 +39,7 @@
             <div class="avatar-container">
               <!--Add image -->
               {% if active.thumbnail %}
-              <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{active.thumbnail}}" alt="Picture Profile"
+              <img src="{{oss}}/{{active.thumbnail}}" alt="Picture Profile"
                 style="width:30px;height:30px;border-radius: 50%;"
                 class=" user-avatar rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
               {% else %}
@@ -71,43 +71,44 @@
         <div id="conversation" class="chat-body-inner has-slimscroll">
 
           {% if message_list %}
-          {% if classified %}
-          <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="{% url 'classifieds:classified' classified.slug %}"
-              style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
+              {% if classified %}
+              <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
+                <a href="{% url 'classifieds:classified' classified.slug %}"
+                  style="color:black; text-decoration:none; background-color:none" class="is-flex">
+                  <div class="card-img-top img-responsive column" style="max-width: 70px">
 
-                {% if classified.image_thumb %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
-                {% else %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
-                {% endif %}
+                    {% if classified.image_thumb %}
+                    <img class="card-img" src="{{oss}}/{{ classified.image_thumb }}">
+                    {% else %}
+                    <img class="card-img" src="{{oss}}/classifieds/default.jpg">
+                    {% endif %}
 
-              </div>
-              <div class="column">
-                <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
-                <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                <div class="card-meta is-flex justify-content-between">
-                  <div class="is-flex location">
-                    {%if classified.city %}
-                    <small>📍</small>
-                    <span class="card-text small "> {{ classified.city|safe }}</span>
-                    {%endif%}
                   </div>
-                </div>
+                  <div class="column">
+                    <h6 class="card-title"> {{ classified.title|truncatechars:60 }} </h6>
+                    <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+                    <div class="card-meta is-flex justify-content-between">
+                      <div class="is-flex location">
+                        {%if classified.city %}
+                        <small>📍</small>
+                        <span class="card-text small "> {{ classified.city|safe }}</span>
+                        {%endif%}
+                      </div>
+                    </div>
 
+                  </div>
+                </a>
               </div>
-            </a>
-          </div>
-          {% endif %}
+              {% endif %}
 
-          {% for message in message_list %}
-          {% include 'messager/single_message.html' with message=message %}
-          {% endfor %}
+              {% for message in message_list %}
+                  {% include 'messager/single_message.html' with message=message %}
+              {% endfor %}
 
-          {% else %}
+      {% else %}
           <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
           <p>{% trans "I am " %} {{ active.username }} {% trans ", Let's talk!" %}</p>
+
           {% if classified %}
           <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
             <a href="{% url 'classifieds:classified' classified.slug %}"
@@ -115,9 +116,9 @@
               <div class="card-img-top img-responsive column" style="max-width: 70px">
 
                 {% if classified.image_thumb %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}">
+                <img class="card-img" src="{{oss}}/{{ classified.image_thumb }}">
                 {% else %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+                <img class="card-img" src="{{oss}}/classifieds/default.jpg">
                 {% endif %}
 
               </div>
@@ -137,9 +138,10 @@
             </a>
           </div>
           {% endif %}
-          {% endif %}
-          <div class="send-message"> </div>
-        </div>
+      {% endif %}
+
+      <div class="send-message"> </div>
+    </div>
 
         <!-- Compose message area -->
         <div class="chat-action">
@@ -202,10 +204,8 @@
 
 <!-- Core js -->
 <script src="{% static 'frontend/assets/js/global.js' %}"></script>
-<script src="{% static 'frontend/assets/js/main.js' %}"></script>
 <script src="{% static 'js/fancybox.min.js' %}"></script>
 
-<!-- Compone"{% static 'frontend/ts js -->
 <script src="{% static 'frontend/assets/js/modal-uploader.js' %}"></script>
 
 {% endblock content %}
@@ -219,7 +219,7 @@
   const oss_url = "{% url 'get_oss_auth' %}";
 
   {% if message.sender.thumbnail %}
-  var user_thumb = https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}
+  var user_thumb = "{{oss}}/{{message.sender.thumbnail}}"
     {% else %}
   var user_thumb = "{% static 'img/user.png' %}"
   {% endif %}
