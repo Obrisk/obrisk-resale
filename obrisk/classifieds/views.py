@@ -1,3 +1,4 @@
+import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -8,7 +9,6 @@ from django.views.generic import (
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
-from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
 from django.http import HttpResponse, HttpResponseRedirect
 from django.core.paginator import (
@@ -18,7 +18,6 @@ from django.db.models import (
         OuterRef, Subquery, Case,
         When, Value, IntegerField, Count)
 from django.urls import reverse_lazy
-from django.core.mail import send_mail
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from taggit.models import Tag
@@ -212,61 +211,72 @@ class CreateClassifiedView(CreateView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
- 
+
     def form_invalid(self, form, data=None):
         '''Render the invalid form messages as json responses
         instead of html form. '''
         if data:
             if data['status'] == '400':
-                return JsonResponse(data) 
+                return JsonResponse(data)
         if form.errors:
             data = {
                 'status': '400',
-                'error_message': f'Your form is having invalid input on: {form.errors} Correct your input and submit again'
+                'error_message': _(
+                    f'Your form is having invalid input \
+                        on: {form.errors} Correct your input and submit again')
             }
         else:
             data = {
                 'status': '400',
-                'error_message': 'We are having trouble to process your post, please try again later' 
+                'error_message': _(
+                    'Sorry we can\'t process your post \
+                        please try again later')
             }
         return JsonResponse(data)
-     
+
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
         img_errors = form.cleaned_data['img_error']
         show_phone = form.cleaned_data['show_phone']
-        
+        user = self.request.user
+
         failure_data = {
             'status': '400',
-            'error_message': 'Sorry, the image(s) were not successful uploaded, please try again'
+            'error_message': _(
+                'Sorry, the image(s) were not successfully uploaded, \
+                    please try again')
         }
         if not images_json:
             #The front-end will add the default images in case of errors 
             #Empty images_json means this form bypassed our front-end upload.
             return self.form_invalid(form, data=failure_data)
-        
+
         if img_errors:
             #Send this email in a celery task to improve performance
-            send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
+            logging.error(
+                    'JS ERRORS ON IMAGE UPLOADING:' + \
+                    str(img_errors)
+                )
 
         #Phone number needs no backend verification, it is just a char field. 
-        form.instance.user = self.request.user
+        form.instance.user = user
         classified = form.save(commit=False)
-        
+
         #Empty phone number is +8613300000000 for all old users around 150 users
-        if self.request.user.phone_number is not '' and show_phone:
-            if not classified.phone_number and self.request.user.phone_number.national_number != 13300000000:
-                classified.phone_number = self.request.user.phone_number
-            
-        if not classified.address and self.request.user.address:
-            classified.address = self.request.user.address
+        if user.phone_number is not '' and show_phone:
+            if (not classified.phone_number and
+                    user.phone_number.national_number != 13300000000):
+                classified.phone_number = user.phone_number
+
+        if not classified.address and user.address:
+            classified.address = user.address
 
         classified.save()
 
-        # split one long string of images into a list of string each for one JSON obj
         images_list = images_json.split(",")
         if multipleImagesPersist(
-                self.request, images_list, 'classifieds', classified):
+                self.request, images_list,
+                'classifieds', classified):
             messages.success(self.request, self.message)
             data = {
                 'status': '200',
@@ -293,14 +303,16 @@ class TagsAutoComplete(autocomplete.Select2QuerySetView):
         return qs
 
 
-class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+class EditClassifiedView(
+        LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""
     model = Classified
     message = _("Your classified has been updated.")
     form_class = ClassifiedEditForm
     template_name = 'classifieds/classified_update.html'
 
-    # In this form there is an image that is not saved, deliberately since you can't upload images.
+    # In this form there is an image that is not saved
+    #deliberately since you can't upload images.
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -311,9 +323,8 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 class ReportClassifiedView(LoginRequiredMixin, View):
-    """This class has to inherit FormClass model but failed to implement that
-    Update view will use the model Classified which is not a nice implementation.
-    There is no need of a model here just render a form and the send email. """
+    """This class has is not working as expected
+    No need of a model just render a form, send email. """
 
     message = _("Your report has been submitted.")
     template_name = 'classifieds/classified_report.html'
@@ -327,18 +338,21 @@ class ReportClassifiedView(LoginRequiredMixin, View):
         return reverse('classifieds:list')
 
 
-
-class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
-    """Implementation of the DeleteView overriding the delete method to
+class ClassifiedDeleteView(
+        LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
+    """Implementation of the DeleteView
+    overriding the delete method to
     allow a no-redirect response to use with AJAX call."""
     model = Classified
-    message = _("Your classified post has been deleted successfully!")
+    message = _(
+            "Your classified post has been deleted successfully!")
     success_url = reverse_lazy("classifieds:list")
 
 
     def delete(self, request, *args, **kwargs):
         """
-        Call the delete() method on the fetched object and then redirect to the
+        Call the delete() method on the fetched object
+        and then redirect to the
         success URL. This method is called by post.
         """
         self.object = self.get_object()
@@ -347,16 +361,21 @@ class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
         self.object.save()
         return HttpResponseRedirect(success_url)
 
+
 class DetailClassifiedView(DetailView):
-    """Basic DetailView implementation to call an individual classified."""
+    """Basic DetailView implementation
+    to call an individual classified."""
     model = Classified
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        context = super(DetailClassifiedView, self).get_context_data(**kwargs)
+        context = super(
+                DetailClassifiedView, self
+            ).get_context_data(**kwargs)
 
         classified_tags_ids = self.object.tags.values_list('id', flat=True)
-        similar_classifieds = Classified.objects.get_active().filter(tags__in=classified_tags_ids)\
+        similar_classifieds = Classified.objects.get_active().filter(
+                tags__in=classified_tags_ids)\
             .exclude(id=self.object.id).annotate (
                 image_thumb = Subquery (
                     ClassifiedImages.objects.filter(
@@ -368,10 +387,13 @@ class DetailClassifiedView(DetailView):
             )
 
         # Add in a QuerySet of all the images
-        context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
-        
+        context['images'] = ClassifiedImages.objects.filter(
+                classified=self.object.id
+            )
+
         context['images_no'] = len(context['images'])
-        context['similar_classifieds'] = similar_classifieds.annotate(same_tags=Count('tags'))\
+        context['similar_classifieds'] = similar_classifieds.annotate(
+                same_tags=Count('tags'))\
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context

@@ -53,7 +53,7 @@ class PhoneSignupForm(SignupForm):
                        'ACCOUNT_USERNAME_MAX_LENGTH', 16),
                    widget=forms.TextInput(
                        attrs={'placeholder':
-                              _('Permanent action. < 16 letters.'),
+                              _('< 16 letters. Can\'t be changed.'),
                               'autofocus': 'autofocus'}))
     province_region = forms.CharField(widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
@@ -64,9 +64,6 @@ class PhoneSignupForm(SignupForm):
 
     class Meta:
         model = User
-        help_texts = {
-            "username": "At least 3 characters, no special characters",
-        }
         fields = (
             "username",
             "city",
@@ -95,12 +92,6 @@ class PhoneSignupForm(SignupForm):
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
-        for fieldname in ["password1"]:
-            self.fields[
-                fieldname
-            ].help_text = (
-                "At least 8 letters & numbers"
-            )
 
     def save(self, request):
         # Ensure you call the parent class's save.

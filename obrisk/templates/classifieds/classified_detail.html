@@ -203,7 +203,7 @@
 
       <!-- Navigation buttons -->
       {% if request.user == classified.user%}
-      <div class="my-3">
+      <div class="m-3 mb-5">
         <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
           title="{% trans 'Edit this classified' %}">
           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
@@ -212,6 +212,7 @@
       <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
       {% endif %}
     </div>
+    <br/>
 
 
     <!-- Similar lassified -->

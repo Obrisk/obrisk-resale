@@ -63,7 +63,7 @@
   <!-- They should be placed at the end of the document so the pages load faster -->
   <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'js/nav.js' %}" type="text/javascript"></script>
+  <script src="{% static 'js/preset.js' %}" type="text/javascript"></script>
   <script src="{% static 'js/lazyload.js' %}"></script>
 
 
@@ -658,32 +658,33 @@
 
   <!-- For the chat-app-->
   {% if request.user.is_authenticated %}
-  <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
-  <script type="text/javascript">
-    var currentUser = "{{ request.user.username}}";
-    var new_messages = "{{ new_msgs }}";
+      <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
+      <script type="text/javascript">
 
-    if (new_messages != "None") {
-      console.log("here");
-      $(".msg-notification i").show();
-    }
 
-    $(function () {
-      source: "{% url 'search:suggestions' %}";
-    });
+        var currentUser = "{{ request.user.username}}";
+        var new_messages = "{{ new_msgs }}";
 
-  </script>
-  <script src="{% static 'js/notif-sw.js' %}" type="text/javascript"></script>
-  <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
+        if (new_messages != "None") {
+          $(".msg-notification i").show();
+        }
+
+        $(function () {
+          source: "{% url 'search:suggestions' %}";
+        });
+
+      </script>
+      <script src="{% static 'js/notif-sw.js' %}" type="text/javascript"></script>
+      <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
   {% endif %}
 
-  <script>
+  <script type="text/javascript">
+    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
     window.addEventListener("load", function (event) {
       lazyload();
     });
-  </script>
 
-  <script type="text/javascript">
     function registerServiceWorker() {
       // register sw script in supporting browsers
       if ('serviceWorker' in navigator) {
