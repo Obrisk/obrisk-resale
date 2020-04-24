@@ -151,6 +151,10 @@ def messagesView(request, username):
                         Classified.objects.filter(
                             message=OuterRef('pk'),
                         ).values_list('price', flat=True)[:1]),
+                    classified_slug = Subquery (
+                        Classified.objects.filter(
+                            message=OuterRef('pk'),
+                        ).values_list('slug', flat=True)[:1]),
                     )[:100]
 
             msgs_data = list(msgs_100)

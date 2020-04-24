@@ -53,6 +53,15 @@ label {
   border: none;
 }
 
+.social-ac {
+    font-size: 35px;
+}
+
+.fa-linkedin {
+  color: #1556cf;
+}
+
+
 .loading {
   -webkit-animation-name: spin;
   -webkit-animation-duration: 4000ms;

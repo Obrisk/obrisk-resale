@@ -104,8 +104,8 @@ $(function() {
                               "MMM. Do h:mm"
                             )}</span>
                             <div class="message-text"><div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="${
-              el.classified_url
+            <a href="/classifieds/${
+              el.classified_slug
             }" style="color:black; text-decoration:none; background-color:none" class="is-flex">
               <div class="card-img-top img-responsive column" style="max-width: 70px">
                                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
@@ -172,8 +172,8 @@ $(function() {
                               "MMM. Do h:mm"
                             )}</span>
                             <div class="message-text"><div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="${
-              el.classified_url
+            <a href="/classifieds/${
+              el.classified_slug
             }" style="color:black; text-decoration:none; background-color:none" class="is-flex">
               <div class="card-img-top img-responsive column" style="max-width: 70px">
                 <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
@@ -402,13 +402,11 @@ $(function() {
             }, 1);
           } else {
             $("#new-message-" + event.sender).show();
-            console.log(event.sender);
           }
         }
         break;
 
       case "set_status":
-        console.log(event.set_status + " " + event.sender);
         setUserOnlineOffline(event.sender, event.set_status);
         break;
       default:

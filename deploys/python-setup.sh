@@ -20,4 +20,5 @@ if [ "$EC2_INSTANCE_ID" = "i-09290a52964419c47" ]; then
     python /home/ubuntu/obdev2018/manage.py migrate
     python /home/ubuntu/obdev2018/manage.py collectstatic --noinput
 fi
+
 python /home/ubuntu/obdev2018/manage.py collectstatic --noinput --settings=config.settings.static

@@ -329,7 +329,8 @@ def post_stories(request):
             story.tags.add(str(tag.strip('#')))
 
         if images:
-            # split one long string of images into a list of string each for one JSON img_obj
+            # split one long string of images 
+            #into a list of string each for one JSON img_obj
             images_list = images.split(",")
 
             imgs_objs = multipleImagesPersist(request, images_list, 'stories', story)

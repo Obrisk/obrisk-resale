@@ -79,7 +79,9 @@
               </div>
 
               {% empty %}
-              <p class="p-3">Sorry {{ request.user.username | title}}, you have no connections </p><br>
+              <p class="p-3">Hey {{ request.user.username | title}}, you have no connections </p><br>
+              <p class="p-3">Connect and follow the accounts you like</p><br>
+
               {% endfor %}
               <!--Friend item-->
             </div>

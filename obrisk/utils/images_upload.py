@@ -4,6 +4,7 @@ import base64
 import os
 import datetime
 import logging
+import requests
 
 from django.contrib import messages
 from django.http.response import JsonResponse, HttpResponse
@@ -65,16 +66,17 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
     :return StsToken: temporary user key
     """
 
-    try:        
-        #Default timeout is 5 secs, but the server is far from alibaba data centers so increase it.
-        #This is north China, there are 3 more data centers. I can try others
-        clt = client.AcsClient(access_key_id, access_key_secret, 'cn-beijing',
-                             timeout=30, max_retry_time=3)
-        
+    try:
+        #Default timeout is 5 secs, but the server is far from aliyun
+        #This is north China, there are 3 more data centers. try others
+        clt = client.AcsClient(
+                access_key_id, access_key_secret,
+                'cn-beijing',timeout=30, max_retry_time=3)
+
     except Exception as e:
         logging.error(e)
         return False
-    
+
     else:
         try:
             #converting the clt results to json
@@ -88,7 +90,7 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
         except Exception as e:
             logging.error(e)
             return False
-        
+
         else:
             #Using the clt results to create an STSToken
             token = StsToken()
@@ -97,12 +99,16 @@ def fetch_sts_token(access_key_id, access_key_secret, role_arn):
             token.access_key_secret = j['Credentials']['AccessKeySecret']
             token.security_token = j['Credentials']['SecurityToken']
             token.request_id = j['RequestId']
-            token.expiration = oss2.utils.to_unixtime(j['Credentials']['Expiration'], '%Y-%m-%dT%H:%M:%SZ')
-
+            token.expiration = oss2.utils.to_unixtime(
+                    j['Credentials']['Expiration'],
+                    '%Y-%m-%dT%H:%M:%SZ'
+                )
             return token
 
 
-bucket = oss2.Bucket(oss2.Auth(access_key_id, access_key_secret), endpoint, bucket_name)
+bucket = oss2.Bucket(oss2.Auth(
+        access_key_id, access_key_secret
+    ), endpoint, bucket_name)
 
 
 def generate_sts_credentials(request):
@@ -111,10 +117,10 @@ def generate_sts_credentials(request):
     # create an STS client object that represents a live connection to the 
     # STS service
     sts_client = boto3.client('sts',
-                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
-                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
-                          region_name=os.getenv('AWS_S3_REGION_NAME')
-                      )
+          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'),
+          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
+          region_name=os.getenv('AWS_S3_REGION_NAME')
+      )
 
     try:
         # Call the assume_role method of the STSConnection object and pass the role
@@ -137,7 +143,6 @@ def generate_sts_credentials(request):
     return assumed_role_object['Credentials']
 
 
-
 def create_presigned_post(bucket_name, object_name,
                           fields=None, conditions=None, expiration=3600):
     """Generate a presigned URL S3 POST request to upload a file
@@ -148,17 +153,17 @@ def create_presigned_post(bucket_name, object_name,
     :param conditions: List of conditions to include in the policy
     :param expiration: Time in seconds for the presigned URL to remain valid
     :return: Dictionary with the following keys:
-        url: URL to post to
-        fields: Dictionary of form fields and values to submit with the POST
+    url: URL to post to
+    fields: Dictionary of form fields and values to submit with the POST
     :return: None if error.
     """
 
     # Generate a presigned S3 POST URL
     s3_client = boto3.client('s3',
-                          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'), 
-                          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
-                          region_name=os.getenv('AWS_S3_REGION_NAME')
-                      )
+          aws_access_key_id=os.getenv('AWS_STATIC_S3_KEY_ID'),
+          aws_secret_access_key=os.getenv('AWS_STATIC_S3_S3KT'),
+          region_name=os.getenv('AWS_S3_REGION_NAME')
+    )
     try:
         response = s3_client.generate_presigned_post(bucket_name,
                                                      object_name,
@@ -178,23 +183,23 @@ def get_oss_auth(request, app_name=None):
     """AJAX Functional view to recieve just the minimum information, process
     and create the new message and return the new data to be attached to the
     conversation stream."""
-    
+
     error_data = {
         'status': 'failed',
         'errorMessage': 'The request requires the object name to be uploaded \
         but no name was supplied'
     }
-    
+
     if app_name == 'stories.video' and env.bool('VIDEO_USE_AWS_MEDIA'):
         data = generate_sts_credentials(request)
-        
+
         if data is None:
             return JsonResponse(error_data)
         return JsonResponse(data)
 
     else:
         token = fetch_sts_token(access_key_id, access_key_secret, sts_role_arn)
-        
+
         if token is False:
             #This is very bad, but we'll do it until we move the servers to China.
             #logging this event
@@ -219,13 +224,14 @@ def get_oss_auth(request, app_name=None):
                 'accessKeySecret': scrt,
                 'SecurityToken': token_value,
                 'bucket': bucket_name
-            }       
+            }
             return JsonResponse(data)
 
 
 def multipleImagesPersist(request, images_list, app, obj):
-    ''' This function takes the request, images list, app name (string) and app object
-    and it validates the images list and stores them to the database. 
+    ''' This func takes request, images list,
+    app name (string) and app object
+    and it validates the images list and stores them to the database.
     It returns images objects list if the images where saved to the db
     False if there is a validation problem '''
 
@@ -237,41 +243,47 @@ def multipleImagesPersist(request, images_list, app, obj):
         obj.delete()
         return False
 
-    #from here if you return form invalid then you have to prior delete the obj, obj.delete()
-    #The current implementation will sucessfully create obj even when there are error on images
+    #from here if you return form invalid
+    #then you have to prior delete the obj, obj.delete()
+    #The current implementation will sucessfully create obj
+    #even when there are error on images
     #This is just to help to increase the app post on the website.
-    #Also most errors are caused by our frontend when uploading so don't return invalid form.
     img_mid_name = None
     saved_objs = []
-    
+
     for index, str_result in enumerate(images_list):
         if str_result.startswith(
               f'media/images/{app}/{request.user.username}') is False:
             #Check if it was default image as it has no username.
             #This is the same default on all multiple upload apps
-            #Though stories shouldn't have this, form shouldn't be submitted without images
+            #Though form shouldn't be submitted without images
             if (str_result != 'classifieds/error-img.jpg'):
                 obj.delete()
-                return False 
-        
+                return False
+
         d = str(datetime.datetime.now())
 
         if app == 'classifieds':
             img_obj = ClassifiedImages(classified=obj, image=str_result)
-            thumb_name = "media/images/classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), to_lower=True) + "/thumbnails/" + d + str(index)
-            img_mid_name = "classifieds/" + slugify(str(obj.user)) + "/" + \
-                    slugify(str(obj.title), to_lower=True) + "/mid-size/" + d + str(index)
+            thumb_name = "media/images/classifieds/" + slugify(
+                    str(obj.user)) + "/" + slugify(
+                            str(obj.title), to_lower=True
+                        ) + "/thumbnails/" + d + str(index)
+            img_mid_name = "classifieds/" + slugify(
+                    str(obj.user)) + "/" + slugify(
+                        str(obj.title), to_lower=True) + "/mid-size/" + d + str(index)
             style = 'image/resize,m_fill,h_156,w_156'
             style_mid = 'image/resize,m_fill,h_400'
 
         elif app == 'stories':
-            #The image here is full url to the OSS bucket because of how it is consumed in the front-end
+            #The image here is full url to the OSS bucket
+            #because of how it is consumed in the front-end
             img_obj = StoryImages(
-                    story=obj, 
-                    image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
-                )
-            thumb_name = "media/images/stories/" + slugify(str(obj.user)) + "/thumbnails/" + d + str(index)
+                story=obj,
+                image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
+            )
+            thumb_name = "media/images/stories/" + slugify(
+                    str(obj.user)) + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_456,w_456'
 
         else:
@@ -290,38 +302,50 @@ def multipleImagesPersist(request, images_list, app, obj):
         else:
             try:
                 process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(thumb_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                    oss2.compat.to_string(base64.urlsafe_b64encode(
+                        oss2.compat.to_bytes(thumb_name))),
+                    oss2.compat.to_string(
+                        base64.urlsafe_b64encode(
+                            oss2.compat.to_bytes(bucket_name)
+                        )
+                    )
+                )
                 bucket.process_object(str_result, process)
-            
+
                 if app == 'classifieds':
                     process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
-                                                                oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                    oss2.compat.to_bytes(img_mid_name))),
-                                                                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                        oss2.compat.to_string(base64.urlsafe_b64encode(
+                            oss2.compat.to_bytes(img_mid_name))),
+                        oss2.compat.to_string(
+                            base64.urlsafe_b64encode(
+                                oss2.compat.to_bytes(bucket_name)
+                                )
+                            )
+                        )
                     bucket.process_object(str_result, process)
-            
+
             except oss2.exceptions.NoSuchKey as e:
                 obj.delete()
                 return False
 
-            except Exception:
-                #If there is a problem with the thumbnail generation, most likely our code is wrong... 
+            except Exception as e:
+                #If there is a problem with the thumbnail generation,
+                #our code is wrong
                 if index+1 == tot_img_objs:
                     #To-do 
-                    #Pass the image object to background task and verify if image exist
-                    #and retry thumbnail creation
+                    #retry thumbnail creation
                     #Send email to the developers
-                    messages.error(request, f"We are having difficulty processing your image(s), \
+                    logging.error(e)
+                    messages.error(
+                        request, f"We are having difficulty processing your image(s), \
                         check your post if everything is fine.")
-                    
-                img_obj.image_thumb = str_result 
+
+                img_obj.image_thumb = str_result
                 if img_mid_name:
                     img_obj.image_mid_size = str_result
                 img_obj.save()
                 saved_objs.append(img_obj)
-                continue   
+                continue
 
             else:
                 img_obj.image_thumb = thumb_name
@@ -330,16 +354,19 @@ def multipleImagesPersist(request, images_list, app, obj):
                 img_obj.save()
                 saved_objs.append(img_obj)
 
-    return saved_objs 
+    return saved_objs
+
 
 def videoPersist(request, video, app, obj):
-    ''' Function takes the request, video string, app name (string) and app object
-    and it validates the video string and stores them to the database. 
+    ''' Takes the request, video str, app name (str) and app object
+    and it validates the video string and stores them to the database.
     It returns True if the video is authentic
     False if there is a validation problem '''
 
     if env.bool('VIDEO_USE_AWS_MEDIA'):
-        if video.startswith('f{media/videos/{app}/{request.user.username}/') is False:
+        if video.startswith(
+                'f{media/videos/{app}/{request.user.username}/'
+            ) is False:
             obj.delete()
             return False
 
@@ -356,42 +383,72 @@ def videoPersist(request, video, app, obj):
     else:
         #For Aliyun OSS:
         try:
-            simplifiedmeta = bucket.get_object_meta(video)
+            #simplifiedmeta = bucket.get_object_meta(video)
             #print(simplifiedmeta.headers['Last-Modified'])
-            if int(simplifiedmeta.headers['Content-Length']) > 0:
-                obj.video = video
-                obj.save()
-                return True
+            #if int(simplifiedmeta.headers['Content-Length']) > 0:
 
-        except oss2.exceptions.NoSuchKey:
-            obj.delete() 
+            display_pic = requests.get(
+                "https://obrisk.oss-cn-hangzhou.aliyuncs.com/" + \
+                video + "?x-oss-process=video/snapshot,t_5000,f_jpg,w_800,h_600,m_fast", # noqa
+                timeout=5
+            )
+
+        except (requests.ConnectionError,
+                requests.RequestException,
+                requests.HTTPError,
+                requests.Timeout,
+                requests.TooManyRedirects) as e:
             return False
+            print( "mafan")
+            logging.error("Can't request thumbnail from video" + e)
 
-    return False
+        # naming them in our oss
+        pic_name = "media/images/{{app}}" + slugify(
+                str(request.user.username)
+            ) + "/video-display-thumb-" + uuid.uuid4().hex[:12]
+
+        # upoad them in our oss
+        try:
+            bucket.put_object(pic_name, display_pic.content)
+
+        except (oss2.exceptions.ClientError,
+                oss2.exceptions.RequestError) as e:
+            logging.error("Can't upload thumbnail for video" + e)
+
+        else:
+            StoryImages.objects.create(
+                 story=obj,
+                 image_thumb = pic_name
+            )
+
+        obj.video = video
+        obj.save()
+        return True
+
 
 @login_required
 @require_http_methods(["GET"])
 def bulk_update_classifieds_mid_images(request):
-    """Function to update all images objects to have 
+    """Function to update all images objects to have
     the mid size image."""
     imgs = ClassifiedImages.objects.all()
 
     for index, img in enumerate(imgs):
         d = str(datetime.datetime.now())
-        
+
         img_mid_name = "classifieds/" + slugify(str(img.classified.user)) + "/" + \
                 slugify(str(img.classified.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
-        
+
         style_mid = 'image/resize,m_fill,h_400'
 
         try:
             process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
-                                                        oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                            oss2.compat.to_bytes(img_mid_name))),
-                                                        oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                oss2.compat.to_string(base64.urlsafe_b64encode(
+                    oss2.compat.to_bytes(img_mid_name))),
+                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
             bucket.process_object(img.image, process)
 
-        
+
         except oss2.exceptions.NoSuchKey as e:
             messages.error(request, f"Object with details doesn't exist {e}")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
@@ -400,13 +457,7 @@ def bulk_update_classifieds_mid_images(request):
             messages.error(request, "This is trouble, restart the process!")
             return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
         else:
-            img.image_mid_size = img_mid_name 
+            img.image_mid_size = img_mid_name
             img.save()
 
     return redirect('classifieds:list')
-
-
-
-
-
-

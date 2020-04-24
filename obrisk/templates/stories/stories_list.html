@@ -38,7 +38,7 @@
   <div class="row mt-4">
 
     <div class="col-md-6 m-auto mt-0 p-sm-0">
-      <div id="compose-card" class="card is-new-content">
+      <div id="compose-card" class="d-none card is-new-content">
         <!-- Top tabs -->
         <div class="tabs-wrapper">
           <div class="tabs is-boxed is-fullwidth">
@@ -261,8 +261,6 @@
                     </div>
                   </div>
                 </div>
-
-
               </div>
 
               <!-- Footer buttons -->
@@ -317,11 +315,13 @@
 
 {% block extra_js %}
 
-<script>
-  //Hide create card on stories details, let use focus on shared content  
-  if ('{{request.path}}'.startsWith('/stories/i/') &&
-    !$('#compose-card').hasClass('d-none')) {
-    $('#compose-card').remove();
+<script type="text/javascript">
+
+
+  //Hide create card on stories details, to focus on shared content  
+  if ($('#compose-card').hasClass('d-none') &&
+  window.location.href.endsWith('/stories/'))  {
+        $('#compose-card').toggleClass('d-none');
   }
 
   var page = 1;
@@ -356,37 +356,11 @@
     });
   }
 
-</script>
-<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
-<script src="{% static 'js/fancybox.min.js' %}"></script>
-
-<link rel="stylesheet" href="{% static 'css/share.css' %}">
-<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/aws-sdk.js' %}" type="text/javascript"></script>
-
-<script>
-  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-</script>
-
-<script>
-
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const app = "stories";
   const user = "{{ request.user.username }}";
-  var infinite = new Waypoint.Infinite({
-    element: $('.infinite-container')[0],
-    onBeforePageLoad: function () {
-      $('.load').show();
-    },
-    onAfterPageLoad: function ($items) {
-      $('.load').hide();
-    }
-  });
+
+
   //Load videos
   var loadvideo = function () {
     Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p, {
@@ -397,9 +371,22 @@
       controls: ['play-large', 'progress', 'mute', 'volume', 'fullscreen']
     }));
   }
+
   $(document).ready(function () {
     loadvideo();
 
   });
 </script>
+
+<script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
+<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/share.css' %}">
+<script src="{% static 'js/fancybox.min.js' %}"></script>
+<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/listing.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
+
 {% endblock extra_js %}

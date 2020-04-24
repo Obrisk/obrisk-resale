@@ -1,16 +1,13 @@
 $(function() {
-  function csrfSafeMethod(method) {
-    // These HTTP methods do not require CSRF protection
-    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-  }
-
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
+    var infinite = new Waypoint.Infinite({
+        element: $('.infinite-container')[0],
+        onBeforePageLoad: function () {
+          $('.load').show();
+        },
+        onAfterPageLoad: function ($items) {
+          $('.load').hide();
+        }
+    });
 
   function offset(el) {
     var rect = el.getBoundingClientRect(),
@@ -18,6 +15,7 @@ $(function() {
       scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
   }
+
   $("input, textarea").val("");
 
   //Submit stories
@@ -60,8 +58,8 @@ $(function() {
         type: "GET",
         cache: false,
         success: function(data) {
+          li.find(".like-button .mdi").toggleClass("is-active");
           li.find(".likes-count .count").text(data.likes);
-          li.find(".like-button").toggleClass("is-active");
         }
       });
     } else {
@@ -241,11 +239,11 @@ $(function() {
     });
   });
 
-  //
   $("body").on("uploadComplete", function(event) {
     $("#id_images").val(images);
     $("#id_video").val(videos);
     $("#id_img_error").val(img_error);
+
     $.ajax({
       url: "/stories/post-stories/",
       data: $("#postStoriesForm").serialize(),
