@@ -174,7 +174,7 @@
               <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
                 <div class="user-image">
                   {% if request.user.thumbnail %}
-                  <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}"
+                  <img src="{{ oss }}/{{request.user.thumbnail}}"
                     alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;"
                     class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
                   {% else %}
@@ -355,29 +355,20 @@
       <div class="tabs overflow-visible is-toggle is-fullwidth w-100 ml-2 mr-2">
         <ul class="justify-content-between">
           
-        {% if request.user.is_authenticated %}
-            <li class="flex-grow-0">
-
-            <div class="navbar-item is-icon drop-trigger">
-              <div id="" class="notifications navbar-item is-icon drop-trigger">
-                <a class="border-0" href="javascript:void(0);">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-bell">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
-                </a>
-
-                <div class="nav-drop is-navbarTop recent-notifications" id="">
-
-                </div>
-              </div>
-            </div>
-          </li>
-        {% endif %}
 
           <li class="flex-grow-0">
+            {% if request.META.HTTP_REFERER %}
+                <a class="border-0" href="javascript:history.back()">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 8 8 12 12 16"></polyline>
+                        <line x1="16" y1="12" x2="8" y2="12"></line>
+                    </svg>
+                </a>
+            {% else  %}
+
             <a class="border-0" href="{% url 'home' %}">
               <svg width="64" height="48" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_i)">
@@ -468,7 +459,11 @@
                 </defs>
               </svg>
             </a>
+
+            {% endif %}
           </li>
+
+          
 
             <!-- Search for the mobile
                 <li >
@@ -489,12 +484,33 @@
             </div> 
           </li> -->
 
+
         {% if request.user.is_authenticated %}
+            <li class="flex-grow-0">
+
+            <div class="navbar-item is-icon drop-trigger">
+              <div id="" class="notifications navbar-item is-icon drop-trigger">
+                <a class="border-0" href="javascript:void(0);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-bell">
+                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                  </svg>
+                </a>
+
+                <div class="nav-drop is-navbarTop recent-notifications" id="">
+
+                </div>
+              </div>
+            </div>
+          </li>
+
           <li class="flex-grow-0">
             <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
               <div class="user-image">
                 {% if request.user.thumbnail %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.thumbnail}}" alt="Picture Profile"
+                <img src="{{ oss }}/{{request.user.thumbnail}}" alt="Picture Profile"
                   style="width:30px;height:30px;border-radius: 50%;"
                   class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
                 {% else %}
