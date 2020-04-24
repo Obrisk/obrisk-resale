@@ -97,8 +97,6 @@ OssUpload.prototype = {
           });
         }
 
-        //make sure we get the sts token
-        if (client !== undefined) {
           const upload = async () => {
             try {
               const results = await client
@@ -193,20 +191,9 @@ OssUpload.prototype = {
               console.log(e);
             }
           };
-
           return upload();
-        } else {
-          $.wnoty({
-            type: "error",
-            autohide: false,
-            message:
-              "Oops!, it looks like there is a network problem, \
-            Please try again later or contact us at support@obrisk.com"
-          });
-          $(".start-uploader").css("display", "block");
-        }
-      })
-      .catch(e => {
+
+        }) .catch(e => {
         $.wnoty({
           type: "error",
           autohide: false,
@@ -216,7 +203,7 @@ OssUpload.prototype = {
         });
         console.log(e);
       });
-  }
+    }
 };
 
 /**

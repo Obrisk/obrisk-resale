@@ -139,9 +139,15 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        html = html2text.html2text(self.object.content_html)
+        context['content'] = html.splitlines(keepends = False)
+        return context
+
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('posts:list')
+        return self.object.get_absolute_url()
 
 
 @method_decorator(login_required, name='post')

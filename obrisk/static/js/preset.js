@@ -2,7 +2,7 @@ $(function() {
   function getCookie(name) {
     // Function to get any cookie available in the session.
     var cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
+    if (document.cookie) {
       var cookies = document.cookie.split(";");
       for (var i = 0; i < cookies.length; i++) {
         var cookie = jQuery.trim(cookies[i]);
@@ -41,7 +41,9 @@ $(document).ready(function() {
     if ($(target).is(".recent-notifications #close")) {
       $(".recent-notifications").removeClass("is-active");
     } else if ($(target).is("#mark")) {
+        //console.log ()
     } else if ($(target).is("#view")) {
+        //console.log ()
     } else {
       $(".recent-notifications").html("");
       $.ajax({

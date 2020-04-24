@@ -28,7 +28,7 @@
         <div class="form-group">
             <input type="file" id="cover-image" name="coverimage" onchange="uploadPreview(this)"
             style="font-size: 10px; width: 20px; opacity: 0; filter:alpha(opacity=0); position:relative; top: -40px;; left: -20px" />
-           <img src="#" alt="cover image" id="cover" class="img-fluid d-none mt-2" style="max-width: 300px;max-height:100%;">
+            <img src="{{oss}}/{{form.image.value}}" alt="cover image" id="cover" class="img-fluid mt-2" style="max-width: 300px;max-height:100%;">
         </div>
 
         <div id="editor">
@@ -78,10 +78,13 @@
 {% block extra_js %}
 
 <script type="text/javascript">
-  console.log("{{ object }}");
   $(document ).ready(function() {
-      quill.setText("{{ form.content_html.value | safe }}" + " \n");
-      //$("#editor").text();
+      var html = $('<textarea />').html("{{ form.content_html.value }}").text();
+      hmtl = html.replace(/<\/?div>/g,'\n');
+      html = html.replace(/<\/?p>/g,'\n');
+      html = html.replace(/<(.|\n)*?>/g, '');
+      quill.setText(html + " \n");
+
   });
 
 </script>

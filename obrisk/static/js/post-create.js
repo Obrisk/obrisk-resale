@@ -47,18 +47,7 @@ Quill.register('modules/blotFormatter', QuillBlotFormatter.default);
 
   });
 
-
-if ( typeof quill !== 'undefined' ) {
-    quill.setContents("{{ form.data.content_json }}")
-    quill.on('text-change', function (delta, oldDelta, source) {
+  quill.setContents("{{ form.data.content_json }}");
+  quill.on('text-change', function (delta, oldDelta, source) {
       $("#id_content").val(quill.getContents());
-    });
-
- } else {
-    $.wnoty({
-        type: "error",
-        autohide: false,
-        message:
-        "Sorry! The editor isn't working. Please try again later!"
-    });
-}
+  });
