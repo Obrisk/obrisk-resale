@@ -30,6 +30,10 @@
   transition: 0.15s linear;
 }
 
+.btn-default {
+  background-color: #FFFF00;
+}
+
 .nav-link.active {
   background-color: #ccc !important;
   color: #fff !important;
@@ -37,7 +41,6 @@
 
 #id_category {
   height: auto;
-  width: 50%;
 }
 .ql-editor {
   min-height: 300px;

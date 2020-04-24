@@ -27,13 +27,12 @@
 
           <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
           {% empty %}
-            Sorry {{ request.user.username| title }}, you don't have any followers right now 😞
+          <p> Hey {{ request.user.username| title }}, you don't have any followers </p>
+          <p> Share interesting content to get followers </p>
 
           {% endfor %}
 
             <div class="mt-3">
-              <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
-                class="fa fa-chevron-left" aria-hidden="true"></i> Back </button>
                 <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
                   {% trans "Discover" %}
                 </a>

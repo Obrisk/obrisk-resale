@@ -4,46 +4,57 @@ from obrisk.classifieds.models import Classified, OfficialAd
 from phonenumber_field.formfields import PhoneNumberField
 
 class ClassifiedForm(forms.ModelForm):
-    status = forms.CharField(widget=forms.HiddenInput(), required=False)
-    edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
-    show_phone = forms.BooleanField(widget=forms.HiddenInput(), initial=True, required=False)
+    status = forms.CharField(
+            widget=forms.HiddenInput(),
+            required=False
+        )
+    edited = forms.BooleanField(
+            widget=forms.HiddenInput(),
+            required=False, initial=False
+        )
+    show_phone = forms.BooleanField(
+            widget=forms.HiddenInput(),
+            initial=True, required=False
+        )
     #100 for each image.
-    images = forms.CharField(widget=forms.HiddenInput(), max_length=1500, required=False)
+    images = forms.CharField(
+            widget=forms.HiddenInput(),
+            max_length=1500, required=False
+        )
     #Store images error for later debugging.
-    img_error = forms.CharField(widget=forms.HiddenInput(), max_length=500, required=False) 
+    img_error = forms.CharField(
+            widget=forms.HiddenInput(),
+            max_length=500, required=False
+        )
     address = forms.CharField (
-        required=False, 
-        label=("Your address"), help_text='English address is preferred. You can permanently save it in your profile settings'
+        required=False,
     )
-    phone_number = PhoneNumberField(required=False, label=("Phone number(optional)"),
-                                    widget=forms.TextInput(
-                                        attrs={'placeholder': ('Don\'t enter country code')}
-                                    )
-                                )
+    phone_number = PhoneNumberField(required=False,
+            label=("Phone number(optional)"),
+            widget=forms.TextInput(
+                attrs={
+                    'placeholder': ('Don\'t enter country code')
+                }
+            )
+        )
 
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "address", "phone_number", "show_phone"]
+        fields = ["title", "details", "status", "edited",
+                 "price", "address", "phone_number", "show_phone"]
 
-        widgets = {
-            'user': forms.HiddenInput(),
-            'details': forms.Textarea(attrs={'rows': 3})
-            #'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
-        }
-
-        help_texts = {
-            "title": "Short description of your product",
-            "price": "Numbers only. 0 means FREE.",
-            "details": "Please provide detailed information, it easily convinces someone to buy.",
-        }
 
 class ClassifiedEditForm(forms.ModelForm):
     status = forms.CharField(widget=forms.HiddenInput())
-    edited = forms.BooleanField( widget=forms.HiddenInput(), required=False, initial=False)
+    edited = forms.BooleanField(
+            widget=forms.HiddenInput(),
+            required=False, initial=False
+        )
     details = forms.CharField(widget=forms.Textarea)
     wechat_id = forms.CharField(required=False, label=('WechatID'))
     phone_number = forms.CharField(required=False)
-    #images = forms.CharField(widget=forms.HiddenInput(), max_length=1500) #100 for each image.
+    #images = forms.CharField(
+        #widget=forms.HiddenInput(), max_length=1500)
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "tags",
@@ -72,7 +83,7 @@ class OfficialAdForm(forms.ModelForm):
         model = OfficialAd
         fields = ["title", "details", "tags", "images"]
         widgets = {'user': forms.HiddenInput()}
-           
+
 # class ClassifiedReportForm(forms.ModelForm):
 #     laws = 'lw'
 #     abusive = 'ab'

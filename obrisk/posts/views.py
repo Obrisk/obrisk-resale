@@ -1,15 +1,20 @@
+import logging
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django.views.generic import (
+    CreateView, ListView, UpdateView, DetailView
+)
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 
 from django.shortcuts import redirect
 from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.posts.models import Post
-from obrisk.posts.forms import PostForm, CommentForm
+from obrisk.posts.forms import (
+    PostForm, PostEditForm, CommentForm
+)
 #For comments
-from django.http import JsonResponse 
+from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
@@ -53,74 +58,80 @@ class CreatePostView(LoginRequiredMixin, CreateView):
     message = _("Your Post has been created.")
     form_class = PostForm
     template_name = 'posts/post_create.html'
-    
+
     def __init__(self, **kwargs):
         self.object = None
         super().__init__(**kwargs)
-        
 
     def form_valid(self, form):
+
+        if self.request.user.is_official is False and \
+        form.cleaned_data['status'] is 'P':
+            messages.error(self.request, "Sorry,\
+                You're not authorized to publish the article")
+            return self.form_invalid(form)
+
         image = form.cleaned_data['image']
 
-        if (image == None):
-            messages.error(self.request, "Sorry, the image were not uploaded successfully. \
-                Please add the image again and submit the form!")
+        if (image is None or (image.startswith(
+            f'media/images/posts/{self.request.user.username}') is False)):
+            messages.error(self.request, "Sorry, the image was not uploaded. \
+                Please add the image and submit the form!")
             return self.form_invalid(form)
-        
+
         else:
             form.instance.user = self.request.user
             post = form.save(commit=False)
             post.user = self.request.user
-            post.image = post.image.replace('https://obrisk.oss-cn-hangzhou.aliyuncs.com/', '')
+            post.image = image
 
             d = str(datetime.datetime.now())
-            thumb_name = "posts/" + str(post.user) + "/" + \
-            slugify(str(post.title), allow_unicode=True, to_lower=True) + "/thumbnails/" + d 
+            thumb_name = "media/images/posts/" + str(post.user) + "/" + \
+            slugify(str(post.title), to_lower=True) + "/thumbnails/" + d
             style = 'image/resize,m_fill,h_300,w_430'
-            
+
             try:
                 process = "{0}|sys/saveas,o_{1},b_{2}".format(style,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
-                                                                oss2.compat.to_bytes(thumb_name))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                        oss2.compat.to_string(base64.urlsafe_b64encode(
+                            oss2.compat.to_bytes(thumb_name))),
+                        oss2.compat.to_string(
+                            base64.urlsafe_b64encode(
+                                oss2.compat.to_bytes(bucket_name)
+                            )
+                        )
+                    )
                 bucket.process_object(post.image, process)
 
             except oss2.exceptions.ServerError as e:
                 post.save()
-                messages.error(self.request, "Oops we are very sorry. \
-                Your image was not uploaded successfully. Please ensure that, \
-                your internet connection is stable and edit your item to add images. "
-                            + 'status={0}, request_id={1}'.format(e.status, e.request_id))
+                messages.error(self.request, _("Sorry, \
+                    Your image was not uploaded. Please verify that, \
+                    your internet is stable and edit the post to add images.")
+                )
+                logging.error(e)
                 # return self.form_invalid(form)
-                #I am not returning form errors because this is our problem and not user's
+                #Dont return form because this is likely our problem
                 return redirect ('posts:list')
-            
-            except:
-                post.save()
-                messages.error(self.request, "Oops we are sorry! Your image \
-                    was not uploaded successfully. Please select your item, then edit, \
-                    and try again to upload the images.")
-                #return self.form_invalid(form)
-                #I am not returning form errors because this is our problem and not user's
-                return redirect ('posts:list')
-        
+
             else:
                 post.img_small = thumb_name
                 post.save()
 
-            #When the for-loop has ended return the results.        
             return super(CreatePostView, self).form_valid(form)
 
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('posts:list')
+        if self.request.user.is_official:
+            return reverse('posts:list')
+        else:
+            return self.object.get_absolute_url()
 
 
 class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing Posts."""
     model = Post
     message = _("Your Post has been updated.")
-    form_class = PostForm
+    form_class = PostEditForm
     template_name = 'posts/post_update.html'
 
     def form_valid(self, form):
@@ -129,8 +140,7 @@ class EditPostView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('posts:list')
-
+        return self.object.get_absolute_url()
 
 
 @method_decorator(login_required, name='post')
@@ -142,7 +152,11 @@ class DetailPostView(DetailView):
     def render_to_response(self, context, **response_kwargs):
         """ Allow AJAX requests to be handled more gracefully """
         if self.request.is_ajax():
-            return JsonResponse('Your comment has been uploaded!',safe=False, **response_kwargs)
+            return JsonResponse(
+                _('Your comment has been uploaded!'),
+                safe=False,
+                **response_kwargs
+            )
         else:
             return super(DetailView,self).render_to_response(context, **response_kwargs)
 
@@ -152,7 +166,7 @@ class DetailPostView(DetailView):
         formsets with the passed POST variables and then checking them for
         validity.
         """
-        
+
         comment_form = CommentForm(self.request.POST)
         self.object = self.get_object()
 
@@ -170,18 +184,17 @@ class DetailPostView(DetailView):
             context['comments'] = self.object.comments.all()
             context['new_comment'] = None
             return self.render_to_response(context=context)
-        
+
         else:
             context = super(DetailPostView, self).get_context_data(**kwargs)
             #Return the form with errors.
             context['comment_form'] = comment_form
             return self.render_to_response(context)
-           
 
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DetailPostView, self).get_context_data(**kwargs)
-        # Add in a QuerySet of all the images
+        # Add in a QuerySet of comments 
         context['comment_form'] = CommentForm()
         context['comments'] = self.object.comments.all()
         context['new_comment'] = None

@@ -1,10 +1,11 @@
+
 {% load static i18n humanize %}
 
 
 {% if request.user == message.sender %}
 <div class="chat-message is-sent">
     {% if message.sender.thumbnail %}
-    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+    <img src="{{oss}}/{{message.sender.thumbnail}}" alt="Picture Profile"
         style="width:30px;height:30px;border-radius: 50%;"
         class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic">
     {% else %}
@@ -18,9 +19,9 @@
         <div class="message-text">{{ message.message }}</div>
         {% endif %}
         {% if message.img_preview %}
-        <a data-fancybox="gallery" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}"><img
+        <a data-fancybox="gallery" href="{{oss}}/{{ message.img_preview }}"><img
                 style="width: 250px; height: 250px;"
-                src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}" /></a>
+                src="{{oss}}/{{ message.img_preview }}" /></a>
         {% endif %}
 
        {% if message.classified %} 
@@ -30,9 +31,9 @@
               <div class="card-img-top img-responsive column" style="max-width: 70px">
 
                 {% if message.classified_thumbnail %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.classified_thumbnail }}">
+                <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}">
                 {% else %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+                <img class="card-img" src="{{oss}}/classifieds/default.jpg">
                 {% endif %}
 
               </div>
@@ -61,7 +62,7 @@
 
 <div class="chat-message is-received">
     {% if message.sender.thumbnail %}
-    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{message.sender.thumbnail}}" alt="Picture Profile"
+    <img src="{{oss}}/{{message.sender.thumbnail}}" alt="Picture Profile"
         style="width:30px;height:30px;border-radius: 50%;"
         class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
     {% else %}
@@ -76,9 +77,9 @@
 
         {% if message.img_preview %}
         <a data-fancybox="gallery" style="width: 250px; height: 250px;"
-            href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}"><img
+            href="{{oss}}/{{ message.img_preview }}"><img
                 style="width: 250px; height: 250px;"
-                src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.img_preview }}" /></a>
+                src="{{oss}}/{{ message.img_preview }}" /></a>
         {% endif %}
 
        {% if message.classified %} 
@@ -88,9 +89,9 @@
               <div class="card-img-top img-responsive column" style="max-width: 70px">
 
                 {% if message.classified_thumbnail %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ message.classified_thumbnail }}">
+                <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}">
                 {% else %}
-                <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg">
+                <img class="card-img" src="{{oss}}/classifieds/default.jpg">
                 {% endif %}
 
               </div>
@@ -110,8 +111,6 @@
             </a>
           </div>
         {% endif %}
-
-
 
     </div>
 </div>

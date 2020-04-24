@@ -14,6 +14,11 @@
     background: linear-gradient(45deg, #491104, #c03004)
 }
 
+.share {
+    padding-top: 18px;
+    padding-bottom: 18px;
+}
+
 .meta-left span {
     color: rgba(0, 0, 0, .54) !important;
 }

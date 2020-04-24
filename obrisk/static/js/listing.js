@@ -26,8 +26,10 @@
 //})()
 
 /* -------------------------------------------------------------------------- */
-/*                              Share classifieds                             */
+/*                              Share posts                                   */
 /* -------------------------------------------------------------------------- */
+
+
 
 function share(title, text, url) {
   url = window.location.host + url;
@@ -69,6 +71,15 @@ $(".close-publish").click(function(e) {
 });
 
 $("#addNewClassified").click(function(e) {
+  e.preventDefault();
+  $(".app-overlay").addClass("is-active");
+  $(".close-wrap").removeClass("d-none");
+  $(".is-new-content").removeClass("d-none");
+  $(".is-new-content").addClass("is-highlighted");
+  $(".all-stories ").addClass("block-scroll");
+});
+
+$("#addNewItem").click(function(e) {
   e.preventDefault();
   $(".app-overlay").addClass("is-active");
   $(".close-wrap").removeClass("d-none");
