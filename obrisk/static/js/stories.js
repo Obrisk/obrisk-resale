@@ -58,8 +58,8 @@ $(function() {
         type: "GET",
         cache: false,
         success: function(data) {
+          li.find(".like-button .mdi").toggleClass("is-active");
           li.find(".likes-count .count").text(data.likes);
-          li.find(".like-button").toggleClass("is-active");
         }
       });
     } else {
