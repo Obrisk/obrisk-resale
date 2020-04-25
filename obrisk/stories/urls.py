@@ -2,6 +2,7 @@ from django.conf.urls import url
 from obrisk.stories import views
 from obrisk.stories.search import (
         SearchListView, get_suggestions)
+from obrisk.utils.images_upload import bulk_update_vid_images
 
 app_name = 'stories'
 urlpatterns = [
@@ -21,6 +22,10 @@ urlpatterns = [
         r'^get-thread/$',
         views.get_thread,
         name='get_thread'),
+    url(
+        r'^story-update-vids/$',
+        bulk_update_vid_images,
+        name='get_vids'),
     url(
         r'^story-likers/$',
         views.get_story_likers,

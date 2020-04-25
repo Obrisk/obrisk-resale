@@ -129,13 +129,6 @@ def classified_list(request, tag_slug=None):
             'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
 
 
-# class ExpiredListView(ClassifiedsListView):
-#     """Overriding the original implementation to call the expired classifieds
-#     list."""
-
-#     def get_queryset(self, **kwargs):
-#         return Classified.objects.get_expired()
-
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = OfficialAd
