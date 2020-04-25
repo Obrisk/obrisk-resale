@@ -20,7 +20,7 @@ import oss2
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
 from obrisk.classifieds.models import ClassifiedImages
-from obrisk.stories.models import StoryImages
+from obrisk.stories.models import StoryImages, Stories
 from config.settings.base import env
 
 
@@ -461,3 +461,56 @@ def bulk_update_classifieds_mid_images(request):
             img.save()
 
     return redirect('classifieds:list')
+
+
+@login_required
+@require_http_methods(["GET"])
+def bulk_update_vid_images(request):
+    """Function to update all images objects to have
+    the mid size image."""
+    strs = Stories.objects.exclude(
+            video__isnull=True
+        ).exclude(video__exact='')
+
+    for story in strs:
+        try:
+            #simplifiedmeta = bucket.get_object_meta(video)
+            #print(simplifiedmeta.headers['Last-Modified'])
+            #if int(simplifiedmeta.headers['Content-Length']) > 0:
+            video = story.video
+            app = 'stories'
+
+            display_pic = requests.get(
+                "https://obrisk.oss-cn-hangzhou.aliyuncs.com/" + \
+                video + "?x-oss-process=video/snapshot,t_5000,f_jpg,w_800,h_600,m_fast", # noqa
+                timeout=5
+            )
+
+        except (requests.ConnectionError,
+                requests.RequestException,
+                requests.HTTPError,
+                requests.Timeout,
+                requests.TooManyRedirects) as e:
+            print( "mafan")
+            logging.error("Can't request thumbnail from video" + e)
+
+        # naming them in our oss
+        pic_name = "media/images/{{app}}" + slugify(
+                str(story.user.username)
+            ) + "/video-display-thumb-" + uuid.uuid4().hex[:12]
+
+        # upoad them in our oss
+        try:
+            bucket.put_object(pic_name, display_pic.content)
+
+        except (oss2.exceptions.ClientError,
+                oss2.exceptions.RequestError) as e:
+            logging.error("Can't upload thumbnail for video" + e)
+
+        else:
+            StoryImages.objects.create(
+                 story=story,
+                 image_thumb = pic_name
+            )
+
+    return redirect('stories:list')
