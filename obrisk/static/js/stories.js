@@ -292,7 +292,8 @@ $(function() {
     e.preventDefault();
     $(".dropdown-trigger").toggleClass("is-active");
   });
-  $(document.body).on("click", "img", function() {
+    
+  $(document.body).on("click", ".stry-image", function() {
     $.ajax({
       type: "get",
       url:
@@ -308,6 +309,7 @@ $(function() {
       }
     });
   });
+
 });
 var shareMe = function shareMe(username, text, url) {
   navigator.share({
