@@ -31,7 +31,7 @@
             <!-- Write Classified Widget -->
           <div class="d-flex mb-3">
             <a class="button is-solid accent-button raised align-self-center" id="addNewClassified" href="#"
-              title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i> 
+              title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i>
               {% trans 'Add new item' %}
             </a>
 
@@ -111,7 +111,7 @@
                         </label>
                         <div class="control">
                           <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required
-                            class="textarea" 
+                            class="textarea"
                             placeholder="Provide enough details, to make it easier for buyers to understand your item!">
                           </textarea>
                         </div>
@@ -140,7 +140,7 @@
 
                       {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
                       <div class="field is-flex justify-content-between">
-                        <label> 
+                        <label>
                             {% trans 'Include your phone no? ' %}
                         </label>
                         <label class="f-switch is-accent">
@@ -224,16 +224,16 @@
                         class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
                   {% else %}
                       <button id="create-btn" type="button" onclick="window.location.href='/auth/login/'"
-                        class="button is-solid accent-button raised"> 
+                        class="button is-solid accent-button raised">
                           {% trans 'Login & Post ' %}
                      </button>
                   {% endif %}
 
-                  <span type="button"
-                    class="ml-4 button is-solid dark-grey-button raised">     
-                        <span class="close-wrap"> 
+                  <button type="button"
+                    class="ml-4 button is-solid dark-grey-button raised">
+                        <span class="close-wrap">
                             <span class="close-publish"> {% trans 'Cancel' %} </span> </span>
-                  </span>
+                  </button>
 
                 </div>
 
