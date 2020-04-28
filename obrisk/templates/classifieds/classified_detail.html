@@ -260,6 +260,10 @@
 
 
 </div>
+
+{% endblock content %}
+
+{% block extra_js %}
 <script type="application/ld+json">
 {
    "@context":"http://schema.org/",
@@ -387,4 +391,5 @@
     });
   });
 </script>
-{% endblock content %}
+
+{% endblock extra_js %}
