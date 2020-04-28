@@ -10,7 +10,8 @@
         <div class="image">
           <a href="/users/{{stories.user}}">
             {% if stories.user.thumbnail %}
-            <img src="{{oss}}/{{stories.user.thumbnail}}" alt="Picture Profile"
+
+            <img src=" {% if oss %}{{oss}}{% else %}https://obrisk.oss-cn-hangzhou.aliyuncs.com{% endif%}/{{stories.user.thumbnail}}" alt="Picture Profile"
               style="width:35px;height:35px;border-radius: 50%;"
               class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
             {% else %}

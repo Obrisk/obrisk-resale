@@ -48,7 +48,8 @@ $(function() {
     // Ajax call on action on like button.
     var li = $(this).closest(".card");
     var stories = $(li).attr("stories-id");
-
+    console.log(li)
+    console.log(stories)
     if (user != "") {
       $.ajax({
         url: "/stories/like/",
@@ -58,6 +59,7 @@ $(function() {
         type: "GET",
         cache: false,
         success: function(data) {
+          li.find(".like-button").addClass("is-active");
           li.find(".like-button .mdi").toggleClass("is-active");
           li.find(".likes-count .count").text(data.likes);
         }
@@ -292,7 +294,7 @@ $(function() {
     e.preventDefault();
     $(".dropdown-trigger").toggleClass("is-active");
   });
-    
+
   $(document.body).on("click", ".stry-image", function() {
     $.ajax({
       type: "get",
