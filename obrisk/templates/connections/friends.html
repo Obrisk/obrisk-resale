@@ -67,20 +67,20 @@
                     </div>
 
                     {% if f.picture %}
-                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.picture}}" alt="Pic">
+                    <img src="{{ oss }}/{{f.picture}}" alt="Pic">
                     {% else %}
                     <img src="{% static 'img/user.png' %}" alt="No Pic" />
                     {% endif %}
                   </div>
                   <h3>{{ f.username | title}}</h3>
-                  <p>From {{f.city|title}}</p>
+                  <p> {{f.city|title}}</p>
 
                 </a>
               </div>
 
               {% empty %}
-              <p class="p-3">Hey {{ request.user.username | title}}, you have no connections </p><br>
-              <p class="p-3">Connect and follow the accounts you like</p><br>
+              <p class="p-1">Hey {{ request.user.username | title}}, you have no connections </p>
+              <p class="p-1">Connect and follow the accounts you like</p><br>
 
               {% endfor %}
               <!--Friend item-->
@@ -114,7 +114,7 @@
                   <i data-feather="eye"></i>
                 </div>
                 {% if connect.picture %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{connect.picture}}" alt="Pic">
+                <img src="{{ oss }}/{{connect.picture}}" alt="Pic">
                 {% else %}
                 <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
                   alt="No Pic" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
@@ -136,21 +136,23 @@
 
 
       {% if request.user.is_official %}
-      <div class="profile-menu mt-2 mb-2 d-flex align-items-start">
-        <div class="menu-start">
-          <a href="{% url 'connections:friendship_followers'  %}"
-            class="button has-min-width">{% trans "Followers" %}</a>
-        </div>
-      </div>
+          <div class="profile-menu mt-2 mb-2 d-flex align-items-start">
+            <div class="menu-start">
+              <a href="{% url 'connections:friendship_followers'  %}"
+                class="button has-min-width">{% trans "Followers" %}</a>
+            </div>
+          </div>
       {% endif %}
 
-      <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i class="fa fa-chevron-left"
-          aria-hidden="true"></i> Back </button>
 
-    </div>
+     </div>
+     </div >
   </div>
 </div>
-</div>
+
+
+{% endblock content %}
+
 <script>
   var setCookie = function (name, value, days) {
     if (!name && !value) {
@@ -172,7 +174,6 @@
   });
 </script>
 
-{% endblock content %}
 
 {% block extra_js %}
 

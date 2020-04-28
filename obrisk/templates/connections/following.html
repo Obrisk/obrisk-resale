@@ -11,37 +11,36 @@
             <!-- Profile page main wrapper -->
             <div id="profile-friends" class="view-wrap is-headless">
 
-
                   <div class="columns">
                         <div class="column">
-                              {% load friendshiptags %}
+                          {% load friendshiptags %}
 
-                              {% for f in following %}
-                              {% if f.thumbnail %}
-                              <a href="{% url 'users:detail' f.username %}">
-                                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}"
-                                          alt="Picture Profile" style="width:40px;height:40px;border-radius: 50%;"
-                                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
-                                          id="pic"> </a>
-                              {% else %}
-                              <a href="{% url 'users:detail' f.username %}">
-                                    <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
-                              </a>
-                              {% endif %}
+                          {% for f in following %}
+                          {% if f.thumbnail %}
+                          <a href="{% url 'users:detail' f.username %}">
+                                <img src="{{ oss }}/{{f.thumbnail}}"
+                                      alt="Picture Profile" style="width:40px;height:40px;border-radius: 50%;"
+                                      class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+                                      id="pic"> </a>
+                          {% else %}
+                          <a href="{% url 'users:detail' f.username %}">
+                                <img src="{% static 'img/user.png' %}" height="40px" alt="No Profile Picture" />
+                          </a>
+                          {% endif %}
 
-                              <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
-                                
-                              {% empty %}
-                                <p> Hey {{ request.user.username | title }}, you are not following any account.</p>
-                                <p> Connect and follow the accounts you like </p>
+                          <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
+                            
+                          {% empty %}
+                            <p> Hey {{ request.user.username | title }}, you are not following any account.</p>
+                            <p> Connect and follow the accounts you like </p> <br/>
 
-                                {% endfor %}
+                            {% endfor %}
 
-                                <div class="mb-3">
-                                      <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
-                                            {% trans "Discover Connections" %} 
-                                          </a>
-                                </div>
+                            <div class="mb-3">
+                                  <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
+                                        {% trans "Discover Connections" %} 
+                                      </a>
+                            </div>
 
                         </div>
                   </div>
@@ -49,7 +48,3 @@
       </div>
 </div>
 {% endblock content %}
-
-{% block extra_js %}
-<script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
-{% endblock extra_js %}
