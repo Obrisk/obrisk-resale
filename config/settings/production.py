@@ -26,7 +26,7 @@ def get_ec2_instance_ip():
     try:
         ip = requests.get(
           'http://169.254.169.254/latest/meta-data/local-ipv4',
-          timeout=1
+          timeout=5
         ).text
     except requests.exceptions.ConnectionError:
         return None
@@ -65,7 +65,7 @@ CACHES = {
         "BACKEND": "django_redis.cache.RedisCache",
         "LOCATION": [
             REDIS_URL,
-            env('SLAVE_REDIS_URL'),
+            #env('SLAVE_REDIS_URL'),
         ],
         "OPTIONS": {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
