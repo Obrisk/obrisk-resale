@@ -264,7 +264,7 @@
 <!-- /.container -->
 {% endblock content %}
 
-{% block javascript %}
+{% block extra_js %}
 <script type="text/javascript">
   var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   var url = "{% url 'posts:post' post.slug %}"
@@ -310,4 +310,4 @@
 </script>
 
 
-{% endblock javascript %}
+{% endblock extra_js %}
