@@ -102,10 +102,11 @@
     </div>
   </div>
 </div>
+{% endblock content %}
+
+{% block extra_js %}
 
 <script>
-
-  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 
   window.mobileUtil = (function (win, doc) {
     var UA = navigator.userAgent,
@@ -214,7 +215,6 @@
       ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
       ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
     }
-
   }
 
   {% if form.errors %}
@@ -222,6 +222,7 @@
   {% endif %}
 
 </script>
+
 <script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 
-{% endblock content %}
+{% endblock extra_js %}

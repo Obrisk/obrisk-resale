@@ -13,27 +13,6 @@
 {% block content %}
 <div class="app-overlay"></div>
 
-<!-- Container -->
-{% comment %}
-<div>
-  <ul class="nav navbar-nav navbar-right">
-    {% if not hide_search %}
-    <form class="form-inline navbar-left" role="search" action="{% url 'stories:results' %}">
-      <div class="input-group">
-        <input name="query" type="search" id="searchInput" class="form-control" placeholder="{% trans 'Search' %}"
-          aria-label="Search">
-        <div class="input-group-append">
-          <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-        </div>
-      </div>
-    </form>
-    {% endif %}
-  </ul>
-</div>
-
-{% endcomment %}
-
-
 <div class="container mt-5">
   <div class="row mt-4">
 
@@ -284,6 +263,7 @@
           </form>
         </div>
       </div>
+
       <!-- Modals -->
       {% include 'stories/stories_form_modal.html' %}
       {% include 'stories/stories_thread_modal.html' %}
