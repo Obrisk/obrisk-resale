@@ -63,7 +63,7 @@
       <div class="post-media grid-1">
 
         <video id="vid-{{ stories.uuid_id }}" class="js-player" width="640px" height="267px"
-          poster="{{oss}}/{{stories.img1}}" 
+          poster="{{oss}}/{{stories.img1}}"
           controls preload="meta"
           crossorigin playsinline data-plyr-config="{ 'title': 'Obrisk stories videos' }"">
             <source src=" {{oss}}/{{stories.video}}" type="video/mp4">
@@ -111,7 +111,7 @@
         <div class="left align-items-center d-flex">
           <div class="fab-wrapper is-share">
             <a href="javascript:void(0);" class="small-fab share-fab share-stories"
-              onclick='shareMe("{{stories.user}}","{{stories|truncatewords:30 }}","i/{{ stories.slug }}/")''>
+              onclick="shareMe('{{stories.user}}','{{stories|truncatewords:30|escape|safe }}','i/{{ stories.slug }}/')">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="feather feather-link-2">
