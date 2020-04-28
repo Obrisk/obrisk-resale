@@ -317,7 +317,6 @@
 
 <script type="text/javascript">
 
-
   //Hide create card on stories details, to focus on shared content  
   if ($('#compose-card').hasClass('d-none') &&
   window.location.href.endsWith('/stories/'))  {
@@ -360,7 +359,6 @@
   const app = "stories";
   const user = "{{ request.user.username }}";
 
-
   //Load videos
   var loadvideo = function () {
     Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p, {
@@ -373,7 +371,15 @@
   }
 
   $(document).ready(function () {
+
     loadvideo();
+
+    $(' .post-text').linkify({ target: "_blank" });
+
+    $('#replyStories').prop('disabled', true);
+    $('#replyInput').keyup(function () {
+      $('#replyStories').prop('disabled', this.value == "" ? true : false);
+    })
 
   });
 </script>
