@@ -13,6 +13,7 @@
 
 {% endblock head %}
 
+{# We need to check if the classified has images or else this will break #}
 {% block icon %}
 <link rel="icon" type="image/png" href="{{oss}}/{{images.0.image_thumb }}">
 <link rel="shortcut icon" href="{{oss}}/{{images.0.image_thumb }}">
@@ -206,7 +207,7 @@
                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
               </div>
           {% else %}
-              <!-- <a href="{% url 'classifieds:report_classified' classified.id %}" 
+              <!-- <a href="{% url 'classifieds:report_classified' classified.id %}"
                   class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
           {% endif %}
         </div>
@@ -291,7 +292,7 @@
          {% else %}
         "image":"{{oss}}/classifieds/default.jpg"
          {% endif %}
-         
+
       }
    }
 }
@@ -387,7 +388,7 @@
 
 
     // Copy to clipboard
-    // Grab any text in the attribute 'data-copy' and pass it to the 
+    // Grab any text in the attribute 'data-copy' and pass it to the
     // copy function
     $('.js-copy').click(function () {
       var text = $(this).attr('data-copy');

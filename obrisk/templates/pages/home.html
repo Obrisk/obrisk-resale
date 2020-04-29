@@ -24,7 +24,6 @@
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
-  <link rel="mask-icon" href="{% static 'img/safari-pinned-tab.svg' %}?v=1" color="#5bbad5">
 
   {% endblock icon %}
 
@@ -66,7 +65,7 @@
 
   <div class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
-        
+
       <div class="banner">
 
           <div class="d-flex flex-column align-items-right">
@@ -94,7 +93,7 @@
               <h2> {% trans 'Hi! Welcome to Obrisk' %} </h2>
               <h5> {% trans 'Socialize, Share and Stay Connected...' %} </h5>
             </div>
-            
+
             <div class="call-to-action">
               <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark mr-4"
                 href="{% url 'account_signup' %}">{% trans 'Sign up now' %}</a>
