@@ -309,7 +309,7 @@ $(document.body).on("click", ".delete-story", function () {
   location.href = $(this).attr("href");
 });
 
-//Fallback to preload videos in wechat browsers
+//Fallback to eload videos in wechat browsers
 document.addEventListener("DOMContentLoaded", function () {
   var videos = document.getElementsByClassName("js-player");
 
@@ -331,6 +331,4 @@ document.addEventListener("DOMContentLoaded", function () {
   ) {
     WeixinJSBridge.invoke("getNetworkType", {}, preload);
   }
-
-  preload();
 });
