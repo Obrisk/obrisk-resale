@@ -44,8 +44,6 @@ $(function () {
     // Ajax call on action on like button.
     var li = $(this).closest(".card");
     var stories = $(li).attr("stories-id");
-    console.log(li);
-    console.log(stories);
     if (user != "") {
       $.ajax({
         url: "/stories/like/",
