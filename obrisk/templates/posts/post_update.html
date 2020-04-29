@@ -81,13 +81,7 @@
 
 <script type="text/javascript">
   $(document).ready(function () {
-    // hmtl = html.replace(/<\/?div>/g, '\n');
-    // html = html.replace(/<\/?p>/g, '\n');
-    // html = html.replace(/<(.|\n)*?>/g, '');
-    // quill.setText(html + " \n");
     quill.setContents({{ form.content_json.value | safe }})
-
-
   });
 
 </script>
