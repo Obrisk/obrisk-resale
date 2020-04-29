@@ -1,13 +1,17 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import (
+        UserCreationForm, UserChangeForm
+    )
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core import validators
-
 from allauth.account.forms import (
     SignupForm, LoginForm, PasswordField)
 from allauth.utils import (
     set_form_field_order)
+from allauth.socialaccount.forms import (
+        SignupForm as SocialSignupForm
+    )
 from phonenumber_field.formfields import PhoneNumberField
 from django.contrib.auth import get_user_model
 
@@ -27,7 +31,10 @@ class CustomUserChangeForm(UserChangeForm):
 
 
 class UserForm(forms.ModelForm):
-    bio = forms.CharField(widget=forms.Textarea(attrs={"rows": 3}), required=False)
+    bio = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 3}),
+        required=False
+    )
     province_region = forms.CharField(widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
     job_title = forms.CharField(required=False, label=("Occupation"))
@@ -35,19 +42,21 @@ class UserForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("name", "job_title", "province_region", "city", "bio", "address")
+        fields = (
+                    "name", "job_title", "province_region",
+                    "city", "bio", "address"
+                )
         help_texts = {
-            # "linkedin_account": "Your linkedin username as it appears on your linkedin profile page.\
-            #     Make sure it is spelled correctly",
             "bio": "A short introduction about yourself",
-            "address": "English address is preferred, don't include your City and Province",
+            "address": "English address is preferred, \
+                        don't include your City and Province",
         }
 
 
 # This form inherits all-auth.
 class PhoneSignupForm(SignupForm):
     username = forms.CharField(label=_("Username"),
-                   min_length=getattr(settings, 
+                   min_length=getattr(settings,
                        'ACCOUNT_USERNAME_MIN_LENGTH', 3),
                    max_length=getattr(settings,
                        'ACCOUNT_USERNAME_MAX_LENGTH', 16),
@@ -59,8 +68,15 @@ class PhoneSignupForm(SignupForm):
     city = forms.CharField(widget=forms.HiddenInput())
     phone_number = PhoneNumberField(
         label=_("Phone number"),
-        widget=forms.TextInput(attrs={"autofocus": "autofocus", "maxlength": "11"}),
+        widget=forms.TextInput(
+            attrs={"autofocus": "autofocus", "maxlength": "11"}
+        ),
     )
+
+    verify_code = forms.IntegerField(
+            widget=forms.HiddenInput(),
+            required=False
+        )
 
     class Meta:
         model = User
@@ -162,6 +178,38 @@ class EmailSignupForm(SignupForm):
         user.city = self.cleaned_data["city"]
         user.save()
 
+        # You must return the original result.
+        return user
+
+
+class CustomSocialSignupForm(SocialSignupForm):
+    phone_number = forms.IntegerField(
+        label=_("Phone number"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={"type": "tel", "placeholder": _("Don't include country code"),}
+        ),
+    )
+
+    verify_code = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=False
+    )
+
+    email = forms.EmailField(
+        widget=forms.HiddenInput(),
+        required=False
+    )
+
+    def save(self):
+
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super(MyCustomSocialSignupForm, self).save()
+
+        # Add your own processing here.
+        user.phone_number = '+86' + str(self.cleaned_data["phone_number"])
+        print( self.cleaned_data["phone_number"] )
         # You must return the original result.
         return user
 

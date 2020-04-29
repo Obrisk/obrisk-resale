@@ -289,7 +289,7 @@ ACCOUNT_FORMS = {
 }
 
 SOCIALACCOUNT_FORMS = {
-    "signup": "allauth.socialaccount.forms.SignupForm",
+    'signup': 'users.forms.CustomSocialSignupForm',
 }
 
 ACCOUNT_USERNAME_BLACKLIST = [
