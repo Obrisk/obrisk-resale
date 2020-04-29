@@ -5,9 +5,6 @@
 {% block title %}{{ user.username|title }}{% endblock %}
 
 {% block head %}
-<script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
-<script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
-<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <link href="{% static 'css/user_form.css' %}" rel="stylesheet">
 {% endblock head %}
 
@@ -84,16 +81,19 @@
 </div>
 {% csrf_token %}
 
-<script>
-  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+{% endblock content %}
 
+{% block extra_js %}
+<script>
   //This var is used only on the signup form, but they share js files with this one
   //In the near future please separate them.
   var errors = false;
   const user = "{{ request.user.username }}";
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth
 
-
 </script>
+<script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/profile-uploader.js' %}" type="text/javascript"></script>
-{% endblock %}
+{% endblock extra_js %}

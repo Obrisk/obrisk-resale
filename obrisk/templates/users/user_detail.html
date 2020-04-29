@@ -55,41 +55,36 @@
 
 
         {% if object in friends %}
-        <a class="button has-min-width m-auto go-to-chat"
-          data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
+            <a class="button has-min-width m-auto go-to-chat"
+              data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
         {% elif object in pending %}
-        <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
+            <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
         {% elif object in pended%}
-        {{object.username|title }} wants to connect with you! 🔌
+            {{object.username|title }} Wants to connect with you 🔌
 
-        <a href="{% url 'connections:friendship_request_list' %}">view all requests</a>
+            <a href="{% url 'connections:friendship_request_list' %}">view all requests</a>
         {% else %}
-        <a class="connect-btn button has-min-width m-auto" href="#">{% trans '➕Connect' %}</a>
+            <a class="connect-btn button has-min-width m-auto" href="#">{% trans '➕Connect' %}</a>
         {% endif %}
       </div>
+
       <div class="d-flex mb-2">
         {% if object in following %}
-        <a class="btn btn-outline-danger m-auto"
-          href="{% url 'connections:follower_remove'  object.username  %}">{% trans 'Unfollow' %}</a>
+            <a class="btn btn-outline-danger m-auto"
+              href="{% url 'connections:follower_remove' object.username  %}">{% trans 'Unfollow' %}</a>
         {% else %}
-        {% if object.is_official %}
-        <a class="button has-min-width m-auto"
-          href="{% url 'connections:follower_add'   object.username %}">{% trans 'Follow' %}</a>
-        {% endif %}
+            {% if object.is_official %}
+                <a class="follow-btn button has-min-width m-auto" href="#">{% trans '🔌Follow' %}</a>
+            {% endif %}
         {% endif %}
       </div>
       {% endif %}
     </div>
-    <!--This is else statement. <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
   </div>
+
   <div class="container profile-wrapper">
 
     <div id="contact-info" class="vcard">
-
-      {% if object.is_seller %}
-
-      {% endif %}
-
       <p>
         {% if object.instagram_account %}
         <a href="https://www.instagram.com/{{ object.instagram_account }}" style="font-size: 2em"
@@ -141,33 +136,17 @@
   </div>
   {% csrf_token %}
 </div>
-<script>
-  function getCookie(name) {
-    // Function to get any cookie available in the session.
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      var cookies = document.cookie.split(";");
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === name + "=") {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
 
+{% endblock content %}
+
+{% block extra_js %}
+
+<script>
   const username = "{{ object.username }}";
-  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val()
 
   $(".connect-btn").click(function (e) {
 
     $.ajax({
-      beforeSend: function (xhr, settings) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      },
       type: "POST",
       url: "/connections/friend/add/" + username + "/",
       data: {
@@ -187,13 +166,35 @@
             message: "Sorry something went wrong , Please try again later.",
           });
         }
-
       }
-
     });
+  });
 
 
+  $(".follow-btn").click(function (e) {
 
+    $.ajax({
+      type: "POST",
+      url: "/connections/follower/add/" + username + "/",
+      data: {
+        followee_username: username
+      },
+      dataType: "json",
+      success: function (response) {
+        if (response) {
+          $.wnoty({
+            type: "success",
+            message: "You're now following" + username + "🔌",
+          });
+        } else {
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "Sorry something went wrong , Please try again later.",
+          });
+        }
+      }
+    });
   });
 
 
@@ -218,4 +219,4 @@
   });
 </script>
 
-{% endblock content %}
+{% endblock extra_js %}
