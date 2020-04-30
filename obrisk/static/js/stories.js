@@ -1,13 +1,13 @@
-$(function() {
-    var infinite = new Waypoint.Infinite({
-        element: $('.infinite-container')[0],
-        onBeforePageLoad: function () {
-          $('.load').show();
-        },
-        onAfterPageLoad: function ($items) {
-          $('.load').hide();
-        }
-    });
+$(function () {
+  var infinite = new Waypoint.Infinite({
+    element: $(".infinite-container")[0],
+    onBeforePageLoad: function () {
+      $(".load").show();
+    },
+    onAfterPageLoad: function ($items) {
+      $(".load").hide();
+    },
+  });
 
   function offset(el) {
     var rect = el.getBoundingClientRect(),
@@ -19,16 +19,12 @@ $(function() {
   $("input, textarea").val("");
 
   //Submit stories
-  $(".submit-button").click(function(e) {
+  $(".submit-button").click(function (e) {
     e.preventDefault();
     //check if text only
     if (uploader.fileStats.totalFilesNum > 0) {
       $("body").trigger("submitClicked");
-    } else if (
-      $("#publish")
-        .val()
-        .substring(0, 20).length != 0
-    ) {
+    } else if ($("#publish").val().substring(0, 20).length != 0) {
       $("body").trigger("uploadComplete");
     } else {
       error = `
@@ -44,23 +40,23 @@ $(function() {
   });
 
   //Liker
-  $(document.body).on("click", ".like-wrapper", function() {
+  $(document.body).on("click", ".like-wrapper", function () {
     // Ajax call on action on like button.
     var li = $(this).closest(".card");
     var stories = $(li).attr("stories-id");
-
     if (user != "") {
       $.ajax({
         url: "/stories/like/",
         data: {
-          stories: stories
+          stories: stories,
         },
         type: "GET",
         cache: false,
-        success: function(data) {
+        success: function (data) {
+          li.find(".like-button").addClass("is-active");
           li.find(".like-button .mdi").toggleClass("is-active");
           li.find(".likes-count .count").text(data.likes);
-        }
+        },
       });
     } else {
       window.location.href = "/auth/login/";
@@ -70,7 +66,7 @@ $(function() {
   });
 
   //Cose comments
-  $(document.body).on("click", ".close-comments", function() {
+  $(document.body).on("click", ".close-comments", function () {
     // Ajax call to request a given Stories object detail and thread, and to
     // show it in a modal.
     var post = $(this).closest(".card");
@@ -81,16 +77,16 @@ $(function() {
   });
 
   //Show comments
-  $(document.body).on("click", ".is-comment", function() {
+  $(document.body).on("click", ".is-comment", function () {
     // Ajax call to request a given Stories object detail and thread, and to
     var post = $(this).closest(".card");
     var stories = $(post).attr("stories-id");
     post.find(".comments-wrap").toggleClass("is-hidden");
     window.scrollTo({
       top: offset(post[0]).top,
-      behavior: "smooth"
+      behavior: "smooth",
     });
-    $(".emojionearea-editor").keyup(function() {
+    $(".emojionearea-editor").keyup(function () {
       var counter = $(this).closest(".textarea-parent");
       counter.find(".counter .count").text(400 - $(this).val().length);
       $(this).height("auto");
@@ -101,25 +97,25 @@ $(function() {
     $.ajax({
       url: "/stories/get-thread/",
       data: {
-        stories: stories
+        stories: stories,
       },
       type: "GET",
       cache: false,
 
-      success: function(data) {
+      success: function (data) {
         if (data.thread) {
           if (data.thread.trim() != "") {
             post.find(".comments-body").html(data.thread);
           }
         }
         post.find("input[name=parent]").val(data.uuid);
-      }
+      },
     });
     $(".comment-textarea").addClass("focused");
   });
 
   //Comment on a story
-  $(document.body).on("click", "a#post-comment-button", function() {
+  $(document.body).on("click", "a#post-comment-button", function () {
     // Ajax call to register a reply to any given Stories object.
     post = $(this).closest(".card");
 
@@ -129,7 +125,7 @@ $(function() {
         data: post.find(".replyStoriesForm").serialize(),
         type: "POST",
         cache: false,
-        success: function() {
+        success: function () {
           post.find(".comment-textarea").val("");
           post
             .find(".comments-count .count")
@@ -141,23 +137,23 @@ $(function() {
 
           var stories = $(post).attr("stories-id");
           $("input, textarea").val("");
-          setTimeout(function() {
+          setTimeout(function () {
             $.ajax({
               url: "/stories/get-thread/",
               data: {
-                stories: stories
+                stories: stories,
               },
               cache: false,
 
-              success: function(data) {
+              success: function (data) {
                 if (data.thread.trim() != "")
                   post.find(".comments-body").html(data.thread);
                 post.find("input[name=parent]").val(data.uuid);
-              }
+              },
             });
           }, 200);
         },
-        error: function(data) {
+        error: function (data) {
           error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           Sorry we can't handle new comments, please try again later.
@@ -167,7 +163,7 @@ $(function() {
         </div>
         `;
           post.find(".card-footer .media-content").append(error);
-        }
+        },
       });
     } else {
       window.location.href = "/auth/login/";
@@ -175,7 +171,7 @@ $(function() {
   });
 
   //Character count
-  $("textarea").keyup(function() {
+  $("textarea").keyup(function () {
     var counter = $(this).closest(".textarea-parent");
     counter.find(".counter .count").text(400 - $(this).val().length);
     $(this).height("auto");
@@ -183,7 +179,7 @@ $(function() {
   });
 
   //Open publish mode
-  $("#publish").on("click", function() {
+  $("#publish").on("click", function () {
     $(".app-overlay").addClass("is-active");
     $(".close-wrap").removeClass("d-none");
     $(".is-new-content").addClass("is-highlighted");
@@ -191,7 +187,7 @@ $(function() {
   });
 
   //Enable and disable publish button based on the textarea value length (1)
-  $("#publish").on("input", function() {
+  $("#publish").on("input", function () {
     var valueLength = $(this).val().length;
 
     if (valueLength >= 1 || $(".filelist").children().length > 0) {
@@ -202,7 +198,7 @@ $(function() {
   });
 
   //Close compose box
-  $(".close-publish").on("click", function() {
+  $(".close-publish").on("click", function () {
     $("body").trigger("resetUpload");
     //Clear text input
     $("input, textarea").val("");
@@ -215,7 +211,7 @@ $(function() {
   });
 
   //Show comments
-  $(document.body).on("click", ".is-comment", function() {
+  $(document.body).on("click", ".is-comment", function () {
     // Ajax call to request a given Stories object detail and thread, and to
     // show it in a modal.
     var post = $(this).closest(".card");
@@ -227,19 +223,19 @@ $(function() {
     $.ajax({
       url: "/stories/get-thread/",
       data: {
-        stories: stories
+        stories: stories,
       },
       cache: false,
 
-      success: function(data) {
+      success: function (data) {
         if (data.thread.trim() != "")
           post.find(".comments-body").html(data.thread);
         post.find("input[name=parent]").val(data.uuid);
-      }
+      },
     });
   });
 
-  $("body").on("uploadComplete", function(event) {
+  $("body").on("uploadComplete", function (event) {
     $("#id_images").val(images);
     $("#id_video").val(videos);
     $("#id_img_error").val(img_error);
@@ -249,7 +245,7 @@ $(function() {
       data: $("#postStoriesForm").serialize(),
       type: "POST",
       cache: false,
-      success: function(data) {
+      success: function (data) {
         $('[name="post"]').val("");
         $(".app-overlay").removeClass("is-active");
         $(".is-new-content").removeClass("is-highlighted");
@@ -261,7 +257,7 @@ $(function() {
         lazyload();
         $("body").trigger("resetUpload");
       },
-      error: function(data) {
+      error: function (data) {
         error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           Sorry we can't handle new posts, please try again later.
@@ -271,53 +267,66 @@ $(function() {
         </div>
         `;
         $(".compose").prepend(error);
-      }
+      },
     });
   });
 
-  $(".select-status button").click(function(e) {
-    $("#selected-status #viewer-icon").html(
-      $(this)
-        .find("svg")
-        .html()
-    );
-    $("#selected-status span").text(
-      $(this)
-        .find("h3")
-        .text()
-    );
+  $(".select-status button").click(function (e) {
+    $("#selected-status #viewer-icon").html($(this).find("svg").html());
+    $("#selected-status span").text($(this).find("h3").text());
     $("#viewers").val($(this).data("status"));
   });
-  $(".dropdown-trigger").click(function(e) {
+  $(".dropdown-trigger").click(function (e) {
     e.preventDefault();
     $(".dropdown-trigger").toggleClass("is-active");
   });
-    
-  $(document.body).on("click", ".stry-image", function() {
+
+  $(document.body).on("click", ".stry-image", function () {
     $.ajax({
       type: "get",
       url:
         "/stories/story-images/?story_id=" +
-        $(this)
-          .closest("[stories-id]")
-          .data("id"),
-      success: function(response) {
+        $(this).closest("[stories-id]").data("id"),
+      success: function (response) {
         $.fancybox.open(response, {
           type: "image",
-          loop: true
+          loop: true,
         });
-      }
+      },
     });
   });
-
 });
 var shareMe = function shareMe(username, text, url) {
   navigator.share({
     title: `${username} shared a story on Obrisk`,
     text: `Shared: ${text}`,
-    url: location.origin + "/stories/" + url
+    url: location.origin + "/stories/" + url,
   });
 };
-$(document.body).on("click", ".delete-story", function() {
+$(document.body).on("click", ".delete-story", function () {
   location.href = $(this).attr("href");
+});
+
+//Fallback to eload videos in wechat browsers
+document.addEventListener("DOMContentLoaded", function () {
+  var videos = document.getElementsByClassName("js-player");
+
+  function preload() {
+    for (var i = 0; i < videos.length; i++) {
+      i.play();
+    }
+    setTimeout(function () {
+      for (var i = 0; i < videos.length; i++) {
+        i.pause();
+      }
+    }, 200);
+  }
+
+  document.addEventListener("WeixinJSBridgeReady", preload, false);
+  if (
+    typeof WeixinJSBridge == "object" &&
+    typeof WeixinJSBridge.invoke == "function"
+  ) {
+    WeixinJSBridge.invoke("getNetworkType", {}, preload);
+  }
 });
