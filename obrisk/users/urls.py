@@ -16,6 +16,10 @@ urlpatterns = [
         view=views.complete_authentication,
         name='complete_auth'),
 
+    url(regex=r'^update-prof-phone/$',
+        view=views.add_user_phonenumber,
+        name='add_phone_no'),
+
     url(regex=r'^verification-code/$',
         view=views.send_code_sms,
         name='verification_code'),

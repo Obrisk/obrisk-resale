@@ -102,6 +102,9 @@ def send_code(full_number, theme, user=None):
             if theme == "signup":
                 msg = f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!"
 
+            if theme == "complete-auth":
+                msg = f"[Obrisk] Welcome {user}, your code is {random}"
+
             elif theme == "password-reset" and user:
                 msg = f"[Obrisk] Verification code:{random} and Username:{user}"
             else:
@@ -537,3 +540,25 @@ def complete_authentication(request):
     else:
 
         return redirect("stories:list")
+
+
+@ajax_required
+@require_http_methods(["GET"])
+def user_phonenumber_exists(request):
+    """A function view to check if the username exists"""
+    user =  User.objects.get(username=request.user)
+    phone_no = request.GET.get('phone_no')
+
+    if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1' and phone_no != '13300000000':
+
+        full_number = "+86" + phone_no
+        check_phone = User.objects.filter(phone_number=full_number).exists()
+
+        if check_phone is False:
+            return send_code(full_number, "complete-auth")
+
+        else:
+            return JsonResponse({'success': False, 'error_message': "This phone number already exists!"})
+
+    else:
+        return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"})
