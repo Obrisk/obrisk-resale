@@ -10,8 +10,10 @@
         <div class="image">
           <a href="/users/{{stories.user}}">
             {% if stories.user.thumbnail %}
-            <img src="{{oss}}/{{stories.user.thumbnail}}" alt="Picture Profile"
-              style="width:35px;height:35px;border-radius: 50%;"
+
+            <img
+              src=" {% if oss %}{{oss}}{% else %}https://obrisk.oss-cn-hangzhou.aliyuncs.com{% endif%}/{{stories.user.thumbnail}}"
+              alt="Picture Profile" style="width:35px;height:35px;border-radius: 50%;"
               class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
             {% else %}
             <img class="pull-left mr-2" src="{% static 'img/user.png' %}" height="35px" alt="No Profile Picture" />
@@ -63,10 +65,9 @@
       <div class="post-media grid-1">
 
         <video id="vid-{{ stories.uuid_id }}" class="js-player" width="640px" height="267px"
-          poster="{{oss}}/{{stories.img1}}" 
-          controls preload="meta"
-          crossorigin playsinline data-plyr-config="{ 'title': 'Obrisk stories videos' }"">
-            <source src=" {{oss}}/{{stories.video}}" type="video/mp4">
+          poster="{{oss}}/{{stories.img1}}" controls crossorigin playsinline
+          data-plyr-config="{ 'title': 'Obrisk stories videos' }" preload x5-video-player-type="h5" control>
+          <source src=" {{oss}}/{{stories.video}}" type="video/mp4">
           Your browser doesn' t support HTML5 video tag. </video>
 
       </div>
@@ -79,27 +80,27 @@
         <!-- CSS masonry wrap -->
 
         {% if stories.img1 %}
-            <figure class="img1 image stry-image is-square">
-              <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" alt="">
-            </figure>
+        <figure class="img1 image stry-image is-square">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" alt="">
+        </figure>
         {%endif%}
 
         {% if stories.img2%}
-            <figure class=" img2 image stry-image is-square">
-              <img class="lazyload" data-src="{{oss}}/{{stories.img2}}" alt="">
-            </figure>
+        <figure class=" img2 image stry-image is-square">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img2}}" alt="">
+        </figure>
         {%endif%}
 
         {% if stories.img3 %}
-            <figure class="img3 image stry-image is-square">
-              <img class="lazyload" data-src="{{oss}}/{{stories.img3}}" alt="">
-            </figure>
+        <figure class="img3 image stry-image is-square">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img3}}" alt="">
+        </figure>
         {%endif%}
 
         {% if stories.img4 %}
-            <figure class="img4 image stry-image is-square">
-              <img class="lazyload" data-src="{{oss}}/{{stories.img4}}" alt="">
-            </figure>
+        <figure class="img4 image stry-image is-square">
+          <img class="lazyload" data-src="{{oss}}/{{stories.img4}}" alt="">
+        </figure>
         {% endif %}
 
       </div>
@@ -111,7 +112,7 @@
         <div class="left align-items-center d-flex">
           <div class="fab-wrapper is-share">
             <a href="javascript:void(0);" class="small-fab share-fab share-stories"
-              onclick='shareMe("{{stories.user}}","{{stories|truncatewords:30 }}","i/{{ stories.slug }}/")''>
+              onclick="shareMe('{{stories.user}}','{{stories|truncatewords:30|escape|safe }}','i/{{ stories.slug }}/')">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                 class="feather feather-link-2">
@@ -170,9 +171,7 @@
       <div class="likers-group">
         {% for liker in stories.get_likers %}
         <a href="/users/{{liker}}">
-          <img
-            src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}"
-            alt="User profile picture">
+          <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
         </a>
         {% endfor %}
       </div>
@@ -192,8 +191,7 @@
               <div class="modal-body likers-group">
                 <P> {% for liker in stories.get_all_likers %}
                   <a href="/users/{{liker}}">
-                    <img
-                      src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}"
+                    <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}"
                       alt="User profile picture">
                   </a>
                   {% endfor %} </P>

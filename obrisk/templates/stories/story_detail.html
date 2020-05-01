@@ -16,7 +16,7 @@
 
 {% endblock head %}
 
-
+{# We need tocheck if the story has images or else this will break #}
 {% block icon %}
 <link rel="icon" type="image/png" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
 <link rel="shortcut icon" href="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{images.0.image_thumb }}">
@@ -259,7 +259,7 @@
          {% else %}
         "image":"https://obrisk.oss-cn-hangzhou.aliyuncs.com/stories/default.jpg"
          {% endif %}
-         
+
       }
    }
 }
@@ -357,7 +357,7 @@
 
 
     // Copy to clipboard
-    // Grab any text in the attribute 'data-copy' and pass it to the 
+    // Grab any text in the attribute 'data-copy' and pass it to the
     // copy function
     $('.js-copy').click(function () {
       var text = $(this).attr('data-copy');
