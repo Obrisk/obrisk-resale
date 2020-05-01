@@ -15,21 +15,6 @@ function printError(msg) {
   $(".form-panel").prepend(template);
 }
 
-$(document).ready(function() {
-  // adding a crsf token
-  function csrfSafeMethod(method) {
-    // these HTTP methods do not require CSRF protection
-    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
-  }
-  $.ajaxSetup({
-    beforeSend: function(xhr, settings) {
-      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-      }
-    }
-  });
-});
-
 var verify_counter = 0;
 var code_counter = 0;
 
@@ -65,19 +50,12 @@ $(function() {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
 
-        if (current_url == "/auth/signup/") {
+        if (current_url == "/users/phone-password-reset/") {
+              url = "/users/phone-password-reset/";
+              req = "POST";
+        } else {
           url = "/users/verification-code/";
           req = "GET";
-        } else if (current_url == "/users/phone-password-reset/") {
-          url = "/users/phone-password-reset/";
-          req = "POST";
-        } else {
-          event.preventDefault();
-          $("#code-notice")
-            .empty()
-            .append(
-              "<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>"
-            );
         }
 
         $.ajax({

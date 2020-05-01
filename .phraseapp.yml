@@ -1,8 +1,0 @@
-# .phraseapp.yml
- 
-phraseapp:
-  file_format: po
- 
-  pull:
-    targets:
-        file: "locale/zh-hans/LC_MESSAGES/django.po

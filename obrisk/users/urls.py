@@ -8,6 +8,10 @@ urlpatterns = [
         view=views.UserListView.as_view(),
         name='list'),
 
+    url(regex=r'^social-form-final/$',
+        view=views.SocialPostView.as_view(),
+        name='social_final_form'),
+
     url(regex=r'^signup/$',
         view=views.EmailSignUp.as_view(),
         name='email_signup'),

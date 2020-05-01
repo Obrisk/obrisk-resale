@@ -39,7 +39,7 @@ from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from .forms import (
-        UserForm, EmailSignupForm,
+        UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm)
 from .models import User
 from .phone_verification import send_sms
@@ -52,6 +52,11 @@ except ImportError:
     from django.contrib.auth.models import User
 
     user_model = User
+
+
+class SocialPostView(FormView):
+    form_class = CusSocialSignupForm
+    template_name = 'socialaccount/signup.html'
 
 
 #There is no need to override this view. 

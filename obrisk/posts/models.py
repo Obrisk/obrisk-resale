@@ -72,18 +72,18 @@ class Post(models.Model):
     AWESOME_LIST = "A"
     CAREER = "C"
     EVENT = "E"
-    HOW-TO = "H"
+    HOW_TO = "H"
     LIFESYLE = "L"
     NEWS = "N"
 
     CATEGORY = (
         (ARTICLE, _("Article")),
-        (AWESOME_LIST = _("Awesome list")),
-        (CAREER = _("Career")),
+        (AWESOME_LIST, _("Awesome list")),
+        (CAREER, _("Career")),
         (EVENT, _("Event")),
-        (HOW-TO = _("How-to-guide")),
-        (LIFESYLE = _("Lifestyle")),
-        (NEWS = _("News")),
+        (HOW_TO, _("How-to-guide")),
+        (LIFESYLE, _("Lifestyle")),
+        (NEWS, _("News")),
     )
 
     user = models.ForeignKey(

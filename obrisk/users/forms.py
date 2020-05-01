@@ -182,7 +182,7 @@ class EmailSignupForm(SignupForm):
         return user
 
 
-class CustomSocialSignupForm(SocialSignupForm):
+class CusSocialSignupForm(forms.Form):
     phone_number = forms.IntegerField(
         label=_("Phone number"),
         required=True,
@@ -210,6 +210,40 @@ class CustomSocialSignupForm(SocialSignupForm):
         # Add your own processing here.
         user.phone_number = '+86' + str(self.cleaned_data["phone_number"])
         print( self.cleaned_data["phone_number"] )
+        # You must return the original result.
+        return user
+
+
+class CustomSocialSignupForm(SocialSignupForm):
+    phone_number = forms.IntegerField(
+        label=_("Phone number"),
+        required=True,
+        widget=forms.TextInput(
+            attrs={"type": "tel", "placeholder": _("Don't include country code"),}
+        ),
+    )
+
+    verify_code = forms.IntegerField(
+        widget=forms.HiddenInput(),
+        required=False
+    )
+
+    email = forms.EmailField(
+        widget=forms.HiddenInput(),
+        required=False
+    )
+
+    def save(self):
+
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super(MyCustomSocialSignupForm, self).save()
+
+        # Add your own processing here.
+        if self.cleaned_data["phone_number"].startsWith('+86'):
+            user.phone_number = self.cleaned_data["phone_number"]
+        else:
+            user.phone_number = '+86' + self.cleaned_data['phone_number']
         # You must return the original result.
         return user
 

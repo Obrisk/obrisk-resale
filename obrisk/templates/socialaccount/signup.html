@@ -1,22 +1,228 @@
-{% extends "socialaccount/base.html" %}
-
+{% extends 'base.html' %}
 {% load i18n %}
+{% load static %}
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
 
-{% block head_title %}{% trans "Signup" %}{% endblock %}
+{% block head %}
+<title>{% trans 'Finish Signup' %}</title>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
+{% endblock head %}
 
 {% block content %}
-    <h1>{% trans "Sign Up" %}</h1>
 
-<p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}You are about to use your {{provider_name}} account to login to
-{{site_name}}. As a final step, please complete the following form:{% endblocktrans %}</p>
+<!-- Main Wrapper -->
+<div class="login-wrapper columns is-gapless">
+	<!--Left Side (Desktop Only)-->
+	<div class="column is-6 is-hidden-mobile hero-banner">
+		<div class="hero is-fullheight is-login">
+			<div class="hero-body">
+				<div class="container">
+					<div class="left-caption">
+                        <h2> Thank you for signing up! </h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-<form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
-  {% csrf_token %}
-  {{ form.as_p }}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-  {% endif %}
-  <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-</form>
+	<!--Right Side-->
+	<div class="column is-6">
+		<div class="hero form-hero is-fullheight">
 
-{% endblock %}
+			<!--Signup Form-->
+			<div class="hero-body p-0">
+				<div class="form-wrapper">
+					<!--Form-->
+					<div class="login-form">
+
+						<div class="signup-wrapper">
+							<div class="outer-panel">
+								<div class="outer-panel-inner">
+
+                                    <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+
+										{% csrf_token %}
+
+										<div class="text-center">
+											<span
+												class="login100-form-title p-b-32 ">{% trans 'VERIFY ACCOUNT' %}</span>
+										</div>
+
+										<div id="signup-panel-1"
+											class=" step-dot-1 process-panel-wrap is-narrow is-active">
+
+										<div class="text-center">
+                                            <p>{% blocktrans with provider_name=account.get_provider.name site_name=site.name %}
+                                            You have linked your {{provider_name}} account {% endblocktrans %} </p>
+
+                                            <p> {% trans 'Finally, Please verify your information' %}</p>
+										</div>
+
+											<div class="form-panel">
+												<div class=" mb-0">
+													<div class="input-group">
+														<label for="phone_number">
+                                                            {% trans 'Phone Number' %}
+														</label>
+													</div>
+													{{ form.phone_number }}
+												</div>
+
+												<div class=" mt-2">
+													<button
+														class="button is-solid primary-button raised is-rounded is-fullwidth"
+														id="send-code" type="button">
+                                                        {% trans 'Verify' %}
+                                                    </button>
+												</div>
+
+
+												<div id="code-notice" style="font-weight:bold;"></div>
+
+												<div class="d-none" id="code">
+													<div class="form-group ">
+														<div class="input-group">
+															<label for="code">
+                                                                {% trans 'Code*' %}
+                                                            </label>
+														</div>
+
+														<div class="d-flex">
+															<input class="col-10" maxlength="6" minlength="6" type="tel"
+																pattern="[0-9]{6}" name="code" id="code">
+
+															<div class="">
+																<svg class="loading d-none"
+																	xmlns="http://www.w3.org/2000/svg" width="24"
+																	height="24" viewBox="0 0 24 24" fill="none"
+																	stroke="currentColor" stroke-width="2"
+																	stroke-linecap="round" stroke-linejoin="round"
+																	class="feather feather-loader">
+																	<line x1="12" y1="2" x2="12" y2="6"></line>
+																	<line x1="12" y1="18" x2="12" y2="22"></line>
+																	<line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
+																	</line>
+																	<line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
+																	</line>
+																	<line x1="2" y1="12" x2="6" y2="12"></line>
+																	<line x1="18" y1="12" x2="22" y2="12"></line>
+																	<line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
+																	</line>
+																	<line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
+																	</line>
+																</svg>
+															</div>
+														</div>
+
+														<div></div>
+													</div>
+												</div>
+
+												<div id="results" style="font-weight:bold;"> </div>
+												<input type="hidden" name="verified_no" id="verified_no">
+
+												<div class="mt-2">
+                                                      {% if redirect_field_value %}
+                                                          <input type="hidden" name="{{ redirect_field_name }}"
+                                                          value="{{ redirect_field_value }}" />
+                                                      {% endif %}
+												</div>
+											</div>
+										</div>
+
+										<div id="signup-panel-2" class=" step-dot-2 process-panel-wrap is-narrow ">
+											<div class="form-panel">
+												<div class="form-row mt-3">
+													<div class="form-group col-md-12 mb-0" id="username">
+														<div class="input-group">
+															<label for="username">
+                                                                {% trans 'Username' %}
+															</label>
+														</div>
+														{{ form.username }}
+													</div>
+												</div>
+
+												<div class="input-group mb-3 mt-4">
+													<div class="input-group">
+														<label class="" for="province">
+                                                            {% trans 'Province' %}
+                                                        </label>
+													</div>
+													<select class="custom-select" id="province" name="province"
+														autocomplete="on"></select>
+												</div>
+
+												<div class="input-group mb-3">
+													<div class="input-group">
+														<label class="" for="city">
+                                                            {% trans 'City' %}
+                                                        </label>
+													</div>
+													<select class="custom-select" id="city" name="city"
+														autocomplete="on">
+													</select>
+												</div>
+
+												<!-- These fields are hidden fields!-->
+												<div class="form-row">
+													<div class="form-group col-md-12 mb-0">
+                                                        {{ form.email}}
+                                                        {{ form.verify_code }}
+													</div>
+												</div>
+
+											<button type="submit" id="social-signup-submit"
+													class="button is-rounded is-solid accent-button raised is-fullwidth"
+                                                    data-step="step-dot-4">{% trans 'Complete' %}</button>
+											</div>
+										</div>
+									</form>
+
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock content %}
+
+
+{% block extra_js  %}
+
+<script type="text/javascript">
+	var current_url = "{{ request.path }}";
+	var errors = false;
+
+	{% if form.errors %}
+        errors = true;
+        {% if "phone_number" in form.errors %}
+            $("#id_phone_number").attr("disabled", false);
+            $("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
+        {% else %}
+            $("#id_phone_number").attr("disabled", true);
+            $("input[name='verified_no']").val("VAL");
+            $("#signup-panel-1").removeClass("is-active");
+            $("#signup-panel-2").addClass("is-active");
+        {% endif %}
+
+    {% endif %}
+    
+    {% if "username" in form.errors %}
+        $("#username").append(`<small class="pass-text red"> {{form.errors.username}} </small>`)
+    {% endif %}
+
+</script>
+
+<script src="{% static 'js/social-user-form.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
+
+{% endblock extra_js  %}

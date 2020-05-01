@@ -68,8 +68,8 @@ class ClassifiedEditForm(forms.ModelForm):
         help_texts = {
             "address": "It can be a street name, address or other description.\
             Please don't enter your city it will be added automatically based on your profile",
-            "phone_number": "This field is optional.", 
-            "wechat_id": "This field is optional.", 
+            "phone_number": "This field is optional.",
+            "wechat_id": "This field is optional.",
             "tags": "Write the categories of your item, can be one or multiple separated by a comma.\
             e.g phone,electronics. Some categories will appear as you start to type."
         }
@@ -83,6 +83,7 @@ class OfficialAdForm(forms.ModelForm):
         model = OfficialAd
         fields = ["title", "details", "tags", "images"]
         widgets = {'user': forms.HiddenInput()}
+
 
 # class ClassifiedReportForm(forms.ModelForm):
 #     laws = 'lw'
