@@ -35,19 +35,18 @@
       {% if request.user.username == object.username %}
       <div class="d-flex mb-2">
         <a class="btn btn-dark m-auto" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
-
       </div>
 
-      <div class="">
+      <div class="d-flex ">
         {%if object.is_official %}
-        <a class="button has-min-width m-auto"
+        <a class="button has-min-width mr-3 "
           href="{% url 'connections:friendship_followers'  %}">{% trans 'Followers🤝' %}</a>
         {% else %}
-        <a class="button has-min-width m-auto"
+        <a class="button has-min-width mr-3 "
           href="{% url 'connections:friendship_following' %}">{% trans 'Following' %}</a>
         {% endif %}
 
-        <a class=" button has-min-width m-auto"
+        <a class=" button has-min-width "
           href="{% url 'connections:friendship_view_friends' %}">{% trans 'Connects' %}</a>
       </div>
       {% else %}

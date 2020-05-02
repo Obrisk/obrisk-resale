@@ -19,7 +19,10 @@
     <button class="btn btn-danger"> <a href="{% url 'stories:list' %}"> {% trans 'Cancel' %} </a> </button>
   </form>
 
-  <!-- <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script> -->
+{% endblock content %}
+
+{% block extra_js %}
+
   <script>
     $("#confirmlogout").click(function () {
       localStorage.setItem('auth', "");
@@ -28,4 +31,4 @@
 </div>
 
 
-{% endblock %}
+{% endblock extra_js %}
