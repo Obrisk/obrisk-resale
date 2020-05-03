@@ -65,45 +65,19 @@
 
   <div class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
-
-      <div class="banner">
-
-          <div class="d-flex flex-column align-items-right">
-
-            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
-                <input name="next" type="hidden" value="{{ redirect_to }}">
-                <select name="language">
-                    {% get_current_language as LANGUAGE_CODE %}
-                    {% get_available_languages as LANGUAGES %}
-                    {% get_language_info_list for LANGUAGES as languages %}
-                    {% for language in languages %}
-                        <option value="{{ language.code }}"{% if language.code == LANGUAGE_CODE %} selected{% endif %}>
-                            {{ language.name_local }}
-                        </option>
-                    {% endfor %}
-                </select>
-                <input type="submit" value="Go">
-             </form>
-
-           </div>
-
-        <div class="welcome d-flex flex-column align-items-center">
-
-            <div class="title text-center pb-4">
-              <h2> {% trans 'Hi! Welcome to Obrisk' %} </h2>
-              <h5> {% trans 'Socialize, Share and Stay Connected...' %} </h5>
-            </div>
-
-            <div class="call-to-action">
-              <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark mr-4"
-                href="{% url 'account_signup' %}">{% trans 'Sign up now' %}</a>
-
-              <a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
-                href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-            </div>
-          </div>
-       </div>
-   </div>
+      <div class="banner d-flex flex-column justify-content-center align-items-center">
+        <div class="title text-center pb-4">
+            <h2> {% trans 'Hi! Welcome to Obrisk' %} </h2>
+            <h5>{% trans 'Socialize, Share and Stay Connected...' %}</h5>
+        </div>
+        <div class="call-to-action">
+          <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark mr-4"
+            href="{% url 'account_signup' %}">{% trans 'Sign up now' %}
+          </a><a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+            href="{% url 'account_login' %}">{% trans 'Login' %}</a>
+        </div>
+      </div>
+    </div>
   </div>
 
 
