@@ -293,6 +293,7 @@
 
 {% endblock content %}
 
+
 {% block extra_js %}
 
 <script type="text/javascript">
@@ -303,50 +304,30 @@
     $('#compose-card').toggleClass('d-none');
   }
 
-  function prepareTruncatedText() {
+  function prepareTruncatedText(e) {
       if ('querySelector' in document && 
         'addEventListener' in window) {
 
-        var toggleButtons = document.querySelectorAll('.toggle-content');
-        var fullTextWrappers = document.querySelectorAll('.fulltext');
-        var fullText;
-        var shortText;
-        var toggleButtonText;
+        var fullTextWrapper = e.parentElement.querySelector('.fulltext');
+        var toggleButtonText = e.parentElement.querySelector('.text');
+        var shortText = e.parentElement.querySelector('#short-content');
 
-        [].forEach.call(fullTextWrappers, function(fullTextWrapper) {
-            // hide all full text on load
+        // change attributes and text if full text is shown/hidden
+        if (!fullTextWrapper.hasAttribute('hidden')) {
+            if (toggleButtonText.innerText == 'Less') {
+                toggleButtonText.innerText = 'More';
+            }
             fullTextWrapper.setAttribute('hidden', true);
-        });
-
-        [].forEach.call(toggleButtons, function(toggleButton) {
-            // show toggle more buttons
-            toggleButton.removeAttribute('hidden');
-
-            // add listener for each button
-            toggleButton.addEventListener('click', function () {
-
-                fullTextWrapper = this.parentElement.querySelector('.fulltext');
-                shortText = this.parentElement.querySelector('#short-content');
-                toggleButtonText = this.querySelector('.text');
-
-                // change attributes and text if full text is shown/hidden
-                if (!fullTextWrapper.hasAttribute('hidden')) {
-                    toggleButtonText.innerText = 'More';
-                    fullTextWrapper.setAttribute('hidden', true);
-                    toggleButton.setAttribute('aria-expanded', false);
-                    shortText.hidden = false;
-                } else {
-                    toggleButtonText.innerText = 'Less';
-                    fullTextWrapper.removeAttribute('hidden');
-                    toggleButton.setAttribute('aria-expanded', true);
-                    shortText.hidden = true;
-                }
-            });
-        });
-      }
+            shortText.hidden = false;
+        } else {
+            if (toggleButtonText.innerText == 'More') {
+                toggleButtonText.innerText = 'Less';
+            }
+            fullTextWrapper.removeAttribute('hidden');
+            shortText.hidden = true;
+        }
+    }
   }
-
-  prepareTruncatedText(); 
 
   var page = 1;
   var empty_page = false;
@@ -354,7 +335,6 @@
   var is_tag_page = "{{tag}}";
   if (is_tag_page == "None") {
     $(window).scroll(function () {
-      prepareTruncatedText();
       if (empty_page == false && block_request == false) {
         block_request = true;
         page += 1;
@@ -374,7 +354,7 @@
             }
           })
         ).done(
-          lazyload(), prepareTruncatedText()
+          lazyload()
         )
 
       }
