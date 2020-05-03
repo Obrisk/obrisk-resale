@@ -5,14 +5,13 @@ $(function () {
 
 	var toggleButtons = document.querySelectorAll('.toggle-content');
 	var fullTextWrappers = document.querySelectorAll('.fulltext');
-    var shortText = document.querySelector('#short-content');
 	var fullText;
+    var shortText;
 	var toggleButtonText;
 
 	[].forEach.call(fullTextWrappers, function(fullTextWrapper) {
 		// hide all full text on load
 		fullTextWrapper.setAttribute('hidden', true);
-        shortText.hidden = false;
 	});
 
 	[].forEach.call(toggleButtons, function(toggleButton) {
@@ -23,6 +22,7 @@ $(function () {
 		toggleButton.addEventListener('click', function () {
 
 			fullTextWrapper = this.parentElement.querySelector('.fulltext');
+            shortText = this.parentElement.querySelector('#short-content');
 			toggleButtonText = this.querySelector('.text');
 
 			// change attributes and text if full text is shown/hidden
