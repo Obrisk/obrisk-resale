@@ -309,27 +309,3 @@ var shareMe = function shareMe(username, text, url) {
 $(document.body).on("click", ".delete-story", function () {
   location.href = $(this).attr("href");
 });
-
-//Fallback to eload videos in wechat browsers
-document.addEventListener("DOMContentLoaded", function () {
-  var videos = document.getElementsByClassName("js-player");
-
-  function preload() {
-    for (var i = 0; i < videos.length; i++) {
-      i.play();
-    }
-    setTimeout(function () {
-      for (var i = 0; i < videos.length; i++) {
-        i.pause();
-      }
-    }, 200);
-  }
-
-  document.addEventListener("WeixinJSBridgeReady", preload, false);
-  if (
-    typeof WeixinJSBridge == "object" &&
-    typeof WeixinJSBridge.invoke == "function"
-  ) {
-    WeixinJSBridge.invoke("getNetworkType", {}, preload);
-  }
-});
