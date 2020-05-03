@@ -25,12 +25,15 @@
     <div class="divider"></div>
     <div class="card-body">
       <h6 class="card-title"> {{ classified.title}} </h6>
-      <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
+
+      {% if classified.price != 0.00 %}
+          <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
+      {% else %}
+          <p class="card-subtitle O-cl-red"> {% trans 'FREE' %} </p>
+      {% endif %}
       <div class="card-meta d-flex justify-content-between">
 
-
         <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
-
 
       </div>
       <!-- <div class="card-meta d-flex justify-content-between mt-2">

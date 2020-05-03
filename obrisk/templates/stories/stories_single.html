@@ -52,14 +52,23 @@
     </div>
     <!-- /Header -->
 
-
     <!-- Post body -->
     <div class="card-body">
       <!-- Post body text -->
-      <div class="post-text">
-        <p>{{ stories }}</p>
-      </div>
 
+      <div class="post-text">
+        <p id="short-content">{{ stories.content|truncatechars:60 }}</p>
+        
+      {% if stories.content|length > 61 %} 
+            <div id="more-1" class="fulltext">
+                <p>{{ stories.content }}</p>
+            </div>
+
+            <a aria-expanded="false" aria-controls="more-1" class="toggle-content" hidden>
+            <span class="text">More</span> </a>
+      {% endif %}
+      </div>
+        
       <!-- Post Video -->
       {% if stories.video %}
       <div class="post-media grid-1">
@@ -76,33 +85,14 @@
       <!-- Post image  -->
 
       <div
-        class="post-media {% if stories.img4 %}grid-4{% elif stories.img3 %}grid-3{% elif stories.img2 %}grid-2{% else %}grid-1{%endif%}">
+        class="post-media grid-1">
         <!-- CSS masonry wrap -->
 
         {% if stories.img1 %}
-        <figure class="img1 image stry-image is-square">
-          <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" alt="">
-        </figure>
-        {%endif%}
-
-        {% if stories.img2%}
-        <figure class=" img2 image stry-image is-square">
-          <img class="lazyload" data-src="{{oss}}/{{stories.img2}}" alt="">
-        </figure>
-        {%endif%}
-
-        {% if stories.img3 %}
-        <figure class="img3 image stry-image is-square">
-          <img class="lazyload" data-src="{{oss}}/{{stories.img3}}" alt="">
-        </figure>
-        {%endif%}
-
-        {% if stories.img4 %}
-        <figure class="img4 image stry-image is-square">
-          <img class="lazyload" data-src="{{oss}}/{{stories.img4}}" alt="">
-        </figure>
-        {% endif %}
-
+            <figure class="img1 image stry-image is-square">
+                <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" alt="">
+            </figure>
+            {%endif%}
       </div>
       {%endif%}
 

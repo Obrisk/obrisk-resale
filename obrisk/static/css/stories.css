@@ -195,17 +195,6 @@ a:hover {
   grid-area: img1;
 }
 
-.img2 {
-  grid-area: img2;
-}
-
-.img3 {
-  grid-area: img3;
-}
-
-.img4 {
-  grid-area: img4;
-}
 
 .grid-1 {
   display: grid;
@@ -214,26 +203,6 @@ a:hover {
   grid-template-areas: "img1";
 }
 
-.grid-2 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: "img1 img2";
-}
-
-.grid-3 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: "img1 img2" "img3 .";
-}
-
-.grid-4 {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr 1fr;
-  grid-template-areas: "img1 img2" "img3 img4";
-}
 
 @media all and (-ms-high-contrast: none) {
   .grid-container {
@@ -249,27 +218,6 @@ a:hover {
     -ms-grid-column-span: 1;
   }
 
-  .img2 {
-    -ms-grid-row: 1;
-    -ms-grid-row-span: 1;
-    -ms-grid-column: 2;
-    -ms-grid-column-span: 1;
-  }
-
-  .img3 {
-    -ms-grid-row: 2;
-    -ms-grid-row-span: 1;
-    -ms-grid-column: 1;
-    -ms-grid-column-span: 1;
-  }
-
-  .img4 {
-    -ms-grid-row: 2;
-    -ms-grid-row-span: 1;
-    -ms-grid-column: 2;
-    -ms-grid-column-span: 1;
-  }
-}
 
 .card.is-post .content-wrap .card-footer .likers-group a {
   border-radius: 50%;
@@ -307,28 +255,6 @@ a:hover {
   transform-origin: left top;
 }
 
-.grid-4.smaller {
-  width: 200%;
-  height: 100%;
-  margin-bottom: -50px;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: ". . . .";
-}
-.grid-3.smaller {
-  width: 200%;
-  height: 100%;
-  margin-bottom: -150px;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: ". . .";
-}
-.grid-2.smaller {
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 1fr;
-  grid-template-areas: ". .";
-  margin-bottom: -50px;
-}
 .grid-1.smaller {
   width: auto;
   max-height: 300px;
@@ -338,9 +264,8 @@ a:hover {
   grid-template-rows: 1fr;
   grid-template-areas: ".";
 }
+
 .smaller .img1,
-.smaller .img2,
-.smaller .img3,
-.smaller .img4 {
+{
   grid-area: auto;
 }
