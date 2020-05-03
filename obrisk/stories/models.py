@@ -112,8 +112,9 @@ class Stories(models.Model):
             max_length=300, null=True,
             blank=True, unique=True, editable=False
         )
+    images_count = models.IntegerField(default=0)
 
-    #This will help to only show the liked users when needed, otherwise don't load all of them.
+    #This will help to only show the liked users when needed
     likes_count = models.IntegerField(default=0)
     thread_count = models.IntegerField(default=0)
 

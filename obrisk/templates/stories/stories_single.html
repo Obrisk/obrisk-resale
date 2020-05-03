@@ -57,14 +57,15 @@
       <!-- Post body text -->
 
       <div class="post-text">
-        <p id="short-content">{{ stories.content|truncatechars:60 }}</p>
+        <p id="short-content">{{ stories.content|truncatechars:80 }}</p>
         
-      {% if stories.content|length > 60 %} 
+      {% if stories.content|length > 80 %} 
             <div id="more-1" class="fulltext">
                 <p>{{ stories.content }}</p>
             </div>
 
-            <a aria-expanded="false" aria-controls="more-1" class="toggle-content" hidden>
+            <a onclick="prepareTruncatedText();" aria-expanded="false" aria-controls="more-1" class="toggle-content" hidden>
+   
             <span class="text">More</span> </a>
       {% endif %}
       </div>
@@ -74,25 +75,22 @@
       <div class="post-media grid-1">
 
         <video id="vid-{{ stories.uuid_id }}" class="js-player" width="640px" height="267px"
-          poster="{{oss}}/{{stories.img1}}" controls crossorigin playsinline
+          controls crossorigin playsinline
           data-plyr-config="{ 'title': 'Obrisk stories videos' }" preload x5-video-player-type="h5" control>
           <source src=" {{oss}}/{{stories.video}}" type="video/mp4">
           Your browser doesn' t support HTML5 video tag. </video>
 
       </div>
-      {% else %}
 
       <!-- Post image  -->
-
+      {% elif stories.img1 %}
       <div
         class="post-media grid-1">
         <!-- CSS masonry wrap -->
 
-        {% if stories.img1 %}
             <figure class="img1 image stry-image is-square">
-                <img class="lazyload" data-src="{{oss}}/{{stories.img1}}" alt="">
+                <img class="lazyload" data-src="{{stories.img1}}" alt="stories img" style="border-radius:8px;">
             </figure>
-            {%endif%}
       </div>
       {%endif%}
 

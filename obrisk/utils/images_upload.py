@@ -249,7 +249,8 @@ def multipleImagesPersist(request, images_list, app, obj):
     #even when there are error on images
     #This is just to help to increase the app post on the website.
     img_mid_name = None
-    saved_objs = []
+    saved_objs = 0
+    display_img= None
 
     for index, str_result in enumerate(images_list):
         if str_result.startswith(
@@ -296,8 +297,8 @@ def multipleImagesPersist(request, images_list, app, obj):
             if img_mid_name:
                 img_obj.image_mid_size = img_mid_name
             img_obj.save()
-            saved_objs.append(img_obj)
-            return saved_objs
+            saved_objs += 1
+            return  'https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ images_list[0]
 
         else:
             try:
@@ -344,7 +345,7 @@ def multipleImagesPersist(request, images_list, app, obj):
                 if img_mid_name:
                     img_obj.image_mid_size = str_result
                 img_obj.save()
-                saved_objs.append(img_obj)
+                saved_objs += 1
                 continue
 
             else:
@@ -352,9 +353,14 @@ def multipleImagesPersist(request, images_list, app, obj):
                 if img_mid_name:
                     img_obj.image_mid_size = img_mid_name
                 img_obj.save()
-                saved_objs.append(img_obj)
+                saved_objs += 1
 
-    return saved_objs
+    if app == 'stories':
+        obj.images_count = saved_objs
+        obj.save()
+        return 'https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ images_list[0]
+    else:
+        return True
 
 
 def videoPersist(request, video, app, obj):

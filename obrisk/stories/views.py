@@ -48,7 +48,7 @@ def stories_list(request, slug=None):
                     StoryImages.objects.filter(
                         story=OuterRef('pk'),
                 ).values_list(
-                       'image_thumb', flat=True
+                       'image', flat=True
                     )[:1])
         ).prefetch_related(
             'liked', 'parent',
@@ -77,7 +77,7 @@ def stories_list(request, slug=None):
                             StoryImages.objects.filter(
                                 story=OuterRef('pk'),
                         ).values_list(
-                           'image_thumb', flat=True
+                           'image', flat=True
                             )[:1])
                 ).prefetch_related(
                         'liked', 'parent', 'user__thumbnail__username'
@@ -98,7 +98,6 @@ def stories_list(request, slug=None):
             return HttpResponse('')
         # If page is out of range deliver last page of results
         stories = paginator.page(paginator.num_pages)
-
 
     if request.is_ajax():
        return render(request,'stories/stories_list_ajax.html',
@@ -278,7 +277,6 @@ def post_stories(request):
     viewers = request.POST.get('viewers')
     img_errors = request.POST.get('img_error')
 
-    print (len(post))
     if len(post) <= 400 or images or video:
 
         if img_errors:
@@ -300,23 +298,14 @@ def post_stories(request):
             #into a list of string each for one JSON img_obj
             images_list = images.split(",")
 
-            imgs_objs = multipleImagesPersist(request, images_list, 'stories', story)
-            if imgs_objs:
-                story.img1 = imgs_objs[0].image_thumb
-                story.img2 = story.img3 = story.img4 = None
-                # Find a way to return a list in a subquery
-                try:
-                    if imgs_objs[1]:
-                        story.img2 = imgs_objs[1].image_thumb
-                        if imgs_objs[2]:
-                            story.img3 = imgs_objs[2].image_thumb
-                            if imgs_objs[3]:
-                                story.img4 = imgs_objs[3].image_thumb
-                except IndexError:
-                    pass
+            display_img = multipleImagesPersist(request, images_list, 'stories', story)
+            if display_img:
+                story.img1 = display_img
             else:
-                return HttpResponse(
-                    'Sorry, the image(s) were not uploaded successfully!')
+                return HttpResponse(_(
+                    'Sorry, the image(s) were not uploaded successfully!'
+                    )
+                )
 
         if video:
             vid_img = videoPersist(request, video, 'stories', story)
@@ -325,8 +314,10 @@ def post_stories(request):
                 story.img1 = vid_img
 
             else:
-                return HttpResponse(
-                    'Sorry, the video was not uploaded successfully!')
+                return HttpResponse(_(
+                    'Sorry, the image(s) were not uploaded successfully!'
+                    )
+                )
 
         html = render_to_string(
             'stories/stories_single.html',
