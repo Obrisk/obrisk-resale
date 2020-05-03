@@ -326,8 +326,6 @@ $(function() {
       $("input[name='province_region']").val(
         $("select[name='province']").val()
       );
-      console.log("now");
-      console.log("now");
       $("#signup_form").submit();
     }
   });
