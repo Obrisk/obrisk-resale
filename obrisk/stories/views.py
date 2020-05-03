@@ -1,6 +1,7 @@
 import json
 import uuid
 import itertools
+import logging
 from slugify import slugify
 from dal import autocomplete
 from django.utils.decorators import method_decorator
@@ -42,32 +43,13 @@ def stories_list(request, slug=None):
     #    popular_tags = Stories.objects.get_counted_tags()
 
     # Get stories
-    stories_list = Stories.objects.filter(reply=False).annotate (
+    stories_list = Stories.objects.filter(reply=False).annotate(
             img1 = Subquery (
                     StoryImages.objects.filter(
                         story=OuterRef('pk'),
                 ).values_list(
-                   'image_thumb', flat=True
-                    )[:1]),
-            img2 = Subquery (
-                StoryImages.objects.filter(
-                    story=OuterRef('pk'),
-                ).values_list(
-                   'image_thumb', flat=True
-                )[1:2]),
-            img3 = Subquery (
-                StoryImages.objects.filter(
-                    story=OuterRef('pk'),
-                ).values_list(
-                   'image_thumb', flat=True
-                )[2:3]),
-            img4 =  Subquery (
-                StoryImages.objects.filter(
-                    story=OuterRef('pk'),
-                ).values_list(
-                   'image_thumb', flat=True
-                )[3:4])
-
+                       'image_thumb', flat=True
+                    )[:1])
         ).prefetch_related(
             'liked', 'parent',
             'user__thumbnail__username').order_by(
@@ -89,33 +71,17 @@ def stories_list(request, slug=None):
     elif slug:
         tag = get_object_or_404(StoryTags, slug=slug)
 
-        stories_list = Stories.objects.get_stories().filter(tags__in=[tag])\
-                .annotate (
+        stories_list = Stories.objects.get_stories().filter(
+                tags__in=[tag]).annotate (
                     img1 = Subquery (
                             StoryImages.objects.filter(
                                 story=OuterRef('pk'),
                         ).values_list(
                            'image_thumb', flat=True
-                            )[:1]),
-                    img2 = Subquery (
-                        StoryImages.objects.filter(
-                            story=OuterRef('pk'),
-                        ).values_list(
-                           'image_thumb', flat=True
-                        )[1:2]),
-                    img3 = Subquery (
-                        StoryImages.objects.filter(
-                            story=OuterRef('pk'),
-                        ).values_list(
-                           'image_thumb', flat=True
-                        )[2:3]),
-                    img4 =  Subquery (
-                        StoryImages.objects.filter(
-                            story=OuterRef('pk'),
-                        ).values_list(
-                           'image_thumb', flat=True
-                        )[3:4])
-                ).prefetch_related('liked', 'parent', 'user__thumbnail__username')
+                            )[:1])
+                ).prefetch_related(
+                        'liked', 'parent', 'user__thumbnail__username'
+                    )
 
     paginator = Paginator(stories_list, 5)  #5 stories/page
     page = request.GET.get('page')
@@ -145,7 +111,7 @@ def stories_list(request, slug=None):
 
 
 class DetailStoryView(DetailView):
-    """Basic DetailView implementation to call an individual story."""
+    """This view is never called it is here for reference"""
     model = Stories
     context_object_name = 'story'
 
@@ -236,6 +202,8 @@ def stories_create_slugs(request):
 
     return redirect('stories:list')
 
+
+@ajax_required
 @require_http_methods(["GET"])
 def get_story_images(request):
     """A function view return all images of a specific story"""
@@ -310,12 +278,11 @@ def post_stories(request):
     viewers = request.POST.get('viewers')
     img_errors = request.POST.get('img_error')
 
+    print (len(post))
     if len(post) <= 400 or images or video:
 
         if img_errors:
-             #In the near future, send a message like sentry to our mailbox to notify about the error!
-            send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
-
+            logging.error(f"Stories Images error: {img_errors}")
         # Before saving the user inputs to the database, clean everything.
         story = Stories.objects.create(
             user=user,
@@ -352,8 +319,10 @@ def post_stories(request):
                     'Sorry, the image(s) were not uploaded successfully!')
 
         if video:
-            if videoPersist(request, video, 'stories', story):
+            vid_img = videoPersist(request, video, 'stories', story)
+            if vid_img:
                 story.video = video
+                story.img1 = vid_img
 
             else:
                 return HttpResponse(
@@ -452,3 +421,20 @@ def update_reactions_count(request):
 
 
     return HttpResponse("Successfully updated likes")
+
+
+@require_http_methods(["GET"])
+def get_story_images(request):
+    """A function view return all images of a specific story"""
+    story_id = request.GET['story_id']
+
+    try:
+        images = list(StoryImages.objects.filter(
+                            story=story_id,
+                        ).extra(
+                            select={ 'src': 'image'}).values('src')
+                        )
+    except:
+        return HttpResponseBadRequest(
+                content=_('The story post is invalid'))
+    return HttpResponse(json.dumps(images), content_type='application/json')

@@ -87,7 +87,7 @@ def classified_list(request, tag_slug=None):
 
     #official_ads = OfficialAd.objects.all() 
 
-    paginator = Paginator(classifieds_list, 30)  # 30 classifieds in each page
+    paginator = Paginator(classifieds_list, 20)  # 20 classifieds in each page
     page = request.GET.get('page')
 
     try:

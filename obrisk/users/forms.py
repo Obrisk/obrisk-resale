@@ -55,6 +55,14 @@ class UserForm(forms.ModelForm):
 
 # This form inherits all-auth.
 class PhoneSignupForm(SignupForm):
+
+    error_messages = {
+        "account_inactive": _("This account is currently inactive."),
+        "username_password_mismatch": _(
+            "The phone number/username or password you specified are not correct."
+        ),
+    }
+
     username = forms.CharField(label=_("Username"),
                    min_length=getattr(settings,
                        'ACCOUNT_USERNAME_MIN_LENGTH', 3),
@@ -62,7 +70,7 @@ class PhoneSignupForm(SignupForm):
                        'ACCOUNT_USERNAME_MAX_LENGTH', 16),
                    widget=forms.TextInput(
                        attrs={'placeholder':
-                              _('< 16 letters. Can\'t be changed.'),
+                              _('< 16 letters. No spaces'),
                               'autofocus': 'autofocus'}))
     province_region = forms.CharField(widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
@@ -90,9 +98,7 @@ class PhoneSignupForm(SignupForm):
         )
 
     def __init__(self, *args, **kwargs):
-        super(PhoneSignupForm, self).__init__(*args, **kwargs)
-
-        self.fields["password1"] = PasswordField(label=_("Password"))
+        super().__init__(*args, **kwargs)
 
         username_field = self.fields['username']
         username_field.max_length = getattr(settings,

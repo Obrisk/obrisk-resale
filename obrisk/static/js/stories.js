@@ -338,6 +338,7 @@ $(function () {
     });
   });
 });
+
 var shareMe = function shareMe(username, text, url) {
   navigator.share({
     title: `${username} shared a story on Obrisk`,
@@ -345,6 +346,7 @@ var shareMe = function shareMe(username, text, url) {
     url: location.origin + "/stories/" + url,
   });
 };
+
 $(document.body).on("click", ".delete-story", function () {
   location.href = $(this).attr("href");
 });

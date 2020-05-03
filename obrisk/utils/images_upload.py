@@ -423,7 +423,7 @@ def videoPersist(request, video, app, obj):
 
         obj.video = video
         obj.save()
-        return True
+        return pic_name
 
 
 @login_required

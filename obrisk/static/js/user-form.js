@@ -54,8 +54,8 @@ $(function() {
               url = "/users/phone-password-reset/";
               req = "POST";
         } else {
-          url = "/users/verification-code/";
-          req = "GET";
+              url = "/users/verification-code/";
+              req = "GET";
         }
 
         $.ajax({
@@ -266,7 +266,7 @@ $(function() {
     if (!$("input[name='verified_no']").val()) {
       event.preventDefault();
       printError(
-        "Please verify your phone number by requesting the code before signing up!"
+        "Please verify your phone number before submitting the form!"
       );
     } else if (
       !$("select[name='city']").val() ||
@@ -296,7 +296,7 @@ $(function() {
       $(".step-title").removeClass("is-active");
       $(".step-dot-2").addClass("is-active");
       printError(
-        "Username must be more than 3 letters, less than 16"
+        "Must be > 3 letters & < 16, without spaces!"
       );
     } else if ( $("input[name=password1").val().length < 8) {
 
@@ -319,13 +319,15 @@ $(function() {
       ) {
         $("#id_phone_number").val("+86" + $("#id_phone_number").val());
       }
-      $("input[name='city']").val($("select[name='city']").val());
+
+      $("input[name='city']").val(
+          $("select[name='city']").val()
+      );
       $("input[name='province_region']").val(
         $("select[name='province']").val()
       );
-
-      $("input[name='password2']").val($("input[name='password1']").val()); //hack for second password
-
+      console.log("now");
+      console.log("now");
       $("#signup_form").submit();
     }
   });

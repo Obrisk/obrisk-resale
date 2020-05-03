@@ -233,9 +233,9 @@
         </div>
       </div>
     </div>
-    {% endblock content %}
+{% endblock content %}
 
-    {% block extra_js %}
+{% block extra_js %}
     <script>
       var activeUser = "{{ active }}";
       var currentUser = "{{ request.user.username }}";
