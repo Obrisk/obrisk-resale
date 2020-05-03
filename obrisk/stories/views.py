@@ -117,7 +117,7 @@ def stories_list(request, slug=None):
                         )[3:4])
                 ).prefetch_related('liked', 'parent', 'user__thumbnail__username')
 
-    paginator = Paginator(stories_list, 12)  # 12 stories/page
+    paginator = Paginator(stories_list, 6)  #6 stories/page
     page = request.GET.get('page')
 
     try:
