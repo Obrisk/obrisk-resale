@@ -88,7 +88,7 @@ class Stories(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     uuid_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
-    content = models.TextField(max_length=400, null=True)
+    content = models.TextField(max_length=400, null=True, blank=True)
     viewers =  models.CharField(
             max_length=1, choices=VIEWERS, default=PUBLIC
         )
@@ -98,10 +98,10 @@ class Stories(models.Model):
             verbose_name=_("User created tags?"),
             default=False
         )
-    city = models.CharField (max_length=100, null=True)
-    video = models.CharField (max_length=300, null=True)
+    city = models.CharField (max_length=100, null=True, blank=True)
+    video = models.CharField (max_length=300, null=True, blank=True)
     province_region = models.CharField(max_length= 100, null=True)
-    address = models.CharField(max_length=255, null=True)
+    address = models.CharField(max_length=255, null=True, blank=True)
     liked = models.ManyToManyField(settings.AUTH_USER_MODEL,
         blank=True, related_name="liked_stories")
     reply = models.BooleanField(
