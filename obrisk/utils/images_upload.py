@@ -371,7 +371,7 @@ def videoPersist(request, video, app, obj):
 
     if env.bool('VIDEO_USE_AWS_MEDIA'):
         if video.startswith(
-                'f{media/videos/{app}/{request.user.username}/'
+                f'media/videos/{app}/{request.user.username}/'
             ) is False:
             obj.delete()
             return False
@@ -405,13 +405,12 @@ def videoPersist(request, video, app, obj):
                 requests.Timeout,
                 requests.TooManyRedirects) as e:
             return False
-            print( "mafan")
             logging.error("Can't request thumbnail from video" + e)
 
         # naming them in our oss
-        pic_name = "media/images/{{app}}" + slugify(
+        pic_name = f"media/images/{{app}}" + slugify(
                 str(request.user.username)
-            ) + "/video-display-thumb-" + uuid.uuid4().hex[:12]
+            ) + "/video-display-thumb-" + uuid.uuid4().hex[:16]
 
         # upoad them in our oss
         try:
@@ -424,6 +423,7 @@ def videoPersist(request, video, app, obj):
         else:
             StoryImages.objects.create(
                  story=obj,
+                 image = pic_name,
                  image_thumb = pic_name
             )
 
