@@ -33,6 +33,11 @@
   float: left;
 }
 
+.post-media {
+  margin-left: -16px;
+  margin-right: -16px;
+}
+
 .interaction {
   padding-left: 1.5em;
   margin-bottom: 1em;
@@ -250,6 +255,7 @@ a:hover {
 .post-media {
   transition: all 0.2s;
 }
+
 .post-media.smaller {
   transform: scale(0.5);
   transform-origin: left top;
