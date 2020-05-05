@@ -27,7 +27,8 @@
           <a href="/users/{{ stories.user.get_profile_name}}">{{ stories.user.get_profile_name|title }}</a>
           <span class="time">{{ stories.timestamp|naturaltime }}</span>
         </div>
-
+        
+        {% if stories.images_count > 0 %}
         <div>
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" 
                 viewBox="0 0 24 24" fill="none" stroke="#00BAF6" stroke-width="2" 
@@ -35,9 +36,11 @@
                 <rect x="3" y="3" width="18" height="18" rx="2" ry="2"> </rect>
                 <circle cx="8.5" cy="8.5" r="1.5"></circle>
                 <polyline points="21 15 16 10 5 21"></polyline>
-            </svg> <span style="color: #00BAF6;position:relative;bottom:5px;"> {{ stories.images_count }}  </span>
+            </svg> <span style="color: #00BAF6;position:relative;bottom:5px;"> {{ stories.images_count }} </span>
         </div>
+        {% endif %}
       </div>
+
       <!-- /includes/pages/feed/dropdowns/feed-post-dropdown.html -->
       {% if stories.user == request.user %}
       <div class="dropdown is-spaced is-right is-neutral dropdown-trigger">
