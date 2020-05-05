@@ -95,7 +95,7 @@ class Post(models.Model):
     title = models.CharField(max_length=80, null=False, unique=True)
     slug = models.SlugField(max_length=150, null=True, blank=True)
     status = models.CharField(max_length=1, choices=STATUS, default=DRAFT)
-    content = MarkdownxField()
+    content = MarkdownxField(null=True, blank=True)
     content_html = RichTextField(null=True, blank=True)
     content_json = JSONField(null=True, blank=True)
     category =  models.CharField(max_length=1, choices=CATEGORY, default=ARTICLE)
