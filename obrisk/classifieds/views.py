@@ -20,7 +20,6 @@ from django.db.models import (
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from taggit.models import Tag
 from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import (
         Classified, OfficialAd,
@@ -286,9 +285,9 @@ class CreateClassifiedView(CreateView):
         #This method is never called
 
 
-class TagsAutoComplete(autocomplete.Select2QuerySetView):
+class ClassifiedTagsAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Tag.objects.all()
+        qs = ClassifiedTags.objects.all()
 
         if self.q:
             qs = qs.filter(name__icontains=self.q)

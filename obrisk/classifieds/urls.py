@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from obrisk.classifieds.search import SearchListView, get_suggestions
 from obrisk.classifieds.views import (
-        classified_list, TagsAutoComplete,
+        classified_list, ClassifiedTagsAutoComplete,
         CreateClassifiedView, EditClassifiedView,
         ClassifiedDeleteView, ReportClassifiedView,
         DetailClassifiedView)
@@ -17,7 +17,7 @@ urlpatterns = [
         CreateClassifiedView.as_view(),
         name='write_new'),
     url(r'^tags-autocomplete/$',
-        TagsAutoComplete.as_view(),
+        ClassifiedTagsAutoComplete.as_view(),
         name='tags_autocomplete'),
     url(
         r'^tag/([-\w]+)/$',

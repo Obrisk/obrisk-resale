@@ -7,6 +7,13 @@ from obrisk.utils.images_upload import bulk_update_vid_images
 app_name = 'stories'
 urlpatterns = [
     url(r'^$', views.stories_list, name='list'),
+    url(r'^tags-autocomplete/$',
+        views.StoryTagsAutoComplete.as_view(),
+        name='tags_autocomplete'),
+    url(
+        r'^update-images-count/$',
+        views.update_images_count,
+        name='update_images_count'),
     url(
         r'^post-stories/$',
         views.post_stories,
@@ -43,7 +50,7 @@ urlpatterns = [
         views.update_interactions,
         name='update_interactions'),
     url(
-        r'^stories-search-reslts/$',
+        r'^stories-search-results/$',
         SearchListView.as_view(),
         name='results'),
     url(

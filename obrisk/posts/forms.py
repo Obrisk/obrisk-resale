@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib.postgres.forms import JSONField
-from obrisk.posts.models import Post, Comment
-from obrisk.utils.fields import RichTextFormField
 from django.utils.translation import ugettext_lazy as _
 from dal import autocomplete
+from obrisk.posts.models import Post, Comment
+from obrisk.utils.fields import RichTextFormField
 
 class PostForm(forms.ModelForm):
     status = forms.CharField(
@@ -35,11 +35,13 @@ class PostForm(forms.ModelForm):
             "category",
         ]
         widgets = {
-            'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
+            'tags': autocomplete.TagSelect2(url='posts:tags_autocomplete')
         }
 
         help_texts = {
-            "title": _("Make it short but descriptive, maximum 80 characters."),
+            "title": _(
+                "Make it short but descriptive, maximum 80 characters."
+            ),
         }
 
 
@@ -73,7 +75,7 @@ class PostEditForm(forms.ModelForm):
             "category",
         ]
         widgets = {
-            'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
+            'tags': autocomplete.TagSelect2(url='posts:tags_autocomplete')
         }
 
         help_texts = {

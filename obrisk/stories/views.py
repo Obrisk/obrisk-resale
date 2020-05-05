@@ -3,7 +3,6 @@ import uuid
 import itertools
 import logging
 from slugify import slugify
-from dal import autocomplete
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -25,6 +24,7 @@ from django.core.paginator import (
         Paginator, EmptyPage,
         PageNotAnInteger)
 
+from dal import autocomplete
 from obrisk.utils.images_upload import (
         multipleImagesPersist, videoPersist)
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
@@ -245,7 +245,8 @@ def get_thread(request):
     except:
         return JsonResponse({"error":"Story post is not valid"})
 
-    stories_html = render_to_string("stories/stories_single.html", {"stories": stories})
+    stories_html = render_to_string(
+            "stories/stories_single.html", {"stories": stories})
     thread_html = render_to_string(
         "stories/stories_thread.html", {"thread": stories.get_thread()})
     return JsonResponse({
@@ -255,9 +256,11 @@ def get_thread(request):
     })
 
 
-class StoriesDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
-    """Implementation of the DeleteView overriding the delete method to
-    allow a no-redirect response to use with AJAX call."""
+class StoriesDeleteView(LoginRequiredMixin,
+        AuthorRequiredMixin, DeleteView):
+    """Implementation of the DeleteView overriding the
+    delete method to allow a no-redirect response to
+    use with AJAX call."""
     model = Stories
     success_url = reverse_lazy("stories:list")
 
@@ -266,8 +269,9 @@ class StoriesDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
 @ajax_required
 @require_http_methods(["POST"])
 def post_stories(request):
-    """A function view to implement the post functionality with AJAX allowing
-    to create Stories instances as parent ones."""
+    """A function view to implement the post functionality
+    with AJAX allowing to create Stories instances
+    as parent ones."""
     user = request.user
     post = request.POST.get('post')
     post = post.strip()
@@ -333,7 +337,6 @@ def post_stories(request):
                 content=_('Text length is longer than accepted characters.'))
 
 
-@method_decorator(login_required, name='dispatch')
 class StoryTagsAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = StoryTags.objects.all()
@@ -347,11 +350,9 @@ class StoryTagsAutoComplete(autocomplete.Select2QuerySetView):
 @login_required
 @ajax_required
 @require_http_methods(["GET"])
-# The only reason this method is GET is because the server will return 403 on the live site,
-# even when ignoring the csrf with exempt decorator. Need to fix this method to become post.
 def like(request):
-    """Function view to receive AJAX, returns the count of likes a given stories
-    has recieved."""
+    """Function view to receive AJAX, returns the count of likes
+    a given stories has recieved."""
     stories_id = request.GET.get('stories')
     try:
         stories = Stories.objects.get(pk=stories_id)
@@ -370,9 +371,9 @@ def like(request):
 @ajax_required
 @require_http_methods(["POST"])
 def post_comment(request):
-    """A function view to implement the post functionality with AJAX, creating
-    Stories instances who happens to be the children and commenters of the root
-    post."""
+    """A function view to implement the post functionality
+    with AJAX, creating Stories instances who happens to be
+    the children and commenters of the root post."""
     user = request.user
     post = request.POST['reply']
     par = request.POST['parent']
@@ -383,7 +384,10 @@ def post_comment(request):
         # Without this you will get error
         # Object of type 'CombinedExpression' is not JSON serializable
         parent.refresh_from_db()
-        return JsonResponse({'comments': parent.thread_count, 'likes': parent.likes_count})
+        return JsonResponse({
+            'comments': parent.thread_count,
+            'likes': parent.likes_count
+            })
 
     else:
         return HttpResponseBadRequest()
@@ -394,21 +398,26 @@ def post_comment(request):
 def update_interactions(request):
     data_point = request.POST['id_value']
     story = Stories.objects.get(pk=data_point)
-    data = {'likes': story.likes_count, 'comments': story.thread_count}
+    data = {
+            'likes': story.likes_count,
+            'comments': story.thread_count
+        }
     return JsonResponse(data)
 
 
 @login_required
 @require_http_methods(["GET"])
 def update_reactions_count(request):
-    """ This view is temporal used to update stories to new reaction counts model setup"""
+    """ This view is temporal used to update stories
+    to new reaction counts model setup"""
     for story in Stories.objects.all():
         try:
             story.thread_count = story.count_thread()
             story.likes_count = story.count_likers()
             story.save()
         except:
-            return HttpResponse(f"can't update the story object, {story}. Check the admin for more info")
+            return HttpResponse(
+                    f"can't update {story}, Check the admin for more info")
 
 
     return HttpResponse("Successfully updated likes")
@@ -429,3 +438,15 @@ def get_story_images(request):
         return HttpResponseBadRequest(
                 content=_('The story post is invalid'))
     return HttpResponse(json.dumps(images), content_type='application/json')
+
+
+def update_images_count(request):
+    stories = Stories.objects.all()
+
+    for st in stories:
+        imgs = StoryImages.objects.filter(story=st)
+        if st.video is None or st.video == "":
+            st.images_count = len(imgs)
+            st.save()
+
+    return redirect('stories:list')

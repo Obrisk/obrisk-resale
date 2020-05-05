@@ -1,27 +1,27 @@
 import logging
+import base64
+import datetime
+from slugify import slugify
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, ListView, UpdateView, DetailView
+from django.views.generic import (
+        CreateView, ListView, UpdateView, DetailView
+    )
 from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
-
 from django.shortcuts import redirect
-from obrisk.utils.helpers import AuthorRequiredMixin
-from obrisk.posts.models import Post
-from obrisk.posts.forms import PostForm, PostEditForm, CommentForm
-
-# For comments
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.contrib.auth.decorators import login_required
-from obrisk.utils.images_upload import bucket, bucket_name
-from slugify import slugify
-import base64
-import datetime
 
 import oss2
 from aliyunsdkcore import client
+from dal import autocomplete
+from obrisk.utils.images_upload import bucket, bucket_name
+from obrisk.utils.helpers import AuthorRequiredMixin
+from obrisk.posts.models import Post, PostTags
+from obrisk.posts.forms import PostForm, PostEditForm, CommentForm
 
 
 class PostsListView(ListView):
@@ -231,3 +231,13 @@ class DetailPostView(DetailView):
         context["comments"] = self.object.comments.all()
         context["new_comment"] = None
         return context
+
+
+class PostTagsAutoComplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = PostTags.objects.all()
+
+        if self.q:
+            qs = qs.filter(name__icontains=self.q)
+
+            return qs
