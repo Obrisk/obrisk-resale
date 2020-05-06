@@ -364,14 +364,14 @@
   const app = "stories";
   const user = "{{ request.user.username }}";
 
-  //Load videos
+//Load videos
   var loadvideo = function () {
     Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p, {
       loadSprite: true,
       iconPrefix: 'plyr',
       iconUrl: "{% static 'css/plyr.svg' %}",
       ratio: '12:9',
-      controls: ['play-large', 'progress', 'fullscreen']
+      controls: ['play-large', 'progress']
     }));
   }
 
