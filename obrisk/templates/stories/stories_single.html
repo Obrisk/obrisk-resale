@@ -101,9 +101,8 @@
           {% if stories.img1 %}
               <div class="post-media grid-1">
                 <!-- CSS masonry wrap -->
-                    <figure class="img1 image stry-image is-square">
-                        <img class="lazyload" 
-                        src="{{ stories.img1 }}" alt="" style="border-radius:8px;height:auto;">
+                    <figure class="img1 image stry-image is-square"
+                     style="background: url({{ stories.img1 }}); border-radius:8px;height:400px; background-size: cover;">
                     </figure>
               </div>
           {%endif%}
