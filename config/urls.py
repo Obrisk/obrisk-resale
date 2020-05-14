@@ -9,7 +9,8 @@ from django.views.generic import RedirectView
 
 from graphene_django.views import GraphQLView
 from pwa_webpush.views import save_info
-from obrisk.users.views import PasswordResetFromKeyView, AutoLoginView
+from obrisk.users.views import (
+        PasswordResetFromKeyView, AutoLoginView)
 from obrisk.utils.images_upload import get_oss_auth
 from obrisk.classifieds.sitemaps import ClassifiedsSitemap
 from obrisk.posts.sitemaps import PostsSitemap
@@ -28,8 +29,13 @@ sitemaps = {
 
 urlpatterns = [
     url(r"", include("pwa_webpush.urls")),
-    url(r"^$", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    url(r'^i18n/', include('django.conf.urls.i18n')),
+    url(r"^$",
+        TemplateView.as_view(template_name="pages/home.html"),
+        name="home"
+        ),
+    url(r'^i18n/',
+        include('django.conf.urls.i18n')
+        ),
     url(
         r"^download-pwa/$",
         TemplateView.as_view(template_name="pages/download.html"),
@@ -41,7 +47,10 @@ urlpatterns = [
         name="offline",
     ),
     url(r"^get-oss-auth/$", get_oss_auth, name="get_oss_auth"),
-    url(r"^get-oss-auth/([\w\.%+-]+)/$", get_oss_auth, name="get_oss_auth_with_object"),
+    url(r"^get-oss-auth/([\w\.%+-]+)/$",
+        get_oss_auth,
+        name="get_oss_auth_with_object"
+        ),
     url(
         r"^about/$",
         TemplateView.as_view(template_name="pages/about.html"),
@@ -92,20 +101,38 @@ urlpatterns = [
     url(r"^graphql", GraphQLView.as_view(graphiql=True)),
     url(r"^markdownx/", include("markdownx.urls")),
     # Local apps here
-    url(r"^connections/", include("obrisk.connections.urls", namespace="connections")),
+    url(r"^connections/",
+        include("obrisk.connections.urls",
+        namespace="connections")
+        ),
     url(
         r"^ws/notifications/",
         include("obrisk.notifications.urls", namespace="notifications"),
     ),
-    url(r"^classifieds/", include("obrisk.classifieds.urls", namespace="classifieds")),
-    url(r"^posts/", include("obrisk.posts.urls", namespace="posts")),
-    url(r"^stories/", include("obrisk.stories.urls", namespace="stories")),
-    url(r"^ws/messages/", include("obrisk.messager.urls", namespace="messager")),
-    url(r"^qa/", include("obrisk.qa.urls", namespace="qa")),
-    url(r"^search/", include("obrisk.search.urls", namespace="search")),
-    url(r'^obr-translation-with-rosetta/', include('rosetta.urls')),
+    url(r"^classifieds/",
+        include("obrisk.classifieds.urls",
+        namespace="classifieds")
+        ),
+    url(r"^posts/",
+        include("obrisk.posts.urls",
+        namespace="posts")
+        ),
+    url(r"^stories/",
+        include("obrisk.stories.urls",
+        namespace="stories")
+        ),
+    url(r"^ws/messages/",
+        include("obrisk.messager.urls",
+        namespace="messager")),
+    url(r"^qa/",
+        include("obrisk.qa.urls",
+        namespace="qa")),
+    url(r"^search/",
+        include("obrisk.search.urls",
+        namespace="search")),
     url(
-        r"^obdev2018-wsguatpotlfwccdi-sentry-error/", trigger_error, name="sentry_debug"
+        r"^obdev2018-wsguatpotlfwccdi-sentry-error/",
+        trigger_error, name="sentry_debug"
     ),
     url(
         r"^sitemap\.xml$",
@@ -138,5 +165,9 @@ if settings.DEBUG:
     if "debug_toolbar" in settings.INSTALLED_APPS:
         import debug_toolbar
 
-        urlpatterns = [url(r"^__debug__/", include(debug_toolbar.urls)),] + urlpatterns
+        urlpatterns = [url
+            (
+                r"^__debug__/", 
+                include(debug_toolbar.urls)
+            ),] + urlpatterns
 

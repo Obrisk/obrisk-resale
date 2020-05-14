@@ -92,7 +92,8 @@
             <video id="vid-{{ stories.uuid_id }}" class="js-player"
               x5-video-player-type="h5-page"
               poster="{{oss}}/{{stories.img1}}" controls crossorigin webkit-playsinline playsinline
-              data-plyr-config="{ 'title': 'Obrisk stories videos' }" preload control>
+              data-plyr-config="{ 'title': 'Obrisk stories videos' }" preload control
+	      data-setup='{}'>
               <source src=" {{oss}}/{{stories.video}}" type="video/mp4">
               Your browser doesn' t support HTML5 video tag. </video>
           </div>

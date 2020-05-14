@@ -683,9 +683,8 @@
 
   <!-- For the chat-app-->
   {% if request.user.is_authenticated %}
-      <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
+      <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
       <script type="text/javascript">
-
 
         var currentUser = "{{ request.user.username}}";
         var new_messages = "{{ new_msgs }}";
@@ -699,8 +698,6 @@
         });
 
       </script>
-      <script src="{% static 'js/notif-sw.js' %}" type="text/javascript"></script>
-      <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
   {% endif %}
 
   <script type="text/javascript">
