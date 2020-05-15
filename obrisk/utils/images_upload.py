@@ -408,7 +408,7 @@ def videoPersist(request, video, app, obj):
             logging.error("Can't request thumbnail from video" + e)
 
         # naming them in our oss
-        pic_name = f"media/images/{{app}}" + slugify(
+        pic_name = f'media/images/{app}/' + slugify(
                 str(request.user.username)
             ) + "/video-display-thumb-" + uuid.uuid4().hex[:16]
 
@@ -501,9 +501,9 @@ def bulk_update_vid_images(request):
             logging.error("Can't request thumbnail from video" + e)
 
         # naming them in our oss
-        pic_name = "media/images/{{app}}" + slugify(
+        pic_name = f'media/images/{app}' + slugify(
                 str(story.user.username)
-            ) + "/video-display-thumb-" + uuid.uuid4().hex[:12]
+            ) + '/video-display-thumb-' + uuid.uuid4().hex[:12]
 
         # upoad them in our oss
         try:

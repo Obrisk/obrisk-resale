@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load static i18n humanize %}
 
-
 {% block head %}
-<link href="{% static 'css/stories.css' %}?v=1" rel="stylesheet">
-<link rel="stylesheet" href="/static/css/uploader.css" />
+<link href="{% static 'css/stories.css' %}" rel="stylesheet">
+<link href="{% static 'css/videojs.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/uploader.css' %}" rel="stylesheet">
 
 <title>Obrisk Stories</title>
 {% endblock head %}
@@ -265,7 +265,6 @@
       </div>
 
       <!-- Modals -->
-      {% include 'stories/stories_form_modal.html' %}
       {% include 'stories/stories_thread_modal.html' %}
       <!-- End Modals -->
 
@@ -296,7 +295,9 @@
 
 {% block extra_js %}
 
+<script src="{% static 'js/videojs.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
+   window.HELP_IMPROVE_VIDEOJS = false;
 
   //Hide create card on stories details, to focus on shared content
   if ($('#compose-card').hasClass('d-none') &&
@@ -342,16 +343,14 @@
         $.when(
           $.get('?page=' + page, function (data) {
             if (data == '') {
-              empty_page = true;
-              $('.loading').addClass('d-none')
-              $('.stream').append('<div class="m-auto"> End of Stories</div>')
+                empty_page = true;
+                $('.loading').addClass('d-none')
+                $('.stream').append('<div class="m-auto"> End of Stories</div>')
             } else {
-              $('.loading').addClass('d-none');
-              block_request = false;
-              $('.stream').append(data);
-              //load videos
-              loadvideo();
-            }
+		$('.loading').addClass('d-none');
+		block_request = false;
+		$('.stream').append(data);
+	    }
           })
         ).done(
           lazyload()
@@ -366,18 +365,12 @@
 
 //Load videos
   var loadvideo = function () {
-    Array.from(document.querySelectorAll('.js-player')).map(p => new Plyr(p, {
-      loadSprite: true,
-      iconPrefix: 'plyr',
-      iconUrl: "{% static 'css/plyr.svg' %}",
-      ratio: '12:9',
-      controls: ['play-large', 'progress']
+    Array.from(document.querySelectorAll('#my-player')).map(p => videojs(p, {
     }));
   }
 
-  $(document).ready(function () {
 
-    loadvideo();
+  $(document).ready(function () {
 
     $(' .post-text').linkify({ target: "_blank" });
 
