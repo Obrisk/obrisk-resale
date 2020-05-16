@@ -347,10 +347,13 @@
                 $('.loading').addClass('d-none')
                 $('.stream').append('<div class="m-auto"> End of Stories</div>')
             } else {
-		$('.loading').addClass('d-none');
-		block_request = false;
-		$('.stream').append(data);
-	    }
+                $('.loading').addClass('d-none');
+                block_request = false;
+                $('.stream').append(data);
+
+                loadvideo();
+            }
+
           })
         ).done(
           lazyload()
@@ -363,14 +366,27 @@
   const app = "stories";
   const user = "{{ request.user.username }}";
 
-//Load videos
-  var loadvideo = function () {
-    Array.from(document.querySelectorAll('#my-player')).map(p => videojs(p, {
+ //Load videos
+ var loadvideo = function () {
+    Array.from(document.querySelectorAll('.video-js')).map(p => videojs(p, {
+        "controlBar": {
+        "playToggle": true,
+        "captionsButton": false,
+        "chaptersButton": false,
+        "subtitlesButton": false,
+        "remainingTimeDisplay": false,
+        "progressControl": {
+            "seekBar": true
+        },
+        "fullscreenToggle": false,
+        "playbackRateMenuButton": false
+       },
+       "aspectRatio": "4:3"
     }));
   }
 
-
   $(document).ready(function () {
+    loadvideo();
 
     $(' .post-text').linkify({ target: "_blank" });
 

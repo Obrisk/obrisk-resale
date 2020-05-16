@@ -89,24 +89,9 @@
      {% if stories.video %}
           <div class="post-media grid-1">
 
-            <video id="vid-{{ stories.uuid_id }}" class="video-js vjs-4-3 vjs-big-play-centered" x5-video-player-type="h5-page"
+              <video id="vid-{{ stories.uuid_id }}" class="video-js vjs-4-3 vjs-big-play-centered" x5-video-player-type="h5-page"
               poster="{{oss}}/{{stories.img1}}" controls crossorigin webkit-playsinline playsinline
-              preload control 
-	      data-setup='{
-		"controlBar": {
-			"playToggle": true,
-			"captionsButton": false,
-			"chaptersButton": false,
-			"subtitlesButton": false,
-			"remainingTimeDisplay": false,
-			"progressControl": {
-			    "seekBar": true
-			},
-			"fullscreenToggle": false,
-			"playbackRateMenuButton": false
-	       },
-	       "aspectRatio": "4:3"
-	    }'>
+              preload control >
 	    <source src=" {{oss}}/{{stories.video}}" type="video/mp4">
 
               Your browser doesn' t support HTML5 video tag. </video>
