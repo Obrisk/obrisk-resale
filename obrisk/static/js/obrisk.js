@@ -439,6 +439,8 @@ Issues with the above approach:
 //End websocketbridge.js
 //-------------------------------------------------------------------------------
 
+
+
 //Push notifications code
 //-------------------------------------------------------------------------------
 
@@ -462,14 +464,14 @@ const initialiseState = (reg) => {
         return
     }
     if (!'PushManager' in window) {
-        showNotAllowed("Push isn't allowed in your browser 🤔");
+        showNotAllowed("Push notifications aren't allowed in your browser 🤔");
         return
     }
     subscribe(reg);
 }
 
 const showNotAllowed = (message) => {
-    console.log("show not allowed");
+    console.log("push notifications show not allowed");
 };
 
 
@@ -497,8 +499,7 @@ const subscribe = async (reg) => {
     const key = vapidMeta.content;
     const options = {
         userVisibleOnly: true,
-        // if key exists, create applicationServerKey property
-        ...(key && {applicationServerKey: urlB64ToUint8Array(key)})
+	applicationServerKey: urlB64ToUint8Array(key)
     };
 
     const sub = await reg.pushManager.subscribe(options);

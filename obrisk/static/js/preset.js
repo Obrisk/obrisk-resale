@@ -16,32 +16,52 @@ $(function() {
 });
 
 
-$(document).ready(function() {
-  $(".notifications").click(function(e) {
+document.querySelector("#addNewItem").click(function(e) {
+  e.preventDefault();
+  if (window.location.href.includes("stories")) {
+    document.querySelector(".app-overlay").classList.add("is-active");
+    document.querySelector(".close-wrap").classList.remove("d-none");
+    document.querySelector(".is-new-content").classList.add("is-highlighted");
+    document.querySelector(".all-stories ").classList.add("block-scroll");
+
+  } else if (window.location.href.includes("posts")) {
+      window.location.href="/posts/write-new-post/";
+
+  } else if (window.location.href.includes("ws/messages")) {
+      window.location.href="/connections/friends/";
+
+  } else if (window.location.href.includes("classifieds") &&
+      (!window.location.href.endsWith("classifieds/"))) {
+      window.location.href="/classifieds/write-new-classified/";
+  }
+});
+
+
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelector(".notifications").click(function(e) {
     var target = e.target;
-    if ($(target).is(".recent-notifications #close")) {
-      $(".recent-notifications").removeClass("is-active");
-    } else if ($(target).is("#mark")) {
-        //console.log ()
-    } else if ($(target).is("#view")) {
-        //console.log ()
+    if (document.querySelector(target).is(".recent-notifications #close")) {
+      document.querySelector(".recent-notifications").classList.remove("is-active");
     } else {
-      $(".recent-notifications").html("");
-      $.ajax({
-        url: "/ws/notifications/latest-notifications/",
-        success: function(data) {
-          $(".recent-notifications").html(data);
-        }
-      });
+      document.querySelector(".recent-notifications").innerHTML("");
+
+	 // use fetch on the /posts route, then pass the response along
+	    fetch("/ws/notifications/latest-notifications/").then(function(response) {
+		// with the response, parse to text, then pass it along
+		response.text().then(function(data) {
+		  
+		  document.querySelector(".recent-notifications").innerHTML(data);
+		});
+	    });
     }
 
     return false;
   });
 
-  $(".acc").click(function(e) {
+  document.querySelector(".acc").click(function(e) {
     var target = e.target;
-    if ($(target).is("#close")) {
-      $(".is-account-dropdown").removeClass("is-active");
+    if (document.querySelector(target).is("#close")) {
+      document.querySelector(".is-account-dropdown").classList.remove("is-active");
     }
   });
 });
