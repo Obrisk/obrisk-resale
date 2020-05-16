@@ -15,7 +15,6 @@ $(function() {
 
 });
 
-
 document.querySelector("#addNewItem").click(function(e) {
   e.preventDefault();
   if (window.location.href.includes("stories")) {
@@ -38,7 +37,7 @@ document.querySelector("#addNewItem").click(function(e) {
 
 
 document.addEventListener("DOMContentLoaded", function() {
-  document.querySelector(".notifications").click(function(e) {
+    $(".notifications").click(function(e) {
     var target = e.target;
     if (document.querySelector(target).is(".recent-notifications #close")) {
       document.querySelector(".recent-notifications").classList.remove("is-active");
