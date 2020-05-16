@@ -89,7 +89,7 @@
      {% if stories.video %}
           <div class="post-media grid-1">
 
-            <video id="my-player" class="video-js vjs-4-3 vjs-big-play-centered" x5-video-player-type="h5-page"
+            <video id="vid-{{ stories.uuid_id }}" class="video-js vjs-4-3 vjs-big-play-centered" x5-video-player-type="h5-page"
               poster="{{oss}}/{{stories.img1}}" controls crossorigin webkit-playsinline playsinline
               preload control 
 	      data-setup='{
@@ -117,9 +117,8 @@
           {% if stories.img1 %}
               <div class="post-media grid-1">
                 <!-- CSS masonry wrap -->
-                    <figure class="img1 image stry-image is-square"
-                     style="background: url({{ stories.img1 }}); border-radius:8px;height:400px; background-size: cover;">
-                    </figure>
+                    <img class="img1 image stry-image"
+                     src="{{ stories.img1 }}"/>
               </div>
           {%endif%}
       {%endif%}

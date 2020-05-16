@@ -197,7 +197,11 @@ a:hover {
 }
 
 .img1 {
-  grid-area: img1;
+    border-radius:8px;
+    max-height:400px;
+    width: 100%;
+    object-position:top;
+    object-fit:cover;
 }
 
 
