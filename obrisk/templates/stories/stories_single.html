@@ -93,20 +93,20 @@
               poster="{{oss}}/{{stories.img1}}" controls crossorigin webkit-playsinline playsinline
               preload control 
 	      data-setup='{
-		 controlBar: {
-		    playToggle: false,
-		    captionsButton: false,
-		    chaptersButton: false,            
-		    subtitlesButton: false,
-		    remainingTimeDisplay: false,
-		    progressControl: {
-		      seekBar: true
-		    },
-		    fullscreenToggle: false,
-		    playbackRateMenuButton: false,
-		  },
-		  aspectRatio: "4:3",
-	      }'>
+		"controlBar": {
+			"playToggle": true,
+			"captionsButton": false,
+			"chaptersButton": false,
+			"subtitlesButton": false,
+			"remainingTimeDisplay": false,
+			"progressControl": {
+			    "seekBar": true
+			},
+			"fullscreenToggle": false,
+			"playbackRateMenuButton": false
+	       },
+	       "aspectRatio": "4:3"
+	    }'>
 	    <source src=" {{oss}}/{{stories.video}}" type="video/mp4">
 
               Your browser doesn' t support HTML5 video tag. </video>
