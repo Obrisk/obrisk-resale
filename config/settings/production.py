@@ -10,7 +10,7 @@ from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
 #This has to be updated manually in cases we want rapid deployment
-STATIC_VERSION = 'ver20051603'
+STATIC_VERSION = 'ver20051701'
 
 # GENERAL
 # ------------------------------------------------------------------------------
