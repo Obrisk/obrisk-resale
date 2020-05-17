@@ -81,6 +81,42 @@ def aliyun_send_code(random, full_number):
     return ast.literal_eval(ret)
 
 
+def aws_send_code(theme, random, full_number):
+
+    client = boto3.client(
+        "sns",
+        aws_access_key_id=os.getenv('AWS_SMS_ACCESS_KY'),
+        aws_secret_access_key=os.getenv('AWS_SMS_S3KT_KY'),
+        region_name=os.getenv('AWS_SMS_REGION')
+    )
+
+    if theme == "signup":
+        msg = f"[Obrisk] Welcome, the code is {random}. Thank you for signing up!"
+
+    elif theme == "password-reset" and user:
+        msg = f"[Obrisk] Verification code:{random} and Username:{user}"
+    else:
+        msg = f"[Obrisk] the verification code is {random}, valid for 10 minutes!"
+
+    # Send your sms message.
+    ret = client.publish(
+        PhoneNumber=str(full_number),
+        Message=msg,
+        MessageAttributes={
+            'string': {
+                'DataType': 'String',
+                'StringValue': 'String',
+            },
+            'AWS.SNS.SMS.SenderID': {
+                    'DataType': 'String',
+                    'StringValue': os.getenv('AWS_SMS_SENDER_ID')
+                }
+            }
+        )
+
+    return ret['ResponseMetadata']
+
+
 def send_code(full_number, theme, user=None):
     random = get_random_string(length=6, allowed_chars='0123456789')
 
@@ -95,41 +131,8 @@ def send_code(full_number, theme, user=None):
         })
 
     else:
-        # Create an SNS client
         try:
-            client = boto3.client(
-                "sns",
-                aws_access_key_id=os.getenv('AWS_SMS_ACCESS_KY'),
-                aws_secret_access_key=os.getenv('AWS_SMS_S3KT_KY'),
-                region_name=os.getenv('AWS_SMS_REGION')
-            )
-
-            if theme == "signup":
-                msg = f"[Obrisk] Welcome, your code is {random}. Thank you for signing up!"
-
-            elif theme == "password-reset" and user:
-                msg = f"[Obrisk] Verification code:{random} and Username:{user}"
-            else:
-                msg = f"[Obrisk] Your verification code is {random}, valid for 10 minutes!"
-
-            # Send your sms message.
-            ret = client.publish(
-                PhoneNumber=str(full_number),
-                Message=msg,
-                MessageAttributes={
-                    'string': {
-                        'DataType': 'String',
-                        'StringValue': 'String',
-                    },
-                    'AWS.SNS.SMS.SenderID': {
-                            'DataType': 'String',
-                            'StringValue': os.getenv('AWS_SMS_SENDER_ID')
-                        }
-                    }
-                )
-
-        except Exception:
-            #AWS has failed, retry with Aliyun
+            #try with Aliyun first
             ret = aliyun_send_code(random, full_number)
 
             if ret['Code'] == 'OK':
@@ -140,25 +143,29 @@ def send_code(full_number, theme, user=None):
                     'message': "We've sent the code It is valid for 10 minutes!"
                 })
             else:
-                logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
-                return JsonResponse({
-                    'success': False,
-                    'error_message': "Sorry we couldn't send the code please try again later!"
-                })
+                #retry with AWS
+                response = aws_send_code(theme, random, full_number)
+                if response['HTTPStatusCode'] == 200:
+                    cache.set(str(full_number), random , 600)
 
-        response = ret['ResponseMetadata']
-        if response['HTTPStatusCode'] == 200:
-            cache.set(str(full_number), random , 600)
+                    return JsonResponse({
+                        'success': True,
+                        'message': "We've sent the code, it is valid for 10 minutes!"
+                    })
 
-            return JsonResponse({
-                'success': True,
-                'message': "We've sent the code, it is valid for 10 minutes!"
-            })
+                else:
+                    logging.error(
+                            f'AWS & Ali SMS failed. ALI:{ret}, AWS:{response}'
+                        )
+                    return JsonResponse({
+                        'success': False,
+                        'error_message': "Sorry we couldn't send the code please try again later!"
+                    })
 
-        else:
-            #AWS has failed without exception, retry with Aliyun
-            ret = aliyun_send_code(random, full_number)
-            if ret['Code'] == 'OK':
+        except Exception as e:
+            #retry with AWS
+            response = aws_send_code(theme, random, full_number)
+            if response['HTTPStatusCode'] == 200:
                 cache.set(str(full_number), random , 600)
 
                 return JsonResponse({
@@ -167,11 +174,24 @@ def send_code(full_number, theme, user=None):
                 })
 
             else:
-                logging.error(f'AWS and Aliyun SMS failed. Data: {ret}')
-                return JsonResponse({
-                    'success': False,
-                    'error_message': "Sorry we couldn't send the code please try again later!"
-                })
+                #retry with Aliyun again
+                ret = aliyun_send_code(random, full_number)
+                if ret['Code'] == 'OK':
+                    cache.set(str(full_number), random , 600)
+
+                    return JsonResponse({
+                        'success': True,
+                        'message': "We've sent the code, it is valid for 10 minutes!"
+                    })
+
+                else:
+                    logging.error(
+                            f'AWS & Ali SMS failed. ALI:{ret}, AWS:{response}, e:{e}'
+                        )
+                    return JsonResponse({
+                        'success': False,
+                        'error_message': "Sorry we couldn't send the code please try again later!"
+                    })
 
 
 def get_users(full_number):
