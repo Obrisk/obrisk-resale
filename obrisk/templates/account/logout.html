@@ -16,8 +16,12 @@
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
     <button id="confirmlogout" class="btn btn-dark" type="submit">{% trans 'Sign Out' %}</button>
-    <button class="btn btn-danger"> <a href="{% url 'stories:list' %}"> {% trans 'Cancel' %} </a> </button>
-  </form>
+    <button class="btn btn-danger"> 
+        <a class="border-0" href="javascript:history.back()">
+            {% trans 'Cancel' %}
+        </a> 
+    </button>
+   </form>
 
 {% endblock content %}
 

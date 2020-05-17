@@ -13,7 +13,6 @@
     <!-- Profile page main wrapper -->
     <div id="profile-friends" class="view-wrap is-headless">
 
-
       <div class="columns">
 
         <!-- Connections list-->
@@ -59,7 +58,8 @@
               <!--Friend item-->
               <div class="column is-3 is-6-mobile">
 
-              <a class="friend-item has-text-centered" href="{% url 'messager:conversation_detail' f.username  %}">
+              <a class="friend-item has-text-centered go-to-chat"
+                  data-url="{% url 'messager:conversation_detail' f.username  %}" href="#">
                   <div class="avatar-wrap">
                     <div class="circle"></div>
                     <div class="chat-button">
@@ -153,6 +153,9 @@
 
 {% endblock content %}
 
+
+{% block extra_js %}
+
 <script>
   var setCookie = function (name, value, days) {
     if (!name && !value) {
@@ -166,15 +169,14 @@
     document.cookie = name + "=" + value + expires + "; path=/";
     return true;
   }
+
   $(".go-to-chat").click(function (e) {
+    console.log("era eadf");
     e.preventDefault();
     setCookie("active-chat", $(this).data("url"), 1);
-    location.href = "/ws/messages/";
+    window.location.href = "/ws/messages/";
 
   });
 </script>
-
-
-{% block extra_js %}
 
 {% endblock extra_js %}

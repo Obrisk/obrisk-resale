@@ -5,7 +5,13 @@ from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import JsonResponse
-from obrisk.notifications.models import notification_handler, Notification
+from obrisk.notifications.models import (
+        notification_handler, Notification
+    )
+from django.db.models import (
+        OuterRef, Subquery, Case,
+        When, Value, IntegerField, Count
+    )
 try:
     from django.contrib.auth import get_user_model
 
@@ -15,8 +21,12 @@ except ImportError:
 
     user_model = User
 
-from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
-from friendship.models import Friend, Follow, FriendshipRequest, Block
+from friendship.exceptions import (
+        AlreadyExistsError, AlreadyFriendsError
+    )
+from friendship.models import (
+        Friend, Follow, FriendshipRequest, Block
+    )
 
 get_friendship_context_object_name = lambda: getattr(
     settings, "FRIENDSHIP_CONTEXT_OBJECT_NAME", "user"
@@ -26,7 +36,7 @@ get_friendship_context_object_list_name = lambda: getattr(
 )
 
 
-# FRIENDSHIP
+@login_required
 def view_friends(request, template_name="connections/friends.html"):
     """ View the friends of a user """
     user = request.user
@@ -37,20 +47,33 @@ def view_friends(request, template_name="connections/friends.html"):
     friends_pk.append(user.id)
 
     # Try to Get the recommendation list from cache
-    recommended_connects = cache.get(f"recommended_connects_{user.id}")
+    recommended_connects = cache.get(
+            f"recommended_connects-{user.city}"
+        )
 
     if recommended_connects is None:
+
         recommended_connects = (
-            user_model.objects.filter(city=user.city)
-            .exclude(thumbnail=None)
-            .exclude(pk__in=friends_pk)[:40]
+            user_model.objects.annotate(
+                distance = Case (
+                    When(city=user.city, then=Value(1)),
+                    default=Value(2),
+                    output_field=IntegerField(),
+                ),
+                complete_profile = Case (
+                    When(thumbnail=None, then=Value(2)),
+                    default=Value(1),
+                    output_field=IntegerField(),
+                )
+            ).order_by('distance', 'complete_profile').exclude(
+                pk__in=friends_pk)[:40]
         )
 
         RECOMMENDATION_TIMEOUT = getattr(
             settings, "CONNECTS_RECOMMENDATION_TIMEOUT", DEFAULT_TIMEOUT
         )
         cache.set(
-            f"recommended_connects_{user.id}",
+            f"recommended_connects-{user.city}",
             recommended_connects,
             timeout=RECOMMENDATION_TIMEOUT,
         )
@@ -75,7 +98,7 @@ def friendship_add_friend(
     if request.method == "POST":
         to_user = user_model.objects.get(username=to_username)
         from_user = request.user
-        
+
         if Friend.objects.can_request_send(from_user, to_user):
             return JsonResponse(
                 {
@@ -194,6 +217,7 @@ def friendship_requests_detail(
     return render(request, template_name, {"friendship_request": f_request})
 
 
+@login_required
 def followers(request, template_name="connections/followers.html"):
     """ List this user's followers """
     user = request.user
@@ -202,6 +226,7 @@ def followers(request, template_name="connections/followers.html"):
     return render(request, template_name, ctx)
 
 
+@login_required
 def following(request, template_name="connections/following.html"):
     """ List who this user follows """
     user = request.user
@@ -261,6 +286,7 @@ def all_users(request, template_name="friendship/user_actions.html"):
     )
 
 
+@login_required
 def blockers(request, template_name="connections/blockers.html"):
     """ List this user's followers """
     user = request.user
