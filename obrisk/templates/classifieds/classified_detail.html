@@ -223,33 +223,32 @@
             <!-- Classified Entries Column -->
             {% for classified in similar_classifieds %}
                 <div class="card classified-card mr-2 mb-3">
-
-                  <!--Display image-->
-                  <div class="card-img-top img-responsive">
-                    {% if classified.image_thumb %}
-                    <img class="card-img" src="{{oss}}/{{ classified.image_thumb }}">
-                    {% else %}
-                    <img class="card-img" src="{{oss}}/classifieds/default.jpg">
-                    {% endif %}
-                  </div>
-
-                  <div class="card-body">
-                    <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-                    <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
-                    <div class="card-meta d-flex justify-content-between">
-                      <div class="location">
-                        <small>📍</small>
-                        <span class="card-text small"> {{ classified.city|safe }}</span>
+                 <a class="streched-link" href="{% url 'classifieds:classified' classified.slug %}"
+                    style="color:black; text-decoration:none; background-color:none">
+                      <!--Display image-->
+                      <div class="card-img-top img-responsive">
+                        {% if classified.image_thumb %}
+                        <img class="card-img" src="{{oss}}/{{ classified.image_thumb }}">
+                        {% else %}
+                        <img class="card-img" src="{{oss}}/classifieds/default.jpg">
+                        {% endif %}
                       </div>
 
-                      <div class="share-card">
-                        <small>🔗</small>
-                      </div>
-                    </div>
-                  </div>
+                      <div class="card-body">
+                        <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
+                        <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
+                        <div class="card-meta d-flex justify-content-between">
+                          <div class="location">
+                            <small>📍</small>
+                            <span class="card-text small"> {{ classified.city|safe }}</span>
+                          </div>
 
-                  <a class="streched-link" href="{% url 'classifieds:classified' classified.slug %}"
-                    style="color:black; text-decoration:none; background-color:none"> </a>
+                          <div class="share-card">
+                            <small>🔗</small>
+                          </div>
+                        </div>
+                      </div>
+                  </a>
                 </div>
             {% endfor %}
 

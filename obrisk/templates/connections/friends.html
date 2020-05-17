@@ -58,8 +58,8 @@
               {% for f in friends %}
               <!--Friend item-->
               <div class="column is-3 is-6-mobile">
-                <a class="friend-item has-text-centered go-to-chat"
-                  data-url="{% url 'messager:conversation_detail' f.username  %}" href="#">
+
+              <a class="friend-item has-text-centered" href="{% url 'messager:conversation_detail' f.username  %}">
                   <div class="avatar-wrap">
                     <div class="circle"></div>
                     <div class="chat-button">

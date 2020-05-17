@@ -9,7 +9,8 @@
 
     <h1>{% trans "Delete a posted story" %}</h1>
 
-    <p>{% trans 'Are you sure you want to continue? If you do this you will delete this story' %}</p>
+    <p class="m-1">{% trans 'Are you sure you want to continue?' %} </p>
+     <p class="m-1">{% trans 'If you do this you will delete this story' %}</p>
 
     <form method="post" action="{% url 'stories:delete_stories' stories.pk %}">
       {% csrf_token %}
