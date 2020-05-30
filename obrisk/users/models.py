@@ -8,13 +8,22 @@ from phonenumber_field.modelfields import PhoneNumberField
 from obrisk.notifications.models import Notification, notification_handler
 
 
+MALE = "M"
+FEMALE = "F"
+STATUS = (
+    (MALE, _("Male")),
+    (FEMALE, _("Female")),
+)
+
+
 class User(AbstractUser):
     # First Name and Last Name do not cover name patterns around the globe.
     name = models.CharField(_("Full name"), blank=True, max_length=255)
     org_picture = models.CharField(max_length=150, null=True, blank=True)
     picture = models.CharField(max_length=150, null=True, blank=True)
     thumbnail = models.CharField(max_length=150, null=True, blank=True)
-    
+    gender = models.CharField(max_length=1, null=True, blank=True)
+
     job_title = models.CharField(
         _('Job title'), max_length=50, null=True, blank=True)
     personal_url = models.URLField(
@@ -28,10 +37,16 @@ class User(AbstractUser):
     snapchat_account = models.CharField(
         _('Snapchat a/c profile name'), max_length=255, blank=True, null=True)
     wechat_id = models.CharField (max_length=150, null=True, blank=True)
+
+    wechat_openid = models.CharField(
+            max_length=100,blank=True,
+            null=True,verbose_name="wechat_openid",
+            unique=True
+    )
     #Without blank=True the forms add is required label
     address = models.CharField(max_length=300, null=True, blank=True)
     province_region = models.CharField (_('Province'), max_length=200)
-    city = models.CharField  (  _('City'), max_length=200) 
+    city = models.CharField  (  _('City'), max_length=200)
     nationality = models.CharField (_('Nationality'), max_length=200, blank=True, null=True )
     short_bio = models.CharField(
         _('Describe yourself'), max_length=60, blank=True, null=True)
