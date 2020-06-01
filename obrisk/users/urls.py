@@ -32,7 +32,7 @@ urlpatterns = [
         views.AuthView.as_view(),
         name='wechat_auth'),
 
-    url(r'^wechat-info/$',
+    url(r'^wechat-cb/$',
         views.GetInfoView.as_view(),
         name='wechat_info'),
 

@@ -61,6 +61,10 @@ label {
   color: #1556cf;
 }
 
+.fa-wechat {
+  color: #09b83e;
+}
+
 
 .loading {
   -webkit-animation-name: spin;

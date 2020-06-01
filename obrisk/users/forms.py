@@ -77,7 +77,11 @@ class PhoneSignupForm(SignupForm):
     phone_number = PhoneNumberField(
         label=_("Phone number"),
         widget=forms.TextInput(
-            attrs={"autofocus": "autofocus", "maxlength": "11"}
+            attrs={
+                "placeholder" : _('E.g 13291863081'),
+                "autofocus": "autofocus",
+                "maxlength": "11"
+            }
         ),
     )
 

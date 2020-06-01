@@ -76,10 +76,6 @@
 													{{ form.phone_number }}
 												</div>
 
-												<small class="text-muted phone_label" id="phone_label"> 
-                                                    {% trans "Don't include the country code!" %}
-                                                </small>
-
 												<div class=" mt-2">
 													<button
 														class="button is-solid primary-button raised is-rounded is-fullwidth"
@@ -142,6 +138,16 @@
                                                     {% trans 'and the regulations of the country residing.' %}</a>
 													<br />
 
+                                                    <div class="social-ac d-flex">
+                                                        <a style"margin-right: 10px;" href="{% url 'users:wechat_auth' %}">
+                                                            <i class="fa fa-wechat"></i> </a>
+                                                        </a>
+
+                                                        <a href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
+                                                            <i class="fa fa-linkedin"></i> </a>
+                                                        </a>
+
+													</div>
 													<br />
 
 													<div
