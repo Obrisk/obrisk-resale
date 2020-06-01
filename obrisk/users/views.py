@@ -22,6 +22,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
+from django.views.generic import View
+from django.http import HttpResponseServerError
 
 from allauth.account.views import (
         SignupView, LoginView,
@@ -38,6 +40,7 @@ from rest_framework.decorators import api_view
 from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
+from obrisk.users.wechat_authentication import WechatLogin
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm)
@@ -552,14 +555,6 @@ def username_exists(request):
             "status": "200",
             "username":prefered_name,
             "message": "This username is available"})
-
-
-from django.views.generic import View
-from login
-from django.http import HttpResponseRedirect
-from django.http import HttpResponse, HttpResponseServerError
-from django.shortcuts import render, redirect
-from obrisk.users.wechat_authentication import WechatLogin
 
 
 class WechatViewSet(View):
