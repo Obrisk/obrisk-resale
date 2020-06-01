@@ -153,7 +153,7 @@ def send_code(full_number, theme, user=None):
 
                     return JsonResponse({
                         'success': True,
-                        'message': "We've sent the code, it is valid for 10 minutes!"
+                        'message': "Code sent, valid for 10 minutes"
                     })
 
                 else:
@@ -162,7 +162,7 @@ def send_code(full_number, theme, user=None):
                         )
                     return JsonResponse({
                         'success': False,
-                        'error_message': "Sorry we couldn't send the code please try again later!"
+                        'error_message': "Sorry we couldn't send the code, try again later!"
                     })
 
         except Exception as e:
@@ -173,7 +173,7 @@ def send_code(full_number, theme, user=None):
 
                 return JsonResponse({
                     'success': True,
-                    'message': "We've sent the code, it is valid for 10 minutes!"
+                    'message': "Code sent, valid for 10 minutes!"
                 })
 
             else:
@@ -184,7 +184,7 @@ def send_code(full_number, theme, user=None):
 
                     return JsonResponse({
                         'success': True,
-                        'message': "We've sent the code, it is valid for 10 minutes!"
+                        'message': "Code sent, valid for 10 minutes!"
                     })
 
                 else:
@@ -193,7 +193,7 @@ def send_code(full_number, theme, user=None):
                         )
                     return JsonResponse({
                         'success': False,
-                        'error_message': "Sorry we couldn't send the code please try again later!"
+                        'error_message': "Sorry we couldn't send the code, try again later!"
                     })
 
 
