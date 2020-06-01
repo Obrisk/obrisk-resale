@@ -45,7 +45,7 @@ $(function() {
         $("#code-notice")
           .empty()
           .append(
-            "<p class='blue-link'> Wrong number. Don't include country code,spaces or any special character!<p>");
+            "<p class='blue-link'> Incorrect number. Don't include country code,spaces or any special character!<p>");
       } else {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
@@ -70,9 +70,14 @@ $(function() {
               timeout = 60;
               $("#send-code").attr("disabled", true);
               $("#phone_label").hide();
+              $(".social-ac").hide();
 
-              if ($("#code").hasClass("d-none")) {
-                  $("#code").toggleClass("d-none");
+              if ($("#agree").hasClass("d-none")) {
+                  $("#agree").toggleClass("d-none");
+              }
+
+              if ($("#code-section").hasClass("d-none")) {
+                  $("#code-section").toggleClass("d-none");
               }
               if ($("#email-request").hasClass("d-none")) {
                   $("#email-request").toggleClass("d-none");
@@ -145,25 +150,28 @@ $(function() {
     }
   });
 
-  $("input[name='code']").keyup(function(e) {
-    if (e.target.value.length == 6) {
-      $(".loading").toggleClass("d-none");
-      if (
-        isNaN($("input[name='code']").val()) ||
-        $("input[name='code']").val().length != 6 ||
-        isNaN($("#id_phone_number").val()) ||
-        $("#id_phone_number").val().length != 11 ||
-        $("#id_phone_number")
-          .val()
-          .charAt(0) != 1
-      ) {
-        event.preventDefault();
+  $('#code').keyup(function(e) {
+
+    if (document.querySelector('#code').value.length == 6) {
+
+       if ($(".loading").hasClass("d-none")) {
+          $(".loading").toggleClass("d-none");
+       }
+       var int_num = parseInt($("#id_phone_number").val())
+       var str_num = int_num.toString();
+
+    if (isNaN(int_num) || str_num.length != 11 || str_num.charAt(0) != 1) {
+          event.preventDefault();
+          $("#results").empty().append(
+            "<p class='blue-link'> Phone number is incorrect! <p>"
+          );
+
       } else {
         $.ajax({
           url: "/users/phone-verify/",
           data: {
             phone_no: $("#id_phone_number").val(),
-            code: $("input[name='code']").val()
+            code: $('#code').val()
           },
           cache: false,
           type: "GET",
@@ -186,14 +194,10 @@ $(function() {
                   );
                 $("input[name='verified_no']").val("YES");
 
-                //I should hide the phone number label that says don't enter country code
-                $("#phone_label").hide();
-
                 $("#code-notice").empty();
 
-                $("#code").hide();
+                $("#code-section").hide();
                 $("#send-code").hide();
-                $("#email-request").hide();
                 $("#signup-panel-1").hide();
                 $(".process-panel-wrap").removeClass("is-active");
                 $(".step-title").removeClass("is-active");
@@ -215,7 +219,9 @@ $(function() {
                 );
               }
             }
-            $(".loading").toggleClass("d-none");
+           if ($(".loading").hasClass("d-none")) {
+              $(".loading").toggleClass("d-none");
+           }
           },
           error: function(error) {
             printError(error);
@@ -296,7 +302,7 @@ $(function() {
       $(".step-title").removeClass("is-active");
       $(".step-dot-2").addClass("is-active");
       printError(
-        "Must be > 3 letters & < 16, without spaces!"
+        "Must be 3 to 16 letters, without spaces!"
       );
     } else if ( $("input[name=password1").val().length < 8) {
 

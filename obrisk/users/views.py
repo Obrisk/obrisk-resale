@@ -22,6 +22,8 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
+from django.views.generic import View
+from django.http import HttpResponseServerError
 
 from allauth.account.views import (
         SignupView, LoginView,
@@ -38,6 +40,7 @@ from rest_framework.decorators import api_view
 from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
+from obrisk.users.wechat_authentication import WechatLogin
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm)
@@ -150,7 +153,7 @@ def send_code(full_number, theme, user=None):
 
                     return JsonResponse({
                         'success': True,
-                        'message': "We've sent the code, it is valid for 10 minutes!"
+                        'message': "Code sent, valid for 10 minutes"
                     })
 
                 else:
@@ -159,7 +162,7 @@ def send_code(full_number, theme, user=None):
                         )
                     return JsonResponse({
                         'success': False,
-                        'error_message': "Sorry we couldn't send the code please try again later!"
+                        'error_message': "Sorry we couldn't send the code, try again later!"
                     })
 
         except Exception as e:
@@ -170,7 +173,7 @@ def send_code(full_number, theme, user=None):
 
                 return JsonResponse({
                     'success': True,
-                    'message': "We've sent the code, it is valid for 10 minutes!"
+                    'message': "Code sent, valid for 10 minutes!"
                 })
 
             else:
@@ -181,7 +184,7 @@ def send_code(full_number, theme, user=None):
 
                     return JsonResponse({
                         'success': True,
-                        'message': "We've sent the code, it is valid for 10 minutes!"
+                        'message': "Code sent, valid for 10 minutes!"
                     })
 
                 else:
@@ -190,7 +193,7 @@ def send_code(full_number, theme, user=None):
                         )
                     return JsonResponse({
                         'success': False,
-                        'error_message': "Sorry we couldn't send the code please try again later!"
+                        'error_message': "Sorry we couldn't send the code, try again later!"
                     })
 
 
@@ -332,8 +335,8 @@ def update_profile_pic(request):
             except:
                 #Since the image exists just save the profile, it is our problem.
                 return JsonResponse({'success': False,
-                                'error_message': "Sorry! \
-                                        Your image was not uploaded successfully. Try again later!."})
+                                'error_message': "Sorry! Your image was not \
+                                        uploaded successfully. Try again later!."})
 
             #Only save the new image when you have the thumbnail.
             profile = get_user_model().objects.get(username=request.user)
@@ -358,21 +361,32 @@ def send_code_sms(request):
     if request.method == "GET":
         phone_no = request.GET.get("phone_no")
 
-        if phone_no is not None and len(phone_no) == 11 and phone_no[0] == '1' and phone_no != '13300000000':
+        if (phone_no is not None and len(phone_no) == 11
+            and phone_no[0] == '1' and phone_no != '13300000000'):
 
             full_number = "+86" + phone_no
-            check_phone = User.objects.filter(phone_number=full_number).exists()
+            check_phone = User.objects.filter(
+                    phone_number=full_number
+                ).exists()
 
             if check_phone is False:
                 return send_code(full_number, "signup")
 
             else:
-                return JsonResponse({'success': False, 'error_message': "This phone number already exists!"})
+                return JsonResponse(
+                        {'success': False,
+                            'error_message': "This phone number already exists!"
+                        })
 
         else:
-            return JsonResponse({'success': False, 'error_message': "The phone number is not correct please re-enter!"})
+            return JsonResponse({
+                'success': False,
+                'error_message': "The phone number is not correct please re-enter!"})
     else:
-        return JsonResponse({'success': False, 'error_message':"This request is invalid!"})
+        return JsonResponse({
+            'success': False,
+            'error_message':"This request is invalid!"
+        })
 
 
 @ajax_required
@@ -531,9 +545,61 @@ def username_exists(request):
     """A function view to check if the username exists"""
     prefered_name = request.GET.get('username')
     if User.objects.filter(username__contains=prefered_name.lower()):
-        return JsonResponse({"status": "201", "username":prefered_name, "message": "This username is taken"})
+        return JsonResponse({
+            "status": "201",
+            "username":prefered_name,
+            "message": "This username is taken"
+        })
     else:
-        return JsonResponse({"status": "200", "username":prefered_name, "message": "This username is available"})
+        return JsonResponse({
+            "status": "200",
+            "username":prefered_name,
+            "message": "This username is available"})
+
+
+class WechatViewSet(View):
+    wechat_api = WechatLogin()
+
+
+class AuthView(WechatViewSet):
+    def get(self, request):
+        url = self.wechat_api.get_code_url()
+        return redirect(url)
+
+
+class GetInfoView(WechatViewSet):
+    def get(self, request):
+        if 'code' in request.GET:
+            code = request.GET['code']
+            token, openid = self.wechat_api.get_access_token(code)
+            if token is None or openid is None:
+                return HttpResponseServerError('get code error')
+            user_info, error = self.wechat_api.get_user_info(token, openid)
+            if error:
+                return HttpResponseServerError('get access_token error')
+            user_data = {
+                'nickname': user_info['nickname'],
+                'sex': user_info['sex'],
+                'province': user_info['province'].encode('iso8859-1').decode('utf-8'),
+                'city': user_info['city'].encode('iso8859-1').decode('utf-8'),
+                'country': user_info['country'].encode('iso8859-1').decode('utf-8'),
+                'avatar': user_info['headimgurl'],
+                'openid': user_info['openid']
+            }
+            user = User.objects.filter(
+                    wechat_openid=user_data['openid']
+                )
+            if user.count() == 0:
+                user = User.objects.create(
+                        username=user_data['nickname'],
+                        wechat_avatar=user_data['avatar'],
+                        wechat=user_data['openid'],
+                    )
+                login(request, user)
+            else:
+                login(request, user.first())
+            # 授权登录成功，进入主页
+            return home(request)
 
 
 @ajax_required

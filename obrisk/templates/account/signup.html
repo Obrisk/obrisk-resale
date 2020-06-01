@@ -72,13 +72,10 @@
 														<label for="phone_number">
                                                             {% trans 'Phone Number' %}
 														</label>
+
 													</div>
 													{{ form.phone_number }}
 												</div>
-
-												<small class="text-muted phone_label" id="phone_label"> 
-                                                    {% trans "Don't include the country code!" %}
-                                                </small>
 
 												<div class=" mt-2">
 													<button
@@ -88,10 +85,9 @@
                                                     </button>
 												</div>
 
-
 												<div id="code-notice" style="font-weight:bold;"></div>
 
-												<div class="d-none" id="code">
+												<div class="d-none" id="code-section">
 													<div class="form-group ">
 														<div class="input-group">
 															<label for="code">
@@ -100,8 +96,8 @@
 														</div>
 
 														<div class="d-flex">
-															<input class="col-10" maxlength="6" minlength="6" type="tel"
-																pattern="[0-9]{6}" name="code" id="code">
+															<input  id="code" class="col-10" maxlength="6" minlength="6" type="tel"
+																pattern="[0-9]{6}" name="code">
 															<div class="">
 																<svg class="loading d-none"
 																	xmlns="http://www.w3.org/2000/svg" width="24"
@@ -134,35 +130,40 @@
 												<input type="checkbox" name="terms" id="terms"
 													onchange="activateButton(this)">
 
-												<div class="mt-2" style="font-size:13px;">
-                                                    {% trans 'I Agree to' %}
-                                                    <a href="{% url 'terms_and_conditions' %}">
-                                                        {% trans 'Terms & Conditions' %}
-													</a> 
-                                                    {% trans 'and the regulations of the country residing.' %}</a>
-													<br />
+                                                <div class="mt-2"  style="font-size:13px;">
+                                                    <p id='agree' class="d-none">
+                                                        {% trans 'I Agree to' %}
+                                                        <a href="{% url 'terms_and_conditions' %}">
+                                                            {% trans 'Terms & Conditions' %} </a> 
+                                                    </p> <br/>
 
-													<br />
+                                                <div class="social-ac">
+                                                    <a style"margin-right: 10px;" href="{% url 'users:wechat_auth' %}">
+                                                        <i class="fa fa-wechat"></i> </a>
+                                                    </a>
+                                                    <a href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
+                                                        <i class="fa fa-linkedin"></i> </a>
+                                                    </a>
+                                                </div> <br />
 
-													<div
-														class="form-group container-login100-form-btn d-flex justify-content-between">
-														<a href="{% url 'account_login' %}"
-															class="button is-solid dark-grey-button raised">{% trans 'Login' %}</a>
-														<a href="mailto:support@obrisk.com"
-															class="button is-solid dark-grey-button raised">{% trans "Can't signup?" %}</a>
-													</div>
+												<div
+                                                    class="form-group container-login100-form-btn d-flex justify-content-between">
+                                                    <a href="{% url 'account_login' %}"
+                                                        class="button is-solid dark-grey-button raised">{% trans 'Login' %}</a>
+                                                    <a href="mailto:support@obrisk.com"
+                                                        class="button is-solid dark-grey-button raised">{% trans "Can't signup?" %}</a>
+                                                </div> <br />
 
-													<br />
-													<div> <small class="mt-5" id="support"> 
-                                                            {% trans 'Any problem? add our WechatID:' %}
-															<span class="blue-link"> Obrisk. </span> </small> </div>
+                                                <div> <small class="mt-5" id="support"> 
+                                                        {% trans 'Any problem? add our WechatID:' %}
+                                                        <span class="blue-link"> Obrisk. </span> </small> </div>
 
-													{% if redirect_field_value %}
-													<input type="hidden" name="{{ redirect_field_name }}"
-														value="{{ redirect_field_value }}" />
-													{% endif %}
-												</div>
+                                                {% if redirect_field_value %}
+                                                <input type="hidden" name="{{ redirect_field_name }}"
+                                                    value="{{ redirect_field_value }}" />
+                                                {% endif %}
 											</div>
+										  </div>
 										</div>
 
 										<div id="signup-panel-2" class=" step-dot-2 process-panel-wrap is-narrow ">

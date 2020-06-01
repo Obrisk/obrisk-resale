@@ -9,7 +9,7 @@ class PhoneAuthBackend(ModelBackend):
     def __init__(self, *args, **kwargs):
         self.user_model = get_user_model()
 
-    
+
     def get_phone_number_data(self, phone):
         """
         Method used for filtering query.
@@ -24,18 +24,18 @@ class PhoneAuthBackend(ModelBackend):
         phone = str(username)
         if phone.startswith("+86"):
             phone = phone.strip('+86')
-        
+
         if phone == '13300000000':
             return None
-            
+
         if phone.isdigit() and len(phone) == 11 and phone[0] == '1':
             #This code only works for Chinese phone numbers.
             phone = "+86" + phone
-            
+
             user = self.user_model.objects.filter(
                     **self.get_phone_number_data(phone)
                 ).first()
-            
+
             if not user:
                 # Run the default password hasher once to reduce the timing
                 # difference between an existing and a nonexistent user (#20760).
