@@ -14,7 +14,7 @@ User = get_user_model()
 TEST_TEMPLATES = os.path.join(os.path.dirname(__file__), "templates")
 
 class ConnectionsViewsTests(TestCase):
-    
+
     def setUp(self):
         self.User = self.make_user("first_user")
         self.other_user = self.make_user("second_user")
@@ -51,7 +51,7 @@ class ConnectionsViewsTests(TestCase):
             response = self.client.get(url)
             self.assertResponse200(response)
             self.assertTrue("object" in response.context)
-
+        # get all friends of first user
         friends = Friend.objects.friends(first_user)
 
         # friends_pk = friends.values_list('id', flat=True)
@@ -59,7 +59,7 @@ class ConnectionsViewsTests(TestCase):
         friends_pk.append(first_user.id)
 
         # Try to Get the recommendation list from cache
-        recommended_connects = cache.get(f"recommended_connects_{first_user.id}")
+        recommended_connects = cache.get(f"recommended_connects-{first_user.city}")
 
         if recommended_connects is None:
             recommended_connects = (
@@ -98,10 +98,10 @@ class ConnectionsViewsTests(TestCase):
 
         #"users are not friends yet"
         self.assertFalse(Friend.objects.are_friends(first_user, second_user))
-       
+
         #"second user havent send any request to 1st user or vice versa"
         self.assertFalse(Friend.objects.can_request_send(first_user, second_user))
-       
+
         Friend.objects.add_friend(first_user, second_user)
         self.assertEqual(
             FriendshipRequest.objects.filter(from_user=self.User).count(), 1
