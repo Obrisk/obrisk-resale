@@ -168,7 +168,7 @@ def friendship_cancel(request, friendship_request_id):
             request.user.friendship_requests_sent, id=friendship_request_id
         )
         f_request.cancel()
-        # from_user = 
+        # from_user =
         # to
         return redirect("connections:friendship_request_list")
 
@@ -257,9 +257,13 @@ def follower_add(
             notification_handler(actor=follower, verb=Notification.NEW_FOLLOWER, recipient=followee, key='connection_notification')
 
         except AlreadyExistsError:
-            return following(request, followee)
+            return JsonResponse(
+                {"status": "301", "message": "You already follow f' {followee}"}
+                )
         else:
-            return redirect("connections:friendship_following")
+            return JsonResponse(
+                {"status": "301", "message": "You are now following f' {followee}"}
+                )
 
     return render(request, template_name, ctx)
 
