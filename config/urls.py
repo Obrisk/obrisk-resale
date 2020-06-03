@@ -31,10 +31,6 @@ sitemaps = {
 
 urlpatterns = [
     url(r"", include("pwa_webpush.urls")),
-    url(r'(?P<subdomain>[a-z]+)/$',
-        GetInfoView.as_view(),
-        name='wechat_info'
-    ),
     url(r"^$",
         TemplateView.as_view(template_name="pages/home.html"),
         name="home"
@@ -51,6 +47,10 @@ urlpatterns = [
         r"^offline/$",
         TemplateView.as_view(template_name="offline.html"),
         name="offline",
+    ),
+    url(r'^wx-auth/$',
+        GetInfoView.as_view(),
+        name='wechat_info'
     ),
     url(r"^get-oss-auth/$", get_oss_auth, name="get_oss_auth"),
     url(r"^get-oss-auth/([\w\.%+-]+)/$",

@@ -6,6 +6,7 @@ import datetime
 import oss2
 import boto3
 import logging
+import itertools
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
@@ -598,16 +599,32 @@ class GetInfoView(WechatViewSet):
                     wechat_openid=user_data['openid']
                 )
             if user.count() == 0:
-                user = User.objects.create(
-                        username=user_data['nickname'],
-                        wechat_id=user_data['nickname'],
-                        city=user_data['city'],
-                        province_region=user_data['province'],
-                        country=user_data['country'],
-                        gender=user_data['sex'],
-                        picture=user_data['avatar'],
-                        wechat_openid=user_data['openid']
+
+                username_cnd = first_name = slugify(
+                        user_data['nickname'],
+                        max_length=16
                     )
+
+                for x in itertools.count(1):
+                    if not User.objects.filter(username=username_cnd).exists():
+                        break
+                    username_cnd = '%s-%d' % (first_name, x)
+                    
+                try:
+                    user = User.objects.create(
+                            username=username_cnd,
+                            city=user_data['city'],
+                            province_region=user_data['province'],
+                            country=user_data['country'],
+                            gender=user_data['sex'],
+                            picture=user_data['avatar'],
+                            wechat_openid=user_data['openid']
+                        )
+                except IntegrityError:
+                    return HttpResponseServerError(
+                            'Sorry we could not register you. Please try again later!'
+                        )
+                    
                 #Redirect to a page to complete phone number & City
                 login(request, user)
             else:

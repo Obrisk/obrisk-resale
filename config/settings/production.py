@@ -34,7 +34,7 @@ def get_ec2_instance_ip():
 
 AWS_LOCAL_IP = get_ec2_instance_ip()
 
-ALLOWED_HOSTS = [AWS_LOCAL_IP, 'www.obrisk.com', 'obrisk.com']
+ALLOWED_HOSTS = [AWS_LOCAL_IP, 'www.obrisk.com', 'obrisk.com', 'in.obrisk.com']
 
 # DATABASES
 # ------------------------------------------------------------------------------
