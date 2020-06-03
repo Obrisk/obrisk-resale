@@ -10,9 +10,9 @@ def social_user_connected(user, **kwargs):
     when triggerd, it initiates update profile picture
     backgroundnd task and redirects to the homepage
     """
-    if user.socialaccount_set.all():
+    if user.socialaccount_set.all() and not user.picture:
 
-        update_profile_picture.delay(user_id=user.id)
+        update_profile_picture.delay(user, 'linkedin')
 
         return redirect("stories:list")
     else:

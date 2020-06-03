@@ -47,6 +47,7 @@ from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
+from obrisk.users.tasks import update_profile_picture
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm)
@@ -294,6 +295,7 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         # Only get the User record for the user making the request
         return User.objects.get(username=self.request.user.username)
+
 
 @ajax_required
 @login_required
@@ -610,7 +612,7 @@ class GetInfoView(WechatViewSet):
                     if not User.objects.filter(username=username_cnd).exists():
                         break
                     username_cnd = '%s-%d' % (first_name, x)
-                    
+
                 try:
                     user = User.objects.create(
                             username=username_cnd,
@@ -618,20 +620,32 @@ class GetInfoView(WechatViewSet):
                             province_region=user_data['province'],
                             country=user_data['country'],
                             gender=user_data['sex'],
-                            picture=user_data['avatar'],
+                            picture=user_data['avatar']
+                            thumbnail=user_data['avatar'][:-3] + '64',
+                            org_picture=user_data['avatar'][:-3] + '0',
                             wechat_openid=user_data['openid']
 
                         )
+
+                    update_profile_picture.delay(user, 'wechat')
                 except IntegrityError:
                     return HttpResponseServerError(
                             'Sorry we could not register you. Please try again later!'
                         )
-                    
+
                 #Redirect to a page to complete phone number & City
                 login(
                     request, user,
                     backend='django.contrib.auth.backends.ModelBackend')
             else:
+                #this is a trial
+                user.picture=user_data['avatar']
+                user.thumbnail=user_data['avatar'][:-3] + '64'
+                user.org_picture=user_data['avatar'][:-3] + '0'
+                user.save()
+
+                update_profile_picture.delay(user, 'wechat')
+
                 login(
                     request, user.first(),
                     backend='django.contrib.auth.backends.ModelBackend'
