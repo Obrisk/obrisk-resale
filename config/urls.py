@@ -10,7 +10,9 @@ from django.views.generic import RedirectView
 from graphene_django.views import GraphQLView
 from pwa_webpush.views import save_info
 from obrisk.users.views import (
-        PasswordResetFromKeyView, AutoLoginView)
+    PasswordResetFromKeyView,
+    AutoLoginView, GetInfoView
+)
 from obrisk.utils.images_upload import get_oss_auth
 from obrisk.classifieds.sitemaps import ClassifiedsSitemap
 from obrisk.posts.sitemaps import PostsSitemap
@@ -29,13 +31,17 @@ sitemaps = {
 
 urlpatterns = [
     url(r"", include("pwa_webpush.urls")),
+    url(r'(?P<subdomain>[a-z]+)/$',
+        GetInfoView.as_view(),
+        name='wechat_info'
+    ),
     url(r"^$",
         TemplateView.as_view(template_name="pages/home.html"),
         name="home"
-        ),
+    ),
     url(r'^i18n/',
         include('django.conf.urls.i18n')
-        ),
+    ),
     url(
         r"^download-pwa/$",
         TemplateView.as_view(template_name="pages/download.html"),
@@ -50,7 +56,7 @@ urlpatterns = [
     url(r"^get-oss-auth/([\w\.%+-]+)/$",
         get_oss_auth,
         name="get_oss_auth_with_object"
-        ),
+    ),
     url(
         r"^about/$",
         TemplateView.as_view(template_name="pages/about.html"),

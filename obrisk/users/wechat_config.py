@@ -13,8 +13,8 @@ API_KEY = env('SECRET_KEY')
 
 # ----------------------------------------------回调页面---------------------------------------------- #
 # 用户授权获取code后的回调页面，如果需要实现验证登录就必须填写
-REDIRECT_URI = 'https://obrisk.com/wx-login'
-PC_LOGIN_REDIRECT_URI = 'https://d.obrisk.com/wx-login'
+REDIRECT_URI = 'https://in.obrisk.com'
+PC_LOGIN_REDIRECT_URI = 'https://d.obrisk.com/wx-lg'
 
 defaults = {
     # 微信内置浏览器获取code微信接口

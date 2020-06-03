@@ -9,6 +9,7 @@ import logging
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
+from django.utils.translation import ugettext_lazy as _
 from django.views.generic import (
         DetailView, ListView,
         RedirectView, UpdateView, FormView)
@@ -23,12 +24,15 @@ from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
-from django.http import HttpResponseServerError
-
+from django.http import (
+    HttpResponseServerError,
+    HttpResponseBadRequest
+)
 from allauth.account.views import (
-        SignupView, LoginView,
-        _ajax_response,
-        PasswordResetFromKeyView as AllauthPasswordResetFromKeyView)
+    SignupView, LoginView,
+    _ajax_response,
+    PasswordResetFromKeyView as AllauthPasswordResetFromKeyView
+)
 from allauth.account.forms import UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
@@ -573,10 +577,14 @@ class GetInfoView(WechatViewSet):
             code = request.GET['code']
             token, openid = self.wechat_api.get_access_token(code)
             if token is None or openid is None:
-                return HttpResponseServerError('get code error')
+                logging.error('Wechat auth failed')
+                return HttpResponseServerError('get access or openid not provided')
             user_info, error = self.wechat_api.get_user_info(token, openid)
+
             if error:
+                logging.error(f'Wechat auth failed: {error}')
                 return HttpResponseServerError('get access_token error')
+
             user_data = {
                 'nickname': user_info['nickname'],
                 'sex': user_info['sex'],
@@ -592,14 +600,25 @@ class GetInfoView(WechatViewSet):
             if user.count() == 0:
                 user = User.objects.create(
                         username=user_data['nickname'],
-                        wechat_avatar=user_data['avatar'],
-                        wechat=user_data['openid'],
+                        wechat_id=user_data['nickname'],
+                        city=user_data['city'],
+                        province_region=user_data['province'],
+                        country=user_data['country'],
+                        gender=user_data['sex'],
+                        picture=user_data['avatar'],
+                        wechat_openid=user_data['openid']
                     )
+                #Redirect to a page to complete phone number & City
                 login(request, user)
             else:
                 login(request, user.first())
-            # 授权登录成功，进入主页
-            return home(request)
+
+            return reverse('stories:list')
+
+        else:
+            return HttpResponseBadRequest(
+                 content=_('No code or state provided')
+             )
 
 
 @ajax_required

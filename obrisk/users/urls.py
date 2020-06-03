@@ -32,10 +32,6 @@ urlpatterns = [
         views.AuthView.as_view(),
         name='wechat_auth'),
 
-    url(r'^wechat-cb/$',
-        views.GetInfoView.as_view(),
-        name='wechat_info'),
-
     url(regex=r'^bulk-phone-update/$',
         view=views.bulk_update_user_phone_no,
         name='bulk_phone_update'),

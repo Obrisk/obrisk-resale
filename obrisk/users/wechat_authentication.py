@@ -37,20 +37,8 @@ class WechatOpenidAuth(object):
       try:
             user = authenticate(openid=openid)
             login(request, user)
-            print("Huuray",auth)
       except Exception as e:
           logging.error(f'wechat user logging in failed: {e}')
-
-
-
-# -*- coding: utf-8 -*-
-# ----------------------------------------------
-# @Time    : 18-3-21 下午1:36
-# @Author  : YYJ
-# @File    : WechatAPI.py
-# @CopyRight: ZDWL
-# ----------------------------------------------
-
 
 
 class WechatAPI(object):
@@ -70,7 +58,9 @@ class WechatAPI(object):
         except Exception as e:
             return None, {'code': 9999, 'msg': e}
         if 'errcode' in content and content['errcode'] != 0:
-            return None, {'code': content['errcode'], 'msg': content['errmsg']}
+            return None, {
+                    'code': content['errcode'],
+                    'msg': content['errmsg']}
 
         return content, None
 
@@ -114,7 +104,7 @@ class WechatLogin(WechatAPI):
     def get_code_url(self):
         """微信内置浏览器获取网页授权code的url"""
         url = self.config.defaults.get('wechat_browser_code') + (
-            '?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' %
+            '?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' %  #noqa
             (self.config.APPID, parse.quote(self.config.REDIRECT_URI),
              self.config.SCOPE, self.config.STATE if self.config.STATE else ''))
         return url
@@ -122,9 +112,11 @@ class WechatLogin(WechatAPI):
     def get_code_url_pc(self):
         """pc浏览器获取网页授权code的url"""
         url = self.config.defaults.get('pc_QR_code') + (
-            '?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' %
-            (self.config.APPID, parse.quote(self.config.REDIRECT_URI), self.config.PC_LOGIN_SCOPE,
-             self.config.STATE if self.config.STATE else ''))
+            '?appid=%s&redirect_uri=%s&response_type=code&scope=%s&state=%s#wechat_redirect' %  #noqa
+            ( self.config.APPID,
+              parse.quote(self.config.REDIRECT_URI),
+              self.config.PC_LOGIN_SCOPE,
+              self.config.STATE if self.config.STATE else ''))
         return url
 
     def get_access_token(self, code):
@@ -135,13 +127,21 @@ class WechatLogin(WechatAPI):
             'code': code,
             'grant_type': 'authorization_code'
         }
-        token, err = self.process_response_login(requests
-                                                 .get(self.config.defaults.get('wechat_browser_access_token'),
-                                                      params=params))
-        if not err:
+        token, err = self.process_response_login(
+                requests.get(
+                    self.config.defaults.get(
+                        'wechat_browser_access_token'
+                    ),
+                    params=params
+                  )
+                )
+        if err:
+            logging.error(f'Wechat login failed: {err}')
+            return None
+        else:
             self._access_token = token['access_token']
             self._openid = token['openid']
-        return self._access_token, self._openid
+            return self._access_token, self._openid
 
     def get_user_info(self, access_token, openid):
         """获取用户信息"""
@@ -150,5 +150,11 @@ class WechatLogin(WechatAPI):
             'openid': openid,
             'lang': self.config.LANG
         }
-        return self.process_response_login(requests
-                                           .get(self.config.defaults.get('wechat_browser_user_info'), params=params))
+        return self.process_response_login(
+                requests.get(
+                    self.config.defaults.get(
+                        'wechat_browser_user_info'
+                    ),
+                    params=params
+                )
+            )

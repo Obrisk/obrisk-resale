@@ -17,7 +17,6 @@
     <div id="" class="view-wrap true-dom">
       <div class="columns is-centered">
 
-
         <div class="column is-half is-one-third-desktop has-background-white text-center">
 
           <div class="is-flex row">
@@ -74,11 +73,10 @@
                           </div>
 
                             <div class="social-ac d-flex">
-                                <a class="section" href="{% url 'users:wechat_auth' %}">
+                                <a style="margin-right:10px" href="{% url 'users:wechat_auth' %}">
                                     <i class="fa fa-wechat"></i> </a>
                                 </a>
-
-                                <a class="section" href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
+                                <a href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
                                     <i class="fa fa-linkedin"></i> </a>
                                 </a>
                             </div>
