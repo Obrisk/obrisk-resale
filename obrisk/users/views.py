@@ -27,6 +27,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.http import (
     HttpResponseServerError,
+    HttpResponseRedirect,
     HttpResponseBadRequest
 )
 from allauth.account.views import (
@@ -619,6 +620,7 @@ class GetInfoView(WechatViewSet):
                             gender=user_data['sex'],
                             picture=user_data['avatar'],
                             wechat_openid=user_data['openid']
+
                         )
                 except IntegrityError:
                     return HttpResponseServerError(
@@ -626,11 +628,15 @@ class GetInfoView(WechatViewSet):
                         )
                     
                 #Redirect to a page to complete phone number & City
-                login(request, user)
+                login(
+                    request, user,
+                    backend='django.contrib.auth.backends.ModelBackend')
             else:
-                login(request, user.first())
-
-            return reverse('stories:list')
+                login(
+                    request, user.first(),
+                    backend='django.contrib.auth.backends.ModelBackend'
+                )
+            return HttpResponseRedirect(reverse('stories:list'))
 
         else:
             return HttpResponseBadRequest(

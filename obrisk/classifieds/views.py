@@ -6,20 +6,26 @@ from django.views import View
 from django.views.generic import (
         CreateView, UpdateView,
         DetailView, DeleteView)
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.utils.decorators import method_decorator
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import (
+        JsonResponse, HttpResponse, HttpResponseRedirect
+    )
+from django.views.decorators.http import require_http_methods
+from django.conf import settings
+from django.core.cache import cache
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.core.paginator import (
         Paginator, EmptyPage,
         PageNotAnInteger)
 from django.db.models import (
         OuterRef, Subquery, Case,
         When, Value, IntegerField, Count)
-from django.urls import reverse_lazy
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from dal import autocomplete
 from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import (
         Classified, OfficialAd,
@@ -29,15 +35,9 @@ from obrisk.classifieds.forms import (
         ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
 
-from django.http import JsonResponse
-from django.views.decorators.http import require_http_methods
-from django.conf import settings
-from django.core.cache import cache
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
-
-from dal import autocomplete
 
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
+
 
 def set_popular_tags():
     popular_tags = Classified.objects.get_counted_tags()[:30]
