@@ -10,11 +10,13 @@ from obrisk.notifications.models import (
 )
 
 
-MALE = "M"
-FEMALE = "F"
+MALE = "1"
+FEMALE = "2"
+UNKNOWN = "0"
 GENDER = (
     (MALE, _("Male")),
     (FEMALE, _("Female")),
+    (UNKNOWN, _("Unknown")),
 )
 
 

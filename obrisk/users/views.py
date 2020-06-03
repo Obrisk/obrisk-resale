@@ -613,21 +613,25 @@ class GetInfoView(WechatViewSet):
                         break
                     username_cnd = '%s-%d' % (first_name, x)
 
+                if user_data['province'] in (
+                        'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
+                    user_data['city'] = user_data['province']
+
                 try:
                     user = User.objects.create(
                             username=username_cnd,
                             city=user_data['city'],
                             province_region=user_data['province'],
                             country=user_data['country'],
-                            gender=user_data['sex'],
-                            picture=user_data['avatar']
+                            gender=str(user_data['sex']),
+                            picture=user_data['avatar'],
                             thumbnail=user_data['avatar'][:-3] + '64',
                             org_picture=user_data['avatar'][:-3] + '0',
                             wechat_openid=user_data['openid']
 
                         )
 
-                    update_profile_picture.delay(user, 'wechat')
+                    update_profile_picture.delay(user.id, 'wechat')
                 except IntegrityError:
                     return HttpResponseServerError(
                             'Sorry we could not register you. Please try again later!'
@@ -638,14 +642,6 @@ class GetInfoView(WechatViewSet):
                     request, user,
                     backend='django.contrib.auth.backends.ModelBackend')
             else:
-                #this is a trial
-                user.picture=user_data['avatar']
-                user.thumbnail=user_data['avatar'][:-3] + '64'
-                user.org_picture=user_data['avatar'][:-3] + '0'
-                user.save()
-
-                update_profile_picture.delay(user, 'wechat')
-
                 login(
                     request, user.first(),
                     backend='django.contrib.auth.backends.ModelBackend'

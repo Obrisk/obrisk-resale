@@ -42,12 +42,12 @@ class MyUserAdmin(AuthUserAdmin):
                     ('name', 'is_official', 'is_seller', 'points', 'city',
                         'province_region', 'country', 'phone_number', 'picture',
                         'thumbnail', 'instagram_account', 'linkedin_account',
-                        'snapchat_account', 'facebook_account', 'address',
+                        'snapchat_account', 'facebook_account', 'address', 'gender',
                     )
                 }
             ),
     ) + AuthUserAdmin.fieldsets
-    list_display = ('username', 'date_joined', 'last_login', 
+    list_display = ('username', 'last_login', 'date_joined', 
         'city', 'province_region', 'thumbnail', 'points')
     search_fields = ['username', 'phone_number', 'email', 'city']
 

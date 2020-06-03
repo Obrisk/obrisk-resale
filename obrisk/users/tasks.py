@@ -14,13 +14,15 @@ from obrisk.users.models import User
 
 
 @shared_task
-def update_profile_picture(user, socialapp):
+def update_profile_picture(user_id, socialapp):
     """
     Runs the bg task to update user picture download it from
     social app and save it to our bucket
     It has to sleep for sometime or execution will fail
     """
     time.sleep(1)
+    user = User.objects.get(id=user_id)
+
     if socialapp == 'linkedin':
 
         thumbnail = user.socialaccount_set.all()[0] \
