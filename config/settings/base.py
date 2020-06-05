@@ -332,10 +332,10 @@ CHANNEL_LAYERS = {
 # GraphQL settings
 GRAPHENE = {"SCHEMA": "obrisk.schema.schema"}
 
-# Max data to be uploaded to Django server. This is around 12MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 13000000
+# Max data to be uploaded to Django server. This is around 1.2GB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 1300000000
 
-FILE_UPLOAD_MAX_MEMORY_SIZE = 13000000
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1300000000
 
 TAGS_CACHE_TIMEOUT = 60 * 60 * 24 * 7  # 7 days.
 
