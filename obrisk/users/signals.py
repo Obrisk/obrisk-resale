@@ -12,7 +12,7 @@ def social_user_connected(user, **kwargs):
     """
     if user.socialaccount_set.all() and not user.picture:
 
-        update_profile_picture.delay(user, 'linkedin')
+        update_profile_picture.delay(user.id, 'linkedin')
 
         return redirect("stories:list")
     else:
