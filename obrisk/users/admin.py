@@ -41,7 +41,7 @@ class MyUserAdmin(AuthUserAdmin):
                 {'fields': 
                     ('name', 'is_official', 'is_seller', 'points', 'city',
                         'province_region', 'country', 'phone_number', 'picture',
-                        'thumbnail', 'instagram_account', 'linkedin_account',
+                        'thumbnail', 'org_picture', 'instagram_account', 'linkedin_account',
                         'snapchat_account', 'facebook_account', 'address', 'gender',
                     )
                 }
@@ -50,4 +50,4 @@ class MyUserAdmin(AuthUserAdmin):
     list_display = ('username', 'last_login', 'date_joined', 
         'city', 'province_region', 'thumbnail', 'points')
     search_fields = ['username', 'phone_number', 'email', 'city']
-
+    readonly_fields = ('phone_number',)

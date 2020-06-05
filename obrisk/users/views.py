@@ -25,6 +25,7 @@ from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
+from django.db import IntegrityError
 from django.http import (
     HttpResponseServerError,
     HttpResponseRedirect,
@@ -47,7 +48,7 @@ from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
-from obrisk.users.tasks import update_profile_picture
+from obrisk.users.tasks import update_profile_picture, update_prof_pic_sync
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm)
@@ -624,14 +625,15 @@ class GetInfoView(WechatViewSet):
                             province_region=user_data['province'],
                             country=user_data['country'],
                             gender=str(user_data['sex']),
-                            picture=user_data['avatar'],
-                            thumbnail=user_data['avatar'][:-3] + '64',
-                            org_picture=user_data['avatar'][:-3] + '0',
                             wechat_openid=user_data['openid']
-
                         )
 
-                    update_profile_picture.delay(user.id, 'wechat')
+                    update_prof_pic_sync(
+                        user, 
+                        user_data['avatar'][:-3] + '64',
+                        user_data['avatar'],
+                        user_data['avatar'][:-3] + '0'
+                    )
                 except IntegrityError:
                     return HttpResponseServerError(
                             'Sorry we could not register you. Please try again later!'
