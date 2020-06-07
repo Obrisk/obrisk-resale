@@ -603,44 +603,26 @@ class GetInfoView(WechatViewSet):
                 )
             if user.count() == 0:
 
-                username_cnd = first_name = slugify(
+                user_data['nickname'] = first_name = slugify(
                         user_data['nickname'],
                         max_length=16
                     )
 
                 for x in itertools.count(1):
-                    if not User.objects.filter(username=username_cnd).exists():
+                    if not User.objects.filter(username=user_data['nickname']).exists():
                         break
-                    username_cnd = '%s-%d' % (first_name, x)
+                    user_data['nickname'] = '%s-%d' % (first_name, x)
 
                 if user_data['province'] in (
                         'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                     user_data['city'] = user_data['province']
 
-                try:
-                    user = User.objects.create(
-                            username=username_cnd,
-                            city=user_data['city'],
-                            province_region=user_data['province'],
-                            country=user_data['country'],
-                            gender=str(user_data['sex']),
-                            picture=user_data['avatar'],
-                            thumbnail=user_data['avatar'][:-3] + '64',
-                            org_picture=user_data['avatar'][:-3] + '0',
-                            wechat_openid=user_data['openid']
-
+                return HttpResponseRedirect(reverse(
+                            'users:complete_wechat',
+                            kwargs=context
                         )
+                    )
 
-                    update_profile_picture.delay(user.id, 'wechat')
-                except IntegrityError:
-                    return HttpResponseServerError(
-                            'Sorry we could not register you. Please try again later!'
-                        )
-
-                #Redirect to a page to complete phone number & City
-                login(
-                    request, user,
-                    backend='django.contrib.auth.backends.ModelBackend')
             else:
                 login(
                     request, user.first(),
@@ -650,8 +632,39 @@ class GetInfoView(WechatViewSet):
 
         else:
             return HttpResponseBadRequest(
-                 content=_('No code or state provided')
+                 content=_('Bad request')
              )
+
+
+@api_view(['GET'])
+def complete_wechat_reg(request):
+
+    user_data = request.query_params
+    try:
+        user = User.objects.create(
+                username=user_data['nickname'],
+                city=user_data['city'],
+                province_region=user_data['province'],
+                country=user_data['country'],
+                gender=str(user_data['sex']),
+                picture=user_data['avatar'],
+                thumbnail=user_data['avatar'][:-3] + '64',
+                org_picture=user_data['avatar'][:-3] + '0',
+                wechat_openid=user_data['openid']
+            )
+
+        update_profile_picture.delay(user.id, 'wechat')
+    except IntegrityError:
+        return HttpResponseServerError(
+                'Sorry we could not register you. Please try again later!'
+            )
+
+    #Redirect to a page to complete phone number & City
+    login(
+        request, user,
+        backend='django.contrib.auth.backends.ModelBackend')
+
+    return HttpResponseRedirect(reverse('stories:list'))
 
 
 @ajax_required
@@ -678,5 +691,4 @@ def complete_authentication(request):
             return JsonResponse({"status": "403", "message": "Please enter valid inputs"})
 
     else:
-
         return redirect("stories:list")
