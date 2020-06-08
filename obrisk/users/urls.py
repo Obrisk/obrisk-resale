@@ -32,7 +32,11 @@ urlpatterns = [
         views.AuthView.as_view(),
         name='wechat_auth'),
 
-    url(regex=r'^complete-wx-reg/$',
+    url(r'^wechat-test/$',
+        views.wechat_test,
+        name='wechat_test'),
+
+    url(regex=r'^cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/(?P<ui>[-\w]+)/(?P<ky>[-\w]+)/(?P<nck>[\w.@+-]+)/(?P<ct>[\w.@+-]+)/(?P<pr>[\w.@+-]+)/(?P<cnt>[\w.@+-]+)/$',
         view=views.complete_wechat_reg,
         name='complete_wechat'),
 
@@ -44,7 +48,7 @@ urlpatterns = [
         view=views.phone_password_reset,
         name='phone_password_reset'),
 
-    url(regex=r'^phone-password-reset-form/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$',
+    url(regex=r'^phone-password-reset-form/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)(?P<nickname>[\w.@+-]+)/$',
         view=views.PhonePasswordResetConfirmView.as_view(),
         name='phone_ps_reset_confirm'),
 

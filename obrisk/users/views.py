@@ -590,36 +590,38 @@ class GetInfoView(WechatViewSet):
                 return HttpResponseServerError('get access_token error')
 
             user_data = {
-                'nickname': user_info['nickname'],
-                'sex': user_info['sex'],
-                'province': user_info['province'].encode('iso8859-1').decode('utf-8'),
-                'city': user_info['city'].encode('iso8859-1').decode('utf-8'),
-                'country': user_info['country'].encode('iso8859-1').decode('utf-8'),
-                'avatar': user_info['headimgurl'],
-                'openid': user_info['openid']
+                'nck': user_info['nickname'],
+                'ky': user_info['sex'],
+                'pr': user_info['province'].encode('iso8859-1').decode('utf-8'),
+                'ct': user_info['city'].encode('iso8859-1').decode('utf-8'),
+                'cnt': user_info['country'].encode('iso8859-1').decode('utf-8'),
+                'ui': user_info['openid']
             }
             user = User.objects.filter(
-                    wechat_openid=user_data['openid']
+                    wechat_openid=user_data['ui']
                 )
+
             if user.count() == 0:
 
-                user_data['nickname'] = first_name = slugify(
-                        user_data['nickname'],
+                cache.set(user_data['ui'], user_info['headimgurl'], 3000)
+
+                user_data['nck'] = first_name = slugify(
+                        user_data['nck'],
                         max_length=16
                     )
 
                 for x in itertools.count(1):
-                    if not User.objects.filter(username=user_data['nickname']).exists():
+                    if not User.objects.filter(username=user_data['nck']).exists():
                         break
-                    user_data['nickname'] = '%s-%d' % (first_name, x)
+                    user_data['nck'] = '%s-%d' % (first_name, x)
 
-                if user_data['province'] in (
+                if user_data['pr'] in (
                         'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-                    user_data['city'] = user_data['province']
+                    user_data['ct'] = user_data['pr']
 
                 return HttpResponseRedirect(reverse(
                             'users:complete_wechat',
-                            kwargs=context
+                            kwargs=user_data
                         )
                     )
 
@@ -636,10 +638,64 @@ class GetInfoView(WechatViewSet):
              )
 
 
-@api_view(['GET'])
-def complete_wechat_reg(request):
+def wechat_test(request):
 
-    user_data = request.query_params
+    user_data = {
+        'ui': 'thisisaveryuniqueopenid',
+        'ky': 2,
+        'nck':'nickname',
+        'ct': 'Fuzhou',
+        'pr': 'Fujian',
+        'cnt':  'China',
+    }
+
+    user = User.objects.filter(
+            wechat_openid=user_data['ui']
+        )
+    if user.count() == 0:
+
+        cache.set(user_data['ui'], 'https://images.freeimages.com/images/large-previews/b2d/kiwi-fruit-macros-1313905.jpg', 3000)
+
+        user_data['nck'] = first_name = slugify(
+                user_data['nck'],
+                max_length=16
+            )
+
+        for x in itertools.count(1):
+            if not User.objects.filter(username=user_data['nck']).exists():
+                break
+            user_data['nck'] = '%s-%d' % (first_name, x)
+
+        if user_data['pr'] in (
+                'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
+            user_data['ct'] = user_data['pr']
+
+        return HttpResponseRedirect(reverse(
+                    'users:complete_wechat',
+                    kwargs=user_data
+                )
+            )
+
+    return HttpResponseBadRequest(
+         content=_('Bad request')
+     )
+
+
+@api_view(['GET', 'POST'])
+def complete_wechat_reg(request, **kwargs):
+
+    if request.method == 'GET':
+        return render(request, 'users/wechat-auth.html')
+
+    user_data = request.kwargs
+    print(user_data)
+
+    try:
+        picture = cache.get( request.kwargs['ui'])
+    except:
+        return HttpResponseServerError(
+                'Sorry we could not register you. Please try again later!'
+            )
     try:
         user = User.objects.create(
                 username=user_data['nickname'],

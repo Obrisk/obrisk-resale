@@ -45,24 +45,14 @@ label {
   font-weight: 600;
 }
 
-.hero-body {
-  background: #fff;
+
+.form-wrapper {
+    width: 100%;
 }
+
 
 .signup-wrapper .process-panel-wrap .form-panel {
   border: none;
-}
-
-.social-ac {
-    font-size: 35px;
-}
-
-.fa-linkedin {
-  color: #1556cf;
-}
-
-.fa-wechat {
-  color: #09b83e;
 }
 
 
