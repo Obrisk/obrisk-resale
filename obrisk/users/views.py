@@ -25,6 +25,7 @@ from django.contrib import messages
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
+from django.db import IntegrityError
 from django.http import (
     HttpResponseServerError,
     HttpResponseRedirect,
@@ -47,7 +48,7 @@ from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
-from obrisk.users.tasks import update_profile_picture
+from obrisk.users.tasks import update_profile_picture, update_prof_pic_sync
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm)
@@ -624,7 +625,6 @@ class GetInfoView(WechatViewSet):
                             kwargs=user_data
                         )
                     )
-
             else:
                 login(
                     request, user.first(),
