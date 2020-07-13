@@ -48,10 +48,12 @@ from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
+from obrisk.users.wechat_config import CHINA_PROVINCES
 from obrisk.users.tasks import update_profile_picture, update_prof_pic_sync
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
-        PhoneRequestPasswordForm, PhoneResetPasswordForm)
+        PhoneRequestPasswordForm, PhoneResetPasswordForm
+        SocialSignupCompleteForm)
 from .models import User
 from .phone_verification import send_sms
 
@@ -616,6 +618,9 @@ class GetInfoView(WechatViewSet):
                         break
                     user_data['nck'] = '%s-%d' % (first_name, x)
 
+                if user_data['pr'] not in CHINA_PROVINCES:
+                    user_data.update('not_china'=True)
+
                 if user_data['pr'] in (
                         'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                     user_data['ct'] = user_data['pr']
@@ -638,11 +643,11 @@ class GetInfoView(WechatViewSet):
              )
 
 
-def wechat_test(request):
+def wechat_getinfo_view_test(request):
 
     user_data = {
         'ui': 'thisisaveryuniqueopenid',
-        'ky': 2,
+        'gndr': 2,
         'nck':'nickname',
         'ct': 'Fuzhou',
         'pr': 'Fujian',
@@ -666,14 +671,26 @@ def wechat_test(request):
                 break
             user_data['nck'] = '%s-%d' % (first_name, x)
 
-        if user_data['pr'] in (
-                'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-            user_data['ct'] = user_data['pr']
+        in_china=False
+        if user_data['pr'] in CHINA_PROVINCES:
+            in_china=True
 
-        return HttpResponseRedirect(reverse(
-                    'users:complete_wechat',
-                    kwargs=user_data
+            if user_data['pr'] in (
+                    'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
+                user_data['ct'] = user_data['pr']
+
+        form = SocialSignupCompleteForm(
+                    initial={
+                        'username': user_data['nck'],
+                        'province_region': user_data['pr'],
+                        'city': user_data['ct'],
+                        'gender': user_data['gndr'],
+                        'wechat_openid': user_data['ui'],
+                    }
                 )
+        return render(request,
+                'account/phone_password_reset.html',
+                {'form': form, 'in_china': in_china}
             )
 
     return HttpResponseBadRequest(

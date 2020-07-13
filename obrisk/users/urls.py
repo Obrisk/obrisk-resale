@@ -33,7 +33,7 @@ urlpatterns = [
         name='wechat_auth'),
 
     url(r'^wechat-test/$',
-        views.wechat_test,
+        views.wechat_getinfo_view_test,
         name='wechat_test'),
 
     url(regex=r'^cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/(?P<ui>[-\w]+)/(?P<ky>[-\w]+)/(?P<nck>[\w.@+-]+)/(?P<ct>[\w.@+-]+)/(?P<pr>[\w.@+-]+)/(?P<cnt>[\w.@+-]+)/$',

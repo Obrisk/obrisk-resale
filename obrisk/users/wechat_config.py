@@ -34,3 +34,8 @@ SCOPE = 'snsapi_userinfo'
 PC_LOGIN_SCOPE = 'snsapi_login'
 STATE = ''
 LANG = 'en_US'
+
+CHINA_PROVINCES = ['Anhui', 'Beijing', 'Chongqing','Fujian', 'Gansu', 'Guangdong', 'Guizhou',
+        'Hainan', 'Hebei', 'Heilongjiang', 'Henan', 'Hubei',
+        'Hunan', 'Jiangsu', 'Jiangxi', 'Jilin', 'Liaoning', 'Qinghai',
+        'Shanghai', 'Shaanxi', 'Shandong', 'Shanxi', 'Sichuan', 'Taiwan', 'Tianjin', 'Yunnan', 'Zhejiang']

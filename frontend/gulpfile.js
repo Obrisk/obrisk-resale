@@ -171,7 +171,6 @@ gulp.task("compile-css", function() {
       nodepath + "webui-popover/dist/jquery.webui-popover.min.css",
       nodepath + "quill/dist/quill.core.css",
       nodepath + "quill/dist/quill.snow.css",
-      nodepath + "plyr/dist/plyr.css",
       //Other external css
       assetspath + "css/fancybox.min.css"
     ])
@@ -187,7 +186,6 @@ gulp.task("compile-js", function() {
       nodepath + "feather-icons/dist/feather.min.js",
       nodepath + "webui-popover/dist/jquery.webui-popover.min.js",
       nodepath + "quill/dist/quill.min.js",
-      nodepath + "plyr/dist/plyr.min.js",
       //Get external js assets
       assetspath + "js/fancybox.min.js"
     ])

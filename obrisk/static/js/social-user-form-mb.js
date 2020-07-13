@@ -223,7 +223,16 @@ $(function() {
 
   $("#phone-verify").click(function() {});
 
-  //Updated form to be use steps
+  //Updated form to use steps
+    //
+    //
+  var confirm_btn = document.querySelector('#confirm');
+
+  confirm_btn.addEventListener('click', function (event) {
+      document.querySelector("#signup-panel-1").setAttribute('class', 'hidden');
+      document.querySelector(".process-panel-wrap").classList.remove("is-active");
+      document.querySelector("#signup-panel-2").classList.add("is-active");
+  });
 
   $(".process-button").on("click", function() {
     var $this = $(this);

@@ -35,9 +35,11 @@ class UserForm(forms.ModelForm):
         widget=forms.Textarea(attrs={"rows": 3}),
         required=False
     )
-    province_region = forms.CharField(widget=forms.HiddenInput())
+    province_region = forms.CharField(
+            widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
-    job_title = forms.CharField(required=False, label=("Occupation"))
+    job_title = forms.CharField(
+            required=False, label=("Occupation"))
     address = forms.CharField(required=False)
 
     class Meta:
@@ -59,7 +61,7 @@ class PhoneSignupForm(SignupForm):
     error_messages = {
         "account_inactive": _("This account is currently inactive."),
         "username_password_mismatch": _(
-            "The phone number/username or password you specified are not correct."
+            "Phone no./username or password is not correct."
         ),
     }
 
@@ -84,7 +86,10 @@ class PhoneSignupForm(SignupForm):
             }
         ),
     )
-
+    gender = forms.CharField(
+            widget=forms.HiddenInput(),
+            required=False
+        )
     verify_code = forms.IntegerField(
             widget=forms.HiddenInput(),
             required=False
@@ -99,6 +104,7 @@ class PhoneSignupForm(SignupForm):
             "phone_number",
             "password1",
             "password2",
+            "gender"
         )
 
     def __init__(self, *args, **kwargs):
@@ -113,8 +119,9 @@ class PhoneSignupForm(SignupForm):
             username_field.max_length)
 
         if getattr(settings, "SIGNUP_PASSWORD_ENTER_TWICE", False):
-            self.fields["password2"] = PasswordField(label=_("Password (again)"))
-
+            self.fields["password2"] = PasswordField(
+                    label=_("Password (again)")
+                )
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
@@ -129,6 +136,30 @@ class PhoneSignupForm(SignupForm):
         user.phone_number = self.cleaned_data["phone_number"]
         user.save()
 
+        # You must return the original result.
+        return user
+
+
+class SocialSignupCompleteForm(PhoneSignupForm):
+    wechat_openid = forms.CharField(
+            widget=forms.HiddenInput(),
+            required=False
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields.pop('password1')
+        self.fields.pop('password2')
+
+    def save(self, request):
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super().save(request)
+
+        user.gender = self.cleaned_data["gender"]
+        user.wechat_openid = self.cleaned_data["wechat_openid"]
+
+        user.save()
         # You must return the original result.
         return user
 
