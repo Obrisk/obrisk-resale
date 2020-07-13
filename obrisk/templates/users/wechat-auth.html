@@ -46,13 +46,12 @@
 															<label for="username">
                                                                 {% trans 'Username' %}
 															</label>
+                                                            {{form.username}}
 														</div>
-
-                                                        <input class="col-10" maxlength="16" minlength="6" type="tel"
-                                                          pattern="" value="this" name="code" id="code-input">
 
 													</div>
 												</div>
+
 
 												<div class="input-group mb-3 mt-4">
 													<div class="input-group">
@@ -60,8 +59,8 @@
                                                             {% trans 'Province' %}
                                                         </label>
 													</div>
-													<select class="custom-select" id="province" name="province"
-														autocomplete="on"></select>
+                                                        <select class="custom-select" id="province" name="province"
+                                                            autocomplete="on"></select>
 												</div>
 
 												<div class="input-group mb-3">
@@ -70,9 +69,10 @@
                                                             {% trans 'City' %}
                                                         </label>
 													</div>
-													<select class="custom-select" id="city" name="city"
-														autocomplete="on">
-													</select>
+
+                                                        <select class="custom-select" id="city" name="city"
+                                                            autocomplete="on">
+                                                        </select>
 												</div>
 
                                                 <button id="confirm"
@@ -160,7 +160,6 @@
 											</div>
 										</div>
 
-
 									</form>
 
 								</div>
@@ -181,6 +180,9 @@
 <script type="text/javascript">
 	var current_url = "{{ request.path }}";
 	var errors = false;
+    var in_china = false;
+    var province = '';
+    var city = '';
 
 	{% if form.errors %}
         errors = true;
@@ -199,6 +201,13 @@
     {% if "username" in form.errors %}
         $("#username").append(`<small class="pass-text red"> {{form.errors.username}} </small>`)
     {% endif %}
+
+    {% if in_china %}
+        in_china = true;
+        province = '{{ form.province_region.value }}';
+        city = '{{ form.city.value }}';
+    {% endif %}
+
 
 </script>
 

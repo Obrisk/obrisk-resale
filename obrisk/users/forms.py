@@ -149,7 +149,6 @@ class SocialSignupCompleteForm(PhoneSignupForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields.pop('password1')
-        self.fields.pop('password2')
 
     def save(self, request):
         # Ensure you call the parent class's save.

@@ -52,8 +52,8 @@ from obrisk.users.wechat_config import CHINA_PROVINCES
 from obrisk.users.tasks import update_profile_picture, update_prof_pic_sync
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
-        PhoneRequestPasswordForm, PhoneResetPasswordForm
-        SocialSignupCompleteForm)
+        PhoneRequestPasswordForm, PhoneResetPasswordForm,
+        SocialSignupCompleteForm )
 from .models import User
 from .phone_verification import send_sms
 
@@ -594,7 +594,7 @@ class GetInfoView(WechatViewSet):
 
             user_data = {
                 'nck': user_info['nickname'],
-                'ky': user_info['sex'],
+                'sx': user_info['sex'],
                 'pr': user_info['province'].encode('iso8859-1').decode('utf-8'),
                 'ct': user_info['city'].encode('iso8859-1').decode('utf-8'),
                 'cnt': user_info['country'].encode('iso8859-1').decode('utf-8'),
@@ -618,12 +618,13 @@ class GetInfoView(WechatViewSet):
                         break
                     user_data['nck'] = '%s-%d' % (first_name, x)
 
-                if user_data['pr'] not in CHINA_PROVINCES:
-                    user_data.update('not_china'=True)
+                in_china=False
+                if user_data['pr'] in CHINA_PROVINCES:
+                    in_china=True
 
-                if user_data['pr'] in (
-                        'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-                    user_data['ct'] = user_data['pr']
+                    if user_data['pr'] in (
+                            'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
+                        user_data['ct'] = user_data['pr']
 
                 return HttpResponseRedirect(reverse(
                             'users:complete_wechat',
@@ -647,7 +648,7 @@ def wechat_getinfo_view_test(request):
 
     user_data = {
         'ui': 'thisisaveryuniqueopenid',
-        'gndr': 2,
+        'sx': 2,
         'nck':'nickname',
         'ct': 'Fuzhou',
         'pr': 'Fujian',
@@ -684,12 +685,12 @@ def wechat_getinfo_view_test(request):
                         'username': user_data['nck'],
                         'province_region': user_data['pr'],
                         'city': user_data['ct'],
-                        'gender': user_data['gndr'],
+                        'gender': user_data['sx'],
                         'wechat_openid': user_data['ui'],
                     }
                 )
         return render(request,
-                'account/phone_password_reset.html',
+                'users/wechat-auth.html',
                 {'form': form, 'in_china': in_china}
             )
 

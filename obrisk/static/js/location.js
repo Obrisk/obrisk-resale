@@ -135,10 +135,10 @@ $(document).ready(function () {
 
     //Set the Province and city name defaults.
 	function preselect() {
-		if (!$("input[name='city']").val() && !$("input[name='province_region']").val()) {
-			$("#province option[value='Zhejiang']").attr('selected', 'selected');
+		if ( in_china ) {
+			$(`#province option[value=${province}]`).attr('selected', 'selected');
 			helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
-			$("#city option[value='Hangzhou']").attr('selected', 'selected');
+			$(`#city option[value=${city}]`).attr('selected', 'selected');
 		} else {
 			province = "#province option[value=" + $("input[name='province_region']").val() + "]";
 			city = "#city option[value=" + $("input[name = 'city']").val() + "]";
@@ -148,6 +148,7 @@ $(document).ready(function () {
 		}
 
 	}
+    
 	$province = $("select[name='province']");
 	$city = $("select[name='city']");
 	helpers.province(geo_data, $province, "Select an option");
@@ -157,6 +158,3 @@ $(document).ready(function () {
 	});
 
 });
-
-
-
