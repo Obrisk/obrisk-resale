@@ -15,6 +15,8 @@ from allauth.socialaccount.forms import (
 from phonenumber_field.formfields import PhoneNumberField
 from django.contrib.auth import get_user_model
 
+from obrisk.users.wechat_config import CHINA_PROVINCES
+
 User = get_user_model()
 
 
@@ -55,6 +57,19 @@ class UserForm(forms.ModelForm):
         }
 
 
+class ProvinceChoiceField(forms.ChoiceField):
+
+    def validate(self, value):
+        if value not in CHINA_PROVINCES:
+            raise ValidationError("We currently support our services to users in China cities only!")
+
+
+class CityChoiceField(forms.ChoiceField):
+
+    def validate(self, value):
+        pass
+
+
 # This form inherits all-auth.
 class PhoneSignupForm(SignupForm):
 
@@ -74,15 +89,30 @@ class PhoneSignupForm(SignupForm):
                        attrs={'placeholder':
                               _('< 16 letters. No spaces'),
                               'autofocus': 'autofocus'}))
-    province_region = forms.CharField(widget=forms.HiddenInput())
-    city = forms.CharField(widget=forms.HiddenInput())
+    province_region = ProvinceChoiceField(
+        widget = forms.TextInput(attrs={
+                    'id': 'province',
+                    'class': 'custom-select',
+                    'name': 'province'
+            })
+        )
+    city = CityChoiceField(
+        widget = forms.TextInput(attrs={
+                    'id': 'city',
+                    'class': 'custom-select',
+                    'name': 'city'
+            })
+        )
     phone_number = PhoneNumberField(
-        label=_("Phone number"),
+        label=_('Phone number'),
         widget=forms.TextInput(
             attrs={
-                "placeholder" : _('E.g 13291863081'),
-                "autofocus": "autofocus",
-                "maxlength": "11"
+                'placeholder' : _('E.g 13291863081'),
+                'autofocus': "autofocus",
+                'maxlength': '11',
+                'minlength':'11',
+                'type':'tel',
+                'pattern':'[0-9]{11}',
             }
         ),
     )
@@ -91,8 +121,15 @@ class PhoneSignupForm(SignupForm):
             required=False
         )
     verify_code = forms.IntegerField(
-            widget=forms.HiddenInput(),
-            required=False
+            widget=forms.TextInput(attrs={
+                'id':'code-input',
+                'class':'col-10',
+                'maxlength':'6',
+                'minlength':'6',
+                'type':'tel',
+                'pattern':'[0-9]{6}',
+                'name':'code'
+                })
         )
 
     class Meta:

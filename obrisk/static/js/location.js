@@ -26,7 +26,6 @@ var helpers = {
 			// Loop through each of the sorted results and append the option to the dropdown
 			result = result.sort();
 			$.each(result, function (index, text) {
-
 				dropdown.append('<option value="' + text + '">' + text + '</option>');
 			});
 		}
@@ -131,22 +130,24 @@ const geo_data = [{
 
 
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', function () {
 
     //Set the Province and city name defaults.
 	function preselect() {
 		if ( in_china ) {
-			$(`#province option[value=${province}]`).attr('selected', 'selected');
-			helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
-			$(`#city option[value=${city}]`).attr('selected', 'selected');
+            if (!document.getElementById('city').value && 
+                !document.getElementById('province').value) {
+                    $(`#province option[value=${province}]`).attr('selected', 'selected');
+                    helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
+                    $(`#city option[value=${city}]`).attr('selected', 'selected');
+            }
 		} else {
-			province = "#province option[value=" + $("input[name='province_region']").val() + "]";
+			province = "#province option[value=" + $("input[name='province']").val() + "]";
 			city = "#city option[value=" + $("input[name = 'city']").val() + "]";
 			$(province).attr('selected', 'selected');
 			helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
 			$(city).attr('selected', 'selected');
 		}
-
 	}
     
 	$province = $("select[name='province']");

@@ -531,24 +531,6 @@ class PhonePasswordResetConfirmView(FormView):
             return self.form_invalid(form)
 
 
-class AutoLoginView(LoginView):
-    pass
-
-
-@login_required
-@require_http_methods(["GET"])
-def bulk_update_user_phone_no(request):
-    """ A temporally view to create Conversations to users already chatted
-    before Convervation model was created."""
-    users = User.objects.all()
-    for user in users:
-        if isinstance(user.phone_number, PhoneNumber):
-            if not user.phone_number.country_code:
-                user.phone_number = '+8613300000000'
-                user.save()
-
-    return redirect('stories:list')
-
 
 @ajax_required
 @require_http_methods(["GET"])
@@ -579,6 +561,8 @@ class AuthView(WechatViewSet):
 
 
 class GetInfoView(WechatViewSet):
+    http_method_names = ['get', 'post']
+
     def get(self, request):
         if 'code' in request.GET:
             code = request.GET['code']
@@ -626,10 +610,18 @@ class GetInfoView(WechatViewSet):
                             'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                         user_data['ct'] = user_data['pr']
 
-                return HttpResponseRedirect(reverse(
-                            'users:complete_wechat',
-                            kwargs=user_data
+                form = SocialSignupCompleteForm(
+                            initial={
+                                'username': user_data['nck'],
+                                'province_region': user_data['pr'],
+                                'city': user_data['ct'],
+                                'gender': user_data['sx'],
+                                'wechat_openid': user_data['ui'],
+                            }
                         )
+                return render(request,
+                        'users/wechat-auth.html',
+                        {'form': form, 'in_china': in_china}
                     )
             else:
                 login(
@@ -646,99 +638,112 @@ class GetInfoView(WechatViewSet):
 
 def wechat_getinfo_view_test(request):
 
-    user_data = {
-        'ui': 'thisisaveryuniqueopenid',
-        'sx': 2,
-        'nck':'nickname',
-        'ct': 'Fuzhou',
-        'pr': 'Fujian',
-        'cnt':  'China',
-    }
-
-    user = User.objects.filter(
-            wechat_openid=user_data['ui']
-        )
-    if user.count() == 0:
-
-        cache.set(user_data['ui'], 'https://images.freeimages.com/images/large-previews/b2d/kiwi-fruit-macros-1313905.jpg', 3000)
-
-        user_data['nck'] = first_name = slugify(
-                user_data['nck'],
-                max_length=16
-            )
-
-        for x in itertools.count(1):
-            if not User.objects.filter(username=user_data['nck']).exists():
-                break
-            user_data['nck'] = '%s-%d' % (first_name, x)
-
-        in_china=False
-        if user_data['pr'] in CHINA_PROVINCES:
-            in_china=True
-
-            if user_data['pr'] in (
-                    'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-                user_data['ct'] = user_data['pr']
-
-        form = SocialSignupCompleteForm(
-                    initial={
-                        'username': user_data['nck'],
-                        'province_region': user_data['pr'],
-                        'city': user_data['ct'],
-                        'gender': user_data['sx'],
-                        'wechat_openid': user_data['ui'],
-                    }
-                )
-        return render(request,
-                'users/wechat-auth.html',
-                {'form': form, 'in_china': in_china}
-            )
-
-    return HttpResponseBadRequest(
-         content=_('Bad request')
-     )
-
-
-@api_view(['GET', 'POST'])
-def complete_wechat_reg(request, **kwargs):
-
     if request.method == 'GET':
-        return render(request, 'users/wechat-auth.html')
 
-    user_data = request.kwargs
-    print(user_data)
+        user_data = {
+            'ui': 'thisisaveryuniqueopenid2',
+            'sx': 2,
+            'nck':'nickname',
+            'ct': 'Fuzhou',
+            'pr': 'Fujian',
+            'cnt':  'China',
+        }
 
+        user = User.objects.filter(
+                wechat_openid=user_data['ui']
+            )
+        if user.count() == 0:
+            cache.set(user_data['ui'], 'https://tse4-mm.cn.bing.net/th/id/OIP.W2LFjmdl817vzi0Ilvt3WAHaH3?pid=Api&rs=1', 3000)
+
+            user_data['nck'] = first_name = slugify(
+                    user_data['nck'],
+                    max_length=16
+                )
+
+            for x in itertools.count(1):
+                if not User.objects.filter(username=user_data['nck']).exists():
+                    break
+                user_data['nck'] = '%s-%d' % (first_name, x)
+
+            in_china=False
+            if user_data['pr'] in CHINA_PROVINCES:
+                in_china=True
+
+                if user_data['pr'] in (
+                        'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
+                    user_data['ct'] = user_data['pr']
+
+            form = SocialSignupCompleteForm(
+                        initial={
+                            'username': user_data['nck'],
+                            'province_region': user_data['pr'],
+                            'city': user_data['ct'],
+                            'gender': user_data['sx'],
+                            'wechat_openid': user_data['ui'],
+                        }
+                    )
+            return render(request,
+                    'users/wechat-auth.html',
+                    {'form': form, 'in_china': in_china}
+                )
+
+        else:
+            login(
+                request, user.first(),
+                backend='django.contrib.auth.backends.ModelBackend'
+            )
+        return HttpResponseBadRequest(
+             content=_('Bad request')
+         )
+
+    else:
+        return HttpResponseBadRequest(
+             content=_('Bad request')
+         )
+
+
+@ajax_required
+@require_http_methods(["POST"])
+def complete_wechat_reg(request, **kwargs):
     try:
-        picture = cache.get( request.kwargs['ui'])
+        saved_code = cache.get(str(request.POST.get('phone_number')))
     except:
-        return HttpResponseServerError(
-                'Sorry we could not register you. Please try again later!'
-            )
-    try:
-        user = User.objects.create(
-                username=user_data['nickname'],
-                city=user_data['city'],
-                province_region=user_data['province'],
-                country=user_data['country'],
-                gender=str(user_data['sex']),
-                picture=user_data['avatar'],
-                thumbnail=user_data['avatar'][:-3] + '64',
-                org_picture=user_data['avatar'][:-3] + '0',
-                wechat_openid=user_data['openid']
-            )
+        return JsonResponse({
+            'error_message': "The verification code has expired or it is invalid!"})
+    else:
+        if str(saved_code) == str(request.POST.get('verify_code')):
+            form = SocialSignupCompleteForm(request.POST)
 
-        update_profile_picture.delay(user.id, 'wechat')
-    except IntegrityError:
-        return HttpResponseServerError(
-                'Sorry we could not register you. Please try again later!'
-            )
+            if form.is_valid():
+                try:
+                    picture = cache.get(request.POST.get('wechat_openid'))
+                except:
+                    return JsonResponse({
+                        'success': False,
+                        'error_message': "Sorry we failed to register you. Try again later!"
+                    })
 
-    #Redirect to a page to complete phone number & City
-    login(
-        request, user,
-        backend='django.contrib.auth.backends.ModelBackend')
+                user = form.save(request)
+                update_profile_picture.delay(user.id, 'wechat')
 
-    return HttpResponseRedirect(reverse('stories:list'))
+                login(
+                    request, user,
+                    backend='django.contrib.auth.backends.ModelBackend'
+                )
+
+                return HttpResponseRedirect(reverse('stories:list'))
+
+            else:
+                messages.error(request, form.errors)
+                return JsonResponse({
+                    'success': False,
+                    'error_message': str(form.errors)
+                })
+
+        return JsonResponse({
+            'success': False,
+            'error_message': "The verification code is not correct!"
+        })
 
 
 @ajax_required
@@ -762,7 +767,28 @@ def complete_authentication(request):
             return redirect("stories:list")
 
         else:
-            return JsonResponse({"status": "403", "message": "Please enter valid inputs"})
+            return JsonResponse({"status": "403",
+                "message": "Please enter valid inputs"})
 
     else:
         return redirect("stories:list")
+
+
+class AutoLoginView(LoginView):
+    pass
+
+
+@login_required
+@require_http_methods(["GET"])
+def bulk_update_user_phone_no(request):
+    """ A temporally view to create Conversations to users already chatted
+    before Convervation model was created."""
+    users = User.objects.all()
+    for user in users:
+        if isinstance(user.phone_number, PhoneNumber):
+            if not user.phone_number.country_code:
+                user.phone_number = '+8613300000000'
+                user.save()
+
+    return redirect('stories:list')
+
