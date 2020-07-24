@@ -4,6 +4,7 @@ import time
 import oss2
 import uuid
 
+from django.core.cache import cache
 from celery import shared_task
 from slugify import slugify
 

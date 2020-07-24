@@ -49,7 +49,7 @@ from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
 from obrisk.users.wechat_config import CHINA_PROVINCES
-from obrisk.users.tasks import update_profile_picture, update_prof_pic_sync
+from obrisk.users.tasks import update_prof_pic_sync
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm,
@@ -532,7 +532,7 @@ class PhonePasswordResetConfirmView(FormView):
 
 
 
-@ajax_required
+#ajax_required
 @require_http_methods(["GET"])
 def username_exists(request):
     """A function view to check if the username exists"""
@@ -540,13 +540,11 @@ def username_exists(request):
     if User.objects.filter(username__contains=prefered_name.lower()):
         return JsonResponse({
             "status": "201",
-            "username":prefered_name,
             "message": "This username is taken"
         })
     else:
         return JsonResponse({
             "status": "200",
-            "username":prefered_name,
             "message": "This username is available"})
 
 
@@ -603,22 +601,31 @@ class GetInfoView(WechatViewSet):
                     user_data['nck'] = '%s-%d' % (first_name, x)
 
                 in_china=False
-                if user_data['pr'] in CHINA_PROVINCES:
+                if str(user_data['cnt']) == 'China':
                     in_china=True
 
                     if user_data['pr'] in (
                             'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                         user_data['ct'] = user_data['pr']
 
-                form = SocialSignupCompleteForm(
-                            initial={
-                                'username': user_data['nck'],
-                                'province_region': user_data['pr'],
-                                'city': user_data['ct'],
-                                'gender': user_data['sx'],
-                                'wechat_openid': user_data['ui'],
-                            }
-                        )
+
+                    form = SocialSignupCompleteForm(
+                                initial={
+                                    'username': user_data['nck'],
+                                    'province_region': user_data['pr'],
+                                    'city': user_data['ct'],
+                                    'gender': user_data['sx'],
+                                    'wechat_openid': user_data['ui'],
+                                }
+                            )
+                else:
+                    form = SocialSignupCompleteForm(
+                                initial={
+                                    'username': user_data['nck'],
+                                    'gender': user_data['sx'],
+                                    'wechat_openid': user_data['ui'],
+                                }
+                            )
                 return render(request,
                         'users/wechat-auth.html',
                         {'form': form, 'in_china': in_china}
@@ -641,12 +648,12 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid2',
+            'ui': 'thisisaveryuniqueopenid7',
             'sx': 2,
             'nck':'nickname',
             'ct': 'Fuzhou',
             'pr': 'Fujian',
-            'cnt':  'China',
+            'cnt':  'Israel',
         }
 
         user = User.objects.filter(
@@ -666,22 +673,33 @@ def wechat_getinfo_view_test(request):
                 user_data['nck'] = '%s-%d' % (first_name, x)
 
             in_china=False
-            if user_data['pr'] in CHINA_PROVINCES:
+            if str(user_data['cnt']) == 'China':
                 in_china=True
 
                 if user_data['pr'] in (
                         'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                     user_data['ct'] = user_data['pr']
 
-            form = SocialSignupCompleteForm(
-                        initial={
-                            'username': user_data['nck'],
-                            'province_region': user_data['pr'],
-                            'city': user_data['ct'],
-                            'gender': user_data['sx'],
-                            'wechat_openid': user_data['ui'],
-                        }
-                    )
+
+                form = SocialSignupCompleteForm(
+                            initial={
+                                'username': user_data['nck'],
+                                'province_region': user_data['pr'],
+                                'city': user_data['ct'],
+                                'gender': user_data['sx'],
+                                'wechat_openid': user_data['ui'],
+                            }
+                        )
+            else:
+                form = SocialSignupCompleteForm(
+                            initial={
+                                'username': user_data['nck'],
+                                'province_region': 'Select an option',
+                                'city': 'Select an option',
+                                'gender': user_data['sx'],
+                                'wechat_openid': user_data['ui'],
+                            }
+                        )
             return render(request,
                     'users/wechat-auth.html',
                     {'form': form, 'in_china': in_china}
@@ -692,6 +710,7 @@ def wechat_getinfo_view_test(request):
                 request, user.first(),
                 backend='django.contrib.auth.backends.ModelBackend'
             )
+            return HttpResponseRedirect(reverse('stories:list'))
         return HttpResponseBadRequest(
              content=_('Bad request')
          )
@@ -723,15 +742,22 @@ def complete_wechat_reg(request, **kwargs):
                         'error_message': "Sorry we failed to register you. Try again later!"
                     })
 
-                user = form.save(request)
-                update_profile_picture.delay(user.id, 'wechat')
+                user = form.save(request, commit=False)
+                thumbnail = picture[:-3] + '64'
+                full_image = picture[:-3] + '0'
+
+                update_prof_pic_sync(
+                        user, thumbnail, picture, full_image
+                    )
 
                 login(
                     request, user,
                     backend='django.contrib.auth.backends.ModelBackend'
                 )
 
-                return HttpResponseRedirect(reverse('stories:list'))
+                return JsonResponse({
+                    'success': True
+                })
 
             else:
                 messages.error(request, form.errors)

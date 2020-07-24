@@ -5,6 +5,7 @@ from django.contrib.auth.forms import (
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core import validators
+from django.forms.widgets import Select, SelectMultiple
 from allauth.account.forms import (
     SignupForm, LoginForm, PasswordField)
 from allauth.utils import (
@@ -57,6 +58,36 @@ class UserForm(forms.ModelForm):
         }
 
 
+
+class SelectWidget(Select):
+    """
+    Select With Option Attributes:
+        subclass of Django's Select widget that allows attributes in options,
+        like disabled="disabled", title="help text", class="some classes",
+              style="background: color;"...
+
+    Pass a dict instead of a string for its label:
+        choices = [ ('value_1', 'label_1'),
+                    ...
+                    ('value_k', {'label': 'label_k', 'foo': 'bar', ...}),
+                    ... ]
+    The option k will be rendered as:
+        <option value="value_k" foo="bar" ...>label_k</option>
+    """
+
+    def create_option(self, name, value, label, selected, index,
+                      subindex=None, attrs=None):
+        if isinstance(label, dict):
+            opt_attrs = label.copy()
+            label = opt_attrs.pop('label')
+        else:
+            opt_attrs = {}
+        option_dict = super(SelectWOA, self).create_option(name, value,
+            label, selected, index, subindex=subindex, attrs=attrs)
+        for key,val in opt_attrs.items():
+            option_dict['attrs'][key] = val
+        return option_dict
+
 class ProvinceChoiceField(forms.ChoiceField):
 
     def validate(self, value):
@@ -90,17 +121,19 @@ class PhoneSignupForm(SignupForm):
                               _('< 16 letters. No spaces'),
                               'autofocus': 'autofocus'}))
     province_region = ProvinceChoiceField(
-        widget = forms.TextInput(attrs={
+        widget = SelectWidget(attrs={
                     'id': 'province',
                     'class': 'custom-select',
-                    'name': 'province'
+                    'name': 'province_region',
+                    'autocomplete': 'on'
             })
         )
     city = CityChoiceField(
-        widget = forms.TextInput(attrs={
+        widget = SelectWidget(attrs={
                     'id': 'city',
                     'class': 'custom-select',
-                    'name': 'city'
+                    'name': 'city',
+                    'autocomplete': 'on'
             })
         )
     phone_number = PhoneNumberField(

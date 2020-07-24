@@ -142,20 +142,24 @@ document.addEventListener('DOMContentLoaded', function () {
                     $(`#city option[value=${city}]`).attr('selected', 'selected');
             }
 		} else {
-			province = "#province option[value=" + $("input[name='province']").val() + "]";
-			city = "#city option[value=" + $("input[name = 'city']").val() + "]";
+			province = "#province option[value=" + $("input[name='province_region']").val() + "]";
+			city = "#city option[value=" + $("input[name='city']").val() + "]";
 			$(province).attr('selected', 'selected');
-			helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
+            if (document.getElementById("province").value == '') {
+                helpers.city('', $city, "Select an option");
+            } else {
+                helpers.city(geo_data[document.getElementById("province").selectedIndex - 1].cities, $city, "Select an option");
+            }
 			$(city).attr('selected', 'selected');
 		}
 	}
     
-	$province = $("select[name='province']");
+	$province = $("select[name='province_region']");
 	$city = $("select[name='city']");
+
 	helpers.province(geo_data, $province, "Select an option");
 	preselect();
 	$province.change(function () {
 		helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
 	});
-
 });

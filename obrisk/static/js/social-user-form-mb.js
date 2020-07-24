@@ -1,9 +1,12 @@
 //This is only for mobile web app:
+//
+
+var username_el = document.getElementById("id_username");
+var username_err = document.getElementById('username-errors');
 
 document.addEventListener('DOMContentLoaded', function () {
-    var input = document.getElementById("id_username");
-    var len = input.value.length;
-    input.setSelectionRange(len, len);
+    var len = username_el.value.length;
+    username_el.setSelectionRange(len, len);
 });
 
 
@@ -33,11 +36,20 @@ var confirm_btn = document.querySelector('#confirm');
 
 confirm_btn.addEventListener('click', function (event) {
 
-  //Ajax to verify the name if it will be changed
+    if (!document.getElementById('city').value ||
+        !document.getElementById('province').value) {
+          event.preventDefault();
+          printError("Please enter your city and province!");
 
-  document.querySelector("#signup-panel-1").style.display = 'none';
-  document.querySelector(".process-panel-wrap").classList.remove("is-active");
-  document.querySelector("#signup-panel-2").classList.add("is-active");
+    } else if (username_el.value.length < 3 ||
+      username_el.value.length > 16 || /\s/.test(username_el.value)) {
+          event.preventDefault();
+            username_err.innerHTML = "Must be 3 to 16 letters, without spaces!";
+    } else {
+        document.querySelector("#signup-panel-1").style.display = 'none';
+        document.querySelector(".process-panel-wrap").classList.remove("is-active");
+        document.querySelector("#signup-panel-2").classList.add("is-active");
+     }
 });
 
 
@@ -144,13 +156,26 @@ $(function() {
     }
   });
 
+
+  username_el.addEventListener('keyup', e => {
+      fetch(`/users/username-exists/?username=${e.target.value}`)
+      .then (resp => resp.json())
+      .then (data => {
+          if (data.status == '201') {
+            username_err.innerHTML= "This username is already taken!";
+          }
+          else {
+            username_err.innerHTML="";
+          }
+      })
+  });
+
+
   document.getElementById('code-input').addEventListener('keyup', e => {
 
     if (e.target.value.length == 6) {
       $(".loading").toggleClass("d-none");
       
-      document.getElementById('social-signup-submit').hidden = false;
-
       if (
           isNaN($("input[name='verify_code']").val()) ||
           $("input[name='verify_code']").val().length != 6 ||
@@ -168,45 +193,34 @@ $(function() {
               document.getElementById("id_phone_number").value = "+86" + main_phone_no;
           }
 
-        serialized_form = Object.fromEntries(new FormData(document.querySelector("form")));
-         console.log (serialized_form);
-
-
        $.ajax({
           url: "/users/cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/",
-          data: serialized_form,
+          data: Object.fromEntries(new FormData(document.querySelector("form"))),
           cache: false,
           type: "POST",
           success: function(data) {
             if (data.success == true) {
-              if (data) {
-                $("#results").empty().append(
-                    "<p class='blue-link'>Successfully verified your number! <p>"
-                  );
+                window.location.replace('/stories/');
+            } else {
+                  $("#results").empty().append(
+                      "<p class='text-error '>" + data.error_message + "</p>"
+                    );
+                  $("#send-code").attr("disabled", false);
+                  code_counter = code_counter + 1;
 
-                } else {
-                      $("#results").empty().append(
-                          "<p class='text-error '>" + data.error_message + "</p>"
-                        );
-                      $("#send-code").attr("disabled", false);
-                      code_counter = code_counter + 1;
-
-                      if (code_counter >= 5) {
-                        $("#phone-verify").attr("disabled", true);
-                        printError(
-                          "Maximum # of code retrial has reached, Try again later!");
-                      }
-                   }
-                   $(".loading").toggleClass("d-none");
-                 }
-              },
-              error: function(error) {
-                printError(error);
-              }
-            });
-            return false;
+                  if (code_counter >= 5) {
+                    $("#id_verify_code").attr("disabled", true);
+                    printError(
+                      "Max number of code retrial has reached, Try again later!");
+                  }
+               }
+          },
+          error: function(error) {
+            printError(error);
           }
-       }
+        });
+    return false;
+    }
+  }
   });
-
 });

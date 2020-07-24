@@ -40,6 +40,10 @@ urlpatterns = [
         view=views.complete_wechat_reg,
         name='complete_wechat'),
 
+    url(regex=r'^username-exists/$',
+        view=views.username_exists,
+        name='username_exists'),
+
     url(regex=r'^bulk-phone-update/$',
         view=views.bulk_update_user_phone_no,
         name='bulk_phone_update'),

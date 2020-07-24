@@ -48,6 +48,7 @@
                                                                 {% trans 'Username' %}
 															</label>
                                                             {{form.username}}
+                                                            <small id='username-errors' class='pass-text red'> </small>
 														</div>
 													 </div>
 												 </div>
@@ -152,11 +153,6 @@
 
                                               {{ form.wechat_openid }}
                                               {{ form.gender }}
-
-											<button type="submit" id="social-signup-submit" hidden
-													class="button is-rounded is-solid accent-button raised is-fullwidth"
-                                                    >{% trans 'Complete' %}
-                                            </button>
 
                                             <!--Close the form-panel -->
                                             </div>
