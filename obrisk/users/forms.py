@@ -155,7 +155,7 @@ class PhoneSignupForm(SignupForm):
         )
     verify_code = forms.IntegerField(
             widget=forms.TextInput(attrs={
-                'id':'code-input',
+                'id':'verify-code',
                 'class':'col-10',
                 'maxlength':'6',
                 'minlength':'6',
@@ -196,7 +196,7 @@ class PhoneSignupForm(SignupForm):
             set_form_field_order(self, self.field_order)
 
 
-    def save(self, request):
+    def save(self, request, *args, **kwargs):
         # Ensure you call the parent class's save.
         # .save() returns a User object.
         user = super(PhoneSignupForm, self).save(request)
@@ -220,7 +220,7 @@ class SocialSignupCompleteForm(PhoneSignupForm):
         super().__init__(*args, **kwargs)
         self.fields.pop('password1')
 
-    def save(self, request):
+    def save(self, request, *args, **kwargs):
         # Ensure you call the parent class's save.
         # .save() returns a User object.
         user = super().save(request)

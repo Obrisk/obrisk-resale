@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!document.getElementById('city').value && 
                 !document.getElementById('province').value) {
                     $(`#province option[value=${province}]`).attr('selected', 'selected');
-                    helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")
+                    helpers.city(geo_data[document.getElementById("province").selectedIndex - 1].cities, $city, "Select an option")
                     $(`#city option[value=${city}]`).attr('selected', 'selected');
             }
 		} else {

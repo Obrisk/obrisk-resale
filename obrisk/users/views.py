@@ -79,12 +79,12 @@ class EmailSignUp(SignupView):
     template_name = 'account/email_signup.html'
 
 
-def aliyun_send_code(random, full_number):
-    phone_no = str(full_number).strip('+86')
+def aliyun_send_code(random, phone_number):
+
     params = " {\"code\":\""+ random + "\"} "
     __business_id = uuid.uuid1()
     ret = send_sms(
-            __business_id, phone_no,
+            __business_id, phone_number,
             os.getenv('SMS_SIGNATURE'),
             os.getenv('SMS_TEMPLATE'), params)
     ret = ret.decode("utf-8")
@@ -94,7 +94,10 @@ def aliyun_send_code(random, full_number):
     return ast.literal_eval(ret)
 
 
-def aws_send_code(theme, random, full_number):
+def aws_send_code(theme, random, phone_number):
+
+    if len(phone_number) == 11:
+        phone_number = '+86' + phone_number
 
     client = boto3.client(
         "sns",
@@ -113,7 +116,7 @@ def aws_send_code(theme, random, full_number):
 
     # Send your sms message.
     ret = client.publish(
-        PhoneNumber=str(full_number),
+        PhoneNumber=str(phone_number),
         Message=msg,
         MessageAttributes={
             'string': {
@@ -130,14 +133,14 @@ def aws_send_code(theme, random, full_number):
     return ret['ResponseMetadata']
 
 
-def send_code(full_number, theme, user=None):
+def send_code(phone_number, theme, user=None):
     random = get_random_string(length=6, allowed_chars='0123456789')
 
     #if settings.DEBUG=True (default=False)
     if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
         print("Your phone number verification is....")
         print(random)
-        cache.set(str(full_number), random , 600)
+        cache.set(str(phone_number), random , 600)
         return JsonResponse({
             'success': True,
             'message': "We've sent the code, it is valid for 10 minutes!"
@@ -146,10 +149,10 @@ def send_code(full_number, theme, user=None):
     else:
         try:
             #try with Aliyun first
-            ret = aliyun_send_code(random, full_number)
+            ret = aliyun_send_code(random, phone_number)
 
             if ret['Code'] == 'OK':
-                cache.set(str(full_number), random , 600)
+                cache.set(str(phone_number), random , 600)
 
                 return JsonResponse({
                     'success': True,
@@ -157,9 +160,9 @@ def send_code(full_number, theme, user=None):
                 })
             else:
                 #retry with AWS
-                response = aws_send_code(theme, random, full_number)
+                response = aws_send_code(theme, random, phone_number)
                 if response['HTTPStatusCode'] == 200:
-                    cache.set(str(full_number), random , 600)
+                    cache.set(str(phone_number), random , 600)
 
                     return JsonResponse({
                         'success': True,
@@ -177,9 +180,9 @@ def send_code(full_number, theme, user=None):
 
         except Exception as e:
             #retry with AWS
-            response = aws_send_code(theme, random, full_number)
+            response = aws_send_code(theme, random, phone_number)
             if response['HTTPStatusCode'] == 200:
-                cache.set(str(full_number), random , 600)
+                cache.set(str(phone_number), random , 600)
 
                 return JsonResponse({
                     'success': True,
@@ -188,9 +191,9 @@ def send_code(full_number, theme, user=None):
 
             else:
                 #retry with Aliyun again
-                ret = aliyun_send_code(random, full_number)
+                ret = aliyun_send_code(random, phone_number)
                 if ret['Code'] == 'OK':
-                    cache.set(str(full_number), random , 600)
+                    cache.set(str(phone_number), random , 600)
 
                     return JsonResponse({
                         'success': True,
@@ -207,14 +210,17 @@ def send_code(full_number, theme, user=None):
                     })
 
 
-def get_users(full_number):
-    """Given an phone number, return matching user(s) who should receive a reset.
+def get_users(phone_number):
+    """Given a phone number, return matching user(s) who should receive a reset.
     This allows subclasses to more easily customize the default policies
     that prevent inactive users and users with unusable passwords from
     resetting their password.
     """
+    if len(phone_number) == 11:
+        phone_number = '+86' + phone_number
+
     try:
-        return get_user_model().objects.get(phone_number=full_number,is_active=True)
+        return get_user_model().objects.get(phone_number=phone_number,is_active=True)
     except get_user_model().DoesNotExist:
         return None
 
@@ -227,10 +233,9 @@ def phone_password_reset(request):
         if phone_number is not None and len(
                 phone_number) == 11 and phone_number[0] == '1':
 
-            full_number = "+86" + phone_number
-            user = get_users(full_number)
+            user = get_users(phone_number)
             if user:
-                return send_code(full_number, "password-reset", user=user)
+                return send_code(phone_number, "password-reset", user=user)
 
             else:
                 return JsonResponse({'success': False,
@@ -375,13 +380,12 @@ def send_code_sms(request):
         if (phone_no is not None and len(phone_no) == 11
             and phone_no[0] == '1' and phone_no != '13300000000'):
 
-            full_number = "+86" + phone_no
             check_phone = User.objects.filter(
-                    phone_number=full_number
+                    phone_number=phone_no
                 ).exists()
 
             if check_phone is False:
-                return send_code(full_number, "signup")
+                return send_code(phone_no, "signup")
 
             else:
                 return JsonResponse(
@@ -406,11 +410,10 @@ def phone_verify(request):
     if request.method == "GET":
         code = request.GET.get("code")
         phone_no = request.GET.get("phone_no")
-        full_number = "+86" + phone_no
 
         if phone_no is not None and code is not None:
             try:
-                saved_code = cache.get(str(full_number))
+                saved_code = cache.get(str(phone_no))
             except:
                 return JsonResponse({
                     'error_message': "The verification code has expired or it is invalid!"})
@@ -420,13 +423,13 @@ def phone_verify(request):
                             'HTTP_REFERER'
                             )).endswith("/users/phone-password-reset/"):
                         try:
-                            user = get_users(full_number)
+                            user = get_users(phone_no)
                         except:
                             return JsonResponse({'success': False,
                                                 'error_message': "Sorry \
                                                         there is a problem with this account. \
                                                         Please contact us!",
-                                                'phone_no': full_number })
+                                                'phone_no': phone_no })
                         else:
                             if user:
                                 token = default_token_generator.make_token(user)
@@ -728,10 +731,13 @@ def complete_wechat_reg(request, **kwargs):
         saved_code = cache.get(str(request.POST.get('phone_number')))
     except:
         return JsonResponse({
-            'error_message': "The verification code has expired or it is invalid!"})
+            'error_message': "The verification code has expired or is invalid!"})
     else:
         if str(saved_code) == str(request.POST.get('verify_code')):
-            form = SocialSignupCompleteForm(request.POST)
+
+            updated_request = request.POST.copy()
+            updated_request.update({'phone_number': '+86' + updated_request['phone_number']})
+            form = SocialSignupCompleteForm(updated_request)
 
             if form.is_valid():
                 try:
