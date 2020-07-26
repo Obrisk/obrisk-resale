@@ -98,6 +98,11 @@ class User(AbstractUser):
     points = models.IntegerField(  _('Points'), default=0)
     #Needs a country's code 
     phone_number = PhoneNumberField (_('Phone number'))
+
+    unverified_phone = PhoneNumberField (_('Unverified_phone'),
+            blank=True, null=True
+        )
+
     #For the use of published posts
     is_official = models.BooleanField (default=False)
     #For sellers in Classifieds.

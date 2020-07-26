@@ -651,7 +651,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid7',
+            'ui': 'thisisaveryuniqueopenid8',
             'sx': 2,
             'nck':'nickname',
             'ct': 'Fuzhou',
@@ -697,8 +697,6 @@ def wechat_getinfo_view_test(request):
                 form = SocialSignupCompleteForm(
                             initial={
                                 'username': user_data['nck'],
-                                'province_region': 'Select an option',
-                                'city': 'Select an option',
                                 'gender': user_data['sx'],
                                 'wechat_openid': user_data['ui'],
                             }

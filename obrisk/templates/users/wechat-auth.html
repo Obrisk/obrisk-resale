@@ -53,8 +53,13 @@
 													 </div>
 												 </div>
 
+                                                 </br>
 
-												<div class="input-group mb-3 mt-4">
+                                                 {% if not in_china %}
+                                                     <p> We currently support China users only! </p>
+                                                 {% endif %}
+
+												<div class="input-group mb-3 mt-2">
 													<div class="input-group">
 														<label class="" for="province">
                                                             {% trans 'Province' %}
@@ -145,6 +150,26 @@
 												</div>
 
 											  <div id="results" style="font-weight:bold;"> </div>
+
+                                              <a id='request-unverified-phone'> Can't verify? </a>
+
+                                              <input type="hidden" name="unverified-phone"
+                                              id="unverified-phone" />
+
+                                              <div id='unverify-form'> 
+                                                  <p> Provide brief explanation to why can't you verify your mobile number</p>
+                                                  <p> Our support engineer will contact you for further instructions</p>
+                                                  <input type="hidden" name="unverify-reason"
+                                                  id="unverify-reason" />
+
+                                                  Wechat ID: {{ form.wechat_id}}
+                                              
+                                                  <button
+                                                    class="button is-solid primary-button raised is-rounded is-fullwidth"
+                                                    id="cant-verify-submit" type="hidden">
+                                                    {% trans 'Submit' %}
+                                                  </button>
+                                              </div>
 
                                               {% if redirect_field_value %}
                                                   <input type="hidden" name="{{ redirect_field_name }}"

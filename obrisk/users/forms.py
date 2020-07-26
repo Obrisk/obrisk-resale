@@ -148,11 +148,14 @@ class PhoneSignupForm(SignupForm):
                 'pattern':'[0-9]{11}',
             }
         ),
+        required=False,
     )
+
     gender = forms.CharField(
             widget=forms.HiddenInput(),
             required=False
         )
+
     verify_code = forms.IntegerField(
             widget=forms.TextInput(attrs={
                 'id':'verify-code',
@@ -212,6 +215,11 @@ class PhoneSignupForm(SignupForm):
 
 class SocialSignupCompleteForm(PhoneSignupForm):
     wechat_openid = forms.CharField(
+            widget=forms.HiddenInput(),
+            required=False
+        )
+
+    wechat_id = forms.CharField(
             widget=forms.HiddenInput(),
             required=False
         )

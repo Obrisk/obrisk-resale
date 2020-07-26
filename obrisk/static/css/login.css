@@ -154,3 +154,20 @@ label {
 .red {
   color: #ff5f59;
 }
+
+//Wechat signup
+#request-unverified-phone{
+    display: none;
+    align-items: center;
+    margin-top: 3px;
+    justify-content: center;
+}
+
+#unverify-form {
+    z-index: 10;
+    display: none;
+}
+
+#unverify-reason {
+    margin-top: 3px;
+}
