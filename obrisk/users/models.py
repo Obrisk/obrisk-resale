@@ -103,6 +103,10 @@ class User(AbstractUser):
             blank=True, null=True
         )
 
+    notes = models.CharField(
+            max_length=1000, null=True, blank=True
+        )
+
     #For the use of published posts
     is_official = models.BooleanField (default=False)
     #For sellers in Classifieds.

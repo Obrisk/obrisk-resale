@@ -15,10 +15,22 @@ var results = document.getElementById('results');
 var phone_number = document.getElementById('id_phone_number');
 var verify_code_input = document.getElementById('verify-code');
 
+var panel_two = document.getElementById('signup-panel-2');
+var request_unverify = document.getElementById('request-unverified-phone');
+var unverify_form = document.getElementById('unverify-form');
+
+
 
 document.addEventListener('DOMContentLoaded', function () {
     var len = username_el.value.length;
     username_el.setSelectionRange(len, len);
+
+    $.wnoty({
+      type: "info",
+      autohide: false,
+      message: "🎉 You have linked your wechat a/c🎉 \n Lastly, verify your info"
+    });
+
 });
 
 
@@ -84,7 +96,7 @@ $(function() {
           success: function(data) {
             if (data.success == true) {
               timeout = 60;
-              send_code_btn.setAttribute("disabled", true);
+              send_code_btn.disabled = true;
               $("#phone_label").hide();
 
               document.getElementById("code").classList.remove("d-none")
@@ -99,10 +111,16 @@ $(function() {
                 timeout--;
                 if (timeout > 0) {
                   send_code_btn.textContent = timeout + " S";
+
+                  if (timeout == 45 && verify_code_input.value == "") {
+                      request_unverify.style.cssText += ';display:block !important;';
+                      //NOT working: r.style.display = null, block;
+                  }
                 } else {
-                  send_code_btn.textContent = "Resend Code";
-                  send_code_btn.setAttribute("disabled", false);
+                    send_code_btn.textContent = "Resend Code";
+                    send_code_btn.disabled = false;
                 }
+
               }
               // repeat with the interval of 1 seconds
               let timerId = setInterval(() => updateSec(), 1000);
@@ -115,7 +133,7 @@ $(function() {
               verify_counter = verify_counter + 1;
 
               if (verify_counter >= 7) {
-                send_code_btn.setAttribute("disabled", true);
+                send_code_btn.disabled = true;
                 printError(
                   "Maximum number of sending SMS has reached, Try again later!"
                 );
@@ -151,6 +169,23 @@ $(function() {
   });
 
 
+  request_unverify.addEventListener('click', e => {
+      unverify_form.style.cssText += ';display:block !important;';
+      panel_two.ClassList.remove('blur-out');
+      panel_two.ClassList.add('blur-in');
+      e.stopPropagation();
+
+  });
+
+
+  document.getElementById('close-unverify-form').addEventListener('click', e => {
+          unverify_form.style.display = 'none';
+          panel_two.ClassList.remove('blur-in');
+          panel_two.ClassList.add('blur-out');
+          e.stopPropagation();
+  });
+
+
   username_el.addEventListener('keyup', e => {
       fetch(`/users/username-exists/?username=${e.target.value}`)
       .then (resp => resp.json())
@@ -165,50 +200,76 @@ $(function() {
   });
 
 
+  function submitForm() {
+
+       $.ajax({
+          url: "/users/cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/",
+          data: Object.fromEntries(new FormData(document.querySelector("form"))),
+          cache: false,
+          type: "POST",
+          success: function(data) {
+            if (data.success == true) {
+                window.location.replace('/stories/');
+            } else {
+                  results.innerHTML="<p class='text-error '>" + data.error_message + "</p>" ;
+                  send_code_btn.disabled = false;
+                  unverify_form.style.display = 'none';
+                  panel_two.ClassList.remove('blur-in');
+                  panel_two.ClassList.add('blur-out');
+                  code_counter = code_counter + 1;
+
+                  if (code_counter >= 5) {
+                    verify_code_input.disabled = true;
+                    printError(
+                      "Max number of code retrial has reached, Try again later!");
+                  }
+               }
+          },
+          error: function(error) {
+            printError(error);
+          }
+        });
+      return false;
+  }
+
   verify_code_input.addEventListener('keyup', e => {
 
-    if (e.target.value.length == 6) {
-      $(".loading").toggleClass("d-none");
-      
-      if (
-          isNaN(verify_code_input.value) ||
-          verify_code_input.value.length != 6 ||
-          isNaN(phone_number.value) ||
-          phone_number.value.length.toString() != 11 ||
-          phone_number.value.charAt(0) != 1
-      ) {
-          event.preventDefault();
-              results.innerHTML="<p class='blue-link'> The code is not correct!<p>";
-      } else {
+        if (e.target.value.length == 6) {
+          document.getElementByClassName("loading").toggleClass("d-none");
 
-           $.ajax({
-              url: "/users/cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/",
-              data: Object.fromEntries(new FormData(document.querySelector("form"))),
-              cache: false,
-              type: "POST",
-              success: function(data) {
-                if (data.success == true) {
-                    window.location.replace('/stories/');
-                } else {
-                      results.innerHTML="<p class='text-error '>" + data.error_message + "</p>" ;
-                      send_code_btn.setAttribute("disabled", false);
-                      code_counter = code_counter + 1;
-
-                      if (code_counter >= 5) {
-                        verify_code_input.setAttribute("disabled", true);
-                        printError(
-                          "Max number of code retrial has reached, Try again later!");
-                      }
-                   }
-              },
-              error: function(error) {
-                printError(error);
-              }
-            });
-          return false;
-        }
+          if (
+              isNaN(verify_code_input.value) ||
+              verify_code_input.value.length != 6 ||
+              isNaN(phone_number.value) ||
+              phone_number.value.length.toString() != 11 ||
+              phone_number.value.charAt(0) != 1
+          ) {
+              event.preventDefault();
+                  results.innerHTML="<p class='blue-link'> The code or number is not correct!<p>";
+          } else {
+               submitForm();
+          }
       }
-  //Close verify_code_input keyup listener function
   });
+
+  document.getElementById('cant-verify-submit').addEventListener('click', e => {
+
+          if (
+              isNaN(phone_number.value) ||
+              phone_number.value.length.toString() != 11 ||
+              phone_number.value.charAt(0) != 1
+          ) {
+              event.preventDefault();
+                  results.innerHTML="<p class='blue-link'> The phone number is not correct!<p>";
+                  unverify_form.style.display = 'none';
+                  panel_two.ClassList.remove('blur-in');
+                  panel_two.ClassList.add('blur-out');
+                  e.stopPropagation();
+          } else {
+               document.getElementById('id_unverified_phone').value = phone_number.value;
+               phone_number.value = "";
+               submitForm();
+          }
+
 //Close jQuery function
 });

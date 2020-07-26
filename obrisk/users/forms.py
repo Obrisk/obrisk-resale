@@ -151,6 +151,16 @@ class PhoneSignupForm(SignupForm):
         required=False,
     )
 
+    unverified_phone = PhoneNumberField(
+        label=_('Phone number'),
+        widget=forms.HiddenInput(),
+        required=False,
+    )
+
+    notes = forms.CharField(
+        required=False
+    )
+
     gender = forms.CharField(
             widget=forms.HiddenInput(),
             required=False
@@ -177,7 +187,9 @@ class PhoneSignupForm(SignupForm):
             "phone_number",
             "password1",
             "password2",
-            "gender"
+            "gender",
+            "notes",
+            "unverified_phone"
         )
 
     def __init__(self, *args, **kwargs):
@@ -220,7 +232,6 @@ class SocialSignupCompleteForm(PhoneSignupForm):
         )
 
     wechat_id = forms.CharField(
-            widget=forms.HiddenInput(),
             required=False
         )
 

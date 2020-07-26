@@ -112,7 +112,7 @@ def aws_send_code(theme, random, phone_number):
     elif theme == "password-reset" and user:
         msg = f"[Obrisk] Verification code:{random} and Username:{user}"
     else:
-        msg = f"[Obrisk] the verification code is {random}, valid for 10 minutes!"
+        msg = f"[Obrisk] The verification code is {random}, valid for 10 minutes!"
 
     # Send your sms message.
     ret = client.publish(
@@ -143,7 +143,7 @@ def send_code(phone_number, theme, user=None):
         cache.set(str(phone_number), random , 600)
         return JsonResponse({
             'success': True,
-            'message': "We've sent the code, it is valid for 10 minutes!"
+            'message': "The code is sent, valid for 10 minutes"
         })
 
     else:
@@ -656,7 +656,7 @@ def wechat_getinfo_view_test(request):
             'nck':'nickname',
             'ct': 'Fuzhou',
             'pr': 'Fujian',
-            'cnt':  'Israel',
+            'cnt':  'China',
         }
 
         user = User.objects.filter(
