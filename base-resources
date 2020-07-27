@@ -1,0 +1,47 @@
+<script src="{% static 'js/fancybox.min.js' %}"></script>
+
+<script src="{% static 'js/lazyload.js' %}"></script>
+
+<!-- Page and UI related js -->
+<script src="{% static 'frontend/assets/js/feed.js' %}"></script>
+
+nodepath + "webui-popover/dist/jquery.webui-popover.min.js"
+
+nodepath + "quill/dist/quill.min.js",
+//Get external js assets
+assetspath + "js/fancybox.min.js"
+
+
+// Compile css from node modules
+gulp.task("compile-css", function() {
+  return gulp
+    .src([
+      //nodepath + 'path/to/file.min.css',
+      nodepath + "webui-popover/dist/jquery.webui-popover.min.css",
+      nodepath + "quill/dist/quill.core.css",
+      nodepath + "quill/dist/quill.snow.css",
+      //Other external css
+      assetspath + "css/fancybox.min.css"
+    ])
+    .pipe(concat("app.css"))
+    .pipe(gulp.dest("../obrisk/static/frontend/assets/css/"));
+});
+
+
+// Compile js from node modules
+gulp.task("compile-js", function() {
+  return gulp
+    .src([
+      nodepath + "feather-icons/dist/feather.min.js",
+    ])
+    .pipe(concat("app.js"))
+    .pipe(gulp.dest("../obrisk/static/frontend/assets/js/"));
+});
+
+
+<script src="{% static 'js/linkify.min.js' %}" type="text/javascript"></script>
+
+
+<link href="{% static 'frontend/assets/css/webfont.css' %}" rel="stylesheet">
+
+<link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">

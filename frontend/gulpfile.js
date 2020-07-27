@@ -163,35 +163,6 @@ gulp.task("compile-scss", function() {
     .pipe(gulp.dest("../obrisk/static/frontend/assets/css/"));
 });
 
-// Compile css from node modules
-gulp.task("compile-css", function() {
-  return gulp
-    .src([
-      //nodepath + 'path/to/file.min.css',
-      nodepath + "webui-popover/dist/jquery.webui-popover.min.css",
-      nodepath + "quill/dist/quill.core.css",
-      nodepath + "quill/dist/quill.snow.css",
-      //Other external css
-      assetspath + "css/fancybox.min.css"
-    ])
-    .pipe(concat("app.css"))
-    .pipe(gulp.dest("../obrisk/static/frontend/assets/css/"));
-});
-
-// Compile js from node modules
-gulp.task("compile-js", function() {
-  return gulp
-    .src([
-      nodepath + "jquery/dist/jquery.min.js",
-      nodepath + "feather-icons/dist/feather.min.js",
-      nodepath + "webui-popover/dist/jquery.webui-popover.min.js",
-      nodepath + "quill/dist/quill.min.js",
-      //Get external js assets
-      assetspath + "js/fancybox.min.js"
-    ])
-    .pipe(concat("app.js"))
-    .pipe(gulp.dest("../obrisk/static/frontend/assets/js/"));
-});
 
 //Copy Theme js to production site
 gulp.task("copy-js", function() {
@@ -206,6 +177,7 @@ gulp.task("copy-images", function() {
     .src("images/**/*")
     .pipe(gulp.dest("../obrisk/static/frontend/assets/images/"));
 });
+
 gulp.task("update-sw", function(cb) {
   exec("workbox injectManifest config.js", function(err, stdout, stderr) {
     console.log(stdout);
@@ -213,12 +185,12 @@ gulp.task("update-sw", function(cb) {
     cb(err);
   });
 });
+
 gulp.task("init", ["setupBulma"]);
+
 gulp.task("build", [
   "clean",
   "copy",
-  "compile-css",
-  "compile-js",
   "copy-js",
   "compile-sass",
   "compile-scss",
