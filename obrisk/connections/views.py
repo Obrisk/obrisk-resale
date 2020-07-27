@@ -48,7 +48,7 @@ def view_friends(request, template_name="connections/friends.html"):
 
     # Try to Get the recommendation list from cache
     recommended_connects = cache.get(
-            f"recommended_connects-{user.city}"
+            f"recommended_connects_{user.id}"
         )
 
     if recommended_connects is None:
@@ -73,7 +73,7 @@ def view_friends(request, template_name="connections/friends.html"):
             settings, "CONNECTS_RECOMMENDATION_TIMEOUT", DEFAULT_TIMEOUT
         )
         cache.set(
-            f"recommended_connects-{user.city}",
+            f"recommended_connects_{user.id}",
             recommended_connects,
             timeout=RECOMMENDATION_TIMEOUT,
         )
