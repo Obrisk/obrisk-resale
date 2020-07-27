@@ -7,7 +7,7 @@
 {% block head %}
 <title>{% trans 'Finish Signup' %}</title>
 
-<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}?v=2">
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
 
 {% endblock head %}
 
@@ -176,11 +176,11 @@
                                 id="cant-verify-submit" type="submit">
                                 {% trans 'Submit' %}
                               </button>
+                              {{ form.unverified_phone }}
                         </div>
 
                       {{ form.wechat_openid }}
                       {{ form.gender }}
-                      {{ form.unverified_phone }}
 
                 </form>
 

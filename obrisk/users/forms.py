@@ -175,7 +175,8 @@ class PhoneSignupForm(SignupForm):
                 'type':'tel',
                 'pattern':'[0-9]{6}',
                 'name':'code'
-                })
+                }),
+            required=False
         )
 
     class Meta:

@@ -112,13 +112,15 @@ $(function() {
                 if (timeout > 0) {
                   send_code_btn.textContent = timeout + " S";
 
-                  if (timeout == 45 && verify_code_input.value == "") {
-                      request_unverify.style.cssText += ';display:block !important;';
+                    if (timeout == 30 && verify_code_input.value == "") {
+                        request_unverify.style.cssText += ';display:block !important;';
                       //NOT working: r.style.display = null, block;
-                  }
+                    }
+
                 } else {
                     send_code_btn.textContent = "Resend Code";
                     send_code_btn.disabled = false;
+
                 }
 
               }
@@ -171,8 +173,9 @@ $(function() {
 
   request_unverify.addEventListener('click', e => {
       unverify_form.style.cssText += ';display:block !important;';
-      panel_two.ClassList.remove('blur-out');
-      panel_two.ClassList.add('blur-in');
+      document.getElementById('id_notes').focus();
+      panel_two.classList.remove('blur-out');
+      panel_two.classList.add('blur-in');
       e.stopPropagation();
 
   });
@@ -180,8 +183,8 @@ $(function() {
 
   document.getElementById('close-unverify-form').addEventListener('click', e => {
           unverify_form.style.display = 'none';
-          panel_two.ClassList.remove('blur-in');
-          panel_two.ClassList.add('blur-out');
+          panel_two.classList.remove('blur-in');
+          panel_two.classList.add('blur-out');
           e.stopPropagation();
   });
 
@@ -209,13 +212,14 @@ $(function() {
           type: "POST",
           success: function(data) {
             if (data.success == true) {
+                results.innerHTML="<p class='text-error'> Redirecting... Please wait!</p>" ;
                 window.location.replace('/stories/');
             } else {
                   results.innerHTML="<p class='text-error '>" + data.error_message + "</p>" ;
                   send_code_btn.disabled = false;
                   unverify_form.style.display = 'none';
-                  panel_two.ClassList.remove('blur-in');
-                  panel_two.ClassList.add('blur-out');
+                  panel_two.classList.remove('blur-in');
+                  panel_two.classList.add('blur-out');
                   code_counter = code_counter + 1;
 
                   if (code_counter >= 5) {
@@ -262,8 +266,8 @@ $(function() {
               event.preventDefault();
                   results.innerHTML="<p class='blue-link'> The phone number is not correct!<p>";
                   unverify_form.style.display = 'none';
-                  panel_two.ClassList.remove('blur-in');
-                  panel_two.ClassList.add('blur-out');
+                  panel_two.classList.remove('blur-in');
+                  panel_two.classList.add('blur-out');
                   e.stopPropagation();
           } else {
                document.getElementById('id_unverified_phone').value = phone_number.value;
@@ -271,5 +275,6 @@ $(function() {
                submitForm();
           }
 
+    });
 //Close jQuery function
 });
