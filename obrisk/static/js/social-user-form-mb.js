@@ -161,7 +161,7 @@ $(function() {
             }
           },
           error: function(err) {
-              code_notice.innerHTML = "<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>";
+              code_notice.innerHTML = "<p class='blue-link'> The signup is closed! Please try again later!<p>";
               console.log(err);
           }
         });
@@ -215,7 +215,7 @@ $(function() {
                 results.innerHTML="<p class='text-error'> Redirecting... Please wait!</p>" ;
                 window.location.replace('/stories/');
             } else {
-                  results.innerHTML="<p class='text-error '>" + data.error_message + "</p>" ;
+                  results.innerHTML="<p class='pass-text red'>" + data.error_message + "</p>" ;
                   send_code_btn.disabled = false;
                   unverify_form.style.display = 'none';
                   panel_two.classList.remove('blur-in');
@@ -233,13 +233,13 @@ $(function() {
             printError(error);
           }
         });
-      return false;
+        return false;
   }
 
   verify_code_input.addEventListener('keyup', e => {
 
         if (e.target.value.length == 6) {
-          document.getElementByClassName("loading").toggleClass("d-none");
+          document.getElementsByClassName("loading")[0].toggleClass("d-none");
 
           if (
               isNaN(verify_code_input.value) ||
@@ -252,6 +252,7 @@ $(function() {
                   results.innerHTML="<p class='blue-link'> The code or number is not correct!<p>";
           } else {
                submitForm();
+               return false;
           }
       }
   });
@@ -263,7 +264,7 @@ $(function() {
               phone_number.value.length.toString() != 11 ||
               phone_number.value.charAt(0) != 1
           ) {
-              event.preventDefault();
+                  e.preventDefault();
                   results.innerHTML="<p class='blue-link'> The phone number is not correct!<p>";
                   unverify_form.style.display = 'none';
                   panel_two.classList.remove('blur-in');
@@ -273,6 +274,7 @@ $(function() {
                document.getElementById('id_unverified_phone').value = phone_number.value;
                phone_number.value = "";
                submitForm();
+               return false;
           }
 
     });

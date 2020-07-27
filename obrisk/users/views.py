@@ -651,7 +651,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid8',
+            'ui': 'thisisaveryuniqueopenid13',
             'sx': 2,
             'nck':'nickname',
             'ct': 'Fuzhou',
@@ -663,7 +663,10 @@ def wechat_getinfo_view_test(request):
                 wechat_openid=user_data['ui']
             )
         if user.count() == 0:
-            cache.set(user_data['ui'], 'https://tse4-mm.cn.bing.net/th/id/OIP.W2LFjmdl817vzi0Ilvt3WAHaH3?pid=Api&rs=1', 3000)
+            cache.set(
+                user_data['ui'],
+                'https://media.freebibleimages.org/stories/FB_ISC_Kings_Queens/overview-images/001-isc-kings-queens.jpg?1538662549', #noqa
+                3000)
 
             user_data['nck'] = first_name = slugify(
                     user_data['nck'],
@@ -725,54 +728,60 @@ def wechat_getinfo_view_test(request):
 @ajax_required
 @require_http_methods(["POST"])
 def complete_wechat_reg(request, **kwargs):
-    try:
-        saved_code = cache.get(str(request.POST.get('phone_number')))
-    except:
-        return JsonResponse({
-            'error_message': "The verification code has expired or is invalid!"})
+
+    updated_request = request.POST.copy()
+    if request.POST.get('phone_number'):
+        try:
+            saved_code = cache.get(str(request.POST.get('phone_number')))
+        except:
+            return JsonResponse({
+                'error_message': "The verification code has expired or is invalid!"})
+        else:
+            if str(saved_code) == str(request.POST.get('verify_code')):
+
+                updated_request.update({'phone_number': '+86' + updated_request['phone_number']})
+
+    elif request.POST.get('wechat_id'):
+        updated_request.update({'unverified_phone': '+86' + updated_request['unverified_phone']})
+
     else:
-        if str(saved_code) == str(request.POST.get('verify_code')):
-
-            updated_request = request.POST.copy()
-            updated_request.update({'phone_number': '+86' + updated_request['phone_number']})
-            form = SocialSignupCompleteForm(updated_request)
-
-            if form.is_valid():
-                try:
-                    picture = cache.get(request.POST.get('wechat_openid'))
-                except:
-                    return JsonResponse({
-                        'success': False,
-                        'error_message': "Sorry we failed to register you. Try again later!"
-                    })
-
-                user = form.save(request, commit=False)
-                thumbnail = picture[:-3] + '64'
-                full_image = picture[:-3] + '0'
-
-                update_prof_pic_sync(
-                        user, thumbnail, picture, full_image
-                    )
-
-                login(
-                    request, user,
-                    backend='django.contrib.auth.backends.ModelBackend'
-                )
-
-                return JsonResponse({
-                    'success': True
-                })
-
-            else:
-                messages.error(request, form.errors)
-                return JsonResponse({
-                    'success': False,
-                    'error_message': str(form.errors)
-                })
-
         return JsonResponse({
             'success': False,
-            'error_message': "The verification code is not correct!"
+            'error_message': "Sorry we failed to register you. Try again later!"
+        })
+
+    form = SocialSignupCompleteForm(updated_request)
+
+    if form.is_valid():
+        try:
+            picture = cache.get(request.POST.get('wechat_openid'))
+        except:
+            return JsonResponse({
+                'success': False,
+                'error_message': "Sorry we failed to register you. Try again later!"
+            })
+
+        user = form.save(request, commit=False)
+        thumbnail = picture[:-3] + '64'
+        full_image = picture[:-3] + '0'
+
+        update_prof_pic_sync(
+                user, thumbnail, picture, full_image
+            )
+
+        login(
+            request, user,
+            backend='django.contrib.auth.backends.ModelBackend'
+        )
+
+        return JsonResponse({
+            'success': True
+        })
+
+    else:
+        return JsonResponse({
+            'success': False,
+            'error_message': str(form.errors)
         })
 
 
