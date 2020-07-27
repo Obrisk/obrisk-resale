@@ -401,6 +401,8 @@ https: //nzbin.github.io/three-dots
 .invalid-feedback strong,
 .blue-link {
   color: #3ec4e2;
+  font-weight: 400;
+  font-size: 15px;
 }
 .form-control.is-invalid {
   border-color: #3ec4e2;

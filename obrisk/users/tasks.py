@@ -4,6 +4,7 @@ import time
 import oss2
 import uuid
 
+from django.core.cache import cache
 from celery import shared_task
 from slugify import slugify
 
@@ -87,9 +88,10 @@ def update_profile_picture(user_id, socialapp):
 
     elif socialapp == 'wechat':
 
-        thumbnail = user.thumbnail
-        mid_size = user.picture
-        full_image = user.org_picture
+        picture = cache.get(user.wechat_openid)
+        thumbnail = picture[:-3] + '64'
+        mid_size = picture
+        full_image = picture[:-3] + '0'
 
     else:
         return None

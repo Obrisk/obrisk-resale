@@ -48,10 +48,12 @@ from obrisk.users.serializers import UserSerializer
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
-from obrisk.users.tasks import update_profile_picture, update_prof_pic_sync
+from obrisk.users.wechat_config import CHINA_PROVINCES
+from obrisk.users.tasks import update_prof_pic_sync
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
-        PhoneRequestPasswordForm, PhoneResetPasswordForm)
+        PhoneRequestPasswordForm, PhoneResetPasswordForm,
+        SocialSignupCompleteForm )
 from .models import User
 from .phone_verification import send_sms
 
@@ -77,12 +79,12 @@ class EmailSignUp(SignupView):
     template_name = 'account/email_signup.html'
 
 
-def aliyun_send_code(random, full_number):
-    phone_no = str(full_number).strip('+86')
+def aliyun_send_code(random, phone_number):
+
     params = " {\"code\":\""+ random + "\"} "
     __business_id = uuid.uuid1()
     ret = send_sms(
-            __business_id, phone_no,
+            __business_id, phone_number,
             os.getenv('SMS_SIGNATURE'),
             os.getenv('SMS_TEMPLATE'), params)
     ret = ret.decode("utf-8")
@@ -92,7 +94,10 @@ def aliyun_send_code(random, full_number):
     return ast.literal_eval(ret)
 
 
-def aws_send_code(theme, random, full_number):
+def aws_send_code(theme, random, phone_number):
+
+    if len(phone_number) == 11:
+        phone_number = '+86' + phone_number
 
     client = boto3.client(
         "sns",
@@ -107,11 +112,11 @@ def aws_send_code(theme, random, full_number):
     elif theme == "password-reset" and user:
         msg = f"[Obrisk] Verification code:{random} and Username:{user}"
     else:
-        msg = f"[Obrisk] the verification code is {random}, valid for 10 minutes!"
+        msg = f"[Obrisk] The verification code is {random}, valid for 10 minutes!"
 
     # Send your sms message.
     ret = client.publish(
-        PhoneNumber=str(full_number),
+        PhoneNumber=str(phone_number),
         Message=msg,
         MessageAttributes={
             'string': {
@@ -128,26 +133,26 @@ def aws_send_code(theme, random, full_number):
     return ret['ResponseMetadata']
 
 
-def send_code(full_number, theme, user=None):
+def send_code(phone_number, theme, user=None):
     random = get_random_string(length=6, allowed_chars='0123456789')
 
     #if settings.DEBUG=True (default=False)
     if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
         print("Your phone number verification is....")
         print(random)
-        cache.set(str(full_number), random , 600)
+        cache.set(str(phone_number), random , 600)
         return JsonResponse({
             'success': True,
-            'message': "We've sent the code, it is valid for 10 minutes!"
+            'message': "The code is sent, valid for 10 minutes"
         })
 
     else:
         try:
             #try with Aliyun first
-            ret = aliyun_send_code(random, full_number)
+            ret = aliyun_send_code(random, phone_number)
 
             if ret['Code'] == 'OK':
-                cache.set(str(full_number), random , 600)
+                cache.set(str(phone_number), random , 600)
 
                 return JsonResponse({
                     'success': True,
@@ -155,9 +160,9 @@ def send_code(full_number, theme, user=None):
                 })
             else:
                 #retry with AWS
-                response = aws_send_code(theme, random, full_number)
+                response = aws_send_code(theme, random, phone_number)
                 if response['HTTPStatusCode'] == 200:
-                    cache.set(str(full_number), random , 600)
+                    cache.set(str(phone_number), random , 600)
 
                     return JsonResponse({
                         'success': True,
@@ -175,9 +180,9 @@ def send_code(full_number, theme, user=None):
 
         except Exception as e:
             #retry with AWS
-            response = aws_send_code(theme, random, full_number)
+            response = aws_send_code(theme, random, phone_number)
             if response['HTTPStatusCode'] == 200:
-                cache.set(str(full_number), random , 600)
+                cache.set(str(phone_number), random , 600)
 
                 return JsonResponse({
                     'success': True,
@@ -186,9 +191,9 @@ def send_code(full_number, theme, user=None):
 
             else:
                 #retry with Aliyun again
-                ret = aliyun_send_code(random, full_number)
+                ret = aliyun_send_code(random, phone_number)
                 if ret['Code'] == 'OK':
-                    cache.set(str(full_number), random , 600)
+                    cache.set(str(phone_number), random , 600)
 
                     return JsonResponse({
                         'success': True,
@@ -205,14 +210,17 @@ def send_code(full_number, theme, user=None):
                     })
 
 
-def get_users(full_number):
-    """Given an phone number, return matching user(s) who should receive a reset.
+def get_users(phone_number):
+    """Given a phone number, return matching user(s) who should receive a reset.
     This allows subclasses to more easily customize the default policies
     that prevent inactive users and users with unusable passwords from
     resetting their password.
     """
+    if len(phone_number) == 11:
+        phone_number = '+86' + phone_number
+
     try:
-        return get_user_model().objects.get(phone_number=full_number,is_active=True)
+        return get_user_model().objects.get(phone_number=phone_number,is_active=True)
     except get_user_model().DoesNotExist:
         return None
 
@@ -225,10 +233,9 @@ def phone_password_reset(request):
         if phone_number is not None and len(
                 phone_number) == 11 and phone_number[0] == '1':
 
-            full_number = "+86" + phone_number
-            user = get_users(full_number)
+            user = get_users(phone_number)
             if user:
-                return send_code(full_number, "password-reset", user=user)
+                return send_code(phone_number, "password-reset", user=user)
 
             else:
                 return JsonResponse({'success': False,
@@ -373,13 +380,12 @@ def send_code_sms(request):
         if (phone_no is not None and len(phone_no) == 11
             and phone_no[0] == '1' and phone_no != '13300000000'):
 
-            full_number = "+86" + phone_no
             check_phone = User.objects.filter(
-                    phone_number=full_number
+                    phone_number=phone_no
                 ).exists()
 
             if check_phone is False:
-                return send_code(full_number, "signup")
+                return send_code(phone_no, "signup")
 
             else:
                 return JsonResponse(
@@ -404,11 +410,10 @@ def phone_verify(request):
     if request.method == "GET":
         code = request.GET.get("code")
         phone_no = request.GET.get("phone_no")
-        full_number = "+86" + phone_no
 
         if phone_no is not None and code is not None:
             try:
-                saved_code = cache.get(str(full_number))
+                saved_code = cache.get(str(phone_no))
             except:
                 return JsonResponse({
                     'error_message': "The verification code has expired or it is invalid!"})
@@ -418,13 +423,13 @@ def phone_verify(request):
                             'HTTP_REFERER'
                             )).endswith("/users/phone-password-reset/"):
                         try:
-                            user = get_users(full_number)
+                            user = get_users(phone_no)
                         except:
                             return JsonResponse({'success': False,
                                                 'error_message': "Sorry \
                                                         there is a problem with this account. \
                                                         Please contact us!",
-                                                'phone_no': full_number })
+                                                'phone_no': phone_no })
                         else:
                             if user:
                                 token = default_token_generator.make_token(user)
@@ -529,26 +534,8 @@ class PhonePasswordResetConfirmView(FormView):
             return self.form_invalid(form)
 
 
-class AutoLoginView(LoginView):
-    pass
 
-
-@login_required
-@require_http_methods(["GET"])
-def bulk_update_user_phone_no(request):
-    """ A temporally view to create Conversations to users already chatted
-    before Convervation model was created."""
-    users = User.objects.all()
-    for user in users:
-        if isinstance(user.phone_number, PhoneNumber):
-            if not user.phone_number.country_code:
-                user.phone_number = '+8613300000000'
-                user.save()
-
-    return redirect('stories:list')
-
-
-@ajax_required
+#ajax_required
 @require_http_methods(["GET"])
 def username_exists(request):
     """A function view to check if the username exists"""
@@ -556,13 +543,11 @@ def username_exists(request):
     if User.objects.filter(username__contains=prefered_name.lower()):
         return JsonResponse({
             "status": "201",
-            "username":prefered_name,
             "message": "This username is taken"
         })
     else:
         return JsonResponse({
             "status": "200",
-            "username":prefered_name,
             "message": "This username is available"})
 
 
@@ -577,6 +562,8 @@ class AuthView(WechatViewSet):
 
 
 class GetInfoView(WechatViewSet):
+    http_method_names = ['get', 'post']
+
     def get(self, request):
         if 'code' in request.GET:
             code = request.GET['code']
@@ -592,7 +579,7 @@ class GetInfoView(WechatViewSet):
 
             user_data = {
                 'nck': user_info['nickname'],
-                'ky': user_info['sex'],
+                'sx': user_info['sex'],
                 'pr': user_info['province'].encode('iso8859-1').decode('utf-8'),
                 'ct': user_info['city'].encode('iso8859-1').decode('utf-8'),
                 'cnt': user_info['country'].encode('iso8859-1').decode('utf-8'),
@@ -616,14 +603,35 @@ class GetInfoView(WechatViewSet):
                         break
                     user_data['nck'] = '%s-%d' % (first_name, x)
 
-                if user_data['pr'] in (
-                        'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-                    user_data['ct'] = user_data['pr']
+                in_china=False
+                if str(user_data['cnt']) == 'China':
+                    in_china=True
 
-                return HttpResponseRedirect(reverse(
-                            'users:complete_wechat',
-                            kwargs=user_data
-                        )
+                    if user_data['pr'] in (
+                            'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
+                        user_data['ct'] = user_data['pr']
+
+
+                    form = SocialSignupCompleteForm(
+                                initial={
+                                    'username': user_data['nck'],
+                                    'province_region': user_data['pr'],
+                                    'city': user_data['ct'],
+                                    'gender': user_data['sx'],
+                                    'wechat_openid': user_data['ui'],
+                                }
+                            )
+                else:
+                    form = SocialSignupCompleteForm(
+                                initial={
+                                    'username': user_data['nck'],
+                                    'gender': user_data['sx'],
+                                    'wechat_openid': user_data['ui'],
+                                }
+                            )
+                return render(request,
+                        'users/wechat-auth.html',
+                        {'form': form, 'in_china': in_china}
                     )
             else:
                 login(
@@ -638,89 +646,143 @@ class GetInfoView(WechatViewSet):
              )
 
 
-def wechat_test(request):
-
-    user_data = {
-        'ui': 'thisisaveryuniqueopenid',
-        'ky': 2,
-        'nck':'nickname',
-        'ct': 'Fuzhou',
-        'pr': 'Fujian',
-        'cnt':  'China',
-    }
-
-    user = User.objects.filter(
-            wechat_openid=user_data['ui']
-        )
-    if user.count() == 0:
-
-        cache.set(user_data['ui'], 'https://images.freeimages.com/images/large-previews/b2d/kiwi-fruit-macros-1313905.jpg', 3000)
-
-        user_data['nck'] = first_name = slugify(
-                user_data['nck'],
-                max_length=16
-            )
-
-        for x in itertools.count(1):
-            if not User.objects.filter(username=user_data['nck']).exists():
-                break
-            user_data['nck'] = '%s-%d' % (first_name, x)
-
-        if user_data['pr'] in (
-                'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-            user_data['ct'] = user_data['pr']
-
-        return HttpResponseRedirect(reverse(
-                    'users:complete_wechat',
-                    kwargs=user_data
-                )
-            )
-
-    return HttpResponseBadRequest(
-         content=_('Bad request')
-     )
-
-
-@api_view(['GET', 'POST'])
-def complete_wechat_reg(request, **kwargs):
+def wechat_getinfo_view_test(request):
 
     if request.method == 'GET':
-        return render(request, 'users/wechat-auth.html')
 
-    user_data = request.kwargs
-    print(user_data)
+        user_data = {
+            'ui': 'thisisaveryuniqueopenid13',
+            'sx': 2,
+            'nck':'nickname',
+            'ct': 'Fuzhou',
+            'pr': 'Fujian',
+            'cnt':  'China',
+        }
 
-    try:
-        picture = cache.get( request.kwargs['ui'])
-    except:
-        return HttpResponseServerError(
-                'Sorry we could not register you. Please try again later!'
+        user = User.objects.filter(
+                wechat_openid=user_data['ui']
             )
-    try:
-        user = User.objects.create(
-                username=user_data['nickname'],
-                city=user_data['city'],
-                province_region=user_data['province'],
-                country=user_data['country'],
-                gender=str(user_data['sex']),
-                picture=user_data['avatar'],
-                thumbnail=user_data['avatar'][:-3] + '64',
-                org_picture=user_data['avatar'][:-3] + '0',
-                wechat_openid=user_data['openid']
+        if user.count() == 0:
+            cache.set(
+                user_data['ui'],
+                'https://media.freebibleimages.org/stories/FB_ISC_Kings_Queens/overview-images/001-isc-kings-queens.jpg?1538662549', #noqa
+                3000)
+
+            user_data['nck'] = first_name = slugify(
+                    user_data['nck'],
+                    max_length=16
+                )
+
+            for x in itertools.count(1):
+                if not User.objects.filter(username=user_data['nck']).exists():
+                    break
+                user_data['nck'] = '%s-%d' % (first_name, x)
+
+            in_china=False
+            if str(user_data['cnt']) == 'China':
+                in_china=True
+
+                if user_data['pr'] in (
+                        'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
+                    user_data['ct'] = user_data['pr']
+
+
+                form = SocialSignupCompleteForm(
+                            initial={
+                                'username': user_data['nck'],
+                                'province_region': user_data['pr'],
+                                'city': user_data['ct'],
+                                'gender': user_data['sx'],
+                                'wechat_openid': user_data['ui'],
+                            }
+                        )
+            else:
+                form = SocialSignupCompleteForm(
+                            initial={
+                                'username': user_data['nck'],
+                                'gender': user_data['sx'],
+                                'wechat_openid': user_data['ui'],
+                            }
+                        )
+            return render(request,
+                    'users/wechat-auth.html',
+                    {'form': form, 'in_china': in_china}
+                )
+
+        else:
+            login(
+                request, user.first(),
+                backend='django.contrib.auth.backends.ModelBackend'
+            )
+            return HttpResponseRedirect(reverse('stories:list'))
+        return HttpResponseBadRequest(
+             content=_('Bad request')
+         )
+
+    else:
+        return HttpResponseBadRequest(
+             content=_('Bad request')
+         )
+
+
+@ajax_required
+@require_http_methods(["POST"])
+def complete_wechat_reg(request, **kwargs):
+
+    updated_request = request.POST.copy()
+    if request.POST.get('phone_number'):
+        try:
+            saved_code = cache.get(str(request.POST.get('phone_number')))
+        except:
+            return JsonResponse({
+                'error_message': "The verification code has expired or is invalid!"})
+        else:
+            if str(saved_code) == str(request.POST.get('verify_code')):
+
+                updated_request.update({'phone_number': '+86' + updated_request['phone_number']})
+
+    elif request.POST.get('wechat_id'):
+        updated_request.update({'unverified_phone': '+86' + updated_request['unverified_phone']})
+
+    else:
+        return JsonResponse({
+            'success': False,
+            'error_message': "Sorry we failed to register you. Try again later!"
+        })
+
+    form = SocialSignupCompleteForm(updated_request)
+
+    if form.is_valid():
+        try:
+            picture = cache.get(request.POST.get('wechat_openid'))
+        except:
+            return JsonResponse({
+                'success': False,
+                'error_message': "Sorry we failed to register you. Try again later!"
+            })
+
+        user = form.save(request, commit=False)
+        thumbnail = picture[:-3] + '64'
+        full_image = picture[:-3] + '0'
+
+        update_prof_pic_sync(
+                user, thumbnail, picture, full_image
             )
 
-        update_profile_picture.delay(user.id, 'wechat')
-    except IntegrityError:
-        return HttpResponseServerError(
-                'Sorry we could not register you. Please try again later!'
-            )
+        login(
+            request, user,
+            backend='django.contrib.auth.backends.ModelBackend'
+        )
 
-    #Redirect to a page to complete phone number & City
-    login(
-        request, user,
-        backend='django.contrib.auth.backends.ModelBackend')
+        return JsonResponse({
+            'success': True
+        })
 
-    return HttpResponseRedirect(reverse('stories:list'))
+    else:
+        return JsonResponse({
+            'success': False,
+            'error_message': str(form.errors)
+        })
 
 
 @ajax_required
@@ -744,7 +806,28 @@ def complete_authentication(request):
             return redirect("stories:list")
 
         else:
-            return JsonResponse({"status": "403", "message": "Please enter valid inputs"})
+            return JsonResponse({"status": "403",
+                "message": "Please enter valid inputs"})
 
     else:
         return redirect("stories:list")
+
+
+class AutoLoginView(LoginView):
+    pass
+
+
+@login_required
+@require_http_methods(["GET"])
+def bulk_update_user_phone_no(request):
+    """ A temporally view to create Conversations to users already chatted
+    before Convervation model was created."""
+    users = User.objects.all()
+    for user in users:
+        if isinstance(user.phone_number, PhoneNumber):
+            if not user.phone_number.country_code:
+                user.phone_number = '+8613300000000'
+                user.save()
+
+    return redirect('stories:list')
+

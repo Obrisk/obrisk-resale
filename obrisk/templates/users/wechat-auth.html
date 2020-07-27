@@ -13,168 +13,180 @@
 
 {% block content %}
 
-	<!--Right Side-->
-	<div class="column is-6">
-		<div class="hero form-hero is-fullheight">
+<div class=" hero form-hero form-wrapper">
+    <!--Form-->
+    <div id= "wechat-signup-form" class="login-form  hero-body">
 
-			<!--Signup Form-->
-			<div class="hero-body p-0">
-				<div class="form-wrapper">
-					<!--Form-->
-					<div class="login-form">
+        <div class="signup-wrapper">
+            <div class="outer-panel">
 
-						<div class="signup-wrapper">
-							<div class="outer-panel">
-								<div class="outer-panel-inner">
+                <form class="signup" id="signup_form" method="post" name="social_signup_form"
+                    action="{% url 'users:complete_wechat' %}" role="form">
 
-                                    <form class="signup" id="signup_form" method="post" action="{% url 'socialaccount_signup' %}">
+                    {% csrf_token %}
 
-										{% csrf_token %}
+                    <div id="signup-panel-1"
+                        class=" step-dot-1 process-panel-wrap is-narrow is-active">
 
-										<div id="signup-panel-1"
-											class=" step-dot-1 process-panel-wrap is-narrow is-active">
-
-										<div class="text-center">
-                                            <p>{% blocktrans %}🎉 You have linked your wechat a/c🎉 {% endblocktrans %} </p>
-                                            <p> {% trans 'Lastly, Please verify your info' %}</p>
-										</div>
+                        <div class="text-center">
+                            <p> {% trans 'Wechat signup verification' %}</p>
+                        </div>
 
 
-											<div class="form-panel">
-												<div class="form-row mt-0">
-													<div class="form-group col-md-12 mb-0" id="username">
-														<div class="input-group">
-															<label for="username">
-                                                                {% trans 'Username' %}
-															</label>
-														</div>
+                        <div class="form-panel form-panel-top">
+                            <div class="form-row mt-0">
+                                <div class="form-group col-md-12 mb-0" id="username">
+                                    <div class="input-group">
+                                        <label for="username">
+                                            {% trans 'Username' %}
+                                        </label>
+                                        {{form.username}}
+                                        <small id='username-errors' class='pass-text red'> </small>
+                                    </div>
+                                 </div>
+                             </div>
 
-                                                        <input class="col-10" maxlength="16" minlength="6" type="tel"
-                                                          pattern="" value="this" name="code" id="code-input">
+                             </br>
 
-													</div>
-												</div>
+                             {% if not in_china %}
+                                 <small class='blue-link'> We currently support China users only! </small>
+                             {% endif %}
 
-												<div class="input-group mb-3 mt-4">
-													<div class="input-group">
-														<label class="" for="province">
-                                                            {% trans 'Province' %}
-                                                        </label>
-													</div>
-													<select class="custom-select" id="province" name="province"
-														autocomplete="on"></select>
-												</div>
+                            <div class="input-group mb-3 mt-2">
+                                <div class="input-group">
+                                    <label class="" for="province">
+                                        {% trans 'Province' %}
+                                    </label>
+                                </div>
+                                {{ form.province_region }}
+                            </div>
 
-												<div class="input-group mb-3">
-													<div class="input-group">
-														<label class="" for="city">
-                                                            {% trans 'City' %}
-                                                        </label>
-													</div>
-													<select class="custom-select" id="city" name="city"
-														autocomplete="on">
-													</select>
-												</div>
+                            <div class="input-group mb-3">
+                                <div class="input-group">
+                                    <label class="" for="city">
+                                        {% trans 'City' %}
+                                    </label>
+                                </div>
+                                {{ form.city }}
+                            </div>
 
-                                                <button
-                                                    class="button is-solid primary-button raised is-rounded is-fullwidth"
-                                                    type="button">
-                                                    {% trans 'Verify' %}
-                                                </button>
+                            <button id="confirm"
+                                class="button is-solid primary-button raised is-rounded is-fullwidth"
+                                type="button">
+                                {% trans 'Confirm' %}
+                            </button>
 
-											</div>
+                        <!--Close the form-panel -->
+                        </div>
 
+                    <!--Close the signup-panel-1 -->
+                    </div>
 
-										<div id="signup-panel-2" class=" step-dot-2 process-panel-wrap is-narrow ">
+                    <div id="signup-panel-2" class="step-dot-2 process-panel-wrap is-narrow blur-out">
 
+                     <div class="form-panel">
+                        <div class=" mb-0">
+                            <div class="input-group">
+                                <label for="phone_number">
+                                    {% trans 'Phone Number' %}
+                                </label>
+                            </div>
+                            {{ form.phone_number }}
+                        </div>
 
-                                        <div class="form-panel">
-                                            <div class=" mb-0">
-                                                <div class="input-group">
-                                                    <label for="phone_number">
-                                                        {% trans 'Phone Number' %}
-                                                    </label>
-                                                </div>
-                                                {{ form.phone_number }}
-                                            </div>
+                        <div class=" mt-2">
+                            <button
+                                class="button is-solid primary-button raised is-rounded is-fullwidth"
+                                id="send-code" type="button">
+                                {% trans 'Verify' %}
+                            </button>
+                        </div>
 
-                                            <div class=" mt-2">
-                                                <button
-                                                    class="button is-solid primary-button raised is-rounded is-fullwidth"
-                                                    id="send-code" type="button">
-                                                    {% trans 'Verify' %}
-                                                </button>
-                                            </div>
+                        <div id="code-notice" style="font-weight:bold;"></div>
 
-												<div id="code-notice" style="font-weight:bold;"></div>
+                        <div class="d-none" id="code">
+                            <div class="form-group ">
+                                <div class="input-group">
+                                    <label for="code">
+                                        {% trans 'Code*' %}
+                                    </label>
+                                </div>
 
-												<div class="d-none" id="code">
-													<div class="form-group ">
-														<div class="input-group">
-															<label for="code">
-                                                                {% trans 'Code*' %}
-                                                            </label>
-														</div>
+                                <div class="d-flex">
+                                    {{ form.verify_code }}
 
-														<div class="d-flex">
-															<input class="col-10" maxlength="6" minlength="6" type="tel"
-																pattern="[0-9]{6}" name="code" id="code-input">
+                                    <div>
+                                        <svg class="loading d-none"
+                                            xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-loader">
+                                            <line x1="12" y1="2" x2="12" y2="6"></line>
+                                            <line x1="12" y1="18" x2="12" y2="22"></line>
+                                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
+                                            </line>
+                                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
+                                            </line>
+                                            <line x1="2" y1="12" x2="6" y2="12"></line>
+                                            <line x1="18" y1="12" x2="22" y2="12"></line>
+                                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
+                                            </line>
+                                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
+                                            </line>
+                                        </svg>
+                                    </div>
+                                </div>
 
-															<div class="">
-																<svg class="loading d-none"
-																	xmlns="http://www.w3.org/2000/svg" width="24"
-																	height="24" viewBox="0 0 24 24" fill="none"
-																	stroke="currentColor" stroke-width="2"
-																	stroke-linecap="round" stroke-linejoin="round"
-																	class="feather feather-loader">
-																	<line x1="12" y1="2" x2="12" y2="6"></line>
-																	<line x1="12" y1="18" x2="12" y2="22"></line>
-																	<line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
-																	</line>
-																	<line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
-																	</line>
-																	<line x1="2" y1="12" x2="6" y2="12"></line>
-																	<line x1="18" y1="12" x2="22" y2="12"></line>
-																	<line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
-																	</line>
-																	<line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
-																	</line>
-																</svg>
-															</div>
-														</div>
+                                <div></div>
+                                </div>
+                            </div>
 
-														<div></div>
-													</div>
-												</div>
+                          <div id="results" style="font-weight:bold;"> </div>
 
-											  <div id="results" style="font-weight:bold;"> </div>
-											  <input type="hidden" name="verified_no" id="verified_no">
+                          <a id='request-unverified-phone'> Can't verify? </a>
 
-                                              {% if redirect_field_value %}
-                                                  <input type="hidden" name="{{ redirect_field_name }}"
-                                                  value="{{ redirect_field_value }}" />
-                                              {% endif %}
+                        <!--Close the form-panel -->
+                        </div>
 
+                      <!--Close the signup-panel-2 -->
+                      </div>
 
-											<button type="submit" id="social-signup-submit"
-													class="button is-rounded is-solid accent-button raised is-fullwidth"
-                                                    data-step="step-dot-4">{% trans 'Complete' %}
-                                            </button>
-
-											</div>
-										</div>
+                      {% if redirect_field_value %}
+                          <input type="hidden" name="{{ redirect_field_name }}"
+                          value="{{ redirect_field_value }}" />
+                      {% endif %}
 
 
-									</form>
+                     <!-- Modal content -->
+                      <div id='unverify-form'> 
+                          <span class="close" id=close-unverify-form> ❌ </span>
+                          </br>
+                              <p>Reason to why you can't verify?</p> 
+                              {{ form.notes }}
 
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+                              <p class='mt-2'>Your Wechat ID:<p>
+                              {{ form.wechat_id}}
+                              <br>
+                              
+                              <small> We'll contact you to confirm</small>
+                          
+                              <button
+                                class="button is-solid primary-button raised is-rounded is-fullwidth"
+                                id="cant-verify-submit" type="button">
+                                {% trans 'Submit' %}
+                              </button>
+                              {{ form.unverified_phone }}
+                        </div>
+
+                      {{ form.wechat_openid }}
+                      {{ form.gender }}
+
+                </form>
+
+            </div>
+        </div>
+    </div>
 </div>
 
 {% endblock content %}
@@ -185,6 +197,9 @@
 <script type="text/javascript">
 	var current_url = "{{ request.path }}";
 	var errors = false;
+    var in_china = false;
+    var province = '';
+    var city = '';
 
 	{% if form.errors %}
         errors = true;
@@ -203,6 +218,13 @@
     {% if "username" in form.errors %}
         $("#username").append(`<small class="pass-text red"> {{form.errors.username}} </small>`)
     {% endif %}
+
+    {% if in_china %}
+        in_china = true;
+        province = '{{ form.province_region.value }}';
+        city = '{{ form.city.value }}';
+    {% endif %}
+
 
 </script>
 

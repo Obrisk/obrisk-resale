@@ -5,6 +5,7 @@ from django.contrib.auth.forms import (
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core import validators
+from django.forms.widgets import Select, SelectMultiple
 from allauth.account.forms import (
     SignupForm, LoginForm, PasswordField)
 from allauth.utils import (
@@ -14,6 +15,8 @@ from allauth.socialaccount.forms import (
     )
 from phonenumber_field.formfields import PhoneNumberField
 from django.contrib.auth import get_user_model
+
+from obrisk.users.wechat_config import CHINA_PROVINCES
 
 User = get_user_model()
 
@@ -35,9 +38,11 @@ class UserForm(forms.ModelForm):
         widget=forms.Textarea(attrs={"rows": 3}),
         required=False
     )
-    province_region = forms.CharField(widget=forms.HiddenInput())
+    province_region = forms.CharField(
+            widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
-    job_title = forms.CharField(required=False, label=("Occupation"))
+    job_title = forms.CharField(
+            required=False, label=("Occupation"))
     address = forms.CharField(required=False)
 
     class Meta:
@@ -53,13 +58,56 @@ class UserForm(forms.ModelForm):
         }
 
 
+
+class SelectWidget(Select):
+    """
+    Select With Option Attributes:
+        subclass of Django's Select widget that allows attributes in options,
+        like disabled="disabled", title="help text", class="some classes",
+              style="background: color;"...
+
+    Pass a dict instead of a string for its label:
+        choices = [ ('value_1', 'label_1'),
+                    ...
+                    ('value_k', {'label': 'label_k', 'foo': 'bar', ...}),
+                    ... ]
+    The option k will be rendered as:
+        <option value="value_k" foo="bar" ...>label_k</option>
+    """
+
+    def create_option(self, name, value, label, selected, index,
+                      subindex=None, attrs=None):
+        if isinstance(label, dict):
+            opt_attrs = label.copy()
+            label = opt_attrs.pop('label')
+        else:
+            opt_attrs = {}
+        option_dict = super(SelectWOA, self).create_option(name, value,
+            label, selected, index, subindex=subindex, attrs=attrs)
+        for key,val in opt_attrs.items():
+            option_dict['attrs'][key] = val
+        return option_dict
+
+class ProvinceChoiceField(forms.ChoiceField):
+
+    def validate(self, value):
+        if value not in CHINA_PROVINCES:
+            raise ValidationError("We currently support our services to users in China cities only!")
+
+
+class CityChoiceField(forms.ChoiceField):
+
+    def validate(self, value):
+        pass
+
+
 # This form inherits all-auth.
 class PhoneSignupForm(SignupForm):
 
     error_messages = {
         "account_inactive": _("This account is currently inactive."),
         "username_password_mismatch": _(
-            "The phone number/username or password you specified are not correct."
+            "Phone no./username or password is not correct."
         ),
     }
 
@@ -72,21 +120,61 @@ class PhoneSignupForm(SignupForm):
                        attrs={'placeholder':
                               _('< 16 letters. No spaces'),
                               'autofocus': 'autofocus'}))
-    province_region = forms.CharField(widget=forms.HiddenInput())
-    city = forms.CharField(widget=forms.HiddenInput())
+    province_region = ProvinceChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'province',
+                    'class': 'custom-select',
+                    'name': 'province_region',
+                    'autocomplete': 'on'
+            })
+        )
+    city = CityChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'city',
+                    'class': 'custom-select',
+                    'name': 'city',
+                    'autocomplete': 'on'
+            })
+        )
     phone_number = PhoneNumberField(
-        label=_("Phone number"),
+        label=_('Phone number'),
         widget=forms.TextInput(
             attrs={
-                "placeholder" : _('E.g 13291863081'),
-                "autofocus": "autofocus",
-                "maxlength": "11"
+                'placeholder' : _('E.g 13291863081'),
+                'autofocus': "autofocus",
+                'maxlength': '11',
+                'minlength':'11',
+                'type':'tel',
+                'pattern':'[0-9]{11}',
             }
         ),
+        required=False,
     )
 
-    verify_code = forms.IntegerField(
+    unverified_phone = PhoneNumberField(
+        widget=forms.HiddenInput(),
+        required=False,
+    )
+
+    notes = forms.CharField(
+        required=False
+    )
+
+    gender = forms.CharField(
             widget=forms.HiddenInput(),
+            required=False
+        )
+
+    verify_code = forms.IntegerField(
+            widget=forms.TextInput(attrs={
+                'id':'verify-code',
+                'class':'col-10',
+                'maxlength':'6',
+                'minlength':'6',
+                'type':'tel',
+                'pattern':'[0-9]{6}',
+                'name':'code'
+                }),
             required=False
         )
 
@@ -99,6 +187,9 @@ class PhoneSignupForm(SignupForm):
             "phone_number",
             "password1",
             "password2",
+            "gender",
+            "notes",
+            "unverified_phone"
         )
 
     def __init__(self, *args, **kwargs):
@@ -113,13 +204,14 @@ class PhoneSignupForm(SignupForm):
             username_field.max_length)
 
         if getattr(settings, "SIGNUP_PASSWORD_ENTER_TWICE", False):
-            self.fields["password2"] = PasswordField(label=_("Password (again)"))
-
+            self.fields["password2"] = PasswordField(
+                    label=_("Password (again)")
+                )
         if hasattr(self, "field_order"):
             set_form_field_order(self, self.field_order)
 
 
-    def save(self, request):
+    def save(self, request, *args, **kwargs):
         # Ensure you call the parent class's save.
         # .save() returns a User object.
         user = super(PhoneSignupForm, self).save(request)
@@ -129,6 +221,33 @@ class PhoneSignupForm(SignupForm):
         user.phone_number = self.cleaned_data["phone_number"]
         user.save()
 
+        # You must return the original result.
+        return user
+
+
+class SocialSignupCompleteForm(PhoneSignupForm):
+    wechat_openid = forms.CharField(
+            widget=forms.HiddenInput(),
+            required=False
+        )
+
+    wechat_id = forms.CharField(
+            required=False
+        )
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields.pop('password1')
+
+    def save(self, request, *args, **kwargs):
+        # Ensure you call the parent class's save.
+        # .save() returns a User object.
+        user = super().save(request)
+
+        user.gender = self.cleaned_data["gender"]
+        user.wechat_openid = self.cleaned_data["wechat_openid"]
+
+        user.save()
         # You must return the original result.
         return user
 

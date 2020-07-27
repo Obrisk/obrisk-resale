@@ -69,6 +69,10 @@ class User(AbstractUser):
             null=True,verbose_name="wechat_openid",
             unique=True
     )
+
+    #This will become useful when we have multiple
+    #wechat official a/c or mini programs.
+    #We can therefore share data of one user across.
     wechat_unionid = models.CharField(
             max_length=100,blank=True,
             null=True,verbose_name="wechat_unionid"
@@ -94,6 +98,15 @@ class User(AbstractUser):
     points = models.IntegerField(  _('Points'), default=0)
     #Needs a country's code 
     phone_number = PhoneNumberField (_('Phone number'))
+
+    unverified_phone = PhoneNumberField (_('Unverified_phone'),
+            blank=True, null=True
+        )
+
+    notes = models.CharField(
+            max_length=1000, null=True, blank=True
+        )
+
     #For the use of published posts
     is_official = models.BooleanField (default=False)
     #For sellers in Classifieds.
