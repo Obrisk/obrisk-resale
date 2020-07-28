@@ -153,7 +153,7 @@ if env.bool('USE_S3_STATICFILES'):
     STATICFILES_LOCATION = f'static/{STATIC_VERSION}'
 
     #The value from docs is 'storages.backends.s3boto3.S3Boto3Storage'
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 
 else:
     STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
