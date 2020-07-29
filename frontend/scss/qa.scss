@@ -1,0 +1,287 @@
+a {
+  color: black;
+}
+
+.question {
+  width: 100%;
+}
+
+.questions .pagination {
+  margin: 0;
+}
+
+.questions .user {
+  width: 25px;
+  border-radius: 3px;
+}
+
+.questions .asked {
+  color: #aaaaaa;
+  font-size: .8em;
+}
+
+.questions .username {
+  margin-left: .3em;
+  font-weight: 500;
+  font-size: 0.8em;
+}
+
+.questions .panel-body:hover {
+  background-color: #f5f8fa;
+  cursor: pointer;
+}
+
+.questions .question-user {
+  margin-bottom: .6em;
+  width: 100%;
+}
+
+.options {
+  text-align: center;
+
+}
+
+.options i {
+  display: block;
+  font-size: 1.2em;
+}
+
+.options i.favorite {
+  font-size: 2em;
+  margin-top: .4em;
+}
+
+.options i.vote {
+  font-size: 1.5em;
+  color: #ddd;
+}
+
+.options i.vote:hover {
+  cursor: pointer;
+  color: #0aeee3;
+}
+
+.options i.voted {
+  font-size: 1.5em;
+  color: #2e2e31;
+}
+
+.options i.accept {
+  font-size: 1.5em;
+  color: #dddddd;
+  margin-top: .2em;
+}
+
+.options i.accept:hover {
+  cursor: pointer;
+  color: #0aeee3;
+}
+
+.options i.accepted {
+  color: #0aeee3;
+}
+
+.answer {
+  margin-top: 1em;
+}
+
+.answer .answer-user,
+.question .question-user {
+  margin-bottom: .6em;
+  width: 100%;
+
+}
+
+.answer .answer-user .user,
+.question .question-user .user {
+  width: 40px;
+  border-radius: 5px;
+}
+
+.answer .answer-user .username,
+.question .question-user .username {
+  margin-left: .4em;
+}
+
+.answer .answered,
+.question .asked {
+  color: #aaaaaa;
+  margin-left: .6em;
+  font-size: 12px;
+}
+
+.asked {
+  display: block;
+}
+
+.favorite {
+  cursor: pointer;
+}
+
+.favorite:hover {
+  color: #0aeee3;
+}
+
+.favorited {
+  color: #0aeee3;
+}
+
+.question-info {
+  text-align: center;
+  float: left;
+  padding: 0 1em;
+}
+
+.question-title {
+  margin-top: 10px;
+}
+
+.question-info h5 {
+  margin: 0;
+  margin-bottom: .2em;
+}
+
+.question-info .info:first-child {
+  margin-bottom: 1.2em;
+}
+
+.question-info .info:nth-child(2) {
+  margin-bottom: 1.2em;
+}
+
+.fa-star-empty {
+  font-size: 1em;
+}
+
+.votes {
+  margin-left: .4em;
+}
+
+#questionUpVote {
+  color: #01BAEF;
+}
+
+.up-vote,
+.answer-vote {
+  color: #01BAEF;
+}
+
+.card-subtitle {
+  font-size: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+}
+
+.card-body small,
+.small {
+  font-size: 70%;
+}
+
+
+.divider {
+  width: 100%;
+  height: 5px;
+  background: linear-gradient(267.54deg, #3EC4E2 0%, #A1DBD2 101.73%);
+}
+
+.toggle-tags {
+  font-size: 30px;
+  color: #01BAEF;
+  box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
+  background: #fff;
+  padding: 8px;
+
+}
+
+.word-break {
+  word-break: break-all;
+}
+
+.questions .nav-link.active,
+.questions .nav-link:hover {
+  background-color: #3EC4E2;
+  color: #fff;
+  box-shadow: 3px 4px 0px #88dff8;
+}
+
+.questions .nav-link {
+  background-color: #ccc;
+  color: #fff
+}
+
+.questions-card {
+  border: 1px solid #A1DBD2 !important;
+  box-shadow: 2px 2px 0px #3EC4E2 !important;
+  background: #fff;
+}
+
+.questions .nav-tabs {
+  border: none
+}
+
+.form-control {
+  background-color: #fff;
+  border: 2px solid #ccc;
+  color: #111;
+  font-family: 'Montserrat',
+    sans-serif;
+  font-weight: 400;
+  padding: 10px;
+  width: 100%;
+}
+
+.col-form-label {
+  font-family: 'Montserrat',
+    sans-serif;
+  font-weight: 600;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #50a1ff;
+  border-color: #50a1ff;
+}
+
+.btn {
+  font-size: 11px;
+  padding: 8px 26px 6px;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+  border-radius: 2px;
+  outline: none;
+  -webkit-transition: 0.15s linear;
+  transition: 0.15s linear;
+}
+
+.nav-link.active {
+  background-color: #ccc !important;
+  color: #fff !important
+}
+
+.question-wrapper {
+  background: #ffffff;
+  border-radius: 10px;
+  margin-left: 12%;
+}
+
+.answer-wrapper {
+  background: #ffffff;
+  border-radius: 10px;
+}
+
+
+
+@media screen and (max-width:575px) {
+  .questions li .nav-link {
+    font-size: 80% !important
+  }
+
+  .question-wrapper {
+    margin-left: 22%;
+  }
+
+  .answer-wrapper {
+    margin-left: 12%;
+
+  }
+}

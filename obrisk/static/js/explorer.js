@@ -1,0 +1,1 @@
+$(document).ready(function(){"use strict";$(".explorer-menu").length&&$("#explorer-trigger, #mobile-explorer-trigger").on("click",function(){$(".explorer-menu").toggleClass("is-active")})});
