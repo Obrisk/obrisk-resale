@@ -3,7 +3,7 @@ const { src, dest, watch, series, parallel } = require('gulp');
 const sourcemaps = require('gulp-sourcemaps');
 const sass = require('gulp-sass');
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify-es').default;
 const postcss = require('gulp-postcss');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
@@ -71,19 +71,29 @@ function watchTask(){
 }
 
 
+// Runs the scss tasks simultaneously
+exports.scss = series(
+    scssTask
+);
+
+// Runs the js tasks simultaneously
+exports.js = series(
+    jsTask 
+);
+
+
+// Runs the js tasks simultaneously
+exports.watch = series(
+    watchTask
+);
+
+
 // Export the default Gulp task so it can be run
 // Runs the scss and js tasks simultaneously
 exports.default = series(
     parallel(scssTask, jsTask), 
     watchTask
 );
-
-// Runs the scss tasks simultaneously
-exports.scss = series(
-    scssTask, 
-    watchTask
-);
-
 
 
 // Erases the dev folder

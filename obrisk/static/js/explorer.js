@@ -1,1 +1,2 @@
-$(document).ready(function(){"use strict";$(".explorer-menu").length&&$("#explorer-trigger, #mobile-explorer-trigger").on("click",function(){$(".explorer-menu").toggleClass("is-active")})});
+/*! explorer.js | Friendkit | © Css Ninja. 2018-2019 */
+$(document).ready((function(){"use strict";$(".explorer-menu").length&&$("#explorer-trigger, #mobile-explorer-trigger").on("click",(function(){$(".explorer-menu").toggleClass("is-active")}))}));
