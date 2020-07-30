@@ -182,7 +182,7 @@ $(function () {
   //Open publish mode
   $("#publish").on("click", function () {
     $(".app-overlay").addClass("is-active");
-    $(".close-wrap").removeClass("d-none");
+    $(".close-wrap").removeClass("is-hidden");
     $(".is-new-content").addClass("is-highlighted");
     $(".all-stories ").addClass("block-scroll");
   });
@@ -205,7 +205,7 @@ $(function () {
     $("input, textarea").val("");
     $(".app-overlay").removeClass("is-active");
     $(".is-new-content").removeClass("is-highlighted");
-    $(".close-wrap").addClass("d-none");
+    $(".close-wrap").addClass("is-hidden");
     $(".all-stories ").removeClass("block-scroll");
     $("#addVideo").show();
     $("#addBtn").show();
@@ -250,7 +250,7 @@ $(function () {
         $('[name="post"]').val("");
         $(".app-overlay").removeClass("is-active");
         $(".is-new-content").removeClass("is-highlighted");
-        $(".close-wrap").addClass("d-none");
+        $(".close-wrap").addClass("is-hidden");
         feather.replace();
         $("#postStoriesForm")[0].reset();
         $("input, textarea").val("");

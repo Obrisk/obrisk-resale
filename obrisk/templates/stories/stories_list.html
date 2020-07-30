@@ -3,7 +3,7 @@
 
 {% block head %}
 <link href="{% static 'css/stories.css' %}?v=16052001" rel="stylesheet">
-<link href="{% static 'css/videojs.min.css' %}" rel="stylesheet">
+<link href="{% static 'css/vendor/videojs.min.css' %}" rel="stylesheet">
 <link href="{% static 'css/uploader.css' %}" rel="stylesheet">
 
 <title>Obrisk Stories</title>
@@ -17,7 +17,7 @@
   <div class="row mt-4">
 
     <div class="col-md-6 m-auto mt-0 p-sm-0">
-      <div id="compose-card" class="d-none card is-new-content">
+      <div id="compose-card" class="is-hidden card is-new-content">
         <!-- Top tabs -->
         <div class="tabs-wrapper">
           <div class="tabs is-boxed is-fullwidth">
@@ -31,7 +31,7 @@
                 </a>
               </li>
               <!-- Close X button -->
-              <li class="close-wrap d-none">
+              <li class="close-wrap is-hidden">
                 <span class="close-publish">
                   <i data-feather="x"></i>
                 </span>
@@ -66,9 +66,9 @@
                     <textarea id="publish" name="post" class="textarea publish-textarea" rows="3"
                       placeholder="Share something..." maxlength="400">
                   </textarea>
-                    <input type="text" id="id_images" name="images" class="d-none">
-                    <input type="text" id="id_video" name="story_video" class="d-none">
-                    <input type="text" id="id_img_error" name="img_error" class="d-none">
+                    <input type="text" id="id_images" name="images" class="is-hidden">
+                    <input type="text" id="id_video" name="story_video" class="is-hidden">
+                    <input type="text" id="id_img_error" name="img_error" class="is-hidden">
                   </div>
 
                 </div>
@@ -295,14 +295,17 @@
 
 {% block extra_js %}
 
-<script src="{% static 'js/videojs.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/jquery.waypoints.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/linkify.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/videojs.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
    window.HELP_IMPROVE_VIDEOJS = false;
 
   //Hide create card on stories details, to focus on shared content
-  if ($('#compose-card').hasClass('d-none') &&
+  if ($('#compose-card').hasClass('is-hidden') &&
     window.location.href.endsWith('/stories/')) {
-    $('#compose-card').toggleClass('d-none');
+    $('#compose-card').toggleClass('is-hidden');
   }
 
   function prepareTruncatedText(e) {
@@ -339,15 +342,15 @@
       if (empty_page == false && block_request == false) {
         block_request = true;
         page += 1;
-        $('.loading').removeClass('d-none')
+        $('.loading').removeClass('is-hidden')
         $.when(
           $.get('?page=' + page, function (data) {
             if (data == '') {
                 empty_page = true;
-                $('.loading').addClass('d-none')
+                $('.loading').addClass('is-hidden')
                 $('.stream').append('<div class="m-auto"> End of Stories</div>')
             } else {
-                $('.loading').addClass('d-none');
+                $('.loading').addClass('is-hidden');
                 block_request = false;
                 $('.stream').append(data);
 
@@ -398,18 +401,18 @@
   });
 </script>
 
-<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/share.css' %}">
 
-<script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/fancybox.min.js' %}"></script>
-<script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/preset.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/fancybox.min.js' %}"></script>
+<script src="{% static 'js/vendor/infinite.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/lazyload.js' %}"></script>
 <script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
 
 <!-- Load these when the dom is ready or when user click specific button -->
 <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/linkify.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
 
 {% endblock extra_js %}

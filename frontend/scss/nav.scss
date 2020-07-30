@@ -252,6 +252,23 @@ nav {
 #messages {
   margin-top: 3rem;
 }
+
 .navbar .navbar-item .is-navbarTop:after {
   display: none;
+}
+
+.top-nav-user {
+    display: flex;
+    justify-content: space-between;
+}
+
+.top-nav-user-li {
+    display: flex !important;
+    justify-content: flex-end;
+}
+
+.django-messages {
+    margin-top: 4px;
+    padding-top: 2px;
+    padding-bottom: 4px;
 }

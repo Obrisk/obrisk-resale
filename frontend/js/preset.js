@@ -1,3 +1,5 @@
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
 $(function() {
   function csrfSafeMethod(method) {
     // These HTTP methods do not require CSRF protection
@@ -14,6 +16,7 @@ $(function() {
   });
 
 });
+
 
 $("#addNewItem").click(function(e) {
   e.preventDefault();
