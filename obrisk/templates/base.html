@@ -46,104 +46,10 @@
 <body class="O-bg has-slimscroll is-white">
   <!-- Pageloader -->
   {% block body %}
-  <div class="m-b-1">
 
-    <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop fixed-bottom has-shadow w-100  p-0">
-      <div class="tabs is-toggle is-fullwidth w-100">
-        <ul>
-
-          <li class="stories grid-image{% if base_active == 'stories' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'stories:list' %}">
-              <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-compass">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                </svg> </span>
-              <span class="nav-label is-size-7">
-                {% trans 'Stories' %}
-              </span>
-            </a>
-          </li>
-
-          <li class="posts {% if base_active == 'posts' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'posts:list' %}"><span
-                class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-book-open">
-                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                </svg>
-              </span>
-              <span class="nav-label is-size-7	">
-                {% trans 'Articles' %}
-              </span>
-            </a>
-          </li>
-
-
-          <li class="add-new">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="#"
-            id="addNewItem">
-                <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="12" y1="8" x2="12" y2="16"></line>
-                <line x1="8" y1="12" x2="16" y2="12"></line>
-                </svg>
-              </span>
-              <span class="nav-label is-size-7">
-                  {% trans 'Add' %}
-              </span>
-            </a>
-          </li>
-
-          <li class=" classifieds {% if base_active == 'classifieds' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'classifieds:list' %}">
-                <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-shopping-bag">
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
-              </span>
-              <span class="nav-label is-size-7	">
-                  {% trans 'Classifieds' %}
-              </span>
-            </a>
-          </li>
-
-          <li class="message-list {% if base_active == 'chat' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'messager:contacts_list' %}">
-              <span class="nav-icons">
-                <span class="msg-notification" style="position:relative">
-                  <i class="fa fa-circle" aria-hidden="true"
-                    style="display: none;position: absolute;right: 20px;position: absolute;left: 25px;color: #fb4133;font-size: 12px;">
-                  </i>
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-message-square">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg> </span>
-              <span class="nav-label is-size-7	">
-                {% trans 'Chat' %}
-              </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <nav id="navbarTop" class="navbar mobile-navbar is-hidden-desktop is-fixed-top has-shadow w-100 p-0">
+    <nav id="navbarTop" class="navbar mobile-navbar is-fixed-top has-shadow w-100 p-0">
       <div class="tabs overflow-visible is-toggle is-fullwidth w-100 ml-2 mr-2">
-        <ul class="top-nav-user">
+        <ul>
 
           <li class="flex-grow-0">
             {% if request.META.HTTP_REFERER %}
@@ -402,28 +308,120 @@
         </ul>
       </div>
     </nav>
-  </div>
 
-  <div class="django-messages ">
-    <!-- These messages are not from chat, they are the notifications msgs
-    upon successful POST request on the chat the message context is message_list -->
-    {% if messages %}
-    {% for message in messages %}
-    <div class="container">
-      <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} mt-lg-2">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{ message}}
-      </div>
+
+    <div class="django-messages ">
+        <!-- These messages are not from chat, they are the notifications msgs
+        upon successful POST request on the chat the message context is message_list -->
+        {% if messages %}
+            {% for message in messages %}
+            <div class="container">
+              <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} mt-lg-2">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                {{ message}}
+              </div>
+            </div>
+            {% endfor %}
+        {% endif %}
     </div>
-    {% endfor %}
-    {% endif %}
 
     {% block content %}
+
     {% endblock content %}
 
-  </div>
 
-  <link rel="stylesheet" href="{% static 'css/core.css' %}">
+    <nav id="navbarBottom" class="navbar mobile-navbar fixed-bottom has-shadow">
+        <ul class="bt-nav-tab is-toggle is-fullwidth">
+
+          <li class="bt-nav-item {% if base_active == 'stories' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'stories:list' %}">
+              <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-compass">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+                </svg> </span>
+              <span class="nav-label is-size-7">
+                {% trans 'Stories' %}
+              </span>
+            </a>
+          </li>
+
+          <li class="bt-nav-item {% if base_active == 'posts' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'posts:list' %}"><span
+                class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-book-open">
+                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                </svg>
+              </span>
+              <span class="nav-label is-size-7	">
+                {% trans 'Articles' %}
+              </span>
+            </a>
+          </li>
+
+
+          <li class="bt-nav-item">
+            <a class="bt-nav-link" href="#"
+            id="addNewItem">
+                <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </span>
+              <span class="nav-label is-size-7">
+                  {% trans 'Add' %}
+              </span>
+            </a>
+          </li>
+
+         <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'classifieds:list' %}">
+                <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-shopping-bag">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              </span>
+              <span class="nav-label is-size-7">
+                  {% trans 'Classifieds' %}
+              </span>
+            </a>
+          </li>
+
+          <li class="bt-nav-item {% if base_active == 'chat' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'messager:contacts_list' %}">
+              <span class="nav-icons">
+                <span class="msg-notification" style="position:relative">
+                  <i class="fa fa-circle" aria-hidden="true"
+                    style="display: none;position: absolute;right: 20px;position: absolute;left: 25px;color: #fb4133;font-size: 12px;">
+                  </i>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-message-square">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg> </span>
+              <span class="nav-label is-size-7	">
+                {% trans 'Chat' %}
+              </span>
+            </a>
+          </li>
+
+        </ul>
+    </nav>
+
   <link rel="stylesheet" href="{% static 'css/wnoty.css' %}">
 
   <!-- Icon can be replace to show icon on share -->

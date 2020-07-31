@@ -162,17 +162,6 @@ button.button {
             }
         }
 
-        //Green button
-        &.green-button {
-            background: $green;
-            border-color: $green;
-            color: $white;
-
-            &.raised:hover {
-                box-shadow: $green-box-shadow;
-                opacity: 0.8;
-            }
-        }
 
         //Blue button
         &.blue-button {

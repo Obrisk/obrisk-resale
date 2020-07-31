@@ -1,3 +1,23 @@
+@import "partials/layout-colors";
+@import "partials/layout-extra-colors";
+@import "partials/components-cards";
+@import "partials/components-buttons";
+
+@import "partials/layout-placeholders";
+@import "partials/components-cards";
+@import "partials/components-buttons";
+@import "partials/components-dropdowns";
+@import "partials/components-tabs";
+@import "partials/components-modals";
+@import "partials/components-forms";
+@import "partials/components-switch";
+@import "partials/components-popovers";
+@import "partials/components-checkboxes";
+@import "partials/components-utils";
+@import "partials/app-feed";
+@import "partials/app-stories";
+@import "partials/layout-responsive";
+
 .stream {
   margin: 2em 0 0 0;
   padding: 0;

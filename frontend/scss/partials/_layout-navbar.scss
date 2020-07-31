@@ -1,4 +1,4 @@
-/*! _navbar.scss | Friendkit | © Css Ninja. 2018-2019 */
+/*! _navbar.scss | Obrisk-team | */
 
 /* ==========================================================================
 Navbar styles
@@ -11,6 +11,13 @@ Navbar styles
     3. Explorer Menu
 */
 
+
+$white: #fff;
+$white-smoke: #fcfcfc;
+$white-light: #fafafa;
+
+$muted-grey: #999;
+$dark-text: #393a4f;
 /* ==========================================================================
 0. Main Navbar
 ========================================================================== */
@@ -352,17 +359,6 @@ Navbar styles
                 position: relative;
                 max-height: 38px;
 
-                .indicator {
-                    display: block;
-                    position: absolute;
-                    top: 2px;
-                    right: -4px;
-                    height: 13px;
-                    width: 13px;
-                    border-radius: 50%;
-                    border: 2px solid $white;
-                    background: $green;
-                }
             }
 
             //Avatar
@@ -373,18 +369,6 @@ Navbar styles
                 border-radius: 50%;
             }
 
-            //Indicator statuses
-            &.is-busy {
-                .indicator {
-                    background: $fire;
-                }
-            }
-
-            &.is-opened {
-                .account-caret svg {
-                    transform: rotate(180deg);
-                }
-            }
         }
 
         .action-button {
