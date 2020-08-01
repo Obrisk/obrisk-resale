@@ -362,7 +362,6 @@
             </a>
           </li>
 
-
           <li class="bt-nav-item">
             <a class="bt-nav-link" href="#"
             id="addNewItem">
@@ -420,7 +419,6 @@
         </ul>
     </nav>
 
-
   <link rel="stylesheet" href="{% static 'css/wnoty.css' %}">
 
   <!-- Icon can be replace to show icon on share -->
@@ -442,7 +440,7 @@
         var new_messages = "{{ new_msgs }}";
 
         if (new_messages != "None") {
-          $(".msg-notification i").show();
+          document.querySelector(".msg-notification i").style.display = 'block';
         }
 
         $(function () {
@@ -454,10 +452,6 @@
   {% endif %}
 
   <script type="text/javascript">
-
-    window.addEventListener("load", function (event) {
-      lazyload();
-    });
 
     function registerServiceWorker() {
       // register sw script in supporting browsers
@@ -478,14 +472,8 @@
         aspect.toFixed(3) === "0.576" ||
         aspect.toFixed(3) === "0.591")
     ) {
-      $("#navbarBottom").addClass("pb-4");
+      document.getElementById("navbarBottom").addClass("iphone-nav-bt");
     }
-
-    //Hide nav bar on click outside
-
-    // $(document).on('click', function () {
-    //   $('.collapse').collapse('hide');
-    // })
 
   </script>
 
