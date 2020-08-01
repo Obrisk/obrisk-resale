@@ -130,25 +130,24 @@
           </div>
 
           <div class="like-wrapper">
+            {% if request.user in stories.get_all_likers %}
+            <a href="javascript:void(0);" class="like-button is-active">
+              <i class="mdi mdi-heart not-liked bouncy"></i>
+              <i class="mdi mdi-heart is-liked bouncy"></i>
+              <span class="like-overlay"></span>
+            </a>
+            {% else %}
+            <a href="javascript:void(0);" class="like-button">
+              <i class="mdi mdi-heart not-liked bouncy"></i>
+              <i class="mdi mdi-heart is-liked bouncy"></i>
+              <span class="like-overlay"></span>
+            </a>
+            {% endif %}
 
-                {% if request.user in stories.get_all_likers %}
-                <a href="javascript:void(0);" class="like-button is-active">
-                  <i class="mdi mdi-heart not-liked bouncy"></i>
-                  <i class="mdi mdi-heart is-liked bouncy"></i>
-                  <span class="like-overlay"></span>
-                </a>
-                {% else %}
-                <a href="javascript:void(0);" class="like-button">
-                  <i class="mdi mdi-heart not-liked bouncy"></i>
-                  <i class="mdi mdi-heart is-liked bouncy"></i>
-                  <span class="like-overlay"></span>
-                </a>
-                {% endif %}
 
-
-                <small class="likes-count">
-                  <span class="count">{{ stories.likes_count }}</span> <span class="m-0">Liked</span>
-                </small>
+            <small class="likes-count">
+              <span class="count">{{ stories.likes_count }}</span> <span class="m-0">Liked</span>
+            </small>
           </div>
 
         <div class="fab-wrapper is-comment">

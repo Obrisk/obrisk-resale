@@ -46,13 +46,12 @@
   <!-- Pageloader -->
   {% block body %}
 
-    <nav id="navbarTop" class="navbar mobile-navbar is-fixed-top has-shadow w-100 p-0">
-      <div class="tabs overflow-visible is-toggle is-fullwidth w-100 ml-2 mr-2">
-        <ul>
-
-          <li class="flex-grow-0">
+    <nav id="navbarTop" class="navbar is-fixed-top">
+      <div class="nav-inner overflow-visible is-toggle is-fullwidth">
+        <ul class="tp-nav-ul">
+          <li >
             {% if request.META.HTTP_REFERER %}
-                <a class="border-0" href="javascript:history.back()">
+                <a class="is-pulled-left" href="javascript:history.back()">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
@@ -63,7 +62,7 @@
                 </a>
             {% else  %}
 
-            <a class="border-0" href="{% url 'home' %}">
+            <a class="nav-logo" href="{% url 'home' %}">
               <svg width="64" height="48" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_i)">
                   <path d="M23.4699 10.0511C23.1315 9.98326 22.8706 9.90461 22.7042 9.81386L23.4699 10.0511Z"
@@ -158,7 +157,7 @@
           </li>
 
         {% if request.user.is_authenticated %}
-            <li class="flex-grow-0">
+            <li class="">
 
             <div class="navbar-item is-icon drop-trigger">
               <div id="" class="notifications navbar-item is-icon drop-trigger">
@@ -178,7 +177,7 @@
             </div>
           </li>
 
-          <li class="top-nav-user-li">
+          <li class="is-pulled-right">
             <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
               <div class="user-image">
                 {% if request.user.thumbnail %}
@@ -329,8 +328,8 @@
     {% endblock content %}
 
 
-    <nav id="navbarBottom" class="navbar mobile-navbar fixed-bottom has-shadow">
-        <ul class="bt-nav-tab is-toggle is-fullwidth">
+    <nav id="navbarBottom" class="navbar fixed-bottom has-shadow">
+        <ul class="bt-nav-ul is-toggle is-fullwidth">
 
           <li class="bt-nav-item {% if base_active == 'stories' %} is-active {% endif %}">
             <a class="bt-nav-link" href="{% url 'stories:list' %}">

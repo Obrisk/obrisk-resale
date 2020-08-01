@@ -1,17 +1,37 @@
 @import "partials/layout-colors";
 @import "partials/layout-navbar";
 
-nav {
-  font-family: "Montserrat", sans-serif;
+@mixin nav-ul-flex {
+    display: flex;
+    justify-content: space-between;
 }
 
-.navbar-expand-md > .container,
-.navbar-expand-md > .container-fluid {
-  flex-wrap: wrap;
+.nav-inner {
+    align-items: stretch;
+    display: flex;
+    font-size: 1rem;
+    justify-content: space-between;
+    overflow: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
 }
 
-.navbar-brand {
-  font-weight: 600; font-size: 2em; color: #fff;
+.nav-inner.is-toggle li+li {
+    margin-left: -1px;
+}
+
+.nav-inner.is-fullwidth li {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.tp-nav-ul {
+    @include nav-ul-flex;
+    width: 100%;
+}
+
+.nav-logo {
+    justify-content: flex-start !important;
 }
 
 .muted-grey .navbar-nav .nav-link {
@@ -20,23 +40,10 @@ nav {
   color: $muted-grey;
 }
 
-
 #notifications {
   font-size: 20px;
   padding: auto;
   color: #fff;
-}
-
-.navbar-right {
-  flex-direction: row;
-}
-
-.navbar-nav a.is-active {
-  color: $accent !important;
-}
-
-.navbar .navbar-item .is-navbarTop:after {
-  display: none;
 }
 
 .top-nav-user {
@@ -49,25 +56,29 @@ nav {
     justify-content: flex-end;
 }
 
-
 .django-messages {
     margin-top: 4px;
     padding-top: 2px;
     padding-bottom: 4px;
 }
 
+.navbar-nav a.is-active {
+  color: $accent !important;
+}
+
+.navbar .navbar-item .is-navbarTop:after {
+  display: none;
+}
 
 #messages {
   margin-top: 3rem;
 }
 
-.bt-nav-tab {
+.bt-nav-ul {
+    @include nav-ul-flex;
     font-size: 1rem;
     white-space: nowrap;
     color: $muted-grey !important;
-    /* color: #344258;*/
-    display: flex;
-    justify-content: space-between;
     overflow: auto hidden;
     padding: 1px 0px 0px 0px;
     margin-top: 1px;
@@ -92,7 +103,7 @@ nav {
 
 .nav-link {
   margin-top: -5px;
-  font-size: 14px;
+  font-size: 13px;
 }
 
 
