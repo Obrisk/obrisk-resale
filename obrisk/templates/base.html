@@ -51,10 +51,10 @@
         <ul class="tp-nav-ul">
           <li >
             {% if request.META.HTTP_REFERER %}
-                <a class="is-pulled-left" href="javascript:history.back()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
+                <a  href="javascript:history.back()">
+                    <svg  class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
+                         width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 8 8 12 12 16"></polyline>
                         <line x1="16" y1="12" x2="8" y2="12"></line>
@@ -328,7 +328,7 @@
     {% endblock content %}
 
 
-    <nav id="navbarBottom" class="navbar fixed-bottom has-shadow">
+    <nav id="navbarBottom" class="navbar fixed-bottom">
         <ul class="bt-nav-ul is-toggle is-fullwidth">
 
           <li class="bt-nav-item {% if base_active == 'stories' %} is-active {% endif %}">
@@ -432,14 +432,8 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
   {% endblock icon%}
 
-  <!-- Third-party javascript libraries go here -->
-  <!-- place project specific Javascript in this file -->
-
   {% block javascript %}
 
-  <!-- They should be placed at the end of the document so the pages load faster -->
-
-  <!-- Core js -->
 
   <!-- For the chat-app-->
   {% if request.user.is_authenticated %}
