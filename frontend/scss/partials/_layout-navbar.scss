@@ -75,13 +75,6 @@ $dark-text: #393a4f;
                         background: transparent;
                         border-color: $white-smoke;
                         color: $white-smoke !important;
-
-                        &:hover {
-                            border-color: $white;
-                            background: $white;
-                            color: $dark-text !important;
-                            opacity: 1 !important;
-                        }
                     }
 
                     a {
@@ -217,10 +210,6 @@ $dark-text: #393a4f;
                         align-items: center;
                         padding: 10px 20px;
 
-                        &:hover {
-                            background: lighten($fade-grey, 6%);
-                        }
-
                         svg {
                             height: 22px;
                             width: 22px;
@@ -267,7 +256,6 @@ $dark-text: #393a4f;
                 border-radius: 6px;
                 transition: all .3s;
 
-                &:hover,
                 &.is-active {
                     background: lighten($accent, 5%);
                     box-shadow: $accent-box-shadow;
@@ -284,7 +272,6 @@ $dark-text: #393a4f;
                 //Color modifier
                 &.is-primary {
 
-                    &:hover,
                     &.is-active {
                         background: $primary;
                         box-shadow: $primary-box-shadow;
@@ -300,7 +287,6 @@ $dark-text: #393a4f;
 
                     &.is-friends {
 
-                        &:hover,
                         &.is-active {
                             svg {
                                 fill: $white;
@@ -584,9 +570,6 @@ $dark-text: #393a4f;
                                     font-weight: 500;
                                     color: $sidebar;
 
-                                    &:hover {
-                                        color: $accent;
-                                    }
                                 }
 
                                 span {
@@ -705,13 +688,6 @@ $dark-text: #393a4f;
                                 }
                             }
 
-                            &:hover {
-                                background: lighten($fade-grey, 7%);
-
-                                svg {
-                                    stroke: $accent;
-                                }
-                            }
                         }
                     }
                 }
@@ -739,9 +715,6 @@ $dark-text: #393a4f;
                         height: unset;
                         width: unset;
 
-                        &:hover {
-                            color: $primary;
-                        }
                     }
                 }
             }
@@ -837,11 +810,6 @@ $dark-text: #393a4f;
             cursor: pointer;
             transition: all .3s;
 
-            &:hover {
-                svg {
-                    stroke: $muted-grey !important;
-                }
-            }
 
             svg {
                 height: 20px;
@@ -949,9 +917,6 @@ $dark-text: #393a4f;
                         }
                     }
 
-                    &:hover {
-                        background: $white-light;
-                    }
                 }
             }
 
@@ -997,10 +962,6 @@ $dark-text: #393a4f;
     .navbar-brand {
         margin-right: 0;
 
-        .navbar-item:hover {
-            background: transparent !important;
-        }
-
         img {
             height: 34px;
             max-height: 34px;
@@ -1017,10 +978,6 @@ $dark-text: #393a4f;
     //Navbar item
     .navbar-item {
         min-width: unset !important;
-
-        &:hover {
-            background: transparent !important;
-        }
 
         &.has-dropdown {
             .navbar-link {
@@ -1049,10 +1006,6 @@ $dark-text: #393a4f;
     .navbar-burger {
         height: 58px;
         width: 58px;
-    }
-
-    .navbar-burger:hover {
-        background-color: rgba(0, 0, 0, 0.02);
     }
 
     .navbar-burger span {
@@ -1139,10 +1092,6 @@ $dark-text: #393a4f;
             font-size: .9rem;
             padding: .75rem 1.5rem !important;
 
-            &.is-atcive,
-            &:hover {
-                background: lighten($sidebar, 10%);
-            }
         }
     }
 }
@@ -1392,15 +1341,6 @@ $dark-text: #393a4f;
                 border-radius: 8px;
                 transition: all .3s;
                 cursor: pointer;
-
-                &:hover {
-                    border-color: $fade-grey;
-                    box-shadow: $light-box-shadow;
-
-                    img {
-                        box-shadow: $light-box-shadow;
-                    }
-                }
 
                 &.is-coming-soon {
                     img {

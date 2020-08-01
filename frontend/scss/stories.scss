@@ -85,10 +85,6 @@
   background-color: #f5f8fa;
 }
 
-.stream-update a:hover {
-  text-decoration: none;
-  background-color: #e1e8ed;
-}
 
 a {
   color: #202024;
@@ -99,10 +95,6 @@ a {
 .like-count,
 .fa-times {
   color: #8b2100;
-}
-
-a:hover {
-  color: #424247;
 }
 
 .col-centered {
@@ -187,9 +179,6 @@ a:hover {
   cursor: pointer;
 }
 
-.remove-stories:hover {
-  color: #333333;
-}
 
 .infinite-item {
   border: 1px solid #a1dbd2 !important;
@@ -257,14 +246,32 @@ a:hover {
   margin-left: -12px;
 }
 
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
 .card.is-post .content-wrap .post-actions .like-wrapper .like-button {
   width: 28px;
   height: 28px;
 }
 
+.fab-wrapper, .like-wrapper, .is-share {
+    display: flex;
+    align-items: center;
+}
+
 .card.is-post .content-wrap .post-actions .fab-wrapper .small-fab {
   width: 28px;
   height: 28px;
+}
+
+.likes-count {
+    margin-left: 2px;
+}
+
+.count {
+    margin-left: 2px;
 }
 
 .like-overlay {
