@@ -42,15 +42,15 @@ document.addEventListener('DOMContentLoaded', function () {
     //  if (empty_page == false && block_request == false) {
      //   block_request = true;
       //  page += 1;
-       // $('.loading').removeClass('is-hidden')
+       // $('.loading').classList.remove('is-hidden')
         //$.when(
          // $.get('?page=' + page, function (data) {
           //  if (data == '') {
            //     empty_page = true;
-            //    $('.loading').addClass('is-hidden')
+            //    $('.loading').classList.add('is-hidden')
              //   $('.stream').append('<div class="m-auto"> End of Stories</div>')
            // } else {
-            //    $('.loading').addClass('is-hidden');
+            //    $('.loading').classList.add('is-hidden');
              //   block_request = false;
               //  $('.stream').append(data);
 
@@ -69,7 +69,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
   document.getElementById('replyStories').disabled = true;
   document.getElementById('replyInput').addEventListener('keyup', function () {
-      document.getElementById('replyStories').disabled = this.value == "" ? true : false);
+    if (this.value == "") { 
+      document.getElementById('replyStories').disabled = true;
+    } else {
+      document.getElementById('replyStories').disabled = false;
+    }
   });
 
   var infinite = new Waypoint.Infinite({
@@ -97,56 +101,47 @@ document.addEventListener('DOMContentLoaded', function () {
         //check if text only
         if (uploader.fileStats.totalFilesNum > 0) {
 
-            // Create a new event, allow bubbling
-            const submitEv = new CustomEvent('submitClicked', {
-              bubbles: true
-            });
+           document.querySelector("body").dispatchEvent(
+               new CustomEvent('submitClicked', {
+                  bubbles: true
+               })
+           );
 
-           //inside the document dispatches/triggers the event to fire
-           //I can select the form instead of the body
-           document.querySelector("body").dispatchEvent(submitEv); 
+       } else if (document.getElementById("publish").value.substring(0, 20).length != 0) {
 
-    } else if (document.getElementById("publish").value.substring(0, 20).length != 0) {
+           document.querySelector("body").dispatchEvent(
+               new CustomEvent('uploadComplete', {
+                  bubbles: true
+              })
+           );
 
-            // Create a new event, allow bubbling
-            const uploadComp = new CustomEvent('uploadComplete', {
-              bubbles: true
-            });
-           //inside the document dispatches/triggers the event to fire
-           document.querySelector("body").dispatchEvent(uploadComp); 
-
-    } else {
-      error = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          Please, Upload an image or write something!
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        `;
-      $(".compose").prepend(error);
-    }
+       } else {
+          error = `
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+              Please, Upload an image or write something!
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>`;
+          document.getElementsByClassName("compose")[0].insertAdjacentHTML('beforeend', error);
+      }
   });
 
   //Liker
-  $(document.body).on("click", ".like-wrapper", function () {
+  document.getElementsByClassName("like-wrapper").addEventListener('click', function () {
     // Ajax call on action on like button.
-    var li = $(this).closest(".card");
-    var stories = $(li).attr("stories-id");
+    const li = document.querySelector(this).closest(".card");
+    const stories = document.querySelector(li).getAttribute("stories-id");
     if (user != "") {
-      $.ajax({
-        url: "/stories/like/",
-        data: {
-          stories: stories,
-        },
-        type: "GET",
-        cache: false,
-        success: function (data) {
-          li.find(".like-button").addClass("is-active");
-          li.find(".like-button .mdi").toggleClass("is-active");
-          li.find(".likes-count .count").text(data.likes);
-        },
+
+      fetch(`/stories/like/?stories=${stories}`)
+      .then (resp => resp.json())
+      .then (data => {
+          li.querySelectorAll(".like-button").classList.add("is-active");
+          li.querySelectorAll(".like-button .mdi").classList.toggle("is-active");
+          li.querySelectorAll(".likes-count .count").textContent(data.likes);
       });
+
     } else {
       window.location.href = "/auth/login/";
     }
@@ -154,15 +149,15 @@ document.addEventListener('DOMContentLoaded', function () {
     return false;
   });
 
-  //Cose comments
-  $(document.body).on("click", ".close-comments", function () {
+  //Close comments
+  document.getElementsByClassName("close-comments").addEventListener('click', function () {
     // Ajax call to request a given Stories object detail and thread, and to
     // show it in a modal.
-    var post = $(this).closest(".card");
+    const post = document.querySelector(this).closest(".card");
 
-    var stories = $(post).attr("stories-id");
-    post.find(".post-media").removeClass("smaller");
-    post.find(".comments-wrap").toggleClass("is-hidden");
+    const stories = document.querySelector(post).getAttribute("stories-id");
+    post.querySelectorAll(".post-media").classList.remove("smaller");
+    post.querySelectorAll(".comments-wrap").classList.toggle("is-hidden");
   });
 
   //Show comments
@@ -170,14 +165,14 @@ document.addEventListener('DOMContentLoaded', function () {
     // Ajax call to request a given Stories object detail and thread, and to
     var post = $(this).closest(".card");
     var stories = $(post).attr("stories-id");
-    post.find(".comments-wrap").toggleClass("is-hidden");
+    post.querySelectorAll(".comments-wrap").classList.toggle("is-hidden");
     window.scrollTo({
       top: offset(post[0]).top,
       behavior: "smooth",
     });
     $(".emojionearea-editor").keyup(function () {
       var counter = $(this).closest(".textarea-parent");
-      counter.find(".counter .count").text(400 - $(this).val().length);
+      counter.querySelectorAll(".counter .count").textContent(400 - $(this).val().length);
       $(this).height("auto");
       $(this).height($(this).prop("scrollHeight"));
     });
@@ -194,13 +189,13 @@ document.addEventListener('DOMContentLoaded', function () {
       success: function (data) {
         if (data.thread) {
           if (data.thread.trim() != "") {
-            post.find(".comments-body").html(data.thread);
+            post.querySelectorAll(".comments-body").html(data.thread);
           }
         }
-        post.find("input[name=parent]").val(data.uuid);
+        post.querySelectorAll("input[name=parent]").val(data.uuid);
       },
     });
-    $(".comment-textarea").addClass("focused");
+    $(".comment-textarea").classList.add("focused");
   });
 
   //Comment on a story
@@ -211,18 +206,18 @@ document.addEventListener('DOMContentLoaded', function () {
     if (user != "") {
       $.ajax({
         url: "/stories/post-comment/",
-        data: post.find(".replyStoriesForm").serialize(),
+        data: post.querySelectorAll(".replyStoriesForm").serialize(),
         type: "POST",
         cache: false,
         success: function () {
-          post.find(".comment-textarea").val("");
+          post.querySelectorAll(".comment-textarea").val("");
           post
-            .find(".comments-count .count")
-            .html(parseInt(post.find(".comments-count .count").html(), 10) + 1);
+            .querySelectorAll(".comments-count .count")
+            .html(parseInt(post.querySelectorAll(".comments-count .count").html(), 10) + 1);
           var comment_count = Number(
-            post.find(".comments-heading small").text()
+            post.querySelectorAll(".comments-heading small").textContent()
           );
-          post.find(".comments-heading small").text(comment_count + 1);
+          post.querySelectorAll(".comments-heading small").textContent(comment_count + 1);
 
           var stories = $(post).attr("stories-id");
           $("input, textarea").val("");
@@ -236,8 +231,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
               success: function (data) {
                 if (data.thread.trim() != "")
-                  post.find(".comments-body").html(data.thread);
-                post.find("input[name=parent]").val(data.uuid);
+                  post.querySelectorAll(".comments-body").html(data.thread);
+                post.querySelectorAll("input[name=parent]").val(data.uuid);
               },
             });
           }, 200);
@@ -251,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
         </div>
         `;
-          post.find(".card-footer .media-content").append(error);
+          post.querySelectorAll(".card-footer .media-content").append(error);
         },
       });
     } else {
@@ -262,17 +257,17 @@ document.addEventListener('DOMContentLoaded', function () {
   //Character count
   $("textarea").keyup(function () {
     var counter = $(this).closest(".textarea-parent");
-    counter.find(".counter .count").text(400 - $(this).val().length);
+    counter.querySelectorAll(".counter .count").textContent(400 - $(this).val().length);
     $(this).height("auto");
     $(this).height($(this).prop("scrollHeight"));
   });
 
   //Open publish mode
   $("#publish").on("click", function () {
-    $(".app-overlay").addClass("is-active");
-    $(".close-wrap").removeClass("is-hidden");
-    $(".is-new-content").addClass("is-highlighted");
-    $(".all-stories ").addClass("block-scroll");
+    $(".app-overlay").classList.add("is-active");
+    $(".close-wrap").classList.remove("is-hidden");
+    $(".is-new-content").classList.add("is-highlighted");
+    $(".all-stories ").classList.add("block-scroll");
   });
 
   //Enable and disable publish button based on the textarea value length (1)
@@ -280,9 +275,9 @@ document.addEventListener('DOMContentLoaded', function () {
     var valueLength = $(this).val().length;
 
     if (valueLength >= 1 || $(".filelist").children().length > 0) {
-      $("#publish-button").removeClass("is-disabled");
+      $("#publish-button").classList.remove("is-disabled");
     } else {
-      $("#publish-button").addClass("is-disabled");
+      $("#publish-button").classList.add("is-disabled");
     }
   });
 
@@ -291,10 +286,10 @@ document.addEventListener('DOMContentLoaded', function () {
     $("body").trigger("resetUpload");
     //Clear text input
     $("input, textarea").val("");
-    $(".app-overlay").removeClass("is-active");
-    $(".is-new-content").removeClass("is-highlighted");
-    $(".close-wrap").addClass("is-hidden");
-    $(".all-stories ").removeClass("block-scroll");
+    $(".app-overlay").classList.remove("is-active");
+    $(".is-new-content").classList.remove("is-highlighted");
+    $(".close-wrap").classList.add("is-hidden");
+    $(".all-stories ").classList.remove("block-scroll");
     $("#addVideo").show();
     $("#addBtn").show();
   });
@@ -305,9 +300,9 @@ document.addEventListener('DOMContentLoaded', function () {
     // show it in a modal.
     var post = $(this).closest(".card");
     var stories = $(post).attr("stories-id");
-    post.find(".post-media").addClass("smaller");
-    post.find(".comments-wrap").removeClass("is-hidden");
-    post.find("textarea").focus();
+    post.querySelectorAll(".post-media").classList.add("smaller");
+    post.querySelectorAll(".comments-wrap").classList.remove("is-hidden");
+    post.querySelectorAll("textarea").focus();
 
     $.ajax({
       url: "/stories/get-thread/",
@@ -318,8 +313,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
       success: function (data) {
         if (data.thread.trim() != "")
-          post.find(".comments-body").html(data.thread);
-        post.find("input[name=parent]").val(data.uuid);
+          post.querySelectorAll(".comments-body").html(data.thread);
+        post.querySelectorAll("input[name=parent]").val(data.uuid);
       },
     });
   });
@@ -336,9 +331,9 @@ document.addEventListener('DOMContentLoaded', function () {
       cache: false,
       success: function (data) {
         $('[name="post"]').val("");
-        $(".app-overlay").removeClass("is-active");
-        $(".is-new-content").removeClass("is-highlighted");
-        $(".close-wrap").addClass("is-hidden");
+        $(".app-overlay").classList.remove("is-active");
+        $(".is-new-content").classList.remove("is-highlighted");
+        $(".close-wrap").classList.add("is-hidden");
         feather.replace();
         $("#postStoriesForm")[0].reset();
         $("input, textarea").val("");
@@ -361,13 +356,13 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   $(".select-status button").click(function (e) {
-    $("#selected-status #viewer-icon").html($(this).find("svg").html());
-    $("#selected-status span").text($(this).find("h3").text());
+    $("#selected-status #viewer-icon").html($(this).querySelectorAll("svg").html());
+    $("#selected-status span").textContent($(this).querySelectorAll("h3").textContent());
     $("#viewers").val($(this).data("status"));
   });
   $(".dropdown-trigger").click(function (e) {
     e.preventDefault();
-    $(".dropdown-trigger").toggleClass("is-active");
+    $(".dropdown-trigger").classList.toggle("is-active");
   });
 
   $(document.body).on("click", ".stry-image", function () {
