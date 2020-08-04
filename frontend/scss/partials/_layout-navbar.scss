@@ -4,10 +4,6 @@
 Navbar styles
 ========================================================================== */
 
-/* ==========================================================================
-0. Main Navbar
-========================================================================== */
-
 .navbar {
     position: fixed;
     left: 0;
@@ -143,19 +139,13 @@ Navbar styles
                 left: unset !important;
                 max-height: unset !important;
 
-                &:before {
-                    right: 23px !important;
-                    left: unset !important;
-                }
-
                 &:after {
                     display: none !important;
                 }
             }
             &.is-navbarTop{
-                 left: 0 !important;
                   &:before {
-                     left: 7%!important;
+                     right: 7% !important;
                 }
             }
 
@@ -166,12 +156,8 @@ Navbar styles
                 //header
                 .nav-drop-header {
                     display: flex;
-                    justify-content: space-between;
                     align-items: center;
-                    padding: 10px 16px;
-                    border-bottom: 1px solid $fade-grey;
-                    border-radius: 4px 4px 0 0;
-                    background: $white;
+                    padding: 15px 16px;
 
                     span,
                     a {
@@ -213,7 +199,7 @@ Navbar styles
 
                     //Account items list
                     &.account-items {
-                        padding: 10px 0;
+                        padding: 0 0;
 
                         hr {
                             margin: .4rem 0 !important;
@@ -221,9 +207,9 @@ Navbar styles
 
                         //List item
                         .account-item {
-                            padding: 8px 16px;
+                            padding: 2px 8px;
                             display: block;
-                            line-height: 1.2;
+                            line-height: 3;
 
                             //media object
                             .media {
@@ -249,7 +235,7 @@ Navbar styles
                                     display: flex;
                                     justify-content: center;
                                     align-items: center;
-                                    margin-right: 1rem;
+                                    margin-right: 0.5rem;
 
                                     svg {
                                         width: 18px;

@@ -1,12 +1,84 @@
-$(function () {
+document.addEventListener('DOMContentLoaded', function () {
+
+   //window.HELP_IMPROVE_VIDEOJS = false;
+
+  //Hide create card on stories details, to focus on shared content
+  if (document.getElementById('compose-card').classList.contains('is-hidden') &&
+    window.location.href.endsWith('/stories/')) {
+    document.getElementById('compose-card').classList.toggle('is-hidden');
+  }
+
+  function prepareTruncatedText(e) {
+      if ('querySelector' in document && 
+        'addEventListener' in window) {
+
+        var fullTextWrapper = e.parentElement.querySelector('.fulltext');
+        var toggleButtonText = e.parentElement.querySelector('.text');
+        var shortText = e.parentElement.querySelector('#short-content');
+
+        // change attributes and text if full text is shown/hidden
+        if (!fullTextWrapper.hasAttribute('hidden')) {
+            if (toggleButtonText.innerText == 'Less') {
+                toggleButtonText.innerText = 'More';
+            }
+            fullTextWrapper.setAttribute('hidden', true);
+            shortText.hidden = false;
+        } else {
+            if (toggleButtonText.innerText == 'More') {
+                toggleButtonText.innerText = 'Less';
+            }
+            fullTextWrapper.removeAttribute('hidden');
+            shortText.hidden = true;
+        }
+    }
+  }
+
+  //var page = 1;
+  //var empty_page = false;
+  //var block_request = false;
+  //var is_tag_page = "{{tag}}";
+  //if (is_tag_page == "None") {
+   // $(window).scroll(function () {
+    //  if (empty_page == false && block_request == false) {
+     //   block_request = true;
+      //  page += 1;
+       // $('.loading').removeClass('is-hidden')
+        //$.when(
+         // $.get('?page=' + page, function (data) {
+          //  if (data == '') {
+           //     empty_page = true;
+            //    $('.loading').addClass('is-hidden')
+             //   $('.stream').append('<div class="m-auto"> End of Stories</div>')
+           // } else {
+            //    $('.loading').addClass('is-hidden');
+             //   block_request = false;
+              //  $('.stream').append(data);
+
+               // loadvideo();
+            //}
+
+       //   })
+      ////////  ).done(
+    ////////      lazyload()
+     ////////   )
+   ////////   }
+ ////////   });
+ //////// }
+
+  //$(' .post-text').linkify({ target: "_blank" });
+
+  document.getElementById('replyStories').disabled = true;
+  document.getElementById('replyInput').addEventListener('keyup', function () {
+      document.getElementById('replyStories').disabled = this.value == "" ? true : false);
+  });
 
   var infinite = new Waypoint.Infinite({
-    element: $(".infinite-container")[0],
+    element: document.querySelectorAll(".infinite-container")[0],
     onBeforePageLoad: function () {
-      $(".load").show();
+      document.querySelector(".load").style.cssText += ';display:block !important;';
     },
-    onAfterPageLoad: function ($items) {
-      $(".load").hide();
+    onAfterPageLoad: function () {
+        document.querySelector(".load").style.display = 'hidden';
     },
   });
 
@@ -17,16 +89,32 @@ $(function () {
     return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
   }
 
-  $("input, textarea").val("");
+  documentElement.querySelector("input, textarea").value = "";
 
   //Submit stories
-  $(".submit-button").click(function (e) {
-    e.preventDefault();
-    //check if text only
-    if (uploader.fileStats.totalFilesNum > 0) {
-      $("body").trigger("submitClicked");
-    } else if ($("#publish").val().substring(0, 20).length != 0) {
-      $("body").trigger("uploadComplete");
+  document.getElementsByClassName("submit-button")[0].addEventListener('click', function (e) {
+        e.preventDefault();
+        //check if text only
+        if (uploader.fileStats.totalFilesNum > 0) {
+
+            // Create a new event, allow bubbling
+            const submitEv = new CustomEvent('submitClicked', {
+              bubbles: true
+            });
+
+           //inside the document dispatches/triggers the event to fire
+           //I can select the form instead of the body
+           document.querySelector("body").dispatchEvent(submitEv); 
+
+    } else if (document.getElementById("publish").value.substring(0, 20).length != 0) {
+
+            // Create a new event, allow bubbling
+            const uploadComp = new CustomEvent('uploadComplete', {
+              bubbles: true
+            });
+           //inside the document dispatches/triggers the event to fire
+           document.querySelector("body").dispatchEvent(uploadComp); 
+
     } else {
       error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">

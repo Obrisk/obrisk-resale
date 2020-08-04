@@ -56,6 +56,22 @@
     justify-content: flex-end;
 }
 
+
+.guest-user {
+    justify-content: flex-end;
+}
+
+.is-auth-user {
+    justify-content: space-between;
+}
+
+.account-item {
+    border-color: #dbdbdb;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 0;
+}
+
 .django-messages {
     margin-top: 4px;
     padding-top: 2px;

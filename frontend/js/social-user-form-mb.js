@@ -21,19 +21,6 @@ var unverify_form = document.getElementById('unverify-form');
 
 
 
-document.addEventListener('DOMContentLoaded', function () {
-    var len = username_el.value.length;
-    username_el.setSelectionRange(len, len);
-
-    $.wnoty({
-      type: "info",
-      autohide: false,
-      message: "🎉 You have linked your wechat a/c🎉 \n Lastly, verify your info"
-    });
-
-});
-
-
 /* -------------------------------------------------------------------------- */
 /*                               utils and libs                               */
 /* -------------------------------------------------------------------------- */
@@ -71,8 +58,17 @@ confirm_btn.addEventListener('click', function (event) {
 });
 
 
+document.addEventListener('DOMContentLoaded', function() {
 
-$(function() {
+    var len = username_el.value.length;
+    username_el.setSelectionRange(len, len);
+
+    $.wnoty({
+      type: "info",
+      autohide: false,
+      message: "🎉 You have linked your wechat a/c🎉 \n Lastly, verify your info"
+    });
+
   send_code_btn.addEventListener('click', function (event) {
     if (!phone_number.value) {
       event.preventDefault();
@@ -97,10 +93,10 @@ $(function() {
             if (data.success == true) {
               timeout = 60;
               send_code_btn.disabled = true;
-              $("#phone_label").hide();
+              document.getElementById("phone_label").hide();
 
-              document.getElementById("code").classList.remove("d-none")
-              //document.getElementById("cant-verify").classList.remove("d-none")
+              document.getElementById("code").classList.remove("is-hidden")
+              //document.getElementById("cant-verify").classList.remove("is-hidden")
 
               if (data.message != undefined) {
                   code_notice.innerHTML = "<p class='blue-link'>" + data.message + "<p>";
@@ -239,7 +235,7 @@ $(function() {
   verify_code_input.addEventListener('keyup', e => {
 
         if (e.target.value.length == 6) {
-          document.getElementsByClassName("loading")[0].toggleClass("d-none");
+          document.getElementsByClassName("loading")[0].classList.toggle("is-hidden");
 
           if (
               isNaN(verify_code_input.value) ||

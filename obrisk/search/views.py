@@ -35,7 +35,7 @@ class SearchListView(LoginRequiredMixin, ListView):
         # context["users_list"] = get_user_model().objects.filter(
         #     Q(username__icontains=query) | Q(
         #         name__icontains=query)).distinct()
-            
+
         context["images"]  = ClassifiedImages.objects.all()
 
         context["stories_count"] = context["stories_list"].count()

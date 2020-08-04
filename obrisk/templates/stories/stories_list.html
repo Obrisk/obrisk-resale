@@ -295,110 +295,11 @@
 
 {% block extra_js %}
 
-<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/vendor/jquery.waypoints.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/vendor/linkify.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/vendor/videojs.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-   window.HELP_IMPROVE_VIDEOJS = false;
-
-  //Hide create card on stories details, to focus on shared content
-  if ($('#compose-card').hasClass('is-hidden') &&
-    window.location.href.endsWith('/stories/')) {
-    $('#compose-card').toggleClass('is-hidden');
-  }
-
-  function prepareTruncatedText(e) {
-      if ('querySelector' in document && 
-        'addEventListener' in window) {
-
-        var fullTextWrapper = e.parentElement.querySelector('.fulltext');
-        var toggleButtonText = e.parentElement.querySelector('.text');
-        var shortText = e.parentElement.querySelector('#short-content');
-
-        // change attributes and text if full text is shown/hidden
-        if (!fullTextWrapper.hasAttribute('hidden')) {
-            if (toggleButtonText.innerText == 'Less') {
-                toggleButtonText.innerText = 'More';
-            }
-            fullTextWrapper.setAttribute('hidden', true);
-            shortText.hidden = false;
-        } else {
-            if (toggleButtonText.innerText == 'More') {
-                toggleButtonText.innerText = 'Less';
-            }
-            fullTextWrapper.removeAttribute('hidden');
-            shortText.hidden = true;
-        }
-    }
-  }
-
-  var page = 1;
-  var empty_page = false;
-  var block_request = false;
-  var is_tag_page = "{{tag}}";
-  if (is_tag_page == "None") {
-    $(window).scroll(function () {
-      if (empty_page == false && block_request == false) {
-        block_request = true;
-        page += 1;
-        $('.loading').removeClass('is-hidden')
-        $.when(
-          $.get('?page=' + page, function (data) {
-            if (data == '') {
-                empty_page = true;
-                $('.loading').addClass('is-hidden')
-                $('.stream').append('<div class="m-auto"> End of Stories</div>')
-            } else {
-                $('.loading').addClass('is-hidden');
-                block_request = false;
-                $('.stream').append(data);
-
-                loadvideo();
-            }
-
-          })
-        ).done(
-          lazyload()
-        )
-      }
-    });
-  }
-
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const app = "stories";
   const user = "{{ request.user.username }}";
 
- //Load videos
- var loadvideo = function () {
-    Array.from(document.querySelectorAll('.video-js')).map(p => videojs(p, {
-        "controlBar": {
-        "playToggle": true,
-        "captionsButton": false,
-        "chaptersButton": false,
-        "subtitlesButton": false,
-        "remainingTimeDisplay": false,
-        "progressControl": {
-            "seekBar": true
-        },
-        "fullscreenToggle": false,
-        "playbackRateMenuButton": false
-       },
-       "aspectRatio": "4:3"
-    }));
-  }
-
-  $(document).ready(function () {
-    loadvideo();
-
-    $(' .post-text').linkify({ target: "_blank" });
-
-    $('#replyStories').prop('disabled', true);
-    $('#replyInput').keyup(function () {
-      $('#replyStories').prop('disabled', this.value == "" ? true : false);
-    })
-
-  });
 </script>
 
 <link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
