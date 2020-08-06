@@ -10,8 +10,8 @@ if (
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    var drop_trigger = document.querySelector('.drop-trigger');
-    var nav_drop = document.querySelector('.nav-drop');
+    const drop_trigger = document.querySelector('.drop-trigger');
+    const nav_drop = drop_trigger.querySelector('.nav-drop');
 
     document.getElementById("addNewItem").addEventListener('click', function(e) {
       e.preventDefault();
@@ -35,7 +35,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
     drop_trigger.addEventListener('click', function (e) {
         if (drop_trigger.classList.contains('is-account')) {
-            console.log('here');
             nav_drop.classList.add('is-active');
             drop_trigger.classList.add('is-opened');
         }

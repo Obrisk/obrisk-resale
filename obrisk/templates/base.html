@@ -157,7 +157,7 @@
           </li>
 
         {% if request.user.is_authenticated %}
-            <li class="">
+            <li class="notif-li">
 
             <div class="navbar-item is-icon drop-trigger">
               <div id="" class="notifications navbar-item is-icon drop-trigger">
@@ -195,8 +195,8 @@
                             {% trans 'CLOSE' %}
                         </a>
                       </div>
-                      <div class="nav-drop-body account-items">
 
+                      <div class="nav-drop-body account-items">
                         <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
                           <div class="media">
                             <div class="icon-wrap">
@@ -237,14 +237,18 @@
                             </div>
                           </div>
                         </a>
+                      <!-- close nav-drop-body -->
                       </div>
-                    </div>
+
+                   <!-- close inner div-->
+                   </div>
 
                 <div class="nav-drop acc-nav-toggle" id=""> 
                 </div>
 
+               <!-- close inner, nav-drop, ac-dropdown -->
               </div>
-          </div>
+            </div>
           </li>
 
         {% else %}
