@@ -177,90 +177,86 @@
             </div>
           </li>
 
-          <li class="is-pulled-right">
-            <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
-              <div class="user-image">
-                {% if request.user.thumbnail %}
-                <img src="{{ oss }}/{{request.user.thumbnail}}" alt="Picture Profile"
-                  style="width:30px;height:30px;border-radius: 50%;"
-                  class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
-                {% else %}
-                <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
-                {% endif %}
-              </div>
-              <div class="nav-drop is-account-dropdown">
-                <div class="inner">
-                  <div class="nav-drop-header is-auth-user">
-                    <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                    <a id="close">❌
-                        {% trans 'CLOSE' %}
-                    </a>
-                  </div>
-                  <div class="nav-drop-body account-items">
+          <li class="top-nav-user-li">
+            <div id="account-dropdown" class="user-image navbar-item acc is-account drop-trigger has-caret">
+                  {% if request.user.thumbnail %}
+                    <img   src="{{ oss }}/{{request.user.thumbnail}}" alt="Picture Profile"
+                      style="width:30px;height:30px;border-radius: 50%;"
+                      class="img-drop-trigger rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
+                  {% else %}
+                    <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
+                  {% endif %}
 
-                    <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
-                      <div class="media">
-                        <div class="icon-wrap">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-user">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" /></svg>
-                        </div>
-                        <div>
-                            <h3>
-                                {% trans 'My Profile' %}
-                            </h3>
-                            <small>
-                                {% trans 'Access profile & settings' %}
-                            </small>
-                        </div>
+                  <div class="nav-drop is-account-dropdown">
+                    <div class="inner">
+                      <div class="nav-drop-header is-auth-user">
+                        <span class="username">{{ request.user.username|truncatechars:12}}</span>
+                        <a id="close">❌
+                            {% trans 'CLOSE' %}
+                        </a>
                       </div>
-                    </a>
+                      <div class="nav-drop-body account-items">
 
-                    <a class="account-item" href="{% url 'account_logout' %}">
-                      <div class="media">
-                        <div class="icon-wrap">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-power">
-                            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                            <line x1="12" y1="2" x2="12" y2="12"></line>
-                          </svg>
-                        </div>
-                        <div>
-                            <h3>
-                                {% trans 'Log out' %}
-                            </h3>
-                            <small>
-                                {% trans 'Log out from your account.' %}
-                            </small>
-                        </div>
+                        <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
+                          <div class="media">
+                            <div class="icon-wrap">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-user">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" /></svg>
+                            </div>
+                            <div>
+                                <h3>
+                                    {% trans 'My Profile' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Access profile & settings' %}
+                                </small>
+                            </div>
+                          </div>
+                        </a>
+
+                        <a class="account-item" href="{% url 'account_logout' %}">
+                          <div class="media">
+                            <div class="icon-wrap">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-power">
+                                <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                                <line x1="12" y1="2" x2="12" y2="12"></line>
+                              </svg>
+                            </div>
+                            <div>
+                                <h3>
+                                    {% trans 'Log out' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Log out from your account.' %}
+                                </small>
+                            </div>
+                          </div>
+                        </a>
                       </div>
-                    </a>
-                  </div>
-                </div>
+                    </div>
 
-                <div class="nav-drop acc-nav-toggle" id="">
-
+                <div class="nav-drop acc-nav-toggle" id=""> 
                 </div>
 
               </div>
-            </div>
+          </div>
           </li>
 
         {% else %}
             <li class="top-nav-user-li">
                 <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
-
-                  <img class="user-image" src="{% static 'img/user.png' %}"
-                    height="30px" width="30px" alt="No Profile Picture" />
+                      <img class="user-image" src="{% static 'img/user.png' %}"
+                        height="30px" width="30px" alt="No Profile Picture" />
 
                   <div class="nav-drop is-navbarTop is-account-dropdown">
-
                     <div class="inner">
                           <div class="nav-drop-header guest-user">
-                            <a id="close">❌ CLOSE</a>
+                            <a href="#" id="close">❌ CLOSE</a>
                           </div>
 
                           <div class="nav-drop-body account-items">
@@ -295,7 +291,7 @@
                                     </div>
                                   </div>
                                 </a>
-                          </div>
+                            </div>
                      <!-- close inner, nav-drop, ac-dropdown -->
                     </div>
                   </div>

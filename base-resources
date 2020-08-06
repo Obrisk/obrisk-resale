@@ -29,6 +29,9 @@ CSS
 JS
 
 stories:
+<script src="{% static 'js/vendor/infinite.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
+
 <script src="{% static 'js/preset.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/vendor/fancybox.min.js' %}"></script>
 <script src="{% static 'js/lazyload.js' %}"></script>

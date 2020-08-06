@@ -11,6 +11,7 @@ if (
 
 document.addEventListener("DOMContentLoaded", function() {
     var drop_trigger = document.querySelector('.drop-trigger');
+    var nav_drop = document.querySelector('.nav-drop');
 
     document.getElementById("addNewItem").addEventListener('click', function(e) {
       e.preventDefault();
@@ -32,17 +33,18 @@ document.addEventListener("DOMContentLoaded", function() {
       }
     });
 
-    drop_trigger.addEventListener('click', function () {
-        //if (drop_trigger.classList.contains('is-account')) {
-            //drop_trigger.querySelectorAll('.nav-drop')[0].classList.add('is-active');
-        drop_trigger.classList.add('is-opened');
-        document.querySelector('.nav-drop').classList.add('is-active');
-        //}
+    drop_trigger.addEventListener('click', function (e) {
+        if (drop_trigger.classList.contains('is-account')) {
+            console.log('here');
+            nav_drop.classList.add('is-active');
+            drop_trigger.classList.add('is-opened');
+        }
     });
 
     document.getElementById('close').addEventListener('click', function (e) {
-        document.querySelector('.nav-drop').classList.remove('is-active');
-        document.querySelector('.is-account').classList.remove('is-opened');
+            nav_drop.classList.remove('is-active');
+            drop_trigger.classList.remove('is-opened');
+            e.stopPropagation();
     });
 
     if (currentUser !== undefined) {
