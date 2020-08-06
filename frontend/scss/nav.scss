@@ -140,6 +140,20 @@
   left: auto !important;
 }
 
+.msg-notification {
+    position:relative;
+}
+
+.new-msgs-icon {
+    display: none;
+    position: absolute;
+    right: 20px;
+    position: absolute;
+    left: 25px;
+    color: #fb4133;
+    font-size: 12px;
+}
+
 .iphone-nav-bt {
     margin-bottom: 4px;
 }

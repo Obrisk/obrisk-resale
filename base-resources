@@ -27,8 +27,24 @@ CSS
 
 
 JS
-
 stories:
+
+<obrisk.js>
+document.querySelector("#notifications").addEventListener('click', function() {
+document.querySelector("#recent-notifications").innerHTML = "";
+
+    fetch("/ws/notifications/latest-notifications/")
+    .then(function(response) {
+        // with the response, parse to text, then pass it along
+        response.text().then(function(data) {
+            document.querySelector("#recent-notifications").innerHTML = data;
+        });
+    });
+ }
+return false;
+});
+
+
 <script src="{% static 'js/vendor/infinite.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
 

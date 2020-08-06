@@ -45,25 +45,21 @@ document.addEventListener("DOMContentLoaded", function() {
             drop_trigger.classList.remove('is-opened');
             e.stopPropagation();
     });
-
-    if (currentUser !== undefined) {
-        let notf = document.querySelector(".notifications");
-        notf.addEventListener('click', function(e) {
-            if (notif.is(".recent-notifications #close")) {
-              document.querySelector(".recent-notifications").classList.remove("is-active");
-            } else {
-              document.querySelector(".recent-notifications").innerHTML("");
-
-             // use fetch on the /posts route, then pass the response along
-                fetch("/ws/notifications/latest-notifications/")
-                .then(function(response) {
-                    // with the response, parse to text, then pass it along
-                    response.text().then(function(data) {
-                      document.querySelector(".recent-notifications").innerHTML(data);
-                    });
-                });
-            }
-            return false;
-      });
-    }
 });
+
+
+//Hide Top nav bar on scroll
+var prevScrollpos = window.pageYOffset;
+window.onscroll = function() {
+  var currentScrollPos = window.pageYOffset;
+  if (prevScrollpos > currentScrollPos) {
+    document.getElementById("navbarBottom").style.bottom = "-80px";
+    document.getElementById("navbarTop").style.top = "0";
+  } else {
+    document.getElementById("navbarBottom").style.bottom = "0";
+    if (!document.querySelector(".is-account-dropdown").contains("is-active")) {
+      document.getElementById("navbarTop").style.top = "0";
+    }
+  }
+  prevScrollpos = currentScrollPos;
+};

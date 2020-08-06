@@ -537,70 +537,72 @@ swSubReg();
 //-------------------------------------------------------------------------------
 
 
-$(".form-group").removeClass("row");
+document.getElementsByClassName("form-group")[0].classList.remove("row");
 
 /* Notifications JS basic client */
-$(function() {
+document.addEventListener('DOMContentLoaded', function() {
   let emptyMessage = "You have no unread notification";
 
   function checkNotifications() {
-    $.ajax({
-      url: "/ws/notifications/latest-notifications/",
-      cache: false,
-      success: function(data) {
-        if (!data.includes(emptyMessage)) {
-          $(".is-notify").addClass("notification--num");
-        }
-      }
+        fetch("/ws/notifications/latest-notifications/")
+        .then(function(response) {
+            // with the response, parse to text, then pass it along
+            response.text().then(function(data) {
+            document.querySelector(".recent-notifications").innerHTML= data;
+            //if (!data.includes(emptyMessage)) {
+               //document.querySelector(".is-notify").classList.add("notification--num");
+            //}
+        });
     });
   }
 
   function update_social_activity(id_value) {
-    let storiesToUpdate = $("[stories-id=" + id_value + "]");
+    let storiesToUpdate = document.querySelector("[stories-id=" + id_value + "]");
     payload = {
-      id_value: id_value
+      id_value: id_value,
+      'csrfmiddlewaretoken': document.querySelector(
+               '#csrf-helper input[name="csrfmiddlewaretoken"]'
+           ).getAttribute('value')
     };
-    $.ajax({
-      url: "/stories/update-interactions/",
-      data: payload,
-      type: "POST",
-      cache: false,
-      success: function(data) {
-        $(".like-count", storiesToUpdate).text(data.likes);
-        $(".comment-count", storiesToUpdate).text(data.comments);
-      }
+
+    fetch('/stories/update-interactions/', {
+        method: 'POST',
+        body: payload,
+        credentials: 'same-origin'
+    }).then(function(response) {
+        // with the response, parse to text, then pass it along
+        response.text().then(function(data) {
+            document.querySelector(".like-count", storiesToUpdate).textContent(data.likes);
+            document.querySelector(".comment-count", storiesToUpdate).textContent(data.comments);
+        });
     });
   }
-
-  checkNotifications();
-
   // $('#notifications').popover({
   //     html: true,
   //     trigger: 'manual',
   //     container: "body",
   //     placement: "bottom",
   // });
+  const notif = document.querySelector(".notifications");
 
-  $("#notifications").click(function() {
-    $("#recent-notifications").html("");
-    $.ajax({
-      url: "/ws/notifications/latest-notifications/",
-
-      success: function(data) {
-        console.log(data);
-        $("#recent-notifications").html(data);
-      }
-    });
-
+  notif.addEventListener('click', function(e) {
+    if (notif.contains(".recent-notifications #close")) { //if (notif.is(.recent-not...)
+          document.querySelector(".recent-notifications").classList.remove("is-active");
+    } else {
+          document.querySelector(".recent-notifications").innerHTML = "";
+          checkNotifications();
+    }
     return false;
   });
 
+  checkNotifications();
+
   // Code block to manage WebSocket connections for notifications
   // Try to correctly decide between ws:// and wss://
-  var ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
-  var notif = new Audio("/static/sound/knock_brush.ogg");
-  var ws_path = ws_scheme + "://" + window.location.host + "/ws/notifications/";
-  var webSocket = new channels.WebSocketBridge();
+  const ws_scheme = window.location.protocol == "https:" ? "wss" : "ws";
+  const socket_notif = new Audio("/static/sound/knock_brush.ogg");
+  const ws_path = ws_scheme + "://" + window.location.host + "/ws/notifications/";
+  const webSocket = new channels.WebSocketBridge();
 
   webSocket.connect(ws_path);
 
@@ -609,8 +611,8 @@ $(function() {
     switch (event.key) {
       case "new_message":
         if (event.recipient == currentUser) {
-          notif.play();
-          $(".msg-notification i").show();
+          socket_notif.play();
+          document.querySelector(".msg-notification i").style.display = 'block !important';
         }
         break;
       default:
@@ -619,6 +621,7 @@ $(function() {
   });
 
   // When debugging websockets uncomment these lines.
+  //Now it is still JQuery it has to be converted to vanilla JS
   // webSocket.socket.onopen = function () {
   //     //console.log("Connected to " + ws_path);
   // };
@@ -651,19 +654,3 @@ $(function() {
   //     };
   // });
 });
-
-//Hide Top nav bar on scroll
-var prevScrollpos = window.pageYOffset;
-window.onscroll = function() {
-  var currentScrollPos = window.pageYOffset;
-  if (prevScrollpos > currentScrollPos) {
-    document.getElementById("navbarBottom").style.bottom = "-80px";
-    document.getElementById("navbarTop").style.top = "0";
-  } else {
-    document.getElementById("navbarBottom").style.bottom = "0";
-    if (!$(".is-account-dropdown").hasClass("is-active")) {
-      document.getElementById("navbarTop").style.top = "0";
-    }
-  }
-  prevScrollpos = currentScrollPos;
-};
