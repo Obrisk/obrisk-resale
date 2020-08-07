@@ -161,56 +161,60 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   //Show comments
-  $(document.body).on("click", ".is-comment", function () {
-    // Ajax call to request a given Stories object detail and thread, and to
-    var post = $(this).closest(".card");
-    var stories = $(post).attr("stories-id");
-    post.querySelectorAll(".comments-wrap").classList.toggle("is-hidden");
+  document.querySelector(".is-comment").addEventListener("click", function () {
+    // Ajax call to request a given Stories object detail and thread
+    var post = this.closest(".card");
+    var stories = post.getAttribute("stories-id");
+    post.querySelector(".comments-wrap").classList.toggle("is-hidden");
     window.scrollTo({
       top: offset(post[0]).top,
       behavior: "smooth",
     });
-    $(".emojionearea-editor").keyup(function () {
-      var counter = $(this).closest(".textarea-parent");
-      counter.querySelectorAll(".counter .count").textContent(400 - $(this).val().length);
-      $(this).height("auto");
-      $(this).height($(this).prop("scrollHeight"));
-    });
-    $("input, textarea").val("");
-    $(".emojionearea-editor").html("");
-    $.ajax({
-      url: "/stories/get-thread/",
-      data: {
-        stories: stories,
-      },
-      type: "GET",
-      cache: false,
 
-      success: function (data) {
-        if (data.thread) {
-          if (data.thread.trim() != "") {
-            post.querySelectorAll(".comments-body").html(data.thread);
-          }
-        }
-        post.querySelectorAll("input[name=parent]").val(data.uuid);
-      },
+    document.querySelector(".emojionearea-editor").addEventListener("keyup", function () {
+      var counter = this.closest(".textarea-parent");
+      counter.querySelector(".counter .count").textContent(400 - this.value.length);
+      this.style.height = "auto";
+      //this.height(this.prop("scrollHeight"));
+      this.style.height=this.scrollHeight;
     });
-    $(".comment-textarea").classList.add("focused");
+
+    document.querySelector("input, textarea").value="";
+    document.querySelector(".emojionearea-editor").innerHTML= "";
+
+      fetch(`/stories/get-thread/?stories=${stories}`)
+      .then (resp => resp.json())
+      .then (data => {
+            if (data.thread) {
+              if (data.thread.trim() != "") {
+                post.querySelectorAll(".comments-body").innerHTML=data.thread;
+              }
+            }
+            post.querySelector("input[name=parent]").value=data.uuid;
+      });
+
+    document.querySelector(".comment-textarea").classList.add("focused");
   });
 
   //Comment on a story
-  $(document.body).on("click", "a#post-comment-button", function () {
+  document.querySelector('a#post-comment-button').addEventListener("click", function () {
     // Ajax call to register a reply to any given Stories object.
-    post = $(this).closest(".card");
+    post = this.closest(".card");
 
     if (user != "") {
-      $.ajax({
-        url: "/stories/post-comment/",
-        data: post.querySelectorAll(".replyStoriesForm").serialize(),
-        type: "POST",
-        cache: false,
-        success: function () {
-          post.querySelectorAll(".comment-textarea").val("");
+
+        //'csrfmiddlewaretoken': document.querySelector(
+                   //'#csrf-helper input[name="csrfmiddlewaretoken"]'
+              // ).getAttribute('value')
+
+    fetch('/stories/post-comment/', {
+        method: 'POST',
+        body: post.querySelectorAll(".replyStoriesForm").serialize(),
+        credentials: 'same-origin'
+    }).then(function(response) {
+        // with the response, parse to text, then pass it along
+        response.text().then(function(data) {
+          post.querySelectorAll(".comment-textarea").value("");
           post
             .querySelectorAll(".comments-count .count")
             .html(parseInt(post.querySelectorAll(".comments-count .count").html(), 10) + 1);
@@ -220,7 +224,7 @@ document.addEventListener('DOMContentLoaded', function () {
           post.querySelectorAll(".comments-heading small").textContent(comment_count + 1);
 
           var stories = $(post).attr("stories-id");
-          $("input, textarea").val("");
+          $("input, textarea").value("");
           setTimeout(function () {
             $.ajax({
               url: "/stories/get-thread/",
@@ -232,7 +236,7 @@ document.addEventListener('DOMContentLoaded', function () {
               success: function (data) {
                 if (data.thread.trim() != "")
                   post.querySelectorAll(".comments-body").html(data.thread);
-                post.querySelectorAll("input[name=parent]").val(data.uuid);
+                post.querySelectorAll("input[name=parent]").value(data.uuid);
               },
             });
           }, 200);
@@ -253,13 +257,20 @@ document.addEventListener('DOMContentLoaded', function () {
       window.location.href = "/auth/login/";
     }
   });
+        });
+    });
+
+
+
+      $.ajax({
+        success: function () {
 
   //Character count
   $("textarea").keyup(function () {
-    var counter = $(this).closest(".textarea-parent");
-    counter.querySelectorAll(".counter .count").textContent(400 - $(this).val().length);
-    $(this).height("auto");
-    $(this).height($(this).prop("scrollHeight"));
+    var counter = this.closest(".textarea-parent");
+    counter.querySelectorAll(".counter .count").textContent(400 - this.value.length);
+    this.height("auto");
+    this.height(this.prop("scrollHeight"));
   });
 
   //Open publish mode
@@ -272,7 +283,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   //Enable and disable publish button based on the textarea value length (1)
   $("#publish").on("input", function () {
-    var valueLength = $(this).val().length;
+    var valueLength = this.value.length;
 
     if (valueLength >= 1 || $(".filelist").children().length > 0) {
       $("#publish-button").classList.remove("is-disabled");
@@ -285,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $(".close-publish").on("click", function () {
     $("body").trigger("resetUpload");
     //Clear text input
-    $("input, textarea").val("");
+    $("input, textarea").value("");
     $(".app-overlay").classList.remove("is-active");
     $(".is-new-content").classList.remove("is-highlighted");
     $(".close-wrap").classList.add("is-hidden");
@@ -298,7 +309,7 @@ document.addEventListener('DOMContentLoaded', function () {
   $(document.body).on("click", ".is-comment", function () {
     // Ajax call to request a given Stories object detail and thread, and to
     // show it in a modal.
-    var post = $(this).closest(".card");
+    var post = this.closest(".card");
     var stories = $(post).attr("stories-id");
     post.querySelectorAll(".post-media").classList.add("smaller");
     post.querySelectorAll(".comments-wrap").classList.remove("is-hidden");
@@ -314,15 +325,15 @@ document.addEventListener('DOMContentLoaded', function () {
       success: function (data) {
         if (data.thread.trim() != "")
           post.querySelectorAll(".comments-body").html(data.thread);
-        post.querySelectorAll("input[name=parent]").val(data.uuid);
+        post.querySelectorAll("input[name=parent]").value(data.uuid);
       },
     });
   });
 
   $("body").on("uploadComplete", function (event) {
-    $("#id_images").val(images);
-    $("#id_video").val(videos);
-    $("#id_img_error").val(img_error);
+    $("#id_images").value(images);
+    $("#id_video").value(videos);
+    $("#id_img_error").value(img_error);
 
     $.ajax({
       url: "/stories/post-stories/",
@@ -330,13 +341,13 @@ document.addEventListener('DOMContentLoaded', function () {
       type: "POST",
       cache: false,
       success: function (data) {
-        $('[name="post"]').val("");
+        $('[name="post"]').value("");
         $(".app-overlay").classList.remove("is-active");
         $(".is-new-content").classList.remove("is-highlighted");
         $(".close-wrap").classList.add("is-hidden");
         feather.replace();
         $("#postStoriesForm")[0].reset();
-        $("input, textarea").val("");
+        $("input, textarea").value("");
         $(".stream").prepend(data);
         lazyload();
         $("body").trigger("resetUpload");
@@ -356,9 +367,9 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   $(".select-status button").click(function (e) {
-    $("#selected-status #viewer-icon").html($(this).querySelectorAll("svg").html());
-    $("#selected-status span").textContent($(this).querySelectorAll("h3").textContent());
-    $("#viewers").val($(this).data("status"));
+    $("#selected-status #viewer-icon").html(this.querySelectorAll("svg").html());
+    $("#selected-status span").textContent(this.querySelectorAll("h3").textContent());
+    $("#viewers").value(this.data("status"));
   });
   $(".dropdown-trigger").click(function (e) {
     e.preventDefault();
@@ -370,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function () {
       type: "get",
       url:
         "/stories/story-images/?story_id=" +
-        $(this).closest("[stories-id]").data("id"),
+        this.closest("[stories-id]").data("id"),
       success: function (response) {
         $.fancybox.open(response, {
           type: "image",
@@ -390,5 +401,5 @@ var shareMe = function shareMe(username, text, url) {
 };
 
 $(document.body).on("click", ".delete-story", function () {
-  location.href = $(this).attr("href");
+  location.href = this.attr("href");
 });

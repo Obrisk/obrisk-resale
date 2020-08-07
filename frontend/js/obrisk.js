@@ -549,7 +549,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // with the response, parse to text, then pass it along
             response.text().then(function(data) {
             document.querySelector(".recent-notifications").innerHTML= data;
-            //if (!data.includes(emptyMessage)) {
+            //if (!data.includes(emptyMessage)) { //seems is-notify is not in the DOM
                //document.querySelector(".is-notify").classList.add("notification--num");
             //}
         });
