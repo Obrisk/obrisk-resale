@@ -1,4 +1,4 @@
-/*! _cards.scss | Friendkit | © Css Ninja. 2018-2019 */
+/*! _cards.scss | Obrisk-team */
 
 /* ==========================================================================
 Card styles
@@ -12,12 +12,15 @@ Card styles
 1. Main Extendable Class
 ========================================================================== */
 
+#compose-card {
+  top:20px;
+}
+ 
 .card {
   position: relative;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
   border: 1px solid $fade-grey;
-  border-radius: 6px;
-  box-shadow: none;
+  border-radius: 8px;
 
   //Header
   .card-heading {

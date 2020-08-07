@@ -1,6 +1,24 @@
 @import "partials/layout-colors";
 @import "partials/layout-navbar";
 
+/* ==========================================================================
+ Slimscroll
+========================================================================== */
+
+//standard
+.has-slimscroll {
+    overflow: hidden !important;
+
+    &::-webkit-scrollbar {
+        width: 6px !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+    }
+}
+
 @mixin nav-ul-flex {
     display: flex;
     justify-content: space-between;

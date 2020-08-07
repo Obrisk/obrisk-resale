@@ -19,11 +19,33 @@ $(function() {
 });
 
 
+
 CSS
+stories: 
+<link href="{% static 'css/uploader.css' %}" rel="stylesheet">
+
+base html:
 <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">
 <!-- This file stores project-specific CSS -->
 <link href="{% static 'css/obrisk.css' %}" rel="stylesheet">
 <link href="{% static 'css/account.css' %}" rel="stylesheet">
+
+component_utils.css
+//small
+.has-slimscroll-xs {
+    overflow-x: hidden !important;
+
+    &::-webkit-scrollbar {
+        width: 2px !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px !important;
+        background: rgba(0, 0, 0, 0.2) !important;
+    }
+}
+
+
 
 
 JS
@@ -59,6 +81,7 @@ return false;
 ##==============End stories============    
 
 
+base html:
 <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/global.js' %}"></script>
 <script src="{% static 'js/main.js' %}"></script>
@@ -69,6 +92,8 @@ return false;
 
 <!-- Page and UI related js -->
 <script src="{% static 'frontend/assets/js/feed.js' %}"></script>
+##==============End base html============    
+
 
 nodepath + "webui-popover/dist/jquery.webui-popover.min.js"
 
