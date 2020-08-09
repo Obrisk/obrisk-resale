@@ -331,33 +331,19 @@
     <nav id="navbarBottom" class="navbar fixed-bottom">
         <ul class="bt-nav-ul is-toggle is-fullwidth">
 
-          <li class="bt-nav-item {% if base_active == 'stories' %} is-active {% endif %}">
-            <a class="bt-nav-link" href="{% url 'stories:list' %}">
-              <span class="nav-icons">
+         <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'classifieds:list' %}">
+                <span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-compass">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                </svg> </span>
-              <span class="nav-label">
-                {% trans 'Stories' %}
-              </span>
-            </a>
-          </li>
-
-          <li class="bt-nav-item {% if base_active == 'posts' %} is-active {% endif %}">
-            <a class="bt-nav-link" href="{% url 'posts:list' %}"><span
-                class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-book-open">
-                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                  class="feather feather-shopping-bag">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
                 </svg>
               </span>
               <span class="nav-label">
-                {% trans 'Articles' %}
+                  {% trans 'Classifieds' %}
               </span>
             </a>
           </li>
@@ -376,23 +362,6 @@
               </span>
               <span class="nav-label">
                   {% trans 'Add' %}
-              </span>
-            </a>
-          </li>
-
-         <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">
-            <a class="bt-nav-link" href="{% url 'classifieds:list' %}">
-                <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-shopping-bag">
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
-              </span>
-              <span class="nav-label">
-                  {% trans 'Classifieds' %}
               </span>
             </a>
           </li>
