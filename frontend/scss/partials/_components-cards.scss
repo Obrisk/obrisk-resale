@@ -18,6 +18,7 @@ Card styles
  
 .card {
   position: relative;
+  margin: 2%;
   margin-bottom: 1rem;
   border: 1px solid $fade-grey;
   border-radius: 8px;
@@ -81,6 +82,8 @@ Card styles
     background-color: $accent;
     background-color: -webkit-linear-gradient(to right, #c2e9fb, #a1c4fd);
     background-color: linear-gradient(to right, #c2e9fb, #a1c4fd);
+    width: 300px;
+    display: none;
 
     .card-heading {
       .dropdown.is-spaced > div {

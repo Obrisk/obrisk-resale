@@ -240,8 +240,8 @@ document.addEventListener('DOMContentLoaded', function () {
               },
             });
           }, 200);
-        },
-        error: function (data) {
+        });
+        }).catch(err =>  {
           error = `
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
           Sorry we can't handle new comments, please try again later.
@@ -250,20 +250,13 @@ document.addEventListener('DOMContentLoaded', function () {
           </button>
         </div>
         `;
-          post.querySelectorAll(".card-footer .media-content").append(error);
-        },
-      });
+          post.querySelector(".card-footer .media-content").append(error);
+          console.log(err)
+        });
     } else {
       window.location.href = "/auth/login/";
     }
   });
-        });
-    });
-
-
-
-      $.ajax({
-        success: function () {
 
   //Character count
   $("textarea").keyup(function () {
