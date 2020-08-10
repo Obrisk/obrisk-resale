@@ -1,17 +1,7 @@
 @import "partials/layout-colors";
 @import "partials/layout-extra-colors";
 @import "partials/components-cards";
-@import "partials/components-buttons";
 
-@import "partials/components-dropdowns";
-@import "partials/components-modals";
-@import "partials/components-forms";
-@import "partials/components-popovers";
-@import "partials/components-checkboxes";
-@import "partials/components-utils";
-@import "partials/app-feed";
-@import "partials/app-stories";
-@import "partials/layout-responsive";
 
 body {
   height: 100% !important;
@@ -26,6 +16,7 @@ body {
 .tags-card-wrapper {
     display: flex;
     justify-content: center;
+    margin-top: 68px;
 }
 
 .small-cards-listing {
@@ -59,6 +50,10 @@ body {
     position: absolute;
     width: 100%;
     z-index: 1;
+}
+
+.classifieds-list-wrapper {
+    padding-top: 0rem;
 }
 
 .sidebar {
