@@ -6,7 +6,7 @@
 <!-- <div class="col-md-9"> -->
 {% for classified in classifieds %}
 <!-- Classified ad. -->
-<div class="card classified-card mr-2 mb-3 justify-content-center">
+<div class="card classified-card">
   <!--Display image-->
 
   <a href="{% url 'classifieds:classified' classified.slug %}"
@@ -31,7 +31,7 @@
       {% else %}
           <p class="card-subtitle O-cl-red"> {% trans 'FREE' %} </p>
       {% endif %}
-      <div class="card-meta d-flex justify-content-between">
+      <div class="card-meta">
 
         <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
 
@@ -92,20 +92,8 @@
      }
   }
   </script>
-  <script>
-    window.addEventListener("load", function (event) {
-      lazyload();
-    });
-  </script>
+
 </div>
-<!-- official ads for phones-->
-{% if official_ads %}
-{% if forloop.counter == 6 %}
-<div class="ads d-lg-none" style="height: 250px; width:80%;">
-  <iframe class="h-100 w-100" src="{% url 'classifieds:mobile-ads'%}" frameborder="0"></iframe>
-</div>
-{% endif %}
-{% endif %}
 
 {% empty %}
 <small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.

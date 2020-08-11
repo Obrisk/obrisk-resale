@@ -1,4 +1,22 @@
+/* -------------------------------------------------------------------------- */
+/*                                    utils                                   */
+/* -------------------------------------------------------------------------- */
+
+function printError(msg, target) {
+  template = `
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+          ${msg}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        `;
+  $(`${target}`).prepend(template);
+}
+
+
 $(function() {
+
   $("body").on("uploadComplete", function(event) {
     //Todo check if images where uploaded or empty
     $("input[name='status']").val("A");
@@ -70,33 +88,3 @@ $(function() {
   });
 });
 
-/* -------------------------------------------------------------------------- */
-/*                                    utils                                   */
-/* -------------------------------------------------------------------------- */
-
-function printError(msg, target) {
-  template = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          ${msg}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        `;
-  $(`${target}`).prepend(template);
-}
-
-
-//Common js for classifieds and posts details pages
-
-function goToEdit () {
-    window.location.href=editUrl;
-}
-
-function shareMe(title, text) {
-    navigator.share({
-      title: title,
-      text: text,
-      url: location.href,
-    });
-}

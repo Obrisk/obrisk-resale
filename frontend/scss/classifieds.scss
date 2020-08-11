@@ -56,6 +56,15 @@ body {
     padding-top: 0rem;
 }
 
+.card-meta {
+   display: flex;
+   justify-content: space-between;
+ }
+
+ .end-classifieds {
+     margin: auto;
+ }
+
 .sidebar {
     float: left;
     width: 280px;
