@@ -96,7 +96,7 @@ def classified_list(request, tag_slug=None):
         if request.is_ajax():
             # If the request is AJAX and the page is out of range
             # return an empty page            
-            return JsonResponse('')
+            return JsonResponse('', safe=False)
         # If page is out of range deliver last page of results
         classifieds = paginator.page(paginator.num_pages)
 
@@ -120,7 +120,7 @@ def classified_list(request, tag_slug=None):
         ajx_classifieds = list(
             classifieds.select_related(
                 'user').values(
-                    'title','price','city','img_thumb'
+                    'title','price','city','img_thumb', 'slug'
                 )
             )
         return JsonResponse({
