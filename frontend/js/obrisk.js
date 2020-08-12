@@ -535,9 +535,8 @@ swSubReg();
 
 //End push notif code
 //-------------------------------------------------------------------------------
-
-
-document.getElementsByClassName("form-group")[0].classList.remove("row");
+//
+//document.getElementsByClassName("form-group")[0].classList.remove("row");
 
 /* Notifications JS basic client */
 document.addEventListener('DOMContentLoaded', function() {

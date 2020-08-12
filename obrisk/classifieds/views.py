@@ -40,7 +40,7 @@ TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 
 def set_popular_tags():
-    popular_tags = Classified.objects.get_counted_tags()[:30]
+    popular_tags = Classified.objects.get_counted_tags()[:10]
 
     cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
@@ -65,24 +65,27 @@ def classified_list(request, tag_slug=None):
     popular_tags = cache.get('popular_tags')
 
     if popular_tags is None:
-        popular_tags = Classified.objects.get_counted_tags()
+        popular_tags = Classified.objects.get_counted_tags()[:10]
+        cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
     #Get classifieds
-    classifieds_list = Classified.objects.get_active().annotate(
-        order = Case (
-            When(city=city, then=Value(1)),
-            default=Value(2),
-            output_field=IntegerField(),
-        )
-    ).annotate (
-        image_thumb = Subquery (
-            ClassifiedImages.objects.filter(
-                classified=OuterRef('pk'),
-            ).values(
-                'image_thumb'
-            )[:1]
-        )
-    ).order_by('order', '-priority', '-timestamp')
+    classifieds_list = Classified.objects.get_active().values(
+                    'title','price','city','slug'
+                ).annotate(
+                    order = Case (
+                        When(city=city, then=Value(1)),
+                        default=Value(2),
+                        output_field=IntegerField(),
+                    )
+                ).annotate (
+                    image_thumb = Subquery (
+                        ClassifiedImages.objects.filter(
+                            classified=OuterRef('pk'),
+                        ).values(
+                            'image_thumb'
+                        )[:1]
+                    )
+                ).order_by('order', '-priority', '-timestamp')
 
     paginator = Paginator(classifieds_list, 20)  # 20 classifieds in each page
     page = request.GET.get('page')
@@ -96,7 +99,7 @@ def classified_list(request, tag_slug=None):
         if request.is_ajax():
             # If the request is AJAX and the page is out of range
             # return an empty page            
-            return JsonResponse('', safe=False)
+            return JsonResponse({'classifieds': 'end'})
         # If page is out of range deliver last page of results
         classifieds = paginator.page(paginator.num_pages)
 
@@ -117,12 +120,7 @@ def classified_list(request, tag_slug=None):
         ).order_by('-timestamp')
 
     if request.is_ajax():
-        ajx_classifieds = list(
-            classifieds.select_related(
-                'user').values(
-                    'title','price','city','img_thumb', 'slug'
-                )
-            )
+        ajx_classifieds = list(classifieds)
         return JsonResponse({
                 'classifieds': ajx_classifieds
             })
