@@ -2,102 +2,106 @@
 {% load static i18n %}
 {% load humanize thumbnail %}
 
-<!-- Classified Entries Column -->
-<!-- <div class="col-md-9"> -->
-{% for classified in classifieds %}
-<!-- Classified ad. -->
-<div class="card classified-card">
-  <!--Display image-->
+<div class="ajax-classifieds"> 
 
-  <a href="{% url 'classifieds:classified' classified.slug %}"
-    style="color:black; text-decoration:none; background-color:none">
-    <div class="card-img-top img-responsive">
+    {% for classified in classifieds %}
+    <!-- Classified ad. -->
+    <div class="card classified-card">
+      <!--Display image-->
 
-      {% if classified.image_thumb %}
-      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
-        width="154px" height="154px">
-      {% else %}
-      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
-        width="154px" height="154px">
-      {% endif %}
+      <a href="{% url 'classifieds:classified' classified.slug %}"
+        style="color:black; text-decoration:none; background-color:none">
+        <div class="card-img-top img-responsive">
 
-    </div>
-    <div class="divider"></div>
-    <div class="card-body">
-      <h6 class="card-title"> {{ classified.title}} </h6>
-
-      {% if classified.price != 0.00 %}
-          <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
-      {% else %}
-          <p class="card-subtitle O-cl-red"> {% trans 'FREE' %} </p>
-      {% endif %}
-      <div class="card-meta">
-
-        <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
-
-      </div>
-      <!-- <div class="card-meta d-flex justify-content-between mt-2">
-
-        <div class="chat-button">
-          <small class="button p-1 share"
-            onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
-            ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-              stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-              class="feather feather-message-square">
-              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
-            Chat</small>
+          {% if classified.image_thumb %}
+          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+            width="154px" height="154px">
+          {% else %}
+          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+            width="154px" height="154px">
+          {% endif %}
 
         </div>
-        <div class="share-button">
-          <small class="button p-1 share"
-            onclick="shareMe('Bing is blocked in China','Hangzhou 0.00 ','/classifieds/boni-bing-is-blocked-in-china-2019-12-09-1/')"
-            ontouchstart="shareMe('Bing is blocked in China','Hangzhou 0.00 ','/classifieds/boni-bing-is-blocked-in-china-2019-12-09-1/')"><svg
-              xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3EC4E2"
-              stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
-              <circle cx="18" cy="5" r="3"></circle>
-              <circle cx="6" cy="12" r="3"></circle>
-              <circle cx="18" cy="19" r="3"></circle>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-            </svg> Share</small>
+        <div class="divider"></div>
+        <div class="card-body">
+          <h6 class="card-title"> {{ classified.title}} </h6>
+
+          {% if classified.price != 0.00 %}
+              <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
+          {% else %}
+              <p class="card-subtitle O-cl-red"> {% trans 'FREE' %} </p>
+          {% endif %}
+          <div class="card-meta">
+
+            <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+
+          </div>
+          <!-- <div class="card-meta d-flex justify-content-between mt-2">
+
+            <div class="chat-button">
+              <small class="button p-1 share"
+                onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
+                ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                  stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-message-square">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg>
+                Chat</small>
+
+            </div>
+            <div class="share-button">
+              <small class="button p-1 share"
+                onclick="shareMe('Bing is blocked in China','Hangzhou 0.00 ','/classifieds/boni-bing-is-blocked-in-china-2019-12-09-1/')"
+                ontouchstart="shareMe('Bing is blocked in China','Hangzhou 0.00 ','/classifieds/boni-bing-is-blocked-in-china-2019-12-09-1/')"><svg
+                  xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3EC4E2"
+                  stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="feather feather-share-2">
+                  <circle cx="18" cy="5" r="3"></circle>
+                  <circle cx="6" cy="12" r="3"></circle>
+                  <circle cx="18" cy="19" r="3"></circle>
+                  <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                  <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                </svg> Share</small>
+            </div>
+          </div> -->
+
         </div>
-      </div> -->
+        {% if classified.priority > 0 %}
+        <div class="priority">
+          Featured
+        </div>
+        {% endif %}
+
+      </a>
+      <script type="application/ld+json">
+      {
+         "@context":"http://schema.org/",
+         "@type":"Product",
+         "name":"{{ classified.title}}",
+         "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
+         "image":[
+            "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+         ],
+         "brand":"",
+         "offers":{
+            "@type":"Offer",
+            "priceCurrency":"CNY",
+            "price":{{ classified.price|title }},
+            "availability":"http://schema.org/InStock",
+            "itemCondition":"http://schema.org/UsedCondition",
+            "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}"
+         }
+      }
+      </script>
 
     </div>
-    {% if classified.priority > 0 %}
-    <div class="priority text-center pb-2">
-      Featured
-    </div>
-    {% endif %}
 
-  </a>
-  <script type="application/ld+json">
-  {
-     "@context":"http://schema.org/",
-     "@type":"Product",
-     "name":"{{ classified.title}}",
-     "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
-     "image":[
-        "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
-     ],
-     "brand":"",
-     "offers":{
-        "@type":"Offer",
-        "priceCurrency":"CNY",
-        "price":{{ classified.price|title }},
-        "availability":"http://schema.org/InStock",
-        "itemCondition":"http://schema.org/UsedCondition",
-        "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}"
-     }
-  }
-  </script>
+    {% empty %}
+    <small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
+      {% trans 'It looks like there are no items near you.' %}
+      <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a>
+    </small>
+    <br />
+    {% endfor %}
 
+<!--close ajax classifieds -->
 </div>
-
-{% empty %}
-<small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
-  {% trans 'It looks like there are no items near you.' %}
-  <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a> </small>
-<br />
-{% endfor %}

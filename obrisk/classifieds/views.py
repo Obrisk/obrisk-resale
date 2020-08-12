@@ -84,8 +84,6 @@ def classified_list(request, tag_slug=None):
         )
     ).order_by('order', '-priority', '-timestamp')
 
-    #official_ads = OfficialAd.objects.all() 
-
     paginator = Paginator(classifieds_list, 20)  # 20 classifieds in each page
     page = request.GET.get('page')
 
@@ -98,7 +96,7 @@ def classified_list(request, tag_slug=None):
         if request.is_ajax():
             # If the request is AJAX and the page is out of range
             # return an empty page            
-            return HttpResponse('')
+            return JsonResponse('')
         # If page is out of range deliver last page of results
         classifieds = paginator.page(paginator.num_pages)
 
@@ -119,12 +117,18 @@ def classified_list(request, tag_slug=None):
         ).order_by('-timestamp')
 
     if request.is_ajax():
-       return render(request,'classifieds/classified_list_ajax.html',
-                    {'page': page, 'popular_tags': popular_tags,
-                    'classifieds': classifieds, 'base_active': 'classifieds'})
+        ajx_classifieds = list(
+            classifieds.select_related(
+                'user').values(
+                    'title','price','city','img_thumb'
+                )
+            )
+        return JsonResponse({
+                'classifieds': ajx_classifieds
+            })
 
     return render(request, 'classifieds/classified_list.html',
-            {'page': page, 'popular_tags': popular_tags,
+            {'page': page, 'popular_tags': popular_tags, 'city': city,
             'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
 
 

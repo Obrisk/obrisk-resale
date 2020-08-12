@@ -66,7 +66,10 @@ class Classified(models.Model):
         on_delete=models.CASCADE)
     title = models.CharField(max_length=80)
     timestamp = models.DateTimeField(auto_now_add=True)
-    slug = models.SlugField(max_length=300, null=True, blank=True, unique=True, editable=False)
+    slug = models.SlugField(
+            max_length=300, null=True,
+            blank=True, unique=True, editable=False
+        )
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
     details = models.CharField(max_length=2000)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
@@ -100,17 +103,18 @@ class Classified(models.Model):
         return reverse('classifieds:classified', args=[self.slug])
 
     def save(self, *args, **kwargs):
-        
+
         if not self.slug:
-            self.slug = first_slug = slugify(f"{self.user.username}-{self.title}", 
+            self.slug = first_slug = slugify(f"{self.user.username}-{self.title}",
                                 to_lower=True, max_length=300)
-            
+
             for x in itertools.count(1):
                 if not Classified.objects.filter(slug=self.slug).exists():
                     break
                 self.slug = '%s-%d' % (first_slug, x)
 
-        #These locations will be taken from the user's profile, else he has to change location.
+        #These locations will be taken from the user's profile,
+        #else he has to change location.
         if not self.city:
             self.city =self.user.city
         if not self.province_region:
@@ -122,7 +126,11 @@ class Classified(models.Model):
 
 
 class ClassifiedImages(models.Model):
-    classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='images')
+    classified = models.ForeignKey(
+            Classified,
+            on_delete=models.CASCADE,
+            related_name='images'
+        )
     image = models.CharField(max_length=300)
     image_mid_size = models.CharField(max_length=300)
     image_thumb = models.CharField(max_length=300)
