@@ -3,11 +3,11 @@
 {% load crispy_forms_tags thumbnail humanize %}
 
 {% block head %}
-<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
 <link href="{% static 'css/classified-details.css' %} " rel="stylesheet">
 <link href="{% static 'css/colors.css' %}" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/slider-pro.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/share.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor/slider-pro.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
 
 <title>{{ classified.title|title }}</title>
 
@@ -35,39 +35,39 @@
 
 {% block content %}
 <!-- Page Content -->
-<div class="container mt-5 mb-md-5">
+<div class="container">
 
   <div class="row">
     <!-- Post Content Column -->
 
-    <div class="classified-wrapper col-lg-8 col-md-10 m-auto">
+    <div class="classified-wrapper">
 
       <section class="col">
-        <div class="classified-meta mb-4">
+        <div class="classified-meta">
           <!-- Title -->
-          <h3 class="mt-4 text-left">{{ classified.title|title }}</h3>
+          <h3 class="cls-title">{{ classified.title|title }}</h3>
 
-          <div class="meta-details mt-4 d-flex justify-content-between flex-column flex-md-row">
+          <div class="meta-details">
 
-            <div class="meta-right d-flex">
-              <a href="{% url 'users:detail' classified.user.username %}" class="mr-2">
+            <div class="meta-right">
+              <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
                 {% if classified.user.thumbnail %}
                 <img src="{{oss}}/{{classified.user.thumbnail}}"
-                  alt="Picture Profile" style="height:35px; max-width:35px; border-radius: 50%;" id="pic">
+                  alt="Picture Profile" id="pic">
                 {% else %}
                 <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
                 {% endif %}
               </a>
               <!-- Location -->
-              <div class="meta-left d-flex flex-column">
+              <div class="meta-left">
                 <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
                   href="{% url 'users:detail' classified.user.username %}">
                   <strong itemprop="name" id="classified-user">
                     {{ classified.user.get_profile_name|title }} </strong>
                 </a>
                 <div class="location">
-                  <small class="card-subtitle mb-2">📍</small>
-                  <span class="card-subtitle mb-2">
+                  <small class="card-subtitle">📍</small>
+                  <span class="card-subtitle">
                     {% if classified.address  %}
                     {{ classified.address }}, {{ classified.city }}
                     {% else %}
@@ -75,22 +75,21 @@
                     {% endif %} </span>
                 </div>
                 <!-- Date/Time -->
-                <div class="time mt-2"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
+                <div class="time"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
 
               </div>
             </div>
 
-            <div
-              class="align-items-baseline align-items-md-end d-flex flex-column meta-right ml-xl-0 mr-xl-0 mt-4 mt-md-0 ml-0 mr-0">
+            <div class="action-wrapper meta-right">
               <!-- Price -->
               <h3 class="O-cl-red price">
                 <strong>¥{{ classified.price }}</strong>
               </h3>
-              <div class="action d-flex justify-content-between w-100 mt-2">
+              <div class="action">
                 {% if classified.user != request.user %}
 
-                <div class="chat-button mr-2 col-6 p-0">
-                  <div class=" button p-1 w-100"
+                <div class="chat-button">
+                  <div class="button"
                     onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
                     ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -103,8 +102,8 @@
                 </div>
 
                 {% endif %}
-                <div class="share-button col-6 p-0">
-                  <div class="button p-1 share w-100"
+                <div class="share-button">
+                  <div class="button share"
                     onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -122,9 +121,9 @@
           </div>
 
         </div>
-        <div class="col-lg-9 m-auto h-50">
+        <div class="slider-wrapper">
 
-          <div class="slider-pro mt-4 mb-4" id="image-slider">
+          <div class="slider-pro" id="image-slider">
             <div class="sp-slides">
               {% for image in images %}
               <div class="sp-slide">
@@ -297,11 +296,11 @@
 }
 </script>
 
-<script src="{% static 'js/fancybox.min.js' %}"></script>
-<script src="{% static 'js/jquery.sliderPro.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/fancybox.min.js' %}"></script>
+<script src="{% static 'js/vendor/jquery.sliderPro.min.js' %}"></script>
 <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/details.js' %}" type="text/javascript"></script>
-<link rel="stylesheet" href="{% static 'css/share.css' %}">
 <script type="text/javascript">
 
   var setCookie = function (name, value, days) {
