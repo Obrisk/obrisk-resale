@@ -1,5 +1,5 @@
 .container {
-   margin-top: 58px;
+   margin-top: 52px;
    margin-bottom: 5;
 }
 
@@ -11,7 +11,7 @@
 }
 
 .classified-meta {
-   margin-bottom: 4;
+   margin: 10px;
 }
 
 .cls-title {
@@ -60,6 +60,11 @@
 
 .gallery-thumbs .swiper-slide-thumb-active {
   opacity: 1;
+}
+
+.price-time {
+    display: flex;
+    justify-content: space-between;
 }
 
 #classified-user {
@@ -126,19 +131,13 @@ a:hover.btn-action {
 
 .action-wrapper {
   display: flex;
-  align-items: baseline;
   align-items: flex-end;
-  flex-direction: column;
   margin: 0;
   margin-top: 4px;
-}
-
-.action {
-   display: flex;
    justify-content: space-between;
-   margin-top: 2;
    width: 100%;
 }
+
 
 .chat-button {
    margin-right: 2px;
