@@ -37,10 +37,31 @@
 <!-- Page Content -->
 <div class="container">
 
-    <!-- Post Content Column -->
-    <div class="classified-wrapper">
-
       <section class="col">
+
+        <!-- Post Content Column -->
+        <div class="classified-wrapper">
+
+
+            <div class="slider-wrapper">
+
+              <div class="slider-pro" id="image-slider">
+                <div class="sp-slides">
+                  {% for image in images %}
+                  <div class="sp-slide">
+                      <a href="{{oss}}/{{ image.image }}"
+                      data-fancybox="classified-gallery">
+                      <img class="sp-image" src=""
+                        data-src="{{oss}}/{{ image.image_mid_size }}" />
+                    </a>
+                  </div>
+                  {% endfor %}
+                </div>
+              </div>
+            </div>
+
+
+
         <div class="classified-meta">
           <!-- Title -->
           <h3 class="cls-title">{{ classified.title|title }}</h3>
@@ -119,22 +140,7 @@
           </div>
 
         </div>
-        <div class="slider-wrapper">
 
-          <div class="slider-pro" id="image-slider">
-            <div class="sp-slides">
-              {% for image in images %}
-              <div class="sp-slide">
-                  <a href="{{oss}}/{{ image.image }}"
-                  data-fancybox="classified-gallery">
-                  <img class="sp-image" src=""
-                    data-src="{{oss}}/{{ image.image_mid_size }}" />
-                </a>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
 
         <div class="card-text text-justify">{{ classified.details }}</div>
 
