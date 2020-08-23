@@ -42,6 +42,7 @@
         <!-- Post Content Column -->
         <div class="classified-wrapper">
 
+      <section class="classified-wrapper">
 
             <div class="slider-wrapper">
 
@@ -60,67 +61,50 @@
               </div>
             </div>
 
-
-
         <div class="classified-meta">
-          <!-- Title -->
-          <h3 class="cls-title">{{ classified.title|title }}</h3>
+              <!-- Title -->
+              <h3 class="cls-title">{{ classified.title|title }}</h3>
 
-          <div class="meta-details">
+              <div class="price-time">
+                  <!-- Price -->
+                  <strong class="O-cl-red price"> ¥{{ classified.price }} </strong>
 
-            <div class="meta-right">
-              <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
-                {% if classified.user.thumbnail %}
-                <img src="{{oss}}/{{classified.user.thumbnail}}"
-                  alt="Picture Profile" id="pic">
-                {% else %}
-                <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
-                {% endif %}
-              </a>
-              <!-- Location -->
-              <div class="meta-left">
-                <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
-                  href="{% url 'users:detail' classified.user.username %}">
-                  <strong itemprop="name" id="classified-user">
-                    {{ classified.user.get_profile_name|title }} </strong>
-                </a>
-                <div class="location">
-                  <small class="card-subtitle">📍</small>
-                  <span class="card-subtitle">
-                    {% if classified.address  %}
-                    {{ classified.address }}, {{ classified.city }}
-                    {% else %}
-                    {{ classified.user.city }}
-                    {% endif %} </span>
-                </div>
-                <!-- Date/Time -->
-                <div class="time"><small>⏲️</small><span>{{ classified.timestamp|naturaltime }} </span></div>
-
+                  <!-- Date/Time -->
+                  <small class="time" > ⏲️  {{ classified.timestamp|naturaltime }} </small> 
               </div>
-            </div>
 
-            <div class="action-wrapper meta-right">
-              <!-- Price -->
-              <h3 class="O-cl-red price">
-                <strong>¥{{ classified.price }}</strong>
-              </h3>
-              <div class="action">
-                {% if classified.user != request.user %}
+              <div class="meta-details">
 
-                <div class="chat-button">
-                  <div class="button"
-                    onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
-                    ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                      class="feather feather-message-square">
-                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
-                    Chat</div>
+                <div class="meta-right">
+                  <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
+                    {% if classified.user.thumbnail %}
+                    <img src="{{oss}}/{{classified.user.thumbnail}}"
+                      alt="Picture Profile" id="pic">
+                    {% else %}
+                    <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
+                    {% endif %}
+                  </a>
 
+                  <div class="meta-left">
+                    <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                      href="{% url 'users:detail' classified.user.username %}">
+                      <strong itemprop="name" id="classified-user">
+                        {{ classified.user.get_profile_name|title }} </strong>
+                    </a>
+
+                    <div class="location">
+                      <span class="card-subtitle">
+                        {% if classified.address  %}
+                           📍{{ classified.address }}, {{ classified.city }}
+                        {% else %}
+                           📍{{ classified.user.city }}
+                        {% endif %} </span>
+                    </div>
+                  </div>
                 </div>
 
-                {% endif %}
+            <div class="action-wrapper">
+
                 <div class="share-button">
                   <div class="button share"
                     onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
@@ -134,12 +118,30 @@
                       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                     </svg> Share</div>
                 </div>
+
+                <div class="chat-button">
+                    {% if classified.user != request.user %}
+                       <div class="button"
+                        onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
+                        ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                          class="feather feather-message-square">
+                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Chat</div>
+
+                    {% else %}
+                        <a class="button" href="{% url 'classifieds:edit_classified' classified.id %}"
+                          title="{% trans 'Edit this classified' %}">
+                          <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+                    {% endif %}
+                 </div>
               </div>
-            </div>
+
 
           </div>
 
-        </div>
 
 
         <div class="card-text text-justify">{{ classified.details }}</div>
@@ -186,7 +188,7 @@
 
         {% endif %}
 
-      </section>
+      
 
 
     <div class = "mb-4" >
@@ -202,21 +204,14 @@
               </div>
           {% endif %}
 
-          <!-- Navigation buttons -->
-          {% if request.user == classified.user%}
-              <div class="m-3 ">
-                <a class="btn btn-dark" href="{% url 'classifieds:edit_classified' classified.id %}"
-                  title="{% trans 'Edit this classified' %}">
-                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-              </div>
-          {% else %}
-              <!-- <a href="{% url 'classifieds:report_classified' classified.id %}"
-                  class="btn btn-danger" title="{% trans 'Report this classified' %}">{% trans 'Report' %} </a> -->
-          {% endif %}
         </div>
 
         <br/>
 
+        <!-- End classified-meta -->
+        </div>
+
+      </section>
 
         <!-- Similar lassified -->
         {% if similar_classifieds %}
