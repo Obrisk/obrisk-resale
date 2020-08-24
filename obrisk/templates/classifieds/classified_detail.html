@@ -3,8 +3,7 @@
 {% load crispy_forms_tags thumbnail humanize %}
 
 {% block head %}
-<link href="{% static 'css/classified-details.css' %} " rel="stylesheet">
-<link href="{% static 'css/colors.css' %}" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/share.css' %}">
 <link rel="stylesheet" href="{% static 'css/vendor/slider-pro.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
@@ -35,39 +34,32 @@
 
 {% block content %}
 <!-- Page Content -->
-<div class="container">
+<div class="container view-wrapper">
+   <section class="classified-wrapper">
 
-      <section class="col">
-
-        <!-- Post Content Column -->
-        <div class="classified-wrapper">
-
-      <section class="classified-wrapper">
-
-            <div class="slider-wrapper">
-
-              <div class="slider-pro" id="image-slider">
-                <div class="sp-slides">
-                  {% for image in images %}
-                  <div class="sp-slide">
-                      <a href="{{oss}}/{{ image.image }}"
-                      data-fancybox="classified-gallery">
-                      <img class="sp-image" src=""
-                        data-src="{{oss}}/{{ image.image_mid_size }}" />
-                    </a>
-                  </div>
-                  {% endfor %}
-                </div>
+       <div class="slider-wrapper">
+          <div class="slider-pro" id="image-slider">
+            <div class="sp-slides">
+              {% for image in images %}
+              <div class="sp-slide">
+                  <a href="{{oss}}/{{ image.image }}"
+                  data-fancybox="classified-gallery">
+                  <img class="sp-image" src=""
+                    data-src="{{oss}}/{{ image.image_mid_size }}" />
+                </a>
               </div>
+              {% endfor %}
             </div>
+          </div>
+        </div>
 
         <div class="classified-meta">
               <!-- Title -->
-              <h3 class="cls-title">{{ classified.title|title }}</h3>
+              <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
 
               <div class="price-time">
                   <!-- Price -->
-                  <strong class="O-cl-red price"> ¥{{ classified.price }} </strong>
+                  <strong class="price"> ¥{{ classified.price }} </strong>
 
                   <!-- Date/Time -->
                   <small class="time" > ⏲️  {{ classified.timestamp|naturaltime }} </small> 
@@ -105,158 +97,175 @@
 
             <div class="action-wrapper">
 
-                <div class="share-button">
-                  <div class="button share"
+                  <div class="button share share-button"
                     onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-share-2">
                       <circle cx="18" cy="5" r="3"></circle>
                       <circle cx="6" cy="12" r="3"></circle>
                       <circle cx="18" cy="19" r="3"></circle>
                       <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
                       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
-                    </svg> Share</div>
-                </div>
+                    </svg>
+                    Share
+                  </div>
 
-                <div class="chat-button">
                     {% if classified.user != request.user %}
-                       <div class="button"
+                       <div class="button chat-button"
                         onclick="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')"
                         ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                          stroke="#3EC4E2" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                          stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                           class="feather feather-message-square">
                           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
                         Chat</div>
 
                     {% else %}
-                        <a class="button" href="{% url 'classifieds:edit_classified' classified.id %}"
+                        <a class="button chat-button" href="{% url 'classifieds:edit_classified' classified.id %}"
                           title="{% trans 'Edit this classified' %}">
                           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
                     {% endif %}
-                 </div>
               </div>
-
-
           </div>
 
+        <div class="card-text">{{ classified.details }}</div>
 
+        <div class="seller-contacts-wrapper">
+          {% if user.is_authenticated %}
 
-        <div class="card-text text-justify">{{ classified.details }}</div>
+            {% if classified.phone_number %}
+                  <small class="seller-contacts w-75"><strong>Seller's contacts :</strong>
+                    <div class="btn-group">
+                      <a class="btn btn-primary btn-email btn-dark " href="tel:{{ classified.phone_number }}">📞
+                        {{ classified.phone_number }}</a>
+                      <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
+                        data-placement="bottom" data-copy=" {{ classified.phone_number }}" title=""
+                        data-original-title="Copy to clipboard">
+                        📋
+                      </button>
+                    </div>
+                    <br />
+                  </small>
 
-        {% if user.is_authenticated %}
-          <div class="flex-column flex-md-row d-flex">
-
-              {% if classified.phone_number %}
-
-              <small class="seller-contacts w-75"><strong>Seller's contacts :</strong>
-                <div class="btn-group">
-                  <a class="btn btn-primary btn-email btn-dark " href="tel:{{ classified.phone_number }}">📞
-                    {{ classified.phone_number }}</a>
-                  <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
-                    data-placement="bottom" data-copy=" {{ classified.phone_number }}" title=""
-                    data-original-title="Copy to clipboard">
-                    📋
-                  </button>
-                </div>
-                <br />
-              </small>
-              {% endif %}
-              {%if classified.wechat_id %}
-              <small class="seller-contacts w-75">
-                <strong>Seller's WechatID :</strong>
-                <div class="btn-group">
-                  <a class="btn btn-primary btn-email btn-dark " href="#"><i class="fa fa-weixin"></i>
-                    {{ classified.wechat_id }}</a>
-                  <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
-                    data-placement="bottom" data-copy="{{ classified.wechat_id }}" title=""
-                    data-original-title="Copy to clipboard">
-                    📋
-                  </button>
-                </div>
-              </small>
-              {% endif %}
-
-            </div>
+            {%elif classified.wechat_id %}
+                  <small class="seller-contacts w-75">
+                    <strong>Seller's WechatID :</strong>
+                    <div class="btn-group">
+                      <a class="btn btn-primary btn-email btn-dark " href="#"><i class="fa fa-weixin"></i>
+                        {{ classified.wechat_id }}</a>
+                      <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
+                        data-placement="bottom" data-copy="{{ classified.wechat_id }}" title=""
+                        data-original-title="Copy to clipboard">
+                        📋
+                      </button>
+                    </div>
+                  </small>
+           {% endif %}
 
         {% else %}
-            <h6> Please login to view seller's contacts: </h6>
-            <a class="btn btn-dark btn-xl js-scroll-trigger text-white"
-              href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-
+            <h6> Please <a class="js-scroll-trigger login-text"
+               href="{% url 'account_login' %}"> {% trans 'Login' %}</a>
+               to view seller's contacts:
+            </h6>
         {% endif %}
+      </div>
 
-      
-
-
-    <div class = "mb-4" >
           <!-- Cloud Tag Widget -->
           {% if classified.tags.all %}
-              <div class="card my-4">
-                <h5 class="card-header O-bg-blue-ns">{% trans 'Tags' %}</h5>
-                <div class="card-body">
-                  {% for tag in classified.tags.all %}
-                  <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="badge badge-info">{{ tag }}</span></a>
-                  {% endfor %}
-                </div>
-              </div>
-          {% endif %}
+                <!-- Cloud Tag Widget -->
+                  <div class="card classified-tags">
+                      <h5 class="card-heading has-text-weight-medium has-text-white	">{% trans 'Popular tags' %}</h5>
 
-        </div>
+                        <div class="card-body">
+                          <div class="previsions">
+                              {% for tag in classified.tags.all %}
+                                  <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag is-white">{{ tag }}</span></a>
+                              {% endfor %}
+                          </div>
+                        </div>
+                   </div>
+          {% endif %}
 
         <br/>
 
-        <!-- End classified-meta -->
-        </div>
-
-      </section>
 
         <!-- Similar lassified -->
         {% if similar_classifieds %}
-        <div class="col-lg-8 col-md-10 mr-auto ml-auto related-card mt-4 pt-4 mb-4">
-          <h5 class="card-header O-bg-blue-ns">Related Classifieds</h5>
-          <div class=" related mt-4 mb-4">
+          <h5 class="title related-title">Related Classifieds</h5>
+          <div class="related">
             <!-- Classified Entries Column -->
             {% for classified in similar_classifieds %}
-                <div class="card classified-card mr-2 mb-3">
-                 <a class="streched-link" href="{% url 'classifieds:classified' classified.slug %}"
+                <div class="card classified-card">
+                  <!--Display image-->
+                  <a href="{% url 'classifieds:classified' classified.slug %}"
                     style="color:black; text-decoration:none; background-color:none">
-                      <!--Display image-->
-                      <div class="card-img-top img-responsive">
-                        {% if classified.image_thumb %}
-                        <img class="card-img" src="{{oss}}/{{ classified.image_thumb }}">
-                        {% else %}
-                        <img class="card-img" src="{{oss}}/classifieds/default.jpg">
-                        {% endif %}
+                    <div class="card-img-top img-responsive">
+
+                      {% if classified.image_thumb %}
+                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+                        width="154px" height="154px">
+                      {% else %}
+                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+                        width="154px" height="154px">
+                      {% endif %}
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="card-body">
+                      <h6 class="card-title"> {{ classified.title}} </h6>
+
+                      {% if classified.price != 0.00 %}
+                          <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
+                      {% else %}
+                          <p class="card-subtitle O-cl-red"> {% trans 'FREE' %} </p>
+                      {% endif %}
+                      <div class="card-meta">
+
+                        <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+
                       </div>
 
-                      <div class="card-body">
-                        <h6 class="card-title"> {{ classified.title|truncatechars:20}} </h6>
-                        <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
-                        <div class="card-meta d-flex justify-content-between">
-                          <div class="location">
-                            <small>📍</small>
-                            <span class="card-text small"> {{ classified.city|safe }}</span>
-                          </div>
+                    </div>
+                    {% if classified.priority > 0 %}
+                    <div class="priority">
+                      Featured
+                    </div>
+                    {% endif %}
 
-                          <div class="share-card">
-                            <small>🔗</small>
-                          </div>
-                        </div>
-                      </div>
                   </a>
+                  <script type="application/ld+json">
+                  {
+                     "@context":"http://schema.org/",
+                     "@type":"Product",
+                     "name":"{{ classified.title}}",
+                     "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
+                     "image":[
+                        "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+                     ],
+                     "brand":"",
+                     "offers":{
+                        "@type":"Offer",
+                        "priceCurrency":"CNY",
+                        "price":{{ classified.price|title }},
+                        "availability":"http://schema.org/InStock",
+                        "itemCondition":"http://schema.org/UsedCondition",
+                        "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}"
+                     }
+                  }
+                  </script>
+
                 </div>
+
             {% endfor %}
-
-          </div>
-
         </div>
 
       </div>
       {% endif %}
 
+   </section>
 </div>
 
 {% endblock content %}
