@@ -1,3 +1,18 @@
+@import "partials/layout-colors";
+@import "partials/layout-extra-colors";
+@import "partials/components-buttons";
+@import "partials/components-forms";
+
+.container {
+    margin-top: 5rem;
+    padding: 2rem;
+}
+
+.login100-form-title {
+    padding-bottom: 32px;
+}
+    
+
 .custom-select {
   -webkit-appearance: none;
   display: block;
