@@ -15,11 +15,6 @@
     }
 }
 
-@mixin nav-ul-flex {
-    display: flex;
-    justify-content: space-between;
-}
-
 .nav-inner {
     align-items: stretch;
     display: flex;
@@ -45,7 +40,8 @@ a {
 }
 
 .tp-nav-ul {
-    @include nav-ul-flex;
+    display: flex;
+    justify-content: space-between;
     width: 100%;
 }
 
@@ -110,7 +106,8 @@ a {
 }
 
 .bt-nav-ul {
-    @include nav-ul-flex;
+    display: flex;
+    justify-content: space-around;
     font-size: 1rem;
     white-space: nowrap;
     color: $muted-grey !important;
@@ -119,7 +116,6 @@ a {
     margin: 1px 6px 0 6px;
     border: 0px;
     box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
-
 }
 
 .bt-nav-link {
