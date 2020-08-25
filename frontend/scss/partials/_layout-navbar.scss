@@ -40,14 +40,6 @@ Navbar styles
         position: relative;
         min-width: unset !important;
 
-        &.has-dropdown {
-            .navbar-link {
-                &:after {
-                    border-color: $medium-grey;
-                }
-            }
-        }
-
         //Icon modifier
         &.is-icon {
             padding-left: 6px !important;
@@ -76,202 +68,221 @@ Navbar styles
                 max-height: 38px;
                 border-radius: 50%;
             }
+        }
+    }
 
+    .has-dropdown {
+        .navbar-link {
+            &:after {
+                border-color: $medium-grey;
+            }
+        }
+    }
+
+    //Navbar dropdown
+    .nav-drop {
+        position: absolute;
+        top: 90%;
+
+        right: 0;
+        //left: 0;
+        width: 340px;
+        background: $white;
+        border: 1px solid $fade-grey;
+        border-radius: 4px;
+        margin-top: 5px;
+        box-shadow: 0px 5px 43px rgba(0, 0, 0, 0.18) !important;
+        opacity: 0;
+        transform: translateY(20px);
+        pointer-events: none;
+        transition: all .2s;
+        z-index: 100;
+
+        //Arrow
+        &:after,
+        &:before {
+            bottom: 100%;
+            right: 7%;
+            border: solid transparent;
+            content: " ";
+            height: 0;
+            width: 0;
+            position: absolute;
+            pointer-events: none;
         }
 
-        //Navbar dropdown
-        .nav-drop {
-            position: absolute;
-            top: 90%;
+        &:after {
+            border-color: rgba(255, 255, 255, 0);
+            border-bottom-color: #fff;
+            border-width: 4px;
+            margin-left: -4px;
+        }
 
-            right: 0;
-            //left: 0;
-            width: 340px;
-            background: $white;
-            border: 1px solid $fade-grey;
-            border-radius: 4px;
-            margin-top: 5px;
-            box-shadow: 0px 5px 43px rgba(0, 0, 0, 0.18) !important;
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-            transition: all .2s;
-            z-index: 100;
+        &:before {
+            border-color: rgba(255, 255, 255, 0);
+            border-bottom-color: #fff;
+            border-width: 7px;
+            margin-left: -7px;
+        }
 
-            //Active state
-            &.is-active {
-                opacity: 1;
-                transform: translateY(0);
-                pointer-events: all;
-            }
-
-            //Arrow
-            &:after,
-            &:before {
-                bottom: 100%;
-                right: 7%;
-                border: solid transparent;
-                content: " ";
-                height: 0;
-                width: 0;
-                position: absolute;
-                pointer-events: none;
-            }
+        //Account dropdown modifier
+        &.is-account-dropdown {
+            width: 300px;
+            right: 0 !important;
+            left: unset !important;
+            max-height: unset !important;
 
             &:after {
-                border-color: rgba(255, 255, 255, 0);
-                border-bottom-color: #fff;
-                border-width: 4px;
-                margin-left: -4px;
+                display: none !important;
             }
-
-            &:before {
-                border-color: rgba(255, 255, 255, 0);
-                border-bottom-color: #fff;
-                border-width: 7px;
-                margin-left: -7px;
-            }
-
-            //Account dropdown modifier
-            &.is-account-dropdown {
-                width: 300px;
-                right: 0 !important;
-                left: unset !important;
-                max-height: unset !important;
-
-                &:after {
-                    display: none !important;
-                }
-            }
-            &.is-navbarTop{
-                  &:before {
-                     right: 7% !important;
-                }
-            }
-
-            //inner section
-            .inner {
-                position: relative;
-
-                //header
-                .nav-drop-header {
-                    display: flex;
-                    align-items: center;
-                    padding: 15px 16px;
-
-                    span,
-                    a {
-                        display: block;
-                        text-transform: uppercase;
-                        font-size: .68rem;
-                        font-weight: 500;
-
-                        &.username {
-                            font-weight: 600 !important;
-                        }
-                    }
-
-                    a {
-                        height: unset;
-                        width: unset;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                    }
-                }
-
-                //body
-                .nav-drop-body {
-                    max-height: 420px;
-                    padding: 0 10px;
-                    overflow-y: auto;
-
-                    //scrollbar
-                    &::-webkit-scrollbar {
-                        width: 5px;
-                    }
-
-                    &::-webkit-scrollbar-thumb {
-                        border-radius: 5px;
-                        background: rgba(0, 0, 0, 0.2);
-                    }
-
-
-                    //Account items list
-                    &.account-items {
-                        padding: 0 0;
-
-                        hr {
-                            margin: .4rem 0 !important;
-                        }
-
-                        //List item
-                        .account-item {
-                            padding: 2px 8px;
-                            display: block;
-                            line-height: 3;
-
-                            //media object
-                            .media {
-                                align-items: center;
-
-                                .media-left {
-                                    img {
-                                        height: 35px;
-                                        width: 35px;
-                                    }
-                                }
-
-                                h3 {
-                                    color: $dark-text;
-                                    font-size: .8rem;
-                                    font-weight: 500;
-                                    transition: all .3s;
-                                }
-
-                                .icon-wrap {
-                                    height: 35px;
-                                    width: 35px;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    margin-right: 0.5rem;
-
-                                    svg {
-                                        width: 18px;
-                                        height: 18px;
-                                        stroke-width: 2px;
-                                        stroke: $medium-text;
-                                        transition: all .3s;
-                                    }
-                                }
-
-                                small {
-                                    color: $medium-text;
-                                    font-size: .75rem;
-                                }
-
-                            }
-
-                            //Active state
-                            &.is-active {
-                                background: $blue;
-
-                                svg {
-                                    stroke: $white;
-                                }
-
-                                small {
-                                    color: $white;
-                                }
-                            }
-
-                        }
-                    }
-                }
-
+        }
+        &.is-navbarTop{
+              &:before {
+                 right: 7% !important;
             }
         }
 
+        //inner section
+        .inner {
+            position: relative;
+
+            //header
+            .nav-drop-header {
+                display: flex;
+                align-items: center;
+                padding: 15px 16px;
+
+                span,
+                a {
+                    display: block;
+                    text-transform: uppercase;
+                    font-size: .68rem;
+                    font-weight: 500;
+
+                    &.username {
+                        font-weight: 600 !important;
+                    }
+                }
+
+                a {
+                    height: unset;
+                    width: unset;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                }
+            }
+
+            //body
+            .nav-drop-body {
+                max-height: 420px;
+                padding: 0 10px;
+                overflow-y: auto;
+
+                //scrollbar
+                &::-webkit-scrollbar {
+                    width: 5px;
+                }
+
+                &::-webkit-scrollbar-thumb {
+                    border-radius: 5px;
+                    background: rgba(0, 0, 0, 0.2);
+                }
+
+
+                //Account items list
+                &.account-items {
+                    padding: 0 0;
+
+                    hr {
+                        margin: .4rem 0 !important;
+                    }
+
+                    //List item
+                    .account-item {
+                        padding: 2px 8px;
+                        display: block;
+                        line-height: 3;
+
+                        //media object
+                        .media {
+                            align-items: center;
+
+                            .media-left {
+                                img {
+                                    height: 35px;
+                                    width: 35px;
+                                }
+                            }
+
+                            h3 {
+                                color: $dark-text;
+                                font-size: .8rem;
+                                font-weight: 500;
+                                transition: all .3s;
+                            }
+
+                            .icon-wrap {
+                                height: 35px;
+                                width: 35px;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                margin-right: 0.5rem;
+
+                                svg {
+                                    width: 18px;
+                                    height: 18px;
+                                    stroke-width: 2px;
+                                    stroke: $medium-text;
+                                    transition: all .3s;
+                                }
+                            }
+
+                            small {
+                                color: $medium-text;
+                                font-size: .75rem;
+                            }
+
+                        }
+
+                        //Active state
+                        &.is-active {
+                            background: $blue;
+
+                            svg {
+                                stroke: $white;
+                            }
+
+                            small {
+                                color: $white;
+                            }
+                        }
+
+                    }
+                }
+            }
+
+        }
     }
 }
+
+
+//nav-drop active state
+#du:target {
+    .nav-drop {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+}
+
+//nav-drop active state
+#d:target {
+    .nav-drop {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+    }
+}
+

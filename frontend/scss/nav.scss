@@ -1,11 +1,7 @@
 @import "partials/layout-colors";
 @import "partials/layout-navbar";
 
-/* ==========================================================================
- Slimscroll
-========================================================================== */
-
-//standard
+//standard slim
 .has-slimscroll {
     overflow: hidden !important;
 
@@ -83,7 +79,6 @@ a {
     display: flex !important;
     justify-content: flex-end;
 }
-
 
 .guest-user {
     justify-content: flex-end;

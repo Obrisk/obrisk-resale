@@ -20,6 +20,25 @@ $(function() {
 
 
 
+BASE GLOBAL NAV JS
+================================================================================
+drop_trigger.addEventListener('click', function (e) {
+    if (drop_trigger.classList.contains('is-account')) {
+        nav_drop.classList.add('is-active');
+        drop_trigger.classList.add('is-opened');
+    }
+});
+
+document.getElementById('close').addEventListener('click', function (e) {
+        nav_drop.classList.remove('is-active');
+        drop_trigger.classList.remove('is-opened');
+        e.stopPropagation();
+});
+
+
+
+
+
 CLASSIFIEDS
 ================================================================================
 

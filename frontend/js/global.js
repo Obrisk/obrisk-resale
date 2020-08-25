@@ -10,41 +10,16 @@ if (
 
 
 document.addEventListener("DOMContentLoaded", function() {
-    const drop_trigger = document.querySelector('.drop-trigger');
-    const nav_drop = drop_trigger.querySelector('.nav-drop');
-
     document.getElementById("addNewItem").addEventListener('click', function(e) {
       e.preventDefault();
-      if (window.location.href.includes("stories")) {
-        document.querySelector(".app-overlay").classList.add("is-active");
-        document.querySelector(".close-wrap").classList.remove("is-hidden");
-        document.querySelector(".is-new-content").classList.add("is-highlighted");
-        document.querySelector(".all-stories ").classList.add("block-scroll");
 
-      } else if (window.location.href.includes("posts")) {
-          window.location.href="/posts/write-new-post/";
-
+      if (window.location.href.includes("classifieds")) {
+          window.location.href="/classifieds/write-new-classified/";
       } else if (window.location.href.includes("ws/messages")) {
           window.location.href="/connections/friends/";
-
-      } else if (window.location.href.includes("classifieds") &&
-          (!window.location.href.endsWith("classifieds/"))) {
-          window.location.href="/classifieds/write-new-classified/";
       }
     });
 
-    drop_trigger.addEventListener('click', function (e) {
-        if (drop_trigger.classList.contains('is-account')) {
-            nav_drop.classList.add('is-active');
-            drop_trigger.classList.add('is-opened');
-        }
-    });
-
-    document.getElementById('close').addEventListener('click', function (e) {
-            nav_drop.classList.remove('is-active');
-            drop_trigger.classList.remove('is-opened');
-            e.stopPropagation();
-    });
 });
 
 

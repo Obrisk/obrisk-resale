@@ -171,14 +171,13 @@
                 </a>
 
                 <div class="nav-drop is-navbarTop recent-notifications" id="">
-
                 </div>
               </div>
             </div>
           </li>
 
           <li class="top-nav-user-li">
-            <div id="account-dropdown" class="user-image navbar-item acc is-account drop-trigger has-caret">
+            <a href="#du" class="user-image navbar-item is-account drop-trigger">
                   {% if request.user.thumbnail %}
                     <img   src="{{ oss }}/{{request.user.thumbnail}}" alt="Picture Profile"
                       style="width:30px;height:30px;border-radius: 50%;"
@@ -186,7 +185,9 @@
                   {% else %}
                     <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
                   {% endif %}
+            </a>
 
+            <div id="du" class="has-caret">
                   <div class="nav-drop is-account-dropdown">
                     <div class="inner">
                       <div class="nav-drop-header is-auth-user">
@@ -253,10 +254,12 @@
 
         {% else %}
             <li class="top-nav-user-li">
-                <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
+            <a href="#d" class="user-image navbar-item is-account drop-trigger">
                       <img class="user-image" src="{% static 'img/user.png' %}"
                         height="30px" width="30px" alt="No Profile Picture" />
+            </a>
 
+            <div id="d" class="has-caret">
                   <div class="nav-drop is-navbarTop is-account-dropdown">
                     <div class="inner">
                           <div class="nav-drop-header guest-user">
