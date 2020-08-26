@@ -10,9 +10,9 @@
   <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
-  <meta name="description" content="A Social Network for foreigners living in China.">
+  <meta name="description" content="Reselling platform for foreigners in China">
   <meta name="keywords"
-    content="Buy and sell, secondhand, classifieds, Expat in China, foreigners in China, China, Hangzhou, Shanghai, Ningbo">
+    content="Buy and sell, secondhand, classifieds, Expats in China, foreigners in China, China, Hangzhou, Shanghai">
   <meta name="author" content="Obrisk team">
   <meta name="apple-mobile-web-app-title" content="Obrisk">
   <meta name="locale" content="en">
@@ -20,8 +20,8 @@
   <meta name="vapid-key" content="{{ vapid_key }}">
 
   {% if request.user.is_authenticated %}
-  {% webpush_header %}
-  <meta name="user_id" content="{{ request.user.id }}">
+      {% webpush_header %}
+      <meta name="user_id" content="{{ request.user.id }}">
   {% endif %}
 
   <!-- PWA settings -->
@@ -157,25 +157,6 @@
           </li>
 
         {% if request.user.is_authenticated %}
-            <li class="notif-li">
-
-            <div class="navbar-item is-icon drop-trigger">
-              <div id="" class="notifications navbar-item is-icon drop-trigger">
-                <a class="border-0" href="javascript:void(0);">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-bell">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
-                </a>
-
-                <div class="nav-drop is-navbarTop recent-notifications" id="">
-                </div>
-              </div>
-            </div>
-          </li>
-
           <li class="top-nav-user-li">
             <a href="#du" class="user-image navbar-item is-account drop-trigger">
                   {% if request.user.thumbnail %}
@@ -352,7 +333,7 @@
           </li>
 
           <li class="bt-nav-item">
-            <a class="bt-nav-link" href="#"
+            <a class="bt-nav-link" href="{% url 'classifieds:write_new' %}"
             id="addNewItem">
                 <span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -415,6 +396,17 @@
         });
       }
     }
+
+    //fix navbar bottom on iphone X families
+    let iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
+    let aspect = window.screen.width / window.screen.height;
+    if (
+      iPhone && (aspect.toFixed(3) === "0.462" ||
+        aspect.toFixed(3) === "0.576" ||
+        aspect.toFixed(3) === "0.591")
+    ) {
+      document.getElementById("navbarBottom").classList.add("iphone-nav-bt");
+    }
   </script>
 
   {% if request.user.is_authenticated %}
@@ -423,11 +415,10 @@
         currentUser = "{{ request.user.username}}";
         new_messages = "{{ new_msgs }}";
       </script>
-
       <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
+
   {% endif %}
 
-  <script src="{% static 'js/global.js' %}"></script>
   {% endblock javascript %}
 
   {% block extra_js %}{% endblock extra_js %}
