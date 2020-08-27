@@ -11,7 +11,10 @@
 .login100-form-title {
     padding-bottom: 32px;
 }
-    
+
+.login {
+    margin: 8px;
+}
 
 .custom-select {
   -webkit-appearance: none;
@@ -65,11 +68,63 @@ label {
     width: 100%;
 }
 
+.login-submit-btn {
+    margin-top: 14px;
+    width: 75%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.options-wrapper {
+    display: flex;
+    position: fixed;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.options-btns {
+    position: relative;
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    margin: 30px auto;
+    z-index: 100;
+
+    a {
+        margin: 10px auto;
+        width: 90%;
+    }
+}
+
+.login-utils-buttons {
+    display: flex;
+    margin-top: 3rem;
+    justify-content: space-around;
+}
 
 .signup-wrapper .process-panel-wrap .form-panel {
   border: none;
 }
 
+.social-ac {
+    display: flex;
+    margin: 14px auto;
+    justify-content: space-around;
+}
+
+.login-help {
+  opacity: 0;
+  display: absolute;
+
+  &:target {
+      opacity: 1;
+  }
+}
 
 .loading {
   -webkit-animation-name: spin;
@@ -129,11 +184,6 @@ label {
   to {
     transform: rotate(360deg);
   }
-}
-
-.login-wrapper .hero.is-login .left-caption h2 {
-  color: #393a4f;
-  text-shadow: 4px 4px #3ec4e2, 8px 8px #20b6d7;
 }
 
 .login100-form-title {
@@ -374,6 +424,3 @@ label {
         filter: blur(0px);
     }
 }
-
-
-

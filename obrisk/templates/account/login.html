@@ -17,94 +17,63 @@
     <div id="" class="view-wrap true-dom">
       <div class="columns is-centered">
 
-          <div class="is-flex row">
-            <span class="login100-form-title">{% trans 'Account Login' %}</span>
-            <span class="errors"></span>
-          </div>
+          <h1 class="login100-form-title "> {% trans 'Account Login' %}</h1>
+          <div class="errors"></div>
 
           <!--Login Form-->
             <div class="form-wrapper">
               <!--Form-->
-              <div class="login-form">
+                  <form class="login blur-in" method="POST" action="{% url 'account_login' %}">
+                      {% csrf_token %}
 
-                <div class="login-wrapper">
-                  <div class="outer-panel">
-                    <div class="outer-panel-inner">
+                        <label for="phone_number">
+                              {% trans 'Phone / Username' %}
+                        </label>
+                        {{ form.login }}
 
-                      <form class="login" method="POST" action="{% url 'account_login' %}">
-                        {% csrf_token %}
-                        <div id="signup-panel-1" class="process-panel-wrap is-narrow is-active ">
-                          <div class="form-panel">
-                            <div class="form-row mt-3">
-                              <div class="form-group col-md-12 mb-0">
-                                <div class="input-group">
-                                  <label for="phone_number">
-                                      {% trans 'Phone number / Username / Email' %}
-                                  </label>
-                                </div>
-                                {{ form.login }}
-                              </div>
-                            </div>
-                            <div class="form-row">
+                        <label for="password">
+                          {% trans 'Password' %}
+                        </label>
+                        {{ form.password }}
 
-                              <div class="form-group">
-                                <div class="input-group">
-                                  <label for="password">
-                                      {% trans 'Password' %}
-                                  </label>
-                                </div>
-                                {{ form.password }}
-                              </div>
-                            </div>
+                      {% if redirect_field_value %}
+                          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                      {% endif %}
 
-                          </div>
+                        <button type="submit"
+                          class="button is-rounded is-solid accent-button raised login-submit-btn">
+                            {% trans 'Login' %}
+                        </button>
 
-                          {% if redirect_field_value %}
-                              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                          {% endif %}
+                  </form>
 
-                          <div class="form-group container-login100-form-btn mt-1">
-                            <button type="submit"
-                              class="button is-rounded is-solid accent-button raised is-fullwidth ">{% trans 'Login' %}</button>
-                          </div>
-
-                            <div class="social-ac is-flex">
-                                <a class="button raised is-solid " href="{% url 'users:wechat_auth' %}">
-                                    <i class="fa fa-wechat"></i>Wechat Login </a>
-                                </a>
-                                <a class="button raised is-solid " href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
-                                    <i class="fa fa-linkedin"></i>LinkedIn Login </a>
-                                </a>
-                            </div>
-                            <br />
-
-
-                          <div class="form-group container-login100-form-btn is-flex justify-content-between">
-                            <a href="{% url 'account_signup' %}"
-                              class="button is-solid dark-grey-button raised">{% trans 'Sign up' %}</a>
-                            <a href="{% url 'users:phone_password_reset' %}"
-                              class="button is-solid dark-grey-button raised">{% trans 'Reset Password' %}</a>
-                          </div>
-
-                        </div>
-                      </form>
+                  <div class="options-wrapper" >
+                      <div class="options-btns" >
+                        <a class="button raised is-solid " href="{% url 'users:wechat_auth' %}">
+                            <i class="fa fa-wechat"></i>Wechat Login </a>
+                        </a>
+                        <a class="button raised is-solid " href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
+                            <i class="fa fa-linkedin"></i>LinkedIn Login </a>
+                        </a>
+                        <a class="button raised is-solid " href="#phone">
+                            <i class="fa fa-linkedin"></i> Phone no Login </a>
+                        </a>
+                        <a href="{% url 'account_signup' %}"
+                          class="button is-solid dark-grey-button raised">
+                          {% trans 'Sign up' %}
+                        </a>
+                        <a href="{% url 'users:phone_password_reset' %}">
+                           {% trans 'Renew password' %}
+                        </a>
+                        <a href="#lh"
+                          class="login-help button is-solid dark-grey-button raised" 
+                          data-help="<a href='mailto:support@obrisk.com'>{% trans 'Email us' %}</a> {% trans 'Or add WechatID:Obrisk' %}">
+                        </a>
                     </div>
                   </div>
-
                 </div>
-              </div>
-
-            </div>
+             </div>
           </div>
-
-          <div> <small id="support"> 
-                  {% trans 'Login problem?' %}
-              <a class="blue-link" href="mailto:support@obrisk.com">
-                  {% trans 'click here ' %}
-              </a> 
-              {% trans 'to contact us or add WechatID:' %}
-              <span class="blue-link"> Obrisk. </span> </small> </div>
-  </div>
 </div>
 {% endblock content %}
 
