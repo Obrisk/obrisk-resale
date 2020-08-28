@@ -536,7 +536,6 @@ swSubReg();
 //End push notif code
 //-------------------------------------------------------------------------------
 //
-//document.getElementsByClassName("form-group")[0].classList.remove("row");
 
 /* Notifications JS basic client */
 document.addEventListener('DOMContentLoaded', function() {
@@ -576,13 +575,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
   }
-  // $('#notifications').popover({
-  //     html: true,
-  //     trigger: 'manual',
-  //     container: "body",
-  //     placement: "bottom",
-  // });
-  const notif = document.querySelector(".notifications");
+
+  /*const notif = document.querySelector(".notifications");
 
   notif.addEventListener('click', function(e) {
     if (notif.contains(".recent-notifications #close")) { //if (notif.is(.recent-not...)
@@ -593,8 +587,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     return false;
   });
+  */
 
-  checkNotifications();
+  //checkNotifications();
 
   // Code block to manage WebSocket connections for notifications
   // Try to correctly decide between ws:// and wss://
