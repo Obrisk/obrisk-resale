@@ -1,24 +1,23 @@
 //This is only for mobile web app:
 //
 
-var username_el = document.getElementById("id_username");
-var username_err = document.getElementById('username-errors');
+const username_el = document.getElementById("id_username");
+const username_err = document.getElementById('username-errors');
 
 var verify_counter = 0;
 var code_counter = 0;
 var phone_no;
 
-var confirm_btn = document.querySelector('#confirm');
-var code_notice = document.getElementById("code-notice");
-var send_code_btn = document.getElementById('send-code');
-var results = document.getElementById('results');
-var phone_number = document.getElementById('id_phone_number');
-var verify_code_input = document.getElementById('verify-code');
+const confirm_btn = document.querySelector('#confirm');
+const code_notice = document.getElementById("code-notice");
+const send_code_btn = document.getElementById('send-code');
+const results = document.getElementById('results');
+const phone_number = document.getElementById('id_phone_number');
+const verify_code_input = document.getElementById('verify-code');
 
-var panel_two = document.getElementById('signup-panel-2');
-var request_unverify = document.getElementById('request-unverified-phone');
-var unverify_form = document.getElementById('unverify-form');
-
+const panel_two = document.getElementById('signup-panel-2');
+const request_unverify = document.getElementById('request-unverified-phone');
+const unverify_form = document.getElementById('unverify-form');
 
 
 /* -------------------------------------------------------------------------- */

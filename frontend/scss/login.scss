@@ -51,6 +51,7 @@ input {
   border-style: none;
   border-color: initial;
   border-image: initial;
+  border-bottom: 1px solid rgba(59, 59, 59, 0.7);
   outline: none;
   border-radius: 0px;
   transition: box-shadow 0.2s ease 0s;
@@ -75,7 +76,17 @@ label {
     transform: translateX(-50%);
 }
 
-.options-wrapper {
+.phone-options-btn {
+    display:flex;
+    align-content: space-between;
+
+    a {
+        margin: 10px auto;
+        width: 35%;
+    }
+}
+
+#options-wrapper {
     display: flex;
     position: fixed;
     top:0;
@@ -118,12 +129,6 @@ label {
 }
 
 .login-help {
-  opacity: 0;
-  display: absolute;
-
-  &:target {
-      opacity: 1;
-  }
 }
 
 .loading {
@@ -190,7 +195,6 @@ label {
   justify-content: center;
   text-align: center;
   font-size: 1.5em;
-  color: #555555;
   line-height: 1.2;
   text-transform: uppercase;
   width: 100%;
@@ -268,17 +272,17 @@ label {
 }
 
 .blur-in {
-    -webkit-animation: blur 2s forwards !important;
-    -moz-animation: blur 2s forwards !important;
-    -o-animation: blur 2s forwards !important;
-    animation: blur 2s forwards !important;
+    -webkit-animation: blur 1s forwards !important;
+    -moz-animation: blur 1s forwards !important;
+    -o-animation: blur 1s forwards !important;
+    animation: blur 1s forwards !important;
 }
 
 .blur-out {
-    -webkit-animation: blur-out 2s forwards;
-    -moz-animation: blur-out 2s forwards;
-    -o-animation: blur-out 2s forwards;
-    animation: blur-out 2s forwards;
+    -webkit-animation: blur-out 1s forwards;
+    -moz-animation: blur-out 1s forwards;
+    -o-animation: blur-out 1s forwards;
+    animation: blur-out 1s forwards;
 }
 
 @-webkit-keyframes blur {
