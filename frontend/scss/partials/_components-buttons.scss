@@ -119,7 +119,6 @@ button.button {
         &.primary-button {
             background: $primary;
             border-color: $primary;
-            color: $white !important;
 
             &.raised:hover {
                 box-shadow: $primary-box-shadow;
@@ -142,7 +141,6 @@ button.button {
         &.accent-button {
             background: $accent;
             border-color: $accent;
-            color: $white;
 
             &.raised:hover {
                 box-shadow: $accent-box-shadow;
@@ -183,11 +181,6 @@ button.button {
             svg {
                 stroke: $sidebar !important;
             }
-
-            &:hover {
-                background: lighten($fade-grey, 4%);
-                border-color: lighten($fade-grey, 4%);
-            }
         }
 
         //Dark grey button
@@ -197,11 +190,6 @@ button.button {
 
             svg {
                 stroke: $sidebar !important;
-            }
-
-            &:hover {
-                background: darken($fade-grey, 4%);
-                border-color: darken($fade-grey, 4%);
             }
         }
     }
@@ -213,156 +201,9 @@ button.button {
         color: $white;
         font-weight: 500;
 
-        &:hover {
-            background: $white;
-            color: $dark-text;
-        }
-
-        &.raised:hover {
-            box-shadow: $primary-box-shadow !important;
-            opacity: 0.8;
-        }
     }
 }
 
-/* ==========================================================================
-2. Like button
-========================================================================== */
-
-//Wrapper
-.like-wrapper {
-    //Button
-    .like-button {
-        position: relative;
-        width: 54px;
-        height: 54px;
-        border-radius: 50%;
-
-        //border: 4px solid $white;
-
-        //background: lighten($placeholder, 6%);
-        background: $white;
-        box-shadow: 0px 5px 43px rgba(0, 0, 0, 0.18);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin: 0 auto;
-        text-decoration: none;
-        opacity: 1 !important;
-        overflow: hidden;
-
-        //Overlay
-        .like-overlay {
-            display: block;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 54px;
-            height: 54px;
-            border-radius: 50%;
-            background: darken($red, 10%);
-            transform: scale(0);
-            transition: all .4s;
-            z-index: 0;
-        }
-
-        i {
-            &.not-liked {
-                display: block;
-                color: darken($red, 10%);
-                position: relative;
-                z-index: 1;
-            }
-
-            &.is-liked {
-                display: none;
-                color: $white;
-                position: relative;
-                z-index: 1;
-            }
-        }
-
-        //Active state
-        &.is-active {
-            box-shadow: 0px 5px 43px rgba($red, 0.18);
-
-            .like-overlay {
-                transform: scale(1);
-            }
-
-            i {
-                &.not-liked {
-                    display: none;
-                }
-
-                &.is-liked {
-                    display: block;
-                }
-            }
-        }
-    }
-}
-
-/* ==========================================================================
-3. Circle button
-========================================================================== */
-
-//Wrapper
-.fab-wrapper {
-    &.is-share {
-        a {
-            background: lighten($accent, 5%);
-            box-shadow: $accent-box-shadow;
-
-            &:hover {
-                background: lighten($accent, 12%);
-
-                svg {
-                    stroke: $white;
-                }
-            }
-        }
-    }
-
-    &.is-comment {
-        a {
-            background: lighten($accent, 5%);
-            box-shadow: $accent-box-shadow;
-
-            &:hover {
-                background: lighten($accent, 12%);
-
-                svg {
-                    stroke: $white;
-                }
-            }
-        }
-    }
-
-    //Button
-    .small-fab {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 43px;
-        height: 43px;
-        border-radius: 50%;
-        color: $white-smoke;
-        opacity: 1;
-        transition: all .3s;
-
-        svg {
-            width: 18px;
-            height: 18px;
-            transition: all .3s;
-        }
-
-        //Active state
-        &.is-active {
-            background: $accent;
-        }
-    }
-}
 
 /* ==========================================================================
 4. Load more button

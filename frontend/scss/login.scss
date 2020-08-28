@@ -3,10 +3,6 @@
 @import "partials/components-buttons";
 @import "partials/components-forms";
 
-.container {
-    margin-top: 5rem;
-    padding: 2rem;
-}
 
 .login100-form-title {
     padding-bottom: 32px;
@@ -14,6 +10,10 @@
 
 .login {
     margin: 8px;
+}
+
+.signup {
+    width: 90%;
 }
 
 .custom-select {
@@ -47,10 +47,7 @@ input {
   -webkit-font-smoothing: antialiased;
   line-height: unset;
   padding: 0px 0px 8px;
-  border-width: initial;
-  border-style: none;
-  border-color: initial;
-  border-image: initial;
+  border: none;
   border-bottom: 1px solid rgba(59, 59, 59, 0.7);
   outline: none;
   border-radius: 0px;
@@ -58,19 +55,27 @@ input {
   box-shadow: rgba(172, 181, 191, 0.3) 0px 1px;
   background: none;
   padding: 0.375rem 0.75rem;
+
+  &#terms {
+      border-bottom: none;
+  }
 }
 
 label {
   font-weight: 600;
 }
 
-
 .form-wrapper {
-    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 5%;
+}
+
+#send-code, .login-submit-btn {
+   margin-top: 14px;
 }
 
 .login-submit-btn {
-    margin-top: 14px;
     width: 75%;
     left: 50%;
     transform: translateX(-50%);
@@ -79,6 +84,7 @@ label {
 .phone-options-btn {
     display:flex;
     align-content: space-between;
+    margin-top: 2rem;
 
     a {
         margin: 10px auto;
@@ -126,9 +132,6 @@ label {
     display: flex;
     margin: 14px auto;
     justify-content: space-around;
-}
-
-.login-help {
 }
 
 .loading {
@@ -216,8 +219,18 @@ label {
 }
 
 .pass-percent,
-.pass-text {
-  font-size: 12px;
+.pass-text, .error-text {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.pass-text, .pass-percent {
+    color: #002bf0;
+    font-weight: 400;
+}
+
+.error-text {
+  color: $red;
 }
 
 .pass-percent {
@@ -225,7 +238,7 @@ label {
 }
 
 .red {
-  color: #ff5f59;
+  color: $red;
 }
 
 

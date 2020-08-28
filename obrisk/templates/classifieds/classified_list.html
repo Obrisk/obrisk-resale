@@ -4,21 +4,15 @@
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
 {% block head %}
-<link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="{% static 'css/classifieds-list.css' %}" rel="stylesheet">
 <title>Obrisk Classifieds </title>
 {% endblock head %}
 
 {% block content %}
 <div class="app-overlay"></div>
 
-<div class="view-wrapper">
-  <!-- Container -->
-  <div id="main-feed" class="container">
-    <div id="" class="view-wrap true-dom">
-      <div class="columns">
-
+<!-- Container -->
+  <div class="columns">
         <!-- Cloud Tag Widget -->
         <div class="tags-card-wrapper">
           <div class="card is-weather-card">
@@ -116,14 +110,7 @@
               <div class="dot-pulse"></div>
             </div>
           </div>
-
-      </div>
-      <!-- /Middle column -->
-
-    </div>
-  </div>
 </div>
-
 
 {% endblock content %}
 

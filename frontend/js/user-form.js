@@ -12,7 +12,7 @@ function printError(msg) {
           </button>
         </div>
         `;
-  $(".form-panel").prepend(template);
+  $("#signup-panel-2").prepend(template);
 }
 
 var verify_counter = 0;
@@ -34,7 +34,7 @@ $(function() {
       $("#code-notice")
         .empty()
         .append(
-          "<p class='blue-link'>Empty input. Please enter a valid phone number!<p>"
+          "<p class='error-text'>Please enter a valid phone number!<p>"
         );
     } else {
       var num = parseInt($("#id_phone_number").val());
@@ -45,7 +45,7 @@ $(function() {
         $("#code-notice")
           .empty()
           .append(
-            "<p class='blue-link'> Incorrect number. Don't include country code,spaces or any special character!<p>");
+            "<p class='error-text'> Don't include country code/special characters<p>");
       } else {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
@@ -70,23 +70,19 @@ $(function() {
               timeout = 60;
               $("#send-code").attr("disabled", true);
               $("#phone_label").hide();
-              $(".social-ac").hide();
 
-              if ($("#agree").hasClass("d-none")) {
-                  $("#agree").toggleClass("d-none");
+              if ($("#agree").hasClass("is-hidden")) {
+                  $("#agree").toggleClass("is-hidden");
               }
 
-              if ($("#code-section").hasClass("d-none")) {
-                  $("#code-section").toggleClass("d-none");
-              }
-              if ($("#email-request").hasClass("d-none")) {
-                  $("#email-request").toggleClass("d-none");
+              if ($("#code-section").hasClass("is-hidden")) {
+                  $("#code-section").toggleClass("is-hidden");
               }
 
               if (data.message != undefined) {
                 $("#code-notice")
                   .empty()
-                  .append("<p class='blue-link'>" + data.message + "<p>");
+                  .append("<p class='pass-text'>" + data.message + "<p>");
               }
 
               function updateSec() {
@@ -115,12 +111,12 @@ $(function() {
                 );
               }
 
-              //$("#send-code").attr("disabled", false);
+            //$("#send-code").attr("disabled", false);
             } else {
               if (data.error_message != undefined) {
                 $("#code-notice")
                   .empty()
-                  .append("<p class='blue-link'>" + data.error_message + "<p>");
+                  .append("<p class='error-text'>" + data.error_message + "<p>");
               }
               if (data.messageId != undefined) {
                 console.log(data.messageId);
@@ -140,7 +136,7 @@ $(function() {
             $("#code-notice")
               .empty()
               .append(
-                "<p class='blue-link'> Sorry the signup is closed! Please try again later!<p>"
+                "<p class='error-text'> Sorry the signup is closed! Please try again later!<p>"
               );
             console.log(err);
           }
@@ -154,8 +150,8 @@ $(function() {
 
     if (document.querySelector('#code').value.length == 6) {
 
-       if ($(".loading").hasClass("d-none")) {
-          $(".loading").toggleClass("d-none");
+       if ($(".loading").hasClass("is-hidden")) {
+          $(".loading").toggleClass("is-hidden");
        }
        var int_num = parseInt($("#id_phone_number").val())
        var str_num = int_num.toString();
@@ -163,7 +159,7 @@ $(function() {
     if (isNaN(int_num) || str_num.length != 11 || str_num.charAt(0) != 1) {
           event.preventDefault();
           $("#results").empty().append(
-            "<p class='blue-link'> Phone number is incorrect! <p>"
+            "<p class='error-text'> Phone number is incorrect! <p>"
           );
 
       } else {
@@ -180,28 +176,26 @@ $(function() {
             if (data.success == true) {
               // $('#send-code').removeAttr("disabled");
               if (data.url) {
-                $("#results")
-                  .empty()
-                  .append(
-                    "<p class='blue-link'>Successfully verified your number! Redirecting... <p>"
-                  );
-                window.location.href = data.url;
+                    $("#results")
+                      .empty()
+                      .append(
+                        "<p class='error-text'>Successfully verified your number! Redirecting... <p>"
+                      );
+                    window.location.href = data.url;
               } else {
-                $("#results")
-                  .empty()
-                  .append(
-                    "<p class='blue-link'> You have successfully verified your phone number! <p>"
-                  );
-                $("input[name='verified_no']").val("YES");
+                    $("#results")
+                      .empty()
+                      .append(
+                        "<p class='error-text'> You have successfully verified your phone number! <p>"
+                      );
+                    $("input[name='verified_no']").val("YES");
 
-                $("#code-notice").empty();
-
-                $("#code-section").hide();
-                $("#send-code").hide();
-                $("#signup-panel-1").hide();
-                $(".process-panel-wrap").removeClass("is-active");
-                $(".step-title").removeClass("is-active");
+                    $("#signup-panel-1").hide();
+                    $(".process-panel-wrap").removeClass("is-active");
+                    $(".step-title").removeClass("is-active");
               }
+
+              $(".step-dot-2").removeClass("is-hidden");
               $(".step-dot-2").addClass("is-active");
             } else {
               $("#results")
@@ -219,9 +213,9 @@ $(function() {
                 );
               }
             }
-           if ($(".loading").hasClass("d-none")) {
-              $(".loading").toggleClass("d-none");
-           }
+
+          $(".loading").removeClass("is-hidden");
+
           },
           error: function(error) {
             printError(error);
@@ -261,7 +255,7 @@ $(function() {
 
   $("#signup-finish").on("click", function() {
     var $this = $(this);
-    var url = "/stories";
+    var url = "/classifieds";
     $this.addClass("is-loading");
     setTimeout(function() {
       window.location = url;
@@ -310,6 +304,7 @@ $(function() {
       $(".process-panel-wrap").removeClass("is-active");
       $(".step-title").removeClass("is-active");
       $(".step-dot-2").addClass("is-active");
+
       printError(
         "The password is too weak!"
       );
@@ -319,11 +314,9 @@ $(function() {
 
       if (
         $("#id_phone_number")
-          .val()
-          .toString()
-          .startsWith("+86") == false
+          .val().toString().startsWith("+86") == false
       ) {
-        $("#id_phone_number").val("+86" + $("#id_phone_number").val());
+          $("#id_phone_number").val("+86" + $("#id_phone_number").val());
       }
 
       $("input[name='city']").val(
@@ -530,7 +523,7 @@ $("#id_password1").password({
 
   shortPass: "The password is too short",
   badPass: "Weak; Try combining letters & numbers",
-  goodPass: "Medium; Medium stength password!",
+  goodPass: "Medium; This is okay",
   strongPass: "Strong password!",
   containsField: "The password contains your username",
   enterPass: "Type carefully, ensure there are no mistakes!",

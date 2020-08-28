@@ -143,7 +143,7 @@ def send_code(phone_number, theme, user=None):
         cache.set(str(phone_number), random , 600)
         return JsonResponse({
             'success': True,
-            'message': "The code is sent, valid for 10 minutes"
+            'message': "Code sent!, 10 minutes valid"
         })
 
     else:
@@ -156,7 +156,7 @@ def send_code(phone_number, theme, user=None):
 
                 return JsonResponse({
                     'success': True,
-                    'message': "We've sent the code It is valid for 10 minutes!"
+                    'message': "Code sent!, 10 minutes valid"
                 })
             else:
                 #retry with AWS
@@ -166,7 +166,7 @@ def send_code(phone_number, theme, user=None):
 
                     return JsonResponse({
                         'success': True,
-                        'message': "Code sent, valid for 10 minutes"
+                        'message': "Code sent!, 10 minutes valid"
                     })
 
                 else:
@@ -186,7 +186,7 @@ def send_code(phone_number, theme, user=None):
 
                 return JsonResponse({
                     'success': True,
-                    'message': "Code sent, valid for 10 minutes!"
+                    'message': "Code sent! 10 minutes valid"
                 })
 
             else:
@@ -197,7 +197,7 @@ def send_code(phone_number, theme, user=None):
 
                     return JsonResponse({
                         'success': True,
-                        'message': "Code sent, valid for 10 minutes!"
+                        'message': "Code sent! 10 minutes valid"
                     })
 
                 else:
