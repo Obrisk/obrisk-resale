@@ -15,41 +15,6 @@ body,
   flex-flow: column wrap;
 }
 
-.chat-title {
-  flex: 0 1 45px;
-  position: relative;
-  z-index: 2;
-  background: linear-gradient(45deg, #0aacec, #0aeee3);
-  color: #fff;
-  text-align: left;
-  padding: 10px 10px 10px 40px;
-}
-
-.chat-title .back-btn {
-  position: absolute;
-  top: 15px;
-  left: 20px;
-  color: #fff;
-}
-
-.chat-title .name {
-  position: absolute;
-  top: 10px;
-  left: 40px;
-  font-weight: normal;
-  font-size: 18px;
-  margin: 0;
-  padding: 0;
-  color: #fff;
-}
-
-.chat-title .status {
-  position: absolute;
-  left: 80%;
-  color: #fff;
-  font-size: 8px;
-  letter-spacing: 1px;
-}
 
 .messages {
   flex: 1 1px;

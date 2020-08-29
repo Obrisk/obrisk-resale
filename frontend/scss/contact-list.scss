@@ -1,5 +1,11 @@
 @charset "UTF-8";
 
+@import "partials/layout-colors";
+@import "partials/layout-extra-colors";
+@import "partials/components-cards";
+@import "partials/components-buttons";
+@import "partials/app-chat";
+
 html,
 body,
 .chat {
