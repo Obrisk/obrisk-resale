@@ -298,7 +298,7 @@
         {% if messages %}
             {% for message in messages %}
             <div class="container">
-              <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} mt-lg-2">
+              <div id="messages" class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 {{ message}}
               </div>
