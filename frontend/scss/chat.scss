@@ -12,11 +12,26 @@ body,
   width: 100% !important;
 }
 
+.title {
+    margin: auto 3%;
+}
+
 .users-list {
   margin-top: auto;
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
+}
+
+.contact-card {
+    display: flex;
+    margin: 3%;
+    padding: 4px 12px;
+}
+
+.contact-card-meta {
+    width: 90%;
+    margin: auto 6px;
 }
 
 #msg-timestamp {
@@ -43,6 +58,11 @@ body,
 
 .small-screen .contacts {
   display: none;
+}
+
+.name-time-section {
+    display: flex;
+    justify-content: space-between;
 }
 
 .fa-circle {
@@ -73,6 +93,15 @@ h5 {
 
 #new-msgs {
   margin-left: 2px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+
+    a {
+        width: 40%;
+    }
 }
 
 @media screen and (max-width: 450px) {

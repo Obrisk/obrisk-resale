@@ -59,12 +59,6 @@ button.button {
         }
     }
 
-    //Hover raised buttons
-    &.default-raised:hover {
-        box-shadow: 0 14px 26px -12px rgba(0, 0, 0, 0.42), 0 4px 23px 0px rgba(0, 0, 0, 0.12), 0 8px 10px -5px rgba(0, 0, 0, 0.2);
-        opacity: 0.8;
-    }
-
     //Phantom buttons
     &.is-phantom {
         background: transparent;
@@ -73,17 +67,11 @@ button.button {
         &.primary-button {
             color: $primary;
 
-            &:hover {
-                border-color: $primary;
-            }
         }
 
         &.accent-button {
             color: $accent;
 
-            &:hover {
-                border-color: $accent;
-            }
         }
     }
 
@@ -94,22 +82,10 @@ button.button {
 
         &.primary-button {
             color: $primary;
-
-            &:hover {
-                border-color: transparent !important;
-                background: $primary;
-                color: $white-light;
-            }
         }
 
         &.accent-button {
             color: $accent;
-
-            &:hover {
-                border-color: transparent !important;
-                background: $accent;
-                color: $white-light;
-            }
         }
     }
 
@@ -120,21 +96,12 @@ button.button {
             background: $primary;
             border-color: $primary;
 
-            &.raised:hover {
-                box-shadow: $primary-box-shadow;
-                opacity: 0.8;
-            }
         }
 
         //Secondary button
         &.secondary-button {
             background: $secondary;
             border-color: $secondary;
-
-            &.raised:hover {
-                box-shadow: $secondary-box-shadow;
-                opacity: 0.8;
-            }
         }
 
         //Accent button
@@ -142,10 +109,6 @@ button.button {
             background: $accent;
             border-color: $accent;
 
-            &.raised:hover {
-                box-shadow: $accent-box-shadow;
-                opacity: 0.8;
-            }
         }
 
         //Red button
@@ -153,11 +116,6 @@ button.button {
             background: $red;
             border-color: $red;
             color: $white;
-
-            &.raised:hover {
-                box-shadow: $red-box-shadow;
-                opacity: 0.8;
-            }
         }
 
 
@@ -167,10 +125,6 @@ button.button {
             border-color: $blue;
             color: $white;
 
-            &.raised:hover {
-                box-shadow: $blue-box-shadow;
-                opacity: 0.8;
-            }
         }
 
         //Grey button
@@ -242,11 +196,6 @@ button.button {
     &:focus {
         outline: none;
         border-color: $medium-grey;
-    }
-
-    //Hover state
-    &:hover {
-        background: $white-light;
     }
 
     //Loading modifier

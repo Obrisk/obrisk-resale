@@ -9,76 +9,75 @@
 {% block content %}
 <div class="container">
 
-    <h1 class="is-header is-4"> {% trans 'Recent Messages' %} </h1>
+    <h1 class="title is-5"> {% trans 'Recent Messages' %} </h1>
 
     <div class="users-list">
       {% for con in convs %}
           {% if con.first_user.username == request.user.username %}
-          <a href="#chat-window" data-toggle="modal"
-            data-url="{% url 'messager:conversation_detail' con.second_user.username %}"
-            class="card flex-row open-chat">
-            {% if con.second_user.thumbnail %}
-            <img src="{{oss}}/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
-              style="width:40px;height:40px;border-radius: 50%;"
-              class="rounded-circle profile-header-avatar img-fluid">
-            {% else %}
-            <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
-              alt="No Pic" class="profile-header-avatar img-fluid" />
-            {% endif %}
+              <a href="#chat-window" data-toggle="modal"
+                data-url="{% url 'messager:conversation_detail' con.second_user.username %}"
+                class="card contact-card open-chat">
+                {% if con.second_user.thumbnail %}
+                <img src="{{oss}}/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
+                  style="width:40px;height:40px;border-radius: 50%;"
+                  class="rounded-circle profile-header-avatar img-fluid">
+                {% else %}
+                <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
+                  alt="No Pic" class="profile-header-avatar img-fluid" />
+                {% endif %}
 
-            <div class="w-100">
-              <div class="is-flex justify-content-between">
-                <strong> {{ con.second_user.get_profile_name|title }} </strong>
-                <small> {{ con.time|date:'N d G:i' }} </small>
-              </div>
+                <div class="contact-card-meta">
+                  <div class="name-time-section">
+                      <div> <strong> {{ con.second_user.get_profile_name|title }} </strong> </div>
+                      <div> <small> {{ con.time|date:'N d G:i' }} </small> </div>
+                  </div>
 
-              {% if con.last_msg %}
-                  <small> {{ con.last_msg|truncatechars:50 }} </small>
-              {% elif con.img or con.attachment %}
-                  <small> Attachment </small>
-              {% else %}
-                  <small> New conversation </small>
-              {% endif %}
+                  {% if con.last_msg %}
+                      <small> {{ con.last_msg|truncatechars:50 }} </small>
+                  {% elif con.img or con.attachment %}
+                      <small> Attachment </small>
+                  {% else %}
+                      <small> New conversation </small>
+                  {% endif %}
 
-              {%  if con.unread and request.user.id == con.recipient %}
-                  <span id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-              {% endif %}
-            </div>
-          </a>
+                  {%  if con.unread and request.user.id == con.recipient %}
+                      <span id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+                  {% endif %}
+                </div>
+              </a>
 
           {% else %}
-          <a href="#chat-window" data-toggle="modal"
-            data-url="{% url 'messager:conversation_detail' con.first_user.username %}"
-            class="card flex-row open-chat ">
-            {% if con.first_user.thumbnail %}
-            <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
-              style="width:40px;height:40px;border-radius: 50%;"
-              class="rounded-circle profile-header-avatar img-fluid" id="pic">
-            {% else %}
-            <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
-              alt="No Profile Picture" class="profile-header-avatar img-fluid" />
-            {% endif %}
+              <a href="#chat-window" data-toggle="modal"
+                data-url="{% url 'messager:conversation_detail' con.first_user.username %}"
+                class="card contact-card open-chat">
+                {% if con.first_user.thumbnail %}
+                <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
+                  style="width:40px;height:40px;border-radius: 50%;"
+                  class="rounded-circle profile-header-avatar img-fluid" id="pic">
+                {% else %}
+                <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
+                  alt="No Profile Picture" class="profile-header-avatar img-fluid" />
+                {% endif %}
 
-            <div class="w-100">
-              <div class="is-flex justify-content-between">
-                <strong> {{ con.first_user.get_profile_name|title }} </strong>
-                <small> {{ con.time|date:'N d G:i' }} </small>
-              </div>
+                <div class="contact-card-meta">
+                  <div class="name-time-section">
+                    <strong> {{ con.first_user.get_profile_name|title }} </strong>
+                    <small> {{ con.time|date:'N d G:i' }} </small>
+                  </div>
 
+                  {% if con.last_msg %}
+                      <small> {{ con.last_msg|truncatechars:50 }} </small>
+                  {% elif con.img or con.attachment %}
+                      <small> Attachment </small>
+                  {% else %}
+                      <small> New conversation </small>
+                  {% endif %}
 
-              {% if con.last_msg %}
-                  <small> {{ con.last_msg|truncatechars:50 }} </small>
-              {% elif con.img or con.attachment %}
-                  <small> Attachment </small>
-              {% else %}
-                  <small> New conversation </small>
-              {% endif %}
-
-              {%  if con.unread and request.user.id == con.recipient %}
-                  <span id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-              {% endif %}
-            </div>
-          </a>
+                  {%  if con.unread and request.user.id == con.recipient %}
+                      <span id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+                  {% endif %}
+                </div>
+              </a>
           {% endif %}
 
       {% empty %}
@@ -112,14 +111,14 @@
       {% endfor %}
       </div>
 
-      <div class="has-text-centered is-flex">
+      <div class="action-buttons">
 
-          <a onclick="shareMe()" class="button accent-button has-min-width">
+          <a onclick="shareMe()" class="button is-solid accent-button">
             {% trans "Invite Friends" %}
           </a>
 
           <a href="{% url 'connections:friendship_view_friends' %}" 
-              class="button accent-button has-min-width">
+              class="button is-solid accent-button">
             {% trans "Discover" %}
           </a>
       </div>
