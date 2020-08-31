@@ -14,11 +14,12 @@
     }
 
     &::-webkit-scrollbar-track-piece {
-        background: $accent !important;
+        background: $opt-accent !important;
     }
 
     &::-webkit-scrollbar-thumb {
         border-radius: 10px !important;
+        color: $accent !important;
     }
 }
 
@@ -152,18 +153,8 @@ $alert-padding-y: 15px;
     margin-bottom: 0;
 }
 
-.django-messages {
-    margin-top: 4px;
-    padding-top: 2px;
-    padding-bottom: 4px;
-}
-
 .navbar .navbar-item .is-navbarTop:after {
   display: none;
-}
-
-#messages {
-  margin-top: 3rem;
 }
 
 .bt-nav-ul {

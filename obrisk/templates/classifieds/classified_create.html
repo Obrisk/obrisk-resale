@@ -7,7 +7,6 @@
 {% endblock head %}
 
 {% block content %}
-<div class="container">
     <div class="alert alert-error is-hidden">
         <strong><span id="data-errors"> </span></strong>
     </div>
@@ -172,12 +171,9 @@
         </div>
       </div>
   </div>
-<!--close container -->
-</div>
 {% endblock content %}
 
 {% block extra_js %}
-
 
 <script type="text/javascript">
 
@@ -191,8 +187,11 @@
   //const tags = "{{ form.tags.auto_id }}";
 </script>
 
+<link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
 <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/vendor/aliyun-oss.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/classifieds-create.js' %}" type="text/javascript"></script>
 
 {% endblock extra_js %}

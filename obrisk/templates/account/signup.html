@@ -10,13 +10,8 @@
 {% endblock head %}
 
 {% block content %}
-<script>
-</script>
-
 <!-- Main Wrapper -->
-<div class="container login-wrapper">
-
-  <div class="form-wrapper columns">
+  <div class="login-wrapper form-wrapper columns">
      <!--Form-->
           <form class="signup blur-in" id="signup_form" method="post"
                 action="{% url 'account_signup' %}">
@@ -150,7 +145,6 @@
                 </a>
              </div>
         </div>
-</div>
 {% endblock content %}
 
 {% block extra_js  %}

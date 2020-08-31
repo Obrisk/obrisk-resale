@@ -10,9 +10,10 @@
   <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
-  <meta name="description" content="Reselling platform for foreigners in China">
+  <meta name="description"
+      content="classifieds website for foreigners in China to buy and sell secondhand items and find apartments for rent">
   <meta name="keywords"
-    content="Buy and sell, secondhand, classifieds, Expats in China, foreigners in China, China, Hangzhou, Shanghai">
+    content="Buy and sell, secondhand, classifieds, expats in China, foreigners in China, China, Hangzhou, Shanghai">
   <meta name="author" content="Obrisk team">
   <meta name="apple-mobile-web-app-title" content="Obrisk">
   <meta name="locale" content="en">
@@ -28,21 +29,16 @@
   {% progressive_web_app_meta %}
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  {% block meta %}
-  {% endblock meta %}
-
   {% block cdn %}
-  <!-- Core CSS -->
-  <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
-
+      <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
   {% endblock cdn %}
 
   {% block head %}
   {% endblock head %}
 </head>
 
-<body class="O-bg has-slimscroll is-white">
+<body class="has-slimscroll">
   <!-- Pageloader -->
   {% block body %}
 
@@ -292,24 +288,23 @@
     </nav>
 
 
-    <div class="django-messages ">
+    <div class='container'>
         <!-- These messages are not from chat, they are the notifications msgs
         upon successful POST request on the chat the message context is message_list -->
         {% if messages %}
             {% for message in messages %}
-            <div class="container">
-              <div id="messages" class="alert alert-dismissible {% if message.tags %}alert-{{ message.tags }}{% endif %}">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              <div class="notification 
+                 {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
+                <button class="delete"></button>
                 {{ message}}
               </div>
-            </div>
             {% endfor %}
         {% endif %}
+
+        {% block content %}
+
+        {% endblock content %}
     </div>
-
-    {% block content %}
-
-    {% endblock content %}
 
 
     <nav id="navbarBottom" class="navbar fixed-bottom">
