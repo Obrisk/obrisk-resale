@@ -7,10 +7,6 @@
 {% endblock head %}
 
 {% block content %}
-    <div class="alert alert-error is-hidden">
-        <strong><span id="data-errors"> </span></strong>
-    </div>
-
     <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
           id="classified-form" method="post" role="form">
           {% csrf_token %}
@@ -41,7 +37,7 @@
                       </label>
                       <span> ¥
                           <input type="number" id="id_price" name="price" class="numberinput input" id="id_price"
-                            required step="1.00" value="0" placeholder="Item price">
+                            required step=".01" value="0" placeholder="Item price">
                       <span>
                   </div>
                   <small> {% trans '0 for GIVEAWAY' %}

@@ -1,4 +1,5 @@
 import logging
+import re
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -213,11 +214,11 @@ class CreateClassifiedView(CreateView):
             if data['status'] == '400':
                 return JsonResponse(data)
         if form.errors:
+            error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
             data = {
                 'status': '400',
                 'error_message': _(
-                    f'Your form is having invalid input \
-                        on: {form.errors} Correct your input and submit again')
+                    f'Form error on {error_msg}')
             }
         else:
             data = {
@@ -240,6 +241,7 @@ class CreateClassifiedView(CreateView):
                 'Sorry, the image(s) were not successfully uploaded, \
                     please try again')
         }
+
         if not images_json:
             #The front-end will add the default images in case of errors 
             #Empty images_json means this form bypassed our front-end upload.

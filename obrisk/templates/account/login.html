@@ -133,10 +133,10 @@
     if (!localStorage.getItem('auth')) {
       //When user click on login save the auth details only after successfull ajax login then redirect
       //else allow user to retry login
-      $('.login100-form-btn').click(function (event) {
+      document.querySelector('.login-submit-btn').click(function (event) {
         event.preventDefault();
-        var username = $('[name="login"]').val();
-        var pass = $('[name="password"]').val();
+        const username = document.querySelector('[name="login"]').value;
+        const pass = document.querySelector('[name="password"]').value;
 
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function () {

@@ -288,25 +288,6 @@
     </nav>
 
 
-    <div class='container'>
-        <!-- These messages are not from chat, they are the notifications msgs
-        upon successful POST request on the chat the message context is message_list -->
-        {% if messages %}
-            {% for message in messages %}
-              <div class="notification 
-                 {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
-                <button class="delete"></button>
-                {{ message}}
-              </div>
-            {% endfor %}
-        {% endif %}
-
-        {% block content %}
-
-        {% endblock content %}
-    </div>
-
-
     <nav id="navbarBottom" class="navbar fixed-bottom">
         <ul class="bt-nav-ul is-toggle is-fullwidth">
 
@@ -365,6 +346,35 @@
         </ul>
     </nav>
 
+    <div class='container'>
+        <!-- These messages are not from chat, they are the notifications msgs
+        upon successful POST request on the chat the message context is message_list -->
+        {% if messages %}
+            {% for message in messages %}
+              <div class="notification 
+                 {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
+                <button class="delete close-dj-messages"></button>
+                {{ message}}
+              </div>
+            {% endfor %}
+
+           <script type="text/javascript">
+                document.querySelectorAll('.close-dj-messages').forEach(item => {
+                  item.addEventListener('click', e => {
+                    e.currentTarget.parentElement.remove();
+                    e.stopPropagation();
+                  });
+                });
+          </script>
+
+        {% endif %}
+
+        {% block content %}
+
+        {% endblock content %}
+    </div>
+
+
   <!-- Icon can be replace to show icon on share -->
   {% block icon %}
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}?v=1">
@@ -400,6 +410,7 @@
     ) {
       document.getElementById("navbarBottom").classList.add("iphone-nav-bt");
     }
+
   </script>
 
   {% if request.user.is_authenticated %}

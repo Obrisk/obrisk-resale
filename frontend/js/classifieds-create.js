@@ -4,11 +4,9 @@
 
 function printError(msg, target) {
   template = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="notification is-danger" role="alert">
+            <button type="button" class="delete close-dj-messages"></button>
           ${msg}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         `;
   $(`${target}`).prepend(template);
@@ -30,15 +28,13 @@ $(function() {
       cache: false,
       success: function(data) {
         if (data.status == "200") {
-          //This doesn't redirect smoothly
-          window.location.replace("/classifieds/");
+            window.location.replace("/classifieds/");
         } else {
           //At this point check if the images variable exists and
           //update the thumbnail holder to show the uploaded images.
           //Scroll the page to the top or to the place with errors.
           console.log(data);
-          $(".alert-error").removeClass("d-none");
-          $("#data-errors").html(data.error_message);
+          printError(data.error_message, "#classified-form");
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
       },
@@ -58,12 +54,12 @@ $(function() {
   });
 
   $(".submit-button").click(function(event) {
-
+    const phn = $("#id_phone_number").val();
     //Help the user to add the country code on phone number
-    if (typeof $("#id_phone_number").val() !== 'undefined') {
-        if ($("#id_phone_number").val().startsWith('+86') == false) {
-            if ($("#id_phone_number").val().length == 11 ) {
-                $("#id_phone_number").val("+86" + $("#id_phone_number").val());
+    if ((typeof phn !== 'undefined') && phn != '') {
+        if (phn.val().startsWith('+86') == false) {
+            if (phn.val().length == 11 ) {
+                phn.val("+86" + phn.val());
             } else {
               printError(
                 "Your phone number is incorrect, Please verify",
@@ -87,4 +83,3 @@ $(function() {
     }
   });
 });
-
