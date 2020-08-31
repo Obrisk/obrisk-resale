@@ -2,7 +2,7 @@
 @import "partials/layout-navbar";
 
 .container {
-    margin-top: 4.5rem;
+    margin: 3.5rem auto;
 }
 
 //standard slim
@@ -10,16 +10,15 @@
     overflow: hidden !important;
 
     &::-webkit-scrollbar {
-        width: 6px !important;
+        width: 4px !important;
     }
 
-    &::-webkit-scrollbar-track {
-        background: #3ec4e2 !important;
+    &::-webkit-scrollbar-track-piece {
+        background: $accent !important;
     }
 
     &::-webkit-scrollbar-thumb {
         border-radius: 10px !important;
-        background: #3ec4e2 !important;
     }
 }
 

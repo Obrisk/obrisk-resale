@@ -1,3 +1,6 @@
+@import "partials/layout-colors";
+@import "partials/components-buttons";
+
 .form-control {
   background-color: #fff;
   border: 2px solid #ccc;
@@ -11,6 +14,35 @@
 .col-form-label {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
+}
+
+.price {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -5px;
+
+    span {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+
+#id_price {
+    width:70%;
+}
+
+
+.include-phone {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+
+    input[type="checkbox"] {
+        zoom: 1.5;
+    }
 }
 
 .btn-primary {
@@ -33,6 +65,12 @@
 .city {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
+}
+
+.img-pick-wrapper {
+    display: flex;
+    margin: auto;
+    justify-content: space-around;
 }
 
 .lds-roller {

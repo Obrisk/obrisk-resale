@@ -111,6 +111,12 @@ button.button {
 
         }
 
+        //Accent button
+        &.opt-accent-button {
+            background: $opt-accent;
+            border-color: $opt-accent;
+        }
+
         //Red button
         &.red-button {
             background: $red;

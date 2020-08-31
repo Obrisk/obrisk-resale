@@ -1,2 +1,515 @@
-.form-control{background-color:#fff;border:2px solid #ccc;color:#111;font-family:Montserrat,sans-serif;font-weight:400;padding:10px;width:100%}.col-form-label{font-family:Montserrat,sans-serif;font-weight:600}.btn-primary{color:#fff;background-color:#50a1ff;border-color:#50a1ff}.btn{font-size:11px;padding:8px 26px 6px;letter-spacing:1.7px;text-transform:uppercase;border-radius:2px;outline:none;transition:.15s linear}.city{font-family:Montserrat,sans-serif;font-weight:600}.lds-roller{display:inline-block;position:relative;width:64px;height:64px}.lds-roller div{animation:lds-roller 1.2s cubic-bezier(.5,0,.5,1) infinite;transform-origin:32px 32px}.lds-roller div:after{content:" ";display:block;position:absolute;width:6px;height:6px;border-radius:50%;background:#fff;margin:-3px 0 0 -3px}.lds-roller div:first-child{animation-delay:-36ms}.lds-roller div:first-child:after{top:50px;left:50px}.lds-roller div:nth-child(2){animation-delay:-72ms}.lds-roller div:nth-child(2):after{top:54px;left:45px}.lds-roller div:nth-child(3){animation-delay:-.108s}.lds-roller div:nth-child(3):after{top:57px;left:39px}.lds-roller div:nth-child(4){animation-delay:-.144s}.lds-roller div:nth-child(4):after{top:58px;left:32px}.lds-roller div:nth-child(5){animation-delay:-.18s}.lds-roller div:nth-child(5):after{top:57px;left:25px}.lds-roller div:nth-child(6){animation-delay:-.216s}.lds-roller div:nth-child(6):after{top:54px;left:19px}.lds-roller div:nth-child(7){animation-delay:-.252s}.lds-roller div:nth-child(7):after{top:50px;left:14px}.lds-roller div:nth-child(8){animation-delay:-.288s}.lds-roller div:nth-child(8):after{top:45px;left:10px}@keyframes lds-roller{0%{transform:rotate(0deg)}to{transform:rotate(1turn)}}.loading-modal{position:fixed;background:rgba(0,0,0,.39);width:100%;height:100%;z-index:9999;display:-ms-flexbox;display:flex;-ms-flex-pack:center;justify-content:center;-ms-flex-align:center;align-items:center;top:0;bottom:0}textarea.textarea{color:#878787;box-shadow:none;transition:all .8s}textarea.textarea:focus{border:1px solid #ededed}textarea.textarea.is-primary-focus:focus{border-color:#4fc1ea}textarea.textarea.is-primary-focus:focus~span.icon i{color:#4fc1ea}textarea.textarea.is-secondary-focus:focus{border-color:#7f00ff}textarea.textarea.is-secondary-focus:focus~span.icon i{color:#7f00ff}textarea.textarea.is-accent-focus:focus{border-color:#ad5cff}textarea.textarea.is-accent-focus:focus~span.icon i{color:#ad5cff}textarea.textarea.is-grey-focus:focus{border-color:#a9abac}textarea.textarea.is-grey-focus:focus~span.icon i{color:#a9abac}textarea.textarea.is-default-focus:focus{border-color:#ccc}textarea.textarea.is-default-focus:focus~span.icon i{color:#ccc}textarea.textarea.is-grow{min-height:40px!important;height:40px;resize:none;transition:all .5s;overflow:hidden}textarea.textarea.is-grow:focus{height:130px!important;border-color:#999}textarea.textarea.is-button{min-height:50px!important;height:50px!important;resize:none;border-top-left-radius:4px;border-top-right-radius:4px;border-bottom-left-radius:0;border-bottom-right-radius:0;border-bottom:none!important;transition:all .6s}textarea.textarea.is-button:hover{border-color:#ccc}textarea.textarea.is-button:focus{height:130px!important;padding-bottom:40px!important;border-color:#ccc}textarea.textarea.is-button+.textarea-button{display:-ms-flexbox;display:flex;-ms-flex-pack:end;justify-content:flex-end;position:relative;border:1px solid #ccc;border-top:none!important;border-bottom-left-radius:4px;border-bottom-right-radius:4px}textarea.textarea.is-button+.textarea-button button{margin:10px 7px 7px}
-/*# sourceMappingURL=../../../frontend/scss/sourcemaps/classified-create.css.map */
+@charset "UTF-8";
+/*! _colors.scss | Obrisk-team */
+/* ==========================================================================
+1. Main colors
+========================================================================== */
+/* Obrisk's azure blue */
+/* ==========================================================================
+4. Box shadows
+========================================================================== */
+/*! _buttons.scss | Friendkit | © Css Ninja. 2018-2019 */
+/* ==========================================================================
+Friendkit button styles
+========================================================================== */
+/*
+    1. Main Class
+    2. Like button
+    3. Circle button
+    4. Load more button
+*/
+/* ==========================================================================
+1. Main Class
+========================================================================== */
+button.button {
+  line-height: 0;
+}
+
+.button {
+  font-size: .8rem;
+  font-weight: 500;
+  padding: 18px 22px;
+  transition: all .3s;
+}
+
+.button.is-rounded {
+  padding-left: 1.5em;
+  padding-right: 1.5em;
+}
+
+.button.icon-button {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.button.icon-button svg {
+  height: 16px !important;
+  width: 16px !important;
+  stroke: #344258;
+}
+
+.button.icon-button.is-solid svg {
+  stroke: #fff !important;
+}
+
+.button.has-icon svg {
+  height: 16px;
+  width: 16px;
+  min-height: 16px;
+  min-width: 16px;
+  margin-right: 4px;
+}
+
+.button.is-phantom {
+  background: transparent;
+  border: 2px solid transparent;
+}
+
+.button.is-phantom.primary-button {
+  color: #ff5f59;
+}
+
+.button.is-phantom.accent-button {
+  color: #3EC4E2;
+}
+
+.button.is-reversed-phantom {
+  background: transparent;
+  border: 1px solid transparent;
+}
+
+.button.is-reversed-phantom.primary-button {
+  color: #ff5f59;
+}
+
+.button.is-reversed-phantom.accent-button {
+  color: #3EC4E2;
+}
+
+.button.is-solid.primary-button {
+  background: #ff5f59;
+  border-color: #ff5f59;
+}
+
+.button.is-solid.secondary-button {
+  background: #757a91;
+  border-color: #757a91;
+}
+
+.button.is-solid.accent-button {
+  background: #3EC4E2;
+  border-color: #3EC4E2;
+}
+
+.button.is-solid.opt-accent-button {
+  background: #81c1ff;
+  border-color: #81c1ff;
+}
+
+.button.is-solid.red-button {
+  background: #FF7273;
+  border-color: #FF7273;
+  color: #fff;
+}
+
+.button.is-solid.blue-button {
+  background: #039BE5;
+  border-color: #039BE5;
+  color: #fff;
+}
+
+.button.is-solid.grey-button {
+  background: #f7f7f7;
+  border-color: #f7f7f7;
+}
+
+.button.is-solid.grey-button svg {
+  stroke: #344258 !important;
+}
+
+.button.is-solid.dark-grey-button {
+  background: #ededed;
+  border-color: #ededed;
+}
+
+.button.is-solid.dark-grey-button svg {
+  stroke: #344258 !important;
+}
+
+.button.light-button {
+  background: transparent;
+  border-color: #fff;
+  color: #fff;
+  font-weight: 500;
+}
+
+/* ==========================================================================
+4. Load more button
+========================================================================== */
+.load-more-wrap {
+  padding: 40px 0;
+}
+
+.load-more-wrap.narrow-top {
+  padding-top: 20px 0;
+}
+
+.load-more-button {
+  box-sizing: border-box;
+  display: inline-block;
+  width: 8em;
+  height: 2.25em;
+  padding: 0.5em 1em;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+  color: #757a91 !important;
+  white-space: nowrap;
+  line-height: 1;
+  font-size: 1em;
+  text-decoration: none;
+  transition: width 0.1s ease, height 0.4s ease, border-width 0.4s ease, border-radius 0.4s ease, border-color 0.4s ease, padding 0.4s ease;
+}
+
+.load-more-button:focus {
+  outline: none;
+  border-color: #ddd;
+}
+
+.load-more-button.loading {
+  height: 24px;
+  width: 24px;
+  padding: 0;
+  border-width: 2px;
+  border-radius: 17px;
+  border-color: #eee #eee #eee #999;
+  background: #fff;
+  font-size: 0;
+  color: transparent;
+  pointer-events: none;
+  animation: spin 1.2s infinite linear;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.form-control {
+  background-color: #fff;
+  border: 2px solid #ccc;
+  color: #111;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 400;
+  padding: 10px;
+  width: 100%;
+}
+
+.col-form-label {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.price {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: -5px;
+}
+
+.price span {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+#id_price {
+  width: 70%;
+}
+
+.include-phone {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.include-phone input[type="checkbox"] {
+  zoom: 1.5;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #50a1ff;
+  border-color: #50a1ff;
+}
+
+.btn {
+  font-size: 11px;
+  padding: 8px 26px 6px;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+  border-radius: 2px;
+  outline: none;
+  -webkit-transition: 0.15s linear;
+  transition: 0.15s linear;
+}
+
+.city {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.img-pick-wrapper {
+  display: flex;
+  margin: auto;
+  justify-content: space-around;
+}
+
+.lds-roller {
+  display: inline-block;
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.lds-roller div {
+  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+  transform-origin: 32px 32px;
+}
+
+.lds-roller div:after {
+  content: " ";
+  display: block;
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  margin: -3px 0 0 -3px;
+}
+
+.lds-roller div:nth-child(1) {
+  animation-delay: -0.036s;
+}
+
+.lds-roller div:nth-child(1):after {
+  top: 50px;
+  left: 50px;
+}
+
+.lds-roller div:nth-child(2) {
+  animation-delay: -0.072s;
+}
+
+.lds-roller div:nth-child(2):after {
+  top: 54px;
+  left: 45px;
+}
+
+.lds-roller div:nth-child(3) {
+  animation-delay: -0.108s;
+}
+
+.lds-roller div:nth-child(3):after {
+  top: 57px;
+  left: 39px;
+}
+
+.lds-roller div:nth-child(4) {
+  animation-delay: -0.144s;
+}
+
+.lds-roller div:nth-child(4):after {
+  top: 58px;
+  left: 32px;
+}
+
+.lds-roller div:nth-child(5) {
+  animation-delay: -0.18s;
+}
+
+.lds-roller div:nth-child(5):after {
+  top: 57px;
+  left: 25px;
+}
+
+.lds-roller div:nth-child(6) {
+  animation-delay: -0.216s;
+}
+
+.lds-roller div:nth-child(6):after {
+  top: 54px;
+  left: 19px;
+}
+
+.lds-roller div:nth-child(7) {
+  animation-delay: -0.252s;
+}
+
+.lds-roller div:nth-child(7):after {
+  top: 50px;
+  left: 14px;
+}
+
+.lds-roller div:nth-child(8) {
+  animation-delay: -0.288s;
+}
+
+.lds-roller div:nth-child(8):after {
+  top: 45px;
+  left: 10px;
+}
+
+@keyframes lds-roller {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-modal {
+  position: fixed;
+  background: #00000063;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0;
+  bottom: 0;
+}
+
+/* line 150, src/assets/scss/components/_components-forms.scss */
+textarea.textarea {
+  color: #878787;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  -webkit-transition: all 0.8s;
+  transition: all 0.8s;
+}
+
+/* line 155, src/assets/scss/components/_components-forms.scss */
+textarea.textarea:focus {
+  border: 1px solid #ededed;
+}
+
+/* line 160, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-primary-focus:focus {
+  border-color: #4fc1ea;
+}
+
+/* line 163, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-primary-focus:focus ~ span.icon i {
+  color: #4fc1ea;
+}
+
+/* line 170, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-secondary-focus:focus {
+  border-color: #7f00ff;
+}
+
+/* line 173, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-secondary-focus:focus ~ span.icon i {
+  color: #7f00ff;
+}
+
+/* line 180, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-accent-focus:focus {
+  border-color: #ad5cff;
+}
+
+/* line 183, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-accent-focus:focus ~ span.icon i {
+  color: #ad5cff;
+}
+
+/* line 190, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-grey-focus:focus {
+  border-color: #a9abac;
+}
+
+/* line 193, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-grey-focus:focus ~ span.icon i {
+  color: #a9abac;
+}
+
+/* line 200, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-default-focus:focus {
+  border-color: #ccc;
+}
+
+/* line 203, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-default-focus:focus ~ span.icon i {
+  color: #ccc;
+}
+
+/* line 210, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-grow {
+  min-height: 40px !important;
+  height: 40px;
+  resize: none;
+  -webkit-transition: all 0.5s;
+  transition: all 0.5s;
+  overflow: hidden;
+}
+
+/* line 217, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-grow:focus {
+  height: 130px !important;
+  border-color: #999;
+}
+
+/* line 224, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-button {
+  min-height: 50px !important;
+  height: 50px !important;
+  resize: none;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom: none !important;
+  -webkit-transition: all 0.6s;
+  transition: all 0.6s;
+}
+
+/* line 235, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-button:hover {
+  border-color: #ccc;
+}
+
+/* line 239, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-button:focus {
+  height: 130px !important;
+  padding-bottom: 40px !important;
+  border-color: #ccc;
+}
+
+/* line 245, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-button + .textarea-button {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  position: relative;
+  border: 1px solid #ccc;
+  border-top: none !important;
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+}
+
+/* line 254, src/assets/scss/components/_components-forms.scss */
+textarea.textarea.is-button + .textarea-button button {
+  margin: 10px 7px 7px 7px;
+}
