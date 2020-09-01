@@ -217,15 +217,11 @@
                       <h6 class="card-title"> {{ classified.title}} </h6>
 
                       {% if classified.price != 0.00 %}
-                          <p class="card-subtitle O-cl-red"> ¥{{ classified.price|title }} </p>
+                          <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
                       {% else %}
-                          <p class="card-subtitle O-cl-red"> {% trans 'FREE' %} </p>
+                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
                       {% endif %}
-                      <div class="card-meta">
-
-                        <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
-
-                      </div>
+                      <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
 
                     </div>
                     {% if classified.priority > 0 %}
