@@ -38,16 +38,16 @@ class MyUserAdmin(AuthUserAdmin):
     add_form = MyUserCreationForm
     fieldsets = (
             ('User Profile',
-                {'fields': 
+                {'fields':
                     ('name', 'is_official', 'is_seller', 'points', 'city',
                         'province_region', 'country', 'phone_number', 'picture',
-                        'thumbnail', 'org_picture', 'instagram_account', 'linkedin_account',
-                        'snapchat_account', 'facebook_account', 'address', 'gender',
+                        'thumbnail', 'org_picture', 'linkedin_account',
+                        'address', 'gender', 'wechat_openid',
                     )
                 }
             ),
     ) + AuthUserAdmin.fieldsets
-    list_display = ('username', 'last_login', 'date_joined', 
+    list_display = ('username', 'last_login', 'date_joined',
         'city', 'province_region', 'thumbnail', 'points')
     search_fields = ['username', 'phone_number', 'email', 'city']
     readonly_fields = ('phone_number',)
