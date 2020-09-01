@@ -7,239 +7,183 @@
 {% block head %}
 <title>{% trans 'Account Signup' %}</title>
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
 {% endblock head %}
 
 {% block content %}
-<script>
-	function disableSubmit() {
-		document.getElementById("phone-signup-submit").disabled = true;
-	}
-
-	function activateButton(element) {
-
-		if (element.checked) {
-			document.getElementById("phone-signup-submit").disabled = false;
-		}
-		else {
-			document.getElementById("phone-signup-submit").disabled = true;
-		}
-	}
-</script>
-
 <!-- Main Wrapper -->
-<div class="login-wrapper columns is-gapless">
-	<!--Left Side (Desktop Only)-->
-	<div class="column is-6 is-hidden-mobile hero-banner">
-		<div class="hero is-fullheight is-login">
-			<div class="hero-body">
-				<div class="container">
-					<div class="left-caption">
-						<h2>Join an Exciting Social Experience.</h2>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--Right Side-->
-	<div class="column is-6">
-		<div class="hero form-hero is-fullheight">
+  <div class="login-wrapper form-wrapper columns">
+     <!--Form-->
+          <form class="signup blur-in" id="signup_form" method="post"
+                action="{% url 'account_signup' %}">
+                {% csrf_token %}
+                  <h1 class="text-center login100-form-title">
+                        {% trans 'Account Signup' %}
+                  </h1>
 
-			<!--Signup Form-->
-			<div class="hero-body p-0">
-				<div class="form-wrapper">
-					<!--Form-->
-					<div class="login-form">
+                  <div id="signup-panel-1"
+                     class=" step-dot-1 process-panel-wrap is-narrow is-active">
 
-						<div class="signup-wrapper">
-							<div class="outer-panel">
-								<div class="outer-panel-inner">
-									<br />
-									<form class="signup" id="signup_form" method="post"
-										action="{% url 'account_signup' %}">
-										{% csrf_token %}
-										<div class="text-center">
-											<span
-												class="login100-form-title p-b-32 ">{% trans 'Account Signup' %}</span>
-										</div>
+                            <label for="phone_number">
+                                {% trans 'Phone Number' %}
+                            </label>
+                            {{ form.phone_number }}
 
-										<div id="signup-panel-1"
-											class=" step-dot-1 process-panel-wrap is-narrow is-active">
+                            <button
+                                class="button is-solid raised accent-button is-rounded is-fullwidth"
+                                id="send-code" type="button"> {% trans 'Verify' %}
+                            </button>
 
-											<div class="form-panel">
-												<div class=" mb-0">
-													<div class="input-group">
-														<label for="phone_number">
-                                                            {% trans 'Phone Number' %}
-														</label>
+                            <div id="code-notice" style="font-weight:bold;">
+                            </div>
 
-													</div>
-													{{ form.phone_number }}
-												</div>
+                             <div class="is-hidden" id="code-section">
+                                <label for="code">
+                                    {% trans 'Code*' %}
+                                </label>
 
-												<div class=" mt-2">
-													<button
-														class="button is-solid primary-button raised is-rounded is-fullwidth"
-														id="send-code" type="button">
-                                                        {% trans 'Verify' %}
-                                                    </button>
-												</div>
+                                <div class="is-flex">
+                                    <input  id="code" class="col-10" maxlength="6" minlength="6" type="tel"
+                                        pattern="[0-9]{6}" name="code">
+                                        <svg class="loading is-hidden"
+                                            xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-loader">
+                                            <line x1="12" y1="2" x2="12" y2="6"></line>
+                                            <line x1="12" y1="18" x2="12" y2="22"></line>
+                                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
+                                            </line>
+                                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
+                                            </line>
+                                            <line x1="2" y1="12" x2="6" y2="12"></line>
+                                            <line x1="18" y1="12" x2="22" y2="12"></line>
+                                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
+                                            </line>
+                                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
+                                            </line>
+                                        </svg>
+                                  </div>
+                              </div>
 
-												<div id="code-notice" style="font-weight:bold;"></div>
+                        <div id="results" class="pass-text"> 
+                        </div>
+                        <input type="hidden" name="verified_no" id="verified_no">
 
-												<div class="d-none" id="code-section">
-													<div class="form-group ">
-														<div class="input-group">
-															<label for="code">
-                                                                {% trans 'Code*' %}
-                                                            </label>
-														</div>
+                        <p id='agree' class="is-hidden">
+                            {% trans 'I agree to' %}
+                            <a href="{% url 'terms_and_conditions' %}">
+                                {% trans 'Terms & Conditions' %} </a> 
+                        </p>
+                        <input type="checkbox" name="terms" id="terms"
+                            onchange="activateButton(this)">
+                        <br/>
 
-														<div class="d-flex">
-															<input  id="code" class="col-10" maxlength="6" minlength="6" type="tel"
-																pattern="[0-9]{6}" name="code">
-															<div class="">
-																<svg class="loading d-none"
-																	xmlns="http://www.w3.org/2000/svg" width="24"
-																	height="24" viewBox="0 0 24 24" fill="none"
-																	stroke="currentColor" stroke-width="2"
-																	stroke-linecap="round" stroke-linejoin="round"
-																	class="feather feather-loader">
-																	<line x1="12" y1="2" x2="12" y2="6"></line>
-																	<line x1="12" y1="18" x2="12" y2="22"></line>
-																	<line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
-																	</line>
-																	<line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
-																	</line>
-																	<line x1="2" y1="12" x2="6" y2="12"></line>
-																	<line x1="18" y1="12" x2="22" y2="12"></line>
-																	<line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
-																	</line>
-																	<line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
-																	</line>
-																</svg>
-															</div>
-														</div>
+                        <div class="phone-options-btn" >
+                            <a href="{% url 'account_login' %}"
+                                class="button is-solid accent-button raised">{% trans 'Login' %}</a>
+                            <a href="#" id="open-options"
+                                class="button is-solid accent-button raised">{% trans "More options?" %}</a>
+                        </div>
 
-														<div></div>
-													</div>
-												</div>
+                        {% if redirect_field_value %}
+                            <input type="hidden" name="{{ redirect_field_name }}"
+                                value="{{ redirect_field_value }}" />
+                        {% endif %}
 
-												<div id="results" style="font-weight:bold;"> </div>
-												<input type="hidden" name="verified_no" id="verified_no">
-												<input type="checkbox" name="terms" id="terms"
-													onchange="activateButton(this)">
+                 <!-- Close signup-panel-1 -->
+                </div>
 
-                                                <div class="mt-2"  style="font-size:13px;">
-                                                    <p id='agree' class="d-none">
-                                                        {% trans 'I Agree to' %}
-                                                        <a href="{% url 'terms_and_conditions' %}">
-                                                            {% trans 'Terms & Conditions' %} </a> 
-                                                    </p> <br/>
+                <div id="signup-panel-2" class="is-hidden step-dot-2 process-panel-wrap is-narrow">
+                        <label for="username" id="username">
+                            {% trans 'Username' %}
+                        </label>
+                        {{ form.username }}
 
-                                                <div class="social-ac">
-                                                    <a style"margin-right: 10px;" href="{% url 'users:wechat_auth' %}">
-                                                        <i class="fa fa-wechat"></i> </a>
-                                                    </a>
-                                                    <a href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
-                                                        <i class="fa fa-linkedin"></i> </a>
-                                                    </a>
-                                                </div> <br />
+                        <div class="form-row">
+                              <label for="password1">
+                                    {% trans 'Password' %}
+                              </label>
+                            {{ form.password1 }}
+                        </div>
 
-												<div
-                                                    class="form-group container-login100-form-btn d-flex justify-content-between">
-                                                    <a href="{% url 'account_login' %}"
-                                                        class="button is-solid dark-grey-button raised">{% trans 'Login' %}</a>
-                                                    <a href="mailto:support@obrisk.com"
-                                                        class="button is-solid dark-grey-button raised">{% trans "Can't signup?" %}</a>
-                                                </div> <br />
+                        <label class="" for="province">
+                            {% trans 'Province' %}
+                        </label>
+                        {{ form.province_region }}
 
-                                                <div> <small class="mt-5" id="support"> 
-                                                        {% trans 'Any problem? add our WechatID:' %}
-                                                        <span class="blue-link"> Obrisk. </span> </small> </div>
+                        <label class="" for="city">
+                            {% trans 'City' %}
+                        </label>
+                        {{ form.city }}
 
-                                                {% if redirect_field_value %}
-                                                <input type="hidden" name="{{ redirect_field_name }}"
-                                                    value="{{ redirect_field_value }}" />
-                                                {% endif %}
-											</div>
-										  </div>
-										</div>
+                        <a id="phone-signup-submit"
+                            class="button is-rounded is-solid accent-button raised is-fullwidth"
+                            data-step="step-dot-4">{% trans 'Sign Up' %}
+                        </a>
+                  </div>
+          </form>
 
-										<div id="signup-panel-2" class=" step-dot-2 process-panel-wrap is-narrow ">
-											<div class="form-panel">
-												<div class="form-row mt-3">
-													<div class="form-group col-md-12 mb-0" id="username">
-														<div class="input-group">
-															<label for="username">
-                                                                {% trans 'Username' %}
-															</label>
-														</div>
-														{{ form.username }}
-													</div>
-												</div>
+          <div id="options-wrapper"  >
+              <div class="options-btns" >
 
-												<div class="form-row">
-													<div class="form-group col-md-12 mb-0">
-														<div class="input-group">
-															<label for="password1">
-                                                                {% trans 'Password' %}
-															</label>
-														</div>
-														{{ form.password1 }}
-													</div>
-												</div>
+                <a class="button raised is-solid "  href="{% url 'users:wechat_auth' %}">
+                    <i class="fa fa-wechat"></i>Wechat signup</a>
+                </a>
+                <a class="button raised is-solid" 
+                    href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
+                    <i class="fa fa-linkedin"></i>LinkedIn signup</a>
+                </a>
 
-												<div class="input-group mb-3 mt-4">
-													<div class="input-group">
-														<label class="" for="province">
-                                                            {% trans 'Province' %}
-                                                        </label>
-													</div>
-													<select class="custom-select" id="province" name="province"
-														autocomplete="on"></select>
-												</div>
-
-												<div class="input-group mb-3">
-													<div class="input-group">
-														<label class="" for="city">
-                                                            {% trans 'City' %}
-                                                        </label>
-													</div>
-													<select class="custom-select" id="city" name="city"
-														autocomplete="on">
-													</select>
-												</div>
-
-												<!-- These 2 fields are hidden fields!-->
-												<div class="form-row">
-													<div class="form-group col-md-12 mb-0">
-														{{ form.province_region }}
-														{{ form.city }}
-													</div>
-												</div>
-												<a id="phone-signup-submit"
-													class="button is-rounded is-solid accent-button raised is-fullwidth"
-													data-step="step-dot-4">{% trans 'Sign Up' %}</a>
-											</div>
-										</div>
-									</form>
-
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+                <a class="button raised is-solid " id="phone-login" href="#">
+                    <i class="fa fa-linkedin"></i> Phone no Signup </a>
+                </a>
+                <a href="#lh"
+                  class="login-help button is-solid dark-grey-button raised" 
+                  data-help="<a href='mailto:support@obrisk.com'>{% trans 'Email us' %}</a> {% trans 'Or add WechatID:Obrisk' %}">
+                   {% trans 'Need help?' %}
+                </a>
+             </div>
+        </div>
 {% endblock content %}
 
 {% block extra_js  %}
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-	var current_url = "{{ request.path }}";
+
+    function disableSubmit() {
+        document.getElementById("phone-signup-submit").disabled = true;
+    }
+
+    function activateButton(element) {
+
+        if (element.checked) {
+            document.getElementById("phone-signup-submit").disabled = false;
+        }
+        else {
+            document.getElementById("phone-signup-submit").disabled = true;
+        }
+    }
+
+
+    const login_form = document.getElementById('signup_form');
+    const options_wrapper = document.getElementById('options-wrapper');
+    document.getElementById('phone-login').addEventListener('click', e => {
+    login_form.classList.remove('blur-in');
+    login_form.classList.add('blur-out');
+    options_wrapper.style.display = 'none';
+    document.getElementById('id_phone_number').focus();
+    });
+
+    document.getElementById('open-options').addEventListener('click', e => {
+        login_form.classList.remove('blur-out');
+        login_form.classList.add('blur-in');
+        options_wrapper.style.display = 'flex';
+    });
+
+
+	const current_url = "{{ request.path }}";
+    const in_china = "{{ in_china }}";
 	var errors = false;
 
 	{% if form.errors %}

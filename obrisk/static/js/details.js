@@ -1,13 +1,1 @@
-//Common js for classifieds and posts details pages
-
-function goToEdit () {
-    window.location.href=editUrl;
-}
-
-function shareMe(title, text) {
-    navigator.share({
-      title: title,
-      text: text,
-      url: location.href,
-    });
-}
+function goToEdit(){window.location.href=editUrl}function shareMe(t,o){navigator.share({title:t,text:o,url:location.href})}

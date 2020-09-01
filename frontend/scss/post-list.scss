@@ -1,0 +1,89 @@
+body {
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden;
+}
+
+.post-wrapper {
+    margin-top: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: auto;
+}
+
+.single-post {
+    border: 1px solid #A1DBD2 !important;
+    box-shadow: 2px 2px 0px #3EC4E2 !important;
+    background: #fff;
+}
+
+.single-post a:hover {
+    opacity: 0.8;
+
+}
+
+.card-side {
+  justify-content: center;
+}
+
+.time {
+    font-size: 14px;
+    font-weight: bold;
+    margin-top: 4%;
+}
+
+
+#post-user {
+    display: inline-block;
+    color: black;
+}
+
+.author-buttons {
+    margin-top: 0;
+    margin-right: 5%;
+    margin-bottom: 0;
+    display: flex;
+    align-content: flex-end;
+    justify-content: right;
+}
+
+.btn-dark {
+    margin : 3px;
+}
+
+/*  Phone post cards */
+@media (max-width: 560px) {
+
+    .post-wrapper {
+        margin-top: 5%;
+        margin-bottom: 10%;
+    }
+    
+    .author-buttons {
+        margin-top: 3%;
+        align-content: center;
+        justify-content: center;
+    }
+
+    .title {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .card-details  {
+        margin-left: -4%;
+        margin-right: -4%;
+        margin-top: -4%;
+    }
+    .time {
+        font-size: 12px;
+    }
+    .card-img-top {
+        height: 150px;
+    }
+}
+
+@media (max-width: 1024px) {
+    .author-buttons {
+        margin-top: 10%;
+    }
+}

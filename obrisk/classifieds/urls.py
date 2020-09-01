@@ -11,7 +11,9 @@ from obrisk.classifieds.views import (
 app_name = 'classifieds'
 
 urlpatterns = [
-    url(r'^$', classified_list, name='list'),
+    url(r'^$',
+        classified_list,
+        name='list'),
     url(
         r'^write-new-classified/$',
         CreateClassifiedView.as_view(),

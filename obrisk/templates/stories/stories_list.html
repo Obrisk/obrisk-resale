@@ -2,411 +2,301 @@
 {% load static i18n humanize %}
 
 {% block head %}
-<link href="{% static 'css/stories.css' %}?v=16052001" rel="stylesheet">
-<link href="{% static 'css/videojs.min.css' %}" rel="stylesheet">
-<link href="{% static 'css/uploader.css' %}" rel="stylesheet">
+<link href="{% static 'css/stories.css' %}" rel="stylesheet">
 
 <title>Obrisk Stories</title>
 {% endblock head %}
 
-
 {% block content %}
-<div class="app-overlay"></div>
 
-<div class="container mt-5">
-  <div class="row mt-4">
+<div class="container top-space">
 
-    <div class="col-md-6 m-auto mt-0 p-sm-0">
-      <div id="compose-card" class="d-none card is-new-content">
+  <div id="compose-card" class="card is-new-content">
         <!-- Top tabs -->
         <div class="tabs-wrapper">
-          <div class="tabs is-boxed is-fullwidth">
-            <ul>
-              <li class="is-active">
-                <a>
-                  <i data-feather="edit-3"></i>
-                  <span>
-                    {% trans 'Publish' %}
-                  </span>
-                </a>
-              </li>
-              <!-- Close X button -->
-              <li class="close-wrap d-none">
-                <span class="close-publish">
-                  <i data-feather="x"></i>
-                </span>
-              </li>
-            </ul>
-          </div>
-
-          <!-- Tab content -->
-          <form role="form" method="post" action="#" onsubmit="return false" id="postStoriesForm">
-            {% csrf_token %}
-            <div class="tab-content">
-              <!-- Compose form -->
-              <div class="compose">
-
-                <div class="compose-form">
-                  <p class="image is-48x48">
-                    {% if request.user.picture %}
-                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.picture}}"
-                      alt="Picture Profile" style="width:35px;height:35px;border-radius: 50%;"
-                      class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                    {% else %}
-                    <img class="pull-left mr-2" src="{% static 'img/user.png' %}" height="35px"
-                      alt="No Profile Picture" />
-                    {% endif %}
-                  </p>
-                  <div class="control textarea-parent">
-                    <p class="counter" style="font-size: .8rem;color: #999;float: right;"> <span class="count">400
+              <div class="tabs is-boxed is-fullwidth">
+                <ul>
+                  <li class="is-active">
+                    <a>
+                      <i data-feather="edit-3"></i>
+                      <span>
+                        {% trans 'Publish' %}
                       </span>
-                      {% trans 'Characters' %}
-                    </p>
-
-                    <textarea id="publish" name="post" class="textarea publish-textarea" rows="3"
-                      placeholder="Share something..." maxlength="400">
-                  </textarea>
-                    <input type="text" id="id_images" name="images" class="d-none">
-                    <input type="text" id="id_video" name="story_video" class="d-none">
-                    <input type="text" id="id_img_error" name="img_error" class="d-none">
-                  </div>
-
-                </div>
-
+                    </a>
+                  </li>
+                  <!-- Close X button -->
+                  <li class="close-wrap is-hidden">
+                    <span class="close-publish">
+                      <i data-feather="x"></i>
+                    </span>
+                  </li>
+                </ul>
               </div>
-              <!-- /Compose form -->
-              <!-- Media and Visibility -->
-              <div class="hidden-options">
-                <div class="target-channels">
-                  <!-- Publication Channel -->
-                  <div class="channel">
-                    <div id="basic-options" class="compose-options flex-column flex-lg-row" style="background:none;">
-                      <!-- Upload action -->
-                      <div id="addBtn" class="compose-option mb-2" style="background:#fff;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="feather feather-camera">
-                          <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
-                          </path>
-                          <circle cx="12" cy="13" r="4"></circle>
-                        </svg>
-                        <span>
-                          {% trans 'Image' %}
-                        </span>
-                      </div>
-                      <div id="addVideo" class="compose-option mb-2" style="background:#fff;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                          class="feather feather-video">
-                          <polygon points="23 7 16 12 23 17 23 7" />
-                          <rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></svg>
-                        <span>
-                          {% trans 'Video' %}
-                        </span>
-                      </div>
-                    </div>
-                    <!-- Dropdown menu -->
-                    <div
-                      class="dropdown is-spaced is-modern is-right is-neutral dropdown-trigger is-active select-viewers">
-                      <div>
-                        <button id="selected-status" class="button" aria-haspopup="true">
-                          <svg id="viewer-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                            stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe">
-                            <circle cx="12" cy="12" r="10"></circle>
-                            <line x1="2" y1="12" x2="22" y2="12"></line>
-                            <path
-                              d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                            </path>
-                          </svg>
-                          <span>
-                            {% trans 'Public' %}
-                          </span>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-chevron-down caret">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                          </svg>
-                        </button>
-                      </div>
-                      <div class="dropdown-menu select-status" role="menu">
-                        <div class="dropdown-content">
-                          <button class="dropdown-item" data-status="P">
-                            <div class="media">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-globe">
-                                <circle cx="12" cy="12" r="10"></circle>
-                                <line x1="2" y1="12" x2="22" y2="12"></line>
-                                <path
-                                  d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
-                                </path>
-                              </svg>
-                              <div class="media-content">
-                                <h3>
-                                  {% trans 'Public' %}
-                                </h3>
-                                <small>
-                                  {% trans 'Anyone can see this post.' %}
-                                </small>
-                              </div>
-                            </div>
-                          </button>
-                          <button class="dropdown-item" data-status="C">
-                            <div class="media">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-users">
-                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="9" cy="7" r="4"></circle>
-                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                              </svg>
-                              <div class="media-content">
-                                <h3>
-                                  {% trans 'Connects' %}
-                                </h3>
-                                <small>
-                                  {% trans 'Only connects can see this post' %}
-                                </small>
-                              </div>
-                            </div>
-                          </button>
-                          <button class="dropdown-item" data-status="A">
-                            <div class="media">
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                stroke-linejoin="round" class="feather feather-map-pin">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
-                                <circle cx="12" cy="10" r="3" /></svg>
-                              <div class="media-content">
-                                <h3>
-                                  {% trans 'Around' %}
-                                </h3>
 
-                                <small>
-                                  {% trans 'Only people in your city can see this post.' %}
-                                </small>
-                              </div>
-                            </div>
-                          </button>
+              <!-- Tab content -->
+              <form role="form" method="post" action="#" onsubmit="return false" id="postStoriesForm">
+                    {% csrf_token %}
+                    <div class="tab-content">
+                      <!-- Compose form -->
+                      <div class="compose">
 
-                        </div>
-                      </div>
-                      <input type="hidden" name="viewers" value="P" id="viewers">
-                    </div>
-                  </div>
-                  <div class="channel">
-                    <div id="wrapper" class="mb-4 w-100">
-                      <div class="container" style="display: none; padding: 0;">
-                        <div id="uploader">
-                          <div class="queueList">
-
-                          </div>
-                        </div>
-                        <div id="statusBar" class="statusBar  flex-column align-items-center" style="display: flex;">
-                          <div class="total-progress">
-                            <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
-                              aria-valuemin="0" aria-valuemax="100">
-                            </div>
-                          </div>
-
-                          <a id="startUpload" href="javascript:void(0);" class="is-hidden">
-                            {% trans 'Upload images' %}
-                          </a>
-
-                        </div>
-
-                        <div class="" style="clear: both;">
-                          <p class="text-center">
-                            {% trans 'Notes:' %}
-                            {% trans 'Not more than 8 images &amp; Max size per image is 13MB' %}
+                        <div class="compose-form">
+                          <p class="image is-48x48">
+                            {% if request.user.picture %}
+                            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.picture}}"
+                              alt="Picture Profile" style="width:35px;height:35px;border-radius: 50%;"
+                              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                            {% else %}
+                            <img class="pull-left mr-2" src="{% static 'img/user.png' %}" height="35px"
+                              alt="No Profile Picture" />
+                            {% endif %}
                           </p>
-                          <button id="retry-button" type="button"
-                            class="button is-solid accent-button is-fullwidth is-hidden">
-                            {% trans 'Retry' %}
-                          </button>
+                          <div class="control textarea-parent">
+                            <p class="counter" style="font-size: .8rem;color: #999;float: right;"> <span class="count">400
+                              </span>
+                              {% trans 'Characters' %}
+                            </p>
+
+                            <textarea id="publish" name="post" class="textarea publish-textarea" rows="3"
+                              placeholder="Share something..." maxlength="400">
+                          </textarea>
+                            <input type="text" id="id_images" name="images" class="is-hidden">
+                            <input type="text" id="id_video" name="story_video" class="is-hidden">
+                            <input type="text" id="id_img_error" name="img_error" class="is-hidden">
+                          </div>
+
+                        </div>
+
+                      </div>
+                      <!-- /Compose form -->
+                      <!-- Media and Visibility -->
+                      <div class="hidden-options">
+                        <div class="target-channels">
+                          <!-- Publication Channel -->
+                          <div class="channel">
+                            <div id="basic-options" class="compose-options flex-column flex-lg-row" style="background:none;">
+                              <!-- Upload action -->
+                              <div id="addBtn" class="compose-option mb-2" style="background:#fff;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                  class="feather feather-camera">
+                                  <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z">
+                                  </path>
+                                  <circle cx="12" cy="13" r="4"></circle>
+                                </svg>
+                                <span>
+                                  {% trans 'Image' %}
+                                </span>
+                              </div>
+                              <div id="addVideo" class="compose-option mb-2" style="background:#fff;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                  class="feather feather-video">
+                                  <polygon points="23 7 16 12 23 17 23 7" />
+                                  <rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></svg>
+                                <span>
+                                  {% trans 'Video' %}
+                                </span>
+                              </div>
+                            </div>
+                            <!-- Dropdown menu -->
+                            <div
+                              class="dropdown is-spaced is-modern is-right is-neutral dropdown-trigger is-active select-viewers">
+                              <div>
+                                <button id="selected-status" class="button" aria-haspopup="true">
+                                  <svg id="viewer-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-globe">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <line x1="2" y1="12" x2="22" y2="12"></line>
+                                    <path
+                                      d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                    </path>
+                                  </svg>
+                                  <span>
+                                    {% trans 'Public' %}
+                                  </span>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-chevron-down caret">
+                                    <polyline points="6 9 12 15 18 9"></polyline>
+                                  </svg>
+                                </button>
+                              </div>
+                              <div class="dropdown-menu select-status" role="menu">
+                                <div class="dropdown-content">
+                                  <button class="dropdown-item" data-status="P">
+                                    <div class="media">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-globe">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <line x1="2" y1="12" x2="22" y2="12"></line>
+                                        <path
+                                          d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z">
+                                        </path>
+                                      </svg>
+                                      <div class="media-content">
+                                        <h3>
+                                          {% trans 'Public' %}
+                                        </h3>
+                                        <small>
+                                          {% trans 'Anyone can see this post.' %}
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </button>
+                                  <button class="dropdown-item" data-status="C">
+                                    <div class="media">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-users">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                        <circle cx="9" cy="7" r="4"></circle>
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                      </svg>
+                                      <div class="media-content">
+                                        <h3>
+                                          {% trans 'Connects' %}
+                                        </h3>
+                                        <small>
+                                          {% trans 'Only connects can see this post' %}
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </button>
+                                  <button class="dropdown-item" data-status="A">
+                                    <div class="media">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" class="feather feather-map-pin">
+                                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                                        <circle cx="12" cy="10" r="3" /></svg>
+                                      <div class="media-content">
+                                        <h3>
+                                          {% trans 'Around' %}
+                                        </h3>
+
+                                        <small>
+                                          {% trans 'Only people in your city can see this post.' %}
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </button>
+
+                                </div>
+                              </div>
+                              <input type="hidden" name="viewers" value="P" id="viewers">
+                            </div>
+                          </div>
+                          <div class="channel">
+                            <div id="wrapper" class="mb-4 w-100">
+                              <div class="container" style="display: none; padding: 0;">
+                                <div id="uploader">
+                                  <div class="queueList">
+
+                                  </div>
+                                </div>
+                                <div id="statusBar" class="statusBar  flex-column align-items-center" style="display: flex;">
+                                  <div class="total-progress">
+                                    <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0"
+                                      aria-valuemin="0" aria-valuemax="100">
+                                    </div>
+                                  </div>
+
+                                  <a id="startUpload" href="javascript:void(0);" class="is-hidden">
+                                    {% trans 'Upload images' %}
+                                  </a>
+
+                                </div>
+
+                                <div class="" style="clear: both;">
+                                  <p class="text-center">
+                                    {% trans 'Notes:' %}
+                                    {% trans 'Not more than 8 images &amp; Max size per image is 13MB' %}
+                                  </p>
+                                  <button id="retry-button" type="button"
+                                    class="button is-solid accent-button is-fullwidth is-hidden">
+                                    {% trans 'Retry' %}
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+
+                            <div class="container bs-docs-container">
+                              <form id="form">
+                                <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+                              </form>
+                              <form id="video-form">
+                                <input id="video-file" type="file" style="display:none;" multiple="multiple" accept="video/*" />
+                              </form>
+                            </div>
+                          </div>
                         </div>
                       </div>
+
+                      <!-- Footer buttons -->
+                      <div class="more-wrap">
+                        <!-- Publish button -->
+                        {% if request.user.is_authenticated %}
+                        <button id="publish-button" type="button"
+                          class="submit-button button is-solid accent-button is-fullwidth is-disabled">
+                          {% trans 'Publish' %}
+                        </button>
+                        {% else %}
+                        <a href="{% url 'account_login' %}">
+                          <button id="login-and-publish-button" type="button"
+                            class="button is-solid accent-button is-fullwidth is-disabled">
+                            {% trans 'Login & Post' %}
+                          </button> </a>
+                        {% endif %}
+
+                      </div>
                     </div>
+              </form>
 
-                    <div class="container bs-docs-container">
-                      <form id="form">
-                        <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
-                      </form>
-                      <form id="video-form">
-                        <input id="video-file" type="file" style="display:none;" multiple="multiple" accept="video/*" />
-                      </form>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Footer buttons -->
-              <div class="more-wrap">
-                <!-- Publish button -->
-                {% if request.user.is_authenticated %}
-                <button id="publish-button" type="button"
-                  class="submit-button button is-solid accent-button is-fullwidth is-disabled">
-                  {% trans 'Publish' %}
-                </button>
-                {% else %}
-                <a href="{% url 'account_login' %}">
-                  <button id="login-and-publish-button" type="button"
-                    class="button is-solid accent-button is-fullwidth is-disabled">
-                    {% trans 'Login & Post' %}
-                  </button> </a>
-                {% endif %}
-
-              </div>
-            </div>
-          </form>
+          <!--tabs-wrapper -->
         </div>
-      </div>
-
-      <!-- Modals -->
-      {% include 'stories/stories_thread_modal.html' %}
-      <!-- End Modals -->
-
-      <!-- Stories List -->
-      <div class="stream-update">
-        <a href="{% url 'stories:list' %}"><span class="new-posts"></span> {% trans 'There are new stories' %}</a>
-      </div>
-      <div class="infinite-container">
-        <ul class="stream">
-          {% include "stories/stories_list_ajax.html" %}
-
-        </ul>
-      </div>
-      <div class="load">
-        {% if page_obj.has_next %}
-        <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"><img
-            src="{% static 'img/loading.gif' %}"></a>
-        {% endif %}
-      </div>
-      <!-- End Stories List -->
-    </div>
+  <!-- compose-card -->
   </div>
-</div>
+
+  <!-- Modals -->
+  {% include 'stories/stories_thread_modal.html' %}
+  <!-- End Modals -->
+
+  <!-- Stories List -->
+  <div class="stream-update">
+    <a href="{% url 'stories:list' %}"><span class="new-posts"></span> {% trans 'There are new stories' %}</a>
+  </div>
+  <div class="infinite-container">
+    <ul class="stream">
+      {% include "stories/stories_list_ajax.html" %}
+
+    </ul>
+  </div>
+  <div class="load">
+    {% if page_obj.has_next %}
+    <a class="infinite-more-link" href="?page={{ page_obj.next_page_number }}"><img
+        src="{% static 'img/loading.gif' %}"></a>
+    {% endif %}
+  </div>
+
 <!-- End container -->
+</div>
 
 {% endblock content %}
 
+<link rel="stylesheet" href="{% static 'css/share.css' %}">
 
 {% block extra_js %}
 
-<script src="{% static 'js/videojs.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-   window.HELP_IMPROVE_VIDEOJS = false;
-
-  //Hide create card on stories details, to focus on shared content
-  if ($('#compose-card').hasClass('d-none') &&
-    window.location.href.endsWith('/stories/')) {
-    $('#compose-card').toggleClass('d-none');
-  }
-
-  function prepareTruncatedText(e) {
-      if ('querySelector' in document && 
-        'addEventListener' in window) {
-
-        var fullTextWrapper = e.parentElement.querySelector('.fulltext');
-        var toggleButtonText = e.parentElement.querySelector('.text');
-        var shortText = e.parentElement.querySelector('#short-content');
-
-        // change attributes and text if full text is shown/hidden
-        if (!fullTextWrapper.hasAttribute('hidden')) {
-            if (toggleButtonText.innerText == 'Less') {
-                toggleButtonText.innerText = 'More';
-            }
-            fullTextWrapper.setAttribute('hidden', true);
-            shortText.hidden = false;
-        } else {
-            if (toggleButtonText.innerText == 'More') {
-                toggleButtonText.innerText = 'Less';
-            }
-            fullTextWrapper.removeAttribute('hidden');
-            shortText.hidden = true;
-        }
-    }
-  }
-
-  var page = 1;
-  var empty_page = false;
-  var block_request = false;
-  var is_tag_page = "{{tag}}";
-  if (is_tag_page == "None") {
-    $(window).scroll(function () {
-      if (empty_page == false && block_request == false) {
-        block_request = true;
-        page += 1;
-        $('.loading').removeClass('d-none')
-        $.when(
-          $.get('?page=' + page, function (data) {
-            if (data == '') {
-                empty_page = true;
-                $('.loading').addClass('d-none')
-                $('.stream').append('<div class="m-auto"> End of Stories</div>')
-            } else {
-                $('.loading').addClass('d-none');
-                block_request = false;
-                $('.stream').append(data);
-
-                loadvideo();
-            }
-
-          })
-        ).done(
-          lazyload()
-        )
-      }
-    });
-  }
-
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const app = "stories";
   const user = "{{ request.user.username }}";
 
- //Load videos
- var loadvideo = function () {
-    Array.from(document.querySelectorAll('.video-js')).map(p => videojs(p, {
-        "controlBar": {
-        "playToggle": true,
-        "captionsButton": false,
-        "chaptersButton": false,
-        "subtitlesButton": false,
-        "remainingTimeDisplay": false,
-        "progressControl": {
-            "seekBar": true
-        },
-        "fullscreenToggle": false,
-        "playbackRateMenuButton": false
-       },
-       "aspectRatio": "4:3"
-    }));
-  }
-
-  $(document).ready(function () {
-    loadvideo();
-
-    $(' .post-text').linkify({ target: "_blank" });
-
-    $('#replyStories').prop('disabled', true);
-    $('#replyInput').keyup(function () {
-      $('#replyStories').prop('disabled', this.value == "" ? true : false);
-    })
-
-  });
 </script>
-
-<link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/share.css' %}">
-
-<script src="{% static 'js/jquery.waypoints.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/fancybox.min.js' %}"></script>
-<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/infinite.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/stories.js' %}" type="text/javascript"></script>
 
 {% endblock extra_js %}

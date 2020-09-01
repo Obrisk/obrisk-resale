@@ -10,9 +10,10 @@
   <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
-  <meta name="description" content="A Social Network for foreigners living in China.">
+  <meta name="description"
+      content="classifieds website for foreigners in China to buy and sell secondhand items and find apartments for rent">
   <meta name="keywords"
-    content="Buy and sell, secondhand, classifieds, Expat in China, foreigners in China, China, Hangzhou, Shanghai, Ningbo">
+    content="Buy and sell, secondhand, classifieds, expats in China, foreigners in China, China, Hangzhou, Shanghai">
   <meta name="author" content="Obrisk team">
   <meta name="apple-mobile-web-app-title" content="Obrisk">
   <meta name="locale" content="en">
@@ -20,337 +21,36 @@
   <meta name="vapid-key" content="{{ vapid_key }}">
 
   {% if request.user.is_authenticated %}
-  {% webpush_header %}
-  <meta name="user_id" content="{{ request.user.id }}">
-
+      {% webpush_header %}
+      <meta name="user_id" content="{{ request.user.id }}">
   {% endif %}
-
-
-  <!-- Icon can be replace to show icon on share -->
-  {% block icon %}
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}?v=1">
-  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=2">
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=2">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=2">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=2">
-  {% endblock icon%}
 
   <!-- PWA settings -->
   {% progressive_web_app_meta %}
   <meta name="apple-mobile-web-app-capable" content="yes">
 
-  {% block meta %}
-  {% endblock meta %}
-
-
   {% block cdn %}
-  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'css/colors.css' %}">
-  <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600" rel="stylesheet">
-
-  <!-- This file stores project-specific CSS -->
-  <link href="{% static 'css/obrisk.css' %}" rel="stylesheet">
-  <link href="{% static 'css/account.css' %}" rel="stylesheet">
-
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700,800,900" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
-  <link href="{% static 'frontend/assets/css/materialdesignicons.min.css' %}" rel="stylesheet">
-  <link href="{% static 'frontend/assets/css/webfont.css' %}" rel="stylesheet">
-  <!-- Core CSS -->
-  <link rel="stylesheet" href="{% static 'frontend/assets/css/bulma.css' %}">
-  <link rel="stylesheet" href="{% static 'frontend/assets/css/app.css' %}">
-  <link rel="stylesheet" href="{% static 'frontend/assets/css/core.css' %}">
-
-  <!-- SEO optimization allow to show search box in search results-->
-  <script type="application/ld+json">
-    {"@context" : "http://schema.org",
-    "@type" : "WebSite","name" :
-    "Obrisk","url" : "https://obrisk.com/",
-    "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://obrisk.com/search/?query={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }}
-  </script>
-
-  <link rel="stylesheet" href="{% static 'css/wnoty.css' %}">
+      <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
   {% endblock cdn %}
 
   {% block head %}
   {% endblock head %}
 </head>
 
-<body class="O-bg has-slimscroll is-white">
+<body class="has-slimscroll">
   <!-- Pageloader -->
   {% block body %}
-  <div class="m-b-1">
-    <nav class="navbar fixed-top is-hidden-mobile is-hidden-tablet-only navbar-expand-lg navbar-dark O-bg-blue">
-      <div class="container">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse"
-          data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-          aria-label="Toggle navigation">
-          {% if new_msgs %}
-          <i class=" fa fa-envelope d-md-none" style="color: #dc3545;position: absolute;font-size: 15px;"></i>
-          {% endif %}
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <a class="navbar-brand" href="{% url 'home' %}">
-          <img src="{% static 'img/logo_light_blue.png' %}" style="width: 160px" alt="Obrisk"></a>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-          <ul class="main-nav navbar-nav mr-auto">
-            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                class="nav-link {% if base_active == 'stories' %} is-active {% endif %} "
-                href="{% url 'stories:list' %}">{% trans 'Stories' %} </a></li>
-            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                class="nav-link {% if base_active == 'posts' %} is-active {% endif %} "
-                href="{% url 'posts:list' %}">{% trans 'Articles' %} <span class="sr-only">(current)</span></a></li>
-            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                class="nav-link {% if base_active == 'classifieds' %} is-active {% endif %} "
-                href="{% url 'classifieds:list' %}">
-                    {% trans 'Classifieds' %}
-                </a></li>
-            <li class="nav-item text-lg-center mr-lg-2 ml-lg-2  mr-md-1"><a
-                class="nav-link {% if base_active == 'chat' %} is-active {% endif %} "
-                href="{% url 'messager:contacts_list' %}">
-
-                <span class="msg-notification" style="position:relative">
-                  <i class="fa fa-circle" aria-hidden="true"
-                    style="display: none;position: absolute;right: 20px;position: absolute;left: 40px;color: #fb4133; font-size: 10px;">
-                  </i>
-                </span>
-
-                {% trans 'Chat' %}</a>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            {# if not hide_search #}
-            <!-- <form class="form-inline navbar-left" role="search" action="{% url 'search:results' %}">
-                      <div class="input-group">
-                        <input name="query" type="search" id="searchInput" class="form-control" placeholder="{% trans 'Search' %}" aria-label="Search">
-                        <div class="input-group-append">
-                          <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-                        </div>
-                      </div>
-                    </form> -->
-            {# endif #}
-
-        {% if request.user.is_authenticated %}
-
-            <li class="nav-item">
-              <div id="" class="notifications navbar-item is-icon drop-trigger">
-                <a class="icon-link" href="javascript:void(0);">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-bell">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
-                  <span class="indicator"></span>
-                </a>
-
-                <div class="nav-drop recent-notifications" id="">
-
-                </div>
-              </div>
-            </li>
-
-            <li class="nav-item dropdown">
-              <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
-                <div class="user-image">
-                  {% if request.user.thumbnail %}
-                  <img src="{{ oss }}/{{request.user.thumbnail}}"
-                    alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;"
-                    class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
-                  {% else %}
-                  <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
-                  {% endif %}
-                </div>
-                <div class="nav-drop is-account-dropdown">
-                  <div class="inner">
-                    <div class="nav-drop-header">
-                      <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                      <a id="close">❌
-                          {% trans 'CLOSE' %}
-                      </a>
-                    </div>
-                    <div class="nav-drop-body account-items">
-
-
-                      <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
-                        <div class="media">
-                          <div class="icon-wrap">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round" class="feather feather-user">
-                              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                              <circle cx="12" cy="7" r="4" /></svg>
-                          </div>
-                          <div class="media-content">
-                            <h3>
-                                {% trans 'My Profile' %}
-                            </h3>
-                            <small>
-                                {% trans 'Access your profile.' %}
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-
-                      <a class="account-item" href="{% url 'account_logout' %}">
-                        <div class="media">
-                          <div class="icon-wrap">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                              stroke-linejoin="round" class="feather feather-power">
-                              <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                              <line x1="12" y1="2" x2="12" y2="12"></line>
-                            </svg>
-                          </div>
-                          <div class="media-content">
-                            <h3>
-                                {% trans 'Log out' %}
-                            </h3>
-                            <small>
-                                {% trans 'Log out from your account.' %}
-                            </small>
-                          </div>
-                        </div>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="nav-drop acc-nav-toggle" id="">
-
-                </div>
-              </div>
-            </li>
-
-        {% else %}
-            </ul>
-              <ul class="nav navbar-nav ">
-
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'account_login' %}">{% trans 'Login' %}</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{% url 'account_signup' %}">{% trans 'Signup' %}</a>
-                </li>
-
-              </ul>
-       {% endif %}
-
-        </div>
-      </div>
-    </nav>
-
-    <nav id="navbarBottom" class="navbar mobile-navbar is-hidden-desktop fixed-bottom has-shadow w-100  p-0">
-      <div class="tabs is-toggle is-fullwidth w-100">
-        <ul>
-
-          <li class="stories grid-image{% if base_active == 'stories' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'stories:list' %}">
-              <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-compass">
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
-                </svg> </span>
-              <span class="nav-label is-size-7">
-                {% trans 'Stories' %}
-              </span>
-            </a>
-          </li>
-
-          <li class="posts {% if base_active == 'posts' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'posts:list' %}"><span
-                class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-book-open">
-                  <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                  <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                </svg>
-              </span>
-              <span class="nav-label is-size-7	">
-                {% trans 'Articles' %}
-              </span>
-            </a>
-          </li>
-
-
-          <li class="add-new">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="#"
-            id="addNewItem">
-                <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square">
-                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
-                <line x1="12" y1="8" x2="12" y2="16"></line>
-                <line x1="8" y1="12" x2="16" y2="12"></line>
-                </svg>
-              </span>
-              <span class="nav-label is-size-7">
-                  {% trans 'Add' %}
-              </span>
-            </a>
-          </li>
-
-          <li class=" classifieds {% if base_active == 'classifieds' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'classifieds:list' %}">
-                <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-shopping-bag">
-                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
-                  <line x1="3" y1="6" x2="21" y2="6"></line>
-                  <path d="M16 10a4 4 0 0 1-8 0"></path>
-                </svg>
-              </span>
-              <span class="nav-label is-size-7	">
-                  {% trans 'Classifieds' %}
-              </span>
-            </a>
-          </li>
-
-          <li class="message-list {% if base_active == 'chat' %} is-active {% endif %}">
-            <a class="d-flex flex-column pl-0 pr-0 pt-1 pb-0 border-0 mt-1" href="{% url 'messager:contacts_list' %}">
-              <span class="nav-icons">
-                <span class="msg-notification" style="position:relative">
-                  <i class="fa fa-circle" aria-hidden="true"
-                    style="display: none;position: absolute;right: 20px;position: absolute;left: 25px;color: #fb4133;font-size: 12px;">
-                  </i>
-                </span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-message-square">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg> </span>
-              <span class="nav-label is-size-7	">
-                {% trans 'Chat' %}
-              </span>
-            </a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-
-    <nav id="navbarTop" class="navbar mobile-navbar is-hidden-desktop is-fixed-top has-shadow w-100 p-0">
-      <div class="tabs overflow-visible is-toggle is-fullwidth w-100 ml-2 mr-2">
-        <ul class="justify-content-between">
-
-          <li class="flex-grow-0">
+    <nav id="navbarTop" class="navbar is-fixed-top">
+      <div class="nav-inner overflow-visible is-toggle is-fullwidth">
+        <ul class="tp-nav-ul">
+          <li >
             {% if request.META.HTTP_REFERER %}
-                <a class="border-0" href="javascript:history.back()">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-left-circle">
+                <a  href="javascript:history.back()">
+                    <svg  class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
+                         width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
                         <polyline points="12 8 8 12 12 16"></polyline>
                         <line x1="16" y1="12" x2="8" y2="12"></line>
@@ -358,7 +58,7 @@
                 </a>
             {% else  %}
 
-            <a class="border-0" href="{% url 'home' %}">
+            <a class="nav-logo" href="{% url 'classifieds:list' %}">
               <svg width="64" height="48" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_i)">
                   <path d="M23.4699 10.0511C23.1315 9.98326 22.8706 9.90461 22.7042 9.81386L23.4699 10.0511Z"
@@ -452,140 +152,30 @@
             {% endif %}
           </li>
 
-
-
-            <!-- Search for the mobile
-                <li >
-                <div class="justify-content-center mt-5 mr-0">
-            <div class="justify-content-end ml-auto d-flex flex-row">
-            <form class="form-inline navbar-left" role="search" action="/classifieds/classifieds-search-results/">
-              <div class="input-group">
-                <input name="query" type="search" id="searchInput" class="form-control" aria-label="Search">
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
-                </div>
-              </div>
-            </form>
-            </div>
-
-            <div class="d-flex justify-content-center h-100">
-
-            </div>
-          </li> -->
-
-
         {% if request.user.is_authenticated %}
-            <li class="flex-grow-0">
-
-            <div class="navbar-item is-icon drop-trigger">
-              <div id="" class="notifications navbar-item is-icon drop-trigger">
-                <a class="border-0" href="javascript:void(0);">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-bell">
-                    <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                  </svg>
-                </a>
-
-                <div class="nav-drop is-navbarTop recent-notifications" id="">
-
-                </div>
-              </div>
-            </div>
-          </li>
-
-          <li class="flex-grow-0">
-            <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
-              <div class="user-image">
-                {% if request.user.thumbnail %}
-                <img src="{{ oss }}/{{request.user.thumbnail}}" alt="Picture Profile"
-                  style="width:30px;height:30px;border-radius: 50%;"
-                  class="rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
-                {% else %}
-                <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
-                {% endif %}
-              </div>
-              <div class="nav-drop is-account-dropdown">
-                <div class="inner">
-                  <div class="nav-drop-header">
-                    <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                    <a id="close">❌
-                        {% trans 'CLOSE' %}
-                    </a>
-                  </div>
-                  <div class="nav-drop-body account-items">
-
-                    <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
-                      <div class="media">
-                        <div class="icon-wrap">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-user">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                            <circle cx="12" cy="7" r="4" /></svg>
-                        </div>
-                        <div class="media-content">
-                            <h3>
-                                {% trans 'My Profile' %}
-                            </h3>
-                            <small>
-                                {% trans 'Access your profile.' %}
-                            </small>
-                        </div>
-                      </div>
-                    </a>
-
-                    <a class="account-item" href="{% url 'account_logout' %}">
-                      <div class="media">
-                        <div class="icon-wrap">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-power">
-                            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                            <line x1="12" y1="2" x2="12" y2="12"></line>
-                          </svg>
-                        </div>
-                        <div class="media-content">
-                            <h3>
-                                {% trans 'Log out' %}
-                            </h3>
-                            <small>
-                                {% trans 'Log out from your account.' %}
-                            </small>
-                        </div>
-                      </div>
-                    </a>
-                  </div>
-                </div>
-
-                <div class="nav-drop acc-nav-toggle" id="">
-
-                </div>
-
-              </div>
-            </div>
-          </li>
-
-        {% else %}
-            <li class="flex-grow-0">
-                <div id="account-dropdown" class="navbar-item acc is-account drop-trigger has-caret">
-                  <div class="user-image">
-
+          <li class="top-nav-user-li">
+            <a href="#ddu" class="user-image navbar-item is-account drop-trigger">
+                  {% if request.user.thumbnail %}
+                    <img   src="{{ oss }}/{{request.user.thumbnail}}" alt="Picture Profile"
+                      style="width:30px;height:30px;border-radius: 50%;"
+                      class="img-drop-trigger rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
+                  {% else %}
                     <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
+                  {% endif %}
+            </a>
 
-                  </div>
-                  <div class="nav-drop is-navbarTop is-account-dropdown">
+            <div id="du" class="has-caret">
+                  <div class="nav-drop is-account-dropdown">
                     <div class="inner">
-
-                      <div class="nav-drop-header">
-                        <a id="close">❌ CLOSE</a>
+                      <div class="nav-drop-header is-auth-user">
+                        <span class="username">{{ request.user.username|truncatechars:12}}</span>
+                        <a href="#" id="close">❌ 
+                            {% trans 'CLOSE' %}
+                        </a>
                       </div>
 
                       <div class="nav-drop-body account-items">
-
-
-                        <a class="account-item" href="{% url 'account_login' %}">
+                        <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
                           <div class="media">
                             <div class="icon-wrap">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -594,31 +184,99 @@
                                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
                                 <circle cx="12" cy="7" r="4" /></svg>
                             </div>
-                            <div class="media-content">
-                              <h3>Login</h3>
-                              <small>Access your account.</small>
+                            <div>
+                                <h3>
+                                    {% trans 'My Profile' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Access profile & settings' %}
+                                </small>
                             </div>
                           </div>
                         </a>
 
-                        <a class="account-item" href="{% url 'account_signup' %}">
+                        <a class="account-item" href="{% url 'account_logout' %}">
                           <div class="media">
                             <div class="icon-wrap">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                                 stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-user-plus">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                <circle cx="8.5" cy="7" r="4" />
-                                <line x1="20" y1="8" x2="20" y2="14" />
-                                <line x1="23" y1="11" x2="17" y2="11" /></svg>
+                                class="feather feather-power">
+                                <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                                <line x1="12" y1="2" x2="12" y2="12"></line>
+                              </svg>
                             </div>
-                            <div class="media-content">
-                              <h3>Sign up</h3>
-                              <small>Create an account.</small>
+                            <div>
+                                <h3>
+                                    {% trans 'Log out' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Log out from your account.' %}
+                                </small>
                             </div>
                           </div>
                         </a>
+                      <!-- close nav-drop-body -->
                       </div>
+
+                   <!-- close inner div-->
+                   </div>
+
+                <div class="nav-drop acc-nav-toggle" id=""> 
+                </div>
+
+               <!-- close inner, nav-drop, ac-dropdown -->
+              </div>
+            </div>
+          </li>
+
+        {% else %}
+            <li class="top-nav-user-li">
+            <a href="#d" class="user-image navbar-item is-account drop-trigger">
+                      <img class="user-image" src="{% static 'img/user.png' %}"
+                        height="30px" width="30px" alt="No Profile Picture" />
+            </a>
+
+            <div id="d" class="has-caret">
+                  <div class="nav-drop is-navbarTop is-account-dropdown">
+                    <div class="inner">
+                          <div class="nav-drop-header guest-user">
+                            <a href="#" id="close">❌ CLOSE</a>
+                          </div>
+
+                          <div class="nav-drop-body account-items">
+                                <a class="account-item" href="{% url 'account_login' %}">
+                                  <div class="media">
+                                    <div class="icon-wrap">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-user">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" /></svg>
+                                    </div>
+                                    <div>
+                                      <h3>Login</h3>
+                                    </div>
+                                  </div>
+                                </a>
+
+                                <a class="account-item" href="{% url 'account_signup' %}">
+                                  <div class="media">
+                                    <div class="icon-wrap">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-user-plus">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="8.5" cy="7" r="4" />
+                                        <line x1="20" y1="8" x2="20" y2="14" />
+                                        <line x1="23" y1="11" x2="17" y2="11" /></svg>
+                                    </div>
+                                    <div>
+                                      <h3>Sign up</h3>
+                                    </div>
+                                  </div>
+                                </a>
+                            </div>
+                     <!-- close inner, nav-drop, ac-dropdown -->
                     </div>
                   </div>
                 </div>
@@ -628,82 +286,108 @@
         </ul>
       </div>
     </nav>
-  </div>
 
-  <div class="mt-4 pt-2 pb-4">
-    <!-- These messages are not from chat, they are the notifications msgs
-    upon successful POST request on the chat the message context is message_list -->
-    {% if messages %}
-    {% for message in messages %}
-    <div class="container">
-      <div id="messages" class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %} mt-lg-2">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-        {{ message}}
-      </div>
+
+    <nav id="navbarBottom" class="navbar fixed-bottom">
+        <ul class="bt-nav-ul is-toggle is-fullwidth">
+
+         <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'classifieds:list' %}">
+                <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-shopping-bag">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              </span>
+              <span class="nav-label">
+                  {% trans 'Classifieds' %}
+              </span>
+            </a>
+          </li>
+
+          <li class="bt-nav-item">
+            <a class="bt-nav-link" href="{% url 'classifieds:write_new' %}"
+            id="addNewItem">
+                <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </span>
+              <span class="nav-label">
+                  {% trans 'Add' %}
+              </span>
+            </a>
+          </li>
+
+          <li class="bt-nav-item {% if base_active == 'chat' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'messager:contacts_list' %}">
+              <span class="nav-icons">
+                <span class="msg-notification">
+                  <i class="new-msgs-icon fa fa-circle" aria-hidden="true"></i>
+                </span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-message-square">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                </svg> </span>
+              <span class="nav-label">
+                {% trans 'Chat' %}
+              </span>
+            </a>
+          </li>
+
+        </ul>
+    </nav>
+
+    <div class='container'>
+        <!-- These messages are not from chat, they are the notifications msgs
+        upon successful POST request on the chat the message context is message_list -->
+        {% if messages %}
+            {% for message in messages %}
+              <div class="notification 
+                 {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
+                <button type="button" class="delete close-dj-messages"></button>
+                {{ message}}
+              </div>
+            {% endfor %}
+
+           <script type="text/javascript">
+                document.querySelectorAll('.close-dj-messages').forEach(item => {
+                  item.addEventListener('click', e => {
+                    e.currentTarget.parentElement.remove();
+                    e.stopPropagation();
+                  });
+                });
+          </script>
+
+        {% endif %}
+
+        {% block content %}
+
+        {% endblock content %}
     </div>
-    {% endfor %}
-    {% endif %}
 
-    {% block content %}
-    {% endblock content %}
 
-  </div>
-  <!-- /container -->
-
-  <!-- Third-party javascript libraries go here -->
-  <!-- place project specific Javascript in this file -->
+  <!-- Icon can be replace to show icon on share -->
+  {% block icon %}
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}?v=1">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=2">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+  {% endblock icon%}
 
   {% block javascript %}
-
-  <!-- They should be placed at the end of the document so the pages load faster -->
-  <script src="{% static 'js/jquery.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'js/bootstrap.min.js' %}" type="text/javascript"></script>
-  <script src="{% static 'js/lazyload.js' %}"></script>
-  <script src="{% static 'js/preset.js' %}" type="text/javascript"></script>
-
-  <!-- Concatenated js plugins and jQuery -->
-  <script src="{% static 'frontend/assets/js/app.js' %}"></script>
-  <!-- Raven.config('{# sentry_dsn #}').install();
-       window.onerror = Raven.process; -->
-
-  <!-- Core js -->
-  <script src="{% static 'frontend/assets/js/global.js' %}"></script>
-  <script src="{% static 'frontend/assets/js/main.js' %}"></script>
-
-  <!-- Page and UI related js -->
-  <script src="{% static 'frontend/assets/js/feed.js' %}"></script>
-  <script src="{% static 'frontend/assets/js/chat.js' %}"></script>
-  <script src="{% static 'js/fancybox.min.js' %}"></script>
-  <script src="{% static 'js/linkify.min.js' %}" type="text/javascript"></script>
-
-<!-- /.container -->
-<!-- wnoty for alert-->
-<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
-
-  <!-- For the chat-app-->
-  {% if request.user.is_authenticated %}
-      <script type="text/javascript">
-        var currentUser = "{{ request.user.username}}";
-        var new_messages = "{{ new_msgs }}";
-
-        if (new_messages != "None") {
-          $(".msg-notification i").show();
-        }
-
-        $(function () {
-          source: "{% url 'search:suggestions' %}";
-        });
-
-      </script>
-      <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
-  {% endif %}
-
   <script type="text/javascript">
-    var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-
-    window.addEventListener("load", function (event) {
-      lazyload();
-    });
+    var currentUser;
+    var new_messages;
 
     function registerServiceWorker() {
       // register sw script in supporting browsers
@@ -716,24 +400,28 @@
       }
     }
 
+    //fix navbar bottom on iphone X families
     let iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
     let aspect = window.screen.width / window.screen.height;
     if (
-      iPhone &&
-      (aspect.toFixed(3) === "0.462" ||
+      iPhone && (aspect.toFixed(3) === "0.462" ||
         aspect.toFixed(3) === "0.576" ||
         aspect.toFixed(3) === "0.591")
     ) {
-      $("#navbarBottom").addClass("pb-4");
+      document.getElementById("navbarBottom").classList.add("iphone-nav-bt");
     }
 
-    //Hide nav bar on click outside
-
-    // $(document).on('click', function () {
-    //   $('.collapse').collapse('hide');
-    // })
-
   </script>
+
+  {% if request.user.is_authenticated %}
+
+      <script type="text/javascript">
+        currentUser = "{{ request.user.username}}";
+        new_messages = "{{ new_msgs }}";
+      </script>
+      <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
+
+  {% endif %}
 
   {% endblock javascript %}
 

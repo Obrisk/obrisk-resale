@@ -1,20 +1,2 @@
-.O-bg-blue {
-
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
-}
-
-.O-bg-blue-ns {
-    background: #3EC4E2;
-}
-
-.O-cl-red {
-    color: #EB5757
-}
-
-.O-bg {
-    background: #EEF3F4
-}
-
-.O-black {
-    background: #000
-}
+.O-bg-blue{box-shadow:2px 4px 4px rgba(0,0,0,.25)}.O-bg-blue-ns{background:#3ec4e2}.O-cl-red{color:#eb5757}.O-bg{background:#eef3f4}.O-black{background:#000}
+/*# sourceMappingURL=../../../frontend/scss/sourcemaps/colors.css.map */

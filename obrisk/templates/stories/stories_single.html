@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load humanize static %}
+
 <div class="card is-post is-simple" data-id="{{ stories.uuid_id }}" stories-id="{{ stories.uuid_id }}">
   <!-- Main wrap -->
   <div class="content-wrap">
@@ -114,9 +115,8 @@
       {%endif%}
 
       <!-- Post actions -->
-      <div class="d-flex justify-content-between post-actions">
+      <div class="post-actions">
 
-        <div class="left align-items-center d-flex">
           <div class="fab-wrapper is-share">
             <a href="javascript:void(0);" class="small-fab share-fab share-stories"
               onclick="shareMe('{{stories.user}}','{{stories|truncatewords:30|escape|safe }}','i/{{ stories.slug }}/')">
@@ -129,8 +129,7 @@
             </a>
           </div>
 
-          <div class="align-items-center d-flex like-wrapper">
-
+          <div class="like-wrapper">
             {% if request.user in stories.get_all_likers %}
             <a href="javascript:void(0);" class="like-button is-active">
               <i class="mdi mdi-heart not-liked bouncy"></i>
@@ -146,13 +145,12 @@
             {% endif %}
 
 
-            <small class="likes-count ml-2">
+            <small class="likes-count">
               <span class="count">{{ stories.likes_count }}</span> <span class="m-0">Liked</span>
             </small>
           </div>
-        </div>
 
-        <div class="align-items-center d-flex fab-wrapper is-comment">
+        <div class="fab-wrapper is-comment">
           <a href="javascript:void(0);" class="small-fab comment-button">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -163,63 +161,19 @@
             </svg>
           </a>
           <small class="comments-count">
-            <span class="count ml-2">{{ stories.thread_count }}</span>
-            <span class="m-0">Comments</span>
-          </small></div>
+            <span class="count">{{ stories.thread_count }}</span>
+            <span>Comments</span>
+          </small>
+        </div>
+
       </div>
 
-      <!-- /Post actions  -->
+    <!-- /Post actions  -->
     </div>
     <!-- /Post body -->
-    <!-- Post footer -->
-    <div class="card-footer justify-content-end">
-      <!-- Followers -->
-      {% if stories.get_likers %}
-      <div class="likers-group">
-        {% for liker in stories.get_likers %}
-        <a href="/users/{{liker}}">
-          <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}" alt="User profile picture">
-        </a>
-        {% endfor %}
-      </div>
-      <div class="likers-text">
-        {% if stories.likes_count > 3%}
-        <p> {{ stories.likes_count|add:"-3" }} More</p>
-        <!-- popup box modal starts here -->
-        <div class="modal fade demo-popup {{ stories.uuid_id }}" tabindex="-1" role="dialog"
-          aria-labelledby="myLargeModalLabel-1" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                <h3 class="ml-2 modal-title"> ALL LIKES </h3>
-              </div>
-              <div class="modal-body likers-group">
-                <P> {% for liker in stories.get_all_likers %}
-                  <a href="/users/{{liker}}">
-                    <img src="{{oss}}/{{liker.thumbnail|default_if_none:'/static/img/user.png' }}"
-                      alt="User profile picture">
-                  </a>
-                  {% endfor %} </P>
-              </div>
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-        </div><!-- /.modal-->
-        <!-- popup box modal ends -->
-        {% endif%}
-      </div>
-      {% else %}
-      <div class="likers-text">
-        <p>Be the first to like</p>
-      </div>
-      {% endif %}
     </div>
-    <!-- /Post footer -->
-  </div>
 
-  <!-- /Main wrap -->
-
-  <!-- Post #6 comments -->
+  <!-- Post comments -->
   <div class="comments-wrap is-hidden">
     <!-- Header -->
     <div class="comments-heading pb-0 pt-0">

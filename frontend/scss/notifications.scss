@@ -1,0 +1,43 @@
+li.notifications {
+  list-style: none;
+  padding: 0;
+}
+
+li.notification {
+  border: 1px solid #A1DBD2 !important;
+  box-shadow: 2px 2px 0px #3EC4E2 !important;
+  background: #fff;
+  text-decoration: none;
+}
+
+li.notification:last-child {
+  border-bottom: 0;
+}
+
+li.notification:hover,
+li.notification.active:hover {
+  background-color: #f9f9f9;
+  border-color: #eeeeee;
+}
+
+li.notification.active {
+  background-color: #f4f4f4;
+}
+
+ali.notification:hover {
+  text-decoration: none;
+}
+
+li.notification-title {
+  font-size: 15px;
+  margin-bottom: 0;
+}
+
+li.notification-desc {
+  margin-bottom: 0;
+}
+
+li.notification .media-body {
+  padding-top: 5.6px;
+  padding-left: 15px;
+}

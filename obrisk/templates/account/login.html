@@ -4,121 +4,106 @@
 {% load socialaccount %}
 {% load crispy_forms_tags %}
 {% get_providers as socialaccount_providers %}
+
 {% block head %}
 <title>{% trans 'Account Login' %}</title>
-<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-<link rel="stylesheet" href="{% static 'css/wnoty.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'css/vendor/vex.css' %}" />
+<link rel="stylesheet" type="text/css" href="{% static 'css/vendor/vex-theme-os.css' %}" />
 {% endblock head %}
 
 {% block content %}
-<div class="view-wrapper">
-  <div class="container">
     <div id="" class="view-wrap true-dom">
       <div class="columns is-centered">
 
-        <div class="column is-half is-one-third-desktop has-background-white text-center">
-
-          <div class="is-flex row">
-            <span class="login100-form-title p-b-32 col-12 ">{% trans 'Account Login' %}</span>
-
-            <span class="errors col-12"></span>
-          </div>
+          <h1 class="login100-form-title "> {% trans 'Account Login' %}</h1>
+          <div class="errors"></div>
 
           <!--Login Form-->
-          <div class="hero-body p-0">
             <div class="form-wrapper">
               <!--Form-->
-              <div class="login-form">
+                  <form class="login blur-in" id="login-form" method="POST" action="{% url 'account_login' %}">
+                      {% csrf_token %}
 
-                <div class="login-wrapper">
-                  <div class="outer-panel">
-                    <div class="outer-panel-inner">
+                        <label for="phone_number">
+                              {% trans 'Phone / Username' %}
+                        </label>
+                        {{ form.login }}
 
-                      <form class="login" method="POST" action="{% url 'account_login' %}">
-                        {% csrf_token %}
-                        <div id="signup-panel-1" class="process-panel-wrap is-narrow is-active ">
-                          <div class="form-panel">
-                            <div class="form-row mt-3">
-                              <div class="form-group col-md-12 mb-0">
-                                <div class="input-group">
-                                  <label for="phone_number">
-                                      {% trans 'Phone number / Username / Email' %}
-                                  </label>
-                                </div>
-                                {{ form.login }}
-                              </div>
-                            </div>
-                            <div class="form-row">
+                        <label for="password">
+                          {% trans 'Password' %}
+                        </label>
+                        {{ form.password }}
 
-                              <div class="form-group col-md-12 mb-0">
-                                <div class="input-group">
-                                  <label for="password">
-                                      {% trans 'Password' %}
-                                  </label>
-                                </div>
-                                {{ form.password }}
-                              </div>
-                            </div>
+                      {% if redirect_field_value %}
+                          <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                      {% endif %}
 
-                          </div>
+                        <button type="submit"
+                          class="button is-rounded is-solid accent-button raised login-submit-btn">
+                            {% trans 'Login' %}
+                        </button>
 
-                          {% if redirect_field_value %}
-                              <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                          {% endif %}
-
-                          <div class="form-group container-login100-form-btn mt-1">
-                            <button type="submit"
-                              class="button is-rounded is-solid accent-button raised is-fullwidth ">{% trans 'Login' %}</button>
-                          </div>
-
-                            <div class="social-ac d-flex">
-                                <a style="margin-right:10px" href="{% url 'users:wechat_auth' %}">
-                                    <i class="fa fa-wechat"></i> </a>
-                                </a>
-                                <a href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
-                                    <i class="fa fa-linkedin"></i> </a>
-                                </a>
-                            </div>
-                            <br />
-
-
-                          <div class="form-group container-login100-form-btn d-flex justify-content-between">
-                            <a href="{% url 'account_signup' %}"
-                              class="button is-solid dark-grey-button raised">{% trans 'Sign up' %}</a>
+                        <div class="phone-options-btn" >
                             <a href="{% url 'users:phone_password_reset' %}"
-                              class="button is-solid dark-grey-button raised">{% trans 'Reset Password' %}</a>
-                          </div>
+                              class="button is-solid accent-button raised">
+                               {% trans 'Renew password' %}
+                            </a>
 
+                            <a id="open-options" href="#"
+                              class="button is-solid accent-button raised">
+                              {% trans 'More options' %}
+                            </a>
                         </div>
-                      </form>
-                    </div>
+                  </form>
+
+                  <div id="options-wrapper"  >
+                      <div class="options-btns" >
+                        <a class="button raised is-solid " href="{% url 'users:wechat_auth' %}">
+                            <i class="fa fa-wechat"></i>Wechat Login </a>
+                        </a>
+                        <a class="button raised is-solid " href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
+                            <i class="fa fa-linkedin"></i>LinkedIn Login </a>
+                        </a>
+                        <a class="button raised is-solid " id="phone-login" href="#">
+                            <i class="fa fa-linkedin"></i> Phone no Login </a>
+                        </a>
+                        <a href="{% url 'account_signup' %}"
+                          class="button is-solid dark-grey-button raised">
+                          {% trans 'Sign up' %}
+                        </a>
+                        <a href="#lh"
+                          class="login-help button is-solid dark-grey-button raised" 
+                          data-help="<a href='mailto:support@obrisk.com'>{% trans 'Email us' %}</a> {% trans 'Or add WechatID:Obrisk' %}">
+                           {% trans 'Need help?' %}
+                        </a>
+                     </div>
                   </div>
-
-                </div>
-              </div>
-
             </div>
-          </div>
-
-          <div> <small class="mt-5" id="support"> 
-                  {% trans 'Login problem?' %}
-              <a class="blue-link" href="mailto:support@obrisk.com">
-                  {% trans 'click here ' %}
-              </a> 
-              {% trans 'to contact us or add WechatID:' %}
-              <span class="blue-link"> Obrisk. </span> </small> </div>
-
-        </div>
+         </div>
       </div>
-    </div>
-  </div>
-</div>
 {% endblock content %}
 
 {% block extra_js %}
 
+<script src="{% static 'js/vendor/vex.combined.min.js' %}" type="text/javascript"></script>
 <script>
+  vex.defaultOptions.className = 'vex-theme-os'
+
+  const login_form = document.getElementById('login-form');
+  const options_wrapper = document.getElementById('options-wrapper');
+  document.getElementById('phone-login').addEventListener('click', e => {
+    login_form.classList.remove('blur-in');
+    login_form.classList.add('blur-out');
+    options_wrapper.style.display = 'none';
+    document.getElementById('id_login').focus();
+  });
+
+  document.getElementById('open-options').addEventListener('click', e => {
+        login_form.classList.remove('blur-out');
+        login_form.classList.add('blur-in');
+        options_wrapper.style.display = 'flex';
+  });
 
   window.mobileUtil = (function (win, doc) {
     var UA = navigator.userAgent,
@@ -135,9 +120,9 @@
       isQQ: /QQ/gi.test(UA)
     };
   })(window, document);
+
   const isInStandaloneMode = () =>
     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
-
 
   //NOTE!!!
   //This auto-login mechanism is a quick hack around to solve the problem of iOS 11 and weixin browsers
@@ -148,10 +133,10 @@
     if (!localStorage.getItem('auth')) {
       //When user click on login save the auth details only after successfull ajax login then redirect
       //else allow user to retry login
-      $('.login100-form-btn').click(function (event) {
+      document.querySelector('.login-submit-btn').click(function (event) {
         event.preventDefault();
-        var username = $('[name="login"]').val();
-        var pass = $('[name="password"]').val();
+        const username = document.querySelector('[name="login"]').value;
+        const pass = document.querySelector('[name="password"]').value;
 
         var ajax = new XMLHttpRequest();
         ajax.onreadystatechange = function () {
@@ -182,11 +167,9 @@
               location.replace('/stories')
             }
             else {
-              $.wnoty({
-                type: "error",
-                autohide: false,
-                message: 'Failed to login, please verify your username or password'
-              });
+              vex.dialog.alert(
+                'Failed to login, please verify your username or password'
+              );
             }
           }
         }
@@ -194,16 +177,14 @@
         ajax.open("POST", "/auth/login/");
         ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
         ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
-
       })
 
     }
     else {
 
-      var dialog = $.wnoty({
-        type: "info",
-        message: '<p class="text-center mb-0"><i class="fa fa-spin fa-cog"></i> Autologin</p>',
-      });
+      var dialog = vex.dialog.prompt(
+        'Autologin, please wait...',
+      );
 
       var auth = JSON.parse(localStorage.getItem('auth'));
       var ajax = new XMLHttpRequest();
@@ -230,11 +211,14 @@
   }
 
   {% if form.errors %}
-  $(".errors").append(`<small class="pass-text" style="color: #ff5f59;">The phone number/username or password you specified are not correct.</small>`)
+        document.querySelector(".errors").innerHTML =
+        `<small class="pass-text" style="color: #ff5f59;">The phone number/username or password you specified are not correct.</small>`
+
+        login_form.classList.remove('blur-in');
+        login_form.classList.add('blur-out');
+        options_wrapper.style.display = 'none';
+        document.getElementById('id_login').focus();
   {% endif %}
 
 </script>
-
-<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
-
 {% endblock extra_js %}

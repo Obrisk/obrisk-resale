@@ -1,4 +1,5 @@
 import logging
+import re
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -40,7 +41,7 @@ TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 
 def set_popular_tags():
-    popular_tags = Classified.objects.get_counted_tags()[:30]
+    popular_tags = Classified.objects.get_counted_tags()[:10]
 
     cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
@@ -65,26 +66,27 @@ def classified_list(request, tag_slug=None):
     popular_tags = cache.get('popular_tags')
 
     if popular_tags is None:
-        popular_tags = Classified.objects.get_counted_tags()
+        popular_tags = Classified.objects.get_counted_tags()[:10]
+        cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
 
     #Get classifieds
-    classifieds_list = Classified.objects.get_active().annotate(
-        order = Case (
-            When(city=city, then=Value(1)),
-            default=Value(2),
-            output_field=IntegerField(),
-        )
-    ).annotate (
-        image_thumb = Subquery (
-            ClassifiedImages.objects.filter(
-                classified=OuterRef('pk'),
-            ).values(
-                'image_thumb'
-            )[:1]
-        )
-    ).order_by('order', '-priority', '-timestamp')
-
-    #official_ads = OfficialAd.objects.all() 
+    classifieds_list = Classified.objects.get_active().values(
+                    'title','price','city','slug'
+                ).annotate(
+                    order = Case (
+                        When(city=city, then=Value(1)),
+                        default=Value(2),
+                        output_field=IntegerField(),
+                    )
+                ).annotate (
+                    image_thumb = Subquery (
+                        ClassifiedImages.objects.filter(
+                            classified=OuterRef('pk'),
+                        ).values(
+                            'image_thumb'
+                        )[:1]
+                    )
+                ).order_by('order', '-priority', '-timestamp')
 
     paginator = Paginator(classifieds_list, 20)  # 20 classifieds in each page
     page = request.GET.get('page')
@@ -98,7 +100,7 @@ def classified_list(request, tag_slug=None):
         if request.is_ajax():
             # If the request is AJAX and the page is out of range
             # return an empty page            
-            return HttpResponse('')
+            return JsonResponse({'classifieds': 'end'})
         # If page is out of range deliver last page of results
         classifieds = paginator.page(paginator.num_pages)
 
@@ -119,12 +121,13 @@ def classified_list(request, tag_slug=None):
         ).order_by('-timestamp')
 
     if request.is_ajax():
-       return render(request,'classifieds/classified_list_ajax.html',
-                    {'page': page, 'popular_tags': popular_tags,
-                    'classifieds': classifieds, 'base_active': 'classifieds'})
+        ajx_classifieds = list(classifieds)
+        return JsonResponse({
+                'classifieds': ajx_classifieds
+            })
 
     return render(request, 'classifieds/classified_list.html',
-            {'page': page, 'popular_tags': popular_tags,
+            {'page': page, 'popular_tags': popular_tags, 'city': city,
             'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
 
 
@@ -211,11 +214,11 @@ class CreateClassifiedView(CreateView):
             if data['status'] == '400':
                 return JsonResponse(data)
         if form.errors:
+            error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
             data = {
                 'status': '400',
                 'error_message': _(
-                    f'Your form is having invalid input \
-                        on: {form.errors} Correct your input and submit again')
+                    f'Form error on {error_msg}')
             }
         else:
             data = {
@@ -238,6 +241,7 @@ class CreateClassifiedView(CreateView):
                 'Sorry, the image(s) were not successfully uploaded, \
                     please try again')
         }
+
         if not images_json:
             #The front-end will add the default images in case of errors 
             #Empty images_json means this form bypassed our front-end upload.

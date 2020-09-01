@@ -1,0 +1,85 @@
+/* -------------------------------------------------------------------------- */
+/*                                    utils                                   */
+/* -------------------------------------------------------------------------- */
+
+function printError(msg, target) {
+  template = `
+        <div class="notification is-danger" role="alert">
+            <button type="button" class="delete close-dj-messages"></button>
+          ${msg}
+        </div>
+        `;
+  $(`${target}`).prepend(template);
+}
+
+
+$(function() {
+
+  $("body").on("uploadComplete", function(event) {
+    //Todo check if images where uploaded or empty
+    $("input[name='status']").val("A");
+    $("#id_images").val(images);
+    $("#id_img_error").val(img_error);
+
+    $.ajax({
+      url: "/classifieds/write-new-classified/",
+      data: $("form").serialize(),
+      type: "POST",
+      cache: false,
+      success: function(data) {
+        if (data.status == "200") {
+            window.location.replace("/classifieds/");
+        } else {
+          //At this point check if the images variable exists and
+          //update the thumbnail holder to show the uploaded images.
+          //Scroll the page to the top or to the place with errors.
+          console.log(data);
+          printError(data.error_message, "#classified-form");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      },
+      error: function(data) {
+          if (typeof data.error_message !== 'undefined') {
+             printError(data.error_message, "#classified-form");
+          }else {
+             printError("Sorry we can't process your request, please try again later",
+                "#classified-form");
+          }
+      }
+    });
+  });
+
+  $("#addBtn").click(function() {
+    $("#uploader").show();
+  });
+
+  $(".submit-button").click(function(event) {
+    const phn = $("#id_phone_number").val();
+    //Help the user to add the country code on phone number
+    if ((typeof phn !== 'undefined') && phn != '') {
+        if (phn.val().startsWith('+86') == false) {
+            if (phn.val().length == 11 ) {
+                phn.val("+86" + phn.val());
+            } else {
+              printError(
+                "Your phone number is incorrect, Please verify",
+                "#classified-form"
+              );
+            }
+        }
+    }
+
+    if (uploader.fileStats.totalFilesNum > 0) {
+      if (images != "" && $("#id_images").val() == images) {
+        $("body").trigger("uploadComplete");
+      } else {
+        $("body").trigger("submitClicked");
+      }
+    } else {
+      printError(
+        "Please provide all the details and upload at least 1 image",
+        "#classified-form"
+      );
+    }
+  });
+});

@@ -10,7 +10,7 @@ from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
 #This has to be updated manually in cases we want rapid deployment
-STATIC_VERSION = 'ver2707200001' #DDMMYY####
+STATIC_VERSION = 'ver0109200001' #DDMMYY####
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -153,7 +153,7 @@ if env.bool('USE_S3_STATICFILES'):
     STATICFILES_LOCATION = f'static/{STATIC_VERSION}'
 
     #The value from docs is 'storages.backends.s3boto3.S3Boto3Storage'
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 
 else:
     STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
