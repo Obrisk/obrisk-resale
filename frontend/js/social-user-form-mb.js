@@ -27,11 +27,9 @@ const unverify_form = document.getElementById('unverify-form');
 //Print error message
 function printError(msg) {
   template = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="notification is-danger" role="alert">
+            <button type="button" class="delete close-dj-messages"></button>
           ${msg}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         `;
   $(".form-panel-top").prepend(template);
@@ -39,7 +37,6 @@ function printError(msg) {
 
 
 confirm_btn.addEventListener('click', function (event) {
-
     if (!document.getElementById('city').value ||
         !document.getElementById('province').value) {
           event.preventDefault();
@@ -52,6 +49,7 @@ confirm_btn.addEventListener('click', function (event) {
     } else {
         document.querySelector("#signup-panel-1").style.display = 'none';
         document.querySelector(".process-panel-wrap").classList.remove("is-active");
+        document.querySelector("#signup-panel-2").classList.remove("is-hidden");
         document.querySelector("#signup-panel-2").classList.add("is-active");
      }
 });
@@ -71,14 +69,14 @@ document.addEventListener('DOMContentLoaded', function() {
   send_code_btn.addEventListener('click', function (event) {
     if (!phone_number.value) {
       event.preventDefault();
-        code_notice.innerHTML ="<p class='blue-link'>Empty input. Please enter a valid phone number!<p>";
+        code_notice.innerHTML ="<p class='error-text'>Please enter a valid phone number!<p>";
     } else {
       var num = parseInt(phone_number.value);
       var str = num.toString();
 
       if (isNaN(num) || str.length != 11 || str.charAt(0) != 1) {
         event.preventDefault();
-          code_notice.innerHTML = "<p class='blue-link'>Invalid number. Don't include country code/spaces/special characters<p>";
+          code_notice.innerHTML = "<p class='error-text'>Don't enter country code or special characters<p>";
       } else {
 
         $.ajax({
@@ -92,13 +90,11 @@ document.addEventListener('DOMContentLoaded', function() {
             if (data.success == true) {
               timeout = 60;
               send_code_btn.disabled = true;
-              document.getElementById("phone_label").hide();
 
               document.getElementById("code").classList.remove("is-hidden")
-              //document.getElementById("cant-verify").classList.remove("is-hidden")
 
               if (data.message != undefined) {
-                  code_notice.innerHTML = "<p class='blue-link'>" + data.message + "<p>";
+                  code_notice.innerHTML = "<p class='pass-text'>" + data.message + "<p>";
                   verify_code_input.focus()
               }
 
@@ -115,7 +111,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     send_code_btn.textContent = "Resend Code";
                     send_code_btn.disabled = false;
-
                 }
 
               }
@@ -139,7 +134,7 @@ document.addEventListener('DOMContentLoaded', function() {
               //$("#send-code").attr("disabled", false);
             } else {
               if (data.error_message != undefined) {
-                code_notice.innerHTML = "<p class='blue-link'>" + data.error_message + "<p>";
+                code_notice.innerHTML = "<p class='error-text'>" + data.error_message + "<p>";
               }
               if (data.messageId != undefined) {
                 console.log(data.messageId);
@@ -156,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
           },
           error: function(err) {
-              code_notice.innerHTML = "<p class='blue-link'> The signup is closed! Please try again later!<p>";
+              code_notice.innerHTML = "<p class='error-text'> The signup is closed! Please try again later!<p>";
               console.log(err);
           }
         });
@@ -190,16 +185,17 @@ document.addEventListener('DOMContentLoaded', function() {
       .then (data => {
           if (data.status == '201') {
             username_err.innerHTML= "This username is already taken!";
+            confirm_btn.disabled = true;
           }
           else {
             username_err.innerHTML="";
+            confirm_btn.disabled = false;
           }
       })
   });
 
 
   function submitForm() {
-
        $.ajax({
           url: "/users/cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/",
           data: Object.fromEntries(new FormData(document.querySelector("form"))),
@@ -207,11 +203,12 @@ document.addEventListener('DOMContentLoaded', function() {
           type: "POST",
           success: function(data) {
             if (data.success == true) {
-                results.innerHTML="<p class='text-error'> Redirecting... Please wait!</p>" ;
-                window.location.replace('/stories/');
+                results.innerHTML="<p class='pass-text'> Redirecting... Please wait!</p>" ;
+                window.location.replace('/classifieds/');
             } else {
-                  results.innerHTML="<p class='pass-text red'>" + data.error_message + "</p>" ;
+                  results.innerHTML="<p class='error-text'>" + data.error_message + "</p>" ;
                   send_code_btn.disabled = false;
+                  document.getElementById('verify-code').disabled = false;
                   unverify_form.style.display = 'none';
                   panel_two.classList.remove('blur-in');
                   panel_two.classList.add('blur-out');
@@ -239,15 +236,18 @@ document.addEventListener('DOMContentLoaded', function() {
           if (
               isNaN(verify_code_input.value) ||
               verify_code_input.value.length != 6 ||
-              isNaN(phone_number.value) ||
-              phone_number.value.length.toString() != 11 ||
-              phone_number.value.charAt(0) != 1
+              isNaN(phone_number.value)
           ) {
               event.preventDefault();
-                  results.innerHTML="<p class='blue-link'> The code or number is not correct!<p>";
+                  results.innerHTML="<p class='error-text'> The code or number is not correct!<p>";
           } else {
-               submitForm();
-               return false;
+
+              if (phone_number.value.toString().startsWith("+86") == false) {
+                  phone_number.value = "+86" + phone_number.value;
+              }
+
+              submitForm();
+              return false;
           }
       }
   });
@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', function() {
               phone_number.value.charAt(0) != 1
           ) {
                   e.preventDefault();
-                  results.innerHTML="<p class='blue-link'> The phone number is not correct!<p>";
+                  results.innerHTML="<p class='error-text'> The phone number is not correct!<p>";
                   unverify_form.style.display = 'none';
                   panel_two.classList.remove('blur-in');
                   panel_two.classList.add('blur-out');

@@ -28,23 +28,17 @@
                     <div id="signup-panel-1"
                         class=" step-dot-1 process-panel-wrap is-narrow is-active">
 
-                        <div class="text-center">
-                            <p> {% trans 'Wechat signup verification' %}</p>
-                        </div>
+                        <p class="title is-5"> {% trans 'Wechat signup verification' %}</p>
 
 
                         <div class="form-panel form-panel-top">
-                            <div class="form-row mt-0">
-                                <div class="form-group col-md-12 mb-0" id="username">
-                                    <div class="input-group">
-                                        <label for="username">
-                                            {% trans 'Username' %}
-                                        </label>
-                                        {{form.username}}
-                                        <small id='username-errors' class='pass-text red'> </small>
-                                    </div>
-                                 </div>
-                             </div>
+                            <div id="username">
+                                <label for="username">
+                                    {% trans 'Username' %}
+                                </label>
+                                {{form.username}}
+                                <small id='username-errors' class='error-text'> </small>
+                            </div>
 
                              </br>
 
@@ -52,26 +46,19 @@
                                  <small class='blue-link'> We currently support China users only! </small>
                              {% endif %}
 
-                            <div class="input-group mb-3 mt-2">
-                                <div class="input-group">
-                                    <label class="" for="province">
-                                        {% trans 'Province' %}
-                                    </label>
-                                </div>
-                                {{ form.province_region }}
-                            </div>
+                            <label class="" for="province">
+                                {% trans 'Province' %}
+                            </label>
+                            {{ form.province_region }}
 
-                            <div class="input-group mb-3">
-                                <div class="input-group">
-                                    <label class="" for="city">
-                                        {% trans 'City' %}
-                                    </label>
-                                </div>
-                                {{ form.city }}
-                            </div>
+                            <label class="" for="city">
+                                {% trans 'City' %}
+                            </label>
+                            {{ form.city }}
 
+                            </br>
                             <button id="confirm"
-                                class="button is-solid primary-button raised is-rounded is-fullwidth"
+                                class="button is-solid accent-button raised is-rounded is-fullwidth"
                                 type="button">
                                 {% trans 'Confirm' %}
                             </button>
@@ -82,40 +69,30 @@
                     <!--Close the signup-panel-1 -->
                     </div>
 
-                    <div id="signup-panel-2" class="step-dot-2 process-panel-wrap is-narrow blur-out">
+                    <div id="signup-panel-2" class="is-hidden step-dot-2 process-panel-wrap is-narrow blur-out">
 
-                     <div class="form-panel">
-                        <div class=" mb-0">
-                            <div class="input-group">
-                                <label for="phone_number">
-                                    {% trans 'Phone Number' %}
-                                </label>
-                            </div>
-                            {{ form.phone_number }}
-                        </div>
+                        <label for="phone_number">
+                            {% trans 'Phone Number' %}
+                        </label>
+                        {{ form.phone_number }}
 
-                        <div class=" mt-2">
-                            <button
-                                class="button is-solid primary-button raised is-rounded is-fullwidth"
-                                id="send-code" type="button">
-                                {% trans 'Verify' %}
-                            </button>
-                        </div>
+                        <button
+                            class="button is-solid accent-button raised is-rounded is-fullwidth"
+                            id="send-code" type="button">
+                            {% trans 'Verify' %}
+                        </button>
 
                         <div id="code-notice" style="font-weight:bold;"></div>
 
                         <div class="is-hidden" id="code">
-                            <div class="form-group ">
-                                <div class="input-group">
-                                    <label for="code">
-                                        {% trans 'Code*' %}
-                                    </label>
-                                </div>
+                                <label for="code">
+                                    {% trans 'Code*' %}
+                                </label>
 
-                                <div class="d-flex">
+                                <div class="is-flex">
                                     {{ form.verify_code }}
 
-                                    <div>
+                                    <span>
                                         <svg class="loading is-hidden"
                                             xmlns="http://www.w3.org/2000/svg" width="24"
                                             height="24" viewBox="0 0 24 24" fill="none"
@@ -135,19 +112,15 @@
                                             <line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
                                             </line>
                                         </svg>
-                                    </div>
+                                    </span>
                                 </div>
 
                                 <div></div>
-                                </div>
-                            </div>
+                          </div>
 
                           <div id="results" style="font-weight:bold;"> </div>
 
                           <a id='request-unverified-phone'> Can't verify? </a>
-
-                        <!--Close the form-panel -->
-                        </div>
 
                       <!--Close the signup-panel-2 -->
                       </div>
@@ -228,6 +201,9 @@
 
 </script>
 
+<link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/social-user-form-mb.js' %}" type="text/javascript"> </script>
 <script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
 

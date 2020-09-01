@@ -5,11 +5,9 @@
 //Print error message
 function printError(msg) {
   template = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <div class="notification is-danger" role="alert">
+            <button type="button" class="delete close-dj-messages"></button>
           ${msg}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         `;
   $("#signup-panel-2").prepend(template);
@@ -37,15 +35,15 @@ $(function() {
           "<p class='error-text'>Please enter a valid phone number!<p>"
         );
     } else {
-      var num = parseInt($("#id_phone_number").val());
-      var str = num.toString();
+      const num = parseInt($("#id_phone_number").val());
+      const nm_str = num.toString();
 
-      if (isNaN(num) || str.length != 11 || str.charAt(0) != 1) {
+      if (isNaN(num) || nm_str.length != 11 || nm_str.charAt(0) != 1) {
         event.preventDefault();
         $("#code-notice")
           .empty()
           .append(
-            "<p class='error-text'> Don't include country code/special characters<p>");
+            "<p class='error-text'> Don't include country code or special characters<p>");
       } else {
         //If button is disabled and the verification code is not sent, user can't do anything.
         var url, req;
@@ -153,10 +151,10 @@ $(function() {
        if ($(".loading").hasClass("is-hidden")) {
           $(".loading").toggleClass("is-hidden");
        }
-       var int_num = parseInt($("#id_phone_number").val())
-       var str_num = int_num.toString();
+       const int_num = parseInt($("#id_phone_number").val())
+       const str_num = int_num.toString();
 
-    if (isNaN(int_num) || str_num.length != 11 || str_num.charAt(0) != 1) {
+    if (isNaN(int_num) || str_num.length < 11 || str_num.length > 14) {
           event.preventDefault();
           $("#results").empty().append(
             "<p class='error-text'> Phone number is incorrect! <p>"

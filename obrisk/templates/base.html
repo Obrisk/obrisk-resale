@@ -58,7 +58,7 @@
                 </a>
             {% else  %}
 
-            <a class="nav-logo" href="{% url 'home' %}">
+            <a class="nav-logo" href="{% url 'classifieds:list' %}">
               <svg width="64" height="48" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <g filter="url(#filter0_i)">
                   <path d="M23.4699 10.0511C23.1315 9.98326 22.8706 9.90461 22.7042 9.81386L23.4699 10.0511Z"
@@ -353,7 +353,7 @@
             {% for message in messages %}
               <div class="notification 
                  {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
-                <button class="delete close-dj-messages"></button>
+                <button type="button" class="delete close-dj-messages"></button>
                 {{ message}}
               </div>
             {% endfor %}

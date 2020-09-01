@@ -1,4 +1,5 @@
-import  os
+import os
+import re
 import uuid
 import ast
 import base64
@@ -540,15 +541,15 @@ class PhonePasswordResetConfirmView(FormView):
 def username_exists(request):
     """A function view to check if the username exists"""
     prefered_name = request.GET.get('username')
-    if User.objects.filter(username__contains=prefered_name.lower()):
+    if not User.objects.filter(username__iexact=prefered_name.lower()):
+        return JsonResponse({
+            "status": "200",
+            "message": "This username is available"})
+    else:
         return JsonResponse({
             "status": "201",
             "message": "This username is taken"
         })
-    else:
-        return JsonResponse({
-            "status": "200",
-            "message": "This username is available"})
 
 
 class WechatViewSet(View):
@@ -638,7 +639,7 @@ class GetInfoView(WechatViewSet):
                     request, user.first(),
                     backend='django.contrib.auth.backends.ModelBackend'
                 )
-            return HttpResponseRedirect(reverse('stories:list'))
+            return HttpResponseRedirect(reverse('classifieds:list'))
 
         else:
             return HttpResponseBadRequest(
@@ -651,12 +652,11 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid13',
+            'ui': 'thisisaveryuniqueopenid17',
             'sx': 2,
-            'nck':'nickname',
-            'ct': 'Fuzhou',
-            'pr': 'Fujian',
-            'cnt':  'China',
+            'nck':'Iamwhoishere',
+            'ct': 'Hangzhou',
+            'cnt':  'USA',
         }
 
         user = User.objects.filter(
@@ -714,7 +714,7 @@ def wechat_getinfo_view_test(request):
                 request, user.first(),
                 backend='django.contrib.auth.backends.ModelBackend'
             )
-            return HttpResponseRedirect(reverse('stories:list'))
+            return HttpResponseRedirect(reverse('classifieds:list'))
         return HttpResponseBadRequest(
              content=_('Bad request')
          )
@@ -779,10 +779,12 @@ def complete_wechat_reg(request, **kwargs):
         })
 
     else:
+        error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
         return JsonResponse({
             'success': False,
-            'error_message': str(form.errors)
-        })
+            'error_message': _(
+                f'Input error on {error_msg}')
+            })
 
 
 @ajax_required
@@ -803,14 +805,14 @@ def complete_authentication(request):
 
         if serializer.is_valid():
             serializer.save()
-            return redirect("stories:list")
+            return redirect("classifieds:list")
 
         else:
             return JsonResponse({"status": "403",
                 "message": "Please enter valid inputs"})
 
     else:
-        return redirect("stories:list")
+        return redirect("classifieds:list")
 
 
 class AutoLoginView(LoginView):
