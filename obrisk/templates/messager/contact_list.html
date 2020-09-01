@@ -49,12 +49,12 @@
                 data-url="{% url 'messager:conversation_detail' con.first_user.username %}"
                 class="card contact-card open-chat">
                 {% if con.first_user.thumbnail %}
-                <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
-                  style="width:40px;height:40px;border-radius: 50%;"
-                  class="rounded-circle profile-header-avatar img-fluid" id="pic">
+                    <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
+                      style="width:40px;height:40px;border-radius: 50%;"
+                      class="rounded-circle profile-header-avatar img-fluid" id="pic">
                 {% else %}
-                <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
-                  alt="No Profile Picture" class="profile-header-avatar img-fluid" />
+                    <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
+                      alt="No Profile Picture" class="profile-header-avatar img-fluid" />
                 {% endif %}
 
                 <div class="contact-card-meta">
@@ -79,22 +79,16 @@
           {% endif %}
 
       {% empty %}
-
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb" style="background-color: #3EC4E2;">
-              <li class="breadcrumb-item">
-                <h4> {% trans "No contacts" %} </h4>
-              </li>
-            </ol>
-          </nav>
-
-          <p>
-            {% trans "Go to discover and send friend requests or invite your friends, Or chat with Obrisk team members" %}
-          </p>
+          <div class="card">
+              <div class="card-body">
+                  <strong> {% trans "No contacts" %} </strong>
+                  <p> {% trans "Invite your friends Or chat with our team members" %}</p>
+              </div>
+          </div>
 
           <a href="#chat-window" data-toggle="modal"
             data-url="{% url 'messager:conversation_detail' super_users.first.username %}"
-            class="card flex-row open-chat ">
+            class="card contact-card open-chat ">
             {% if super_users.first.thumbnail %}
                 <img src="{{oss}}/{{super_users.first.thumbnail}}" alt="Picture Profile"
                   style="width:40px;height:40px;border-radius: 50%;"
@@ -104,9 +98,13 @@
                   class="profile-header-avatar img-fluid" />
             {% endif %}
 
-            <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>
-
+            <div class="contact-card-meta">
+                <strong> {{ super_users.first.get_profile_name|title }} </strong>
+                <p><small> New conversation </small><p>
+            </div>
+           </a>
       {% endfor %}
+
       </div>
 
       <div class="action-buttons">
