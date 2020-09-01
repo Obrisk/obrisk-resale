@@ -878,8 +878,7 @@ function slugify(string) {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-$(function() {
-  //create and initialize upload object
+document.addEventListener('DOMContentLoaded', function() {
   ossUpload = new OssUpload();
   ossUpload.init();
 });
