@@ -129,7 +129,6 @@ const geo_data = [{
 }]
 
 
-
 document.addEventListener('DOMContentLoaded', function () {
 
     //Set the Province and city name defaults.

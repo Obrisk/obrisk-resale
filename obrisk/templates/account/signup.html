@@ -13,133 +13,133 @@
 <!-- Main Wrapper -->
   <div class="login-wrapper form-wrapper columns">
      <!--Form-->
-          <form class="signup is-hidden" id="signup_form" method="post"
-                action="{% url 'account_signup' %}">
-                {% csrf_token %}
-                  <br/>
-                  <h1 class="text-center login100-form-title">
-                        {% trans 'Account Signup' %}
-                  </h1>
+      <form class="signup is-hidden" id="signup_form" method="post"
+            action="{% url 'account_signup' %}">
+            {% csrf_token %}
+              <br/>
+              <h1 class="text-center login100-form-title">
+                    {% trans 'Account Signup' %}
+              </h1>
 
-                  <div id="signup-panel-1"
-                     class=" step-dot-1 process-panel-wrap is-narrow is-active">
+              <div id="signup-panel-1"
+                 class=" step-dot-1 process-panel-wrap is-narrow is-active">
 
-                            <label for="phone_number">
-                                {% trans 'Phone Number' %}
+                        <label for="phone_number">
+                            {% trans 'Phone Number' %}
+                        </label>
+                        {{ form.phone_number }}
+
+                        <button
+                            class="button is-solid raised accent-button is-rounded is-fullwidth"
+                            id="send-code" type="button"> {% trans 'Verify' %}
+                        </button>
+
+                        <div id="code-notice" style="font-weight:bold;">
+                        </div>
+
+                         <div class="is-hidden" id="code-section">
+                            <label for="code">
+                                {% trans 'Code*' %}
                             </label>
-                            {{ form.phone_number }}
 
-                            <button
-                                class="button is-solid raised accent-button is-rounded is-fullwidth"
-                                id="send-code" type="button"> {% trans 'Verify' %}
-                            </button>
-
-                            <div id="code-notice" style="font-weight:bold;">
-                            </div>
-
-                             <div class="is-hidden" id="code-section">
-                                <label for="code">
-                                    {% trans 'Code*' %}
-                                </label>
-
-                                <div class="is-flex">
-                                    <input  id="code" class="col-10" maxlength="6" minlength="6" type="tel"
-                                        pattern="[0-9]{6}" name="code">
-                                        <svg class="loading is-hidden"
-                                            xmlns="http://www.w3.org/2000/svg" width="24"
-                                            height="24" viewBox="0 0 24 24" fill="none"
-                                            stroke="currentColor" stroke-width="2"
-                                            stroke-linecap="round" stroke-linejoin="round"
-                                            class="feather feather-loader">
-                                            <line x1="12" y1="2" x2="12" y2="6"></line>
-                                            <line x1="12" y1="18" x2="12" y2="22"></line>
-                                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
-                                            </line>
-                                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
-                                            </line>
-                                            <line x1="2" y1="12" x2="6" y2="12"></line>
-                                            <line x1="18" y1="12" x2="22" y2="12"></line>
-                                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
-                                            </line>
-                                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
-                                            </line>
-                                        </svg>
-                                  </div>
+                            <div class="is-flex">
+                                <input  id="code" class="col-10" maxlength="6" minlength="6" type="tel"
+                                    pattern="[0-9]{6}" name="code">
+                                    <svg class="loading is-hidden"
+                                        xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-loader">
+                                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
+                                        </line>
+                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
+                                        </line>
+                                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
+                                        </line>
+                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
+                                        </line>
+                                    </svg>
                               </div>
+                          </div>
 
-                        <div id="results" class="pass-text"> 
-                        </div>
-                        <input type="hidden" name="verified_no" id="verified_no">
+                    <div id="results" class="pass-text"> 
+                    </div>
+                    <input type="hidden" name="verified_no" id="verified_no">
 
-                        <p id='agree' class="is-hidden">
-                            {% trans 'I agree to' %}
-                            <a href="{% url 'terms_and_conditions' %}">
-                                {% trans 'Terms & Conditions' %} </a> 
-                        </p>
-                        <input type="checkbox" name="terms" id="terms"
-                            onchange="activateButton(this)">
-                        <br/>
+                    <p id='agree' class="is-hidden">
+                        {% trans 'I agree to' %}
+                        <a href="{% url 'terms_and_conditions' %}">
+                            {% trans 'Terms & Conditions' %} </a> 
+                    </p>
+                    <input type="checkbox" name="terms" id="terms"
+                        onchange="activateButton(this)">
+                    <br/>
 
-                        <div class="phone-options-btn" >
-                            <a href="{% url 'account_login' %}"
-                                class="button is-solid accent-button raised">{% trans 'Login' %}</a>
-                            <a href="#" id="open-options"
-                                class="button is-solid accent-button raised">{% trans "More options?" %}</a>
-                        </div>
+                    <div class="phone-options-btn" >
+                        <a href="{% url 'account_login' %}"
+                            class="button is-solid accent-button raised">{% trans 'Login' %}</a>
+                        <a href="#" id="open-options"
+                            class="button is-solid accent-button raised">{% trans "More options?" %}</a>
+                    </div>
 
-                        {% if redirect_field_value %}
-                            <input type="hidden" name="{{ redirect_field_name }}"
-                                value="{{ redirect_field_value }}" />
-                        {% endif %}
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}"
+                            value="{{ redirect_field_value }}" />
+                    {% endif %}
 
-                 <!-- Close signup-panel-1 -->
-                </div>
+             <!-- Close signup-panel-1 -->
+            </div>
 
-                <div id="signup-panel-2" class="is-hidden step-dot-2 process-panel-wrap is-narrow">
-                        <label for="username" id="username">
-                            {% trans 'Username' %}
-                        </label>
-                        {{ form.username }}
+            <div id="signup-panel-2" class="is-hidden step-dot-2 process-panel-wrap is-narrow">
+                    <label for="username" id="username">
+                        {% trans 'Username' %}
+                    </label>
+                    {{ form.username }}
 
-                        <div class="form-row">
-                              <label for="password1">
-                                    {% trans 'Password' %}
-                              </label>
-                            {{ form.password1 }}
-                        </div>
+                    <div class="form-row">
+                          <label for="password1">
+                                {% trans 'Password' %}
+                          </label>
+                        {{ form.password1 }}
+                    </div>
 
-                        <label class="" for="province">
-                            {% trans 'Province' %}
-                        </label>
-                        {{ form.province_region }}
+                    <label class="" for="province">
+                        {% trans 'Province' %}
+                    </label>
+                    {{ form.province_region }}
 
-                        <label class="" for="city">
-                            {% trans 'City' %}
-                        </label>
-                        {{ form.city }}
+                    <label class="" for="city">
+                        {% trans 'City' %}
+                    </label>
+                    {{ form.city }}
 
-                        <a id="phone-signup-submit"
-                            class="button is-rounded is-solid accent-button raised is-fullwidth"
-                            data-step="step-dot-4">{% trans 'Sign Up' %}
-                        </a>
-                  </div>
-          </form>
+                    <a id="phone-signup-submit"
+                        class="button is-rounded is-solid accent-button raised is-fullwidth"
+                        data-step="step-dot-4">{% trans 'Sign Up' %}
+                    </a>
+              </div>
+      </form>
 
-          <div id="options-wrapper" >
-              <div class="options-btns" >
-                <a class="button raised is-solid "  href="{% url 'users:wechat_auth' %}">
-                    <i class="fa fa-wechat"></i>Wechat signup</a>
-                </a>
-                <a class="button raised is-solid " id="phone-login" href="#">
-                    <i class="fa fa-linkedin"></i> Phone no Signup </a>
-                </a>
-                <a href="#lh"
-                  class="login-help button is-solid dark-grey-button raised" 
-                  data-help="<a href='mailto:support@obrisk.com'>{% trans 'Email us' %}</a> {% trans 'Or add WechatID:Obrisk' %}">
-                   {% trans 'Need help?' %}
-                </a>
-             </div>
-        </div>
+      <div id="options-wrapper" >
+          <div class="options-btns" >
+            <a class="button raised is-solid "  href="{% url 'users:wechat_auth' %}">
+                <i class="fa fa-wechat"></i>Wechat signup</a>
+            </a>
+            <a class="button raised is-solid " id="phone-login" href="#">
+                <i class="fa fa-linkedin"></i> Phone no Signup </a>
+            </a>
+            <a href="#lh"
+              class="login-help button is-solid dark-grey-button raised" 
+              data-help="<a href='mailto:support@obrisk.com'>{% trans 'Email us' %}</a> {% trans 'Or add WechatID:Obrisk' %}">
+               {% trans 'Need help?' %}
+            </a>
+         </div>
+    </div>
 {% endblock content %}
 
 {% block extra_js  %}

@@ -652,7 +652,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid18',
+            'ui': 'thisisaveryuniqueopenid19',
             'sx': 1,
             'nck':'Iamwhoishere',
             'ct': 'Hangzhou',
