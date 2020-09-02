@@ -88,7 +88,7 @@ def classified_list(request, tag_slug=None):
                     )
                 ).order_by('order', '-priority', '-timestamp')
 
-    paginator = Paginator(classifieds_list, 20)  # 20 classifieds in each page
+    paginator = Paginator(classifieds_list, 8)  #8 @ page in mobile
     page = request.GET.get('page')
 
     try:
@@ -121,14 +121,14 @@ def classified_list(request, tag_slug=None):
         ).order_by('-timestamp')
 
     if request.is_ajax():
-        ajx_classifieds = list(classifieds)
         return JsonResponse({
-                'classifieds': ajx_classifieds
+                'classifieds': list(classifieds)
             })
 
     return render(request, 'classifieds/classified_list.html',
-            {'page': page, 'popular_tags': popular_tags, 'city': city,
-            'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
+            {'page': page, 'popular_tags': popular_tags,
+            'city': city,'classifieds': classifieds,
+            'tag': tag, 'base_active': 'classifieds'})
 
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
@@ -144,8 +144,9 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 
     def Classified(self, request, *args, **kwargs):
         """
-        Handles Classified requests, instantiating a form instance and its inline
-        formsets with the passed Classified variables and then checking them for
+        Handles Classified requests, instantiate a form instance
+        and its inline formsets with the passed Classified
+        variables and then checking them for
         validity.
         """
         form = OfficialAdForm(self.request.Classified)
