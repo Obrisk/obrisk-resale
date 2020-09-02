@@ -40,9 +40,11 @@ from dal import autocomplete
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 def set_popular_tags():
-    popular_tags = Classified.objects.get_counted_tags()[:30]
+    popular_tags = Classified.objects.get_counted_tags()[:20]
 
-    cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
+    cache.set('popular_tags_pc',
+                list(popular_tags), timeout=TAGS_TIMEOUT
+            )
 
     return HttpResponse(
             "Successfully sorted the popular tags!",
@@ -62,10 +64,13 @@ def classified_list(request, tag_slug=None):
         city = "Hangzhou"
 
     #Try to Get the popular tags from cache
-    popular_tags = cache.get('popular_tags')
+    popular_tags = cache.get('popular_tags_pc')
 
     if popular_tags is None:
-        popular_tags = Classified.objects.get_counted_tags()
+        popular_tags = Classified.objects.get_counted_tags()[:20]
+        cache.set('popular_tags_pc',
+                    list(popular_tags), timeout=TAGS_TIMEOUT
+                )
 
     #Get classifieds
     classifieds_list = Classified.objects.get_active().annotate(
