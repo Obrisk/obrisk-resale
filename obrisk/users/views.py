@@ -612,12 +612,10 @@ class GetInfoView(WechatViewSet):
                             'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                         user_data['ct'] = user_data['pr']
 
-
+                    print(user_data)
                     form = SocialSignupCompleteForm(
                                 initial={
                                     'username': user_data['nck'],
-                                    'province_region': user_data['pr'],
-                                    'city': user_data['ct'],
                                     'gender': user_data['sx'],
                                     'wechat_openid': user_data['ui'],
                                 }
@@ -656,7 +654,8 @@ def wechat_getinfo_view_test(request):
             'sx': 1,
             'nck':'Iamwhoishere',
             'ct': 'Hangzhou',
-            'cnt':  'USA',
+            'pr': 'Zhejiang',
+            'cnt':  'China',
         }
 
         user = User.objects.filter(
@@ -686,7 +685,7 @@ def wechat_getinfo_view_test(request):
                         'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                     user_data['ct'] = user_data['pr']
 
-
+                print(user_data)
                 form = SocialSignupCompleteForm(
                             initial={
                                 'username': user_data['nck'],
