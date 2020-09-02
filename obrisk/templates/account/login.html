@@ -8,21 +8,19 @@
 {% block head %}
 <title>{% trans 'Account Login' %}</title>
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/vendor/vex.css' %}" />
-<link rel="stylesheet" type="text/css" href="{% static 'css/vendor/vex-theme-os.css' %}" />
 {% endblock head %}
 
 {% block content %}
     <div id="" class="view-wrap true-dom">
       <div class="columns is-centered">
-
+          <br/>
           <h1 class="login100-form-title "> {% trans 'Account Login' %}</h1>
           <div class="errors"></div>
 
           <!--Login Form-->
             <div class="form-wrapper">
               <!--Form-->
-                  <form class="login blur-in" id="login-form" method="POST" action="{% url 'account_login' %}">
+                  <form class="login is-hidden" id="login-form" method="POST" action="{% url 'account_login' %}">
                       {% csrf_token %}
 
                         <label for="phone_number">
@@ -62,9 +60,6 @@
                         <a class="button raised is-solid " href="{% url 'users:wechat_auth' %}">
                             <i class="fa fa-wechat"></i>Wechat Login </a>
                         </a>
-                        <a class="button raised is-solid " href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
-                            <i class="fa fa-linkedin"></i>LinkedIn Login </a>
-                        </a>
                         <a class="button raised is-solid " id="phone-login" href="#">
                             <i class="fa fa-linkedin"></i> Phone no Login </a>
                         </a>
@@ -86,136 +81,25 @@
 
 {% block extra_js %}
 
-<script src="{% static 'js/vendor/vex.combined.min.js' %}" type="text/javascript"></script>
 <script>
-  vex.defaultOptions.className = 'vex-theme-os'
-
   const login_form = document.getElementById('login-form');
   const options_wrapper = document.getElementById('options-wrapper');
   document.getElementById('phone-login').addEventListener('click', e => {
-    login_form.classList.remove('blur-in');
-    login_form.classList.add('blur-out');
+    login_form.classList.remove('is-hidden');
     options_wrapper.style.display = 'none';
     document.getElementById('id_login').focus();
   });
 
   document.getElementById('open-options').addEventListener('click', e => {
-        login_form.classList.remove('blur-out');
-        login_form.classList.add('blur-in');
+        login_form.classList.add('is-hidden');
         options_wrapper.style.display = 'flex';
   });
 
-  window.mobileUtil = (function (win, doc) {
-    var UA = navigator.userAgent,
-      isAndroid = /android|adr/gi.test(UA),
-      isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
-      isBlackBerry = /BlackBerry/i.test(UA),
-      isWindowPhone = /IEMobile/i.test(UA),
-      isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
-    return {
-      isAndroid: isAndroid,
-      isIOS: isIOS,
-      isMobile: isMobile,
-      isWeixin: /MicroMessenger/gi.test(UA),
-      isQQ: /QQ/gi.test(UA)
-    };
-  })(window, document);
-
-  const isInStandaloneMode = () =>
-    (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
-
-  //NOTE!!!
-  //This auto-login mechanism is a quick hack around to solve the problem of iOS 11 and weixin browsers
-  //There could be security risks in the future therefore not recommended as permanent fix
-  //All the variables with /stories URL represents the login url where the user will be redirected
-  //after a successful login
-  if (mobileUtil.isWeixin || mobileUtil.isIOS) {
-    if (!localStorage.getItem('auth')) {
-      //When user click on login save the auth details only after successfull ajax login then redirect
-      //else allow user to retry login
-      document.querySelector('.login-submit-btn').click(function (event) {
-        event.preventDefault();
-        const username = document.querySelector('[name="login"]').value;
-        const pass = document.querySelector('[name="password"]').value;
-
-        var ajax = new XMLHttpRequest();
-        ajax.onreadystatechange = function () {
-          if (this.readyState == 4 && this.status == 200) {
-            //This condition marks false while things are true
-            if (this.responseURL && /stories/gi.test(this.responseURL)) {
-              var auth = {
-                username: username,
-                password: pass
-              }
-              localStorage.setItem('autologintry', false);
-              localStorage.setItem('auth', JSON.stringify(auth))
-
-              if (navigator.storage && navigator.storage.persist)
-                navigator.storage.persisted().then(persistent => {
-                  if (persistent)
-                    console.log("Storage will not be cleared except by explicit user action");
-                  else
-                    console.log("Storage may be cleared by the UA under storage pressure.");
-                });
-              if (navigator.storage && navigator.storage.persist)
-                navigator.storage.persist().then(granted => {
-                  if (granted)
-                    console.log("Storage will not be cleared except by explicit user action");
-                  else
-                    console.log("Storage may be cleared by the UA under storage pressure.");
-                });
-              location.replace('/stories')
-            }
-            else {
-              vex.dialog.alert(
-                'Failed to login, please verify your username or password'
-              );
-            }
-          }
-        }
-
-        ajax.open("POST", "/auth/login/");
-        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
-      })
-
-    }
-    else {
-
-      var dialog = vex.dialog.prompt(
-        'Autologin, please wait...',
-      );
-
-      var auth = JSON.parse(localStorage.getItem('auth'));
-      var ajax = new XMLHttpRequest();
-      ajax.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          console.log('autologin');
-          if (this.responseURL && /stories/gi.test(this.responseURL)) {
-
-            location.replace('/stories')
-
-          } else {
-            //try auto login only once
-            localStorage.setItem('autologintry', true);
-            alert('Autologin failed please try manual login');
-            location.replace('/auth/login/');
-          }
-        }
-      }
-      var auth = JSON.parse(localStorage.getItem('auth'));
-      ajax.open("POST", "/auth/login/");
-      ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
-    }
-  }
-
   {% if form.errors %}
         document.querySelector(".errors").innerHTML =
-        `<small class="pass-text" style="color: #ff5f59;">The phone number/username or password you specified are not correct.</small>`
+        `<small class="error-text">The phone/username or password are not correct.</small>`
 
-        login_form.classList.remove('blur-in');
-        login_form.classList.add('blur-out');
+        login_form.classList.remove('is-hidden');
         options_wrapper.style.display = 'none';
         document.getElementById('id_login').focus();
   {% endif %}

@@ -13,9 +13,10 @@
 <!-- Main Wrapper -->
   <div class="login-wrapper form-wrapper columns">
      <!--Form-->
-          <form class="signup blur-in" id="signup_form" method="post"
+          <form class="signup is-hidden" id="signup_form" method="post"
                 action="{% url 'account_signup' %}">
                 {% csrf_token %}
+                  <br/>
                   <h1 class="text-center login100-form-title">
                         {% trans 'Account Signup' %}
                   </h1>
@@ -124,17 +125,11 @@
                   </div>
           </form>
 
-          <div id="options-wrapper"  >
+          <div id="options-wrapper" >
               <div class="options-btns" >
-
                 <a class="button raised is-solid "  href="{% url 'users:wechat_auth' %}">
                     <i class="fa fa-wechat"></i>Wechat signup</a>
                 </a>
-                <a class="button raised is-solid" 
-                    href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">
-                    <i class="fa fa-linkedin"></i>LinkedIn signup</a>
-                </a>
-
                 <a class="button raised is-solid " id="phone-login" href="#">
                     <i class="fa fa-linkedin"></i> Phone no Signup </a>
                 </a>
@@ -165,22 +160,18 @@
         }
     }
 
-
     const login_form = document.getElementById('signup_form');
     const options_wrapper = document.getElementById('options-wrapper');
     document.getElementById('phone-login').addEventListener('click', e => {
-    login_form.classList.remove('blur-in');
-    login_form.classList.add('blur-out');
+    login_form.classList.remove('is-hidden');
     options_wrapper.style.display = 'none';
     document.getElementById('id_phone_number').focus();
     });
 
     document.getElementById('open-options').addEventListener('click', e => {
-        login_form.classList.remove('blur-out');
-        login_form.classList.add('blur-in');
+        login_form.classList.add('is-hidden');
         options_wrapper.style.display = 'flex';
     });
-
 
 	const current_url = "{{ request.path }}";
     const in_china = "{{ in_china }}";
@@ -201,7 +192,7 @@
     {% endif %}
     
     {% if "username" in form.errors %}
-        $("#username").append(`<small class="pass-text red"> {{form.errors.username}} </small>`)
+        $("#username").append(`<small class="error-text"> {{form.errors.username}} </small>`)
     {% endif %}
 
 </script>
