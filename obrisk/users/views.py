@@ -673,8 +673,6 @@ def wechat_getinfo_view_test(request):
                 form = SocialSignupCompleteForm(
                             initial={
                                 'username': user_data['nck'],
-                                'province_region': user_data['pr'],
-                                'city': user_data['ct'],
                                 'gender': user_data['sx'],
                                 'wechat_openid': user_data['ui'],
                             }
