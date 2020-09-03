@@ -208,6 +208,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                   results.innerHTML="<p class='error-text'>" + data.error_message + "</p>" ;
                   signup_loading.style.display = 'none';
+                  console.log(signup_loading.style.display);
                   send_code_btn.disabled = false;
                   document.getElementById('verify-code').disabled = false;
                   unverify_form.style.display = 'none';

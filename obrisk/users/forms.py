@@ -6,6 +6,8 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core import validators
 from django.forms.widgets import Select, SelectMultiple
+from django.contrib.auth import get_user_model
+
 from allauth.account.forms import (
     SignupForm, LoginForm, PasswordField)
 from allauth.utils import (
@@ -14,7 +16,6 @@ from allauth.socialaccount.forms import (
         SignupForm as SocialSignupForm
     )
 from phonenumber_field.formfields import PhoneNumberField
-from django.contrib.auth import get_user_model
 
 from obrisk.users.wechat_config import CHINA_PROVINCES
 
@@ -88,11 +89,14 @@ class SelectWidget(Select):
             option_dict['attrs'][key] = val
         return option_dict
 
+
 class ProvinceChoiceField(forms.ChoiceField):
 
     def validate(self, value):
         if value not in CHINA_PROVINCES:
-            raise ValidationError("We currently support our services to users in China cities only!")
+            raise forms.ValidationError(
+                    "We currently support users in China mainland only!"
+                )
 
 
 class CityChoiceField(forms.ChoiceField):

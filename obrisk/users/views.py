@@ -637,7 +637,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid19',
+            'ui': 'thisisaveryuniqueopenid21',
             'sx': 1,
             'nck':'Iamwhoishere',
             'cnt':  'Chile',
@@ -649,7 +649,7 @@ def wechat_getinfo_view_test(request):
         if user.count() == 0:
             cache.set(
                 user_data['ui'],
-                'https://media.freebibleimages.org/stories/FB_ISC_Kings_Queens/overview-images/001-isc-kings-queens.jpg?1538662549', #noqa
+                'https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/homepage-bg.jpg', #noqa
                 3000)
 
             user_data['nck'] = first_name = slugify(
@@ -666,25 +666,13 @@ def wechat_getinfo_view_test(request):
             if str(user_data['cnt']) == 'China':
                 in_china=True
 
-                if user_data['pr'] in (
-                        'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-                    user_data['ct'] = user_data['pr']
-
-                form = SocialSignupCompleteForm(
-                            initial={
-                                'username': user_data['nck'],
-                                'gender': user_data['sx'],
-                                'wechat_openid': user_data['ui'],
-                            }
-                        )
-            else:
-                form = SocialSignupCompleteForm(
-                            initial={
-                                'username': user_data['nck'],
-                                'gender': user_data['sx'],
-                                'wechat_openid': user_data['ui'],
-                            }
-                        )
+            form = SocialSignupCompleteForm(
+                        initial={
+                            'username': user_data['nck'],
+                            'gender': user_data['sx'],
+                            'wechat_openid': user_data['ui'],
+                        }
+                    )
             return render(request,
                     'users/wechat-auth.html',
                     {'form': form, 'in_china': in_china}
