@@ -13,7 +13,7 @@
 <!-- Main Wrapper -->
   <div class="login-wrapper form-wrapper columns">
      <!--Form-->
-      <form class="signup is-hidden" id="signup_form" method="post"
+      <form class="signup" id="signup_form" method="post"
             action="{% url 'account_signup' %}">
             {% csrf_token %}
               <br/>
@@ -22,7 +22,7 @@
               </h1>
 
               <div id="signup-panel-1"
-                 class=" step-dot-1 process-panel-wrap is-narrow is-active">
+                 class="is-hidden step-dot-1 process-panel-wrap is-narrow is-active">
 
                         <label for="phone_number">
                             {% trans 'Phone Number' %}
@@ -125,7 +125,7 @@
               </div>
       </form>
 
-      <div id="options-wrapper" >
+      <div id="options-wrapper" class="page-popup-wrapper">
           <div class="options-btns" >
             <a class="button raised is-solid "  href="{% url 'users:wechat_auth' %}">
                 <i class="fa fa-wechat"></i>Wechat signup</a>
@@ -160,12 +160,13 @@
         }
     }
 
-    const login_form = document.getElementById('signup_form');
+    const login_form = document.getElementById('signup-panel-1');
     const options_wrapper = document.getElementById('options-wrapper');
+
     document.getElementById('phone-login').addEventListener('click', e => {
-    login_form.classList.remove('is-hidden');
-    options_wrapper.style.display = 'none';
-    document.getElementById('id_phone_number').focus();
+        login_form.classList.remove('is-hidden');
+        options_wrapper.style.display = 'none';
+        document.getElementById('id_phone_number').focus();
     });
 
     document.getElementById('open-options').addEventListener('click', e => {

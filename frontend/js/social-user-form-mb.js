@@ -18,6 +18,7 @@ const verify_code_input = document.getElementById('verify-code');
 const panel_two = document.getElementById('signup-panel-2');
 const request_unverify = document.getElementById('request-unverified-phone');
 const unverify_form = document.getElementById('unverify-form');
+const signup_loading = document.getElementById('signup-loading-popup');
 
 
 /* -------------------------------------------------------------------------- */
@@ -203,10 +204,10 @@ document.addEventListener('DOMContentLoaded', function() {
           type: "POST",
           success: function(data) {
             if (data.success == true) {
-                results.innerHTML="<p class='pass-text'> Redirecting... Please wait!</p>" ;
                 window.location.replace('/classifieds/');
             } else {
                   results.innerHTML="<p class='error-text'>" + data.error_message + "</p>" ;
+                  signup_loading.style.display = 'none';
                   send_code_btn.disabled = false;
                   document.getElementById('verify-code').disabled = false;
                   unverify_form.style.display = 'none';
@@ -245,7 +246,7 @@ document.addEventListener('DOMContentLoaded', function() {
               if (phone_number.value.toString().startsWith("+86") == false) {
                   phone_number.value = "+86" + phone_number.value;
               }
-
+              signup_loading.style.display = 'flex';
               submitForm();
               return false;
           }
@@ -268,6 +269,7 @@ document.addEventListener('DOMContentLoaded', function() {
           } else {
                document.getElementById('id_unverified_phone').value = phone_number.value;
                phone_number.value = "";
+               signup_loading.style.display = 'flex';
                submitForm();
                return false;
           }

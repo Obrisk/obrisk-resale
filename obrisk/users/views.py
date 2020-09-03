@@ -608,26 +608,13 @@ class GetInfoView(WechatViewSet):
                 if str(user_data['cnt']) == 'China':
                     in_china=True
 
-                    if user_data['pr'] in (
-                            'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
-                        user_data['ct'] = user_data['pr']
-
-                    print(user_data)
-                    form = SocialSignupCompleteForm(
-                                initial={
-                                    'username': user_data['nck'],
-                                    'gender': user_data['sx'],
-                                    'wechat_openid': user_data['ui'],
-                                }
-                            )
-                else:
-                    form = SocialSignupCompleteForm(
-                                initial={
-                                    'username': user_data['nck'],
-                                    'gender': user_data['sx'],
-                                    'wechat_openid': user_data['ui'],
-                                }
-                            )
+                form = SocialSignupCompleteForm(
+                            initial={
+                                'username': user_data['nck'],
+                                'gender': user_data['sx'],
+                                'wechat_openid': user_data['ui'],
+                            }
+                        )
                 return render(request,
                         'users/wechat-auth.html',
                         {'form': form, 'in_china': in_china}
@@ -653,9 +640,7 @@ def wechat_getinfo_view_test(request):
             'ui': 'thisisaveryuniqueopenid19',
             'sx': 1,
             'nck':'Iamwhoishere',
-            'ct': 'Hangzhou',
-            'pr': 'Zhejiang',
-            'cnt':  'China',
+            'cnt':  'Chile',
         }
 
         user = User.objects.filter(
@@ -685,7 +670,6 @@ def wechat_getinfo_view_test(request):
                         'Shanghai', 'Beijing', 'Chongqing', 'Tianjin'):
                     user_data['ct'] = user_data['pr']
 
-                print(user_data)
                 form = SocialSignupCompleteForm(
                             initial={
                                 'username': user_data['nck'],

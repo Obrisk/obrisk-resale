@@ -156,7 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	$province = $("select[name='province_region']");
 	$city = $("select[name='city']");
 
-	helpers.province(geo_data, $province, "Zhejiang");
+	helpers.province(geo_data, $province, "Select an option");
 	preselect();
 	$province.change(function () {
 		helpers.city(geo_data[$("#province").prop('selectedIndex') - 1].cities, $city, "Select an option")

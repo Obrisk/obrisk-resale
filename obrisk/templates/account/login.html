@@ -33,9 +33,9 @@
                         </label>
                         {{ form.password }}
 
-                      {% if redirect_field_value %}
+                        {% if redirect_field_value %}
                           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                      {% endif %}
+                        {% endif %}
 
                         <button type="submit"
                           class="button is-rounded is-solid accent-button raised login-submit-btn">
@@ -55,8 +55,8 @@
                         </div>
                   </form>
 
-                  <div id="options-wrapper"  >
-                      <div class="options-btns" >
+                  <div id="options-wrapper" class="page-popup-wrapper">
+                      <div class="options-btns">
                         <a class="button raised is-solid " href="{% url 'users:wechat_auth' %}">
                             <i class="fa fa-wechat"></i>Wechat Login </a>
                         </a>
