@@ -709,7 +709,9 @@ def complete_wechat_reg(request, **kwargs):
                 'error_message': "The verification code has expired or is invalid!"})
         else:
             if str(saved_code) == str(request.POST.get('verify_code')):
-                updated_request.update({'phone_number': '+86' + updated_request['phone_number']})
+                if not updated_request['phone_number'].startswith('+86'):
+                    updated_request.update(
+                            {'phone_number': '+86' + updated_request['phone_number']})
 
             else:
                 return JsonResponse({
@@ -726,6 +728,7 @@ def complete_wechat_reg(request, **kwargs):
             'error_message': "Sorry we failed to register you. Try again later!"
         })
 
+    print(updated_request)
     form = SocialSignupCompleteForm(updated_request)
 
     if form.is_valid():

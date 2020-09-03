@@ -97,7 +97,7 @@ class User(AbstractUser):
         _('Country'), max_length=100, default="China")
     points = models.IntegerField(  _('Points'), default=0)
     #Needs a country's code 
-    phone_number = PhoneNumberField (_('Phone number'))
+    phone_number = PhoneNumberField(('Phone number'))
 
     unverified_phone = PhoneNumberField (_('Unverified_phone'),
             blank=True, null=True
