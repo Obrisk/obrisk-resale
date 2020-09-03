@@ -67,7 +67,7 @@
                               </div>
                           </div>
 
-                    <div id="results" class="pass-text"> 
+                    <div id="results"> 
                     </div>
                     <input type="hidden" name="verified_no" id="verified_no">
 
@@ -107,6 +107,7 @@
                           </label>
                         {{ form.password1 }}
                     </div>
+                    <br/>
 
                     <label class="" for="province">
                         {% trans 'Province' %}
@@ -118,6 +119,7 @@
                     </label>
                     {{ form.city }}
 
+                    <br/>
                     <a id="phone-signup-submit"
                         class="button is-rounded is-solid accent-button raised is-fullwidth"
                         data-step="step-dot-4">{% trans 'Sign Up' %}

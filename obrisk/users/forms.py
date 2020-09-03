@@ -155,7 +155,7 @@ class PhoneSignupForm(SignupForm):
         required=False,
     )
 
-    unverified_phone = PhoneNumberField(
+    unverified_phone = forms.CharField(
         widget=forms.HiddenInput(),
         required=False,
     )

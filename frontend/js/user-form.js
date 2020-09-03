@@ -199,7 +199,7 @@ $(function() {
               $("#results")
                 .empty()
                 .append(
-                  "<p class='text-error '>" + data.error_message + "</p>"
+                  "<p class='error-text'>" + data.error_message + "</p>"
                 );
               $("#send-code").attr("disabled", false);
               code_counter = code_counter + 1;

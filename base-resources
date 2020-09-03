@@ -1,3 +1,11 @@
+SCRIPT TO DEBUG IN MOBILE DEVICES
+<script src="{% static 'js/vendor/vconsole.min.js' %}"></script>
+<script>
+var vConsole = new VConsole();
+</script>
+
+
+
 BEFORE AJAX
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 

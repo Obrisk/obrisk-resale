@@ -133,24 +133,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
     //Set the Province and city name defaults.
 	function preselect() {
-		if ( in_china ) {
-            if (!document.getElementById('city').value && 
-                !document.getElementById('province').value) {
-                    $(`#province option[value=${province}]`).attr('selected', 'selected');
-                    helpers.city(geo_data[document.getElementById("province").selectedIndex - 1].cities, $city, "Select an option")
-                    $(`#city option[value=${city}]`).attr('selected', 'selected');
-            }
-		} else {
-			province = "#province option[value=" + $("input[name='province_region']").val() + "]";
-			city = "#city option[value=" + $("input[name='city']").val() + "]";
-			$(province).attr('selected', 'selected');
-            if (document.getElementById("province").value == '') {
-                helpers.city('', $city, "Select an option");
-            } else {
-                helpers.city(geo_data[document.getElementById("province").selectedIndex - 1].cities, $city, "Select an option");
-            }
-			$(city).attr('selected', 'selected');
-		}
+        province = "#province option[value=" + $("input[name='province_region']").val() + "]";
+        city = "#city option[value=" + $("input[name='city']").val() + "]";
+        $(province).attr('selected', 'selected');
+        if (document.getElementById("province").value == '') {
+            helpers.city('', $city, "Select an option");
+        } else {
+            helpers.city(geo_data[document.getElementById("province").selectedIndex - 1].cities, $city, "Select an option");
+        }
+        $(city).attr('selected', 'selected');
 	}
     
 	$province = $("select[name='province_region']");

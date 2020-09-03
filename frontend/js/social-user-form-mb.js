@@ -106,12 +106,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
                     if (timeout == 30 && verify_code_input.value == "") {
                         request_unverify.style.cssText += ';display:block !important;';
-                      //NOT working: r.style.display = null, block;
                     }
 
                 } else {
                     send_code_btn.textContent = "Resend Code";
                     send_code_btn.disabled = false;
+                    verify_code_input.disabled = false;
+                    
                 }
 
               }
@@ -208,8 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                   results.innerHTML="<p class='error-text'>" + data.error_message + "</p>" ;
                   signup_loading.style.display = 'none';
-                  console.log(signup_loading.style.display);
                   send_code_btn.disabled = false;
+                  verify_code_input.disabled = false;
                   document.getElementById('verify-code').disabled = false;
                   unverify_form.style.display = 'none';
                   panel_two.classList.remove('blur-in');

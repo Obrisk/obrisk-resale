@@ -20,26 +20,6 @@
     margin: auto 10%;
 }
 
-.custom-select {
-  -webkit-appearance: none;
-  display: block;
-  width: 100%;
-  font-family: inherit;
-  padding-left: 0px;
-  padding-right: 26px;
-  padding-bottom: 8px;
-  background-color: transparent;
-  box-shadow: rgba(172, 181, 191, 0.3) 0px 1px;
-  border-radius: 0px;
-  border-width: initial;
-  border-style: none;
-  border-color: initial;
-  border-image: initial;
-  transition: all 0.2s ease 0s;
-  outline: none;
-  height: auto;
-}
-
 input, select {
   line-height: 28px;
   display: block;
@@ -235,12 +215,12 @@ label {
 }
 
 .pass-text, .pass-percent {
-    color: #002bf0;
+    color: #00b300;
     font-weight: 400;
 }
 
 .error-text {
-  color: $red;
+  color: #cf0223;
 }
 
 .pass-percent {

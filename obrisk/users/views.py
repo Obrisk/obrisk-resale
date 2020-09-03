@@ -637,10 +637,10 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid21',
+            'ui': 'thisisaveryuniqueopenid22',
             'sx': 1,
             'nck':'Iamwhoishere',
-            'cnt':  'Chile',
+            'cnt':  'China',
         }
 
         user = User.objects.filter(
@@ -701,14 +701,21 @@ def complete_wechat_reg(request, **kwargs):
     updated_request = request.POST.copy()
     if request.POST.get('phone_number'):
         try:
-            saved_code = cache.get(str(request.POST.get('phone_number')))
+            saved_code = cache.get(
+                    str(request.POST.get('phone_number')).strip('+86'))
         except:
             return JsonResponse({
+                'success': False,
                 'error_message': "The verification code has expired or is invalid!"})
         else:
             if str(saved_code) == str(request.POST.get('verify_code')):
-
                 updated_request.update({'phone_number': '+86' + updated_request['phone_number']})
+
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error_message': "The verification code is incorrect"
+                })
 
     elif request.POST.get('wechat_id'):
         updated_request.update({'unverified_phone': '+86' + updated_request['unverified_phone']})
