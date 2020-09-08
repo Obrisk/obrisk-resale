@@ -136,16 +136,10 @@
           {% if user.is_authenticated %}
 
             {% if classified.phone_number %}
-                  <small class="seller-contacts w-75"><strong>Seller's contacts :</strong>
+                  <small class="seller-contacts"><strong>Seller's contacts:</strong>
                     <div class="btn-group">
-                      <a class="btn btn-primary btn-email btn-dark " href="tel:{{ classified.phone_number }}">📞
-                        {{ classified.phone_number }}</a>
-                      <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
-                        data-placement="bottom" data-copy=" {{ classified.phone_number }}" title=""
-                        data-original-title="Copy to clipboard">
-                        📋
-                      </button>
-                    </div>
+                      <a class="button is-solid accent-button btn-email" href="tel:{{ classified.phone_number }}">📞
+                        CALL SELLER</a> </div>
                     <br />
                   </small>
 
@@ -155,7 +149,7 @@
                     <div class="btn-group">
                       <a class="btn btn-primary btn-email btn-dark " href="#"><i class="fa fa-weixin"></i>
                         {{ classified.wechat_id }}</a>
-                      <button type="button" class="btn btn-copy js-tooltip js-copy" data-toggle="tooltip"
+                      <button type="button" class="button is-solid accent-button btn-copy js-tooltip js-copy" data-toggle="tooltip"
                         data-placement="bottom" data-copy="{{ classified.wechat_id }}" title=""
                         data-original-title="Copy to clipboard">
                         📋

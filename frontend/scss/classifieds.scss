@@ -503,3 +503,12 @@ a {
    display: flex;
    justify-content: space-between;
  }
+
+ .btn-group {
+     display: flex;
+     justify-content: space-around;
+ }
+
+ .btn-email {
+     width: 70%;
+ }
