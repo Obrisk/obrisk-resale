@@ -50,6 +50,7 @@ $(function() {
       return true;
     }
   };
+
   function loadMessages(chat) {
     var chatURL = chat;
     //Load messages
@@ -215,7 +216,6 @@ $(function() {
 
   //This will only run once and then delete the cookies
   if (getCookie("active-chat")) {
-    jQuery.noConflict();
     $("#chat-window").modal("show");
     loadMessages(getCookie("active-chat"));
     //Clear the cookies obtained from the classified details
