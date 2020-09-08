@@ -5,8 +5,7 @@
 {# block head_title %}{% trans "Sign Out" %}{% endblock #}
 
 {% block content %}
-<div class="container">
-  <h1>{% trans "Sign Out" %}</h1>
+  <h1 class="title is-5">{% trans "Sign Out" %}</h1>
 
   <p>{% trans 'Are you sure you want to sign out?' %}</p>
 
@@ -15,8 +14,8 @@
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
-    <button id="confirmlogout" class="btn btn-dark" type="submit">{% trans 'Sign Out' %}</button>
-    <button class="btn btn-danger"> 
+    <button id="confirmlogout" class="button accent-button" type="submit">{% trans 'Sign Out' %}</button>
+    <button class="button red-button"> 
         <a class="border-0" href="javascript:history.back()">
             {% trans 'Cancel' %}
         </a> 
@@ -28,11 +27,10 @@
 {% block extra_js %}
 
   <script>
-    $("#confirmlogout").click(function () {
+    document.querySelector("#confirmlogout").addEventListener('click', function () {
       localStorage.setItem('auth', "");
     })
   </script>
 </div>
-
 
 {% endblock extra_js %}

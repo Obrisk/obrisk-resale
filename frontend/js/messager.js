@@ -1,4 +1,5 @@
 //let audio = new Audio("/static/sound/chime.mp3");
+const bottomNav = document.getElementById('navbarBottom');
 
 function scrollMessages() {
   /* Set focus on the input box from the form, and rolls to show the
@@ -58,7 +59,7 @@ $(function() {
       type: "get",
       url: chatURL,
       success: function(response) {
-        var activeUserThumbnail =
+        const activeUserThumbnail =
           response.active_thumbnail == null
             ? "/static/img/user.png"
             : response.active_thumbnail;
@@ -218,12 +219,14 @@ $(function() {
   if (getCookie("active-chat")) {
     $("#chat-window").modal("show");
     loadMessages(getCookie("active-chat"));
+    bottomNav.style.display = "none";
     //Clear the cookies obtained from the classified details
     deleteCookie("active-chat");
   }
 
   $(".open-chat").click(function() {
     loadMessages($(this).data("url"));
+    bottomNav.style.display = "none";
   });
 
   $(".delete").click(function(e) {
@@ -233,7 +236,9 @@ $(function() {
     $(".username").html("");
     $("body").removeClass("modal-open");
     $("body").removeClass("is-frozen");
+    bottomNav.style.display = "block";
   });
+
   function setUserOnlineOffline(username, status) {
     /* This function enables the client to switch the user connection
         status, allowing to show if an user is connected or not.

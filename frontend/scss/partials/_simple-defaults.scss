@@ -1,7 +1,8 @@
 $accent: #3EC4E2; /* Obrisk's azure blue */
 $opt-accent: #81c1ff;  
+$white: #fff;
+$red: #FF7273;
 
-//Accent button
 .accent-button {
     background: $accent;
     border-color: $accent;
@@ -10,4 +11,10 @@ $opt-accent: #81c1ff;
 .opt-accent-button {
     background: $opt-accent;
     border-color: $opt-accent;
+}
+
+.red-button {
+    background: $red;
+    border-color: $red;
+    color: $white;
 }
