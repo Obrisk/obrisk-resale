@@ -9,41 +9,43 @@
 {% endblock head %}
 
 {% block content %}
-<button onclick="window.history.go(-1); return false;" class="d-sm-block d-md-none btn btn-dark"> <i
-    class="fa fa-chevron-left" aria-hidden="true"></i></button>
 
-<div class="col-lg-8 m-auto">
-  <div class="row profile">
-    <div class="col-md-4 user-profile d-flex flex-column align-items-center">
-      <h1>{{ user.username|title }}</h1>
-      {% if user.name %}<p class="lead">{{ user.name }}</p>{% endif %}
+<div class="column profile m-2">
+  <div class="user-profile">
+      <h1 class="title is-5">{{ user.username|title }}</h1>
+
+      {% if user.name %}
+          <p class="lead">{{ user.name }}</p>
+      {% endif %}
+
       {% if object.picture %}
-      <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
-        style="width:250px;height:250px;border-radius: 50%;" id="avatar" class="mr-4">
+          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
+            style="width:250px;height:250px;border-radius: 50%;" id="avatar" class="mr-4">
       {% else %}
-      <img id="avatar" src="{% static 'img/user.png' %}" height="250px" class="mr-4"
-        style="width:250px;height:250px;border-radius: 50%;" alt="No Profile Picture" />
+          <img id="avatar" src="{% static 'img/user.png' %}" height="250px" class="mr-4"
+            style="width:250px;height:250px;border-radius: 50%;" alt="No Profile Picture" />
       {% endif %}
 
       <input type="file" name="temp_pic" onchange="uploadPreview(this)" accept="image/*" id="temp_pic">
-      <p class="mt-3">
-        <button class="btn btn-dark" onclick="document.getElementById('temp_pic').click();"> Choose pic </button>
-      </p>
-      <p class="mt-2"> <button class="btn btn-dark" id="startUpload" type="button"> Save pic</button> </p>
 
-      <div id="statusBar" class="statusBar  flex-column align-items-center"
+      <div class="grp-btns" >
+        <button class="button is-solid opt-accent-button" onclick="document.getElementById('temp_pic').click();"> Choose pic </button>
+        <button class="button accent-button" id="startUpload" type="button"> Save pic</button>
+      </div>
+
+      <div id="statusBar" class="statusBar"
         style="display:none; font-size:14px; font-weight:bold;">
         <div class="total-progress">
-          <div id="totalProgressBar" class="total-progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0"
-            aria-valuemax="100">
+          <div id="totalProgressBar" class="total-progress-bar"
+             role="progressbar" aria-valuenow="0" aria-valuemin="0"
+             aria-valuemax="100">
           </div>
         </div>
       </div>
 
     </div>
 
-    <div class="col-md-8">
-      <form enctype="multipart/form-data" class="update form-horizontal" method="post"
+      <form enctype="multipart/form-data" class="update form-horizontal m-3" method="post"
         action="{% url 'users:update' %}">
         <small> <strong> All fields are optional </strong> </small>
         {% csrf_token %}
@@ -63,21 +65,13 @@
           <select class="custom-select" id="city" name="city"> </select>
         </div>
 
-        <div class="control-group">
-          <div class="form-group d-flex justify-content-center">
-            <div class="controls">
-              <button type="submit" id="update-profile" class="btn btn-dark">{% trans 'Save Profile' %}</button>
-
-            </div>
-            <div class="controls ml-4 ">
-              <a href="/users/{{ user.username}}/" class="btn btn-danger">Cancel</a>
-            </div>
-          </div>
-
+        <div class="grp-btns controls mt-3">
+          <button type="submit" id="update-profile" class="button accent-button">{% trans 'Save Profile' %}</button>
+          <a href="/users/{{ user.username}}/" class="button red-button">Cancel</a>
         </div>
+
       </form>
     </div>
-  </div>
 </div>
 {% csrf_token %}
 
@@ -92,8 +86,12 @@
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth
 
 </script>
+
+<link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/vendor/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
 <script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
-<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/profile-uploader.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}
