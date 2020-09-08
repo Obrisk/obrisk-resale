@@ -4,81 +4,50 @@
 {% block title %}{{ object.username }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/user_profile.css' %}?v=200719" rel="stylesheet">
+<link href="{% static 'css/user_profile.css' %}" rel="stylesheet">
 
 {% endblock head %}
 
 {% block content %}
-<a href="{% url 'stories:list' %}" class="d-sm-block d-md-none btn btn-dark"> <i class="fa fa-chevron-left"
-    aria-hidden="true"></i></a>
 
-<div class="col-md-8 m-auto">
-  <div class="media user-profile profile-header d-flex flex-column">
+<div>
+  <div class="media profile profile-header m-2">
     {% if object.picture %}
-    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
-      class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid profile-pic" id="pic">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
+          class="mb-3 profile-header-avatar img-fluid profile-pic" id="pic">
     {% else %}
-    <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
-    <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
+        <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
+        <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
     {% endif %}
 
-    <div class="media-body">
-      <h1 class="mt-0">{{ object.username|title }}</h1>
+    <h1 class="media-body mt-0">{{ object.username|title }}</h1>
 
-    </div>
     <div class="profile-points">
       <div class="point-label"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</div>
       <div class="points"> {{ object.points }} </div>
     </div>
 
-    <div>
       {% if request.user.username == object.username %}
-      <div class="d-flex mb-2">
-        <a class="btn btn-dark m-auto" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
-      </div>
+          <div class="is-flex mb-2">
+            <a class="button accent-button m-2" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+          </div>
 
-      <div class="d-flex ">
-        {%if object.is_official %}
-        <a class="button has-min-width mr-3 "
-          href="{% url 'connections:friendship_followers'  %}">{% trans 'Followers🤝' %}</a>
-        {% else %}
-        <a class="button has-min-width mr-3 "
-          href="{% url 'connections:friendship_following' %}">{% trans 'Following' %}</a>
-        {% endif %}
-
-        <a class=" button has-min-width "
-          href="{% url 'connections:friendship_view_friends' %}">{% trans 'Connects' %}</a>
-      </div>
       {% else %}
-      <div class="d-flex mb-2">
-
-
-        {% if object in friends %}
-            <a class="button has-min-width m-auto go-to-chat"
-              data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
-        {% elif object in pending %}
-            <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
-        {% elif object in pended%}
-            {{object.username|title }} Wants to connect with you 🔌
-
-            <a href="{% url 'connections:friendship_request_list' %}">view all requests</a>
-        {% else %}
-            <a class="connect-btn button has-min-width m-auto" href="#">{% trans '➕Connect' %}</a>
-        {% endif %}
-      </div>
-
-      <div class="d-flex mb-2">
-        {% if object in following %}
-            <a class="btn btn-outline-danger m-auto"
-              href="{% url 'connections:follower_remove' object.username  %}">{% trans 'Unfollow' %}</a>
-        {% else %}
-            {% if object.is_official %}
-                <a class="follow-btn button has-min-width m-auto" href="#">{% trans '🔌Follow' %}</a>
+          <div class="is-flex mb-2">
+            {% if object in friends %}
+                <a class="button accent-button m-2 go-to-chat"
+                  data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
+            {% elif object in pending %}
+                <a class="button accent-button m-2" href="#">{% trans 'Pending' %}</a>
+            {% elif object in pended%}
+                {{object.username|title }} Wants to connect with you 🔌
+                <a class="button accent-button m-2" 
+                    href="{% url 'connections:friendship_request_list' %}">view all requests</a>
+            {% else %}
+                <a class="connect-btn button accent-button m-2" href="#">{% trans '➕Connect' %}</a>
             {% endif %}
-        {% endif %}
-      </div>
+          </div>
       {% endif %}
-    </div>
   </div>
 
   <div class="container profile-wrapper">
@@ -140,7 +109,12 @@
 
 {% block extra_js %}
 
+<link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
+
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 <script>
+  const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   const username = "{{ object.username }}";
 
   $(".connect-btn").click(function (e) {
@@ -195,7 +169,6 @@
       }
     });
   });
-
 
   //setcookies to open chat window
   var setCookie = function (name, value, days) {

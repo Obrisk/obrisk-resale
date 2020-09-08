@@ -27,6 +27,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.db import IntegrityError
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.utils.decorators import method_decorator
 from django.http import (
     HttpResponseServerError,
     HttpResponseRedirect,
@@ -251,6 +253,7 @@ def phone_password_reset(request):
         return render(request, 'account/phone_password_reset.html', {'form': form})
 
 
+@method_decorator(ensure_csrf_cookie, name="get")
 class UserDetailView(LoginRequiredMixin, DetailView):
     model = User
     # These next two lines tell the view to index lookups by username
@@ -266,20 +269,14 @@ class UserDetailView(LoginRequiredMixin, DetailView):
         user = get_object_or_404(user_model, pk=self.object.pk)
         """
         user = self.request.user
-        friends = Friend.objects.friends(user)
-        following = Follow.objects.following(user)
-        followers = Follow.objects.followers(user)
-        # pending = FriendshipRequest.objects.filter(from_user=user)
+        #following = Follow.objects.following(user)
+        #followers = Follow.objects.followers(user)
         sent_requests = Friend.objects.sent_requests(user)
         in_coming_reqst = Friend.objects.requests(user)
-        pending = [u.to_user for u in sent_requests]
-        pended = [u.from_user for u in in_coming_reqst]
 
-        context['friends'] = friends
-        context['followers'] = followers
-        context['following'] = following
-        context['pending'] = pending
-        context['pended'] = pended
+        context['pending'] = [u.to_user for u in sent_requests]
+        context['pended'] = [u.from_user for u in in_coming_reqst]
+        context['friends'] = Friend.objects.friends(user)
 
         return context
 
