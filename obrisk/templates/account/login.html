@@ -61,7 +61,7 @@
                             <i class="fa fa-wechat"></i>Wechat Login </a>
                         </a>
                         <a class="button raised is-solid " id="phone-login" href="#">
-                            <i class="fa fa-linkedin"></i> Phone no Login </a>
+                            <i class="fa fa-linkedin"></i> Phone/Username Login </a>
                         </a>
                         <a href="{% url 'account_signup' %}"
                           class="button is-solid dark-grey-button raised">
@@ -72,6 +72,9 @@
                           data-help="<a href='mailto:support@obrisk.com'>{% trans 'Email us' %}</a> {% trans 'Or add WechatID:Obrisk' %}">
                            {% trans 'Need help?' %}
                         </a>
+                        <br/>
+                        <br/>
+                        <p id="login-loading" class="is-hidden"> </p>
                      </div>
                   </div>
             </div>
@@ -82,12 +85,20 @@
 {% block extra_js %}
 
 <script>
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
   const login_form = document.getElementById('login-form');
   const options_wrapper = document.getElementById('options-wrapper');
+  const lg_loading = document.getElementById('login-loading');
+  const login_errors = document.querySelector(".errors");
+
+  function phoneLogin() {
+        login_form.classList.remove('is-hidden');
+        options_wrapper.style.display = 'none';
+        document.getElementById('id_login').focus();
+  }
+
   document.getElementById('phone-login').addEventListener('click', e => {
-    login_form.classList.remove('is-hidden');
-    options_wrapper.style.display = 'none';
-    document.getElementById('id_login').focus();
+      phoneLogin();
   });
 
   document.getElementById('open-options').addEventListener('click', e => {
@@ -95,13 +106,126 @@
         options_wrapper.style.display = 'flex';
   });
 
-  {% if form.errors %}
-        document.querySelector(".errors").innerHTML =
-        `<small class="error-text">The phone/username or password are not correct.</small>`
+  window.mobileUtil = (function (win, doc) {
+        const UA = navigator.userAgent,
+          isAndroid = /android|adr/gi.test(UA),
+          isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
+          isBlackBerry = /BlackBerry/i.test(UA),
+          isWindowPhone = /IEMobile/i.test(UA),
+          isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
 
-        login_form.classList.remove('is-hidden');
-        options_wrapper.style.display = 'none';
-        document.getElementById('id_login').focus();
+        return {
+          isAndroid: isAndroid,
+          isIOS: isIOS,
+          isMobile: isMobile,
+          isWeixin: /MicroMessenger/gi.test(UA),
+          isQQ: /QQ/gi.test(UA)
+        };
+  })(window, document);
+
+  const isInStandaloneMode = () =>
+    (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
+
+  //This auto-login mechanism is a quick hack to solve the problem of iOS 11 and weixin browser
+  //Variables with /stories URL are the login url, the user will be redirected
+  if (mobileUtil.isWeixin || mobileUtil.isIOS) {
+
+    if (!localStorage.getItem('auth')) {
+          //When user click on login save the auth details only after successfull ajax login then redirect
+          //else allow user to retry login
+          document.querySelector('.login-submit-btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            const username = document.querySelector('[name="login"]').value;
+            const pass = document.querySelector('[name="password"]').value;
+
+            const ajax = new XMLHttpRequest();
+            ajax.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                  //This condition marks false while things are true
+                  if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+                      const auth = {
+                        username: username,
+                        password: pass
+                      }
+
+                      localStorage.setItem('autologintry', false);
+                      localStorage.setItem('auth', JSON.stringify(auth))
+
+                    if (navigator.storage && navigator.storage.persist) {
+                        navigator.storage.persisted();
+                        navigator.storage.persist();
+                    }
+                    location.replace('/classifieds');
+
+                  } else {
+                    login_errors.innerHTML =
+                        `<small class="error-text">The phone/username or password are not correct.</small>`
+                }
+              }
+            }
+
+            ajax.open("POST", "/auth/login/");
+            ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
+
+          })
+
+    } else {
+        lg_loading.innerHTML = 
+          `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="24px" height="30px" viewBox="0 0 24 30" 
+            style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <rect x="0" y="0" width="4" height="10" fill="#333">
+              <animateTransform attributeType="xml"
+                attributeName="transform" type="translate"
+                values="0 0; 0 20; 0 0"
+                begin="0" dur="0.6s" repeatCount="indefinite" />
+            </rect>
+            <rect x="10" y="0" width="4" height="10" fill="#333">
+              <animateTransform attributeType="xml"
+                attributeName="transform" type="translate"
+                values="0 0; 0 20; 0 0"
+                begin="0.2s" dur="0.6s" repeatCount="indefinite" />
+            </rect>
+            <rect x="20" y="0" width="4" height="10" fill="#333">
+              <animateTransform attributeType="xml"
+                attributeName="transform" type="translate"
+                values="0 0; 0 20; 0 0"
+                begin="0.4s" dur="0.6s" repeatCount="indefinite" />
+            </rect>
+          </svg>
+        Autologin</p>`;
+
+        const auth = JSON.parse(localStorage.getItem('auth'));
+        const ajax = new XMLHttpRequest();
+
+        ajax.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              if (this.responseURL && /stories/gi.test(this.responseURL)) {
+                  location.replace('/classifieds')
+
+              } else {
+                localStorage.setItem('autologintry', true);
+                phoneLogin();
+                login_errors.innerHTML =
+                    `<small class="error-text">The phone/username or password are not correct.</small>`
+                location.replace('/auth/login/');
+              }
+            }
+        }
+
+        ajax.open("POST", "/auth/login/");
+        ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+        ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
+    }
+
+  }
+
+  {% if form.errors %}
+        phoneLogin();
+        login_errors.innerHTML =
+            `<small class="error-text">The phone/username or password are not correct.</small>`
   {% endif %}
 
 </script>

@@ -431,3 +431,8 @@ label {
         filter: blur(0px);
     }
 }
+
+svg path,
+svg rect {
+  fill: $accent;
+}
