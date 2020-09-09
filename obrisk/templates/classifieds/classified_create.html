@@ -130,7 +130,7 @@
                 </div>
 
                 <div class="buttons img-pick-wrapper">
-                  <button type="button" class="button is-solid opt-accent-button raised"
+                  <button id="cancel-classified" type="button" class="button is-solid opt-accent-button raised"
                     onclick="javascript:history.back()"> 
                     {% trans 'Cancel' %}
                   </button>
@@ -140,7 +140,7 @@
                         class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
                   {% else %}
                       <button id="create-btn" type="button" onclick="window.location.href='/auth/login/'"
-                        class="button is-solid accent-button raised"> 
+                        class="login-to-post button is-solid accent-button raised"> 
                           {% trans 'Login & Post ' %}
                      </button>
                   {% endif %}
@@ -150,7 +150,6 @@
 
   </form>
   {{ form.media }}
-
 
    <div id="error-modal" class="modal fade">
       <div class="modal-dialog">
@@ -180,7 +179,6 @@
   const title_id = "{{ form.title.auto_id }}";
   const details_id = "{{ form.details.auto_id }}";
   const address = "{{ form.address.auto_id }}";
-  //const tags = "{{ form.tags.auto_id }}";
 </script>
 
 <link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>

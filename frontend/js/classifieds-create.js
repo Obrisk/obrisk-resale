@@ -15,6 +15,14 @@ function printError(msg, target) {
 
 $(function() {
 
+  const new_classified = JSON.parse(localStorage.getItem('new-classified'));
+
+  if (new_classified) {
+      document.getElementById('id_title').value = new_classified.title;
+      document.getElementById('id_details').value = new_classified.details;
+      document.getElementById('id_price').value = new_classified.price;
+  }
+
   $("body").on("uploadComplete", function(event) {
     //Todo check if images where uploaded or empty
     $("input[name='status']").val("A");
@@ -81,5 +89,16 @@ $(function() {
         "#classified-form"
       );
     }
+  });
+  
+  if ( user === '' ) {
+      document.getElementsByClassName('login-to-post')[0].addEventListener('click', function () {
+          let draft_post = Object.fromEntries(new FormData(document.querySelector("form")));
+          localStorage.setItem('new-classified', JSON.stringify(draft_post));
+      });
+  }
+
+  document.getElementById('cancel-classified').addEventListener('click', function () {
+      localStorage.removeItem('new-classified');
   });
 });

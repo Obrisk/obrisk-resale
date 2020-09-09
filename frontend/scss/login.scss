@@ -432,7 +432,9 @@ label {
     }
 }
 
-svg path,
-svg rect {
-  fill: $accent;
+#login-loading {
+    svg path,
+    svg rect {
+      fill: $accent;
+    }
 }

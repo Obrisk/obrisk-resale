@@ -126,8 +126,8 @@
   const isInStandaloneMode = () =>
     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
 
-  //This auto-login mechanism is a quick hack to solve the problem of iOS 11 and weixin browser
-  //Variables with /stories URL are the login url, the user will be redirected
+  //Auto-login is a quick hack to solve the problem of iOS and weixin browser
+  //Variables with /classifieds URL are login url
   if (mobileUtil.isWeixin || mobileUtil.isIOS) {
 
     if (!localStorage.getItem('auth')) {
@@ -202,7 +202,7 @@
 
         ajax.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-              if (this.responseURL && /stories/gi.test(this.responseURL)) {
+              if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
                   location.replace('/classifieds')
 
               } else {

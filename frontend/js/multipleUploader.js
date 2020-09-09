@@ -14,10 +14,13 @@ var uploader = {
 };
 
 //Upload instance object
-var Buffer = OSS.Buffer;
-var STS = OSS.STS;
-var MaxImageSize = 13000000;
-var MaxVideoSize = 200000000;
+const Buffer = OSS.Buffer;
+const STS = OSS.STS;
+const obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
+const MaxImageSize = 13000000;
+const MaxVideoSize = 200000000;
+const s3Upload = false;
+const aliyunUpload = true;
 
 var images = "";
 var videos = "";
@@ -25,13 +28,16 @@ var img_error; //Records the errors happened during upload.
 var client;
 var imgClient; //If we'll  be checking the file size.
 var ossUpload = "";
-var obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
+var files = ""; 
+//The length of the file already in the plugin, append
+var curIndex = 0;
+var NumberOfSelectedFiles = 0;
 var hasErrors = false;
 var retryCount = 0;
 var retryCountMax = 5;
 var TotalFilesMaxSize = 8;
-const s3Upload = false;
-const aliyunUpload = true;
+
+
 OssUpload.prototype = {
   constructor: OssUpload,
   // Binding event
@@ -48,11 +54,10 @@ OssUpload.prototype = {
     $("#image-file").change(function(e) {
       $("#wrapper .container").css("display", "block");
       $(".submit-button").removeClass("is-disabled");
-      //console.log(e)
-      var files = e.target.files;
-      var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
-      var NumberOfSelectedFiles = files.length;
-      //console.log("total files selected " + NumberOfSelectedFiles);
+      files = e.target.files;
+      //The length of the file already in the plugin, append
+      curIndex = uploader.fileList.length;
+      NumberOfSelectedFiles = files.length;
       var file = null;
       $("#uploader .placeholder").hide();
 
@@ -138,10 +143,9 @@ OssUpload.prototype = {
       $("#wrapper .container").css("display", "block");
       $(".submit-button").removeClass("is-disabled");
       //console.log(e)
-      var files = e.target.files;
-      var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
-      var NumberOfSelectedFiles = files.length;
-      //console.log("total files selected " + NumberOfSelectedFiles);
+      files = e.target.files;
+      curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
+      NumberOfSelectedFiles = files.length;
       var file = null;
       $("#uploader .placeholder").hide();
 
