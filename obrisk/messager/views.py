@@ -162,8 +162,10 @@ def messagesView(request, username):
             conv.messages.all().update(unread=False)
             if cache.get(f'msg_{request.user.pk}') is not None:
                 values = list(cache.get(f'msg_{request.user.pk}'))
-                values = values.remove(key)
-                cache.set(f'msg_{request.user.pk}', values, None)
+
+                if key in values:
+                    values = values.remove(key)
+                    cache.set(f'msg_{request.user.pk}', values, None)
 
             return JsonResponse({
                 'msgs': msgs_data,
