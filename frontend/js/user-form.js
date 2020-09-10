@@ -1,16 +1,10 @@
 /* -------------------------------------------------------------------------- */
 /*                               utils and libs                               */
 /* -------------------------------------------------------------------------- */
-
 //Print error message
 function printError(msg) {
-  template = `
-        <div class="notification is-danger" role="alert">
-            <button type="button" class="delete close-dj-messages"></button>
-          ${msg}
-        </div>
-        `;
-  $("#signup-panel-2").prepend(template);
+  document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
+  document.getElementById('notf-msg').innerHTML = msg;
 }
 
 var verify_counter = 0;
@@ -25,6 +19,13 @@ $(function() {
     var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
     return re.test(str);
   }
+
+  document.querySelectorAll('.close-dj-messages').forEach(item => {
+    item.addEventListener('click', e => {
+        e.currentTarget.parentElement.classList.add('is-hidden');
+        e.stopPropagation();
+    });
+  });
 
   $("#send-code").click(function(event) {
     if (!$("#id_phone_number").val()) {
@@ -105,7 +106,7 @@ $(function() {
               if (verify_counter >= 7) {
                 $("#send-code").attr("disabled", true);
                 printError(
-                  "Maximum number of sending SMS has reached, Try again later!"
+                  "Max number of sending SMS has reached, Try again later!"
                 );
               }
 
@@ -207,7 +208,7 @@ $(function() {
               if (code_counter >= 5) {
                 $("#phone-verify").attr("disabled", true);
                 printError(
-                  "Maximum number of code retrial has reached, you can't retry anymore!"
+                  "Maximum number of code retrial, you can't retry anymore!"
                 );
               }
             }
@@ -351,6 +352,7 @@ $(function() {
       $("#signup_form").submit();
     }
   });
+
 });
 
 /* -------------------------------------------------------------------------- */
@@ -545,3 +547,4 @@ $("#id_password1").on("password.text", (e, text, score) => {
     $(".process-button").addClass("is-hidden");
   }
 });
+
