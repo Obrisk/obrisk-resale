@@ -30,8 +30,12 @@
 
                         <p class="title is-5"> {% trans 'Wechat signup verification' %}</p>
 
-
                         <div class="form-panel form-panel-top">
+                            <div class="notification is-danger is-hidden" role="alert">
+                                <button type="button" class="delete close-dj-messages"></button>
+                                <p id="notf-msg"></p>
+                            </div>
+
                             <div id="username">
                                 <label for="username">
                                     {% trans 'Username' %}
@@ -116,11 +120,19 @@
                                 </div>
 
                                 <div></div>
+
+                              <div id="results" style="font-weight:bold;"> </div>
+
+                              <a id='request-unverified-phone'> Can't verify? </a>
+
+                              <br/>
+                              <button id="submit-code" type="button"  
+                                   class="button accent-button raised is-rounded is-fullwidth"> {% trans 'Submit' %} 
+                              </button>
+
+                              <!-- close is-hidden for the code -->
                           </div>
 
-                          <div id="results" style="font-weight:bold;"> </div>
-
-                          <a id='request-unverified-phone'> Can't verify? </a>
 
                       <!--Close the signup-panel-2 -->
                       </div>

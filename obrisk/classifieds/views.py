@@ -41,7 +41,7 @@ TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 
 def set_popular_tags():
-    popular_tags = Classified.objects.get_counted_tags()[:9]
+    popular_tags = Classified.objects.get_counted_tags()[:10]
 
     cache.set('popular_tags_mb',
                 list(popular_tags), timeout=TAGS_TIMEOUT
@@ -68,7 +68,7 @@ def classified_list(request, tag_slug=None):
     popular_tags = cache.get('popular_tags_mb')
 
     if popular_tags is None:
-        popular_tags = Classified.objects.get_counted_tags()[:9]
+        popular_tags = Classified.objects.get_counted_tags()[:10]
         cache.set('popular_tags_mb',
                     list(popular_tags), timeout=TAGS_TIMEOUT
                 )

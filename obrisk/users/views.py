@@ -634,7 +634,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid22',
+            'ui': 'thisisaveryuniqueopenid26',
             'sx': 1,
             'nck':'Iamwhoishere',
             'cnt':  'China',
@@ -725,7 +725,6 @@ def complete_wechat_reg(request, **kwargs):
             'error_message': "Sorry we failed to register you. Try again later!"
         })
 
-    print(updated_request)
     form = SocialSignupCompleteForm(updated_request)
 
     if form.is_valid():

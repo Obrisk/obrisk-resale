@@ -2,25 +2,26 @@
 /*                               utils and libs                               */
 /* -------------------------------------------------------------------------- */
 
-//Print error message
-function printError(msg) {
-  template = `
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-          ${msg}
-          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        `;
-  $(".form-panel").prepend(template);
-}
-
 var verify_counter = 0;
 var code_counter = 0;
 
 var phone_no;
 
+//Print error message
+function printError(msg) {
+  document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
+  document.getElementById('notf-msg').innerHTML = msg;
+}
+
 $(function() {
+
+  document.querySelectorAll('.close-dj-messages').forEach(item => {
+    item.addEventListener('click', e => {
+        e.currentTarget.parentElement.classList.add('is-hidden');
+        e.stopPropagation();
+    });
+  });
+
   $("#send-code").click(function(event) {
     if (!$("#id_phone_number").val()) {
       event.preventDefault();
@@ -64,11 +65,11 @@ $(function() {
               $("#send-code").attr("disabled", true);
               $("#phone_label").hide();
 
-              if ($("#code").hasClass("d-none")) {
-                  $("#code").toggleClass("d-none");
+              if ($("#code").hasClass("is-hidden")) {
+                  $("#code").toggleClass("is-hidden");
               }
-              if ($("#email-request").hasClass("d-none")) {
-                  $("#email-request").toggleClass("d-none");
+              if ($("#email-request").hasClass("is-hidden")) {
+                  $("#email-request").toggleClass("is-hidden");
               }
 
               if (data.message != undefined) {
@@ -141,7 +142,7 @@ $(function() {
 
   $("input[name='code']").keyup(function(e) {
     if (e.target.value.length == 6) {
-      $(".loading").toggleClass("d-none");
+      $(".loading").toggleClass("is-hidden");
       if (
         isNaN($("input[name='code']").val()) ||
         $("input[name='code']").val().length != 6 ||
@@ -208,7 +209,7 @@ $(function() {
                   "Maximum number of code retrial has reached, you can't retry anymore!");
               }
             }
-            $(".loading").toggleClass("d-none");
+            $(".loading").toggleClass("is-hidden");
           },
           error: function(error) {
             printError(error);
