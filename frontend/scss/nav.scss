@@ -102,6 +102,10 @@ a {
   display: none;
 }
 
+#navbarTop > .nav-inner {
+    overflow-x: hidden;
+}
+
 .bt-nav-ul {
     display: flex;
     justify-content: space-around;
