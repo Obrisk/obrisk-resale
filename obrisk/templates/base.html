@@ -20,6 +20,16 @@
   <meta name="theme-color" content="#3EC4E2">
   <meta name="vapid-key" content="{{ vapid_key }}">
 
+  <!-- Icon can be replace to show icon on share -->
+  {% block icon %}
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+  {% endblock icon%}
+
+
   {% if request.user.is_authenticated %}
       {% webpush_header %}
       <meta name="user_id" content="{{ request.user.id }}">
@@ -288,7 +298,7 @@
     </nav>
 
 
-    <nav id="navbarBottom" class="navbar fixed-bottom">
+    <nav id="navbarBottom" class="navbar fixed-bottom is-hidden-tablet">
         <ul class="bt-nav-ul is-toggle is-fullwidth">
 
          <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">
@@ -346,7 +356,15 @@
         </ul>
     </nav>
 
-    <div class='container'>
+    <div class="container is-hidden-mobile"> 
+        <div class='my-5'>
+            <p>This platform works best on Wechat</p>
+            <p>Please use Wechat to scan the QR-code below </p>
+            <img src="{% static 'img/qrcode.jpg' %}" alt="Obrisk QRcode"/>
+        </div>
+    </div>
+
+    <div class='container is-hidden-tablet'>
         <!-- These messages are not from chat, they are the notifications msgs
         upon successful POST request on the chat the message context is message_list -->
         {% if messages %}
@@ -374,15 +392,6 @@
         {% endblock content %}
     </div>
 
-
-  <!-- Icon can be replace to show icon on share -->
-  {% block icon %}
-  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}?v=1">
-  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=2">
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
-  {% endblock icon%}
 
   {% block javascript %}
   <script type="text/javascript">
