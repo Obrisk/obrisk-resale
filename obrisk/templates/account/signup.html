@@ -65,10 +65,18 @@
                                         </line>
                                     </svg>
                               </div>
+
+                              <div id="results"> 
+                              </div>
+
+                              <br/>
+                              <button id="submit-code" type="button"  
+                                   class="button accent-button raised is-rounded is-fullwidth"> {% trans 'Submit' %} 
+                              </button>
+
+                          <!-- close is-hidden -->
                           </div>
 
-                    <div id="results"> 
-                    </div>
                     <input type="hidden" name="verified_no" id="verified_no">
 
                     <p id='agree' class="is-hidden">
@@ -217,7 +225,7 @@
 
 </script>
 
-<script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/phone-signup.js' %}" type="text/javascript"> </script>
 <script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
 
 {% endblock extra_js  %}
