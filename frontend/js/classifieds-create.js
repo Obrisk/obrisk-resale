@@ -62,12 +62,12 @@ $(function() {
   });
 
   $(".submit-button").click(function(event) {
-    const phn = $("#id_phone_number").val();
+    const phn = document.getElementById("id_phone_number");
     //Help the user to add the country code on phone number
     if ((typeof phn !== 'undefined') && phn != '') {
-        if (phn.val().startsWith('+86') == false) {
-            if (phn.val().length == 11 ) {
-                phn.val("+86" + phn.val());
+        if (phn.value.startsWith('+86') == false) {
+            if (phn.value.length == 11 ) {
+                phn.value ="+86" + phn.value;
             } else {
               printError(
                 "Your phone number is incorrect, Please verify",
