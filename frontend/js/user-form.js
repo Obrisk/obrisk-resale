@@ -1,16 +1,43 @@
+const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+$(function() {
+  function csrfSafeMethod(method) {
+    // These HTTP methods do not require CSRF protection
+    return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
+  }
+
+  // This sets up every ajax call with proper headers.
+  $.ajaxSetup({
+    beforeSend: function(xhr, settings) {
+      if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+      }
+    }
+  });
+
+});
+
+
 /* -------------------------------------------------------------------------- */
 /*                               utils and libs                               */
 /* -------------------------------------------------------------------------- */
 //Print error message
-function printError(msg) {
-  document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
-  document.getElementById('notf-msg').innerHTML = msg;
-}
+const confirm_btn = document.querySelector('#confirm');
+const code_notice = document.getElementById("code-notice");
+const send_code_btn = document.getElementById('send-code');
+const phone_number = document.getElementById('id_phone_number');
+const verify_code_input = document.getElementById('verify-code');
 
 var verify_counter = 0;
 var code_counter = 0;
 
 var phone_no;
+
+function printError(msg) {
+  document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
+  document.getElementById('notf-msg').innerHTML = msg;
+}
+
 
 $(function() {
   function checkPassword(str) {
@@ -19,6 +46,8 @@ $(function() {
     var re = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
     return re.test(str);
   }
+
+  document.getElementById("id_phone_number").removeAttribute("disabled");
 
   document.querySelectorAll('.close-dj-messages').forEach(item => {
     item.addEventListener('click', e => {
@@ -110,7 +139,6 @@ $(function() {
                 );
               }
 
-            //$("#send-code").attr("disabled", false);
             } else {
               if (data.error_message != undefined) {
                 $("#code-notice")
@@ -173,7 +201,6 @@ $(function() {
           success: function(data) {
             //enable send button after message is sent
             if (data.success == true) {
-              // $('#send-code').removeAttr("disabled");
               if (data.url) {
                     $("#results")
                       .empty()
@@ -205,7 +232,7 @@ $(function() {
               $("#send-code").attr("disabled", false);
               code_counter = code_counter + 1;
 
-              if (code_counter >= 5) {
+              if (code_counter >= 7) {
                 $("#phone-verify").attr("disabled", true);
                 printError(
                   "Maximum number of code retrial, you can't retry anymore!"
@@ -295,7 +322,7 @@ $(function() {
       $(".step-title").removeClass("is-active");
       $(".step-dot-2").addClass("is-active");
       printError(
-        "Must be 3 to 16 letters, without spaces!"
+        "Username must be 3 to 16 letters, without spaces!"
       );
     } else if ( $("input[name=password1").val().length < 8) {
 
@@ -309,23 +336,22 @@ $(function() {
       );
 
     } else {
-      $("#id_phone_number").attr("disabled", false);
+          $("#id_phone_number").attr("disabled", false);
 
-      if (
-        $("#id_phone_number")
-          .val().toString().startsWith("+86") == false
-      ) {
-          $("#id_phone_number").val("+86" + $("#id_phone_number").val());
-      }
+          if ($("#id_phone_number").val().toString().startsWith("+86") === false)
+          {
+              $("#id_phone_number").val("+86" + $("#id_phone_number").val());
+          }
 
-      $("input[name='city']").val(
-          $("select[name='city']").val()
-      );
-      $("input[name='province_region']").val(
-        $("select[name='province']").val()
-      );
-      $("#signup_form").submit();
-    }
+          $("input[name='city']").val(
+              $("select[name='city']").val()
+          );
+          $("input[name='province_region']").val(
+            $("select[name='province']").val()
+          );
+
+          $("#signup_form").submit();
+     }
   });
 
   //update-profile submit event is on the image-uploader.js file
@@ -547,4 +573,3 @@ $("#id_password1").on("password.text", (e, text, score) => {
     $(".process-button").addClass("is-hidden");
   }
 });
-

@@ -91,14 +91,14 @@
   const lg_loading = document.getElementById('login-loading');
   const login_errors = document.querySelector(".errors");
 
-  function phoneLogin() {
+  function phoneLoginActive() {
         login_form.classList.remove('is-hidden');
         options_wrapper.style.display = 'none';
         document.getElementById('id_login').focus();
   }
 
   document.getElementById('phone-login').addEventListener('click', e => {
-      phoneLogin();
+      phoneLoginActive();
   });
 
   document.getElementById('open-options').addEventListener('click', e => {
@@ -207,7 +207,7 @@
 
               } else {
                 localStorage.setItem('autologintry', true);
-                phoneLogin();
+                phoneLoginActive();
                 login_errors.innerHTML =
                     `<small class="error-text">The phone/username or password are not correct.</small>`
                 location.replace('/auth/login/');
@@ -223,7 +223,7 @@
   }
 
   {% if form.errors %}
-        phoneLogin();
+        phoneLoginActive();
         login_errors.innerHTML =
             `<small class="error-text">The phone/username or password are not correct.</small>`
   {% endif %}

@@ -14,7 +14,7 @@
   <div class="login-wrapper form-wrapper columns">
      <!--Form-->
       <form class="signup" id="signup_form" method="post"
-            action="{% url 'account_signup' %}">
+            action="">
             {% csrf_token %}
               <br/>
               <h1 class="text-center login100-form-title">
@@ -154,6 +154,10 @@
 <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
 
+    const panel_one = document.getElementById('signup-panel-1');
+    const panel_two = document.getElementById('signup-panel-2');
+    const options_wrapper = document.getElementById('options-wrapper');
+
     function disableSubmit() {
         document.getElementById("phone-signup-submit").disabled = true;
     }
@@ -168,34 +172,41 @@
         }
     }
 
-    const login_form = document.getElementById('signup-panel-1');
-    const options_wrapper = document.getElementById('options-wrapper');
-
-    document.getElementById('phone-login').addEventListener('click', e => {
-        login_form.classList.remove('is-hidden');
+    function phoneLoginActive() {
+        panel_one.classList.remove('is-hidden');
         options_wrapper.style.display = 'none';
         document.getElementById('id_phone_number').focus();
+    }
+
+    document.getElementById('phone-login').addEventListener('click', e => {
+        phoneLoginActive();
     });
 
     document.getElementById('open-options').addEventListener('click', e => {
-        login_form.classList.add('is-hidden');
+        panel_one.classList.add('is-hidden');
         options_wrapper.style.display = 'flex';
     });
 
 	const current_url = "{{ request.path }}";
     const in_china = "{{ in_china }}";
+    const phone_signup_url = "{% url 'account_signup' %}";
 	var errors = false;
 
 	{% if form.errors %}
         errors = true;
+        phoneLoginActive();
+
         {% if "phone_number" in form.errors %}
             $("#id_phone_number").attr("disabled", false);
             $("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
         {% else %}
             $("#id_phone_number").attr("disabled", true);
             $("input[name='verified_no']").val("VAL");
-            $("#signup-panel-1").removeClass("is-active");
-            $("#signup-panel-2").addClass("is-active");
+            panel_one.classList.add('is-hidden');
+            panel_one.classList.remove('is-active');
+            panel_two.classList.add('is-active');
+            document.querySelector('.step-dot-2').classList.remove('is-hidden');
+            document.querySelector('.step-dot-2').classList.add('is-active');
         {% endif %}
 
     {% endif %}
