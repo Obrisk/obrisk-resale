@@ -50,4 +50,3 @@ class MyUserAdmin(AuthUserAdmin):
     list_display = ('username', 'last_login', 'date_joined',
         'city', 'province_region', 'thumbnail', 'points')
     search_fields = ['username', 'phone_number', 'email', 'city']
-    readonly_fields = ('phone_number',)
