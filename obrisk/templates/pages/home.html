@@ -5,41 +5,32 @@
 <html lang="en">
 
 <head>
-
   <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description"
     content="classifieds website for foreigners in China to buy and sell secondhand items and find apartments for rent">
   <meta name="author" content="Obrisk team">
-  <meta name="keywords" content="Buy and sell, Classifieds, secondhand, China expats, foreigners in China, China">
+  <meta name="keywords" content="secondhand Hangzhou, secondhand China, China Classifieds, secondhand, classifieds, China expats, foreigners in China">
   <meta name="apple-mobile-web-app-title" content="obrisk">
   <meta name="locale" content="en">
   <meta name="theme-color" content="#3EC4E2">
 
-  <!-- <link rel="manifest" href="{% static 'js/site.webmanifest' %}?v=3"> -->
   {% block icon %}
   <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
-  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}?v=1">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
   <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}?v=1">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}?v=1">
 
   {% endblock icon %}
 
-
-  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-  <!--[if lt IE 9]>
-  <script src="Https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
-    <![endif]-->
   <title>Obrisk</title>
 
-  <!-- Bootstrap core CSS -->
-  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
-
   <!-- Custom styles for this template -->
+  <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
-  <link href="{% static 'css/creative.css' %}?v=2008192" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/creative.css' %}">
 
   <script>
     // Initialize the service worker
@@ -65,13 +56,16 @@
 
   <div class="carousel slide" data-ride="carousel">
     <div class="carousel-inner">
-      <div class="banner d-flex flex-column justify-content-center align-items-center">
+      <div class="banner">
+
         <div class="title text-center pb-4">
             <h2> {% trans 'Hi! Welcome to Obrisk' %} </h2>
-            <h5>{% trans 'Socialize, Share and Stay Connected...' %}</h5>
+            <h5>{% trans 'The largest Secondhand platform for foreigners in China' %}</h5>
+            <br/>
         </div>
-        <div class="call-to-action">
-          <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark mr-4"
+
+        <div class="is-flex call-to-action">
+          <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark"
             href="{% url 'account_signup' %}">{% trans 'Sign up now' %}
           </a><a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
             href="{% url 'account_login' %}">{% trans 'Login' %}</a>
@@ -86,32 +80,11 @@
       <div class="c_feature_box">
         <div class="row">
 
-          <div class="col-lg-4 mb-5">
-            <div class="c_box_item">
-                <h4 class="p-0 m-0">  {% trans 'Stories posts' %} </h4>
-                <p>{% trans  'Read and share brief informative content' %}</p>
-              <a href="{% url 'stories:list' %}" class="read-btn">
-                  {% trans 'View Stories' %}
-              </a>
-            </div>
-          </div>
-
           <div class="col-lg-4">
             <div class="c_box_item mb-5">
-                <h4 class="p-0 m-0">{% trans 'Secondhand platform' %}</h4>
-              <p>{% trans 'Buy or sell secondhand items closer to your location.' %}</p>
+              <p>{% trans 'Easily Buy or sell stuff closer to your location' %}</p>
               <a href="{% url 'classifieds:list' %}" class="read-btn">
-                  {% trans 'View Classifieds' %}
-              </a>
-            </div>
-          </div>
-
-          <div class="col-lg-4 mb-5">
-            <div class="c_box_item">
-                <h4 class="p-0 m-0">{% trans 'Published articles' %}</h4>
-              <p>{% trans 'Read, discuss and share helpful ideas' %}</p>
-              <a href="{% url 'posts:list' %}" class="read-btn">
-                  {% trans 'View Post' %}
+                  {% trans 'View the platform' %}
               </a>
             </div>
           </div>

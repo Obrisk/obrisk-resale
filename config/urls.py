@@ -119,14 +119,6 @@ urlpatterns = [
         include("obrisk.classifieds.urls",
         namespace="classifieds")
         ),
-    url(r"^posts/",
-        include("obrisk.posts.urls",
-        namespace="posts")
-        ),
-    url(r"^stories/",
-        include("obrisk.stories.urls",
-        namespace="stories")
-        ),
     url(r"^ws/messages/",
         include("obrisk.messager.urls",
         namespace="messager")),
