@@ -11,6 +11,11 @@
           id="classified-form" method="post" role="form">
           {% csrf_token %}
 
+          <div class="notification is-danger is-hidden" role="alert">
+            <button type="button" class="delete close-dj-messages"></button>
+            <p id="notf-msg"></p>
+          </div>
+
           <div class="column">
                   <div class="field">
                         <label>

@@ -2,18 +2,22 @@
 /*                                    utils                                   */
 /* -------------------------------------------------------------------------- */
 
-function printError(msg, target) {
-  template = `
-        <div class="notification is-danger" role="alert">
-            <button type="button" class="delete close-dj-messages"></button>
-          ${msg}
-        </div>
-        `;
-  $(`${target}`).prepend(template);
+
+//Print error message
+function printError(msg) {
+  document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
+  document.getElementById('notf-msg').innerHTML = msg;
 }
 
 
-$(function() {
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.querySelectorAll('.close-dj-messages').forEach(item => {
+        item.addEventListener('click', e => {
+            e.currentTarget.parentElement.classList.add('is-hidden');
+            e.stopPropagation();
+        });
+  });
 
   const new_classified = JSON.parse(localStorage.getItem('new-classified'));
 
@@ -42,36 +46,36 @@ $(function() {
           //update the thumbnail holder to show the uploaded images.
           //Scroll the page to the top or to the place with errors.
           console.log(data);
-          printError(data.error_message, "#classified-form");
+          printError(data.error_message);
           window.scrollTo({ top: 0, behavior: "smooth" });
         }
       },
       error: function(data) {
           if (typeof data.error_message !== 'undefined') {
-             printError(data.error_message, "#classified-form");
+             printError(data.error_message);
           }else {
-             printError("Sorry we can't process your request, please try again later",
-                "#classified-form");
+             printError(
+                 "Sorry we can't process your request, please try again later"
+             );
           }
       }
     });
   });
 
-  $("#addBtn").click(function() {
+  document.querySelector("#addBtn").addEventListener('click', function() {
     $("#uploader").show();
   });
 
-  $(".submit-button").click(function(event) {
+  document.querySelector(".submit-button").addEventListener('click', function(event) {
     const phn = document.getElementById("id_phone_number");
     //Help the user to add the country code on phone number
-    if ((typeof phn !== 'undefined') && phn != '') {
+    if (phn !== null && phn !== '') {
         if (phn.value.startsWith('+86') == false) {
             if (phn.value.length == 11 ) {
                 phn.value ="+86" + phn.value;
             } else {
               printError(
-                "Your phone number is incorrect, Please verify",
-                "#classified-form"
+                "Your phone number is incorrect, Please verify"
               );
             }
         }
@@ -85,8 +89,7 @@ $(function() {
       }
     } else {
       printError(
-        "Please provide all the details and upload at least 1 image",
-        "#classified-form"
+        "Please provide all the details and upload at least 1 image"
       );
     }
   });
