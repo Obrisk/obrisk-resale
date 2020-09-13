@@ -65,9 +65,9 @@
         </div>
 
         <div class="is-flex call-to-action">
-          <a class="btn btn-dark  btn-xl js-scroll-trigger text-dark"
-            href="{% url 'account_signup' %}">{% trans 'Sign up now' %}
-          </a><a class="btn btn-dark btn-xl js-scroll-trigger text-dark"
+          <a class="button is-solid is-rounded accent-button text-dark"
+            href="{% url 'account_signup' %}">{% trans 'Sign up' %}
+          </a><a class="button is-solid is-rounded accent-button text-dark"
             href="{% url 'account_login' %}">{% trans 'Login' %}</a>
         </div>
       </div>
@@ -83,7 +83,7 @@
           <div class="col-lg-4">
             <div class="c_box_item mb-5">
               <p>{% trans 'Easily Buy or sell stuff closer to your location' %}</p>
-              <a href="{% url 'classifieds:list' %}" class="read-btn">
+              <a href="{% url 'classifieds:list' %}" class="read-button">
                   {% trans 'View the platform' %}
               </a>
             </div>
