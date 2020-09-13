@@ -1,4 +1,4 @@
-/*! _chat.scss | Friendkit | © Css Ninja. 2018-2019 */
+/*! _chat.scss | Obrisk | ©Elisha Kingdom 2019-2020 */
 
 /* ==========================================================================
 Chat window styles
@@ -162,14 +162,6 @@ Chat window styles
                     //Close chat window button
                     &.close-chat {
                         border-radius: 50%;
-
-                        &:hover {
-                            background: lighten($fade-grey, 3%);
-
-                            svg {
-                                stroke: $medium-text;
-                            }
-                        }
                     }
                 }
 
@@ -236,11 +228,6 @@ Chat window styles
                     }
                 }
 
-                //Hover state
-                &:hover {
-                    background: lighten($fade-grey, 2%);
-                }
-
                 //Avatar container
                 .avatar-container {
                     position: relative;
@@ -299,15 +286,6 @@ Chat window styles
                     border-radius: 50%;
                     transition: all .3s;
                     cursor: pointer;
-
-                    //Hover state
-                    &:hover {
-                        border: 1.8px solid $primary;
-
-                        svg {
-                            stroke: $primary;
-                        }
-                    }
 
                     svg {
                         height: 18px;
@@ -490,7 +468,7 @@ Chat window styles
             
             width: 100%;
             height: 60px;
-            padding: 0 40px;
+            padding: 0;
             background: lighten($fade-grey, 3%);
 
             //Inner wrap
@@ -549,16 +527,6 @@ Chat window styles
                             background: $accent;
                             transition: all .3s;
                             cursor: pointer;
-                        }
-
-                        //Hover state
-                        &:hover .button-inner {
-                            border-color: $primary;
-                            background-color: $primary;
-
-                            svg {
-                                stroke: $white-light;
-                            }
                         }
 
                         svg {
@@ -621,14 +589,6 @@ Chat window styles
                         transition: all .3s;
                         cursor: pointer;
 
-                        &:hover {
-                            background: lighten($fade-grey, 3%);
-
-                            svg {
-                                stroke: $medium-text;
-                            }
-                        }
-
                         svg {
                             height: 20px;
                             width: 20px;
@@ -675,10 +635,6 @@ Chat window styles
                                         font-size: 22px;
                                         color: $grey-text;
                                     }
-
-                                    &:hover {
-                                        background: lighten($fade-grey, 5%);
-                                    }
                                 }
                             }
 
@@ -708,10 +664,6 @@ Chat window styles
                                     background: $accent;
                                     cursor: pointer;
                                     transition: all .3s;
-
-                                    &:hover {
-                                        background: lighten($accent, 12%);
-                                    }
 
                                     i {
                                         font-size: 20px;
@@ -791,18 +743,6 @@ Chat window styles
                                         -ms-transition: all 0.3s ease-in-out;
                                         -o-transition: all 0.3s ease-in-out;
                                         transition: all 0.3s ease-in-out;
-                                    }
-
-                                    &:hover {
-                                        background: $medium-text !important;
-
-                                        &:after {
-                                            border-top: 12.5px solid $medium-text !important;
-                                        }
-
-                                        &:before {
-                                            border-bottom: 12.5px solid $medium-text !important;
-                                        }
                                     }
 
                                     //Color modifiers
@@ -940,10 +880,6 @@ Chat window styles
 
                                         a {
                                             color: $muted-grey;
-
-                                            &:hover {
-                                                color: $accent;
-                                            }
                                         }
                                     }
                                 }
@@ -955,4 +891,3 @@ Chat window styles
         }
     }
 }
-
