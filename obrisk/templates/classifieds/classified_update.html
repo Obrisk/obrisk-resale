@@ -30,17 +30,15 @@
 {% endblock content %}
 
 {% block extra_js %}
-<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
 
-  $(function () {
-    $(".update").click(function () {
-      $("input[name='status']").val("A");
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelector(".update").addEventListener('click', function () {
+      document.querySelector("input[name='status']").value = "A";
       //This image below is just to pass the form validation, but it is not saved.
-      $("input[name='images']").val("samples/ecommerce/accessories-bag.jpg");
-      //$("input[name='edited']").prop("checked");
-      $("input[name='edited']").val("True");
-      $("#classified-form").submit();
+      document.querySelector("input[name='images']").value = "samples/ecommerce/accessories-bag.jpg";
+      document.querySelector("input[name='edited']").value = "True";
+      document.getElementById("classified-form").submit();
     });
   });
 </script>

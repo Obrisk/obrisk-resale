@@ -50,11 +50,14 @@ class ClassifiedEditForm(forms.ModelForm):
             widget=forms.HiddenInput(),
             required=False, initial=False
         )
-    details = forms.CharField(widget=forms.Textarea)
+    details = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 4})
+    )
     wechat_id = forms.CharField(required=False, label=('WechatID'))
     phone_number = forms.CharField(required=False)
     #images = forms.CharField(
         #widget=forms.HiddenInput(), max_length=1500)
+
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "tags",
@@ -62,16 +65,15 @@ class ClassifiedEditForm(forms.ModelForm):
 
         widgets = {
             'user': forms.HiddenInput(),
-            'tags': autocomplete.TagSelect2(url='classifieds:tags_autocomplete')
         }
 
         help_texts = {
             "address": "It can be a street name, address or other description.\
-            Please don't enter your city it will be added automatically based on your profile",
+            Please don't enter your city",
             "phone_number": "This field is optional.",
             "wechat_id": "This field is optional.",
-            "tags": "Write the categories of your item, can be one or multiple separated by a comma.\
-            e.g phone,electronics. Some categories will appear as you start to type."
+            "tags": "Category of your item, can be 1 or multiple separated by a comma.\
+                        e.g electronics, ebike"
         }
 
 
