@@ -82,7 +82,6 @@ label {
     left:0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0,0,0,0.6);
 }
 
 #options-wrapper {
@@ -102,8 +101,8 @@ label {
     margin: 8rem auto;
     z-index: 10;
 
-    a {
-        margin: 10px auto;
+    .button {
+        margin: 16px auto;
         width: 90%;
     }
 }
@@ -114,6 +113,10 @@ label {
     justify-content: space-around;
 }
 
+.wechat-button {
+    background-color: #2F8819;
+}
+
 .signup-wrapper .process-panel-wrap .form-panel {
   border: none;
 }
@@ -122,6 +125,21 @@ label {
     display: flex;
     margin: 14px auto;
     justify-content: space-around;
+}
+
+#lh {
+    opacity: 0;
+    margin-left: 1rem;
+}
+
+#lh:target {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: all;
+}
+
+.underline-me {
+    text-decoration: underline;
 }
 
 .loading {
