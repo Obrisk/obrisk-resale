@@ -251,10 +251,13 @@ def multipleImagesPersist(request, images_list, app, obj):
     img_mid_name = None
     saved_objs = 0
     display_img= None
+    username = slugify(request.user.username, to_lower=True)
+    title = slugify(obj.title, to_lower=True)
 
     for index, str_result in enumerate(images_list):
+
         if str_result.startswith(
-              f'media/images/{app}/{request.user.username}') is False:
+                f'media/images/{app}/{username}/{title}') is False:
             #Check if it was default image as it has no username.
             #This is the same default on all multiple upload apps
             #Though form shouldn't be submitted without images
@@ -266,13 +269,8 @@ def multipleImagesPersist(request, images_list, app, obj):
 
         if app == 'classifieds':
             img_obj = ClassifiedImages(classified=obj, image=str_result)
-            thumb_name = "media/images/classifieds/" + slugify(
-                    str(obj.user)) + "/" + slugify(
-                            str(obj.title), to_lower=True
-                        ) + "/thumbnails/" + d + str(index)
-            img_mid_name = "classifieds/" + slugify(
-                    str(obj.user)) + "/" + slugify(
-                        str(obj.title), to_lower=True) + "/mid-size/" + d + str(index)
+            thumb_name = "media/images/classifieds/" + username + "/" + title + d + "/thumbnails/" + str(index) + ".jpeg" #noqa
+            img_mid_name = "media/images/classifieds/" + username + "/" + title + d + "/mid-size/" + str(index) + ".jpeg" #noqa
             style = 'image/resize,m_fill,h_156,w_156'
             style_mid = 'image/resize,m_fill,h_400'
 
@@ -281,10 +279,9 @@ def multipleImagesPersist(request, images_list, app, obj):
             #because of how it is consumed in the front-end
             img_obj = StoryImages(
                 story=obj,
-                image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result
+                image='https://obrisk.oss-cn-hangzhou.aliyuncs.com/'+ str_result #noqa
             )
-            thumb_name = "media/images/stories/" + slugify(
-                    str(obj.user)) + "/thumbnails/" + d + str(index)
+            thumb_name = "media/images/stories/" + username + "/thumbnails/" + d + str(index)
             style = 'image/resize,m_fill,h_456,w_456'
 
         else:
@@ -497,7 +494,6 @@ def bulk_update_vid_images(request):
                 requests.HTTPError,
                 requests.Timeout,
                 requests.TooManyRedirects) as e:
-            print( "mafan")
             logging.error("Can't request thumbnail from video" + e)
 
         # naming them in our oss

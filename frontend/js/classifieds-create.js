@@ -66,33 +66,38 @@ document.addEventListener('DOMContentLoaded', function() {
     $("#uploader").show();
   });
 
-  document.querySelector(".submit-button").addEventListener('click', function(event) {
-    const phn = document.getElementById("id_phone_number");
-    //Help the user to add the country code on phone number
-    if (phn !== null && phn !== '') {
-        if (phn.value.startsWith('+86') == false) {
-            if (phn.value.length == 11 ) {
-                phn.value ="+86" + phn.value;
-            } else {
-              printError(
-                "Your phone number is incorrect, Please verify"
-              );
-            }
-        }
-    }
 
-    if (uploader.fileStats.totalFilesNum > 0) {
-      if (images != "" && $("#id_images").val() == images) {
-        $("body").trigger("uploadComplete");
-      } else {
-        $("body").trigger("submitClicked");
-      }
-    } else {
-      printError(
-        "Please provide all the details and upload at least 1 image"
-      );
-    }
+  document.getElementById("create-btn").addEventListener('click', function(event) {
+      const phn = document.getElementById("id_phone_number");
+      //Help the user to add the country code on phone number
+      if (phn !== null && phn !== '') {
+            if (phn.value.startsWith('+86') == false) {
+                if (phn.value.length == 11 ) {
+                    phn.value ="+86" + phn.value;
+                } else {
+                      console.log('phone phone');
+                      printError(
+                        "The phone number is incorrect, Please verify"
+                      );
+                }
+            }
+        } else if (uploader.fileStats.totalFilesNum < 1 ||
+            document.getElementById('id_title').value.length < 2 ||
+            document.getElementById('id_details').value.length < 2) {
+              printError(
+                "Please provide all the details and upload at least 1 image"
+              );
+
+        } else {
+              if (images != "" && $("#id_images").val() == images) {
+                    $("body").trigger("uploadComplete");
+              } else {
+                  localStorage.removeItem('new-classified');
+                  $("body").trigger("submitClicked");
+              }
+        }
   });
+
   
   if ( user === '' ) {
       document.getElementsByClassName('login-to-post')[0].addEventListener('click', function () {

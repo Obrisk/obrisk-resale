@@ -52,221 +52,222 @@ OssUpload.prototype = {
     });
 
     $("#image-file").change(function(e) {
-      $("#wrapper .container").css("display", "block");
-      $(".submit-button").removeClass("is-disabled");
-      files = e.target.files;
-      //The length of the file already in the plugin, append
-      curIndex = uploader.fileList.length;
-      NumberOfSelectedFiles = files.length;
-      var file = null;
-      $("#uploader .placeholder").hide();
+          $("#wrapper .container").css("display", "block");
+          $(".submit-button").removeClass("is-disabled");
+          files = e.target.files;
+          //The length of the file already in the plugin, append
+          curIndex = uploader.fileList.length;
+          NumberOfSelectedFiles = files.length;
+          var file = null;
+          $("#uploader .placeholder").hide();
 
-      var AllowUploadQuantity = TotalFilesMaxSize - curIndex;
+          var AllowUploadQuantity = TotalFilesMaxSize - curIndex;
 
-      //check if the upload quantity has reach max
-      if (AllowUploadQuantity == 0) {
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message: "Only " + TotalFilesMaxSize + " images are allowed"
-        });
-        $("#addBtn").hide();
-      } else if (files.length == 0) {
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message: "No image selected , Please select one or more images"
-        });
-      } else {
-        //Add only the allow # of files to upload qeue
-        if (
-          NumberOfSelectedFiles <= AllowUploadQuantity &&
-          NumberOfSelectedFiles > 0
-        ) {
-          for (var i = 0; i < NumberOfSelectedFiles; i++) {
-            file = files[i];
-            //don't upload files with size greater than 13MB
-            if (file.size <= MaxImageSize) {
-              uploader.fileList[curIndex + i] = file;
-              file.id = uploader.fileList[curIndex + i].id =
-                "image" + (curIndex + i + 1); //Add id to each file
-              uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-              _this.addFile(file); //Add to control view
-              $("#addVideo").hide();
-            } else {
-              $.wnoty({
-                type: "error",
-                autohide: false,
-                message:
-                  file.name +
-                  " is larger than 13MB, please select images small than 13MB "
-              });
-            }
+          //check if the upload quantity has reach max
+          if (AllowUploadQuantity === 0) {
+                $.wnoty({
+                  type: "error",
+                  autohide: false,
+                  message: "Only " + TotalFilesMaxSize + " images are allowed"
+                });
+                $("#addBtn").hide();
+          } else if (files.length === 0) {
+                $.wnoty({
+                  type: "error",
+                  autohide: false,
+                  message: "No image selected , Please select one or more images"
+                });
+          } else {
+             //Add only the allow # of files to upload qeue
+             if (
+                  NumberOfSelectedFiles <= AllowUploadQuantity &&
+                  NumberOfSelectedFiles > 0
+              ) {
+                  for (var i = 0; i < NumberOfSelectedFiles; i++) {
+                    file = files[i];
+                    //don't upload files with size greater than 13MB
+                    if (file.size <= MaxImageSize) {
+                      uploader.fileList[curIndex + i] = file;
+                      file.id = uploader.fileList[curIndex + i].id =
+                        "image" + (curIndex + i + 1); //Add id to each file
+                      uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                      _this.addFile(file); //Add to control view
+                      $("#addVideo").hide();
+                    } else {
+                      $.wnoty({
+                        type: "error",
+                        autohide: false,
+                        message:
+                          file.name +
+                          " is larger than 13MB, please select images small than 13MB "
+                      });
+                    }
+                  }
+                } else {
+                  for (
+                    var i = 0;
+                    i < NumberOfSelectedFiles &&
+                    uploader.fileList.length < TotalFilesMaxSize;
+                    i++
+                  ) {
+                    file = files[i];
+                    //don't upload files with size greater than 13MB
+                    if (file.size <= MaxImageSize) {
+                      uploader.fileList[curIndex + i] = file;
+                      file.id = uploader.fileList[curIndex + i].id =
+                        "image" + (curIndex + i + 1); //Add id to each file
+                      uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                      _this.addFile(file); //Add to control view
+                      $("#addVideo").hide();
+                    } else {
+                      $.wnoty({
+                        type: "error",
+                        autohide: false,
+                        message:
+                          file.name +
+                          " is larger than 13MB, please select images small than 13MB "
+                      });
+                    }
+                  }
+                  $.wnoty({
+                    type: "error",
+                    autohide: false,
+                    message: "Only " + TotalFilesMaxSize + " images are allowed"
+                  });
+                }
           }
-        } else {
-          for (
-            var i = 0;
-            i < NumberOfSelectedFiles &&
-            uploader.fileList.length < TotalFilesMaxSize;
-            i++
-          ) {
-            file = files[i];
-            //don't upload files with size greater than 13MB
-            if (file.size <= MaxImageSize) {
-              uploader.fileList[curIndex + i] = file;
-              file.id = uploader.fileList[curIndex + i].id =
-                "image" + (curIndex + i + 1); //Add id to each file
-              uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-              _this.addFile(file); //Add to control view
-              $("#addVideo").hide();
-            } else {
-              $.wnoty({
-                type: "error",
-                autohide: false,
-                message:
-                  file.name +
-                  " is larger than 13MB, please select images small than 13MB "
-              });
-            }
-          }
-          $.wnoty({
-            type: "error",
-            autohide: false,
-            message: "Only " + TotalFilesMaxSize + " images are allowed"
-          });
-        }
-      }
-      uploader.fileStats.totalFilesNum = uploader.fileList.length;
+          uploader.fileStats.totalFilesNum = uploader.fileList.length;
     });
 
     $("#video-file").change(function(e) {
-      $("#wrapper .container").css("display", "block");
-      $(".submit-button").removeClass("is-disabled");
-      //console.log(e)
-      files = e.target.files;
-      curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
-      NumberOfSelectedFiles = files.length;
-      var file = null;
-      $("#uploader .placeholder").hide();
+          $("#wrapper .container").css("display", "block");
+          $(".submit-button").removeClass("is-disabled");
+          //console.log(e)
+          files = e.target.files;
+          curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
+          NumberOfSelectedFiles = files.length;
+          var file = null;
+          $("#uploader .placeholder").hide();
 
-      var AllowUploadQuantity = 1 - curIndex;
+          var AllowUploadQuantity = 1 - curIndex;
 
-      //check if the upload quantity has reach max
-      if (AllowUploadQuantity == 0) {
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message: "Only " + 1 + " video is allowed"
-        });
-        $("#addVideo").hide();
-      } else if (files.length == 0) {
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message: "No video selected , Please select one or more videos"
-        });
-      } else {
-        //Add only the allow # of files to upload qeue
-        if (
-          NumberOfSelectedFiles <= AllowUploadQuantity &&
-          NumberOfSelectedFiles > 0
-        ) {
-          for (var i = 0; i < NumberOfSelectedFiles; i++) {
-            file = files[i];
-            //don't upload files with size greater than 13MB
-            if (file.size <= MaxVideoSize) {
-              uploader.fileList[curIndex + i] = file;
-              file.id = uploader.fileList[curIndex + i].id =
-                "video" + (curIndex + i + 1); //Add id to each file
-              uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-              _this.addFile(file); //Add to control view
-              $("#addBtn").hide();
+          //check if the upload quantity has reach max
+          if (AllowUploadQuantity == 0) {
+            $.wnoty({
+              type: "error",
+              autohide: false,
+              message: "Only " + 1 + " video is allowed"
+            });
+            $("#addVideo").hide();
+          } else if (files.length == 0) {
+            $.wnoty({
+              type: "error",
+              autohide: false,
+              message: "No video selected, Please select one or more videos"
+            });
+          } else {
+            //Add only the allow # of files to upload qeue
+            if (
+              NumberOfSelectedFiles <= AllowUploadQuantity &&
+              NumberOfSelectedFiles > 0
+            ) {
+              for (var i = 0; i < NumberOfSelectedFiles; i++) {
+                file = files[i];
+                //don't upload files with size greater than 13MB
+                if (file.size <= MaxVideoSize) {
+                  uploader.fileList[curIndex + i] = file;
+                  file.id = uploader.fileList[curIndex + i].id =
+                    "video" + (curIndex + i + 1); //Add id to each file
+                  uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                  _this.addFile(file); //Add to control view
+                  $("#addBtn").hide();
+                } else {
+                  $.wnoty({
+                    type: "error",
+                    autohide: false,
+                    message:
+                      file.name +
+                      " is larger than 13MB, please select videos small than 13MB "
+                  });
+                }
+              }
             } else {
+              for (
+                var i = 0;
+                i < NumberOfSelectedFiles && uploader.fileList.length < 1;
+                i++
+              ) {
+                file = files[i];
+                //don't upload files with size greater than 13MB
+                if (file.size <= MaxVideoSize) {
+                  uploader.fileList[curIndex + i] = file;
+                  file.id = uploader.fileList[curIndex + i].id =
+                    "video" + (curIndex + i + 1); //Add id to each file
+                  uploader.fileStats.totalFilesSize += file.size; //Statistical file size
+                  _this.addFile(file); //Add to control view
+                  $("#addBtn").hide();
+                } else {
+                  $.wnoty({
+                    type: "error",
+                    autohide: false,
+                    message:
+                      file.name +
+                      " is larger than 13MB, please select videos small than 13MB "
+                  });
+                }
+              }
               $.wnoty({
                 type: "error",
                 autohide: false,
-                message:
-                  file.name +
-                  " is larger than 13MB, please select videos small than 13MB "
+                message: "Only " + 1 + " video is allowed"
               });
             }
           }
-        } else {
-          for (
-            var i = 0;
-            i < NumberOfSelectedFiles && uploader.fileList.length < 1;
-            i++
-          ) {
-            file = files[i];
-            //don't upload files with size greater than 13MB
-            if (file.size <= MaxVideoSize) {
-              uploader.fileList[curIndex + i] = file;
-              file.id = uploader.fileList[curIndex + i].id =
-                "video" + (curIndex + i + 1); //Add id to each file
-              uploader.fileStats.totalFilesSize += file.size; //Statistical file size
-              _this.addFile(file); //Add to control view
-              $("#addBtn").hide();
-            } else {
-              $.wnoty({
-                type: "error",
-                autohide: false,
-                message:
-                  file.name +
-                  " is larger than 13MB, please select videos small than 13MB "
-              });
-            }
-          }
-          $.wnoty({
-            type: "error",
-            autohide: false,
-            message: "Only " + 1 + " video is allowed"
-          });
-        }
-      }
-      uploader.fileStats.totalFilesNum = uploader.fileList.length;
+          uploader.fileStats.totalFilesNum = uploader.fileList.length;
     });
 
     $("body").on("submitClicked", function() {
-      $("#statusBar").css("display", "flex");
-      var length = uploader.fileStats.totalFilesNum;
-      var file;
-      $(".start-uploader").css("display", "none");
-      $totalProgressbar
-        .css("width", "40%")
-        .html("Upload Started please wait...");
-      for (var i = 0; i < length; i++) {
-        file = uploader.fileList[i];
-        var filename = genKey(file.type);
-        _this.uploadFile(file, filename, file.type);
-      }
+          $("#statusBar").css("display", "flex");
+          var length = uploader.fileStats.totalFilesNum;
+          var file;
+          $(".start-uploader").css("display", "none");
+          $totalProgressbar
+            .css("width", "40%")
+            .html("Upload Started please wait...");
+          for (var i = 0; i < length; i++) {
+            file = uploader.fileList[i];
+            var filename = genKey(file.type);
+            _this.uploadFile(file, filename, file.type);
+          }
     });
 
     $(".queueList .filelist").delegate("li span.cancel", "click", function() {
-      var $this = $(this);
-      var $li = $this.parent().parent();
-      var id = $li.attr("id");
-      var list = uploader.fileList;
-      var len = list.length;
-      for (var i = 0; i < len; i++) {
-        if (len <= 0) {
-          $("#addBtn").show();
-          $("#addVideo").hide();
-        }
-        if (uploader.fileList[i].id == id) {
-          uploader.fileStats.totalFilesSize -= uploader.fileList[i].size; //Statistical file size
-          uploader.fileList.splice(i, 1); //Delete a file from the file list
-          uploader.fileStats.totalFilesNum = uploader.fileList.length;
-          break;
-        }
-      }
+          var $this = $(this);
+          var $li = $this.parent().parent();
+          var id = $li.attr("id");
+          var list = uploader.fileList;
+          var len = list.length;
+          for (var i = 0; i < len; i++) {
+            if (len <= 0) {
+              $("#addBtn").show();
+              $("#addVideo").hide();
+            }
+            if (uploader.fileList[i].id == id) {
+              uploader.fileStats.totalFilesSize -= uploader.fileList[i].size; //Statistical file size
+              uploader.fileList.splice(i, 1); //Delete a file from the file list
+              uploader.fileStats.totalFilesNum = uploader.fileList.length;
+              break;
+            }
+          }
 
-      $li.remove();
-      if (uploader.fileList.length == 0) {
-        $("#wrapper .placeholder").css("display", "block");
-        $("#addBtn").show();
-        $("#addVideo").show();
-      }
+          $li.remove();
+          if (uploader.fileList.length == 0) {
+            $("#wrapper .placeholder").css("display", "block");
+            $("#addBtn").show();
+            $("#addVideo").show();
+          }
     });
+
   },
 
   /***
@@ -424,15 +425,15 @@ OssUpload.prototype = {
                                 type: "error",
                                 autohide: false,
                                 message:
-                                  "Oops! an error occured when uploading your image(s). \
-                                                    But you can submit this post without images ."
+                                  "Sorry an error occured when uploading your image(s). \
+                                                    You can submit this post without images ."
                               });
                             } else {
                               $.wnoty({
                                 type: "error",
                                 autohide: false,
                                 message:
-                                  "Sorry! an error occured when uploading your image(s). You can post without images"
+                                  "Sorry! an error occured when uploading your image(s). You can still post without images"
                               });
                             }
                           }
@@ -541,7 +542,7 @@ OssUpload.prototype = {
               autohide: false,
               message:
                 "Oops!, it looks like there is a network problem, \
-            Please try again later or contact us at support@obrisk.com"
+                try again later or contact us at support@obrisk.com"
             });
             $(".start-uploader").css("display", "block");
           }
@@ -859,6 +860,7 @@ var getPresignedURL = function() {
   });
 };
 
+
 //File upload initializer
 function OssUpload() {
   var _this = this;
@@ -869,45 +871,6 @@ function OssUpload() {
   _this.initPage = function() {};
 }
 
-/**
- * generate file name using uuid
- *
- * @return  {string}
- */
-
-function genKey(extension) {
-  var filename =
-    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
-      var r = (Math.random() * 16) | 0,
-        v = c == "x" ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    }) +
-    "." +
-    extension.split("/")[1] +
-    "/";
-
-  var date = new Date().toISOString().split("T")[0];
-
-  if (app == "stories") {
-    if (/^video/.test(extension)) {
-      return (
-        "media/videos" + "/" + app + "/" + user + "/" + date + "/" + filename
-      );
-    } else {
-      return (
-        "media/images" + "/" + app + "/" + user + "/" + date + "/" + filename
-      );
-    }
-  } else if (app == "classifieds") {
-    return (
-      "media/images" + "/" + app + "/" + user + "/" + date + "/" + filename
-    );
-  } else if (app == "articles") {
-    return (
-      "media/images" + "/" + app + "/" + user + "/" + date + "/" + filename
-    );
-  }
-}
 
 /**
  * create a slug
@@ -931,6 +894,57 @@ function slugify(string) {
     .replace(/^-+/, "") // Trim - from start of text
     .replace(/-+$/, ""); // Trim - from end of text
 }
+
+
+/**
+ * generate file name using uuid
+ *
+ * @return  {string}
+ */
+
+function genKey(extension) {
+  var filename =
+    "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
+      var r = (Math.random() * 16) | 0,
+        v = c == "x" ? r : (r & 0x3) | 0x8;
+      return v.toString(16);
+    }) +
+    "." +
+    extension.split("/")[1];
+
+  var date = new Date().toISOString().split("T")[0];
+
+  if (app == "stories") {
+        if (/^video/.test(extension)) {
+          return (
+            "media/videos" + "/" + app + "/" + slugify(user) + "/" + date + "/" + filename
+          );
+        } else {
+          return (
+            "media/images" + "/" + app + "/" + slugify(user) + "/" + date + "/" + filename
+          );
+        }
+
+  } else if (app == "classifieds") {
+        const title = document.getElementById('id_title').value;
+        if (title === 'undefined') {
+            return (
+              "media/images" + "/" + app + "/" + slugify(user) + "/item-no-title/" + date + "/" + filename
+            );
+        }
+        else {
+            return (
+              "media/images" + "/" + app + "/" + slugify(user) + "/" + slugify(title) + "/" + date + "/" + filename
+            );
+        }
+  } else if (app == "articles") {
+        return (
+          "media/images" + "/" + app + "/" + slugify(user) + "/" + date + "/" + filename
+        );
+  }
+}
+
+
 // Upload file to a private S3 bucket, using a presigned URL
 $(function() {
   //create and initialize upload object
