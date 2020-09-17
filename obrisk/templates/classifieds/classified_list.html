@@ -84,7 +84,7 @@
                         "price":{{ classified.price|title }},
                         "availability":"http://schema.org/InStock",
                         "itemCondition":"http://schema.org/UsedCondition",
-                        "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}"
+                        "url":"{% url 'classifieds:classified' classified.slug %}"
                      }
                   }
                   </script>
