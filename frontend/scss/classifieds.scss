@@ -502,13 +502,23 @@ a {
 .card-meta {
    display: flex;
    justify-content: space-between;
- }
+}
 
- .btn-group {
+.btn-group {
      display: flex;
      justify-content: space-around;
- }
+}
 
- .btn-email {
+.btn-email {
      width: 70%;
- }
+}
+
+.off-ac {
+    background-color: $accent;
+    color: white;
+    display: flex;
+
+    span {
+        margin-left: 14px;
+    }
+} 

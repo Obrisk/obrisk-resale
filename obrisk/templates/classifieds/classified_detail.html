@@ -133,7 +133,7 @@
         <div class="card-text">{{ classified.details }}</div>
 
         <div class="seller-contacts-wrapper">
-          {% if user.is_authenticated %}
+          {% if request.user.city == classified.city %}
 
             {% if classified.phone_number %}
                   <small class="seller-contacts"><strong>Seller's contacts:</strong>
@@ -158,12 +158,17 @@
                   </small>
            {% endif %}
 
-        {% else %}
+       {% elif user.is_authenticated %}
+           
+            <strong> This item is not available in your city </strong>
+
+       {% else %}
             <h6> Please <a class="js-scroll-trigger login-text"
                href="{% url 'account_login' %}"> {% trans 'Login' %}</a>
                to view seller's contacts:
             </h6>
         {% endif %}
+
       </div>
 
           <!-- Cloud Tag Widget -->
@@ -181,7 +186,6 @@
                         </div>
                    </div>
           {% endif %}
-
         <br/>
 
         <!-- Similar lassified -->
@@ -253,6 +257,14 @@
 
       </div>
       {% endif %}
+
+    <div class="notification off-ac">
+        <img src="{% static 'img/qrcode.jpg' %}"
+           height="100px" width="100px" alt="Obrisk QRcode"/>
+        <span> Long press the QR code & follow our platform
+            to explore more</span>
+    </div>
+
 
    </section>
 </div>
