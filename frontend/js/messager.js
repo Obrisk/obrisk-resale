@@ -109,13 +109,13 @@ $(function() {
             <a href="/classifieds/${
               el.classified_slug
             }" style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
+              <div class="card-img-top img-responsive">
                                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
                                  el.classified_thumbnail
-                               }" alt="${el.classified_title}">
+                               }" alt="${el.classified_title}" style="max-width: 70px">
 
               </div>
-              <div class="column">
+              <div style"margin-left: 5px">
                 <h6 class="card-title"> ${el.classified_title} </h6>
                 <p class="card-subtitle O-cl-red"> CNY ${
                   el.classified_price
@@ -177,12 +177,12 @@ $(function() {
             <a href="/classifieds/${
               el.classified_slug
             }" style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
+              <div class="card-img-top img-responsive">
                 <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
                   el.classified_thumbnail
-                }" alt="${el.classified_title}">
+                }" alt="${el.classified_title}" style="max-width: 70px">
               </div>
-              <div class="column">
+              <div style"margin-left: 5px">
                 <h6 class="card-title"> ${el.classified_title} </h6>
                 <p class="card-subtitle O-cl-red"> CNY ${
                   el.classified_price

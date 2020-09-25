@@ -28,13 +28,16 @@
           <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
             <a href="{% url 'classifieds:classified' message.classified.slug %}"
               style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
 
+              <div class="card-img-top img-responsive column">
                 {% if message.classified_thumbnail %}
-                <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}">
+                    <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}"
+                    style="max-width: 70px">
                 {% else %}
-                <img class="card-img" src="{{oss}}/classifieds/default.jpg">
+                    <img class="card-img" src="{{oss}}/classifieds/default.jpg"
+                    style="max-width: 70px">
                 {% endif %}
+              </div>
 
               </div>
               <div class="column">
@@ -86,15 +89,17 @@
           <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
             <a href="{% url 'classifieds:classified' message.classified.slug %}"
               style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive column" style="max-width: 70px">
 
+              <div class="card-img-top img-responsive column">
                 {% if message.classified_thumbnail %}
-                <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}">
+                    <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}"
+                    style="max-width: 70px">
                 {% else %}
-                <img class="card-img" src="{{oss}}/classifieds/default.jpg">
+                    <img class="card-img" src="{{oss}}/classifieds/default.jpg"
+                    style="max-width: 70px">
                 {% endif %}
-
               </div>
+
               <div class="column">
                 <h6 class="card-title"> {{ message.classified.title|truncatechars:60 }} </h6>
                 <p class="card-subtitle O-cl-red"> CNY {{ message.classified.price|title }} </p>
