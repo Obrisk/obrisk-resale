@@ -70,14 +70,16 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById("create-btn").addEventListener('click', function(event) {
       const phn = document.getElementById("id_phone_number");
       //Help the user to add the country code on phone number
-      if (phn.value !== null && phn.value !== '') {
-            if (phn.value.startsWith('+86') == false) {
-                if (phn.value.length === 11 ) {
-                    phn.value ="+86" + phn.value;
-                } else {
-                      printError(
-                        "The phone number is incorrect, Please verify"
-                      );
+      if (phn !== null) {
+         if (phn.value !== '') {
+                if (phn.value.startsWith('+86') == false) {
+                    if (phn.value.length === 11 ) {
+                        phn.value ="+86" + phn.value;
+                    } else {
+                          printError(
+                            "The phone number is incorrect, Please verify"
+                          );
+                    }
                 }
             }
         } else if (uploader.fileStats.totalFilesNum < 1 ||
