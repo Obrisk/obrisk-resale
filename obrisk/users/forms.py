@@ -22,43 +22,6 @@ from obrisk.users.wechat_config import CHINA_PROVINCES
 User = get_user_model()
 
 
-class CustomUserCreationForm(UserCreationForm):
-    class Meta(UserCreationForm):
-        model = User
-        fields = ("username", "country", "city")
-
-
-class CustomUserChangeForm(UserChangeForm):
-    class Meta:
-        model = User
-        fields = UserChangeForm.Meta.fields
-
-
-class UserForm(forms.ModelForm):
-    bio = forms.CharField(
-        widget=forms.Textarea(attrs={"rows": 3}),
-        required=False
-    )
-    province_region = forms.CharField(
-            widget=forms.HiddenInput())
-    city = forms.CharField(widget=forms.HiddenInput())
-    job_title = forms.CharField(
-            required=False, label=("Occupation"))
-    address = forms.CharField(required=False)
-
-    class Meta:
-        model = User
-        fields = (
-                    "name", "job_title", "province_region",
-                    "city", "bio", "address"
-                )
-        help_texts = {
-            "bio": "A short introduction about yourself",
-            "address": "English address is preferred, \
-                        don't include your City and Province",
-        }
-
-
 
 class SelectWidget(Select):
     """
@@ -254,6 +217,58 @@ class SocialSignupCompleteForm(PhoneSignupForm):
         user.save()
         # You must return the original result.
         return user
+
+
+class CustomUserCreationForm(UserCreationForm):
+    class Meta(UserCreationForm):
+        model = User
+        fields = ("username", "country", "city")
+
+
+class CustomUserChangeForm(UserChangeForm):
+    class Meta:
+        model = User
+        fields = UserChangeForm.Meta.fields
+
+
+class UserForm(forms.ModelForm):
+    bio = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 3}),
+        required=False
+    )
+    job_title = forms.CharField(
+            required=False, label=("Occupation"))
+
+    province_region = ProvinceChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'province',
+                    'class': 'custom-select',
+                    'name': 'province_region',
+                    'autocomplete': 'on'
+            })
+        )
+    city = CityChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'city',
+                    'class': 'custom-select',
+                    'name': 'city',
+                    'autocomplete': 'on'
+            })
+        )
+
+    address = forms.CharField(required=False)
+
+    class Meta:
+        model = User
+        fields = (
+                    "name", "job_title","bio",
+                    "province_region", "city", "address"
+                )
+        help_texts = {
+            "bio": "A short introduction about yourself",
+            "address": "English address is preferred, \
+                        don't include your City and Province",
+        }
 
 
 class EmailSignupForm(SignupForm):
