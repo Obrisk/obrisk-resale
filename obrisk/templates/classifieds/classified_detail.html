@@ -95,6 +95,7 @@
                   </div>
                 </div>
 
+            {% if classified.status == 'A' %}
             <div class="action-wrapper">
 
                   <div class="button share share-button"
@@ -120,7 +121,8 @@
                           class="feather feather-message-square">
                           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                         </svg>
-                        Chat</div>
+                        Chat
+                       </div>
 
                     {% else %}
                         <a class="button chat-button" href="{% url 'classifieds:edit_classified' classified.id %}"
@@ -128,12 +130,18 @@
                           <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
                     {% endif %}
               </div>
+          {% else %}
+              <div class="notification is-warning">
+                This item is no longer available
+              </div>
+
+          {% endif %}
           </div>
 
         <div class="card-text">{{ classified.details }}</div>
 
         <div class="seller-contacts-wrapper">
-          {% if request.user.city == classified.city %}
+          {% if request.user.city == classified.city and classified.status == 'A' %}
 
             {% if classified.phone_number %}
                   <small class="seller-contacts"><strong>Seller's contacts:</strong>
@@ -160,7 +168,7 @@
 
        {% elif user.is_authenticated %}
            
-            <strong> This item is not available in your city </strong>
+            <strong> This item is not available in your city or it is already bought </strong>
 
        {% else %}
             <h6> Please <a class="js-scroll-trigger login-text"
