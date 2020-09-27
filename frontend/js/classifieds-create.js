@@ -68,21 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
   document.getElementById("create-btn").addEventListener('click', function(event) {
-      const phn = document.getElementById("id_phone_number");
-      //Help the user to add the country code on phone number
-      if (phn !== null) {
-         if (phn.value !== '') {
-                if (phn.value.startsWith('+86') == false) {
-                    if (phn.value.length === 11 ) {
-                        phn.value ="+86" + phn.value;
-                    } else {
-                          printError(
-                            "The phone number is incorrect, Please verify"
-                          );
-                    }
-                }
-            }
-        } else if (uploader.fileStats.totalFilesNum < 1 ||
+
+      if (uploader.fileStats.totalFilesNum < 1 ||
             document.getElementById('id_title').value.length < 2 ||
             document.getElementById('id_details').value.length < 2) {
               printError(
@@ -93,9 +80,28 @@ document.addEventListener('DOMContentLoaded', function() {
               if (images != "" && $("#id_images").val() == images) {
                     $("body").trigger("uploadComplete");
               } else {
+                  try {
+                    const phn = document.getElementById("id_phone_number");
+                    if (phn !== null) {
+                       if (phn.value !== '') {
+                            if (phn.value.startsWith('+86') == false) {
+                                if (phn.value.length === 11 ) {
+                                    phn.value ="+86" + phn.value;
+                                } else {
+                                      printError(
+                                        "The phone number is incorrect, Please verify"
+                                      );
+                                }
+                            }
+                        }
+                     } 
+                  } catch (error) {
+                    console.error(error);
+                  }
+
                   localStorage.removeItem('new-classified');
                   $("body").trigger("submitClicked");
-              }
+            }
         }
   });
 
