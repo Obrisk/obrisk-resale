@@ -7,6 +7,11 @@
 function printError(msg) {
   document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
   document.getElementById('notf-msg').innerHTML = msg;
+  window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth'
+  });
 }
 
 
