@@ -315,7 +315,7 @@ def update_profile_pic(request):
             'error_message': "No profile picture submitted!"})
 
     else:
-        if picture.startswith('media/profile_pics/') is False:
+        if picture.startswith('media/images/profile_pics/') is False:
             return JsonResponse({'success': False,
                                 'error_message': "Your picture, \
                                         wasn't uploaded successfully, \
@@ -323,10 +323,10 @@ def update_profile_pic(request):
 
         else:
             d = str(datetime.datetime.now())
-            thumb_name = "media/profile_pics/" + slugify(
-                    str(request.user)) + "/thumbnails/" + "thumb-" + d
-            pic_name = "media/profile_pics/" + slugify(
-                    str(request.user))+ "/thumbnails" + "dp-" + d
+            thumb_name = "media/images/profile_pics/" + slugify(
+                    str(request.user)) + "/thumbnails/" + "thumb-" + d + ".jpeg"
+            pic_name = "media/images/profile_pics/" + slugify(
+                    str(request.user))+ "/thumbnails" + "dp-" + d + ".jpeg"
             style1 = 'image/resize,m_fill,h_60,w_60'
             style2 = 'image/resize,m_fill,h_250,w_250'
 

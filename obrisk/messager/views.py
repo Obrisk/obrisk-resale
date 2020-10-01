@@ -46,36 +46,36 @@ class ContactsListView(LoginRequiredMixin, ListView):
         context['convs'] = Conversation.objects.get_conversations(
                         self.request.user
                     ).select_related('first_user','second_user').annotate(
-                    time = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('timestamp', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    last_msg = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('message', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    img = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('image', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    attachment = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('attachment', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    unread = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('unread', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    recipient = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('recipient', flat=True).order_by('-timestamp')[:1]
-                    )
+                        time = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('timestamp', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        last_msg = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('message', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        img = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('image', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        attachment = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('attachment', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        unread = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('unread', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        recipient = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('recipient', flat=True).order_by('-timestamp')[:1]
+                        )
                 ).order_by('-time')
 
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
@@ -190,12 +190,16 @@ def send_message(request):
     sender = request.user
     recipient_username = request.POST.get('to')
     try:
-        recipient = get_user_model().objects.get(username=recipient_username)
+        recipient = get_user_model().objects.get(
+                    username=recipient_username
+                )
     except get_user_model().DoesNotExist:
-        return HttpResponseNotFound("The user account appears to not exist or it has been freezed!")
+        return HttpResponseNotFound(
+                "This account doesn't exist or it is freezed!")
 
     #Django-channels doesn't accept group names that are chinese characters
-    #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
+    #This is a trivial workaround to avoid an error to happen
+    #in case the name of user is in chinese characters
 
     recipient.username = slugify(recipient_username)
     sender.username = slugify(request.user.username)
@@ -209,14 +213,17 @@ def send_message(request):
         return HttpResponse()
 
     if image:
-        if image.startswith(f'media/images/messages/{sender.username}/{recipient.username}') == False:
+        if image.startswith(
+            f'media/images/messages/{sender.username}/{recipient.username}' #noqa
+          ) == False:
             image = None
 
         else:
             d = str(datetime.datetime.now())
-            img_preview = "messages/" + slugify(
-                    str(request.user.username)) + slugify(
-                            str(recipient_username)) + "/preview/" + "prv-" + d
+            img_preview = "media/images/messages/" + slugify(
+                    str(request.user.username)) + "/" + slugify(
+                            str(recipient_username)
+                        ) + "/preview/" + "prv-" + d + ".jpeg"
             style1 = 'image/resize,m_fill,h_250,w_250'
 
             try:

@@ -24,10 +24,12 @@ from obrisk.stories.models import StoryImages, Stories
 from config.settings.base import env
 
 
-# Initialize the information such as AccessKeyId, AccessKeySecret, and Endpoint.
-# Get through environment variables, or replace something like "< your AccessKeyId>" with a real AccessKeyId.
+# Initialize info e.g AccessKeyId, AccessKeySecret, and Endpoint.
+# Get through environment variables,
+# or replace something like "< your AccessKeyId>" with a real AccessKeyId.
 # Note: AccessKeyId and AccessKeySecret are the keys of the sub-users.
-# RoleArn can be viewed in the console under Access Control > Role Management > Administration > Basic Information > Arn.
+# RoleArn can be viewed in the console under 
+# Access Control > Role Management > Administration > Basic Information > Arn.
 #
 # Taking the Hangzhou area as an example, the Endpoint can be
 #   https://oss-cn-hangzhou.aliyuncs.com
@@ -45,7 +47,7 @@ class StsToken(object):
     """Temporary user key returned by AssumeRole
     :param str access_key_id: access user id of the temporary user
     :param str access_key_secret: temporary user's access key secret
-    :param int expiration: expiration time, UNIX time, seconds from UTC zero on January 1, 1970
+    :param int expiration: UNIX time, secs from UTC zero/Jan 1, 1970
     :param str security_token: temporary user token
     :param str request_id: request ID
     """

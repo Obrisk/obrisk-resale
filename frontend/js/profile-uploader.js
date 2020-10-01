@@ -341,7 +341,7 @@ function OssUpload() {
 
 function genKey() {
   return (
-    "media/profile_pics/" +
+    "media/images/profile_pics/" +
     user +
     "/pics/" +
     "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {

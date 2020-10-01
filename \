@@ -457,7 +457,7 @@ OssUpload.prototype = {
   constructor: OssUpload,
   // Binding event
   bindEvent: function() {
-    const _this = this;
+    var _this = this;
 
     $("#chooseFile, #addBtn").click(function() {
       document.getElementById("image-file").click();
@@ -465,9 +465,9 @@ OssUpload.prototype = {
 
     $('input[type="file"]').change(function(e) {
       if (e.target.files && e.target.files[0]) {
-        const reader = new FileReader();
+        var reader = new FileReader();
         reader.onload = function() {
-          const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic"><div class="message-block"><span>${moment().format(
+          var image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic"><div class="message-block"><span>${moment().format(
             "MMM. Do h:mm"
           )}</span><a data-fancybox="gallery" href="${
             reader.result
@@ -818,9 +818,10 @@ var progress = function(p) {
  * TODO neeeds improvment to make ajax call ony when token has expired
  */
 var applyTokenDo = function() {
+  var url = oss_url; //Request background to obtain authorization address url
   return new Promise((resolve, reject) => {
     $.ajax({
-      url: oss_url,
+      url: url,
       success: function(result) {
         resolve(result);
       },
@@ -833,7 +834,7 @@ var applyTokenDo = function() {
 
 //File upload initializer
 function OssUpload() {
-  const _this = this;
+  var _this = this;
   _this.init = function() {
     _this.initPage();
     _this.bindEvent();
@@ -849,7 +850,7 @@ function OssUpload() {
 
 function genKey() {
   return (
-    "media/images/messages/" +
+    "messages/" +
     currentUser +
     "/" +
     activeUser +

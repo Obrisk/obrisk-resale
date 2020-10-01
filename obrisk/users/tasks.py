@@ -37,14 +37,15 @@ def update_prof_pic_sync(user, thumb, mid, full):
 
     # naming them in our oss
     salt = uuid.uuid4().hex[:12]
-    thumb_name = "media/profile_pics/" + slugify(
+    thumb_name = "media/images/profile_pics/" + slugify(
             str(user.username)
-        ) + "/thumbnails/" + "thumb-" + salt
-    pic_name = "media/profile_pics/" + slugify(
-            str(user.username)) + "/mid-thumbnails/" + "dp-" + salt
-    org_pic_name = "media/profile_pics/" + slugify(
+        ) + "/thumbnails/" + "thumb-" + salt + ".jpeg"
+    pic_name = "media/images/profile_pics/" + slugify(
+                str(user.username)
+            ) + "/mid-thumbnails/" + "dp-" + salt + ".jpeg"
+    org_pic_name = "media/images/profile_pics/" + slugify(
             str(user.username)
-        ) + "/full-pic/" + "org-dp-" + salt
+        ) + "/full-pic/" + "org-dp-" + salt + ".jpeg"
 
     # upoad them in our oss
     try:
@@ -112,14 +113,15 @@ def update_profile_picture(user_id, socialapp):
 
     # naming them in our oss
     salt = uuid.uuid4().hex[:12]
-    thumb_name = "media/profile_pics/" + slugify(
+    thumb_name = "media/images/profile_pics/" + slugify(
             str(user.username)
-        ) + "/thumbnails/" + "thumb-" + salt
-    pic_name = "media/profile_pics/" + slugify(
-            str(user.username)) + "/mid-thumbnails/" + "dp-" + salt
-    org_pic_name = "media/profile_pics/" + slugify(
+        ) + "/thumbnails/" + "thumb-" + salt + ".jpeg"
+    pic_name = "media/images/profile_pics/" + slugify(
+                str(user.username)
+            ) + "/mid-thumbnails/" + "dp-" + salt + ".jpeg"
+    org_pic_name = "media/images/profile_pics/" + slugify(
             str(user.username)
-        ) + "/full-pic/" + "org-dp-" + salt
+        ) + "/full-pic/" + "org-dp-" + salt + ".jpeg"
 
     # upoad them in our oss
     try:

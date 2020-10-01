@@ -215,20 +215,19 @@
 
     <script>
       var activeUser = "{{ active }}";
-      var currentUser = "{{ request.user.username }}";
-
-      {% if request.user.thumbnail %}
-          var currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
-      {% else %}
-          var currentUserThumbnail = "{{oss}}/{% static 'img/user.png' %}"
-      {% endif %}
-
       const oss_url = "{% url 'get_oss_auth' %}";
 
-      {% if active.thumbnail %}
-          var user_thumb = "{{oss}}/{{ active.thumbnail }}"
+      {% if request.user.thumbnail %}
+          const currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
       {% else %}
-          var user_thumb = "{% static 'img/user.png' %}"
+          const currentUserThumbnail = "{{oss}}/{% static 'img/user.png' %}"
+      {% endif %}
+
+
+      {% if active.thumbnail %}
+          const user_thumb = "{{oss}}/{{ active.thumbnail }}"
+      {% else %}
+          const user_thumb = "{% static 'img/user.png' %}"
       {% endif %}
 
       function shareMe() {
