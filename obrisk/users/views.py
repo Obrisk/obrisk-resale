@@ -806,5 +806,4 @@ def bulk_update_user_phone_no(request):
                 user.phone_number = '+8613300000000'
                 user.save()
 
-    return redirect('stories:list')
-
+    return redirect('classifieds:list')

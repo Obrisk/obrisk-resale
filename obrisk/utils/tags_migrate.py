@@ -13,4 +13,4 @@ def migrate_all_tags(request):
     migrate_qa_tags.delay()
     migrate_stories_tags.delay()
 
-    return redirect("stories:list")
+    return redirect("classifieds:list")

@@ -14,6 +14,6 @@ def social_user_connected(user, **kwargs):
 
         update_profile_picture.delay(user.id, 'linkedin')
 
-        return redirect("stories:list")
+        return redirect("classifieds:list")
     else:
-        return redirect("stories:list")
+        return redirect("classifieds:list")

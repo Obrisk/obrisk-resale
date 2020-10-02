@@ -517,4 +517,4 @@ def bulk_update_vid_images(request):
                  image_thumb = pic_name
             )
 
-    return redirect('stories:list')
+    return redirect('classifieds:list')
