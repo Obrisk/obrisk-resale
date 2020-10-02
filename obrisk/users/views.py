@@ -564,65 +564,71 @@ class GetInfoView(WechatViewSet):
 
     def get(self, request):
         if 'code' in request.GET:
-            code = request.GET['code']
-            token, openid = self.wechat_api.get_access_token(code)
-            if token is None or openid is None:
-                logging.error('Wechat auth failed')
-                return HttpResponseServerError('get access or openid not provided')
-            user_info, error = self.wechat_api.get_user_info(token, openid)
-
-            if error:
-                logging.error(f'Wechat auth failed: {error}')
-                return HttpResponseServerError('get access_token error')
-
-            user_data = {
-                'nck': user_info['nickname'],
-                'sx': user_info['sex'],
-                'pr': user_info['province'].encode('iso8859-1').decode('utf-8'),
-                'ct': user_info['city'].encode('iso8859-1').decode('utf-8'),
-                'cnt': user_info['country'].encode('iso8859-1').decode('utf-8'),
-                'ui': user_info['openid']
-            }
-            user = User.objects.filter(
-                    wechat_openid=user_data['ui']
-                )
-
-            if user.count() == 0:
-
-                cache.set(user_data['ui'], user_info['headimgurl'], 3000)
-
-                user_data['nck'] = first_name = slugify(
-                        user_data['nck'],
-                        max_length=16
-                    )
-
-                for x in itertools.count(1):
-                    if not User.objects.filter(username=user_data['nck']).exists():
-                        break
-                    user_data['nck'] = '%s-%d' % (first_name, x)
-
-                in_china=False
-                if str(user_data['cnt']) == 'China':
-                    in_china=True
-
-                form = SocialSignupCompleteForm(
-                            initial={
-                                'username': user_data['nck'],
-                                'gender': user_data['sx'],
-                                'wechat_openid': user_data['ui'],
-                            }
-                        )
-                return render(request,
-                        'users/wechat-auth.html',
-                        {'form': form, 'in_china': in_china}
+            try:
+                code = request.GET['code']
+                token, openid = self.wechat_api.get_access_token(code)
+            except TypeError:
+                logging.error('TypeError: NoneType object is not iterable')
+                return HttpResponseServerError(
+                        'Sorry we are currently unable to process this request, try again later'
                     )
             else:
-                login(
-                    request, user.first(),
-                    backend='django.contrib.auth.backends.ModelBackend'
-                )
-            return HttpResponseRedirect(reverse('classifieds:list'))
+                if token is None or openid is None:
+                    logging.error('Wechat auth failed')
+                    return HttpResponseServerError('Get access or openid not provided')
 
+                user_info, error = self.wechat_api.get_user_info(token, openid)
+
+                if error:
+                    logging.error(f'Wechat auth failed: {error}')
+                    return HttpResponseServerError('get access_token error')
+
+                user_data = {
+                    'nck': user_info['nickname'],
+                    'sx': user_info['sex'],
+                    'pr': user_info['province'].encode('iso8859-1').decode('utf-8'),
+                    'ct': user_info['city'].encode('iso8859-1').decode('utf-8'),
+                    'cnt': user_info['country'].encode('iso8859-1').decode('utf-8'),
+                    'ui': user_info['openid']
+                }
+                user = User.objects.filter(
+                        wechat_openid=user_data['ui']
+                    )
+
+                if user.count() == 0:
+                    cache.set(user_data['ui'], user_info['headimgurl'], 3000)
+
+                    user_data['nck'] = first_name = slugify(
+                            user_data['nck'],
+                            max_length=16
+                        )
+
+                    for x in itertools.count(1):
+                        if not User.objects.filter(username=user_data['nck']).exists():
+                            break
+                        user_data['nck'] = '%s-%d' % (first_name, x)
+
+                    in_china=False
+                    if str(user_data['cnt']) == 'China':
+                        in_china=True
+
+                    form = SocialSignupCompleteForm(
+                                initial={
+                                    'username': user_data['nck'],
+                                    'gender': user_data['sx'],
+                                    'wechat_openid': user_data['ui'],
+                                }
+                            )
+                    return render(request,
+                            'users/wechat-auth.html',
+                            {'form': form, 'in_china': in_china}
+                        )
+                else:
+                    login(
+                        request, user.first(),
+                        backend='django.contrib.auth.backends.ModelBackend'
+                    )
+                return HttpResponseRedirect(reverse('classifieds:list'))
         else:
             return HttpResponseBadRequest(
                  content=_('Bad request')
