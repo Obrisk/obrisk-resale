@@ -1,5 +1,11 @@
 #Please ignore pylint hint on Classified.DoesNotExist
 #This code is valid
+import time
+import base64
+import datetime
+import oss2
+import logging
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -11,11 +17,6 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
 from django.views.generic import ListView
 from django.db.models import OuterRef, Subquery
-
-import time
-import base64
-import datetime
-import oss2
 
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
@@ -117,7 +118,7 @@ def messagesView(request, username):
                 conv.second_user = active_user
                 conv.save()
 
-            msgs_100 = conv.messages.all().select_related(
+            msgs_all = conv.messages.all().select_related(
                     'sender',
                     'recipient',
                     'classified'
@@ -155,20 +156,24 @@ def messagesView(request, username):
                         Classified.objects.filter(
                             message=OuterRef('pk'),
                         ).values_list('slug', flat=True)[:1]),
-                    )[:100]
+                    )
 
-            msgs_data = list(msgs_100)
+            msgs_data = list(msgs_all)
 
-            conv.messages.all().update(unread=False)
-            if cache.get(f'msg_{request.user.pk}') is not None:
-                values = list(cache.get(f'msg_{request.user.pk}'))
+            #If update is called on the query, the order 'll be distorted
+            msgs_all.update(unread=False)
+
+            unread_msgs = cache.get(f'msg_{request.user.pk}')
+            if unread_msgs is not None:
+                values = list(unread_msgs)
 
                 if key in values:
                     values = values.remove(key)
                     cache.set(f'msg_{request.user.pk}', values, None)
 
+            #Slicing is at end to allow the update query to run
             return JsonResponse({
-                'msgs': msgs_data,
+                'msgs': msgs_data[:50],
                 'active_username': active_user.username,
                 'active_thumbnail': active_user.thumbnail
             })
@@ -184,9 +189,9 @@ def messagesView(request, username):
 @ajax_required
 @require_http_methods(["POST"])
 def send_message(request):
-    """AJAX Functional view to recieve just the minimum information, process
-    and create the new message and return the new data to be attached to the
-    conversation stream."""
+    """AJAX view to recieve just the minimum information,
+    and create the new message and return the new data
+    to be attached to the conversation stream."""
     sender = request.user
     recipient_username = request.POST.get('to')
     try:
@@ -197,7 +202,7 @@ def send_message(request):
         return HttpResponseNotFound(
                 "This account doesn't exist or it is freezed!")
 
-    #Django-channels doesn't accept group names that are chinese characters
+    #Django-channels doesn't accept group names that are chinese
     #This is a trivial workaround to avoid an error to happen
     #in case the name of user is in chinese characters
 
@@ -239,26 +244,25 @@ def send_message(request):
                 image = None
                 img_preview = None
 
-    if message:
-        if len(message.strip()) == 0:
-            return HttpResponse()
+    if message and len(message.strip()) == 0:
+        return HttpResponse()
 
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
-                            image=image, img_preview=img_preview, attachment=attachment)
+                            image=image, img_preview=img_preview,
+                            attachment=attachment)
         notification_handler(actor=sender,
                 recipient=recipient,
                 verb=Notification.NEW_MESSAGE,
                 is_msg=True, key='new_message')
 
         key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
-        values = []
-        if cache.get(f'msg_{recipient.pk}') is None:
-            values.append(key)
-            cache.set(f'msg_{recipient.pk}', values, None)
+
+        recp_new_msgs = cache.get(f'msg_{recipient.pk}')
+        if recp_new_msgs is None:
+            cache.set(f'msg_{recipient.pk}', [key] , None)
         else:
-            values = list(cache.get(f'msg_{recipient.pk}'))
-            values = values.append(key)
+            values = list(recp_new_msgs).append(key)
             cache.set(f'msg_{recipient.pk}', values, None)
 
         # creating a key for the chatting users and updating a value for the key
@@ -272,9 +276,13 @@ def send_message(request):
 
         # if recipient_key is None and recipient_key !=sender_key:
         #     #notification
-        #     notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='message')
+        #     notification_handler(actor=sender, recipient=recipient,
+              #verb=Notification.NEW_MESSAGE, is_msg=True, key='message')
 
-        return render(request, 'messager/single_message.html', {'message': msg})
+        return render(
+                request, 'messager/single_message.html',
+                {'message': msg}
+            )
 
     return HttpResponse()
 
@@ -283,7 +291,7 @@ def send_message(request):
 @ajax_required
 @require_http_methods(["GET"])
 def receive_message(request):
-    """Simple AJAX functional view to return a rendered single message on the
+    """AJAX view to return a rendered single message on the
     receiver side providing realtime connections."""
     try:
         message_id = request.GET.get('message_id')
@@ -306,14 +314,20 @@ def classified_chat(request, to, classified):
         from_user = request.user
         classified = Classified.objects.get(id=classified)
 
+        if classified.user != to_user:
+            return redirect('messager:contacts_list')
+
     except get_user_model().DoesNotExist:
-        messages.error(request, f"Sorry, The user {to}, doesn't exist!")
+        messages.error(request, f"Sorry, The account {to} is unavailable!")
         return redirect('messager:contacts_list')
 
     except Classified.DoesNotExist:
-        #This error message assumes that the classifieds items are never deleted completely.
-        #If the user reaches here then he/she was playing with url parameters.
-        messages.error(request, f"Hello there, your request is invalid!")
+        #This error message assumes that the classifieds items
+        #are never deleted completely.
+        messages.error(
+                request,
+                f"Invalid request or the classified is unavailable!"
+            )
         return redirect('messager:contacts_list')
 
     else:
@@ -322,36 +336,24 @@ def classified_chat(request, to, classified):
                 classified=classified
             )[:1]
 
-        if Conversation.objects.conversation_exists(from_user, to_user):
+        if not Conversation.objects.conversation_exists(from_user, to_user):
+
+            key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+            conv = Conversation(first_user=from_user,
+                            second_user=to_user,
+                            key=key)
+            conv.save()
+
+        if not Message.objects.msg_clsf_exists(
+                from_user, to_user, classified
+            ):
             Message.objects.create(
                 sender=from_user,
                 recipient=to_user,
                 classified=classified,
                 classified_thumbnail=str(classified_thumbnail[0])
             )
-            return redirect("messager:conversation_detail" , to)
-
-        else:
-            #This condition assumes classified parameter should never be null.
-            if classified.user == to_user:
-                key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
-                conv = Conversation(first_user=from_user,
-                                second_user=to_user,
-                                key=key)
-                conv.save()
-
-                Message.objects.create(
-                    conversation=conv,
-                    sender=from_user,
-                    recipient=to_user,
-                    classified=classified,
-                    classified_thumbnail=str(classified_thumbnail[0])
-                )
-                return redirect('messager:conversation_detail', to)
-            else:
-                messages.error(request, f"Hey you there, it looks like you're trying to do something bad. \
-                    Your account { from_user}, has been flagged, and if this happens again, you will be blocked!")
-                return redirect('messager:contacts_list')
+        return redirect("messager:conversation_detail" , to)
 
 
 

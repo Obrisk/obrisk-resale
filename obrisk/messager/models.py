@@ -20,14 +20,12 @@ class ConversationQuerySet(models.query.QuerySet):
         """ Get all conversations of a specific user """
         return self.filter( Q(first_user=user) | Q(second_user=user))
 
+    #TODO: check conversation exists only by checking the key
     def conversation_exists(self, user1, user2):
         """ Check if these 2 users had conversation before """
-        qs = self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1)
-
-        if qs:
+        if self.filter(first_user=user1, second_user=user2) | self.filter(first_user=user2, second_user=user1):
             return True
         return False
-
 
     def get_conv_classified(self, user1, user2):
         qs = self.filter(Q (first_user=user1, second_user=user2)) | self.filter(first_user=user2, second_user=user1)
@@ -76,30 +74,48 @@ class MessageQuerySet(models.query.QuerySet):
         except self.model.DoesNotExist:
             return get_user_model().objects.get(username=recipient.username)
 
+    def msg_clsf_exists(self, frm, to, classified):
+        if self.filter(
+                sender=frm, recipient=to,
+                classified=classified
+            ):
+            return True
+        return False
 
 class Message(models.Model):
     """A private message sent between users."""
     uuid_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
-    #In the near future enforce all messages to belong to a specific conversation,
-    #this will improve the query speed on the conversation list. (null=False)
+    #TODO: enforce all messages to belong to a specific conversation,
+    #this will improve query speed on conversation list. (null=False)
     conversation = models.ForeignKey(
         Conversation, related_name='messages', null=True,
         blank=True,  on_delete=models.CASCADE)
     sender = models.ForeignKey(
         settings.AUTH_USER_MODEL, related_name='sent_messages',
-        verbose_name=_("Sender"), null=True, on_delete=models.CASCADE)
+        verbose_name=_("Sender"), null=True, on_delete=models.CASCADE
+      )
     recipient = models.ForeignKey(
-        settings.AUTH_USER_MODEL, related_name='received_messages', null=True,
-        blank=True, verbose_name=_("Recipient"), on_delete=models.CASCADE)
+        settings.AUTH_USER_MODEL, related_name='received_messages',
+        null=True, blank=True,
+        verbose_name=_("Recipient"), on_delete=models.CASCADE
+       )
     timestamp = models.DateTimeField(auto_now_add=True)
     message = models.TextField(max_length=1000, blank=True, null=True)
     unread = models.BooleanField(default=True, db_index=True)
     image = models.CharField(max_length=300, blank=True, null=True)
-    img_preview = models.CharField(max_length=300, blank=True, null=True)
-    classified = models.ForeignKey(Classified, on_delete=models.CASCADE, related_name='message', null=True, blank=True)
-    classified_thumbnail = models.CharField(max_length=300, blank=True, null=True)
-    attachment = models.CharField(max_length=300, blank=True, null=True)
+    img_preview = models.CharField(
+            max_length=300, blank=True, null=True
+        )
+    classified = models.ForeignKey(
+            Classified, on_delete=models.CASCADE,
+            related_name='message', null=True, blank=True)
+    classified_thumbnail = models.CharField(
+            max_length=300, blank=True, null=True
+        )
+    attachment = models.CharField(
+            max_length=300, blank=True, null=True
+        )
     has_link = models.BooleanField(default=False)
     objects = MessageQuerySet.as_manager()
 
