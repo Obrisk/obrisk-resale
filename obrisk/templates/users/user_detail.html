@@ -23,7 +23,19 @@
     <h1 class="media-body mt-0">{{ object.username|title }}</h1>
 
     <div class="profile-points">
-      <div class="point-label"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</div>
+      <div class="point-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-gift">
+            <polyline points="20 12 20 22 4 22 4 12"></polyline>
+            <rect x="2" y="7" width="20" height="5"></rect>
+            <line x1="12" y1="22" x2="12" y2="7"></line>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+        </svg>
+        {% trans 'Points' %}
+      </div>
       <div class="points"> {{ object.points }} </div>
     </div>
 
@@ -55,49 +67,77 @@
     <div id="contact-info" class="vcard">
       <p>
         {% if object.instagram_account %}
-        <a href="https://www.instagram.com/{{ object.instagram_account }}" style="font-size: 2em"
-          title="{% trans 'Instagram Profile' %}"><i class="fa fa-instagram"></i> </a>
+            <a href="https://www.instagram.com/{{ object.instagram_account }}"
+               style="font-size: 2em"
+               title="{% trans 'Instagram Profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-instagram">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
+                    </rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z">
+                    </path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            </a>
         {% endif %}
 
         {% if object.linkedin_account %}
-        <a href="https://www.linkedin.com/in/{{ object.linkedin_account }}" style="font-size: 2em"
-          title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i> </a>
-        {% endif %}
-
-        {% if object.snapchat_account %}
-        <a href="https://www.snapchat.com/add/{{ object.snapchat_account }}" style="font-size: 2em"
-          title="{% trans 'Snapchat Profile' %}"><i class="fa fa-snapchat"></i> </a>
+            <a href="https://www.linkedin.com/in/{{ object.linkedin_account }}" style="font-size: 2em"
+              title="{% trans 'LinkedIn Profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="#039BE5" stroke="#039BE5"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-linkedin">
+                    <path 
+                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                    </path>
+                    <rect x="2" y="9" width="4" height="12"></rect>
+                    <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+            </a>
         {% endif %}
 
         {% if object.facebook_account %}
-        <a href="https://www.facebook.com/{{ object.facebook_account }}" style="font-size: 2em"
-          title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i> </a>
+            <a href="https://www.facebook.com/{{ object.facebook_account }}"
+               style="font-size: 2em"
+              title="{% trans 'Facebook Profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="#039BE5" stroke="#039BE5"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-facebook">
+                    <path
+                        d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z">
+                    </path>
+                </svg>
+            </a>
         {% endif %}
 
         <br />
+
         {% if object.name %}
-        👤{{ object.name|title  }}
+            👤{{ object.name|title  }} <br />
         {% endif %}
 
-        <br />
         {% if object.city %}
-        <span class="fa"> 📍{{ object.city }} </span> <br />
+             📍{{ object.city }} <br />
         {% endif %}
         <br />
+
         {% if object.job_title %}
-        💼{{ object.job_title }} <br />
+            💼{{ object.job_title }} <br />
         {% else %}
-        <p>🛌 {{ object.username }} is too lazy to add a job title.</p>
+            <p>🛌 {{ object.username }} is too lazy to add a job title.</p>
         {% endif %}
       </p>
 
       {% if object.bio %}
-      <div class="panel-body" id="objective">
-        <p>📇{{ object.bio }}</p>
-      </div>
+          <div class="panel-body" id="objective">
+            <p>📇{{ object.bio }}</p>
+          </div>
       {% else %}
-      <p> 🛌{{ object.username}} is too lazy to write a short bio.</p>
+          <p> 🛌{{ object.username}} is too lazy to write a short bio.</p>
       {% endif %}
+
       <div class="clear"></div>
     </div>
 
