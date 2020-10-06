@@ -526,7 +526,6 @@ document.addEventListener('DOMContentLoaded', function() {
   const webSocket = new channels.WebSocketBridge();
 
   if (new_messages.length > 1) {
-      socket_notif.play();
       document.querySelector(".msg-notification").style.display = 'block !important';
   }
 
