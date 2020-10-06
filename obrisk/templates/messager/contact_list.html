@@ -15,7 +15,7 @@
           {% if con.first_user.username == request.user.username %}
               <a href="#chat-window" data-toggle="modal"
                 data-url="{% url 'messager:conversation_detail' con.second_user.username %}"
-                class="card contact-card open-chat">
+                id="{{ con.key }}" class="card contact-card open-chat">
                 {% if con.second_user.thumbnail %}
                 <img src="{{oss}}/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
                   style="width:40px;height:40px;border-radius: 50%;"
@@ -40,7 +40,15 @@
                   {% endif %}
 
                   {%  if con.unread and request.user.id == con.recipient %}
-                      <span id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+                      <span id="new-msgs">
+                        <span class="msg-notification">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </span>
+                      </span>
                   {% endif %}
                 </div>
               </a>
@@ -48,7 +56,7 @@
           {% else %}
               <a href="#chat-window" data-toggle="modal"
                 data-url="{% url 'messager:conversation_detail' con.first_user.username %}"
-                class="card contact-card open-chat">
+                id="{{ con.key }}" class="card contact-card open-chat">
                 {% if con.first_user.thumbnail %}
                     <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
                       style="width:40px;height:40px;border-radius: 50%;"
@@ -73,7 +81,15 @@
                   {% endif %}
 
                   {%  if con.unread and request.user.id == con.recipient %}
-                      <span id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
+                      <span id="new-msgs">
+                        <span class="msg-notification">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </span>
+                      </span>
                   {% endif %}
                 </div>
               </a>
