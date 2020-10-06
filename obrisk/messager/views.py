@@ -15,6 +15,8 @@ from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.generic import ListView
 from django.db.models import OuterRef, Subquery
 
@@ -32,6 +34,9 @@ except ImportError:
     from django.contrib.auth.models import User
     user_model = User
 
+SESSION_COOKIE_AGE = getattr(
+        settings, 'SESSION_COOKIE_AGE', DEFAULT_TIMEOUT
+    )
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -169,7 +174,7 @@ def messagesView(request, username):
 
                 if key in values:
                     values = values.remove(key)
-                    cache.set(f'msg_{request.user.pk}', values, None)
+                    cache.set(f'msg_{request.user.pk}', values, timeout=SESSION_COOKIE_AGE)
 
             #Slicing is at end to allow the update query to run
             return JsonResponse({
@@ -257,27 +262,13 @@ def send_message(request):
                 is_msg=True, key='new_message')
 
         key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
-
         recp_new_msgs = cache.get(f'msg_{recipient.pk}')
+
         if recp_new_msgs is None:
-            cache.set(f'msg_{recipient.pk}', [key] , None)
+            cache.set(f'msg_{recipient.pk}', [key] , timeout=SESSION_COOKIE_AGE)
         else:
             values = list(recp_new_msgs).append(key)
-            cache.set(f'msg_{recipient.pk}', values, None)
-
-        # creating a key for the chatting users and updating a value for the key
-        # value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
-        # cache.set(f'joint_chat_{sender.pk}', value, timeout=SESSION_COOKIE_AGE)
-
-        # # keys from caches
-        # sender_key = cache.get(f'joint_chat_{sender.pk}')
-        # recipient_key = cache.get(f'joint_chat_{recipient.pk}')
-        # print('sender key:', sender_key, "and recipient key", recipient_key )
-
-        # if recipient_key is None and recipient_key !=sender_key:
-        #     #notification
-        #     notification_handler(actor=sender, recipient=recipient,
-              #verb=Notification.NEW_MESSAGE, is_msg=True, key='message')
+            cache.set(f'msg_{recipient.pk}', values, timeout=SESSION_COOKIE_AGE)
 
         return render(
                 request, 'messager/single_message.html',
