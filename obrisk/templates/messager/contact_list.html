@@ -234,6 +234,7 @@
       var activeUser = "{{ active }}";
       const oss_url = "{% url 'get_oss_auth' %}";
 
+
       {% if request.user.thumbnail %}
           const currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
       {% else %}

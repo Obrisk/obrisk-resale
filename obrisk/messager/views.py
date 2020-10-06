@@ -180,7 +180,8 @@ def messagesView(request, username):
             return JsonResponse({
                 'msgs': msgs_data[:50],
                 'active_username': active_user.username,
-                'active_thumbnail': active_user.thumbnail
+                'active_thumbnail': active_user.thumbnail,
+                'current_conv': key
             })
 
     else:
