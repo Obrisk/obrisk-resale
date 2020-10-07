@@ -34,32 +34,6 @@ body,
     margin: auto 6px;
 }
 
-#msg-timestamp {
-  position: absolute;
-  top: 28%;
-  right: 11%;
-  font-weight: normal;
-  margin: 0;
-  padding: 0;
-  font-size: 11px;
-}
-
-#last-msg {
-  position: absolute;
-  height: 18px;
-  overflow: hidden;
-  left: 70px;
-  top: 60%;
-  font-weight: normal;
-  margin: 0;
-  padding: 0;
-  font-size: 12px;
-}
-
-.small-screen .contacts {
-  display: none;
-}
-
 .name-time-section {
     display: flex;
     justify-content: space-between;
@@ -89,10 +63,6 @@ h5 {
 .btn-dark:disabled {
   color: #cccccc !important;
   background: gray !important;
-}
-
-#new-msgs {
-  margin-left: 2px;
 }
 
 .action-buttons {

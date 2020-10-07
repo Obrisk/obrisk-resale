@@ -1,5 +1,9 @@
 //let audio = new Audio("/static/sound/chime.mp3");
 var current_conv;
+var last_stamp;
+var last_msg = document.getElementById('last-msg').value;
+var current_lst_stamp = document.getElementById('last-timestamp').value;
+
 const bottomNav = document.getElementById('navbarBottom');
 
 function scrollMessages() {
@@ -254,7 +258,16 @@ $(function() {
     $("body").removeClass("is-frozen");
     bottomNav.style.display = "block";
 
-    console.log(document.getElementById(current_conv));
+    if (current_lst_stamp !== last_stamp) {
+        const lst_conv = document.getElementById(current_conv)
+        //lst_conv.querySelector('#new-msgs').style.display = 'none !important';
+        document.getElementsByClassName('users-list')[0].prepend(
+            lst_conv
+        );
+        lst_conv.querySelector('.msg').innerHTML = last_msg;
+        lst_conv.querySelector('.timestamp').innerHTML = last_stamp;
+        current_lst_stamp = last_stamp;
+    }
   });
 
   function setUserOnlineOffline(username, status) {
@@ -313,13 +326,16 @@ $(function() {
     e.preventDefault();
     //make sure the textarea isn't empty before submitting the form
     if ($("textarea").val() !== "") {
+      const tme_stamp = moment().format("MMM. Do h:mm");
+      console.log(tme_stamp);
+
       const msg = `<div class="chat-message is-sent">
             <img src="${currentUserThumbnail}"
             alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;"
             class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
             id="pic">
             <div class="message-block">
-                <span>${moment().format("MMM. Do h:mm")}</span>
+                <span>${tme_stamp}</span>
                 <div class="message-text">${$("#sendText").val()}</div>
             </div>
         </div>`;
@@ -333,10 +349,16 @@ $(function() {
         success: function(data) {
           //enable send button after message is sent
           //$('.send-btn').removeAttr("disabled");
+          last_msg = $("#sendText").val().substring(0, 50);
+          if (last_msg === "")last_msg = 'Attachment';
+          last_stamp = tme_stamp;
+
           $("#send")[0].reset();
           $("textarea").val("");
           $("textarea[name='message']").focus();
           $("#conversation").scrollTop(99999999999);
+
+
         },
         fail: function() {
           $.wnoty({

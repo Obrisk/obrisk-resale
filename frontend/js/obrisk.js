@@ -525,9 +525,10 @@ document.addEventListener('DOMContentLoaded', function() {
   const ws_path = ws_scheme + "://" + window.location.host + "/ws/notifications/";
   const webSocket = new channels.WebSocketBridge();
 
-  if (new_messages.length > 1) {
-      document.querySelector(".msg-notification").style.display = 'block !important';
-  }
+  if (new_messages !== "None" )
+      document.querySelector(".msg-notification").style.display = 'block';
+  else
+      document.querySelector(".msg-notification").style.display = 'none';
 
   webSocket.connect(ws_path);
 

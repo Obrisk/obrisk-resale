@@ -27,17 +27,21 @@
 
                 <div class="contact-card-meta">
                   <div class="name-time-section">
-                      <div> <strong> {{ con.second_user.get_profile_name|title }} </strong> </div>
-                      <div> <small> {{ con.time|date:'N d G:i' }} </small> </div>
+                        <strong> {{ con.second_user.get_profile_name|title }} </strong>
+                        <small class="timestamp" {% if forloop.first %} id="last-timestamp" {% endif %}>
+                            {{ con.time|date:'N d G:i' }}
+                        </small>
                   </div>
 
-                  {% if con.last_msg %}
-                      <small> {{ con.last_msg|truncatechars:50 }} </small>
-                  {% elif con.img or con.attachment %}
-                      <small> Attachment </small>
-                  {% else %}
-                      <small> New conversation </small>
-                  {% endif %}
+                  <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}> 
+                      {% if con.last_msg %}
+                          {{ con.last_msg|truncatechars:50 }}
+                      {% elif con.img or con.attachment %}
+                          Attachment
+                      {% else %}
+                          New conversation
+                      {% endif %}
+                   </small>
 
                   {%  if con.unread and request.user.id == con.recipient %}
                       <span id="new-msgs">
@@ -69,16 +73,20 @@
                 <div class="contact-card-meta">
                   <div class="name-time-section">
                     <strong> {{ con.first_user.get_profile_name|title }} </strong>
-                    <small> {{ con.time|date:'N d G:i' }} </small>
+                    <small class="timestamp" {% if forloop.first %} id="last-timestamp" {% endif %}>
+                        {{ con.time|date:'N d G:i' }}
+                    </small>
                   </div>
 
-                  {% if con.last_msg %}
-                      <small> {{ con.last_msg|truncatechars:50 }} </small>
-                  {% elif con.img or con.attachment %}
-                      <small> Attachment </small>
-                  {% else %}
-                      <small> New conversation </small>
-                  {% endif %}
+                  <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}>
+                      {% if con.last_msg %}
+                          {{ con.last_msg|truncatechars:50 }}
+                      {% elif con.img or con.attachment %}
+                          Attachment
+                      {% else %}
+                          New conversation
+                      {% endif %}
+                   </small>
 
                   {%  if con.unread and request.user.id == con.recipient %}
                       <span id="new-msgs">
