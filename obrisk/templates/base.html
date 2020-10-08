@@ -347,13 +347,15 @@
               <span class="nav-label">
                 {% trans 'Chat' %}
               </span>
-              <span class="msg-notification">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
-                    viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
-                    stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
-                    class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
-                </svg>
-              </span>
+              {% if request.user.is_authenticated %}
+                  <span } class="msg-notification ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
+                        stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                  </span>
+              {% endif %}
             </a>
           </li>
 
