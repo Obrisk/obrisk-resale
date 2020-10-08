@@ -148,7 +148,8 @@ $(function() {
             }
             if (el.message != null) {
               $("#conversation")
-                .append(`<div class="chat-message is-received" ><img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
+                .append(`<div class="chat-message is-received" >
+                          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${activeUserThumbnail}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
                           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
 
@@ -166,7 +167,7 @@ $(function() {
 
                           <img src="${currentUserThumbnail}" alt="Picture Profile"
                               style="width:30px;height:30px;border-radius: 50%;"
-                              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                              class="rounded-circle profile-header-avatar img-fluid" id="pic">
 
                           <div class="message-block">
                               <span>${moment(el.timestamp).format(
@@ -185,37 +186,43 @@ $(function() {
             }
             if (el.classified_title != null) {
               $("#conversation")
-                .append(`<div class="chat-message is-sent "style="background-color: transparent;"><img src="${currentUserThumbnail}" alt="Picture Profile"
+                .append(`<div class="chat-message is-sent "style="background-color: transparent;">
+                          <img src="${currentUserThumbnail}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
-                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                          class="rounded-circle profile-header-avatar img-fluid" id="pic">
 
                           <div class="message-block">
                             <span>${moment(el.timestamp).format(
                               "MMM. Do h:mm"
                             )}</span>
-                            <div class="message-text"><div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="/classifieds/${
-              el.classified_slug
-            }" style="color:black; text-decoration:none; background-color:none" class="is-flex">
-              <div class="card-img-top img-responsive">
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
-                  el.classified_thumbnail
-                }" alt="${el.classified_title}" style="max-width: 70px">
-              </div>
-              <div style"margin-left: 5px">
-                <h6 class="card-title"> ${el.classified_title} </h6>
-                <p class="card-subtitle O-cl-red"> CNY ${
-                  el.classified_price
-                } </p>
-              </div>
-            </a>
-          </div></div></div></div>`);
+                            <div class="message-text">
+                                <div class="card classified-card justify-content-center is-flex"
+                                style="max-width: 295px">
+                                    <a href="/classifieds/${el.classified_slug }" class="is-flex" 
+                                      style="color:black; text-decoration:none; background-color:none">
+                                      <div class="card-img-top img-responsive">
+                                        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${
+                                          el.classified_thumbnail
+                                        }" alt="${el.classified_title}" style="max-width: 70px">
+                                      </div>
+                                      <div style"margin-left: 5px">
+                                        <h6 class="card-title"> ${el.classified_title} </h6>
+                                        <p class="card-subtitle O-cl-red"> CNY ${
+                                          el.classified_price
+                                        } </p>
+                                      </div>
+                                    </a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>`
+                );
             }
             if (el.message != null) {
               $("#conversation")
                 .append(`<div class="chat-message is-sent" ><img src="${currentUserThumbnail}" alt="Picture Profile"
                           style="width:30px;height:30px;border-radius: 50%;"
-                          class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                          class="rounded-circle profile-header-avatar img-fluid" id="pic">
 
                           <div class="message-block">
                             <span>${moment(el.timestamp).format(
@@ -223,7 +230,8 @@ $(function() {
                             )}</span>
                             <div class="message-text">${el.message}</div>
                           </div>
-                      </div>`);
+                      </div>`
+                );
             }
           }
         });
@@ -268,7 +276,10 @@ $(function() {
         lst_conv.querySelector('.timestamp').innerHTML = last_stamp;
         current_lst_stamp = last_stamp;
     }
-    lst_conv.querySelector('.msg-notification').style.display = 'none';
+
+    const notif_icon = lst_conv.querySelector('.msg-notification');
+    if (notif_icon !== null) 
+        notif_icon.style.display = 'none';
   });
 
   function setUserOnlineOffline(username, status) {
@@ -349,15 +360,13 @@ $(function() {
         success: function(data) {
           //enable send button after message is sent
           //$('.send-btn').removeAttr("disabled");
-          last_msg = $("#sendText").val().substring(0, 50);
-          if (last_msg === "")last_msg = 'Attachment';
+          last_msg = $("#sendText").val().substring(0, 48);
           last_stamp = tme_stamp;
 
           $("#send")[0].reset();
           $("textarea").val("");
           $("textarea[name='message']").focus();
           $("#conversation").scrollTop(99999999999);
-
 
         },
         fail: function() {
@@ -502,20 +511,32 @@ OssUpload.prototype = {
       if (e.target.files && e.target.files[0]) {
         const reader = new FileReader();
         reader.onload = function() {
-          const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}" alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;" class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic"><div class="message-block"><span>${moment().format(
-            "MMM. Do h:mm"
-          )}</span><a data-fancybox="gallery" href="${
-            reader.result
-          }"><img style="width: 250px; height: 250px;" src="${
-            reader.result
-          }"></a></div></div>`;
+
+          const tme_stamp = moment().format("MMM. Do h:mm");
+
+          const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}"
+                            alt="Picture Profile"
+                            style="width:30px;height:30px;border-radius: 50%;"
+                            class="rounded-circle profile-header-avatar img-fluid is-hidden-mobile"
+                            id="pic">
+                            <div class="message-block"><span>${tme_stamp} </span>
+                              <a data-fancybox="gallery" href="${reader.result}">
+                                <img style="width: 250px; height: 250px;" src="${reader.result}">
+                              </a>
+                            </div>
+                        </div>`;
           $("#conversation").append(image);
           $("#conversation").scrollTop(99999999999);
+
+          last_msg = 'Attachment';
+          last_stamp = tme_stamp;
+
         };
         reader.readAsDataURL(e.target.files[0]);
       }
       var files = e.target.files;
-      var curIndex = uploader.fileList.length; //The length of the file already in the plugin, append
+      //The length of the file already in the plugin, append
+      var curIndex = uploader.fileList.length;
       var NumberOfSelectedFiles = files.length;
       var file = null;
       $("#uploader .placeholder").hide();
@@ -590,8 +611,8 @@ OssUpload.prototype = {
   /***
    *  upload files
    * @param file files to be uploaded
-   * @param filename to which location to upload the file. According to the official statement is the key
-   * oss is object storage, there is no path path concept, but personally think this can be better understood as a path
+   * @param filename to which location to upload the file. In the official doc is named key
+   * oss is object storage, there is no path path concept, it can still be viewed as a path
    */
   uploadFile: function(file, filename) {
     $totalProgressbar.css("width", "30%").html("Uploading...");
@@ -625,8 +646,8 @@ OssUpload.prototype = {
                   timeout: 120000 // 2 minutes timeout
                 })
                 .then(function(res) {
-                  //Try to get the dominat color from the uploaded image, if it fails it means the image
-                  //was corrupted during upload
+                  //Try to get the dominat color from the uploaded image
+                  //if it fails it means the image was corrupted during upload
 
                   //
                   $.ajax({
@@ -641,8 +662,10 @@ OssUpload.prototype = {
                       $("#" + file.id)
                         .children(".file-panel")
                         .hide();
-                      uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                      uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
+                      //Successfully uploaded + 1
+                      uploader.fileStats.uploadFinishedFilesNum++;
+                      //Currently uploaded file size
+                      uploader.fileStats.curFileSize += file.size;
                       progressBarNum =
                         (
                           uploader.fileStats.curFileSize /
