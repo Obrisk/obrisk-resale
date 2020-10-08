@@ -258,9 +258,9 @@ $(function() {
     $("body").removeClass("is-frozen");
     bottomNav.style.display = "block";
 
+    const lst_conv = document.getElementById(current_conv)
+
     if (current_lst_stamp !== last_stamp) {
-        const lst_conv = document.getElementById(current_conv)
-        //lst_conv.querySelector('#new-msgs').style.display = 'none !important';
         document.getElementsByClassName('users-list')[0].prepend(
             lst_conv
         );
@@ -268,6 +268,7 @@ $(function() {
         lst_conv.querySelector('.timestamp').innerHTML = last_stamp;
         current_lst_stamp = last_stamp;
     }
+    lst_conv.querySelector('.msg-notification').style.display = 'none';
   });
 
   function setUserOnlineOffline(username, status) {
@@ -327,7 +328,6 @@ $(function() {
     //make sure the textarea isn't empty before submitting the form
     if ($("textarea").val() !== "") {
       const tme_stamp = moment().format("MMM. Do h:mm");
-      console.log(tme_stamp);
 
       const msg = `<div class="chat-message is-sent">
             <img src="${currentUserThumbnail}"
