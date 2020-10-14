@@ -711,9 +711,15 @@ def complete_wechat_reg(request, **kwargs):
         except:
             return JsonResponse({
                 'success': False,
-                'error_message': "The verification code has expired or is invalid!"})
+                'error_message': "The verification code has expired or is invalid!"
+            })
         else:
-            if str(saved_code) == str(request.POST.get('verify_code')):
+            request_code = str(request.POST.get('verify_code')).strip()
+            logging.error(
+                    f'Saved code: {str(saved_code)} Request code: {request_code}, length:{len(request_code)}'
+                )
+
+            if str(saved_code) == request_code:
                 if not updated_request['phone_number'].startswith('+86'):
                     updated_request.update(
                             {'phone_number': '+86' + updated_request['phone_number']})
@@ -725,7 +731,9 @@ def complete_wechat_reg(request, **kwargs):
                 })
 
     elif request.POST.get('wechat_id'):
-        updated_request.update({'unverified_phone': '+86' + updated_request['unverified_phone']})
+        updated_request.update({
+            'unverified_phone': '+86' + updated_request['unverified_phone']
+        })
 
     else:
         return JsonResponse({
