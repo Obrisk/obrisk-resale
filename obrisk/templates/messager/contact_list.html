@@ -113,7 +113,7 @@
 
           <a href="#chat-window" data-toggle="modal"
             data-url="{% url 'messager:conversation_detail' super_users.first.username %}"
-            class="card contact-card open-chat ">
+            id="{{super_users.first.id}}.{{request.user.id}}" class="card contact-card open-chat ">
             {% if super_users.first.thumbnail %}
                 <img src="{{oss}}/{{super_users.first.thumbnail}}" alt="Picture Profile"
                   style="width:40px;height:40px;border-radius: 50%;"
@@ -124,8 +124,16 @@
             {% endif %}
 
             <div class="contact-card-meta">
-                <strong> {{ super_users.first.get_profile_name|title }} </strong>
-                <p><small> New conversation </small><p>
+                  <div class="name-time-section">
+                        <strong>{{ super_users.first.get_profile_name|title }} </strong>
+                        <small class="timestamp" id="last-timestamp" >
+                            {%  now 'N d G:i' %}
+                        </small>
+                  </div>
+
+                  <small class="msg" id="last-msg">
+                     New conversation 
+                  </small>
             </div>
            </a>
       {% endfor %}
