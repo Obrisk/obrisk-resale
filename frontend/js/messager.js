@@ -1,8 +1,10 @@
 //let audio = new Audio("/static/sound/chime.mp3");
-var current_conv;
-var last_stamp;
-var last_msg = document.getElementById('last-msg').value;
-var current_lst_stamp = document.getElementById('last-timestamp').value;
+var current_conv, last_stamp, last_msg, current_lst_stamp;
+
+try {
+    last_msg = document.getElementById('last-msg').value;
+    current_lst_stamp = document.getElementById('last-timestamp').value;
+} catch (err) {}
 
 const bottomNav = document.getElementById('navbarBottom');
 
@@ -277,9 +279,11 @@ $(function() {
         current_lst_stamp = last_stamp;
     }
 
-    const notif_icon = lst_conv.querySelector('.msg-notification');
-    if (notif_icon !== null) 
-        notif_icon.style.display = 'none';
+    try {
+        const notif_icon = lst_conv.querySelector('.msg-notification');
+        if (notif_icon !== null) 
+            notif_icon.style.display = 'none';
+    } catch (err) {}
   });
 
   function setUserOnlineOffline(username, status) {

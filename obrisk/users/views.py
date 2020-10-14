@@ -604,7 +604,8 @@ class GetInfoView(WechatViewSet):
                         )
 
                     for x in itertools.count(1):
-                        if not User.objects.filter(username=user_data['nck']).exists():
+                        if not User.objects.filter(
+                                username=user_data['nck']).exists():
                             break
                         user_data['nck'] = '%s-%d' % (first_name, x)
 
@@ -640,10 +641,10 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid26',
+            'ui': 'thisisaveryuniqueopenid28',
             'sx': 1,
-            'nck':'Iamwhoishere',
-            'cnt':  'China',
+            'nck':'admin',
+            'cnt':  'China'
         }
 
         user = User.objects.filter(
@@ -661,7 +662,8 @@ def wechat_getinfo_view_test(request):
                 )
 
             for x in itertools.count(1):
-                if not User.objects.filter(username=user_data['nck']).exists():
+                if not User.objects.filter(
+                        username=user_data['nck']).exists():
                     break
                 user_data['nck'] = '%s-%d' % (first_name, x)
 
