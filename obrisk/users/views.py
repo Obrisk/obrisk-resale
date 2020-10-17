@@ -139,14 +139,15 @@ def aws_send_code(theme, random, phone_number):
 def send_code(phone_number, theme, user=None):
     random = get_random_string(length=6, allowed_chars='0123456789')
 
-    #if settings.DEBUG=True (default=False)
+    logging.error(f'Initial Phone number is: {str(phone_number)}')
+    cache.set(str(phone_number), random , 600)
+
     if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
         print("Your phone number verification is....")
         print(random)
-        cache.set(str(phone_number), random , 600)
         return JsonResponse({
             'success': True,
-            'message': "Code sent!, 10 minutes valid"
+            'message': "Code sent, 10 minutes valid"
         })
 
     else:
@@ -155,21 +156,18 @@ def send_code(phone_number, theme, user=None):
             ret = aliyun_send_code(random, phone_number)
 
             if ret['Code'] == 'OK':
-                cache.set(str(phone_number), random , 600)
-
                 return JsonResponse({
                     'success': True,
-                    'message': "Code sent!, 10 minutes valid"
+                    'message': "Code sent, 10 minutes valid"
                 })
             else:
                 #retry with AWS
                 response = aws_send_code(theme, random, phone_number)
                 if response['HTTPStatusCode'] == 200:
-                    cache.set(str(phone_number), random , 600)
 
                     return JsonResponse({
                         'success': True,
-                        'message': "Code sent!, 10 minutes valid"
+                        'message': "Code sent, 10 minutes valid"
                     })
 
                 else:
@@ -185,8 +183,6 @@ def send_code(phone_number, theme, user=None):
             #retry with AWS
             response = aws_send_code(theme, random, phone_number)
             if response['HTTPStatusCode'] == 200:
-                cache.set(str(phone_number), random , 600)
-
                 return JsonResponse({
                     'success': True,
                     'message': "Code sent! 10 minutes valid"
@@ -196,8 +192,6 @@ def send_code(phone_number, theme, user=None):
                 #retry with Aliyun again
                 ret = aliyun_send_code(random, phone_number)
                 if ret['Code'] == 'OK':
-                    cache.set(str(phone_number), random , 600)
-
                     return JsonResponse({
                         'success': True,
                         'message': "Code sent! 10 minutes valid"
@@ -641,7 +635,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid30',
+            'ui': 'thisisaveryuniqueopenid31',
             'sx': 1,
             'nck':'admin',
             'cnt':  'China'
@@ -704,10 +698,12 @@ def wechat_getinfo_view_test(request):
 def complete_wechat_reg(request, **kwargs):
 
     updated_request = request.POST.copy()
-    if request.POST.get('phone_number'):
+    req_phone_num = request.POST.get('phone_number')
+    if req_phone_num:
         try:
             saved_code = cache.get(
-                    str(request.POST.get('phone_number')).strip('+86'))
+                    req_phone_num.strip('+86')
+                )
         except:
             return JsonResponse({
                 'success': False,
@@ -716,7 +712,7 @@ def complete_wechat_reg(request, **kwargs):
         else:
             request_code = str(request.POST.get('verify_code')).strip()
             logging.error(
-                    f'Saved code: {str(saved_code)} Request code: {request_code}, length:{len(request_code)}'
+                    f'Phone no: {req_phone_num} Saved code: {str(saved_code)} Request code: {request_code}, length:{len(request_code)}'
                 )
 
             if str(saved_code) == request_code:
