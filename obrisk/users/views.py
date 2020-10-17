@@ -142,13 +142,15 @@ def send_code(phone_number, theme, user=None):
     logging.error(f'Initial Phone number is: {str(phone_number)}')
     cache.set(str(phone_number), random , 600)
 
+    success_resp = JsonResponse({
+        'success': True,
+        'message': "Code sent, 10 minutes valid"
+    })
+
     if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
         print("Your phone number verification is....")
         print(random)
-        return JsonResponse({
-            'success': True,
-            'message': "Code sent, 10 minutes valid"
-        })
+        return success_resp
 
     else:
         try:
@@ -156,19 +158,12 @@ def send_code(phone_number, theme, user=None):
             ret = aliyun_send_code(random, phone_number)
 
             if ret['Code'] == 'OK':
-                return JsonResponse({
-                    'success': True,
-                    'message': "Code sent, 10 minutes valid"
-                })
+                return success_resp
             else:
                 #retry with AWS
                 response = aws_send_code(theme, random, phone_number)
                 if response['HTTPStatusCode'] == 200:
-
-                    return JsonResponse({
-                        'success': True,
-                        'message': "Code sent, 10 minutes valid"
-                    })
+                    return success_resp
 
                 else:
                     logging.error(
@@ -183,19 +178,13 @@ def send_code(phone_number, theme, user=None):
             #retry with AWS
             response = aws_send_code(theme, random, phone_number)
             if response['HTTPStatusCode'] == 200:
-                return JsonResponse({
-                    'success': True,
-                    'message': "Code sent! 10 minutes valid"
-                })
+                return success_resp
 
             else:
                 #retry with Aliyun again
                 ret = aliyun_send_code(random, phone_number)
                 if ret['Code'] == 'OK':
-                    return JsonResponse({
-                        'success': True,
-                        'message': "Code sent! 10 minutes valid"
-                    })
+                    return success_resp
 
                 else:
                     logging.error(
@@ -217,7 +206,9 @@ def get_users(phone_number):
         phone_number = '+86' + phone_number
 
     try:
-        return get_user_model().objects.get(phone_number=phone_number,is_active=True)
+        return get_user_model().objects.get(
+                phone_number=phone_number,is_active=True
+            )
     except get_user_model().DoesNotExist:
         return None
 
@@ -255,16 +246,9 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'username'
 
     def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        # pk = kwargs.get('pk')pk=self.object.pk
         context = super(UserDetailView, self).get_context_data(**kwargs)
-        """
-        this prints the other user
-        user = get_object_or_404(user_model, pk=self.object.pk)
-        """
+
         user = self.request.user
-        #following = Follow.objects.following(user)
-        #followers = Follow.objects.followers(user)
         sent_requests = Friend.objects.sent_requests(user)
         in_coming_reqst = Friend.objects.requests(user)
 
@@ -343,8 +327,8 @@ def update_profile_pic(request):
             except:
                 #Since the image exists just save the profile, it is our problem.
                 return JsonResponse({'success': False,
-                                'error_message': "Sorry! Your image was not \
-                                        uploaded successfully. Try again later!."})
+                                'error_message': "Sorry, your photo was not \
+                                        uploaded successfully. Try again later!"})
 
             #Only save the new image when you have the thumbnail.
             profile = get_user_model().objects.get(username=request.user)
@@ -373,7 +357,7 @@ def send_code_sms(request):
             and phone_no[0] == '1' and phone_no != '13300000000'):
 
             check_phone = User.objects.filter(
-                    phone_number=phone_no
+                    phone_number= '+86' + phone_no
                 ).exists()
 
             if check_phone is False:
@@ -699,11 +683,12 @@ def complete_wechat_reg(request, **kwargs):
 
     updated_request = request.POST.copy()
     req_phone_num = request.POST.get('phone_number')
+
     if req_phone_num:
-        cached_phone = str(req_phone_num).strip('+86')
-        repl_phone = str(req_phone_num).replace('+86', '')
         try:
-            saved_code = cache.get(repl_phone)
+            saved_code = cache.get(
+                    str(req_phone_num).replace('+86', '')
+                )
         except:
             return JsonResponse({
                 'success': False,
@@ -711,9 +696,6 @@ def complete_wechat_reg(request, **kwargs):
             })
         else:
             request_code = str(request.POST.get('verify_code')).strip()
-            logging.error(
-                    f'Phone no: {req_phone_num}, Cached_phone: {len(cached_phone)}, Replace phone {len(repl_phone)}'
-                )
 
             if str(saved_code) == request_code:
                 if not updated_request['phone_number'].startswith('+86'):
