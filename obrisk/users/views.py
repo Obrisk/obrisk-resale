@@ -366,7 +366,7 @@ def send_code_sms(request):
             else:
                 return JsonResponse(
                         {'success': False,
-                            'error_message': "This phone number already exists!"
+                            'error_message': "This number exists, try to login or reset password"
                         })
 
         else:
@@ -619,7 +619,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid31',
+            'ui': 'thisisaveryuniqueopenid32',
             'sx': 1,
             'nck':'admin',
             'cnt':  'China'

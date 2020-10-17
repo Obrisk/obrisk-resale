@@ -62,12 +62,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var len = username_el.value.length;
     username_el.setSelectionRange(len, len);
 
-    $.wnoty({
-      type: "info",
-      autohide: false,
-      message: "🎉 You have linked your wechat a/c🎉 \n Lastly, verify your info"
-    });
-
   send_code_btn.addEventListener('click', function (event) {
     if (!phone_number.value) {
       event.preventDefault();
