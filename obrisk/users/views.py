@@ -700,10 +700,10 @@ def complete_wechat_reg(request, **kwargs):
     updated_request = request.POST.copy()
     req_phone_num = request.POST.get('phone_number')
     if req_phone_num:
+        cached_phone = str(req_phone_num).strip('+86')
+        repl_phone = str(req_phone_num).replace('+86', '')
         try:
-            saved_code = cache.get(
-                    req_phone_num.strip('+86')
-                )
+            saved_code = cache.get(repl_phone)
         except:
             return JsonResponse({
                 'success': False,
@@ -712,7 +712,7 @@ def complete_wechat_reg(request, **kwargs):
         else:
             request_code = str(request.POST.get('verify_code')).strip()
             logging.error(
-                    f'Phone no: {req_phone_num} Saved code: {str(saved_code)} Request code: {request_code}, length:{len(request_code)}'
+                    f'Phone no: {req_phone_num}, Cached_phone: {len(cached_phone)}, Replace phone {len(repl_phone)}'
                 )
 
             if str(saved_code) == request_code:
