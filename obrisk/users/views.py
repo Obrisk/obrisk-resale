@@ -138,8 +138,6 @@ def aws_send_code(theme, random, phone_number):
 
 def send_code(phone_number, theme, user=None):
     random = get_random_string(length=6, allowed_chars='0123456789')
-
-    logging.error(f'Initial Phone number is: {str(phone_number)}')
     cache.set(str(phone_number), random , 600)
 
     success_resp = JsonResponse({
