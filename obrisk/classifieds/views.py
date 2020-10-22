@@ -104,11 +104,24 @@ def classified_list(request, tag_slug=None):
         classifieds = paginator.page(1)
     except EmptyPage:
         if request.is_ajax():
+            classifieds = Classified.objects.get_expired().values(
+                            'title','price','city','slug'
+                        ).annotate (
+                            image_thumb = Subquery (
+                                ClassifiedImages.objects.filter(
+                                    classified=OuterRef('pk'),
+                                ).values(
+                                    'image_thumb'
+                                )[:1]
+                            )
+                        ).order_by('-timestamp')
+
             # If the request is AJAX and the page is out of range
             # return an empty page            
-            return JsonResponse({'classifieds': 'end'})
-        # If page is out of range deliver last page of results
-        classifieds = paginator.page(paginator.num_pages)
+            #return JsonResponse({'classifieds': 'end'})
+        else:
+            # If page is out of range deliver last page of results
+            classifieds = paginator.page(paginator.num_pages)
 
     # Deal with tags in the end to override other_classifieds.
     tag = None
