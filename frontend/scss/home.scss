@@ -157,6 +157,22 @@ img::-moz-selection {
     }
 }
 
+.btm-md-bg {
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(180deg, #DDDDDD , #3EC4E2);
+    background-size: cover;
+    background-position: top center;
+
+    p {
+        margin: 0.5rem;
+        text-align: center;
+    }
+}
+
 .btm-bg {
     height: 330px;
     display: flex;
