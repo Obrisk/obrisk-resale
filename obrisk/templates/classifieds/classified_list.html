@@ -126,7 +126,6 @@
   var is_tag_page = "{{tag}}";
   var lastScrollTop = 0;
 
-
   if (is_tag_page == "None") {
     window.addEventListener('scroll', function () {
       if (empty_page == false && block_request == false) {
@@ -142,11 +141,6 @@
         }).then (resp => resp.json())
         .then (data => {
 
-          if (data.classifieds === "end") {
-            empty_page = true;
-            document.querySelector('.loading').classList.add('is-hidden');
-            document.querySelector('.classifieds-list-wrapper').insertAdjacentHTML('beforeend', '<div class="end-classifieds"> End of Classifieds</div>')
-          } else {
             document.querySelector('.loading').classList.add('is-hidden');
             block_request = false;
 
@@ -186,7 +180,13 @@
                         `;
                   document.querySelector('#classifieds').insertAdjacentHTML('beforeend', template);
               }
-            }
+
+              if (data.end === "end") {
+                empty_page = true;
+                document.querySelector('.loading').classList.add('is-hidden');
+                document.querySelector('.classifieds-list-wrapper').insertAdjacentHTML('beforeend', '<div class="end-classifieds"> End of Classifieds</div>')
+              } 
+
         }).catch (err => {
             console.log(err);
         });

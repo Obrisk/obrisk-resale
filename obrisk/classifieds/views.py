@@ -52,8 +52,7 @@ def set_popular_tags():
             "Successfully sorted the popular tags!",
             content_type='text/plain')
 
-#People can view without login
-@ensure_csrf_cookie
+
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
 
@@ -94,7 +93,7 @@ def classified_list(request, tag_slug=None):
                     )
                 ).order_by('order', '-priority', '-timestamp')
 
-    paginator = Paginator(classifieds_list, 8)  #8 @ page in mobile
+    paginator = Paginator(classifieds_list, 6)  #6 @ page in mobile
     page = request.GET.get('page')
 
     try:
@@ -116,11 +115,10 @@ def classified_list(request, tag_slug=None):
                             )
                         ).order_by('-timestamp')
 
-            # If the request is AJAX and the page is out of range
-            # return an empty page            
-            #return JsonResponse({'classifieds': 'end'})
+            return JsonResponse({
+                'classifieds': list(classifieds), 'end':'end'
+                })
         else:
-            # If page is out of range deliver last page of results
             classifieds = paginator.page(paginator.num_pages)
 
     # Deal with tags in the end to override other_classifieds.
