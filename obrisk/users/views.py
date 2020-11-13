@@ -509,6 +509,119 @@ class PhonePasswordResetConfirmView(FormView):
 class AutoLoginView(LoginView):
     pass
 
+#ajax_required
+@require_http_methods(["GET"])
+def username_exists(request):
+    """A function view to check if the username exists"""
+    prefered_name = request.GET.get('username')
+    if not User.objects.filter(username__iexact=prefered_name.lower()):
+        return JsonResponse({
+            "status": "200",
+            "message": "This username is available"})
+    else:
+        return JsonResponse({
+            "status": "201",
+            "message": "This username is taken"
+        })
+
+
+class WechatViewSet(View):
+    wechat_api = WechatLogin()
+
+
+class AuthView(WechatViewSet):
+    def get(self, request):
+        url = self.wechat_api.get_code_url()
+        return redirect(url)
+
+
+class GetInfoView(WechatViewSet):
+    http_method_names = ['get', 'post']
+
+    def get(self, request):
+        if 'code' in request.GET:
+            try:
+                code = request.GET['code']
+                token, openid = self.wechat_api.get_access_token(code)
+            except TypeError:
+                logging.error('TypeError: NoneType object is not iterable')
+                return HttpResponseServerError(
+                        'Sorry we are currently unable to process this request, try again later'
+                    )
+            else:
+                if token is None or openid is None:
+                    logging.error('Wechat auth failed')
+                    return HttpResponseServerError('Get access or openid not provided')
+
+                user_info, error = self.wechat_api.get_user_info(token, openid)
+
+                if error:
+                    logging.error(f'Wechat auth failed: {error}')
+                    return HttpResponseServerError('get access_token error')
+
+                user_data = {
+                    'nck': user_info['nickname'],
+                    'sx': user_info['sex'],
+                    'pr': user_info['province'].encode('iso8859-1').decode('utf-8'),
+                    'ct': user_info['city'].encode('iso8859-1').decode('utf-8'),
+                    'cnt': user_info['country'].encode('iso8859-1').decode('utf-8'),
+                    'ui': user_info['openid']
+                }
+                user = User.objects.filter(
+                        wechat_openid=user_data['ui']
+                    )
+
+                if user.count() == 0:
+                    cache.set(user_data['ui'], user_info['headimgurl'], 3000)
+
+                    user_data['nck'] = first_name = slugify(
+                            user_data['nck'],
+                            max_length=16
+                        )
+
+                    for x in itertools.count(1):
+                        if not User.objects.filter(
+                                username=user_data['nck']).exists():
+                            break
+                        user_data['nck'] = '%s-%d' % (first_name, x)
+
+                    in_china=False
+                    if str(user_data['cnt']) == 'China':
+                        in_china=True
+
+                    form = SocialSignupCompleteForm(
+                                initial={
+                                    'username': user_data['nck'],
+                                    'gender': user_data['sx'],
+                                    'wechat_openid': user_data['ui'],
+                                }
+                            )
+                    return render(request,
+                            'users/wechat-auth.html',
+                            {'form': form, 'in_china': in_china}
+                        )
+                else:
+                    login(
+                        request, user.first(),
+                        backend='django.contrib.auth.backends.ModelBackend'
+                    )
+                return HttpResponseRedirect(reverse('classifieds:list'))
+        else:
+            return HttpResponseBadRequest(
+                 content=_('Bad request')
+             )
+
+
+def wechat_getinfo_view_test(request):
+
+    if request.method == 'GET':
+
+        user_data = {
+            'ui': 'thisisaveryuniqueopenid33',
+            'sx': 1,
+            'nck':'admin',
+            'cnt':  'China'
+        }
 
 @login_required
 @require_http_methods(["GET"])
@@ -522,18 +635,7 @@ def bulk_update_user_phone_no(request):
                 user.phone_number = '+8613300000000'
                 user.save()
 
-    return redirect('stories:list')
-
-
-@ajax_required
-@require_http_methods(["GET"])
-def username_exists(request):
-    """A function view to check if the username exists"""
-    prefered_name = request.GET.get('username')
-    if User.objects.filter(username__contains=prefered_name.lower()):
-        return JsonResponse({"status": "201", "username":prefered_name, "message": "This username is taken"})
-    else:
-        return JsonResponse({"status": "200", "username":prefered_name, "message": "This username is available"})
+    return redirect('classifieds:list')
 
 
 @ajax_required
@@ -554,11 +656,11 @@ def complete_authentication(request):
 
         if serializer.is_valid():
             serializer.save()
-            return redirect("stories:list")
+            return redirect("classifieds:list")
 
         else:
             return JsonResponse({"status": "403", "message": "Please enter valid inputs"})
 
     else:
 
-        return redirect("stories:list")
+        return redirect("classifieds:list")
