@@ -612,17 +612,6 @@ class GetInfoView(WechatViewSet):
              )
 
 
-def wechat_getinfo_view_test(request):
-
-    if request.method == 'GET':
-
-        user_data = {
-            'ui': 'thisisaveryuniqueopenid33',
-            'sx': 1,
-            'nck':'admin',
-            'cnt':  'China'
-        }
-
 @login_required
 @require_http_methods(["GET"])
 def bulk_update_user_phone_no(request):
