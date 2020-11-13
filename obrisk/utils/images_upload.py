@@ -257,7 +257,6 @@ def multipleImagesPersist(request, images_list, app, obj):
     title = slugify(obj.title, to_lower=True)
 
     for index, str_result in enumerate(images_list):
-
         if str_result.startswith(
                 f'media/images/{app}/{username}/{title}') is False:
             #Check if it was default image as it has no username.

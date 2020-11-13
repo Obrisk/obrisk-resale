@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', function() {
         } else {
           //At this point check if the images variable exists and
           //update the thumbnail holder to show the uploaded images.
-          //Scroll the page to the top or to the place with errors.
           console.log(data);
           printError(data.error_message);
           window.scrollTo({ top: 0, behavior: "smooth" });
