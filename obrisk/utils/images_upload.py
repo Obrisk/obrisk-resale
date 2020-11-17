@@ -270,8 +270,8 @@ def multipleImagesPersist(request, images_list, app, obj):
 
         if app == 'classifieds':
             img_obj = ClassifiedImages(classified=obj, image=str_result)
-            thumb_name = "media/images/classifieds/" + username + "/" + title + d + "/thumbnails/" + str(index) + ".jpeg" #noqa
-            img_mid_name = "media/images/classifieds/" + username + "/" + title + d + "/mid-size/" + str(index) + ".jpeg" #noqa
+            thumb_name = "media/images/classifieds/" + username + "/" + title + "/" + d + "/thumbnails/" + str(index) + ".jpeg" #noqa
+            img_mid_name = "media/images/classifieds/" + username + "/" + title + "/" + d + "/mid-size/" + str(index) + ".jpeg" #noqa
             style = 'image/resize,m_fill,h_156,w_156'
             style_mid = 'image/resize,m_fill,h_400'
 
