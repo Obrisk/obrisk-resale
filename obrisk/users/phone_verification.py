@@ -4,9 +4,9 @@ from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.profile import region_provider
 from aliyunsdkcore.request import RpcRequest
 
-REGION = os.getenv('SMS_REGION') 
+REGION = os.getenv('SMS_REGION')
 PRODUCT_NAME = "SMSapi"
-SMS_DOMAIN = os.getenv('SMS_DOMAIN') 
+SMS_DOMAIN = os.getenv('SMS_DOMAIN')
 ACCESS_KEY_ID = os.getenv('RAM_USER_ID')
 ACCESS_KEY_SECRET = os.getenv('RAM_USER_S3KT_KEY')
 
@@ -21,11 +21,11 @@ else:
 
 
 class SendSmsRequest(RpcRequest):
-    """This class has been taken from the python module aliyunsdkdysmsapi 
+    """This class has been taken from the python module aliyunsdkdysmsapi
        that is not an aliyun PyPI package. If this module is built manually
-       in the project then can be easily imported as 
+       in the project then can be easily imported as
        from aliyunsdkdysmsapi.request.v20170525 import SendSmsRequest"""
-	
+
     def __init__(self):
         RpcRequest.__init__(self, 'Dysmsapi', '2017-05-25', 'SendSms')
 
@@ -83,6 +83,7 @@ class SendSmsRequest(RpcRequest):
     def set_OutId(self,OutId):
         self.add_query_param('OutId',OutId)
 
+
 def send_sms(business_id, phone_numbers, sign_name, template_code,template_param=None):
     """
     Call the SMS interface and return the result
@@ -94,7 +95,6 @@ def send_sms(business_id, phone_numbers, sign_name, template_code,template_param
     sign_name = sign_name
     sms_request = SendSmsRequest()
     sms_request.set_TemplateCode(template_code)  # SMS templateCODE
-
 
     # SMS template variable parameters
     if template_param is not None:
@@ -108,10 +108,9 @@ def send_sms(business_id, phone_numbers, sign_name, template_code,template_param
 
     # 数据提交方式
 	# sms_request.set_method(MT.POST)
-	
+
 	# 数据提交格式
     # sms_request.set_accept_format(FT.JSON)
 
     sms_response = acs_client.do_action_with_exception(sms_request)  # Call the SMS send interface and return json
     return sms_response
-

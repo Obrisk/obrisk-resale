@@ -536,7 +536,9 @@ document.addEventListener('DOMContentLoaded', function() {
       case "new_message":
         if (event.recipient == currentUser) {
           socket_notif.play();
-          document.querySelector(".msg-notification").style.display = 'block !important';
+          document.querySelectorAll('.msg-notification').forEach(item => {
+              item.style.display = 'block !important';
+          });
         }
         break;
       default:
