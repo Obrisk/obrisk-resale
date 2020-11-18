@@ -1,4 +1,5 @@
 import os
+import ast
 import uuid
 from django.core.cache import cache
 from django.conf import settings
@@ -48,11 +49,15 @@ def send_messages_notifications(sender_id, recipient_id, key):
             params = " {\"recip\":\""+ recipient.username + "\"} "
             __business_id = uuid.uuid1()
 
-            send_sms(
+            ret = send_sms(
                 __business_id,
                 recipient.phone_number.national_number,
                 os.getenv('SMS_SIGNATURE'),
                 os.getenv('NOTIF_SMS_TEMPLATE'), params
             )
 
-            cache.set(f'notif_sms_{recipient_id}', 1 , 600)
+            ret = ret.decode("utf-8")
+            response = ast.literal_eval(ret)
+
+            if response['Code'] == 'OK':
+                cache.set(f'notif_sms_{recipient_id}', 1 , 600)
