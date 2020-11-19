@@ -83,8 +83,8 @@ class SendSmsRequest(RpcRequest):
     def set_OutId(self,OutId):
         self.add_query_param('OutId',OutId)
 
-
-def send_sms(business_id, phone_numbers, sign_name, template_code,template_param=None):
+def send_sms(business_id, phone_numbers, sign_name,
+        template_code,template_param=None):
     """
     Call the SMS interface and return the result
     :param phone_numbers:  phone number
@@ -105,6 +105,7 @@ def send_sms(business_id, phone_numbers, sign_name, template_code,template_param
 
     sms_request.set_SignName(sign_name)  # 
     sms_request.set_PhoneNumbers(phone_numbers)  #Phone number to send
+    print(sms_request)
 
     # 数据提交方式
 	# sms_request.set_method(MT.POST)
@@ -112,5 +113,8 @@ def send_sms(business_id, phone_numbers, sign_name, template_code,template_param
 	# 数据提交格式
     # sms_request.set_accept_format(FT.JSON)
 
-    sms_response = acs_client.do_action_with_exception(sms_request)  # Call the SMS send interface and return json
+    # Call the SMS send interface and return json
+    sms_response = acs_client.do_action_with_exception(sms_request)
+    print('sms_response')
+    print(sms_response)
     return sms_response
