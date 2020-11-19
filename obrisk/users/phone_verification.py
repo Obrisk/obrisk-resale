@@ -4,21 +4,6 @@ from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.profile import region_provider
 from aliyunsdkcore.request import RpcRequest
 
-REGION = os.getenv('SMS_REGION')
-PRODUCT_NAME = "SMSapi"
-SMS_DOMAIN = os.getenv('SMS_DOMAIN')
-ACCESS_KEY_ID = os.getenv('RAM_USER_ID')
-ACCESS_KEY_SECRET = os.getenv('RAM_USER_S3KT_KEY')
-
-verify_counter = 0
-
-if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
-    print("Setting up local env...")
-
-else:
-    acs_client = AcsClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET, REGION)
-    region_provider.modify_point(PRODUCT_NAME, REGION, SMS_DOMAIN)
-
 
 class SendSmsRequest(RpcRequest):
     """This class has been taken from the python module aliyunsdkdysmsapi
@@ -92,6 +77,23 @@ def send_sms(business_id, phone_numbers, sign_name,
     :param template_code:   Template CODE
     :param template_param:  Template parameters, variables
     """
+
+    REGION = os.getenv('SMS_REGION')
+    PRODUCT_NAME = "SMSapi"
+    SMS_DOMAIN = os.getenv('SMS_DOMAIN')
+    ACCESS_KEY_ID = os.getenv('RAM_USER_ID')
+    ACCESS_KEY_SECRET = os.getenv('RAM_USER_S3KT_KEY')
+
+    verify_counter = 0
+
+    if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
+        print("Setting up local env...")
+
+    else:
+        acs_client = AcsClient(ACCESS_KEY_ID, ACCESS_KEY_SECRET, REGION)
+        region_provider.modify_point(PRODUCT_NAME, REGION, SMS_DOMAIN)
+
+
     sign_name = sign_name
     sms_request = SendSmsRequest()
     sms_request.set_TemplateCode(template_code)  # SMS templateCODE
