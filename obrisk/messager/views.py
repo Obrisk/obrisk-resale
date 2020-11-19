@@ -285,8 +285,10 @@ def send_message(request):
             if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
                 print(f'Hi {recipient.username}, you have new msgs')
             else:
+                print('here')
                 params = " {\"recip\":\""+ recipient.username + "\"} "
                 __business_id = uuid.uuid1()
+                print(params)
 
                 ret = send_sms(
                     __business_id,
@@ -294,6 +296,7 @@ def send_message(request):
                     os.getenv('SMS_SIGNATURE'),
                     os.getenv('NOTIF_SMS_TEMPLATE'), params
                 )
+                print(ret)
 
                 ret = ret.decode("utf-8")
                 response = ast.literal_eval(ret)
