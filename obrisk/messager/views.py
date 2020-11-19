@@ -5,9 +5,6 @@ import base64
 import datetime
 import oss2
 import logging
-import uuid
-import ast
-import os
 
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -29,7 +26,12 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.messager.tasks import send_messages_notifications
+
 from obrisk.notifications.models import Notification, notification_handler
+from obrisk.users.phone_verification import send_sms
+import uuid
+import ast
+import os
 
 try:
     from django.contrib.auth import get_user_model
