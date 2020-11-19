@@ -26,6 +26,7 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.messager.tasks import send_messages_notifications
+from obrisk.notifications.models import Notification, notification_handler
 
 try:
     from django.contrib.auth import get_user_model
@@ -259,6 +260,8 @@ def send_message(request):
                             attachment=attachment)
 
         key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
+
+        #send_messages_notifications.delay(sender.pk, recipient.pk, key)
         recp_new_msgs = cache.get(f'msg_{recipient.pk}')
 
         if recp_new_msgs is None:
@@ -267,7 +270,37 @@ def send_message(request):
             values = list(recp_new_msgs).append(key)
             cache.set(f'msg_{recipient.pk}', values, timeout=SESSION_COOKIE_AGE)
 
-        send_messages_notifications.delay(sender.pk, recipient.pk, key)
+        notification_handler(actor=sender,
+                recipient=recipient,
+                verb=Notification.NEW_MESSAGE,
+                is_msg=True, key='new_message')
+
+        msgs_notif = cache.get(f'notif_sms_{recipient.pk}')
+        print(msgs_notif)
+
+        if (msgs_notif is None and recipient.phone_number != '' and
+                recipient.phone_number.national_number != 13300000000):
+            print('phone number of recipient is valid')
+
+            if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
+                print(f'Hi {recipient.username}, you have new msgs')
+            else:
+                params = " {\"recip\":\""+ recipient.username + "\"} "
+                __business_id = uuid.uuid1()
+
+                ret = send_sms(
+                    __business_id,
+                    recipient.phone_number.national_number,
+                    os.getenv('SMS_SIGNATURE'),
+                    os.getenv('NOTIF_SMS_TEMPLATE'), params
+                )
+
+                ret = ret.decode("utf-8")
+                response = ast.literal_eval(ret)
+                print('response')
+
+                if response['Code'] == 'OK':
+                    cache.set(f'notif_sms_{recipient.pk}', 1 , 600)
 
         return render(
                 request, 'messager/single_message.html',
