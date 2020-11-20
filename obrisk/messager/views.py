@@ -291,7 +291,7 @@ def send_message(request):
                 print(f'Hi {recipient.username}, you have new msgs')
             else:
                 print('here')
-                params = " {\"code\":\""+ 123456 + "\"} "
+                params = " {\"code\":\""+ '123456' + "\"} "
                 __business_id = uuid.uuid1()
                 print(params)
 
