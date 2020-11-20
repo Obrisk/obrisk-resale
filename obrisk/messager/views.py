@@ -291,7 +291,7 @@ def send_message(request):
                 print(f'Hi {recipient.username}, you have new msgs')
             else:
                 print('here')
-                params = " {\"recip\":\""+ recipient.username + "\"} "
+                params = " {\"code\":\""+ 123456 + "\"} "
                 __business_id = uuid.uuid1()
                 print(params)
 
@@ -299,7 +299,7 @@ def send_message(request):
                     __business_id,
                     recipient.phone_number.national_number,
                     os.getenv('SMS_SIGNATURE'),
-                    os.getenv('NOTIF_SMS_TEMPLATE'), params
+                    os.getenv('SMS_TEMPLATE'), params
                 )
                 print(ret)
 
