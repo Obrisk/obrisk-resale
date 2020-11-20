@@ -9,7 +9,7 @@ Type=simple
 User=ubuntu
 Group=www-data
 WorkingDirectory=/home/ubuntu/obdev2018
-ExecStart=/home/ubuntu/obdev2018/venv_obrisk/bin/celery -A config worker -l INFO -P gevent
+ExecStart=/home/ubuntu/obdev2018/venv_obrisk/bin/celery -A config worker -l INFO -P gevent -E
 
 
 [Install]
