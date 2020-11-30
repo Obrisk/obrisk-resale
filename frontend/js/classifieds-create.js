@@ -70,6 +70,14 @@ document.addEventListener('DOMContentLoaded', function() {
     $("#uploader").show();
   });
 
+  document.querySelector("#chooseFile").addEventListener('click', function() {
+    if (currentUser == undefined) {
+      let draft_post = Object.fromEntries(new FormData(document.querySelector("form")));
+      localStorage.setItem('new-classified', JSON.stringify(draft_post));
+      window.location.replace('/auth/login/?next=/classifieds/write-new-classified/');
+    }
+  });
+
 
   document.getElementById("create-btn").addEventListener('click', function(event) {
 
