@@ -266,49 +266,7 @@ def send_message(request):
 
         key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
 
-        #send_messages_notifications.delay(sender.pk, recipient.pk, key)
-        recp_new_msgs = cache.get(f'msg_{recipient.pk}')
-
-        if recp_new_msgs is None:
-            cache.set(f'msg_{recipient.pk}', [key] , timeout=SESSION_COOKIE_AGE)
-        else:
-            values = list(recp_new_msgs).append(key)
-            cache.set(f'msg_{recipient.pk}', values, timeout=SESSION_COOKIE_AGE)
-
-        notification_handler(actor=sender,
-                recipient=recipient,
-                verb=Notification.NEW_MESSAGE,
-                is_msg=True, key='new_message')
-
-        msgs_notif = cache.get(f'notif_sms_{recipient.pk}')
-        print(msgs_notif)
-
-        if (msgs_notif is None and recipient.phone_number != '' and
-                recipient.phone_number.national_number != 13300000000):
-            print('phone number of recipient is valid')
-
-            if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
-                print(f'Hi {recipient.username}, you have new msgs')
-            else:
-                print('here')
-                params = " {\"code\":\""+ '123456' + "\"} "
-                __business_id = uuid.uuid1()
-                print(params)
-
-                ret = send_sms(
-                    __business_id,
-                    recipient.phone_number.national_number,
-                    os.getenv('SMS_SIGNATURE'),
-                    os.getenv('SMS_TEMPLATE'), params
-                )
-                print(ret)
-
-                ret = ret.decode("utf-8")
-                response = ast.literal_eval(ret)
-                print('response')
-
-                if response['Code'] == 'OK':
-                    cache.set(f'notif_sms_{recipient.pk}', 1 , 600)
+        send_messages_notifications.delay(sender.pk, recipient.pk, key)
 
         return render(
                 request, 'messager/single_message.html',
