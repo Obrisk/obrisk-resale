@@ -29,6 +29,7 @@ from django.views.generic import View
 from django.db import IntegrityError
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
+from django.utils.http import is_safe_url
 from django.http import (
     HttpResponseServerError,
     HttpResponseRedirect,
@@ -535,6 +536,20 @@ class AuthView(WechatViewSet):
         return redirect(url)
 
 
+def redirect_after_login(request):
+    nxt = request.GET.get("next", None)
+    if nxt is None:
+        return redirect(settings.LOGIN_REDIRECT_URL)
+    elif not is_safe_url(
+            url=nxt,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure()):
+        return redirect(settings.LOGIN_REDIRECT_URL)
+    else:
+        return redirect(nxt)
+
+
+
 class GetInfoView(WechatViewSet):
     http_method_names = ['get', 'post']
 
@@ -605,7 +620,7 @@ class GetInfoView(WechatViewSet):
                         request, user.first(),
                         backend='django.contrib.auth.backends.ModelBackend'
                     )
-                return HttpResponseRedirect(reverse('classifieds:list'))
+                return redirect_after_login(request)
         else:
             return HttpResponseBadRequest(
                  content=_('Bad request')
@@ -664,7 +679,7 @@ def wechat_getinfo_view_test(request):
                 request, user.first(),
                 backend='django.contrib.auth.backends.ModelBackend'
             )
-            return HttpResponseRedirect(reverse('classifieds:list'))
+            return redirect_after_login(request)
         return HttpResponseBadRequest(
              content=_('Bad request')
          )
