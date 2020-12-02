@@ -549,6 +549,27 @@ def redirect_after_login(request):
         return redirect(nxt)
 
 
+def ajax_redirect_after_login(request):
+    nxt = request.GET.get("next", None)
+    if nxt is None:
+        return JsonResponse({
+            'success': True,
+             'nxt' : settings.LOGIN_REDIRECT_URL
+         })
+    elif not is_safe_url(
+            url=nxt,
+            allowed_hosts={request.get_host()},
+            require_https=request.is_secure()):
+        return JsonResponse({
+            'success': True,
+             'nxt' : settings.LOGIN_REDIRECT_URL
+         })
+    else:
+        return JsonResponse({
+            'success': True,
+             'nxt' : nxt
+         })
+
 
 class GetInfoView(WechatViewSet):
     http_method_names = ['get', 'post']
@@ -591,7 +612,8 @@ class GetInfoView(WechatViewSet):
 
                     user_data['nck'] = first_name = slugify(
                             user_data['nck'],
-                            max_length=16
+                            max_length=16,
+                            allow_unicode=True
                         )
 
                     for x in itertools.count(1):
@@ -620,6 +642,7 @@ class GetInfoView(WechatViewSet):
                         request, user.first(),
                         backend='django.contrib.auth.backends.ModelBackend'
                     )
+                    request.session['wx_num'] = user_data['ui']
                 return redirect_after_login(request)
         else:
             return HttpResponseBadRequest(
@@ -632,9 +655,9 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid33',
+            'ui': 'thisisaveryuniqueopenid35',
             'sx': 1,
-            'nck':'admin',
+            'nck':'admin 乔舒亚',
             'cnt':  'China'
         }
 
@@ -679,6 +702,7 @@ def wechat_getinfo_view_test(request):
                 request, user.first(),
                 backend='django.contrib.auth.backends.ModelBackend'
             )
+            request.session['wx_num'] = user_data['ui']
             return redirect_after_login(request)
         return HttpResponseBadRequest(
              content=_('Bad request')
@@ -755,10 +779,8 @@ def complete_wechat_reg(request, **kwargs):
             request, user,
             backend='django.contrib.auth.backends.ModelBackend'
         )
-
-        return JsonResponse({
-            'success': True
-        })
+        request.session['wx_num'] = request.POST.get('wechat_openid')
+        return ajax_redirect_after_login(request)
 
     else:
         error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
@@ -794,11 +816,23 @@ def complete_authentication(request):
                 "message": "Please enter valid inputs"})
 
     else:
-        return redirect("classifieds:list")
+        return redirect_after_login(request)
 
 
-class AutoLoginView(LoginView):
-    pass
+@ajax_required
+@require_http_methods(["GET"])
+def wechat_auto_login(request, **kwargs):
+    user = User.objects.filter(
+            wechat_openid=request.GET.get('wx-num')
+        )
+    if user.count() == 0:
+        return JsonResponse({"status": "403"})
+
+    login(
+        request, user.first(),
+        backend='django.contrib.auth.backends.ModelBackend'
+    )
+    return ajax_redirect_after_login(request)
 
 
 @login_required

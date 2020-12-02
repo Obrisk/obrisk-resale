@@ -40,6 +40,10 @@ urlpatterns = [
         view=views.complete_wechat_reg,
         name='complete_wechat'),
 
+    url(regex=r'^wx-auto-login-149eb8766awswdff224fgo029k12ol8/$',
+        view=views.wechat_auto_login,
+        name='wx_auto'),
+
     url(regex=r'^username-exists/$',
         view=views.username_exists,
         name='username_exists'),

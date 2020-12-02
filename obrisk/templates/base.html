@@ -433,9 +433,41 @@
       <script type="text/javascript">
         currentUser = "{{ request.user.username}}";
         new_messages = "{{ new_msgs }}";
+        var wx_num = "{{ request.session.wx_num }}";
+
+        if (!localStorage.getItem('wx-auth') && wx_num.length > 1) {
+            localStorage.setItem('wx-auth', JSON.stringify(wx_num))
+
+            if (navigator.storage && navigator.storage.persist) {
+                navigator.storage.persisted();
+                navigator.storage.persist();
+            }
+        }
+
       </script>
       <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
 
+  {% else %}
+
+      <script type="text/javascript">
+
+        if (localStorage.getItem('wx-auth')) {
+            const wx_num = JSON.parse(localStorage.getItem('wx-auth'));
+
+            fetch('{% url 'users:wx_auto' %}'+`?next=${window.location.pathname}?wx-num=wx_num`, {
+              headers: {
+                "X-Requested-With": "XMLHttpRequest"
+              },
+              credentials: 'same-origin',
+              redirect: 'follow'
+            }).then (resp => resp.json())
+              .then (data => {
+                if (data.success === true) {
+                    window.location.replace(data.nxt);
+            })
+          }
+        }
+      </script>
   {% endif %}
 
   {% endblock javascript %}

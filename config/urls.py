@@ -11,7 +11,7 @@ from graphene_django.views import GraphQLView
 from pwa_webpush.views import save_info
 from obrisk.users.views import (
     PasswordResetFromKeyView,
-    AutoLoginView, GetInfoView
+    GetInfoView
 )
 from obrisk.utils.images_upload import get_oss_auth
 from obrisk.classifieds.sitemaps import ClassifiedsSitemap
@@ -87,22 +87,18 @@ urlpatterns = [
     ),
     # User management
     url(
-        r'^accounts-authorization/signup/', 
+        r'^accounts-authorization/signup/',
         RedirectView.as_view(
             pattern_name='account_signup', permanent=False)
     ),
     url(
-        r'^accounts-authorization/login/', 
+        r'^accounts-authorization/login/',
         RedirectView.as_view(
             pattern_name='account_login', permanent=False)
     ),
     url(r"^users/", include("obrisk.users.urls", namespace="users")),
     url(r"^auth/", include("allauth.urls")),
-    url(
-        r"^auto-login-obdev2018-wsguatpotlfwccdi/",
-        AutoLoginView.as_view(),
-        name="auto_login",
-    ),
+
     # Third party apps here
     url(r"^graphql", GraphQLView.as_view(graphiql=True)),
     url(r"^markdownx/", include("markdownx.urls")),

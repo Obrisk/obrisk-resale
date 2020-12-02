@@ -189,14 +189,19 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   function submitForm() {
-       $.ajax({
-          url: "/users/cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/",
-          data: Object.fromEntries(new FormData(document.querySelector("form"))),
-          cache: false,
-          type: "POST",
-          success: function(data) {
+     fetch(
+          "/users/cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/", {
+          method : "POST",
+          body: document.querySelector("form").serialize(),
+          credentials: 'same-origin',
+          headers: {
+            "X-Requested-With": "XMLHttpRequest"
+          },
+          redirect: 'follow'
+        }).then (resp => resp.json())
+          .then (data => {
             if (data.success === true) {
-                window.location.replace('/classifieds/');
+                window.location.replace(data.nxt);
             } else {
                   results.innerHTML="<p class='error-text'>" + data.error_message + "</p>" ;
                   signup_loading.style.display = 'none';
@@ -213,13 +218,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     printError(
                       "Max number of code retrial has reached, Try again later!");
                   }
-               }
-          },
-          error: function(error) {
-            printError(error);
-          }
-        });
-        return false;
+           }
+      })
+      return false;
   }
 
   function submitVerifyCode() {
