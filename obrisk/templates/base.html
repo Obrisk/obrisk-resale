@@ -441,7 +441,7 @@
         var wx_num = "{{ request.session.wx_num }}";
 
         if (!localStorage.getItem('wx-auth') && wx_num.length > 1) {
-            localStorage.setItem('wx-auth', JSON.stringify(wx_num))
+            localStorage.setItem('wx-auth', wx_num)
 
             if (navigator.storage && navigator.storage.persist) {
                 navigator.storage.persisted();
