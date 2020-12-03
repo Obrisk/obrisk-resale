@@ -532,12 +532,24 @@ class WechatViewSet(View):
 
 class AuthView(WechatViewSet):
     def get(self, request):
+        nxt = request.GET.get("next", None)
+
+        if not request.session.session_key:
+            request.session.create()
+
+        cache.set(request.session.session_key, nxt, 1000)
         url = self.wechat_api.get_code_url()
         return redirect(url)
 
 
-def redirect_after_login(request):
-    nxt = request.GET.get("next", None)
+def redirect_after_login(request, social_login=None):
+    if social_login:
+        try:
+            nxt = cache.get(request.session.session_key)
+        except:
+            nxt = None
+    else:
+        nxt = request.GET.get("next", None)
     if nxt is None:
         return redirect(settings.LOGIN_REDIRECT_URL)
     elif not is_safe_url(
@@ -549,8 +561,14 @@ def redirect_after_login(request):
         return redirect(nxt)
 
 
-def ajax_redirect_after_login(request):
-    nxt = request.GET.get("next", None)
+def ajax_redirect_after_login(request, social_login=None):
+    if social_login:
+        try:
+            nxt = cache.get(request.session.session_key)
+        except:
+            nxt = None
+    else:
+        nxt = request.GET.get("next", None)
     if nxt is None:
         return JsonResponse({
             'success': True,
@@ -643,7 +661,7 @@ class GetInfoView(WechatViewSet):
                         backend='django.contrib.auth.backends.ModelBackend'
                     )
                     request.session['wx_num'] = user_data['ui']
-                return redirect_after_login(request)
+                return redirect_after_login(request, social_login=True)
         else:
             return HttpResponseBadRequest(
                  content=_('Bad request')
@@ -703,7 +721,7 @@ def wechat_getinfo_view_test(request):
                 backend='django.contrib.auth.backends.ModelBackend'
             )
             request.session['wx_num'] = user_data['ui']
-            return redirect_after_login(request)
+            return redirect_after_login(request, social_login=True)
         return HttpResponseBadRequest(
              content=_('Bad request')
          )
@@ -780,7 +798,7 @@ def complete_wechat_reg(request, **kwargs):
             backend='django.contrib.auth.backends.ModelBackend'
         )
         request.session['wx_num'] = request.POST.get('wechat_openid')
-        return ajax_redirect_after_login(request)
+        return ajax_redirect_after_login(request, social_login=True)
 
     else:
         error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
