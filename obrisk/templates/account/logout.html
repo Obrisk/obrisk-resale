@@ -29,8 +29,8 @@
   <script>
     document.querySelector("#confirmlogout").addEventListener('click', function () {
       localStorage.removeItem('auth');
-      localStorage.removeItem('wx-auth');
       localStorage.removeItem('new-classified');
+      deleteCookie('wx-auth');
     })
   </script>
 </div>

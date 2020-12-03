@@ -448,15 +448,14 @@
           if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
         }
         return null;
-    };
+    }
 
     var deleteCookie = function(name) {
         if (name) {
           setCookie(name, "", -1);
           return true;
         }
-    };
-
+    }
   </script>
 
   {% if request.user.is_authenticated %}
@@ -466,15 +465,9 @@
         new_messages = "{{ new_msgs }}";
         var wx_num = "{{ request.session.wx_num }}";
 
-        if (!localStorage.getItem('wx-auth') && wx_num.length > 1) {
-            localStorage.setItem('wx-auth', wx_num)
-
-            if (navigator.storage && navigator.storage.persist) {
-                navigator.storage.persisted();
-                navigator.storage.persist();
-            }
+        if ((getCookie('wx-auth') != null) && wx_num.length > 1) {
+            setCookie('wx-auth', wx_num, 30)
         }
-
       </script>
       <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
 
@@ -482,8 +475,8 @@
 
       <script type="text/javascript">
 
-        if (localStorage.getItem('wx-auth')) {
-            const wx_num = JSON.parse(localStorage.getItem('wx-auth'));
+        if (getCookie('wx-auth') != null) {
+            const wx_num = getCookie('wx-auth');
 
             fetch('{% url 'users:wx_auto' %}'+`?next=${window.location.pathname}?wx-num=wx_num`, {
               headers: {
