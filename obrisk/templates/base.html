@@ -470,7 +470,7 @@
         new_messages = "{{ new_msgs }}";
         var wx_num = "{{ request.session.wx_num }}";
 
-        if ((getCookie('wx-auth') != null) && wx_num.length > 1) {
+        if ((getCookie('wx-auth') == null) && wx_num.length > 1) {
             setCookie('wx-auth', wx_num, 30)
         }
       </script>
