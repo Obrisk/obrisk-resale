@@ -853,7 +853,7 @@ def wechat_auto_login(request, **kwargs):
 
     if request.COOKIES.get("wx-rand") is not None:
         openid = request.COOKIES.get("wx-rand")
-    else
+    else:
         return JsonResponse({"success": False})
 
     user = User.objects.filter(
