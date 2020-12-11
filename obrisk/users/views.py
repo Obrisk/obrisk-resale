@@ -851,9 +851,9 @@ def complete_authentication(request):
 @require_http_methods(["GET"])
 def wechat_auto_login(request, **kwargs):
 
-    try:
-        openid = cache.get(request.GET.get('wx-num'))
-    except:
+    if request.COOKIES.get("wx-rand") is not None:
+        openid = request.COOKIES.get("wx-rand")
+    else
         return JsonResponse({"success": False})
 
     user = User.objects.filter(
@@ -866,6 +866,10 @@ def wechat_auto_login(request, **kwargs):
         request, user.first(),
         backend='django.contrib.auth.backends.ModelBackend'
     )
+
+    nxt = request.GET.get("next", None)
+    cache.set(f'nxt_{request.COOKIES.get("wx-rand")}', nxt, 1000)
+
     return ajax_redirect_after_login(request)
 
 

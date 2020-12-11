@@ -477,9 +477,7 @@
       <script type="text/javascript">
 
         if (getCookie('wx-rand') != null) {
-            const wx_num = getCookie('wx-rand');
-
-            fetch('{% url 'users:wx_auto' %}'+`?next=${window.location.pathname}?wx-num=wx_num`, {
+            fetch('{% url 'users:wx_auto' %}'+`?next=${window.location.pathname}`, {
               headers: {
                 "X-Requested-With": "XMLHttpRequest"
               },
