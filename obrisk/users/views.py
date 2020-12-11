@@ -534,10 +534,8 @@ class AuthView(WechatViewSet):
     def get(self, request):
         nxt = request.GET.get("next", None)
 
-        if not request.session.session_key:
-            request.session.create()
-
-        cache.set(request.session.session_key, nxt, 1000)
+        if request.COOKIES.get("wx-rand") is not None:
+            cache.set(f'nxt_{request.COOKIES.get("wx-rand")}', nxt, 1000)
         url = self.wechat_api.get_code_url()
         return redirect(url)
 
@@ -545,7 +543,7 @@ class AuthView(WechatViewSet):
 def redirect_after_login(request, social_login=None):
     if social_login:
         try:
-            nxt = cache.get(request.session.session_key)
+            nxt = cache.get(f'nxt_{request.COOKIES.get("wx-rand")}')
         except:
             nxt = None
     else:
@@ -564,7 +562,7 @@ def redirect_after_login(request, social_login=None):
 def ajax_redirect_after_login(request, social_login=None):
     if social_login:
         try:
-            nxt = cache.get(request.session.session_key)
+            nxt = cache.get(f'nxt_{request.COOKIES.get("wx-rand")}')
         except:
             nxt = None
     else:
@@ -660,7 +658,15 @@ class GetInfoView(WechatViewSet):
                         request, user.first(),
                         backend='django.contrib.auth.backends.ModelBackend'
                     )
-                    request.session['wx_num'] = user_data['ui']
+
+                    try:
+                        cache.get(request.COOKIES.get("wx-rand"))
+                    except:
+                        cache.set(
+                            request.COOKIES.get('wx-rand'),
+                            user.wechat_openid,
+                            getattr(settings, 'SESSION_COOKIE_AGE', 60 * 60 * 24 * 40)
+                        )
                 return redirect_after_login(request, social_login=True)
         else:
             return HttpResponseBadRequest(
@@ -720,7 +726,6 @@ def wechat_getinfo_view_test(request):
                 request, user.first(),
                 backend='django.contrib.auth.backends.ModelBackend'
             )
-            request.session['wx_num'] = user_data['ui']
             return redirect_after_login(request, social_login=True)
         return HttpResponseBadRequest(
              content=_('Bad request')
@@ -797,7 +802,12 @@ def complete_wechat_reg(request, **kwargs):
             request, user,
             backend='django.contrib.auth.backends.ModelBackend'
         )
-        request.session['wx_num'] = request.POST.get('wechat_openid')
+
+        cache.set(
+            request.COOKIES.get('wx-rand'),
+            user.wechat_openid,
+            getattr(settings, 'SESSION_COOKIE_AGE', 60 * 60 * 24 * 40)
+        )
         return ajax_redirect_after_login(request, social_login=True)
 
     else:
@@ -840,11 +850,17 @@ def complete_authentication(request):
 @ajax_required
 @require_http_methods(["GET"])
 def wechat_auto_login(request, **kwargs):
+
+    try:
+        openid = cache.get(request.GET.get('wx-num'))
+    except:
+        return JsonResponse({"success": False})
+
     user = User.objects.filter(
-            wechat_openid=request.GET.get('wx-num')
+            wechat_openid=openid
         )
     if user.count() == 0:
-        return JsonResponse({"status": "403"})
+        return JsonResponse({"success": False})
 
     login(
         request, user.first(),
