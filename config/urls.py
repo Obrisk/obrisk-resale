@@ -14,6 +14,7 @@ from obrisk.users.views import (
     GetInfoView
 )
 from obrisk.utils.images_upload import get_oss_auth
+from obrisk.utils.wx_config import request_wx_credentials
 from obrisk.classifieds.sitemaps import ClassifiedsSitemap
 from obrisk.posts.sitemaps import PostsSitemap
 from obrisk.qa.sitemaps import QASitemap
@@ -51,6 +52,10 @@ urlpatterns = [
     url(r'^wx-auth/$',
         GetInfoView.as_view(),
         name='wechat_info'
+    ),
+    url(r'^obdev2018-wsguatpotlfwccdi-wx-auth/$',
+        GetInfoView.as_view(),
+        name='wx_req_cred'
     ),
     url(r"^get-oss-auth/$", get_oss_auth, name="get_oss_auth"),
     url(r"^get-oss-auth/([\w\.%+-]+)/$",
