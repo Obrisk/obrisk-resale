@@ -336,42 +336,42 @@
                    'updateAppMessageShareData','updateTimelineShareData' 
                 ] 
             });
+
+            wx.ready(function(){
+                function shareMe(title, text) {
+                    wx.updateAppMessageShareData({ 
+                        title: title, 
+                        desc: 'Check out this item', 
+                        link: location.href, 
+                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                        success: function () {
+                          // Indicates that the configuration is successful.
+                        }
+                    })
+                }
+
+                function shareMeMoments(title, text) {
+                    wx.updateTimelineShareData({ 
+                        title: title, 
+                        desc: 'Check out this item', 
+                        link: location.href, 
+                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                        success: function () {
+                          // Indicates that the configuration is successful.
+                        }
+                    })
+                }
+
+            });
+            wx.error(function(res){
+
+            });
+
           } else {
               console.log('failure to init wx');
           }
     })
 
-    wx.ready(function(){
-
-        function shareMe(title, text) {
-            wx.updateAppMessageShareData({ 
-                title: title, 
-                desc: 'Check out this item', 
-                link: location.href, 
-                imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                success: function () {
-                  // Indicates that the configuration is successful.
-                }
-            })
-        }
-
-        function shareMeMoments(title, text) {
-            wx.updateTimelineShareData({ 
-                title: title, 
-                desc: 'Check out this item', 
-                link: location.href, 
-                imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                success: function () {
-                  // Indicates that the configuration is successful.
-                }
-            })
-        }
-
-    });
-
-    wx.error(function(res){
-
-    });
 
 
   $(".go-to-chat").click(function (e) {
@@ -390,72 +390,59 @@
         window.location.href=editUrl;
   }
 
-  const image_count = {{ images| length}}
+  document.addEventListener('DOMContentLoaded', function () {
+      const image_count = {{ images| length}}
 
-  if (image_count > 1) {
-    $(".slider-pro").sliderPro({
-      arrows: true,
-      width: 960,
-      fade: true,
-      autoplay: false,
-      autoScaleLayers: false,
-      autoHeight: true,
+      if (image_count > 1) {
+        $(".slider-pro").sliderPro({
+          arrows: true,
+          width: 960,
+          fade: true,
+          autoplay: false,
+          autoScaleLayers: false,
+          autoHeight: true,
 
-    });
-  } else {
-    $(".slider-pro").sliderPro({
-      arrows: true,
-      width: 960,
-      fade: true,
-      autoplay: false,
-      autoScaleLayers: false,
-      autoHeight: true,
-      touchSwipe: false,//disable touch swipe if we have only one image
+        });
+      } else {
+        $(".slider-pro").sliderPro({
+          arrows: true,
+          width: 960,
+          fade: true,
+          autoplay: false,
+          autoScaleLayers: false,
+          autoHeight: true,
+          touchSwipe: false,//disable touch swipe if we have only one image
 
 
-    });
-  }
-
-  function copyToClipboard(text, el) {
-    var copyTest = document.queryCommandSupported('copy');
-    var elOriginalText = el.attr('data-original-title');
-
-    if (copyTest === true) {
-      var copyTextArea = document.createElement("textarea");
-      copyTextArea.value = text;
-      document.body.appendChild(copyTextArea);
-      copyTextArea.select();
-      try {
-        var successful = document.execCommand('copy');
-        var msg = successful ? 'Copied!' : 'Whoops, not copied!';
-        $.wnoty({
-          type: "success",
-          message: "Copied"
-        })
-      } catch (err) {
-        console.log('Oops, unable to copy');
+        });
       }
-      document.body.removeChild(copyTextArea);
-      el.attr('data-original-title', elOriginalText);
-    } else {
-      // Fallback if browser doesn't support .execCommand('copy')
-      window.prompt("Copy to clipboard: Ctrl+C or Command+C, Enter", text);
-    }
-  }
 
-  $(document).ready(function () {
-    // Initialize
-    // ---------------------------------------------------------------------
+      function copyToClipboard(text, el) {
+        var copyTest = document.queryCommandSupported('copy');
+        var elOriginalText = el.attr('data-original-title');
 
-
-    // Copy to clipboard
-    // Grab any text in the attribute 'data-copy' and pass it to the
-    // copy function
-    $('.js-copy').click(function () {
-      var text = $(this).attr('data-copy');
-      var el = $(this);
-      copyToClipboard(text, el);
-    });
+        if (copyTest === true) {
+          var copyTextArea = document.createElement("textarea");
+          copyTextArea.value = text;
+          document.body.appendChild(copyTextArea);
+          copyTextArea.select();
+          try {
+            var successful = document.execCommand('copy');
+            var msg = successful ? 'Copied!' : 'Whoops, not copied!';
+            $.wnoty({
+              type: "success",
+              message: "Copied"
+            })
+          } catch (err) {
+            console.log('Oops, unable to copy');
+          }
+          document.body.removeChild(copyTextArea);
+          el.attr('data-original-title', elOriginalText);
+        } else {
+          // Fallback if browser doesn't support .execCommand('copy')
+          window.prompt("Copy to clipboard: Ctrl+C or Command+C, Enter", text);
+        }
+      }
   });
 </script>
 

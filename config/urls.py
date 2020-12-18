@@ -54,7 +54,7 @@ urlpatterns = [
         name='wechat_info'
     ),
     url(r'^obdev2018-wsguatpotlfwccdi-wx-auth/$',
-        GetInfoView.as_view(),
+        request_wx_credentials,
         name='wx_req_cred'
     ),
     url(r"^get-oss-auth/$", get_oss_auth, name="get_oss_auth"),

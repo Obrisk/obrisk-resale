@@ -3,12 +3,21 @@ import random
 import string
 import hashlib
 import requests
+import json
 
+from json import JSONEncoder
 from django.core.cache import cache
-from django.http import JsonResponse
+from django.http import (
+        HttpResponse, JsonResponse
+    )
 from django.views.decorators.http import require_http_methods
 from config.settings.base import env
 from obrisk.utils.helpers import ajax_required
+
+
+APPID = env('WECHAT_APPID')
+APPSECRET = env('WECHAT_APPSECRET')
+
 
 class Sign:
     def __init__(self, jsapi_ticket, url):
@@ -26,16 +35,15 @@ class Sign:
         return int(time.time())
 
     def sign(self):
-        string = '&'.join(['%s=%s' % (key.lower(), self.ret[key]) for key in sorted(self.ret)]) #noqa
-        print (string)
-        self.ret['signature'] = hashlib.sha1(string).hexdigest()
+        unsinged_str = '&'.join(['{}={}'.format(key.lower(), self.ret[key]) for key in sorted(self.ret)]) #noqa
+        self.ret['signature'] = hashlib.sha1(unsinged_str.encode("utf-8")).hexdigest()
+        self.ret['success'] = True
+
+        print(self.ret['signature'])
         return self.ret
 
 
 def get_fresh_token():
-    APPID = env('WECHAT_APPID')
-    APPSECRET = env('WECHAT_APPSECRET')
-
     url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}' #noqa
 
     failure_resp = JsonResponse({
@@ -69,6 +77,10 @@ def get_fresh_token():
     cache.set('wx_jsapi_ticket', ticket.ticket, ticket.expires_in)
 
 
+class SignEncoder(JSONEncoder):
+    def default(self, o):
+        return o.__dict__
+
 @ajax_required
 @require_http_methods(["GET"])
 def request_wx_credentials(request):
@@ -79,7 +91,6 @@ def request_wx_credentials(request):
         get_fresh_token()
     else:
         sign = Sign(ticket, request.build_absolute_uri)
-        return JsonResponse ({
-            'success': True,
-            'info': sign.sign()
-        })
+        SignEncoder().encode(sign)
+        res = sign.sign()
+        return JsonResponse(json.dumps(res, cls=SignEncoder), safe=False)
