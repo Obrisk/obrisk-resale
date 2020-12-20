@@ -534,8 +534,24 @@ class AuthView(WechatViewSet):
     def get(self, request):
         nxt = request.GET.get("next", None)
 
-        if request.COOKIES.get("wx-rand") is not None:
-            cache.set(f'nxt_{request.COOKIES.get("wx-rand")}', nxt, 1000)
+        if request.COOKIES.get("active-chat") is not None:
+            cache.set(
+                f'chat_cookie_{request.COOKIES.get("visitor_id")}',
+                request.COOKIES.get("active-chat"),
+                1500
+            )
+        if nxt is not None:
+            cache.set(
+                f'nxt_{request.COOKIES.get("visitor_id")}',
+                nxt,
+                1500
+            )
+        if request.COOKIES.get("classified") is not None:
+            cache.set(
+                f'classified_{request.COOKIES.get("visitor_id")}',
+                request.COOKIES.get("classified"),
+                1500
+            )
         url = self.wechat_api.get_code_url()
         return redirect(url)
 
@@ -543,7 +559,15 @@ class AuthView(WechatViewSet):
 def redirect_after_login(request, social_login=None):
     if social_login:
         try:
-            nxt = cache.get(f'nxt_{request.COOKIES.get("wx-rand")}')
+            nxt = cache.get(
+                f'nxt_{request.COOKIES.get("visitor_id")}'
+            )
+            classified = cache.get(
+                f'classified_{request.COOKIES.get("visitor_id")}'
+            )
+            chat_cookie = cache.get(
+               f'chat_cookie_{request.COOKIES.get("visitor_id")}'
+            )
         except:
             nxt = None
     else:
@@ -562,7 +586,16 @@ def redirect_after_login(request, social_login=None):
 def ajax_redirect_after_login(request, social_login=None):
     if social_login:
         try:
-            nxt = cache.get(f'nxt_{request.COOKIES.get("wx-rand")}')
+            nxt = cache.get(
+                f'nxt_{request.COOKIES.get("visitor_id")}',
+            )
+            classified = cache.get(
+                f'classified_{request.COOKIES.get("visitor_id")}',
+            )
+
+            chat_cookie = cache.get(
+               f'chat_cookie_{request.COOKIES.get("visitor_id")}'
+            )
         except:
             nxt = None
     else:
@@ -570,7 +603,7 @@ def ajax_redirect_after_login(request, social_login=None):
     if nxt is None:
         return JsonResponse({
             'success': True,
-             'nxt' : settings.LOGIN_REDIRECT_URL
+             'nxt' : reverse(settings.LOGIN_REDIRECT_URL)
          })
     elif not is_safe_url(
             url=nxt,
@@ -578,7 +611,7 @@ def ajax_redirect_after_login(request, social_login=None):
             require_https=request.is_secure()):
         return JsonResponse({
             'success': True,
-             'nxt' : settings.LOGIN_REDIRECT_URL
+             'nxt' : reverse(settings.LOGIN_REDIRECT_URL)
          })
     else:
         return JsonResponse({
@@ -679,7 +712,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid35',
+            'ui': 'thisisaveryuniqueopenid38',
             'sx': 1,
             'nck':'admin 乔舒亚',
             'cnt':  'China'
@@ -802,12 +835,7 @@ def complete_wechat_reg(request, **kwargs):
             request, user,
             backend='django.contrib.auth.backends.ModelBackend'
         )
-
-        cache.set(
-            request.COOKIES.get('wx-rand'),
-            user.wechat_openid,
-            getattr(settings, 'SESSION_COOKIE_AGE', 60 * 60 * 24 * 40)
-        )
+        print(user)
         return ajax_redirect_after_login(request, social_login=True)
 
     else:

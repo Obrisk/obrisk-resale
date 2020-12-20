@@ -192,7 +192,7 @@ document.addEventListener('DOMContentLoaded', function() {
      fetch(
           "/users/cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/", {
           method : "POST",
-          body: document.querySelector("form").serialize(),
+          body: new FormData(document.querySelector("form")),
           credentials: 'same-origin',
           headers: {
             "X-Requested-With": "XMLHttpRequest"

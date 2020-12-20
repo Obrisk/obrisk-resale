@@ -142,8 +142,8 @@ LOGIN_REDIRECT_URL = "classifieds:list"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
 
+SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_AGE = 60 * 60 * 24 * 40  # 40 Days.
-
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -178,6 +178,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "utils.middleware.visitorid_middleware",
 ]
 
 # STATIC
