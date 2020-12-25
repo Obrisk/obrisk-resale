@@ -16,7 +16,6 @@ from django.views.generic import (
         DetailView, ListView,
         RedirectView, UpdateView, FormView)
 from django.utils.crypto import get_random_string
-from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from django.core.cache import cache
 from django.shortcuts import redirect, render
@@ -30,10 +29,12 @@ from django.db import IntegrityError
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
+
 from django.http import (
     HttpResponseServerError,
     HttpResponseRedirect,
-    HttpResponseBadRequest
+    HttpResponseBadRequest,
+    JsonResponse
 )
 from allauth.account.views import (
     SignupView, LoginView,
@@ -574,7 +575,7 @@ def redirect_after_login(request, social_login=None):
     else:
         nxt = None
 
-    if nxt is None or nxt == 'None':
+    if nxt is None:
         return redirect(settings.LOGIN_REDIRECT_URL)
     elif not is_safe_url(
             url=nxt,
@@ -582,7 +583,10 @@ def redirect_after_login(request, social_login=None):
             require_https=request.is_secure()):
         return redirect(settings.LOGIN_REDIRECT_URL)
     else:
-        return redirect(nxt)
+        response = HttpResponseRedirect(nxt)
+        if chat_cookie is not None:
+            response.set_cookie('active-chat', chat_cookie)
+        return response
 
 
 def ajax_redirect_after_login(request, social_login=None):
