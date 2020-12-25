@@ -541,7 +541,6 @@ class AuthView(WechatViewSet):
                 1500
             )
 
-        logging.error(f'Next value is {nxt}')
         if nxt is not None and nxt != 'None':
             cache.set(
                 f'nxt_{request.COOKIES.get("visitor_id")}',
@@ -573,9 +572,9 @@ def redirect_after_login(request, social_login=None):
         except:
             nxt = None
     else:
-        nxt = request.GET.get("next", None)
+        nxt = None
 
-    if nxt is None:
+    if nxt is None or nxt == 'None':
         return redirect(settings.LOGIN_REDIRECT_URL)
     elif not is_safe_url(
             url=nxt,
@@ -602,7 +601,8 @@ def ajax_redirect_after_login(request, social_login=None):
         except:
             nxt = None
     else:
-        nxt = request.GET.get("next", None)
+        nxt = None
+
     if nxt is None:
         return JsonResponse({
             'success': True,
