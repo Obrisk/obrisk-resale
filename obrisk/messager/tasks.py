@@ -60,4 +60,4 @@ def send_messages_notifications(sender_id, recipient_id, key):
             response = ast.literal_eval(ret)
 
             if response['Code'] == 'OK':
-                cache.set(f'notif_sms_{recipient_id}', 1 , 600)
+                cache.set(f'notif_sms_{recipient_id}', 1 , 120)
