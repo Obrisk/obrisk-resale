@@ -585,6 +585,7 @@ def redirect_after_login(request, social_login=None):
     else:
         response = HttpResponseRedirect(nxt)
         if chat_cookie is not None:
+            logging.error(f'active chat value is {chat_cookie}')
             response.set_cookie('active-chat', chat_cookie)
         return response
 
