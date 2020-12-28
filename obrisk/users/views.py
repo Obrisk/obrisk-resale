@@ -586,7 +586,7 @@ def redirect_after_login(request, social_login=None):
     else:
         url = urlsplit(nxt)
         response = HttpResponseRedirect(
-                'https://obrisk.com'+ url.path
+                url.path
             )
         if chat_cookie is not None:
             logging.error(f'active chat value is {chat_cookie}')
