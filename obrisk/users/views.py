@@ -584,7 +584,7 @@ def redirect_after_login(request, social_login=None):
             require_https=request.is_secure()):
         return redirect(settings.LOGIN_REDIRECT_URL)
     else:
-        logging.error(nxt)
+        logging.error(nxt, chat_cookie)
         url = urlsplit(nxt)
         response = HttpResponseRedirect(
                 url.path
