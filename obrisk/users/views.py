@@ -8,6 +8,7 @@ import oss2
 import boto3
 import logging
 import itertools
+from urllib.parse import urlsplit
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse, reverse_lazy
@@ -583,7 +584,10 @@ def redirect_after_login(request, social_login=None):
             require_https=request.is_secure()):
         return redirect(settings.LOGIN_REDIRECT_URL)
     else:
-        response = HttpResponseRedirect(nxt)
+        url = urlsplit(nxt)
+        response = HttpResponseRedirect(
+                'https://obrisk.com'+ url.path
+            )
         if chat_cookie is not None:
             logging.error(f'active chat value is {chat_cookie}')
             response.set_cookie('active-chat', chat_cookie)
