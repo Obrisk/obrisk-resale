@@ -372,18 +372,17 @@
           }
     })
 
-
-
-  $(".go-to-chat").click(function (e) {
-    e.preventDefault();
-    setCookie("active-chat", $(this).data("url"), 120);
-    location.href = "/ws/messages/";
-
-  });
-
   function gotochat(url) {
-    setCookie("active-chat", url, 120);
-    location.href = "/ws/messages/";
+      if (typeof currentUser === 'undefined') {
+        setCookie(
+            "active-chat",
+            "/ws/messages/chat/{{classified.user}}",
+            120);
+        location.href = "/ws/messages/";
+      }else {
+        setCookie("active-chat", url, 120);
+        location.href = "/ws/messages/";
+      }
   }
 
   function goToEdit () {

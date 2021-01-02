@@ -537,7 +537,6 @@ class AuthView(WechatViewSet):
         nxt = request.GET.get("next", None)
 
         if request.COOKIES.get("active-chat") is not None:
-            logging.error(f'chat value is: {request.COOKIES.get("active-chat")}')
             cache.set(
                 f'chat_cookie_{request.COOKIES.get("visitor_id")}',
                 request.COOKIES.get("active-chat"),
