@@ -1,5 +1,5 @@
 //let audio = new Audio("/static/sound/chime.mp3");
-var current_conv, last_stamp, last_msg, current_lst_stamp;
+var current_conv, last_stamp, last_msg, current_lst_stamp, url;
 
 try {
     last_msg = document.getElementById('last-msg').value;
@@ -215,7 +215,7 @@ $(function() {
   //This will only run once and then delete the cookies
   if (getCookie("active-chat")) {
     $("#chat-window").modal("show");
-    loadMessages(getCookie("active-chat"));
+    loadMessages(getCookie("active-chat").replace(/["']/g, ''));
     bottomNav.style.display = "none";
     //Clear the cookies obtained from the classified details
     deleteCookie("active-chat");
