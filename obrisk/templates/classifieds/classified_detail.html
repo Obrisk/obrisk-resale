@@ -376,7 +376,7 @@
       if (typeof currentUser === 'undefined') {
         setCookie(
             "active-chat",
-            "/ws/messages/chat/{{classified.user}}",
+            "/ws/messages/chat/{{classified.user}}/",
             120);
         location.href = "/ws/messages/";
       }else {
