@@ -537,6 +537,7 @@ class AuthView(WechatViewSet):
         nxt = request.GET.get("next", None)
 
         if request.COOKIES.get("active-chat") is not None:
+            logging.error(f'chat value is: {request.COOKIES.get("active-chat")}')
             cache.set(
                 f'chat_cookie_{request.COOKIES.get("visitor_id")}',
                 request.COOKIES.get("active-chat"),
@@ -584,14 +585,12 @@ def redirect_after_login(request, social_login=None):
             require_https=request.is_secure()):
         return redirect(settings.LOGIN_REDIRECT_URL)
     else:
-        logging.error(nxt, chat_cookie)
         url = urlsplit(nxt)
         response = HttpResponseRedirect(
                 url.path
             )
         if chat_cookie is not None:
-            logging.error(f'active chat value is {chat_cookie}')
-            response.set_cookie('active-chat', chat_cookie)
+            response.set_cookie('active-chat', chat_cookie, 60)
         return response
 
 
@@ -627,10 +626,14 @@ def ajax_redirect_after_login(request, social_login=None):
              'nxt' : reverse(settings.LOGIN_REDIRECT_URL)
          })
     else:
-        return JsonResponse({
+        url = urlsplit(nxt)
+        response = JsonResponse({
             'success': True,
-             'nxt' : nxt
-         })
+             'nxt' : url.path
+        })
+        if chat_cookie is not None:
+            response.set_cookie('active-chat', chat_cookie, 60)
+        return response
 
 
 class GetInfoView(WechatViewSet):
