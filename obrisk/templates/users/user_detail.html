@@ -211,7 +211,7 @@
 
   $(".go-to-chat").click(function (e) {
     e.preventDefault();
-    setCookie("active-chat", $(this).data("url"), 1);
+    setCookie("active-chat", $(this).data("url"), 120);
     location.href = "/ws/messages/";
 
   });

@@ -158,9 +158,8 @@
 
 <script>
   $(".go-to-chat").click(function (e) {
-    console.log("era eadf");
     e.preventDefault();
-    setCookie("active-chat", $(this).data("url"), 1);
+    setCookie("active-chat", $(this).data("url"), 120);
     window.location.href = "/ws/messages/";
 
   });
