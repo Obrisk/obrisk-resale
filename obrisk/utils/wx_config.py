@@ -4,6 +4,7 @@ import string
 import hashlib
 import requests
 import json
+import logging
 
 from json import JSONEncoder
 from django.core.cache import cache
@@ -44,25 +45,29 @@ class Sign:
 
 
 def get_fresh_token():
-    url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}' #noqa
-
-    failure_resp = JsonResponse({
-        'success': False
-    })
+    url = f'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}' #noqa
 
     try:
         token = requests.get(url, timeout=30)
-        ACCESS_TOKEN = token.access_token
+        logging.error(f'The token is {token}')
+        if token.ok:
+            tkn = json.loads(token.text)
+            ACCESS_TOKEN = tkn['access_token']
+        else:
+            return False
 
-    except (requests.ConnectionError,
+    except (AttributeError,
+            KeyError,
+            requests.ConnectionError,
             requests.RequestException,
             requests.HTTPError,
             requests.Timeout,
             requests.TooManyRedirects) as e:
         logging.error("Failed to request wx credentials" + e)
-        return failure_resp
+        return False
 
     try:
+        logging.error(f'The access token is {ACCESS_TOKEN}')
         ticket_url = f'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={ACCESS_TOKEN}&type=jsapi' #noqa
         ticket = requests.get(ticket_url, timeout=30)
 
@@ -72,9 +77,14 @@ def get_fresh_token():
             requests.Timeout,
             requests.TooManyRedirects) as e:
         logging.error("Failed to request wx ticket" + e)
-        return failure_resp
+        return False
 
-    cache.set('wx_jsapi_ticket', ticket.ticket, ticket.expires_in)
+    if ticket.ok:
+        tkt = json.loads(ticket.text)
+        logging.error(f'The ticket is {tkt}')
+        cache.set('wx_jsapi_ticket', tkt['ticket'], tkt['expires_in'])
+        return True
+    return False
 
 
 class SignEncoder(JSONEncoder):
@@ -84,13 +94,20 @@ class SignEncoder(JSONEncoder):
 @ajax_required
 @require_http_methods(["GET"])
 def request_wx_credentials(request):
+    '''This view returns the credentials used to initialize
+    wechat JavaScript object'''
+    ticket = None
 
-    try:
+    #try:
+    #ticket = cache.get('wx_jsapi_ticket')
+    #except:
+    if get_fresh_token():
         ticket = cache.get('wx_jsapi_ticket')
-    except:
-        get_fresh_token()
     else:
-        sign = Sign(ticket, request.build_absolute_uri)
-        SignEncoder().encode(sign)
-        res = sign.sign()
-        return JsonResponse(json.dumps(res, cls=SignEncoder), safe=False)
+        return JsonResponse({'success': False})
+
+    #finally:
+    sign = Sign(ticket, request.build_absolute_uri)
+    SignEncoder().encode(sign)
+    res = sign.sign()
+    return JsonResponse(json.dumps(res, cls=SignEncoder), safe=False)
