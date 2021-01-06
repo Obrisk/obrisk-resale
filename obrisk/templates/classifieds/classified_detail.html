@@ -98,8 +98,7 @@
             {% if classified.status == 'A' %}
             <div class="action-wrapper">
 
-                  <div class="button share share-button"
-                    onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
+                  <a class="button share share-button" id= 'shareMessage'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-share-2">
@@ -110,7 +109,7 @@
                       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                     </svg>
                     Share
-                  </div>
+                  </a>
 
                     {% if classified.user != request.user %}
                        <div class="button chat-button"
@@ -325,7 +324,7 @@
       redirect: 'follow'
     }).then (resp => resp.json())
       .then (data => {
-          if (data.success == true) {
+          if (data.info.success == true) {
             wx.config({
                 debug: true, 
                 appId: data.info.jsapi_ticket,
@@ -338,17 +337,25 @@
             });
 
             wx.ready(function(){
-                function shareMe(title, text) {
+		    console.log('here')
+		    document.getElementById('shareMessage').AddEventListener('click', () => {
+		    console.log('clicked!');
                     wx.updateAppMessageShareData({ 
-                        title: title, 
-                        desc: 'Check out this item', 
+                        title: '{{ classified.title }}', 
+		        desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:20 }}', 
                         link: location.href, 
                         imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                        success: function () {
-                          // Indicates that the configuration is successful.
+                        trigger: function (res) {
+				console.log(JSON.stringify(res));
+                        },
+                        success: function (res) {
+				console.log(JSON.stringify(res));
+                        },
+                        fail: function (res) {
+				console.log(JSON.stringify(res));
                         }
                     })
-                }
+                })
 
                 function shareMeMoments(title, text) {
                     wx.updateTimelineShareData({ 
@@ -364,7 +371,7 @@
 
             });
             wx.error(function(res){
-
+		console.log(res);
             });
 
           } else {

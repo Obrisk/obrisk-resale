@@ -49,7 +49,6 @@ def get_fresh_token():
 
     try:
         token = requests.get(url, timeout=30)
-        logging.error(f'The token is {token}')
         if token.ok:
             tkn = json.loads(token.text)
             ACCESS_TOKEN = tkn['access_token']
@@ -67,7 +66,6 @@ def get_fresh_token():
         return False
 
     try:
-        logging.error(f'The access token is {ACCESS_TOKEN}')
         ticket_url = f'https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token={ACCESS_TOKEN}&type=jsapi' #noqa
         ticket = requests.get(ticket_url, timeout=30)
 
@@ -81,9 +79,13 @@ def get_fresh_token():
 
     if ticket.ok:
         tkt = json.loads(ticket.text)
-        logging.error(f'The ticket is {tkt}')
-        cache.set('wx_jsapi_ticket', tkt['ticket'], tkt['expires_in'])
-        return True
+        if tkt['ticket'] is not None:
+            cache.set(
+                    'wx_jsapi_ticket',
+                    tkt['ticket'],
+                    tkt['expires_in']
+                )
+            return True
     return False
 
 
@@ -98,16 +100,18 @@ def request_wx_credentials(request):
     wechat JavaScript object'''
     ticket = None
 
-    #try:
-    #ticket = cache.get('wx_jsapi_ticket')
-    #except:
-    if get_fresh_token():
+    try:
         ticket = cache.get('wx_jsapi_ticket')
-    else:
-        return JsonResponse({'success': False})
+        if ticket is None:
+            get_fresh_token()
+    except:
+        if get_fresh_token():
+            ticket = cache.get('wx_jsapi_ticket')
+        else:
+            return JsonResponse({'success': False})
 
-    #finally:
-    sign = Sign(ticket, request.build_absolute_uri)
-    SignEncoder().encode(sign)
-    res = sign.sign()
-    return JsonResponse(json.dumps(res, cls=SignEncoder), safe=False)
+    finally:
+        sign = Sign(ticket, request.META['HTTP_REFERER'])
+        SignEncoder().encode(sign)
+        res = sign.sign()
+        return JsonResponse(json.dumps(res, cls=SignEncoder), safe=False)
