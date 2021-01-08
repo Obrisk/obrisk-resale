@@ -1,5 +1,8 @@
 import logging
 import re
+import requests
+import json
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -27,6 +30,7 @@ from django.db.models import (
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dal import autocomplete
+from ipware import get_client_ip
 from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import (
         Classified, OfficialAd,
@@ -59,10 +63,22 @@ def classified_list(request, tag_slug=None):
     if request.user.is_authenticated:
         city = request.user.city
     else:
-        #Find the way to get their city using IP Address
-        #request.user.IPAddress find in cities tables.
-        #If not in China?
-        city = "Hangzhou"
+        city = cache.get(
+                f'user_city_{request.COOKIES.get("visitor_id")}'
+            )
+        if city is None:
+            client_ip, is_routable = get_client_ip(request)
+            if client_ip is None:
+                city = ""
+            else:
+                info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
+                city = json.loads(info.text)['city']
+                city = cache.set(
+                        f'user_city_{request.COOKIES.get("visitor_id")}',
+                        city,
+                        60 * 60 * 3
+                    )
+
 
     #Try to Get the popular tags from cache
     popular_tags = cache.get('popular_tags_mb')
