@@ -436,7 +436,7 @@ class PhoneRequestPasswordForm(forms.Form):
         label=_("Phone number"),
         required=True,
         widget=forms.TextInput(
-            attrs={"type": "tel", "placeholder": _("Phone number you registered with"),}
+            attrs={"type": "tel", "placeholder": _("Don't include country code"),}
         ),
     )
 
@@ -445,14 +445,36 @@ class PhoneResetPasswordForm(forms.Form):
     """
     A form that lets a user change set their password without entering the old
     password
+    could add pattern attribute but it doesn't work on Chrome
+    "pattern": "^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?!.*\s).*$",
     """
 
     error_messages = {
         "password_mismatch": ("The two password fields didn't match."),
     }
-    new_password1 = forms.CharField(label=("New password"), widget=forms.PasswordInput)
+    new_password1 = forms.CharField(
+        required=True,
+        label=("New password"),
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": _("Atleast 8 letters & numbers "),
+                "type": "password",
+                "minlength": 8,
+                "maxlength": 30
+            }
+        )
+    )
     new_password2 = forms.CharField(
-        label=("New password confirmation"), widget=forms.PasswordInput
+        required=True,
+        label=("Confirm password"),
+        widget=forms.PasswordInput(
+            attrs={
+                "placeholder": _("Same as above"),
+                "type": "password",
+                "minlength": 8,
+                "maxlength": 30
+            }
+        )
     )
 
     def clean_new_password2(self):

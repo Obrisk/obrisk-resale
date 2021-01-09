@@ -11,87 +11,43 @@
 
 {% endblock head %}
 {% block content %}
-<div class="view-wrapper">
-    <div class="container">
-        <div id="" class="view-wrap true-dom">
-            <div class="columns is-centered">
-                <div class="column is-half is-one-third-desktop has-background-white p-4">
+<div class="container view-wrapper">
+    <div class="hero-body p-0">
 
-                    <div class="hero-body p-0">
-                        <div class="form-wrapper">
-                            <!--Form-->
-                            <div class="login-form">
+        <form method="post">
 
-                                <div class="login-wrapper">
-                                    <div class="outer-panel">
-                                        <div class="outer-panel-inner">
-                                            {% if messages %}
-                                            <ul class="messages">
-                                                {% for message in messages %}
-                                                {% endfor %}
+            {% csrf_token %}
 
-                                            </ul>
-                                            {% endif %}
+            <div class="form-panel">
 
-                                            <!-- Form rendering code for template -->
-                                            <form action="" method="post">
+                <label for="new_password1">
+                    New password
+                </label>
+                {{ form.new_password1 }}
 
-                                                {% csrf_token %}
+                <label for="new_password2">
+                    New password confirmation
+                </label>
 
-                                                <div class="form-panel">
-                                                    <div class="form-row">
+                {{ form.new_password2 }}
 
-                                                        <div class="form-group col-md-12 mb-0">
-                                                            <div class="input-group">
-                                                                <label for="new_password1">
-                                                                    New password
-                                                                </label>
-                                                            </div>
-                                                            {{ form.new_password1 }}
+                <br />
+                <button type="submit" value=""
+                    class="button is-rounded is-solid accent-button raised is-fullwidth">
+                    Confirm
+                </button>
 
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-row">
-
-                                                        <div class="form-group col-md-12 mb-0">
-                                                            <div class="input-group">
-                                                                <label for="new_password2">
-                                                                    New password confirmation
-                                                                </label>
-
-                                                            </div>
-                                                            {{ form.new_password2 }}
-                                                        </div>
-                                                    </div>
-                                                    <div class="mt-2">
-                                                        <button type="submit" value=""
-                                                            class="button is-rounded is-solid accent-button raised is-fullwidth">
-                                                            Confirm
-                                                        </button>
-                                                    </div>
-
-
-                                                </div>
-                                            </form>
-
-                                            <br /> <br />
-                                            <small>{% blocktrans %}If you have any problem, please
-                                                <a href="mailto:support@obrisk.com"> click here </a> to contact us or
-                                                via WechatID:
-                                                <span style="font-weight:bold; color: #0aeee3"> Obrisk
-                                                </span>{% endblocktrans %}</small>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                </div>
             </div>
-        </div>
+        </form>
+
+        <br /> <br />
+        <small>{% blocktrans %}Any problem? 
+            <a href="mailto:support@obrisk.com"> email us here </a> or add
+            our WechatID:
+            <span style="font-weight:bold; color: #0aeee3"> Obrisk
+            </span>{% endblocktrans %}
+        </small>
+
     </div>
 </div>
 

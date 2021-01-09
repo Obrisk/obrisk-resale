@@ -56,7 +56,7 @@ urlpatterns = [
         view=views.phone_password_reset,
         name='phone_password_reset'),
 
-    url(regex=r'^phone-password-reset-form/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)(?P<nickname>[\w.@+-]+)/$',
+    url(regex=r'^phone-password-reset-form/(?P<uidb36>[0-9A-Za-z]+)-(?P<key>.+)/$',
         view=views.PhonePasswordResetConfirmView.as_view(),
         name='phone_ps_reset_confirm'),
 
