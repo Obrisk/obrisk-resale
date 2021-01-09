@@ -327,9 +327,9 @@
           if (data.info.success == true) {
             wx.config({
                 debug: true, 
-                appId: data.info.jsapi_ticket,
+                appId: data.info.id,
                 timestamp: data.info.timestamp,
-                nonceStr: data.info.nonce_str,
+                nonceStr: data.info.noncestr,
                 signature: data.info.signature,
                 jsApiList: [
                    'updateAppMessageShareData','updateTimelineShareData' 
