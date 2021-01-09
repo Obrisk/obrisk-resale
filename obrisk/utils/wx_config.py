@@ -23,7 +23,7 @@ APPSECRET = env('WECHAT_APPSECRET')
 class Sign:
     def __init__(self, jsapi_ticket, url):
         self.ret = {
-            'nonce_str': self.__create_nonce_str(),
+            'noncestr': self.__create_nonce_str(),
             'jsapi_ticket': jsapi_ticket,
             'timestamp': self.__create_timestamp(),
             'url': url
@@ -36,11 +36,11 @@ class Sign:
         return int(time.time())
 
     def sign(self):
-        unsinged_str = '&'.join(['{}={}'.format(key.lower(), self.ret[key]) for key in sorted(self.ret)]) #noqa
-        self.ret['signature'] = hashlib.sha1(unsinged_str.encode("utf-8")).hexdigest()
+        unsinged_str = '&'.join(['%s=%s' % (key.lower(), self.ret[key]) for key in sorted(self.ret)]) #noqa
+        self.ret['signature'] = hashlib.sha1(unsinged_str.encode('utf-8')).hexdigest()
         self.ret['success'] = True
+        self.ret['id'] = APPID
 
-        print(self.ret['signature'])
         return self.ret
 
 
@@ -98,20 +98,15 @@ class SignEncoder(JSONEncoder):
 def request_wx_credentials(request):
     '''This view returns the credentials used to initialize
     wechat JavaScript object'''
-    ticket = None
 
-    try:
-        ticket = cache.get('wx_jsapi_ticket')
-        if ticket is None:
-            get_fresh_token()
-    except:
+    ticket = cache.get('wx_jsapi_ticket')
+    if ticket is None:
         if get_fresh_token():
             ticket = cache.get('wx_jsapi_ticket')
         else:
             return JsonResponse({'success': False})
 
-    finally:
-        sign = Sign(ticket, request.META['HTTP_REFERER'])
-        SignEncoder().encode(sign)
-        res = sign.sign()
-        return JsonResponse(json.dumps(res, cls=SignEncoder), safe=False)
+    sign = Sign(ticket, request.META['HTTP_REFERER'])
+    SignEncoder().encode(sign)
+    res = sign.sign()
+    return JsonResponse(json.dumps(res, cls=SignEncoder), safe=False)
