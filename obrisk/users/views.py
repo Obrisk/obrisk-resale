@@ -589,7 +589,7 @@ def redirect_after_login(request, social_login=None):
                 url.path
             )
         if chat_cookie is not None:
-            response.set_cookie('active-chat', chat_cookie, 60)
+            response.set_cookie('active-chat', chat_cookie, 30)
         return response
 
 
@@ -631,7 +631,7 @@ def ajax_redirect_after_login(request, social_login=None):
              'nxt' : url.path
         })
         if chat_cookie is not None:
-            response.set_cookie('active-chat', chat_cookie, 60)
+            response.set_cookie('active-chat', chat_cookie, 30)
         return response
 
 
@@ -707,9 +707,7 @@ class GetInfoView(WechatViewSet):
                         backend='django.contrib.auth.backends.ModelBackend'
                     )
 
-                    try:
-                        cache.get(request.COOKIES.get("wx-rand"))
-                    except:
+                    if cache.get(request.COOKIES.get("wx-rand")) is None:
                         cache.set(
                             request.COOKIES.get('wx-rand'),
                             user.wechat_openid,
@@ -910,8 +908,8 @@ def wechat_auto_login(request, **kwargs):
         backend='django.contrib.auth.backends.ModelBackend'
     )
 
-    nxt = request.GET.get("next", None)
-    cache.set(f'nxt_{request.COOKIES.get("wx-rand")}', nxt, 1000)
+    nxt = request.META.get('HTTP_REFERER')
+    cache.set(f'nxt_{request.COOKIES.get("visitor_id")}', nxt, 60)
 
     return ajax_redirect_after_login(request)
 
