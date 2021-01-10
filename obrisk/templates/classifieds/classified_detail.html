@@ -93,7 +93,8 @@
             {% if classified.status == 'A' %}
             <div class="action-wrapper">
 
-                  <a class="button share share-button" id= 'shareMessage'>
+                <div class="button share share-button"
+                    onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-share-2">
@@ -104,7 +105,7 @@
                       <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
                     </svg>
                     Share
-                  </a>
+                  </div>
 
                     {% if classified.user != request.user %}
                        <div class="button chat-button"
@@ -263,8 +264,9 @@
     <div class="notification off-ac">
         <img src="{% static 'img/qrcode.jpg' %}"
            height="100px" width="100px" alt="Obrisk QRcode"/>
-        <span> Long press the QR code & follow our platform
-            to explore more</span>
+        <span> 
+            Long press the QR code & follow our platform
+        </span>
     </div>
 
 
@@ -308,71 +310,16 @@
 <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/vendor/fancybox.min.js' %}"></script>
 <script defer src="{% static 'js/vendor/jquery.sliderPro.min.js' %}"></script>
-<script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
+<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
 
-    fetch('{% url 'wx_req_cred' %}', {
-      headers: {
-        "X-Requested-With": "XMLHttpRequest"
-      },
-      credentials: 'same-origin',
-      redirect: 'follow'
-    }).then (resp => resp.json())
-      .then (data => {
-          if (data.info.success == true) {
-            wx.config({
-                debug: true, 
-                appId: data.info.id,
-                timestamp: data.info.timestamp,
-                nonceStr: data.info.noncestr,
-                signature: data.info.signature,
-                jsApiList: [
-                   'updateAppMessageShareData','updateTimelineShareData' 
-                ] 
+  function shareMe(title, text) {
+            navigator.share({
+              title: title,
+              text: text,
+              url: location.href,
             });
-
-            wx.ready(function(){
-		    console.log('here')
-		    document.getElementById('shareMessage').AddEventListener('click', () => {
-		    console.log('clicked!');
-                    wx.updateAppMessageShareData({ 
-                        title: '{{ classified.title }}', 
-		        desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:20 }}', 
-                        link: location.href, 
-                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                        trigger: function (res) {
-				console.log(JSON.stringify(res));
-                        },
-                        success: function (res) {
-				console.log(JSON.stringify(res));
-                        },
-                        fail: function (res) {
-				console.log(JSON.stringify(res));
-                        }
-                    })
-                })
-
-                function shareMeMoments(title, text) {
-                    wx.updateTimelineShareData({ 
-                        title: title, 
-                        desc: 'Check out this item', 
-                        link: location.href, 
-                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                        success: function () {
-                          // Indicates that the configuration is successful.
-                        }
-                    })
-                }
-
-            });
-            wx.error(function(res){
-		console.log(res);
-            });
-
-          } else {
-              console.log('failure to init wx');
-          }
-    })
+  }
 
   function gotochat(url) {
       if (typeof currentUser === 'undefined') {
