@@ -76,9 +76,9 @@ def update_profile_pic_async(user_id, thumb, mid, full):
     user = User.objects.get(id=user_id)
 
     try:
-        thumbnail = requests.get(thumb, timeout=60)
-        picture = requests.get(mid, timeout=60)
-        org_picture = requests.get(full, timeout=60)
+        thumbnail = requests.get(thumb, timeout=180)
+        picture = requests.get(mid, timeout=180)
+        org_picture = requests.get(full, timeout=180)
 
     except (requests.ConnectionError,
             requests.RequestException,
