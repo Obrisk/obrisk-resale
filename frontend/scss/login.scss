@@ -249,49 +249,6 @@ label {
   color: $red;
 }
 
-
-#request-unverified-phone{
-    display: none;
-    align-items: center;
-    margin-top: 3px;
-    justify-content: center;
-    font-size: 14px;
-}
-
-
-#unverify-form {
-  display: none;
-  margin: auto;
-  padding: 20px;
-  border-radius:5%;
-  position: absolute;
-  width: 80%;
-  top: 10%;
-  left: 10%;
-  z-index: 999;
-  background: #1d1d1d;
-  color: white;
-}
-
-#unverify-form input {
-  color: white;
-}
-
-#unverify-reason {
-    margin-top: 3px;
-}
-
-#close-unverify-form {
-    float: left;
-}
-
-#id_notes, #id_wechat_id {
-    border-bottom: black;
-    border-bottom-color: black;
-    border-bottom-style: solid;
-    border-bottom-width: thin;
-}
-
 .blur-in {
     -webkit-animation: blur 1s forwards !important;
     -moz-animation: blur 1s forwards !important;

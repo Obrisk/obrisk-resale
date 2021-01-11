@@ -123,8 +123,6 @@
 
                               <div id="results" style="font-weight:bold;"> </div>
 
-                              <a id='request-unverified-phone'> Can't verify? </a>
-
                               <br/>
                               <button id="submit-code" type="button"  
                                    class="button accent-button raised is-rounded is-fullwidth"> {% trans 'Submit' %} 
@@ -140,28 +138,6 @@
                           <input type="hidden" name="{{ redirect_field_name }}"
                           value="{{ redirect_field_value }}" />
                       {% endif %}
-
-
-                     <!-- Modal content -->
-                      <div id='unverify-form'> 
-                          <span class="close" id=close-unverify-form> ❌ </span>
-                          </br>
-                              <p>Reason to why you can't verify?</p> 
-                              {{ form.notes }}
-
-                              <p class='mt-2'>Your Wechat ID:<p>
-                              {{ form.wechat_id}}
-                              <br>
-                              
-                              <small> We'll contact you to confirm</small>
-                          
-                              <button
-                                class="button is-solid primary-button raised is-rounded is-fullwidth"
-                                id="cant-verify-submit" type="button">
-                                {% trans 'Submit' %}
-                              </button>
-                              {{ form.unverified_phone }}
-                        </div>
 
                       {{ form.wechat_openid }}
                       {{ form.gender }}

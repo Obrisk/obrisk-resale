@@ -66,7 +66,7 @@ def update_prof_pic_sync(user, thumb, mid, full):
 
 
 @shared_task
-def update_profile_picture(user_id, socialapp):
+def update_profile_pic_async(user_id, thumb, mid, full):
     """
     Runs the bg task to update user picture download it from
     social app and save it to our bucket
@@ -75,33 +75,10 @@ def update_profile_picture(user_id, socialapp):
     time.sleep(1)
     user = User.objects.get(id=user_id)
 
-    if socialapp == 'linkedin':
-
-        thumbnail = user.socialaccount_set.all()[0] \
-                .extra_data['profilePicture']['displayImage~'] \
-                ['elements'][0]['identifiers'][0]['identifier']
-        mid_size = user.socialaccount_set.all()[0] \
-                .extra_data['profilePicture']['displayImage~'] \
-                ['elements'][2]['identifiers'][0]['identifier']
-        full_image = user.socialaccount_set.all()[0] \
-                .extra_data['profilePicture']['displayImage~'] \
-                ['elements'][3]['identifiers'][0]['identifier']
-
-    elif socialapp == 'wechat':
-
-        picture = cache.get(user.wechat_openid)
-        thumbnail = picture[:-3] + '64'
-        mid_size = picture
-        full_image = picture[:-3] + '0'
-
-    else:
-        return None
-
     try:
-        # timeout is high because it is task.py
-        thumbnail = requests.get(thumbnail, timeout=30)
-        picture = requests.get(mid_size, timeout=30)
-        org_picture = requests.get(full_image, timeout=30)
+        thumbnail = requests.get(thumb, timeout=60)
+        picture = requests.get(mid, timeout=60)
+        org_picture = requests.get(full, timeout=60)
 
     except (requests.ConnectionError,
             requests.RequestException,

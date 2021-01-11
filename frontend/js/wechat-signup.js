@@ -15,8 +15,6 @@ const phone_number = document.getElementById('id_phone_number');
 const verify_code_input = document.getElementById('verify-code');
 
 const panel_two = document.getElementById('signup-panel-2');
-const request_unverify = document.getElementById('request-unverified-phone');
-const unverify_form = document.getElementById('unverify-form');
 const signup_loading = document.getElementById('signup-loading-popup');
 
 
@@ -99,10 +97,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (timeout > 0) {
                   send_code_btn.textContent = timeout + " S";
 
-                    if (timeout === 30 && verify_code_input.value === "") {
-                        request_unverify.style.cssText += ';display:block !important;';
-                    }
-
                 } else {
                     send_code_btn.textContent = "Resend Code";
                     send_code_btn.disabled = false;
@@ -157,22 +151,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  request_unverify.addEventListener('click', e => {
-      unverify_form.style.cssText += ';display:block !important;';
-      document.getElementById('id_notes').focus();
-      panel_two.classList.remove('blur-out');
-      panel_two.classList.add('blur-in');
-      e.stopPropagation();
-
-  });
-
-  document.getElementById('close-unverify-form').addEventListener('click', e => {
-          unverify_form.style.display = 'none';
-          panel_two.classList.remove('blur-in');
-          panel_two.classList.add('blur-out');
-          e.stopPropagation();
-  });
-
   username_el.addEventListener('keyup', e => {
       fetch(`/users/username-exists/?username=${e.target.value}`)
       .then (resp => resp.json())
@@ -208,7 +186,6 @@ document.addEventListener('DOMContentLoaded', function() {
                   send_code_btn.disabled = false;
                   verify_code_input.disabled = false;
                   document.getElementById('verify-code').disabled = false;
-                  unverify_form.style.display = 'none';
                   panel_two.classList.remove('blur-in');
                   panel_two.classList.add('blur-out');
                   code_counter = code_counter + 1;
@@ -254,27 +231,5 @@ document.addEventListener('DOMContentLoaded', function() {
     submitVerifyCode();
   });
 
-  document.getElementById('cant-verify-submit').addEventListener('click', e => {
-
-          if (
-              isNaN(phone_number.value) ||
-              phone_number.value.length.toString() != 11 ||
-              phone_number.value.charAt(0) != 1
-          ) {
-                  e.preventDefault();
-                  results.innerHTML="<p class='error-text'> The phone number is not correct!<p>";
-                  unverify_form.style.display = 'none';
-                  panel_two.classList.remove('blur-in');
-                  panel_two.classList.add('blur-out');
-                  e.stopPropagation();
-          } else {
-               document.getElementById('id_unverified_phone').value = phone_number.value;
-               phone_number.value = "";
-               signup_loading.style.display = 'flex';
-               submitForm();
-               return false;
-          }
-
-    });
 //Close jQuery function
 });

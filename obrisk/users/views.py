@@ -55,7 +55,7 @@ from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
 from obrisk.users.wechat_config import CHINA_PROVINCES
-from obrisk.users.tasks import update_prof_pic_sync
+from obrisk.users.tasks import update_profile_pic_async
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm,
@@ -357,18 +357,18 @@ def send_code_sms(request):
         if (phone_no is not None and len(phone_no) == 11
             and phone_no[0] == '1' and phone_no != '13300000000'):
 
-            check_phone = User.objects.filter(
+            users = User.objects.filter(
                     phone_number= '+86' + phone_no
-                ).exists()
+                )
 
-            if check_phone is False:
-                return send_code(phone_no, "signup")
+            if users:
+                if users.first().wechat_openid != None:
+                    return JsonResponse(
+                            {'success': False,
+                                'error_message': "Number exists, try to login/reset password"
+                            })
+            return send_code(phone_no, "signup")
 
-            else:
-                return JsonResponse(
-                        {'success': False,
-                            'error_message': "This number exists, try to login or reset password"
-                        })
 
         else:
             return JsonResponse({
@@ -725,7 +725,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid38',
+            'ui': 'thisisaveryuniqueopenid41',
             'sx': 1,
             'nck':'admin 乔舒亚',
             'cnt':  'China'
@@ -814,11 +814,6 @@ def complete_wechat_reg(request, **kwargs):
                     'error_message': "The verification code is incorrect"
                 })
 
-    elif request.POST.get('wechat_id'):
-        updated_request.update({
-            'unverified_phone': '+86' + updated_request['unverified_phone']
-        })
-
     else:
         return JsonResponse({
             'success': False,
@@ -836,19 +831,34 @@ def complete_wechat_reg(request, **kwargs):
                 'error_message': "Sorry we failed to register you. Try again later!"
             })
 
-        user = form.save(request, commit=False)
+        exist_users = User.objects.filter(
+                phone_number = updated_request['phone_number']
+            )
+
+        if not exist_users:
+            user = form.save(request, commit=False)
+        else:
+            if exist_users.first().wechat_openid is None:
+                user = exist_users.first()
+                user.wechat_openid = updated_request['wechat_openid']
+            else:
+                return JsonResponse({
+                    'success': False,
+                    'error_message': "Sorry we failed to register you. Try again later!"
+                })
+
         thumbnail = picture[:-3] + '64'
         full_image = picture[:-3] + '0'
 
-        update_prof_pic_sync(
-                user, thumbnail, picture, full_image
+        user.save()
+        update_profile_pic_async.delay(
+                user.id, thumbnail, picture, full_image
             )
 
         login(
             request, user,
             backend='django.contrib.auth.backends.ModelBackend'
         )
-        print(user)
         return ajax_redirect_after_login(request, social_login=True)
 
     else:
