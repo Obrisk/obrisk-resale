@@ -136,7 +136,7 @@
                       <button id="create-btn" type="button"
                         class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
                   {% else %}
-                      <button id="create-btn" type="button" onclick="window.location.href='/auth/login/'"
+                      <button id="create-btn" type="button"
                         class="login-to-post button is-solid accent-button raised"> 
                           {% trans 'Login' %}
                      </button>
@@ -176,6 +176,20 @@
   const title_id = "{{ form.title.auto_id }}";
   const details_id = "{{ form.details.auto_id }}";
   const address = "{{ form.address.auto_id }}";
+
+  if (typeof user === 'undefined') {
+      document.getElementById('create-btn').addEventListener('click', e => {
+        setCookie(
+            "classified",
+            [document.getElementById('id_title'),
+             document.getElementById('id_details'),
+             document.getElementById('id_price')
+            ],
+            120
+        );
+        location.href = "/auth/login/";
+      });
+  }
 </script>
 
 <link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>

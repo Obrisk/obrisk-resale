@@ -17,6 +17,15 @@ function printError(msg) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
+  if (getCookie("classified")) {
+     //cookie.replace(/["']/g, '')
+     const classifiedArray = getCookie("classified")
+
+     document.getElementById('id_title').value = classifiedArray[0]
+     document.getElementById('id_details').value = classifiedArray[1]
+     document.getElementById('id_price').value = classifiedArray[2]
+  }
+
   document.querySelectorAll('.close-dj-messages').forEach(item => {
         item.addEventListener('click', e => {
             e.currentTarget.parentElement.classList.add('is-hidden');
@@ -116,14 +125,6 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
   });
-
-  
-  if ( user === '' ) {
-      document.getElementsByClassName('login-to-post')[0].addEventListener('click', function () {
-          let draft_post = Object.fromEntries(new FormData(document.querySelector("form")));
-          localStorage.setItem('new-classified', JSON.stringify(draft_post));
-      });
-  }
 
   document.getElementById('cancel-classified').addEventListener('click', function () {
       localStorage.removeItem('new-classified');

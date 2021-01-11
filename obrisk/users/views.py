@@ -560,21 +560,16 @@ class AuthView(WechatViewSet):
 
 
 def redirect_after_login(request, social_login=None):
-    if social_login:
-        try:
-            nxt = cache.get(
-                f'nxt_{request.COOKIES.get("visitor_id")}'
-            )
-            classified = cache.get(
-                f'classified_{request.COOKIES.get("visitor_id")}'
-            )
-            chat_cookie = cache.get(
-               f'chat_cookie_{request.COOKIES.get("visitor_id")}'
-            )
-        except:
-            nxt = None
-    else:
-        nxt = None
+    nxt = cache.get(
+        f'nxt_{request.COOKIES.get("visitor_id")}'
+    )
+    classified = cache.get(
+        f'classified_{request.COOKIES.get("visitor_id")}'
+    )
+    chat_cookie = cache.get(
+       f'chat_cookie_{request.COOKIES.get("visitor_id")}'
+    )
+
 
     if nxt is None:
         return redirect(settings.LOGIN_REDIRECT_URL)
@@ -590,26 +585,22 @@ def redirect_after_login(request, social_login=None):
             )
         if chat_cookie is not None:
             response.set_cookie('active-chat', chat_cookie, 30)
+
+        if classified is not None:
+            response.set_cookie('classified', classified , 30)
         return response
 
 
 def ajax_redirect_after_login(request, social_login=None):
-    if social_login:
-        try:
-            nxt = cache.get(
-                f'nxt_{request.COOKIES.get("visitor_id")}',
-            )
-            classified = cache.get(
-                f'classified_{request.COOKIES.get("visitor_id")}',
-            )
-
-            chat_cookie = cache.get(
-               f'chat_cookie_{request.COOKIES.get("visitor_id")}'
-            )
-        except:
-            nxt = None
-    else:
-        nxt = None
+    nxt = cache.get(
+        f'nxt_{request.COOKIES.get("visitor_id")}',
+    )
+    classified = cache.get(
+        f'classified_{request.COOKIES.get("visitor_id")}',
+    )
+    chat_cookie = cache.get(
+       f'chat_cookie_{request.COOKIES.get("visitor_id")}'
+    )
 
     if nxt is None:
         return JsonResponse({
