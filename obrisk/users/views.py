@@ -701,7 +701,7 @@ class GetInfoView(WechatViewSet):
                     if cache.get(request.COOKIES.get("wx-rand")) is None:
                         cache.set(
                             request.COOKIES.get('wx-rand'),
-                            user.wechat_openid,
+                            user.first().wechat_openid,
                             getattr(settings, 'SESSION_COOKIE_AGE', 60 * 60 * 24 * 40)
                         )
                 return redirect_after_login(request, social_login=True)
