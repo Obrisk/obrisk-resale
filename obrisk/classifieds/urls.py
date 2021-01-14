@@ -30,6 +30,11 @@ urlpatterns = [
         SearchListView.as_view(),
         name='classifieds_results'),
     url(
+        r'^wxtest/$',
+        TemplateView.as_view(template_name="classifieds/share.html"),
+        name='wxsharetest'
+        ),
+    url(
         r'^classifieds-suggestions/$',
         get_suggestions,
         name='classifieds_suggestions'),

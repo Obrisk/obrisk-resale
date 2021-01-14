@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load socialaccount %}
+{% load crispy_forms_tags %}
+{% get_providers as socialaccount_providers %}
+
+{% block head %}
+<title>{% trans 'Account Login' %}</title>
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+
+<script src="{% static 'js/vendor/vconsole.min.js' %}"></script>
+<script>
+var vConsole = new VConsole();
+</script>
+
+{% endblock head %}
+
+{% block content %}
+    <button type="button" id="shareMessage"
+      class="button is-rounded is-solid accent-button raised login-submit-btn">
+        {% trans 'Share' %}
+    </button>
+
+{% endblock content %}
+
+<script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
+<script type="text/javascript">
+
+  document.addEventListener('DOMContentLoaded', function () {
+    fetch('{% url 'wx_req_cred' %}', {
+      headers: {
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      credentials: 'same-origin',
+      redirect: 'follow'
+    }).then (resp => resp.json())
+      .then (data => {
+          if (data.info.success == true) {
+            wx.config({
+                debug: true, 
+                appId: data.info.id,
+                timestamp: data.info.timestamp,
+                nonceStr: data.info.noncestr,
+                signature: data.info.signature,
+                jsApiList: [
+                   'updateAppMessageShareData','updateTimelineShareData' 
+                ] 
+            });
+
+            wx.ready(function(){
+		    console.log('here')
+		    document.getElementById('shareMessage').AddEventListener('click', () => {
+		    console.log('clicked!');
+                    wx.updateAppMessageShareData({ 
+                        title: '{{ classified.title }}', 
+		        desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:20 }}', 
+                        link: location.href, 
+                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                        trigger: function (res) {
+				console.log(JSON.stringify(res));
+                        },
+                        success: function (res) {
+				console.log(JSON.stringify(res));
+                        },
+                        fail: function (res) {
+				console.log(JSON.stringify(res));
+                        }
+                    })
+                })
+
+                function shareMeMoments(title, text) {
+                    wx.updateTimelineShareData({ 
+                        title: title, 
+                        desc: 'Check out this item', 
+                        link: location.href, 
+                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                        success: function () {
+                          // Indicates that the configuration is successful.
+                        }
+                    })
+                }
+
+            });
+            wx.error(function(res){
+		console.log(res);
+            });
+
+          } else {
+              console.log('failure to init wx');
+          }
+    })
+
+})
+</script>
