@@ -22,13 +22,11 @@ var vConsole = new VConsole();
         {% trans 'Share' %}
     </button>
 
-{% endblock content %}
 
 <script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
 <script type="text/javascript">
 
   document.addEventListener('DOMContentLoaded', function () {
-    fetch('{% url 'wx_req_cred' %}', {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
       },
@@ -36,13 +34,13 @@ var vConsole = new VConsole();
       redirect: 'follow'
     }).then (resp => resp.json())
       .then (data => {
-          if (data.info.success == true) {
+          if (data.success === true) {
             wx.config({
                 debug: true, 
-                appId: data.info.id,
-                timestamp: data.info.timestamp,
-                nonceStr: data.info.noncestr,
-                signature: data.info.signature,
+                appId: data.id,
+                timestamp: data.timestamp,
+                nonceStr: data.noncestr,
+                signature: data.signature,
                 jsApiList: [
                    'updateAppMessageShareData','updateTimelineShareData' 
                 ] 
@@ -93,3 +91,4 @@ var vConsole = new VConsole();
 
 })
 </script>
+{% endblock content %}
