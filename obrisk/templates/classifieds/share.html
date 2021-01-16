@@ -34,7 +34,8 @@ var vConsole = new VConsole();
       credentials: 'same-origin',
       redirect: 'follow'
     }).then (resp => resp.json())
-      .then (data => {
+      .then (strData => {
+	  let data = JSON.parse(strData);
           if (data.success === true) {
             wx.config({
                 debug: true, 
