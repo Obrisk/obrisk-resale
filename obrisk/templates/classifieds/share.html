@@ -27,6 +27,7 @@ var vConsole = new VConsole();
 <script type="text/javascript">
 
   document.addEventListener('DOMContentLoaded', function () {
+    fetch('{% url 'wx_req_cred' %}', {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
       },
@@ -51,7 +52,7 @@ var vConsole = new VConsole();
 		    document.getElementById('shareMessage').AddEventListener('click', () => {
 		    console.log('clicked!');
                     wx.updateAppMessageShareData({ 
-                        title: '{{ classified.title }}', 
+                        title: 'dkasi jaidi', 
 		        desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:20 }}', 
                         link: location.href, 
                         imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
