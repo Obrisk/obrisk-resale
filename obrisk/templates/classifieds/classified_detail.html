@@ -338,43 +338,6 @@ var vConsole = new VConsole();
                 ] 
             });
 
-            wx.ready(function(){
-                document.getElementById('shareMessage').AddEventListener('click', () => {
-                  console.log('clicked!');
-                  wx.updateAppMessageShareData({ 
-                        title: '{{classified.title}}', 
-                        desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:20 }}', 
-                        link: location.href, 
-                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                        trigger: function (res) {
-                            console.log(JSON.stringify(res));
-                        },
-                        success: function (res) {
-                            console.log(JSON.stringify(res));
-                        },
-                        fail: function (res) {
-                            console.log(JSON.stringify(res));
-                        }
-                    })
-                })
-
-                function shareMeMoments(title, text) {
-                    wx.updateTimelineShareData({ 
-                        title: title, 
-                        desc: 'Check out this item', 
-                        link: location.href, 
-                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                        success: function () {
-                          // Indicates that the configuration is successful.
-                        }
-                    })
-                }
-
-            });
-            wx.error(function(res){
-		console.log(res);
-            });
-
           } else {
               console.log('failure to init wx');
           }
@@ -406,6 +369,49 @@ var vConsole = new VConsole();
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+      function waitForWx(){
+        if(typeof wx !== "undefined"){
+            document.getElementById('shareMessage').AddEventListener('click', () => {
+                  console.log('clicked!');
+                  wx.updateAppMessageShareData({ 
+                        title: '{{classified.title}}', 
+                        desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:20 }}', 
+                        link: location.href, 
+                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                        trigger: function (res) {
+                            console.log(JSON.stringify(res));
+                        },
+                        success: function (res) {
+                            console.log(JSON.stringify(res));
+                        },
+                        fail: function (res) {
+                            console.log(JSON.stringify(res));
+                        }
+                    })
+                })
+
+                function shareMeMoments(title, text) {
+                    wx.updateTimelineShareData({ 
+                        title: title, 
+                        desc: 'Check out this item', 
+                        link: location.href, 
+                        imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                        success: function () {
+                          // Indicates that the configuration is successful.
+                        }
+                    })
+                }
+
+            wx.error(function(res){
+                console.log(res);
+            });
+
+        }
+        else{
+            setTimeout(waitForWx, 250);
+        }
+      }
+
       const image_count = {{ images| length}}
 
       if (image_count > 1) {
