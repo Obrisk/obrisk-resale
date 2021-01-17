@@ -10,11 +10,6 @@
 
 <title>{{ classified.title|title }}</title>
 
-<script src="{% static 'js/vendor/vconsole.min.js' %}"></script>
-<script>
-var vConsole = new VConsole();
-</script>
-
 {% endblock head %}
 
 {# We need to check if the classified has images or else this will break #}
@@ -97,9 +92,8 @@ var vConsole = new VConsole();
 
             {% if classified.status == 'A' %}
             <div class="action-wrapper">
-
                  <button class="button share share-button"
-		    ontouchstart="shareMessage()">
+                    onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-share-2">
@@ -236,27 +230,6 @@ var vConsole = new VConsole();
                     {% endif %}
 
                   </a>
-                  <script type="application/ld+json">
-                  {
-                     "@context":"http://schema.org/",
-                     "@type":"Product",
-                     "name":"{{ classified.title}}",
-                     "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
-                     "image":[
-                        "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
-                     ],
-                     "brand":"",
-                     "offers":{
-                        "@type":"Offer",
-                        "priceCurrency":"CNY",
-                        "price":{{ classified.price|title }},
-                        "availability":"http://schema.org/InStock",
-                        "itemCondition":"http://schema.org/UsedCondition",
-                        "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}"
-                     }
-                  }
-                  </script>
-
                 </div>
 
             {% endfor %}
@@ -280,36 +253,6 @@ var vConsole = new VConsole();
 {% endblock content %}
 
 {% block extra_js %}
-<script type="application/ld+json">
-{
-   "@context":"http://schema.org/",
-   "@type":"Product",
-   "name":"{{ classified.title|title }}",
-   "description":"{{ classified.details }}",
-   "image":[
-      "{{oss}}/{{images.0.image_thumb }}"
-   ],
-   "brand":"",
-   "offers":{
-      "@type":"Offer",
-      "priceCurrency":"CNY",
-      "price":{{ classified.price }},
-      "availability":"http://schema.org/InStock",
-      "itemCondition":"http://schema.org/UsedCondition",
-      "url":"https://obrisk.com{% url 'classifieds:classified' classified.slug %}",
-      "seller":{
-         "@type":"Person",
-         "name":"{{ classified.user.get_profile_name }}",
-         {% if classified.user.thumbnail %}
-         "image":"{{oss}}/{{classified.user.thumbnail}}"
-         {% else %}
-        "image":"{{oss}}/classifieds/default.jpg"
-         {% endif %}
-
-      }
-   }
-}
-</script>
 
 <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/vendor/fancybox.min.js' %}"></script>
@@ -343,11 +286,9 @@ var vConsole = new VConsole();
         window.location.href=editUrl;
   }
 
-
-  function shareMessage() {
-	  wx.onMenuShareAppMessage({ 
+  wx.onMenuShareAppMessage({ 
 		title: '{{classified.title}}', 
-		desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:20 }}', 
+		desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:40 }}', 
 		link: location.href, 
 		imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
 		trigger: function (res) {
@@ -359,8 +300,24 @@ var vConsole = new VConsole();
 		fail: function (res) {
 		    console.log(JSON.stringify(res));
 		}
-	    })
-  }
+    })
+
+    wx.onMenuShareTimeline({ 
+		title: '{{classified.title}}', 
+		desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:40 }}', 
+		link: location.href, 
+		imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+		trigger: function (res) {
+		    console.log(JSON.stringify(res));
+		},
+		success: function () {
+		  // Indicates that the configuration is successful.
+		},
+		fail: function (res) {
+		    console.log(JSON.stringify(res));
+		}
+
+    })
 
   document.addEventListener('DOMContentLoaded', function () {
 
@@ -393,21 +350,9 @@ var vConsole = new VConsole();
 		  }
 	    })
 
-	function shareMeMoments(title, text) {
-	    wx.updateTimelineShareData({ 
-		title: title, 
-		desc: 'Check out this item', 
-		link: location.href, 
-		imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-		success: function () {
-		  // Indicates that the configuration is successful.
-		}
-	    })
-	}
-
         wx.error(function(res){
-	    console.log(res);
-	});
+            console.log(res);
+        });
 
       const image_count = {{ images| length}}
 
@@ -430,8 +375,6 @@ var vConsole = new VConsole();
           autoScaleLayers: false,
           autoHeight: true,
           touchSwipe: false,//disable touch swipe if we have only one image
-
-
         });
       }
 
