@@ -16,7 +16,7 @@ upstream websocket_server {
 server {
     listen 80;
 
-    server_name obrisk.com www.obrisk.com; 
+    server_name obrisk.com www.obrisk.com in.obrisk.com; 
 
     keepalive_timeout 5;
     client_max_body_size 4G;
@@ -65,6 +65,14 @@ server {
     location / {
         try_files $uri @proxy_to_app;
     }
+
+    # This root block is used only when verifying the domain name on wechat open platform dashboard
+    # MP_verify_HTQQQmxtxv6VNTtN.txt file is served on the root to pass the test
+    # This file must be inside the alias folder defined in the block
+    #location / {
+	#autoindex on;
+	#alias /home/ubuntu/wxmp/;
+    #}
 
     location /ws/ {
           try_files $uri @proxy_to_ws;
