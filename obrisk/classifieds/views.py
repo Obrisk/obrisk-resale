@@ -63,7 +63,8 @@ def classified_list(request, tag_slug=None):
     if request.user.is_authenticated:
         city = request.user.city
     else:
-        city = cache.get(
+        city = "Hangzhou"
+        '''city = cache.get(
                 f'user_city_{request.COOKIES.get("visitor_id")}'
             )
         if city is None:
@@ -83,7 +84,7 @@ def classified_list(request, tag_slug=None):
                     f'user_city_{request.COOKIES.get("visitor_id")}',
                     city,
                     60 * 60 * 2
-                )
+                )'''
 
     classifieds_list = Classified.objects.get_active().values(
                     'title','price','city','slug'
