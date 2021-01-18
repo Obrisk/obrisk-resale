@@ -18,8 +18,9 @@
             <div class="card-body">
               <div class="previsions">
                 {% for tag, count in popular_tags %}
-                <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="tag is-white">{{ count }}
-                    {{ tag }}</span></a>
+                <a href="{% url 'classifieds:list_by_tag' tag %}">
+                    <span class="tag is-white"> {{ tag }}</span>
+                </a>
                 {% endfor %}
               </div>
 
