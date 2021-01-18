@@ -72,7 +72,6 @@ def classified_list(request, tag_slug=None):
                     proxy_count=2,
                     proxy_trusted_ips=['63.0.0.5','63.1']
                 )
-            logging.error(f'Client ip is {client_ip}')
             if client_ip is None:
                 city = ""
             else:
