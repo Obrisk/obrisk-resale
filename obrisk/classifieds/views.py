@@ -67,7 +67,12 @@ def classified_list(request, tag_slug=None):
                 f'user_city_{request.COOKIES.get("visitor_id")}'
             )
         if city is None:
-            client_ip, is_routable = get_client_ip(request)
+            client_ip, _ = get_client_ip(
+                    request,
+                    proxy_count=2,
+                    proxy_trusted_ips=['63.0.0.5','63.1']
+                )
+            logging.error(f'Client ip is {client_ip}')
             if client_ip is None:
                 city = ""
             else:
