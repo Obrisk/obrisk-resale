@@ -295,25 +295,29 @@
 	      redirect: 'follow'
 	    }).then (resp => resp.json())
 	      .then (strData => {
-		  let data = JSON.parse(strData);
-		  if (data.success === true) {
-		    wx.config({
-			debug: false, 
-			appId: data.id,
-			timestamp: data.timestamp,
-			nonceStr: data.noncestr,
-			signature: data.signature,
-			jsApiList: [
-			   'updateAppMessageShareData',
-			   'updateTimelineShareData',
-			   'onMenuShareAppMessage',
-			   'onMenuShareTimeline'
-			] 
-		    });
+          try {
+              let data = JSON.parse(strData);
+              if (data.success === true) {
+                wx.config({
+                debug: false, 
+                appId: data.id,
+                timestamp: data.timestamp,
+                nonceStr: data.noncestr,
+                signature: data.signature,
+                jsApiList: [
+                   'updateAppMessageShareData',
+                   'updateTimelineShareData',
+                   'onMenuShareAppMessage',
+                   'onMenuShareTimeline'
+                ] 
+                });
 
-		  } else {
+              } else {
+                  console.log('failure to init wx');
+              }
+          } catch {
 		      console.log('failure to init wx');
-		  }
+          }
 	    })
 
           wx.ready(function(){

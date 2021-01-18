@@ -57,12 +57,13 @@ def get_fresh_token():
 
     except (AttributeError,
             KeyError,
+            TypeError,
             requests.ConnectionError,
             requests.RequestException,
             requests.HTTPError,
             requests.Timeout,
             requests.TooManyRedirects) as e:
-        logging.error("Failed to request wx credentials" + e)
+        logging.error(f"Failed to request wx credentials {e}")
         return False
 
     try:
@@ -74,7 +75,7 @@ def get_fresh_token():
             requests.HTTPError,
             requests.Timeout,
             requests.TooManyRedirects) as e:
-        logging.error("Failed to request wx ticket" + e)
+        logging.error(f"Failed to request wx ticket: {e}")
         return False
 
     if ticket.ok:

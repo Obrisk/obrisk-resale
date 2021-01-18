@@ -72,29 +72,19 @@ def classified_list(request, tag_slug=None):
                     proxy_count=2,
                     proxy_trusted_ips=['63.0.0.5','63.1']
                 )
+
             if client_ip is None:
-                city = ""
+                city = "Hangzhou"
             else:
                 info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
                 city = json.loads(info.text)['city']
-                city = cache.set(
-                        f'user_city_{request.COOKIES.get("visitor_id")}',
-                        city,
-                        60 * 60 * 3
-                    )
 
-
-    #Try to Get the popular tags from cache
-    popular_tags = cache.get('popular_tags_mb')
-
-    if popular_tags is None:
-        popular_tags = Classified.objects.get_active(
-                ).get_counted_tags()[:10]
-        cache.set('popular_tags_mb',
-                    list(popular_tags), timeout=TAGS_TIMEOUT
+            city = cache.set(
+                    f'user_city_{request.COOKIES.get("visitor_id")}',
+                    city,
+                    60 * 60 * 2
                 )
 
-    #Get classifieds
     classifieds_list = Classified.objects.get_active().values(
                     'title','price','city','slug'
                 ).annotate(
@@ -141,6 +131,21 @@ def classified_list(request, tag_slug=None):
         else:
             classifieds = paginator.page(paginator.num_pages)
 
+    if request.is_ajax():
+        return JsonResponse({
+                'classifieds': list(classifieds)
+            })
+
+    #Try to Get the popular tags from cache
+    popular_tags = cache.get('popular_tags_mb')
+
+    if popular_tags is None:
+        popular_tags = Classified.objects.get_active(
+                ).get_counted_tags()[:10]
+        cache.set('popular_tags_mb',
+                    list(popular_tags), timeout=TAGS_TIMEOUT
+                )
+
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
@@ -156,11 +161,6 @@ def classified_list(request, tag_slug=None):
                 )[:1]
             )
         ).order_by('-timestamp')
-
-    if request.is_ajax():
-        return JsonResponse({
-                'classifieds': list(classifieds)
-            })
 
     return render(request, 'classifieds/classified_list.html',
             {'page': page, 'popular_tags': popular_tags,
