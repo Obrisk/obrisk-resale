@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="{% static 'css/share.css' %}">
 <link rel="stylesheet" href="{% static 'css/vendor/slider-pro.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
-
 <title>{{ classified.title|title }}</title>
 
 {% endblock head %}
@@ -92,7 +91,7 @@
 
             {% if classified.status == 'A' %}
             <div class="action-wrapper">
-                 <button class="button share share-button"
+                 <button class="button share share-button" id='shareMessage'
                     onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -286,39 +285,6 @@
         window.location.href=editUrl;
   }
 
-  wx.onMenuShareAppMessage({ 
-		title: '{{classified.title}}', 
-		desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:40 }}', 
-		link: location.href, 
-		imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-		trigger: function (res) {
-		    console.log(JSON.stringify(res));
-		},
-		success: function (res) {
-		    console.log(JSON.stringify(res));
-		},
-		fail: function (res) {
-		    console.log(JSON.stringify(res));
-		}
-    })
-
-    wx.onMenuShareTimeline({ 
-		title: '{{classified.title}}', 
-		desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:40 }}', 
-		link: location.href, 
-		imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-		trigger: function (res) {
-		    console.log(JSON.stringify(res));
-		},
-		success: function () {
-		  // Indicates that the configuration is successful.
-		},
-		fail: function (res) {
-		    console.log(JSON.stringify(res));
-		}
-
-    })
-
   document.addEventListener('DOMContentLoaded', function () {
 
 	  fetch('{% url 'wx_req_cred' %}', {
@@ -349,6 +315,41 @@
 		      console.log('failure to init wx');
 		  }
 	    })
+
+          wx.ready(function(){
+		  wx.onMenuShareAppMessage({ 
+				title: '{{classified.title}}', 
+				desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:80 }}', 
+				link: location.href, 
+				imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+				trigger: function (res) {
+				    console.log(JSON.stringify(res));
+				},
+				success: function (res) {
+				    console.log(JSON.stringify(res));
+				},
+				fail: function (res) {
+				    console.log(JSON.stringify(res));
+				}
+		    })
+
+		  wx.onMenuShareTimeline({ 
+				title: '{{classified.title}}', 
+				desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:80 }}', 
+				link: location.href, 
+				imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+				trigger: function (res) {
+				    console.log(JSON.stringify(res));
+				},
+				success: function (res) {
+				    console.log(JSON.stringify(res));
+				},
+				fail: function (res) {
+				    console.log(JSON.stringify(res));
+				}
+		    })
+
+        });
 
         wx.error(function(res){
             console.log(res);
