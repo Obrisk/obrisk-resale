@@ -55,7 +55,7 @@ from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
 from obrisk.users.wechat_config import CHINA_PROVINCES
-from obrisk.users.tasks import update_profile_pic_async
+from obrisk.users.tasks import update_prof_pic_async
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm,
@@ -716,7 +716,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid41',
+            'ui': 'thisisaveryuniqueopenid44',
             'sx': 1,
             'nck':'admin 乔舒亚',
             'cnt':  'China'
@@ -842,9 +842,9 @@ def complete_wechat_reg(request, **kwargs):
         full_image = picture[:-3] + '0'
 
         user.save()
-        update_profile_pic_async.delay(
-                user.id, thumbnail, picture, full_image
-            )
+        update_prof_pic_async(
+            user.id, thumbnail, picture, full_image
+        )
 
         login(
             request, user,

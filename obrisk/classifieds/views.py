@@ -324,9 +324,6 @@ class CreateClassifiedView(CreateView):
             form = ClassifiedForm()
             return self.form_invalid(form,data=failure_data)
 
-    #def get_success_url(self):
-        #This method is never called
-
 
 class ClassifiedTagsAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):

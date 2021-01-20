@@ -66,13 +66,13 @@ def update_prof_pic_sync(user, thumb, mid, full):
 
 
 @shared_task
-def update_profile_pic_async(user_id, thumb, mid, full):
+def update_prof_pic_async(user_id, thumb, mid, full):
     """
     Runs the bg task to update user picture download it from
     social app and save it to our bucket
-    It has to sleep for sometime or execution will fail
+    It has to sleep for sometime for the view to save user to database
     """
-    time.sleep(1)
+    time.sleep(5)
     user = User.objects.get(id=user_id)
 
     try:
