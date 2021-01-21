@@ -246,7 +246,7 @@ main .notification--num {
 }
 
 .main-nav li {
-  width: 101px;
+  width: 150px;
   flex-basis: calc(25% - -20px);
 }
 

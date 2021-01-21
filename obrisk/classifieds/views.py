@@ -63,35 +63,25 @@ def classified_list(request, tag_slug=None):
         #If not in China?
         city = "Hangzhou"
 
-    #Try to Get the popular tags from cache
-    popular_tags = cache.get('popular_tags_pc')
+    classifieds_list = Classified.objects.get_active().values(
+                    'title','price','city','slug'
+                ).annotate(
+                    order = Case (
+                        When(city=city, then=Value(1)),
+                        default=Value(2),
+                        output_field=IntegerField(),
+                    )
+                ).annotate (
+                    image_thumb = Subquery (
+                        ClassifiedImages.objects.filter(
+                            classified=OuterRef('pk'),
+                        ).values(
+                            'image_thumb'
+                        )[:1]
+                    )
+                ).order_by('order', '-priority', '-timestamp')
 
-    if popular_tags is None:
-        popular_tags = Classified.objects.get_counted_tags()[:20]
-        cache.set('popular_tags_pc',
-                    list(popular_tags), timeout=TAGS_TIMEOUT
-                )
-
-    #Get classifieds
-    classifieds_list = Classified.objects.get_active().annotate(
-        order = Case (
-            When(city=city, then=Value(1)),
-            default=Value(2),
-            output_field=IntegerField(),
-        )
-    ).annotate (
-        image_thumb = Subquery (
-            ClassifiedImages.objects.filter(
-                classified=OuterRef('pk'),
-            ).values(
-                'image_thumb'
-            )[:1]
-        )
-    ).order_by('order', '-priority', '-timestamp')
-
-    #official_ads = OfficialAd.objects.all() 
-
-    paginator = Paginator(classifieds_list, 20)  # 20 classifieds in each page
+    paginator = Paginator(classifieds_list, 20)  #20 @ page in desktop
     page = request.GET.get('page')
 
     try:
@@ -101,11 +91,38 @@ def classified_list(request, tag_slug=None):
         classifieds = paginator.page(1)
     except EmptyPage:
         if request.is_ajax():
-            # If the request is AJAX and the page is out of range
-            # return an empty page            
-            return HttpResponse('')
-        # If page is out of range deliver last page of results
-        classifieds = paginator.page(paginator.num_pages)
+            classifieds = Classified.objects.get_expired().values(
+                            'title','price','city','slug'
+                        ).annotate (
+                            image_thumb = Subquery (
+                                ClassifiedImages.objects.filter(
+                                    classified=OuterRef('pk'),
+                                ).values(
+                                    'image_thumb'
+                                )[:1]
+                            )
+                        ).order_by('-timestamp')
+
+            return JsonResponse({
+                'classifieds': list(classifieds), 'end':'end'
+                })
+        else:
+            classifieds = paginator.page(paginator.num_pages)
+
+    if request.is_ajax():
+        return JsonResponse({
+                'classifieds': list(classifieds)
+            })
+
+    #Try to Get the popular tags from cache
+    popular_tags = cache.get('popular_tags_mb')
+
+    if popular_tags is None:
+        popular_tags = Classified.objects.get_active(
+                ).get_counted_tags()[:10]
+        cache.set('popular_tags_mb',
+                    list(popular_tags), timeout=TAGS_TIMEOUT
+                )
 
     # Deal with tags in the end to override other_classifieds.
     tag = None
@@ -123,14 +140,10 @@ def classified_list(request, tag_slug=None):
             )
         ).order_by('-timestamp')
 
-    if request.is_ajax():
-       return render(request,'classifieds/classified_list_ajax.html',
-                    {'page': page, 'popular_tags': popular_tags,
-                    'classifieds': classifieds, 'base_active': 'classifieds'})
-
     return render(request, 'classifieds/classified_list.html',
             {'page': page, 'popular_tags': popular_tags,
-            'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
+            'city': city,'classifieds': classifieds,
+            'tag': tag, 'base_active': 'classifieds'})
 
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):

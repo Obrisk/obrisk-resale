@@ -125,31 +125,6 @@ $(document).ready(function () {
 
         //Init navbar
         $.fn.initNavbar = function () {
-            $(window).on('scroll', function () {
-                var height = $(window).scrollTop();
-                if (height > 65) {
-                    if ($('.options-nav').length) {
-                        $(".navbar").addClass('no-shadow');
-                        $('.options-nav').removeClass('no-shadow');
-                    } else {
-                        $(".navbar").removeClass('no-shadow');
-                        if ($('.navbar.is-landing').length) {
-                            $(".navbar").removeClass('no-background');
-                        }
-                    }
-                } else {
-                    if ($('.options-nav').length) {
-                        $(".navbar").addClass('no-shadow');
-                        $('.options-nav').addClass('no-shadow');
-                    } else {
-                        $(".navbar").addClass('no-shadow');
-                        if ($('.navbar.is-landing').length) {
-                            $(".navbar").addClass('no-background');
-                        }
-                    }
-                }
-            });
-
             //Clear navbar search input
             $('#clear-search').on('click', function () {
                 $(this).siblings('input').val('');

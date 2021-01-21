@@ -17,7 +17,8 @@
 
 <div class="view-wrapper">
   <!-- Container -->
-  <div id="main-feed" class="container">
+  <div id="main-feed" class="container"
+      style="padding-top:6%">
     <div id="" class="view-wrap true-dom">
       <div class="columns">
 
@@ -44,12 +45,11 @@
 
             </div>
             <div class="card-body">
-
-
               <div class="previsions d-block">
                 {% for tag, count in popular_tags %}
-                <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="tag is-white">{{ count }}
-                    {{ tag }}</span></a>
+                <a href="{% url 'classifieds:list_by_tag' tag %}">
+                    <span class="tag is-white">{{ tag }}</span>
+                </a>
                 {% endfor %}
 
               </div>
@@ -59,7 +59,6 @@
         </div>
       </div>
         <!-- /Left side column -->
-
         <!-- Middle column -->
         <div class="column is-9-fullhd">
           <div class="col-md-8 m-auto mt-0 p-sm-0">
@@ -244,7 +243,7 @@
             </div>
           </div>
 
-          <div id="classifieds" class="p-0 row justify-content-center justify-content-lg-start">
+          <div id="classifieds" class="row justify-content-center justify-content-lg-start">
             {% include "classifieds/classified_list_ajax.html" %}
 
           </div>
@@ -294,26 +293,80 @@
 <script src="{% static 'js/listing.js' %}" type="text/javascript"></script>
 
 <script>
+  const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
+  const user = "{{ request.user.username }}";
+  const app = "classifieds";
+
+  const title_id = "{{ form.title.auto_id }}";
+  const details_id = "{{ form.details.auto_id }}";
+  const address = "{{ form.address.auto_id }}";
+
   var page = 1;
   var empty_page = false;
   var block_request = false;
   var is_tag_page = "{{tag}}";
+  var lastScrollTop = 0;
+
   if (is_tag_page == "None") {
-    $(window).scroll(function () {
+    window.addEventListener('scroll', function () {
       if (empty_page == false && block_request == false) {
         block_request = true;
         page += 1;
-        $('.loading').removeClass('d-none')
-        $.get('?page=' + page, function (data) {
-          if (data == '') {
-            empty_page = true;
-            $('.loading').addClass('d-none')
-            $('.classifieds-container').append('<div class="m-auto"> End of Classifieds</div>')
-          } else {
-            $('.loading').addClass('d-none');
-            block_request = false;
-            $('#classifieds').append(data);
+        document.querySelector('.loading').classList.remove('is-hidden')
+
+        fetch(`/classifieds/?page=${page}`,
+        {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest"
           }
+        }).then (resp => resp.json())
+        .then (data => {
+
+            document.querySelector('.loading').classList.add('is-hidden');
+            block_request = false;
+
+            for (const cls of data.classifieds) {
+                  let img, price; 
+
+                  if ( cls.image_thumb != "" ) {
+                    img = `<img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${cls.image_thumb}" width="154px" height="154px">`;
+                  }else {
+                    img = "<img class='card-img lazyload' src='https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg' width='154px' height='154px'>";
+                  }
+
+                  if (cls.price != 0.00){
+                      price = `<p class="card-subtitle"> ¥${cls.price} </p>`;
+                  } else {
+                      price = "<p class='card-subtitle'> FREE </p>";
+                  }
+
+                  template = `
+                    <div class="card classified-card">
+                      <a href="${cls.slug}"
+                        style="color:black; text-decoration:none; background-color:none">
+                        <div class="card-img-top img-responsive">
+                            ${img}
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-body">
+                          <h6 class="card-title"> ${cls.title} </h6>
+                           ${price}
+                        <span class="card-text small "><small>📍</small> ${ cls.city}</span>
+                        </div>
+                      </a>
+                     </div>
+                    `;
+                  document.querySelector('#classifieds').insertAdjacentHTML('beforeend', template);
+              }
+
+              if (data.end === "end") {
+                empty_page = true;
+                document.querySelector('.loading').classList.add('is-hidden');
+                document.querySelector('.classifieds-list-wrapper').insertAdjacentHTML('beforeend', '<div class="end-classifieds"> End of Classifieds</div>')
+              } 
+
+        }).catch (err => {
+            console.log(err);
         });
       }
     });
