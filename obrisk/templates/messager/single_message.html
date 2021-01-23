@@ -1,45 +1,46 @@
 {% load static i18n humanize %}
 
-
 {% if request.user == message.sender %}
-<div class="chat-message is-sent">
+    <div class="chat-message is-sent">
     {% if message.sender.thumbnail %}
-    <img src="{{oss}}/{{message.sender.thumbnail}}" alt="Picture Profile"
-        style="width:30px;height:30px;border-radius: 50%;"
-        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile" id="pic">
+        <img src="{{oss}}/{{message.sender.thumbnail}}" alt="Picture Profile"
+            style="width:30px;height:30px;border-radius: 50%;"
+            class="rounded-circle profile-header-avatar img-fluid" id="pic"/>
     {% else %}
-    <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" width="30px"
-        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid is-hidden-mobile"
-        alt="No Profile Picture" />
+        <img src="{% static 'img/user.png' %}"
+            style="border-radius: 50%;" height="30px" width="30px"
+            class="rounded-circle profile-header-avatar img-fluid"
+            alt="No Profile Picture" />
     {% endif %}
+
     <div class="message-block">
         <span>{{ message.timestamp|date:'M. d G:i' }}</span>
         {% if message.message %}
-        <div class="message-text">{{ message.message }}</div>
-        {% endif %}
-        {% if message.img_preview %}
-        <a data-fancybox="gallery" href="{{oss}}/{{ message.img_preview }}"><img
-                style="width: 250px; height: 250px;"
-                src="{{oss}}/{{ message.img_preview }}" /></a>
-        {% endif %}
+            <div class="message-text">{{ message.message }}</div>
 
-       {% if message.classified %} 
-          <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
-            <a href="{% url 'classifieds:classified' message.classified.slug %}"
-              style="color:black; text-decoration:none; background-color:none" class="is-flex">
+        {% elif message.img_preview %}
+            <a data-fancybox="gallery" href="{{oss}}/{{ message.img_preview }}"><img
+                    style="width: 250px; height: 250px;"
+                    src="{{oss}}/{{ message.img_preview }}" />
+            </a>
 
-              <div class="card-img-top img-responsive column">
-                {% if message.classified_thumbnail %}
-                    <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}"
-                    style="max-width: 70px">
-                {% else %}
-                    <img class="card-img" src="{{oss}}/classifieds/default.jpg"
-                    style="max-width: 70px">
-                {% endif %}
-              </div>
+       {% elif message.classified %} 
+            <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
+                <a href="{% url 'classifieds:classified' message.classified.slug %}"
+                  style="color:black; text-decoration:none; background-color:none" class="is-flex">
 
-              </div>
-              <div class="column">
+                <div class="card-img-top img-responsive column">
+                    {% if message.classified_thumbnail %}
+                        <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}"
+                        style="max-width: 70px">
+                    {% else %}
+                        <img class="card-img" src="{{oss}}/classifieds/default.jpg"
+                        style="max-width: 70px">
+                    {% endif %}
+                </div>
+             </div>
+
+             <div class="column">
                 <h6 class="card-title"> {{ message.classified.title|truncatechars:60 }} </h6>
                 <p class="card-subtitle O-cl-red"> CNY {{ message.classified.price|title }} </p>
                 <div class="card-meta is-flex justify-content-between">
@@ -54,7 +55,7 @@
               </div>
             </a>
           </div>
-        {% endif %}
+       {% endif %}
 
 
 

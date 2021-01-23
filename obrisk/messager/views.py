@@ -93,7 +93,8 @@ class ContactsListView(LoginRequiredMixin, ListView):
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
 
-        #This is for active user in the messages.js, I was trying to quickly make push notifications work
+        #This is for active user in the messages.js,
+        #I was trying to quickly make push notifications work
         #now there is probably no need.
         if context['convs']:
             if context['convs'][0].first_user == self.request.user:
@@ -180,11 +181,17 @@ def messagesView(request, username):
 
                 if key in values:
                     values = values.remove(key)
-                    cache.set(f'msg_{request.user.pk}', values, timeout=SESSION_COOKIE_AGE)
+                    cache.set(
+                        f'msg_{request.user.pk}',
+                        values,
+                        timeout=SESSION_COOKIE_AGE
+                    )
 
+            #could be sliced but the order needs to be reversed first
             #Slicing is at end to allow the update query to run
+            #Eg 'msgs': msgs_data[:100],
             return JsonResponse({
-                'msgs': msgs_data[:50],
+                'msgs': msgs_data,
                 'active_username': active_user.username,
                 'active_thumbnail': active_user.thumbnail,
                 'current_conv': key
@@ -218,8 +225,8 @@ def send_message(request):
     #This is a trivial workaround to avoid an error to happen
     #in case the name of user is in chinese characters
 
-    recipient.username = slugify(recipient_username)
-    sender.username = slugify(request.user.username)
+    recipient.username = slugify(recipient_username, to_lower=True)
+    sender.username = slugify(request.user.username, to_lower=True)
 
     message = request.POST.get('message')
     image = request.POST.get('image')
