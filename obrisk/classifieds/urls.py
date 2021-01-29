@@ -51,6 +51,10 @@ urlpatterns = [
         ClassifiedDeleteView.as_view(),
         name='delete_classified'),
     url(
+        r'^orders/wsguatpotlfwccdi/(?P<slug>[-\w]+)/$',
+        DetailClassifiedView.as_view(),
+        name='orders'),
+    url(
         r'^(?P<slug>[-\w]+)/$',
         DetailClassifiedView.as_view(),
         name='classified'),

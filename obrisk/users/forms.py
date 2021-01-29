@@ -256,18 +256,19 @@ class UserForm(forms.ModelForm):
             })
         )
 
-    address = forms.CharField(required=False)
+    english_address = forms.CharField(required=False)
+    chinese_address = forms.CharField(required=False)
 
     class Meta:
         model = User
         fields = (
                     "name", "job_title","bio",
-                    "province_region", "city", "address"
+                    "province_region", "city", "chinese_address", "english_address"
                 )
         help_texts = {
             "bio": "A short introduction about yourself",
-            "address": "English address is preferred, \
-                        don't include your City and Province",
+            "english_address": "Don't include your City and Province",
+            "chinese_address": "Full address to be used for delivery services",
         }
 
 

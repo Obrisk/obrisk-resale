@@ -35,6 +35,7 @@ django-friendship>=1.8.2 #https://github.com/revsys/django-friendship
 django_celery_beat>=1.5.0 #https://github.com/celery/django-celery-beat
 djangorestframework #https://github.com/encode/django-rest-framework
 django-ipware # https://github.com/un33k/django-ipware
+beautifulsoup4 # https://pypi.org/project/beautifulsoup4
 
 # Channels
 # ------------------------------------------------------------------------------

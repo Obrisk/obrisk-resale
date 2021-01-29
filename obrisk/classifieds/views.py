@@ -39,6 +39,7 @@ from obrisk.classifieds.forms import (
         ClassifiedForm, OfficialAdForm,
         ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
+from obrisk.classifieds.wxpayments import *
 
 
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
@@ -303,8 +304,11 @@ class CreateClassifiedView(CreateView):
                     user.phone_number.national_number != 13300000000):
                 classified.phone_number = user.phone_number
 
-        if not classified.address and user.address:
-            classified.address = user.address
+        if not classified.english_address and user.english_address:
+            classified.english_address = user.english_address
+
+        if not classified.chinese_address and user.chinese_address:
+            classified.chinese_address = user.chinese_address
 
         classified.save()
 
@@ -429,3 +433,42 @@ class DetailClassifiedView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+
+class WxJsAPIPay(View):
+    def get(self, request, *args, **kwargs):
+        """
+        用户点击一个路由或者扫码进入这个views.py中的函数，首先获取用户的openid,
+        使用jsapi方式支付需要此参数
+        :param self:
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        """
+
+        getInfo = request.GET.get('getInfo', None)
+        openid = request.COOKIES.get('openid', '')
+
+        if not openid:
+            if getInfo != 'yes':
+                # 构造一个url，携带一个重定向的路由参数，
+                # 然后访问微信的一个url,微信会回调你设置的重定向路由，并携带code参数
+                return HttpResponseRedirect(get_redirect_url())
+
+            elif getInfo == 'yes':
+                # 我设置的重定向路由还是回到这个函数中，其中设置了一个getInfo=yes的参数
+                # 获取用户的openid
+                openid = get_openid(request.GET.get('code'), request.GET.get('state', ''))
+
+                if not openid:
+                    return HttpResponse('获取用户openid失败')
+
+                response = render_to_response('wxjspy.html', context={'params': get_jsapi_params(openid)})
+                response.set_cookie('openid', openid, expires=60 * 60 * 24 *30)
+                return response
+            else:
+                return HttpResponse('获取机器编码失败')
+        else:
+            return render(request, 'wxjspy.html', context={'params': get_jsapi_params(openid)})
