@@ -12,6 +12,9 @@ from slugify import slugify
 from taggit.managers import TaggableManager
 from taggit.models import TagBase, GenericTaggedItemBase
 
+from phonenumber_field.modelfields import PhoneNumberField
+
+
 class ClassifiedTags(TagBase):
     class Meta:
         verbose_name = _("Classifieds Tag")
@@ -176,21 +179,46 @@ class ClassifiedOrder(models.Model):
 
     uuid_id = models.UUIDField(
         primary_key=True, default=uuid.uuid4, editable=False)
+    is_offline = models.BooleanField(default=False)
     classified = models.ForeignKey(
         Classified, null=True, related_name="paid_order",
         on_delete=models.CASCADE)
     timestamp = models.DateTimeField(
             auto_now_add=True, editable=False
         )
-    user = models.ForeignKey(
+    buyer = models.ForeignKey(
             settings.AUTH_USER_MODEL,
             null=True, related_name="order_user",
             on_delete=models.CASCADE
         )
 
-    tracking_number = models.CharField (max_length=600, null=True, blank=True)
-    chinese_address = models.CharField (max_length=300, null=True, blank=True)
-    status = models.CharField(max_length=1, choices=STATUS, default=AWAITING)
+    recipient_name = models.CharField(
+            _("Full name"), blank=True, max_length=255
+        )
+    recipient_phone_number = PhoneNumberField(
+            ('Phone number'), null=True, blank=True
+        )
+    tracking_number = models.CharField (
+            max_length=600, null=True, blank=True
+        )
+    buyer_transaction_id = models.CharField (
+            max_length=600, null=True, blank=True
+        )
+    seller_transaction_id = models.CharField (
+            max_length=600, null=True, blank=True
+        )
+    tracking_number = models.CharField (
+            max_length=600, null=True, blank=True
+        )
+    notes = models.CharField(
+            max_length=1000, null=True, blank=True
+        )
+    recipient_chinese_address = models.CharField (
+            max_length=300, null=True, blank=True
+        )
+    status = models.CharField(
+            max_length=1, choices=STATUS, default=AWAITING
+        )
     slug = models.SlugField(
             max_length=300, null=True,
             blank=True, unique=True, editable=False
