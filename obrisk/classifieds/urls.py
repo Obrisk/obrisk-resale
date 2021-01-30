@@ -38,6 +38,15 @@ urlpatterns = [
         r'^classifieds-suggestions/$',
         get_suggestions,
         name='classifieds_suggestions'),
+
+    url(
+        r'^wsguatpotlfwccdi/wxjsapipy/?getInfo=yes/$',
+        get_wxpy_info,
+        name='get_wxpy_info'),
+    url(
+        r'^wsguatpotlfwccdi/wxjsapipy/inwxpy_results/$',
+        inwxpy_res,
+        name='inwxpy_res'),
     url(
         r'^report/(?P<pk>\d+)/$',
         ReportClassifiedView.as_view(),

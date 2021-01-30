@@ -8,10 +8,11 @@ from django.conf import settings
 from bs4 import BeautifulSoup
 
 
-APP_ID = "xxx"  # 公众账号appid
-MCH_ID = "xxx"  # 商户号
-API_KEY = "xxx"  # 微信商户平台(pay.weixin.qq.com) -->账户设置 -->API安全 -->密钥设置，设置完成后把密钥复制到这里
-APP_SECRECT = "xxx"
+APP_ID = env('WECHAT_APPID')
+APP_SECRET = env('WECHAT_APPSECRET')
+API_KEY = env('WECHAT_API_KEY')
+# On wechat merchant ac, account settings then security API
+MCH_ID = env('WECHAT_MCH_ID')
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/inwxpy_results/"
 REDIRECT_URL = 'https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/?getInfo=yes'
@@ -129,7 +130,7 @@ def get_openid(code,state):
         WeChatcode = 'https://api.weixin.qq.com/sns/oauth2/access_token'
         urlinfo = OrderedDict()
         urlinfo['appid'] = APP_ID
-        urlinfo['secret'] = APP_SECRECT
+        urlinfo['secret'] = APP_SECRET
         urlinfo['code'] = code
         urlinfo['grant_type'] = 'authorization_code'
         info = requests.get(url=WeChatcode, params=urlinfo)
