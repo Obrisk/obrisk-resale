@@ -74,7 +74,10 @@ class User(AbstractUser):
             null=True,verbose_name="wechat_unionid"
     )
     #Without blank=True the forms add is required label
-    address = models.CharField(
+    english_address = models.CharField(
+            max_length=300, null=True, blank=True
+        )
+    chinese_address = models.CharField(
             max_length=300, null=True, blank=True
         )
     province_region = models.CharField (

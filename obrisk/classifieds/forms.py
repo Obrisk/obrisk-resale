@@ -26,7 +26,7 @@ class ClassifiedForm(forms.ModelForm):
             widget=forms.HiddenInput(),
             max_length=500, required=False
         )
-    address = forms.CharField (
+    english_address = forms.CharField (
         required=False,
     )
     phone_number = PhoneNumberField(required=False,
@@ -41,7 +41,7 @@ class ClassifiedForm(forms.ModelForm):
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited",
-                 "price", "address", "phone_number", "show_phone"]
+                 "price", "english_address", "phone_number", "show_phone"]
 
 
 class ClassifiedEditForm(forms.ModelForm):
@@ -58,7 +58,7 @@ class ClassifiedEditForm(forms.ModelForm):
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "tags",
-         "address", "wechat_id", "phone_number" ]
+         "english_address", "wechat_id", "phone_number" ]
 
         widgets = {
             'user': forms.HiddenInput(),
@@ -66,7 +66,7 @@ class ClassifiedEditForm(forms.ModelForm):
         }
 
         help_texts = {
-            "address": "It can be a street name, address or other description.\
+            "english_address": "It can be a street name, address or other description.\
             Please don't enter your city it will be added automatically based on your profile",
             "phone_number": "This field is optional.",
             "wechat_id": "This field is optional.",

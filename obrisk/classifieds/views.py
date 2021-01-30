@@ -278,8 +278,8 @@ class CreateClassifiedView(CreateView):
                     user.phone_number.national_number != 13300000000):
                 classified.phone_number = user.phone_number
 
-        if not classified.address and user.address:
-            classified.address = user.address
+        if not classified.english_address and user.english_address:
+            classified.english_address = user.english_address
 
         classified.save()
 

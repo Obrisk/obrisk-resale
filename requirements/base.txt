@@ -37,8 +37,9 @@ djangorestframework #https://github.com/encode/django-rest-framework
 
 # Channels
 # ------------------------------------------------------------------------------
-channels>=2.1.1  # https://github.com/django/channels
-channels-redis>=2.2.1  # https://github.com/django/channels_redis
+#Never upgrade these, the next step is to upgrade to use Async django
+channels==2.4.0  # https://github.com/django/channels
+channels-redis==2.4.2  # https://github.com/django/channels_redis
 
 # GraphQL API
 # ------------------------------------------------------------------------------

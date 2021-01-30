@@ -38,17 +38,18 @@ class UserForm(forms.ModelForm):
     province_region = forms.CharField(widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
     job_title = forms.CharField(required=False, label=("Occupation"))
-    address = forms.CharField(required=False)
+    english_address = forms.CharField(required=False, label=("Address (English)"))
+    chinese_address = forms.CharField(required=False, label=("Address (Chinese)"))
 
     class Meta:
         model = User
         fields = (
                     "name", "job_title", "province_region",
-                    "city", "bio", "address"
+                    "city", "bio", "english_address"
                 )
         help_texts = {
             "bio": "A short introduction about yourself",
-            "address": "English address is preferred, \
+            "english_address": "English address is preferred, \
                         don't include your City and Province",
         }
 
