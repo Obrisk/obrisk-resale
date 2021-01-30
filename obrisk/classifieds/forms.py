@@ -26,9 +26,11 @@ class ClassifiedForm(forms.ModelForm):
             widget=forms.HiddenInput(),
             max_length=500, required=False
         )
-    english_address = forms.CharField (
-        required=False,
-    )
+
+    english_address = forms.CharField(
+            required=False, label=("Address (English)")
+        )
+
     phone_number = PhoneNumberField(required=False,
             label=("Phone number(optional)"),
             widget=forms.TextInput(
@@ -68,10 +70,9 @@ class ClassifiedEditForm(forms.ModelForm):
         }
 
         help_texts = {
-            "english_address": "It can be a street name,district or other description.\
-            Please don't enter your city",
+            "english_address": "Can be street name,district or other info.\
+            Don't enter your city",
             "phone_number": "This field is optional.",
-            "wechat_id": "This field is optional.",
             "tags": "Category of your item, can be 1 or multiple separated by a comma.\
                         e.g electronics, ebike"
         }

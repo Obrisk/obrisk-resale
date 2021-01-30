@@ -256,8 +256,8 @@ class UserForm(forms.ModelForm):
             })
         )
 
-    english_address = forms.CharField(required=False)
-    chinese_address = forms.CharField(required=False)
+    english_address = forms.CharField(required=False, label=("Address (English)"))
+    chinese_address = forms.CharField(required=False, label=("Full address (Chinese)"))
 
     class Meta:
         model = User
