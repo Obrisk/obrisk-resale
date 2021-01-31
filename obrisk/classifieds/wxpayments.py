@@ -6,13 +6,14 @@ from random import Random
 
 from django.conf import settings
 from bs4 import BeautifulSoup
+from config.settings.base import env
 
 
 APP_ID = env('WECHAT_APPID')
 APP_SECRET = env('WECHAT_APPSECRET')
 API_KEY = env('WECHAT_API_KEY')
 # On wechat merchant ac, account settings then security API
-MCH_ID = env('WECHAT_MCH_ID')
+MCH_ID = env('WECHAT_MERCHANT_ID')
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/inwxpy_results/"
 REDIRECT_URL = 'https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/?getInfo=yes'
@@ -146,6 +147,7 @@ def get_jsapi_params(openid, details, total_fee):
     :param openid: 用户的openid
     :return:
     """
+
     params = {
         'appid': APP_ID,  # APPID
         'mch_id': MCH_ID,  # 商户号
@@ -164,6 +166,7 @@ def get_jsapi_params(openid, details, total_fee):
     params['prepay_id'] = trans_xml_to_dict(notify_result)['prepay_id']
     params['timeStamp'] = int(time.time())
     params['nonceStr'] = random_str(16)
+    params['package']: 'prepay_id=' + params['prepay_id']
     params['sign'] = get_sign(
         {
             'appId': APP_ID,

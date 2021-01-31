@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from obrisk.classifieds.search import SearchListView, get_suggestions
 from obrisk.classifieds.views import (
-        classified_list, ClassifiedTagsAutoComplete,
+        classified_list, wxjsapi_req, ClassifiedTagsAutoComplete,
         CreateClassifiedView, EditClassifiedView,
         ClassifiedDeleteView, ReportClassifiedView,
         DetailClassifiedView)
@@ -38,7 +38,10 @@ urlpatterns = [
         r'^classifieds-suggestions/$',
         get_suggestions,
         name='classifieds_suggestions'),
-
+    url(
+        r'^wsguatpotlfwccdi/wxjsapireq/(?P<pk>\d+)/$',
+        wxjsapi_req,
+        name='wxpy_req'),
     url(
         r'^wsguatpotlfwccdi/wxjsapipy/?getInfo=yes/$',
         get_wxpy_info,
