@@ -2,11 +2,7 @@ from django.views.generic.base import TemplateView
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from obrisk.classifieds.search import SearchListView, get_suggestions
-from obrisk.classifieds.views import (
-        classified_list, wxjsapi_req, ClassifiedTagsAutoComplete,
-        CreateClassifiedView, EditClassifiedView,
-        ClassifiedDeleteView, ReportClassifiedView,
-        DetailClassifiedView)
+from obrisk.classifieds.views import *
 
 app_name = 'classifieds'
 
@@ -39,13 +35,9 @@ urlpatterns = [
         get_suggestions,
         name='classifieds_suggestions'),
     url(
-        r'^wsguatpotlfwccdi/wxjsapireq/(?P<pk>\d+)/$',
-        wxjsapi_req,
-        name='wxpy_req'),
-    url(
-        r'^wsguatpotlfwccdi/wxjsapipy/?getInfo=yes/$',
-        get_wxpy_info,
-        name='get_wxpy_info'),
+        r'^orders/wxpy-complete/(?P<pk>\d+)/$',
+        initiate_wxpy_info,
+        name='initiate_wxpy_info'),
     url(
         r'^wsguatpotlfwccdi/wxjsapipy/inwxpy_results/$',
         inwxpy_res,
@@ -64,8 +56,8 @@ urlpatterns = [
         name='delete_classified'),
     url(
         r'^orders/wsguatpotlfwccdi/(?P<slug>[-\w]+)/$',
-        DetailClassifiedView.as_view(),
-        name='orders'),
+        ClassifiedOrderView.as_view(),
+        name='order_detail'),
     url(
         r'^(?P<slug>[-\w]+)/$',
         DetailClassifiedView.as_view(),

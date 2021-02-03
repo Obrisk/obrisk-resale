@@ -93,19 +93,17 @@
                 <div class="action-wrapper">
 
                     {% if classified.user != request.user %}
-                        <div class="zhifu">
-                            <button class="btn" type="button" onclick="javascript:callpay();return false;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone">
-                                    <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                                    <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                                </svg>
-                                Pay
-                            </button>
-                        </div>
+                        <button class="button chat-button" onclick="javascript:callpay();return false;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg>
+                            Buy
+                        </button>
                            
-                        <button class="button chat-button"
+                        <button class="button share share-button"
                             ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                               stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -133,7 +131,7 @@
 
         <div class="seller-contacts-wrapper">
              {% if classified.video %}
-                 <button class="button share share-button">
+                 <button class="button accent-button">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-play-circle">
@@ -144,7 +142,7 @@
                   </button>
              {% endif %}
 
-             <button class="button share share-button" id='shareMessage'
+             <button class="button accent-button" id='shareMessage' 
                 onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -159,21 +157,21 @@
               </button>
         </div>
 
-          <!-- Cloud Tag Widget -->
-          {% if classified.tags.all %}
-                <!-- Cloud Tag Widget -->
-                  <div class="card classified-tags">
-                      <h5 class="card-heading has-text-weight-medium has-text-white	">{% trans 'Popular tags' %}</h5>
+        <!-- Cloud Tag Widget -->
+        {% if classified.tags.all %}
+            <!-- Cloud Tag Widget -->
+              <div class="card classified-tags">
+                  <h5 class="card-heading has-text-weight-medium has-text-white	">{% trans 'Popular tags' %}</h5>
 
-                        <div class="card-body">
-                          <div class="previsions">
-                              {% for tag in classified.tags.all %}
-                                  <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag is-white">{{ tag }}</span></a>
-                              {% endfor %}
-                          </div>
-                        </div>
-                   </div>
-          {% endif %}
+                    <div class="card-body">
+                      <div class="previsions">
+                          {% for tag in classified.tags.all %}
+                              <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag is-white">{{ tag }}</span></a>
+                          {% endfor %}
+                      </div>
+                    </div>
+               </div>
+        {% endif %}
         <br/>
 
         <!-- Similar lassified -->
@@ -228,9 +226,7 @@
     <div class="notification off-ac">
         <img src="{% static 'img/qrcode.jpg' %}"
            height="100px" width="100px" alt="Obrisk QRcode"/>
-        <span> 
-            Long press the QR code & follow our platform
-        </span>
+        <span> Long press the QR code & follow our platform </span>
     </div>
 
 
@@ -272,6 +268,10 @@
         window.location.href=editUrl;
   }
 
+  function callpay() {
+    window.location.replace("{% url 'classifieds:initiate_wxpy_info' classified.id %}");
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
 
 	  fetch('{% url 'wx_req_cred' %}', {
@@ -295,8 +295,7 @@
                        'updateAppMessageShareData',
                        'updateTimelineShareData',
                        'onMenuShareAppMessage',
-                       'onMenuShareTimeline',
-                       'chooseWXPay'
+                       'onMenuShareTimeline'
                     ] 
                 });
 
@@ -308,92 +307,54 @@
           }
 	    })
 
-          wx.ready(function(){
-              wx.onMenuShareAppMessage({ 
-                    title: '{{classified.title}}', 
-                    desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:80 }}', 
-                    link: location.href, 
-                    imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                    trigger: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    success: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    fail: function (res) {
-                        console.log(JSON.stringify(res));
-                    }
-                })
-
-              wx.onMenuShareTimeline({ 
-                    title: '{{classified.title}}', 
-                    desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:80 }}', 
-                    link: location.href, 
-                    imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
-                    trigger: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    success: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    fail: function (res) {
-                        console.log(JSON.stringify(res));
-                    }
-                })
-
-                function callpay() {
-                  fetch('{% url 'classifieds:wxpy_req' classified.id %}', {
-                      headers: {
-                    "X-Requested-With": "XMLHttpRequest"
-                      },
-                      credentials: 'same-origin',
-                      redirect: 'follow'
-                    }).then (resp => resp.json())
-                      .then (strData => {
-                      try {
-                          let data = JSON.parse(strData);
-                          if (data.success === true) {
-                            wx.chooseWXPay({
-                                timestamp: data.timeStamp, 
-                                nonceStr: data.nonceStr,
-                                package: data.package, 
-                                signType: data.signType,
-                                paySign: data.sign
-                                trigger: function (res) {
-                                    console.log(JSON.stringify(res));
-                                },
-                                success: function (res) {
-                                    console.log(JSON.stringify(res));
-                                },
-                                fail: function (res) {
-                                    console.log(JSON.stringify(res));
-                                }
-                            });
-
-                          } else {
-                              console.log('failure to init payments');
-                          }
-                      } catch {
-                          console.log('failure to init payments');
-                      }
-                    })
+        wx.ready(function(){
+          wx.onMenuShareAppMessage({ 
+                title: '{{classified.title}}', 
+                desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:80 }}', 
+                link: location.href, 
+                imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                trigger: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                success: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                fail: function (res) {
+                    console.log(JSON.stringify(res));
                 }
+            })
 
-        });
+          wx.onMenuShareTimeline({ 
+                title: '{{classified.title}}', 
+                desc: 'CNY {{classified.price}} {{ classified.details | truncatechars:80 }}', 
+                link: location.href, 
+                imgUrl: '{{oss}}/{{images.0.image_thumb }}', 
+                trigger: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                success: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                fail: function (res) {
+                    console.log(JSON.stringify(res));
+                }
+            })
 
-        wx.error(function(res){
-            console.log(res);
-        });
+      });
 
-      const image_count = {{ images| length}}
+      wx.error(function(res){
+        console.log(res);
+      });
 
-      if (image_count > 1) {
-        $(".slider-pro").sliderPro({
-          arrows: true,
-          width: 960,
-          fade: true,
-          autoplay: false,
-          autoScaleLayers: false,
+  const image_count = {{ images| length}}
+
+  if (image_count > 1) {
+    $(".slider-pro").sliderPro({
+      arrows: true,
+      width: 960,
+      fade: true,
+      autoplay: false,
+      autoScaleLayers: false,
           autoHeight: true,
 
         });

@@ -2,6 +2,7 @@ import logging
 import re
 import requests
 import json
+import urllib
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -15,7 +16,8 @@ from django.shortcuts import render, get_object_or_404
 from django.utils.translation import ugettext_lazy as _
 from django.utils.decorators import method_decorator
 from django.http import (
-        JsonResponse, HttpResponse, HttpResponseRedirect
+        JsonResponse, HttpResponse,
+        HttpResponseRedirect, HttpResponseBadRequest
     )
 from django.views.decorators.http import require_http_methods
 from django.conf import settings
@@ -31,15 +33,15 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from dal import autocomplete
 from ipware import get_client_ip
-from obrisk.utils.helpers import AuthorRequiredMixin
+from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.classifieds.models import (
-        Classified, OfficialAd,
+        Classified, OfficialAd, ClassifiedOrder,
         ClassifiedImages, ClassifiedTags)
 from obrisk.classifieds.forms import (
         ClassifiedForm, OfficialAdForm,
         ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
-from obrisk.classifieds.wxpayments import *
+from obrisk.classifieds.wxpayments import get_jsapi_params
 
 
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
@@ -435,8 +437,9 @@ class DetailClassifiedView(DetailView):
         return context
 
 
-
-def wxjsapi_req(request, *args, **kwargs):
+@login_required
+@require_http_methods(["GET"])
+def initiate_wxpy_info(request, *args, **kwargs):
     """
     用户点击一个路由或者扫码进入这个views.py中的函数，首先获取用户的openid,
     使用jsapi方式支付需要此参数
@@ -448,14 +451,37 @@ def wxjsapi_req(request, *args, **kwargs):
     """
     classified = Classified.objects.filter(
             id= request.GET.get('classified', None)
-        )
+        ).first()
 
-    if classified is None:
-        return JsonResponse({'success': False})
+    if classified:
+        openid = request.user.wechat_openid
+        details = classified.title
+        total_fee = classified.price
 
-    openid = request.user.wechat_openid
-    details = classified.title
-    total_fee = classified.price
+        if openid:
+            return render(
+                request,
+                'classifieds/create_classified_order.html',
+                {
+                 'classified': classified,
+                 'data': get_jsapi_params(openid, details, total_fee)
+                }
+            )
+        else:
+            messages.success(
+                    request,
+                    "You need to login with wechat to be able to pay"
+                )
+            redirect('classifieds:classified', classified.id)
 
-    #, safe=False
-    return JsonResponse(json.dumps(get_jsapi_params(openid, details, total_fee)))
+    else:
+        return HttpResponseBadRequest(
+                content=_('The request is invalid'))
+
+
+def inwxpy_res(request):
+    print(request)
+
+
+class ClassifiedOrderView(DetailView):
+    model = ClassifiedOrder
