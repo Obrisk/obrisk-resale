@@ -407,3 +407,60 @@ class DetailClassifiedView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+class Wxpay_Result(View):
+    """
+    微信支付结果回调通知路由
+    """
+    def post(self, request, *args, **kwargs):
+        """
+        微信支付成功后会自动回调
+        返回参数为：
+        {'mch_id': '',
+        'time_end': '',
+        'nonce_str': '',
+        'out_trade_no': '',
+        'trade_type': '',
+        'openid': '',
+         'return_code': '',
+         'sign': '',
+         'bank_type': '',
+         'appid': '',
+         'transaction_id': '',
+          'cash_fee': '',
+          'total_fee': '',
+          'fee_type': '', '
+          is_subscribe': '',
+          'result_code': 'SUCCESS'}
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        Check the status of the corresponding business data
+        to determine whether the notification has been processed.
+        If it has not been processed, then proceed with the processing.
+        If it has been processed, the result will be returned directly.
+        Processing payment success logic
+        """
+
+        # 回调数据转字典 # print('支付回调结果', data_dict)
+        data_dict = trans_xml_to_dict(request.body)
+        sign = data_dict.pop('sign')  # 取出签名
+        back_sign = get_sign(data_dict, API_KEY)  # 计算签名
+
+        #Return the received result to WeChat otherwise
+        #WeChat will send a post request every 8 minutes
+        if sign == back_sign and data_dict['return_code'] == 'SUCCESS':
+            classified = cache.get(f"wxpy_order_{data_dict['openid']}")
+            if classified:
+                ClassifiedOrder.objects.create(
+                   buyer=user_model.objects.filter(openid=data_dict['openid']).first(),
+                   classified=Classified.objects.filter(id=classified).first(),
+                   buyer_transaction_id = data_dict['transaction_id']
+                )
+                return HttpResponse(trans_dict_to_xml({'return_code': 'SUCCESS', 'return_msg': 'OK'}))
+            else:
+                logging.error('Payment succeeded but classified is not cached')
+        return HttpResponse(trans_dict_to_xml({'return_code': 'FAIL', 'return_msg': 'SIGNERROR'}))

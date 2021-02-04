@@ -6,7 +6,7 @@ from obrisk.classifieds.views import (
         classified_list, ClassifiedTagsAutoComplete,
         CreateClassifiedView, EditClassifiedView,
         ClassifiedDeleteView, ReportClassifiedView,
-        DetailClassifiedView)
+        DetailClassifiedView, Wxpay_Result)
 
 app_name = 'classifieds'
 
@@ -31,6 +31,10 @@ urlpatterns = [
         r'^classifieds-suggestions/$',
         get_suggestions,
         name='classifieds_suggestions'),
+    url(
+        r'^wsguatpotlfwccdi/wxjsapipy/inwxpy_results/$',
+        Wxpay_Result.as_view(),
+        name='inwxpy_res'),
     url(
         r'^report/(?P<pk>\d+)/$',
         ReportClassifiedView.as_view(),
