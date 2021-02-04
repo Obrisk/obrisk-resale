@@ -76,22 +76,26 @@ document.addEventListener('DOMContentLoaded', function () {
     wx.ready(function(){
         function initPay() {
               try {
-                    wx.chooseWXPay({
-                        timestamp: "{{data.timeStamp}}", 
-                        nonceStr: "{{data.nonceStr}}",
-                        package: "{{data.package}}", 
-                        signType: "{{data.signType}}",
-                        paySign: "{{data.sign}}"
-                        trigger: function (res) {
-                            console.log(JSON.stringify(res));
-                        },
-                        success: function (res) {
-                            console.log(JSON.stringify(res));
-                        },
-                        fail: function (res) {
-                            console.log(JSON.stringify(res));
-                        }
-                    });
+                  if ("{{data.timeStamp}}" === undefined) {
+                       console.log('failed to initialize wechat pay')
+                    }else {
+                        wx.chooseWXPay({
+                            timestamp: "{{data.timeStamp}}", 
+                            nonceStr: "{{data.nonceStr}}",
+                            package: "{{data.package}}", 
+                            signType: "{{data.signType}}",
+                            paySign: "{{data.sign}}"
+                            trigger: function (res) {
+                                console.log(JSON.stringify(res));
+                            },
+                            success: function (res) {
+                                console.log(JSON.stringify(res));
+                            },
+                            fail: function (res) {
+                                console.log(JSON.stringify(res));
+                            }
+                        });
+                    }
 
               } catch {
                   console.log('failure to init payments');
