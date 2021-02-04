@@ -37,6 +37,21 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 from dal import autocomplete
 
+from obrisk.classifieds.wxpayments import (
+        trans_xml_to_dict,
+        trans_dict_to_xml
+    )
+from config.settings.base import env
+
+try:
+    from django.contrib.auth import get_user_model
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+    user_model = User
+
+
+API_KEY = env('WECHAT_API_V3_KEY')
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 def set_popular_tags():
