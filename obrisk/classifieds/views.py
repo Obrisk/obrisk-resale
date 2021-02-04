@@ -460,7 +460,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
     :return:
     """
     classified = Classified.objects.filter(
-            sg=request.GET.get('sg', None)
+            slug=request.GET.get('sg', None)
         ).first()
 
     if classified:
