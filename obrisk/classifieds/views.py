@@ -43,7 +43,7 @@ from obrisk.classifieds.forms import (
         ClassifiedForm, OfficialAdForm,
         ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
-from obrisk.classifieds.wxpayments import get_jsapi_params
+from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
 from config.settings.base import env
 try:
     from django.contrib.auth import get_user_model
