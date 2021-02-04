@@ -93,17 +93,7 @@
                 <div class="action-wrapper">
 
                     {% if classified.user != request.user %}
-                        <button class="button chat-button" onclick="javascript:callpay();return false;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone">
-                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
-                            </svg>
-                            Buy
-                        </button>
-                           
-                        <button class="button share share-button"
+                        <button class="button chat-button"
                             ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                               stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -113,6 +103,16 @@
                             Chat
                          </button>
 
+                        <button class="button pay-button" onclick="javascript:callpay();return false;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone">
+                                <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+                                <line x1="12" y1="18" x2="12.01" y2="18"></line>
+                            </svg>
+                            Buy
+                        </button>
+                           
                     {% else %}
                         <a class="button chat-button" href="{% url 'classifieds:edit_classified' classified.id %}"
                           title="{% trans 'Edit this classified' %}">
@@ -129,10 +129,10 @@
 
         <div class="card-text">{{ classified.details }}</div>
 
-        <div class="seller-contacts-wrapper">
+        <div class="action-wrapper">
              {% if classified.video %}
                  <button class="button accent-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                         stroke-linecap="round" stroke-linejoin="round" class="feather feather-play-circle">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -142,7 +142,7 @@
                   </button>
              {% endif %}
 
-             <button class="button accent-button" id='shareMessage' 
+             <button class="button accent-button" id='shareMessage' style="max-width:160px;"
                 onclick="shareMe('{{ classified.title }}','{{ classified.address }}, {{ classified.city }} {{ classified.price }}')">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -269,7 +269,7 @@
   }
 
   function callpay() {
-    window.location.replace("{% url 'classifieds:initiate_wxpy_info' classified.id %}");
+          window.location.replace("{% url 'classifieds:initiate_wxpy_info'%}?sg={{classified.slug}}");
   }
 
   document.addEventListener('DOMContentLoaded', function () {

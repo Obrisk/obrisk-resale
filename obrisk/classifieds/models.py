@@ -207,9 +207,6 @@ class ClassifiedOrder(models.Model):
     seller_transaction_id = models.CharField (
             max_length=600, null=True, blank=True
         )
-    tracking_number = models.CharField (
-            max_length=600, null=True, blank=True
-        )
     notes = models.CharField(
             max_length=1000, null=True, blank=True
         )
@@ -238,7 +235,7 @@ class ClassifiedOrder(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = first_slug = slugify(
-                    f"{self.classified.title}-{uuid.uuid4().hex}",
+                    f"{self.classified.title}-{uuid.uuid8().hex}",
                     to_lower=True, max_length=300)
 
             for x in itertools.count(1):
@@ -294,6 +291,3 @@ class OfficialAdImages(models.Model):
 
     def __str__(self):
         return str(self.image)
-
-
-

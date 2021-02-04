@@ -35,12 +35,12 @@ urlpatterns = [
         get_suggestions,
         name='classifieds_suggestions'),
     url(
-        r'^orders/wxpy-complete/(?P<pk>\d+)/$',
+        r'^orders/wxpy-complete/$',
         initiate_wxpy_info,
         name='initiate_wxpy_info'),
     url(
         r'^wsguatpotlfwccdi/wxjsapipy/inwxpy_results/$',
-        inwxpy_res,
+        Wxpay_Result.as_view(),
         name='inwxpy_res'),
     url(
         r'^report/(?P<pk>\d+)/$',

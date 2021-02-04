@@ -15,8 +15,7 @@ API_KEY = env('WECHAT_API_KEY')
 # On wechat merchant ac, account settings then security API
 MCH_ID = env('WECHAT_MERCHANT_ID')
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
-NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/inwxpy_results/"
-REDIRECT_URL = 'https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/?getInfo=yes'
+NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/inwxpy_results"
 CREATE_IP = getattr(settings, 'AWS_LOCAL_IP', '127.0.0.1')
 
 
@@ -112,7 +111,7 @@ def get_redirect_url():
     urlinfo = OrderedDict()
     urlinfo['appid'] = APP_ID
     # Set redirect routing
-    urlinfo['redirect_uri'] = REDIRECT_URL
+    urlinfo['redirect_uri'] = 'https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/?getInfo=yes' #noqa
     urlinfo['response_type'] = 'code'
     urlinfo['scope'] = 'snsapi_base'  # 只获取基本信息
     urlinfo['state'] = 'mywxpay'   # 自定义的状态码
