@@ -20,6 +20,7 @@ from django.db.models import (
 from django.urls import reverse_lazy
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+import xmltodict
 from obrisk.utils.helpers import AuthorRequiredMixin
 from obrisk.classifieds.models import (
         Classified, OfficialAd,
@@ -37,10 +38,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 
 from dal import autocomplete
 
-from obrisk.classifieds.wxpayments import (
-        trans_xml_to_dict,
-        trans_dict_to_xml
-    )
+from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
 from config.settings.base import env
 
 try:
@@ -461,7 +459,7 @@ class Wxpay_Result(View):
         """
 
         # 回调数据转字典 # print('支付回调结果', data_dict)
-        data_dict = trans_xml_to_dict(request.body)
+        data_dict = xmltodict.parse(request.body)
         sign = data_dict.pop('sign')  # 取出签名
         back_sign = get_sign(data_dict, API_KEY)  # 计算签名
 
@@ -475,7 +473,17 @@ class Wxpay_Result(View):
                    classified=Classified.objects.filter(id=classified).first(),
                    buyer_transaction_id = data_dict['transaction_id']
                 )
-                return HttpResponse(trans_dict_to_xml({'return_code': 'SUCCESS', 'return_msg': 'OK'}))
+                return HttpResponse(xmltodict.unparse(
+                            {'return_code': 'SUCCESS', 'return_msg': 'OK'},
+                            pretty=True
+                        )
+                    )
             else:
-                logging.error('Payment succeeded but classified is not cached')
-        return HttpResponse(trans_dict_to_xml({'return_code': 'FAIL', 'return_msg': 'SIGNERROR'}))
+                logging.error(
+                    f'Payment succeeded but classified is not cached {data_dict}'
+                )
+        return HttpResponse(xmltodict.unparse(
+                {'return_code': 'FAIL', 'return_msg': 'SIGNERROR'},
+                pretty=True
+            )
+        )
