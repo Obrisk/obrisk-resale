@@ -7,6 +7,12 @@
 <link rel="stylesheet" href="{% static 'css/share.css' %}">
 <link rel="stylesheet" href="{% static 'css/vendor/slider-pro.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
+
+
+<script src="{% static 'js/vendor/vconsole.min.js' %}"></script>
+<script>
+var vConsole = new VConsole();
+</script>
 <title>{{ classified.title|title }}</title>
 
 {% endblock head %}
@@ -269,7 +275,8 @@
   }
 
   function callpay() {
-          window.location.replace("{% url 'classifieds:initiate_wxpy_info'%}?sg={{classified.slug}}");
+	  //const sg = encodeURIComponent("{{classified.slug}}");
+          window.location.replace("{% url 'classifieds:initiate_wxpy_info' %}?sg=" + sg);
   }
 
   document.addEventListener('DOMContentLoaded', function () {

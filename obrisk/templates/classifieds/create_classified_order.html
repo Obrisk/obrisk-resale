@@ -17,24 +17,24 @@ var vConsole = new VConsole();
 <div>
   <div class="media profile profile-header m-2">
       {% if classified.image_thumb %}
-          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.thumbnail }}"
             width="154px" height="154px">
       {% else %}
           <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
             width="154px" height="154px">
       {% endif %}
 
-    <h3 class="media-body mt-0">{{ classified.title|title }}</h3>
-  </div>
+    <h6 class="media-body mt-0">{{ classified.title }}</h6>
 
-  <h4 class="media-body mt-0"> Price: {{ classified.price }} CNY</h4>
-  <div class="is-flex mb-2">
-    <button class="button accent-button mb-2" onclick="javascript:callpay();return false;">{% trans 'Pay' %}</a>
-    <a class="button accent-button m-2" href="javascript:history.back()">{% trans 'Cancel' %}</a>
+  <p class="media-body mt-0"> Price: {{ classified.price }} CNY</p>
+  <div class="is-flex">
+    <a class="button accent-button mb-2" href="javascript:history.back()">{% trans 'Cancel' %}</a>
+    <button class="button accent-button m-2 p-2" onclick="javascript:initPay();return false;">{% trans 'Pay' %}</button>
   </div>
 
 </div>
 
+</div>
 {% endblock content %}
 
 {% block extra_js %}
@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     wx.ready(function(){
-        function callpay() {
+        function initPay() {
               try {
                     wx.chooseWXPay({
                         timestamp: "{{data.timeStamp}}", 

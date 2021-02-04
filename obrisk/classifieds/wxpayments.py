@@ -1,3 +1,4 @@
+import logging
 import hashlib
 import time
 import requests
@@ -15,7 +16,7 @@ API_KEY = env('WECHAT_API_KEY')
 # On wechat merchant ac, account settings then security API
 MCH_ID = env('WECHAT_MERCHANT_ID')
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
-NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/inwxpy_results"
+NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy_results"
 CREATE_IP = getattr(settings, 'AWS_LOCAL_IP', '127.0.0.1')
 
 
@@ -161,19 +162,23 @@ def get_jsapi_params(openid, details, total_fee):
     }
     # print(params)
     # 调用微信统一下单支付接口url
-    notify_result = wx_pay_unifiedorder(params)
-    params['prepay_id'] = trans_xml_to_dict(notify_result)['prepay_id']
-    params['timeStamp'] = int(time.time())
-    params['nonceStr'] = random_str(16)
-    params['package']: 'prepay_id=' + params['prepay_id']
-    params['sign'] = get_sign(
-        {
-            'appId': APP_ID,
-            "timeStamp": params['timeStamp'],
-            'nonceStr': params['nonceStr'],
-            'package': 'prepay_id=' + params['prepay_id'],
-            'signType': 'MD5',
-        },
-        API_KEY
-    )
+    try:
+        notify_result = wx_pay_unifiedorder(params)
+        prepay_id = trans_xml_to_dict(notify_result)['prepay_id']
+        params['timeStamp'] = int(time.time())
+        params['nonceStr'] = random_str(16)
+        params['package']: 'prepay_id=' + prepay_id
+        params['sign'] = get_sign(
+            {
+                'appId': APP_ID,
+                "timeStamp": params['timeStamp'],
+                'nonceStr': params['nonceStr'],
+                'package': 'prepay_id=' + prepay_id,
+                'signType': 'MD5',
+            },
+            API_KEY
+        )
+    except Exception as e:
+        logging.error(f'Cannot initiate wechat pay parameters: {e}')
+
     return params
