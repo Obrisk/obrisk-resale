@@ -18,24 +18,28 @@ var vConsole = new VConsole();
     <p id="notf-msg"></p>
 </div>
 <div>
-  <div class="media profile profile-header m-2">
+  <div class="profile-header">
       {% if classified.thumbnail %}
       <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
-            width="154px" height="154px">
+            width="250px" height="250px">
       {% else %}
       <img class="card-img lazyload" src="{{oss}}/classifieds/default.jpg"
-            width="154px" height="154px">
+            width="250px" height="250px">
       {% endif %}
 
-    <h6 class="mt-0">{{ classified.title }}</h6>
+      <h1 class="title is-4">{{ classified.title }}</h1>
+      <h1> Address: {{ classified.english_address }}</h1>
+      <h1> {{ classified.city }} {{ classified.province }} </h1>
 
-  <h2 class="mt-0"> Price: {{ classified.price }} CNY</h2>
-  <div class="is-flex">
-    <a class="button accent-button m-2" 
+      </br>
+      <h1 class="mt-0"> Price: {{ classified.price }} CNY</h1>
+      <div class="is-flex">
+      <a class="button accent-button cancel-button" 
           href="{% url 'classifieds:classified' classified.slug %}" >
           {% trans 'Cancel' %}
-    </a>
-    <button class="button accent-button m-2 p-2" onclick="javascript:initPay();return false;">
+      </a>
+
+      <button class="button accent-button m-2 p-2" onclick="javascript:initPay();return false;">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"
             width="16px" height="16px"><path fill="#c2e8ff"
             d="M4.433,22.306l-0.176-0.205C2.453,20.001,1.5,17.546,1.5,15C1.5,8.107,8.453,2.5,17,2.5 S32.5,8.107,32.5,15S25.547,27.5,17,27.5c-2.527,0-5.044-0.508-7.275-1.468L9.55,25.957l-6.809,2.269L4.433,22.306z"/>

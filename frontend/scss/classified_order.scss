@@ -1,28 +1,17 @@
 @import "partials/simple-defaults";
 
+.cancel-button {
+   background-color: #81C1FF;
+   margin: auto 6% auto auto;
+}
+
 .clear {
   clear: both;
 }
 
-.fa-instagram {
-  color: #cf153d;
-}
-
-.fa-linkedin {
-  color: #1556cf;
-}
-
-.fa-facebook {
-  color: #2815cf;
-}
-
-.fa-snapchat {
-  color: #ecde16;
-}
-
-.profile-header-avatar {
+.card-img {
   border: 5px solid #fff;
-  border-radius: 100%;
+  border-radius: 10%;
   object-fit: cover;
   background-color: #fff;
   width:250px;
@@ -32,13 +21,12 @@
 .profile-header {
   display: flex;
   flex-direction: column;
-
   align-items: center;
-  border-radius: 10px;
+  border-radius: 25px;
   background: #F6F6F6;
   box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
-  padding: 45px;
-  margin-top: 45px;
+  padding: 15%;
+  margin-top: 18%;
 }
 
 .profile-wrapper {
@@ -51,43 +39,20 @@
 
 }
 
-.profile-points {
-  text-align: center;
-  margin: auto;
-  height: 80px;
-}
-
-.points {
-  font-size: 20px;
-  font-weight: 400;
-}
-
-.point-label {
-  color: rgba(100, 100, 100, 0.5);
-  line-height: 15px;
-  letter-spacing: .3px;
-  text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 400;
-  margin-top: 25%;
-}
-
-@media screen and (max-width: 991px) {
-
-  .profile-header,
-  .profile-wrapper {
-    margin-top: 15px;
-  }
-  .media-body {
-    margin-top: -10px;
-  }
-}
-
-
 .lazy-img {
     text-align: center;
     font-size: 10px;
 }
+
+@media screen and (max-width: 991px) {
+
+  .media-body {
+    margin-top: -10px;
+  }
+
+}
+
+
 
 @media screen and (max-width: 400px) {
   .profile-header-avatar {
