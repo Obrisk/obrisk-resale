@@ -4,7 +4,7 @@
 {% block title %}{{ classified.title }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/user_profile.css' %}" rel="stylesheet">
+<link href="{% static 'css/classified_order.css' %}" rel="stylesheet">
 
 <script src="{% static 'js/vendor/vconsole.min.js' %}"></script>
 <script>
@@ -13,7 +13,10 @@ var vConsole = new VConsole();
 {% endblock head %}
 
 {% block content %}
-
+<div class="notification is-danger is-hidden" role="alert">
+    <button type="button" class="delete close-dj-messages"></button>
+    <p id="notf-msg"></p>
+</div>
 <div>
   <div class="media profile profile-header m-2">
       {% if classified.image_thumb %}
@@ -28,8 +31,25 @@ var vConsole = new VConsole();
 
   <p class="media-body mt-0"> Price: {{ classified.price }} CNY</p>
   <div class="is-flex">
-    <a class="button accent-button mb-2" href="javascript:history.back()">{% trans 'Cancel' %}</a>
-    <button class="button accent-button m-2 p-2" onclick="javascript:initPay();return false;">{% trans 'Pay' %}</button>
+    <a class="button accent-button m-2" 
+          href="{% url 'classifieds:classified' classified.slug %}" >
+          {% trans 'Cancel' %}
+    </a>
+    <button class="button accent-button m-2 p-2" onclick="javascript:initPay();return false;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"
+            width="16px" height="16px"><path fill="#c2e8ff"
+            d="M4.433,22.306l-0.176-0.205C2.453,20.001,1.5,17.546,1.5,15C1.5,8.107,8.453,2.5,17,2.5 S32.5,8.107,32.5,15S25.547,27.5,17,27.5c-2.527,0-5.044-0.508-7.275-1.468L9.55,25.957l-6.809,2.269L4.433,22.306z"/>
+            <path fill="#7496c4" 
+            d="M17,3c8.271,0,15,5.383,15,12s-6.729,12-15,12c-2.46,0-4.907-0.494-7.078-1.428l-0.35-0.151 l-0.361,0.12l-5.728,1.909l1.357-4.75l0.148-0.518l-0.351-0.409C2.912,19.767,2,17.424,2,15C2,8.383,8.729,3,17,3 M17,2 C8.163,2,1,7.82,1,15c0,2.763,1.069,5.32,2.878,7.427L2,29l7.527-2.509C11.758,27.451,14.299,28,17,28c8.837,0,16-5.82,16-13 S25.837,2,17,2L17,2z"/>
+            <path fill="#f2faff"
+            d="M32.484,35.343l-0.208,0.089C30.623,36.141,28.848,36.5,27,36.5c-6.341,0-11.5-4.262-11.5-9.5 s5.159-9.5,11.5-9.5s11.5,4.262,11.5,9.5c0,1.673-0.546,3.327-1.58,4.784l-0.131,0.186l1.479,6.128L32.484,35.343z"/>
+            <path fill="#788b9c"
+            d="M27,18c6.065,0,11,4.037,11,9c0,1.568-0.514,3.122-1.488,4.495l-0.263,0.371l0.107,0.442 l1.18,4.887l-4.632-2.206l-0.408-0.194l-0.416,0.178C30.488,35.654,28.779,36,27,36c-6.065,0-11-4.037-11-9S20.935,18,27,18 M27,17c-6.627,0-12,4.477-12,10c0,5.523,5.373,10,12,10c1.974,0,3.831-0.404,5.473-1.108L39,39l-1.672-6.927 C38.384,30.585,39,28.854,39,27C39,21.477,33.627,17,27,17L27,17z"/>
+            <path fill="#424e5c"
+            d="M22.5 24A1.5 1.5 0 1 0 22.5 27 1.5 1.5 0 1 0 22.5 24zM31.5 24A1.5 1.5 0 1 0 31.5 27 1.5 1.5 0 1 0 31.5 24zM12 9A2 2 0 1 0 12 13 2 2 0 1 0 12 9zM22 9A2 2 0 1 0 22 13 2 2 0 1 0 22 9z"/>
+        </svg>
+        {% trans 'Pay now' %}
+    </button>
   </div>
 
 </div>
@@ -41,6 +61,21 @@ var vConsole = new VConsole();
 
 <script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
 <script>
+function initPay () {
+    if (typeof wxPay == 'function') {
+        wxPay();
+    }else {
+      document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
+      document.getElementById(
+              'notf-msg'
+          ).innerHTML = "Sorry payments feature is currently unavailable, contact the seller directly";
+
+      setTimeout(() => {  
+          window.location.href="{% url 'classifieds:classified' classified.slug %}";
+      }, 7000);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
 
   fetch('{% url 'wx_req_cred' %}', {
@@ -74,7 +109,7 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     wx.ready(function(){
-        function initPay() {
+        function wxPay() {
               try {
                   if ("{{data.timeStamp}}" === undefined) {
                        console.log('failed to initialize wechat pay')
@@ -84,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             nonceStr: "{{data.nonceStr}}",
                             package: "{{data.package}}", 
                             signType: "{{data.signType}}",
-                            paySign: "{{data.sign}}"
+                            paySign: "{{data.sign}}",
                             trigger: function (res) {
                                 console.log(JSON.stringify(res));
                             },
