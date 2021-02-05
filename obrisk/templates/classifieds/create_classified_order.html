@@ -113,6 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     wx.ready(function(){
+         console.log( "{{data.timeStamp}}" + " {{data.nonceStr}}" + " {{data.package}}" + " {{data.signType}}" + " {{data.sign}}")
+
         if ("{{data.timeStamp}}".length < 1) {
            console.log('failed to initialize wechat pay')
         }else {

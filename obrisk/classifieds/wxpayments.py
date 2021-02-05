@@ -7,6 +7,7 @@ import random
 import string
 from random import Random
 
+from django.core.cache import cache
 from django.conf import settings
 from config.settings.base import env
 
@@ -18,7 +19,18 @@ API_KEY = env('WECHAT_API_KEY')
 MCHID = env('WECHAT_MERCHANT_ID')
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy_results"
-CREATE_IP = getattr(settings, 'AWS_LOCAL_IP', '127.0.0.1')
+
+LOCAL_IP = getattr(settings, 'AWS_LOCAL_IP', '127.0.0.1')
+
+CREATE_IP = cache.get(f'public_ip_{LOCAL_IP}')
+
+if CREATE_IP is None:
+    CREATE_IP = requests.get('https://api.ipify.org/?format=raw').text,
+    cache.set(
+        f'public_ip_{LOCAL_IP}',
+        CREATE_IP,
+        None
+    )
 
 
 def random_str(randomlength=8):
@@ -221,5 +233,6 @@ def get_jsapi_params(openid, details, fee):
             }            # 6. paySign签名
             paySign = generate_sign(data)
             data["paySign"] = paySign  # 加入签名
+            logging.error(f'Debugging payments: {paySign}')
             # 7. 传给前端的签名后的参数
             return data
