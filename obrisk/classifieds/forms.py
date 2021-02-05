@@ -55,15 +55,15 @@ class ClassifiedEditForm(forms.ModelForm):
     details = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4})
     )
-    wechat_id = forms.CharField(required=False, label=('WechatID'))
+    english_address = forms.CharField(
+            required=False, label=("Address (English)")
+        )
     phone_number = forms.CharField(required=False)
-    #images = forms.CharField(
-        #widget=forms.HiddenInput(), max_length=1500)
 
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "tags",
-         "english_address", "wechat_id", "phone_number" ]
+         "english_address", "phone_number" ]
 
         widgets = {
             'user': forms.HiddenInput(),

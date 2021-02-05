@@ -19,17 +19,17 @@ var vConsole = new VConsole();
 </div>
 <div>
   <div class="media profile profile-header m-2">
-      {% if classified.image_thumb %}
-          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.thumbnail }}"
+      {% if classified.thumbnail %}
+      <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
             width="154px" height="154px">
       {% else %}
-          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+      <img class="card-img lazyload" src="{{oss}}/classifieds/default.jpg"
             width="154px" height="154px">
       {% endif %}
 
     <h6 class="mt-0">{{ classified.title }}</h6>
 
-  <p class="media-body mt-0"> Price: {{ classified.price }} CNY</p>
+  <h2 class="mt-0"> Price: {{ classified.price }} CNY</h2>
   <div class="is-flex">
     <a class="button accent-button m-2" 
           href="{% url 'classifieds:classified' classified.slug %}" >
@@ -109,34 +109,35 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     wx.ready(function(){
-        function wxPay() {
+        if ("{{data.timeStamp}}".length < 1) {
+           console.log('failed to initialize wechat pay')
+        }else {
+            function wxPay() {
               try {
-                  if ("{{data.timeStamp}}" === undefined) {
-                       console.log('failed to initialize wechat pay')
-                    }else {
-                        wx.chooseWXPay({
-                            timestamp: "{{data.timeStamp}}", 
-                            nonceStr: "{{data.nonceStr}}",
-                            package: "{{data.package}}", 
-                            signType: "{{data.signType}}",
-                            paySign: "{{data.sign}}",
-                            trigger: function (res) {
-                                console.log(JSON.stringify(res));
-                            },
-                            success: function (res) {
-                                console.log(JSON.stringify(res));
-                            },
-                            fail: function (res) {
-                                console.log(JSON.stringify(res));
-                            }
-                        });
-                    }
-
+                    wx.chooseWXPay({
+                        timestamp: "{{data.timeStamp}}", 
+                        nonceStr: "{{data.nonceStr}}",
+                        package: "{{data.package}}", 
+                        signType: "{{data.signType}}",
+                        paySign: "{{data.sign}}",
+                        trigger: function (res) {
+                            console.log(JSON.stringify(res));
+                        },
+                        success: function (res) {
+                            console.log('SUCCESS');
+                            console.log(JSON.stringify(res));
+                        },
+                        fail: function (res) {
+                            console.log(JSON.stringify(res));
+                        }
+                    });
               } catch {
                   console.log('failure to init payments');
               }
-        }
-    });
+            }
+       }
+
+   });
 
     wx.error(function(res){
         console.log(res);

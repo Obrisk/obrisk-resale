@@ -3,6 +3,7 @@ from django.conf.urls import url
 from django.views.generic import TemplateView
 from obrisk.classifieds.search import SearchListView, get_suggestions
 from obrisk.classifieds.views import *
+from obrisk.utils.images_upload import bulk_update_classifieds_thumb
 
 app_name = 'classifieds'
 
@@ -26,9 +27,9 @@ urlpatterns = [
         SearchListView.as_view(),
         name='classifieds_results'),
     url(
-        r'^wxtest/$',
-        TemplateView.as_view(template_name="classifieds/share.html"),
-        name='wxsharetest'
+        r'^clsupdate/$',
+        bulk_update_classifieds_thumb,
+        name='bulk-update'
         ),
     url(
         r'^classifieds-suggestions/$',
