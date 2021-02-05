@@ -1,0 +1,6 @@
+#Silver search ag
+#
+#https://github.com/ggreer/the_silver_searcher
+
+*.min.*
+node_modules/

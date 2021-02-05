@@ -42,7 +42,7 @@ class MyUserAdmin(AuthUserAdmin):
                     ('name', 'is_official', 'is_seller', 'points', 'city',
                         'province_region', 'country', 'phone_number', 'picture',
                         'thumbnail', 'org_picture', 'instagram_account', 'linkedin_account',
-                        'snapchat_account', 'facebook_account', 'address', 'gender', 'wechat_openid',
+                        'snapchat_account', 'facebook_account', 'english_address', 'chinese_address', 'gender', 'wechat_openid',
                     )
                 }
             ),
