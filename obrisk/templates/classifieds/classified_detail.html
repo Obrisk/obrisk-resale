@@ -275,8 +275,8 @@ var vConsole = new VConsole();
   }
 
   function callpay() {
-	  //const sg = encodeURIComponent("{{classified.slug}}");
-          window.location.replace("{% url 'classifieds:initiate_wxpy_info' %}?sg=" + sg);
+	  const sg = encodeURIComponent("{{classified.slug}}");
+	  window.location.replace("{% url 'classifieds:initiate_wxpy_info' %}?sg=" + sg);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
