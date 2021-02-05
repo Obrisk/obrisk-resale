@@ -94,7 +94,7 @@ document.addEventListener('DOMContentLoaded', function () {
           let data = JSON.parse(strData);
           if (data.success === true) {
             wx.config({
-                debug: true, 
+                debug: false, 
                 appId: data.id,
                 timestamp: data.timestamp,
                 nonceStr: data.noncestr,
@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     wx.ready(function(){
         if ("{{data.timeStamp}}".length < 1) {
-           console.log('failed to initialize wechat pay')
+           console.log('Wxpay failed, data empty');
         }else {
             function wxPay() {
               try {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function () {
                         }
                     });
               } catch {
-                  console.log('failure to init payments');
+                  console.log('failure to init payments, exception happened');
               }
             }
        }
