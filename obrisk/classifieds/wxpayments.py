@@ -7,6 +7,7 @@ import random
 import string
 from random import Random
 
+from bs4 import BeautifulSoup
 from django.core.cache import cache
 from django.conf import settings
 from config.settings.base import env
@@ -72,6 +73,15 @@ def get_sign(data_dict, key):
     md5.update(params_str.encode('utf-8'))  # 将参数字符串传入
     sign = md5.hexdigest().upper()  # 完成加密并转为大写
     return sign
+
+
+def trans_xml_to_dict(data_xml):
+    soup = BeautifulSoup(data_xml, features='xml')
+    xml = soup.find('xml')  # 解析XML
+    if not xml:
+        return {}
+    data_dict = dict([(item.name, item.text) for item in xml.find_all()])
+    return data_dict
 
 
 def trans_dict_to_xml(data_dict):
@@ -182,9 +192,9 @@ def send_xml_request(url, param):
             headers={'Content-Type': 'text/xml'}
         )
     # xml 2 dict
-    msg = response.text
-    xmlmsg = xmltodict.parse(msg)
-    return xmlmsg
+    #msg = response.text
+    #xmlmsg = xmltodict.parse(msg)
+    return trans_xml_to_dict(response.text)
 
 
 # 统一下单
