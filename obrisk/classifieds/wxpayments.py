@@ -117,6 +117,16 @@ def wx_pay_unifiedorder(detail):
     return response.content
 
 
+def create_out_trade_no():
+        """
+        创建微信商户订单号
+        :return:
+        """
+        local_time = time.strftime('%Y%m%d%H%M%S', time.localtime(time.time()))
+        result = 'wx{}'.format(local_time[2:])
+        return result
+
+
 def get_jsapi_params(openid, details, total_fee):
     """
     Get the parameters required for WeChat Jsapi payment
@@ -125,44 +135,45 @@ def get_jsapi_params(openid, details, total_fee):
     """
 
     params = {
-        'appid': APP_ID,  # APPID
-        'mch_id': MCH_ID,  # 商户号
+        'appid': APPID,  # APPID
+        'mch_id': MCHID,  # 商户号
         'nonce_str': random_str(16),  # 随机字符串
-        'out_trade_no': ,  # 订单编号,可自定义
-        'total_fee': total_fee,  # 订单总金额
+        'out_trade_no': create_out_trade_no(),  # 订单号
+        'total_fee': int(round(float(total_fee), 2) * 100),  # 订单总金额,1代表1分钱
         'spbill_create_ip': CREATE_IP,  # 发送请求服务器的IP地址
         'openid': openid,
-        'notify_url': NOTIFY_URL,  # 支付成功后微信回调路由
-        'body': details,  # 商品描述
+        'notify_url': '{0}/wxpayresult/'.format('你的域名'),  # 微信支付结果回调url
+        'body': '{0}'.format(details),  # 商品描述
         'trade_type': 'JSAPI',  # 公众号支付类型
     }
-    # print(params)
     # 调用微信统一下单支付接口url
-    try:
-        notify_result = wx_pay_unifiedorder(params)
-        data = trans_xml_to_dict(notify_result)
-        if data['return_code'] == 'SUCCESS':
-            if data['result_code'] == 'SUCCESS':
-                params['timeStamp'] = int(time.time())
-                params['nonceStr'] = random_str(16)
+    notify_result = wx_pay_unifiedorde(params)
+    notify_result = trans_xml_to_dict(notify_result)
+    # print('向微信请求', notify_result)
+    if 'return_code' in notify_result and notify_result['return_code'] == 'FAIL':
+        return {'error': notify_result['return_msg']}
+    if 'prepay_id' not in notify_result:
+        return {'error': 'Prepay_id not returned successfully'}
+    params['prepay_id'] = notify_result['prepay_id']
+    params['timeStamp'] = int(time.time())
+    params['nonceStr'] = random_str(16)
+    params['sign'] = get_sign({'appId': APPID,
+                       "timeStamp": params['timeStamp'],
+                       'nonceStr': params['nonceStr'],
+                       'package': 'prepay_id=' + params['prepay_id'],
+                       'signType': 'MD5',
+                   },
+                   API_KEY
+               )
+    ret_params = {
+        'package': "prepay_id=" + params['prepay_id'],
+        'appid': APPID,
+        'timeStamp': str(params['timeStamp']),
+        'nonceStr': params['nonceStr'],
+        'sign': params['sign'],
 
-                prepay_id = data['prepay_id']
-                params['package']: 'prepay_id=' + prepay_id
-                params['sign'] = get_sign(
-                    {
-                        'appId': APP_ID,
-                        "timeStamp": params['timeStamp'],
-                        'nonceStr': params['nonceStr'],
-                        'package': 'prepay_id=' + prepay_id,
-                        'signType': 'MD5',
-                    },
-                    API_KEY
-                )
-                return params
-    except Exception as e:
-        logging.error(f'Cannot initiate wechat pay parameters: {e}')
-
-    return {'error': xmlmsg['xml']['return_msg'] }
+    }
+    return ret_params
 
 
 # 统一下单
