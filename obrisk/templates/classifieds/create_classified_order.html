@@ -113,10 +113,8 @@ document.addEventListener('DOMContentLoaded', function () {
     })
 
     wx.ready(function(){
-         console.log( "{{data.timeStamp}}" + " {{data.nonceStr}}" + " {{data.package}}" + " {{data.signType}}" + " {{data.sign}}")
-
-        if ("{{data.timeStamp}}".length < 1) {
-           console.log('Wxpay failed, data empty');
+        if ("{{data.error}}".length > 1) {
+           console.log('{{data.error}}');
         }else {
             function wxPay() {
               try {

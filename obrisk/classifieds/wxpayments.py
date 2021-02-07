@@ -17,7 +17,7 @@ APPID = env('WECHAT_APPID')
 APP_SECRET = env('WECHAT_APPSECRET')
 API_KEY = env('WECHAT_API_KEY')
 # On wechat merchant ac, account settings then security API
-MCHID = env('WECHAT_MERCHANT_ID')
+MCHID = env.int('WECHAT_MERCHANT_ID')
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy_results"
 
@@ -113,51 +113,56 @@ def wx_pay_unifiedorder(detail):
     # 以POST方式向微信公众平台服务器发起请求
     response = requests.request('post', WXORDER_URL, data=xml)
     # 将请求返回的数据转为字典
-    # data_dict = trans_xml_to_dict(response.content)
+    data_dict = trans_xml_to_dict(response.content)
     return response.content
 
 
-"""
 def get_jsapi_params(openid, details, total_fee):
-Get the parameters required for WeChat Jsapi payment
-:param openid: 用户的openid
-:return:
+    """
+    Get the parameters required for WeChat Jsapi payment
+    :param openid: 用户的openid
+    :return:
+    """
 
-params = {
-    'appid': APP_ID,  # APPID
-    'mch_id': MCH_ID,  # 商户号
-    'nonce_str': random_str(16),  # 随机字符串
-    'out_trade_no': ,  # 订单编号,可自定义
-    'total_fee': total_fee,  # 订单总金额
-    'spbill_create_ip': CREATE_IP,  # 发送请求服务器的IP地址
-    'openid': openid,
-    'notify_url': NOTIFY_URL,  # 支付成功后微信回调路由
-    'body': details,  # 商品描述
-    'trade_type': 'JSAPI',  # 公众号支付类型
-}
-# print(params)
-# 调用微信统一下单支付接口url
-try:
-    notify_result = wx_pay_unifiedorder(params)
-    prepay_id = trans_xml_to_dict(notify_result)['prepay_id']
-    params['timeStamp'] = int(time.time())
-    params['nonceStr'] = random_str(16)
-    params['package']: 'prepay_id=' + prepay_id
-    params['sign'] = get_sign(
-        {
-            'appId': APP_ID,
-            "timeStamp": params['timeStamp'],
-            'nonceStr': params['nonceStr'],
-            'package': 'prepay_id=' + prepay_id,
-            'signType': 'MD5',
-        },
-        API_KEY
-    )
-except Exception as e:
-    logging.error(f'Cannot initiate wechat pay parameters: {e}')
+    params = {
+        'appid': APP_ID,  # APPID
+        'mch_id': MCH_ID,  # 商户号
+        'nonce_str': random_str(16),  # 随机字符串
+        'out_trade_no': ,  # 订单编号,可自定义
+        'total_fee': total_fee,  # 订单总金额
+        'spbill_create_ip': CREATE_IP,  # 发送请求服务器的IP地址
+        'openid': openid,
+        'notify_url': NOTIFY_URL,  # 支付成功后微信回调路由
+        'body': details,  # 商品描述
+        'trade_type': 'JSAPI',  # 公众号支付类型
+    }
+    # print(params)
+    # 调用微信统一下单支付接口url
+    try:
+        notify_result = wx_pay_unifiedorder(params)
+        data = trans_xml_to_dict(notify_result)
+        if data['return_code'] == 'SUCCESS':
+            if data['result_code'] == 'SUCCESS':
+                params['timeStamp'] = int(time.time())
+                params['nonceStr'] = random_str(16)
 
-return params
-"""
+                prepay_id = data['prepay_id']
+                params['package']: 'prepay_id=' + prepay_id
+                params['sign'] = get_sign(
+                    {
+                        'appId': APP_ID,
+                        "timeStamp": params['timeStamp'],
+                        'nonceStr': params['nonceStr'],
+                        'package': 'prepay_id=' + prepay_id,
+                        'signType': 'MD5',
+                    },
+                    API_KEY
+                )
+                return params
+    except Exception as e:
+        logging.error(f'Cannot initiate wechat pay parameters: {e}')
+
+    return {'error': xmlmsg['xml']['return_msg'] }
 
 
 # 统一下单
@@ -194,13 +199,13 @@ def send_xml_request(url, param):
     # xml 2 dict
     #msg = response.text
     #xmlmsg = xmltodict.parse(msg)
-    logging.error(f'encodings are: {response.encoding}')
-    response.encoding = 'ISO-8859-1'
-    return trans_xml_to_dict(response.text)
+    response.encoding = 'utf-8'
+    #return trans_xml_to_dict(response.text)
+    return xmltodict.parse(response.text)
 
 
 # 统一下单
-def get_jsapi_params(openid, details, fee):
+def iget_jsapi_params(openid, details, fee):
     url = WXORDER_URL
     nonce_str = generate_randomStr()        # 订单中加nonce_str字段记录（回调判断使用）
     out_trade_no = order_num('1202')     # 支付单号，只能使用一次，不可重复支付
@@ -227,6 +232,8 @@ def get_jsapi_params(openid, details, fee):
     sign = generate_sign(param)
     param["sign"] = sign  # 加入签名
     # 3. 调用接口
+
+    logging.error(f'xml data {xml}')
     xmlmsg = send_xml_request(url, param)
     # 4. 获取prepay_id
     if xmlmsg['xml']['return_code'] == 'SUCCESS':
@@ -245,6 +252,6 @@ def get_jsapi_params(openid, details, fee):
             }            # 6. paySign签名
             paySign = generate_sign(data)
             data["paySign"] = paySign  # 加入签名
-            logging.error(f'Debugging payments: {paySign}')
             # 7. 传给前端的签名后的参数
             return data
+    return {'error': xmlmsg['xml']['return_msg'] }
