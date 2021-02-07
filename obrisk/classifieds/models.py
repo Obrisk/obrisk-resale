@@ -81,7 +81,7 @@ class Classified(models.Model):
     wechat_id = models.CharField (max_length=150, null=True, blank=True)
     country = models.CharField(max_length= 100)
     thumbnail = models.CharField(max_length= 300)
-    video = models.CharField(max_length= 300)
+    video = models.CharField(max_length= 300, null=True, blank=True)
     edited = models.BooleanField(default=False)
     show_phone = models.BooleanField(default=True)
     tags = TaggableManager(through=TaggedClassifieds, blank=True)
