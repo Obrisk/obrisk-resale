@@ -194,6 +194,8 @@ def send_xml_request(url, param):
     # xml 2 dict
     #msg = response.text
     #xmlmsg = xmltodict.parse(msg)
+    logging.error(f'encodings are: {response.encoding}')
+    response.encoding = 'ISO-8859-1'
     return trans_xml_to_dict(response.text)
 
 
