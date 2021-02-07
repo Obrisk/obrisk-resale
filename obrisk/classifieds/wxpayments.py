@@ -17,7 +17,7 @@ APPID = env('WECHAT_APPID')
 APP_SECRET = env('WECHAT_APPSECRET')
 API_KEY = env('WECHAT_API_KEY')
 # On wechat merchant ac, account settings then security API
-MCHID = env('WECHAT_MERCHANT_ID')
+MCHID = env.int('WECHAT_MERCHANT_ID')
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy_results"
 
@@ -228,6 +228,10 @@ def get_jsapi_params(openid, details, fee):
     sign = generate_sign(param)
     param["sign"] = sign  # 加入签名
     # 3. 调用接口
+
+    param = {'root': param}
+    xml = xmltodict.unparse(param)
+    logging.error(f'xml data {xml}')
     xmlmsg = send_xml_request(url, param)
     # 4. 获取prepay_id
     if xmlmsg['xml']['return_code'] == 'SUCCESS':
