@@ -76,7 +76,8 @@ def get_sign(data_dict, key):
 
 
 def trans_xml_to_dict(data_xml):
-    soup = BeautifulSoup(data_xml, features='xml')
+    #soup = BeautifulSoup(data_xml, features='xml')
+    soup = ''
     xml = soup.find('xml')  # 解析XML
     if not xml:
         return {}
@@ -113,7 +114,7 @@ def wx_pay_unifiedorder(detail):
     # 以POST方式向微信公众平台服务器发起请求
     response = requests.request('post', WXORDER_URL, data=xml)
     # 将请求返回的数据转为字典
-    # data_dict = trans_xml_to_dict(response.content)
+    data_dict = trans_xml_to_dict(response.content)
     return response.content
 
 
@@ -194,9 +195,9 @@ def send_xml_request(url, param):
     # xml 2 dict
     #msg = response.text
     #xmlmsg = xmltodict.parse(msg)
-    logging.error(f'encodings are: {response.encoding}')
-    response.encoding = 'ISO-8859-1'
-    return trans_xml_to_dict(response.text)
+    response.encoding = 'utf-8'
+    #return trans_xml_to_dict(response.text)
+    return xmltodict.parse(response.text)
 
 
 # 统一下单
@@ -245,6 +246,6 @@ def get_jsapi_params(openid, details, fee):
             }            # 6. paySign签名
             paySign = generate_sign(data)
             data["paySign"] = paySign  # 加入签名
-            logging.error(f'Debugging payments: {paySign}')
             # 7. 传给前端的签名后的参数
             return data
+    return {'error': xmlmsg['xml']['return_msg'] }
