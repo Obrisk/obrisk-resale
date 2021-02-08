@@ -23,6 +23,23 @@ WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy_results"
 
 
+def get_md5(data, salt=True):
+    if salt:
+        return hashlib.md5('get{0}{1}md5'.format(data, time.time()).encode(encoding='UTF-8')).hexdigest()
+    else:
+        return hashlib.md5(data.encode(encoding='UTF-8')).hexdigest()
+
+
+def get_sign_str(sign_dict):
+    data = ''
+    sort_keys = sorted(sign_dict)  # 从小到大排序
+    for i, key in enumerate(sort_keys):
+        data += '{0}={1}&'.format(key, sign_dict.get(key, ''))
+    data += 'key={0}'.format(API_KEY)
+
+    return get_md5(data, False).upper()
+
+
 def random_str(randomlength=8):
     """
     Generate random string
@@ -90,19 +107,31 @@ def trans_dict_to_xml(data_dict):
     return '<xml>{}</xml>'.format(''.join(data_xml)).encode('utf-8')
 
 
+def get_xml_str(sign_dict):
+    xml_data = '<xml>'
+    for k, v in sign_dict.items():
+        xml_data += '<{0}>{1}</{0}>'.format(k, v)
+    xml_data += '</xml>'
+
+    return xml_data
+
+
 def wx_pay_unifiedorder(detail):
     """
     Visit WarmPay unified ordering interface
     :param detail:
     :return:
     """
-    detail['sign'] = get_sign(detail, API_KEY)
-    print(detail)
-    xml = trans_dict_to_xml(detail)  # 转换字典为XML
+    detail['sign'] = get_sign_str(detail)
+
+    xml = get_xml_str(detail)
+
+    #detail['sign'] = get_sign(detail, API_KEY)
+    #xml = trans_dict_to_xml(data)  # 转换字典为XML
     # 以POST方式向微信公众平台服务器发起请求
     response = requests.request('post', WXORDER_URL, data=xml)
     # 将请求返回的数据转为字典
-    data_dict = trans_xml_to_dict(response.content)
+    #data_dict = trans_xml_to_dict(response.content)
     return response.content
 
 
@@ -150,6 +179,9 @@ def get_jsapi_params(request, openid, title, details, total_fee):
         'trade_type': 'JSAPI',  # 公众号支付类型
     }
     # 调用微信统一下单支付接口url
+
+
+
     notify_result = wx_pay_unifiedorder(params)
     notify_result = trans_xml_to_dict(notify_result)
     # print('向微信请求', notify_result)
