@@ -7,9 +7,9 @@ import random
 import string
 from random import Random
 
+from ipware import get_client_ip
 from bs4 import BeautifulSoup
 from django.core.cache import cache
-from django.conf import settings
 from config.settings.base import env
 
 
@@ -17,21 +17,10 @@ APPID = env('WECHAT_APPID')
 APP_SECRET = env('WECHAT_APPSECRET')
 API_KEY = env('WECHAT_API_KEY')
 # On wechat merchant ac, account settings then security API
-MCHID = env.int('WECHAT_MERCHANT_ID')
+MCH_ID = env.int('WECHAT_MERCHANT_ID')
+MCHID = MCH_ID + 1 - 1
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
 NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy_results"
-
-LOCAL_IP = getattr(settings, 'AWS_LOCAL_IP', '127.0.0.1')
-
-CREATE_IP = cache.get(f'public_ip_{LOCAL_IP}')
-
-if CREATE_IP is None:
-    CREATE_IP = requests.get('https://api.ipify.org/?format=raw').text,
-    cache.set(
-        f'public_ip_{LOCAL_IP}',
-        CREATE_IP,
-        None
-    )
 
 
 def random_str(randomlength=8):
@@ -108,7 +97,7 @@ def wx_pay_unifiedorder(detail):
     :return:
     """
     detail['sign'] = get_sign(detail, API_KEY)
-    # print(detail)
+    print(detail)
     xml = trans_dict_to_xml(detail)  # 转换字典为XML
     # 以POST方式向微信公众平台服务器发起请求
     response = requests.request('post', WXORDER_URL, data=xml)
@@ -127,27 +116,41 @@ def create_out_trade_no():
         return result
 
 
-def get_jsapi_params(openid, details, total_fee):
+def get_jsapi_params(request, openid, title, details, total_fee):
     """
     Get the parameters required for WeChat Jsapi payment
     :param openid: 用户的openid
     :return:
     """
+    client_ip = cache.get(
+            f'user_ipaddr_{openid}'
+        )
+    if client_ip is None:
+        client_ip, _ = get_client_ip(
+                request,
+                proxy_trusted_ips=['63.0.0.5','63.1']
+            )
 
+        cache.set(
+                f'user_ipaddr_{openid}',
+                client_ip,
+                60 * 60 * 2
+            )
     params = {
         'appid': APPID,  # APPID
+        'attach':'{0}'.format(title),  # 商品描述
+        'body': '{0}'.format(details),  # 商品描述
         'mch_id': MCHID,  # 商户号
         'nonce_str': random_str(16),  # 随机字符串
-        'out_trade_no': create_out_trade_no(),  # 订单号
-        'total_fee': int(round(float(total_fee), 2) * 100),  # 订单总金额,1代表1分钱
-        'spbill_create_ip': CREATE_IP,  # 发送请求服务器的IP地址
+        'notify_url': NOTIFY_URL,  # 微信支付结果回调url
         'openid': openid,
-        'notify_url': '{0}/wxpayresult/'.format('你的域名'),  # 微信支付结果回调url
-        'body': '{0}'.format(details),  # 商品描述
+        'out_trade_no': create_out_trade_no(),  # 订单号
+        'spbill_create_ip': client_ip,  # 发送请求服务器的IP地址
+        'total_fee': int(round(float(total_fee), 2) * 100),  # 订单总金额,1代表1分钱
         'trade_type': 'JSAPI',  # 公众号支付类型
     }
     # 调用微信统一下单支付接口url
-    notify_result = wx_pay_unifiedorde(params)
+    notify_result = wx_pay_unifiedorder(params)
     notify_result = trans_xml_to_dict(notify_result)
     # print('向微信请求', notify_result)
     if 'return_code' in notify_result and notify_result['return_code'] == 'FAIL':
@@ -234,8 +237,7 @@ def iget_jsapi_params(openid, details, fee):
         "body": details,     # 支付说明
         "out_trade_no": out_trade_no,   # 自己生成的订单号
         "total_fee": fee,
-        "spbill_create_ip": CREATE_IP,    # 发起统一下单的ip
-        "notify_url": NOTIFY_URL,
+        #"spbill_create_ip": CREATE_IP,    # 发起统一下单的ip "notify_url": NOTIFY_URL,
         "trade_type": 'JSAPI',      # 小程序写JSAPI
         "openid": openid,
     }
