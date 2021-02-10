@@ -18,5 +18,6 @@ sentry_sdk>=0.14.1 #https://sentry.io/obrisk/obrisk-e7/getting-started/python-dj
 #Below oss package will install django-oss-storage 1.2 better than aliyun package
 #It needs username and password, I'm not sure why
 #git+https://gitee.com/enlangs/django-oss-storage.git #https://gitee.com/enlangs/django-oss-storage
+django-oss-storage
 django-storages>=1.6.5  # https://github.com/jschneier/django-storages
 
