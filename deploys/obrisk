@@ -14,7 +14,7 @@ upstream websocket_server {
 
 
 server {
-    listen 80;
+    listen 80 http2;
 
     server_name obrisk.com www.obrisk.com in.obrisk.com; 
 
