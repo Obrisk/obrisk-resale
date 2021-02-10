@@ -38,10 +38,11 @@ eval "$(ssh-agent -s)"
 ssh-add -k ~/.ssh/id_rsa
 
 RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
+TOKEN='xxxxxxxxxsecret-tokenxxxxxxxxxx'
+#See how to get this token https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
 
-#Copy and pasting these lines to other editors turns to destroy the spacing encoding and the bash can't parse spaces
-
-curl -H "Authorization: token $2" --data '{"title":"EC2-ubuntu-instance-$3","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
+#Sometimes pasting these lines to other editors destroy the spacing encoding and the bash will fail to parse spaces
+curl -H "Authorization: token $TOKEN" --data '{"title":"EC2-ubuntu-instance-$3","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
 
 git clone git@github.com:elshaddae/obdev2018.git
 
