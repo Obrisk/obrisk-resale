@@ -37,7 +37,9 @@ def get_sign_str(sign_dict):
         data += '{0}={1}&'.format(key, sign_dict.get(key, ''))
     data += 'key={0}'.format(API_KEY)
 
-    return get_md5(data, False).upper()
+    sign = get_md5(data, False).upper()
+    logging.error('%s', data, stack_info=True, extra={'sign': sign})
+    return sign
 
 
 def random_str(randomlength=8):
@@ -78,6 +80,8 @@ def get_sign(data_dict, key):
     md5 = hashlib.md5()  # 使用MD5加密模式
     md5.update(params_str.encode('utf-8'))  # 将参数字符串传入
     sign = md5.hexdigest().upper()  # 完成加密并转为大写
+
+    logging.error('%s', params_str, stack_info=True, extra={'sign': sign})
     return sign
 
 
@@ -122,9 +126,8 @@ def wx_pay_unifiedorder(detail):
     :param detail:
     :return:
     """
-    detail['sign'] = get_sign_str(detail)
-
     xml = get_xml_str(detail)
+    logging.error(xml)
 
     #detail['sign'] = get_sign(detail, API_KEY)
     #xml = trans_dict_to_xml(data)  # 转换字典为XML
@@ -176,12 +179,11 @@ def get_jsapi_params(request, openid, title, details, total_fee):
         'out_trade_no': create_out_trade_no(),  # 订单号
         'spbill_create_ip': client_ip,  # 发送请求服务器的IP地址
         'total_fee': int(round(float(total_fee), 2) * 100),  # 订单总金额,1代表1分钱
-        'trade_type': 'JSAPI',  # 公众号支付类型
+        'trade_type': 'JSAPI'
     }
     # 调用微信统一下单支付接口url
 
-
-
+    params['sign'] = get_sign(params, API_KEY)
     notify_result = wx_pay_unifiedorder(params)
     notify_result = trans_xml_to_dict(notify_result)
     # print('向微信请求', notify_result)
@@ -278,7 +280,6 @@ def iget_jsapi_params(openid, details, fee):
     param["sign"] = sign  # 加入签名
     # 3. 调用接口
 
-    logging.error(f'xml data {xml}')
     xmlmsg = send_xml_request(url, param)
     # 4. 获取prepay_id
     if xmlmsg['xml']['return_code'] == 'SUCCESS':
