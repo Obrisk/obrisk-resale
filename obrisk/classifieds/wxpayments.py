@@ -1,6 +1,7 @@
 import logging
 import hashlib
 import xmltodict
+import dicttoxml
 import time
 import requests
 import random
@@ -11,6 +12,9 @@ from ipware import get_client_ip
 from bs4 import BeautifulSoup
 from django.core.cache import cache
 from config.settings.base import env
+
+from wechatpy.pay.api import WeChatOrder
+from wechatpy.pay import WeChatPay
 
 
 APPID = env('WECHAT_APPID')
@@ -38,7 +42,7 @@ def get_sign_str(sign_dict):
     data += 'key={0}'.format(API_KEY)
 
     sign = get_md5(data, False).upper()
-    logging.error('%s', data, stack_info=True, extra={'sign': sign})
+    #logging.error('%s', data, stack_info=True, extra={'sign': sign})
     return sign
 
 
@@ -81,7 +85,7 @@ def get_sign(data_dict, key):
     md5.update(params_str.encode('utf-8'))  # 将参数字符串传入
     sign = md5.hexdigest().upper()  # 完成加密并转为大写
 
-    logging.error('%s', params_str, stack_info=True, extra={'sign': sign})
+    #logging.error('%s', params_str, stack_info=True, extra={'sign': sign})
     return sign
 
 
@@ -126,16 +130,17 @@ def wx_pay_unifiedorder(detail):
     :param detail:
     :return:
     """
-    xml = get_xml_str(detail)
-    logging.error(xml)
+    xml = dicttoxml.dicttoxml(detail, custom_root="xml")
+    #logging.error(xml)
 
     #detail['sign'] = get_sign(detail, API_KEY)
     #xml = trans_dict_to_xml(data)  # 转换字典为XML
     # 以POST方式向微信公众平台服务器发起请求
     response = requests.request('post', WXORDER_URL, data=xml)
+    response.encoding = 'utf8'
     # 将请求返回的数据转为字典
     #data_dict = trans_xml_to_dict(response.content)
-    return response.content
+    return response.text
 
 
 def create_out_trade_no():
@@ -170,8 +175,8 @@ def get_jsapi_params(request, openid, title, details, total_fee):
             )
     params = {
         'appid': APPID,  # APPID
-        'attach':'{0}'.format(title),  # 商品描述
-        'body': '{0}'.format(details),  # 商品描述
+        'body':  '{0}'.format(details), # 商品描述
+        'attach': '{0}'.format(title),  # 商品描述
         'mch_id': MCHID,  # 商户号
         'nonce_str': random_str(16),  # 随机字符串
         'notify_url': NOTIFY_URL,  # 微信支付结果回调url
@@ -183,34 +188,26 @@ def get_jsapi_params(request, openid, title, details, total_fee):
     }
     # 调用微信统一下单支付接口url
 
-    params['sign'] = get_sign(params, API_KEY)
-    notify_result = wx_pay_unifiedorder(params)
-    notify_result = trans_xml_to_dict(notify_result)
-    # print('向微信请求', notify_result)
-    if 'return_code' in notify_result and notify_result['return_code'] == 'FAIL':
-        return {'error': notify_result['return_msg']}
-    if 'prepay_id' not in notify_result:
-        return {'error': 'Prepay_id not returned successfully'}
-    params['prepay_id'] = notify_result['prepay_id']
-    params['timeStamp'] = int(time.time())
-    params['nonceStr'] = random_str(16)
-    params['sign'] = get_sign({'appId': APPID,
-                       "timeStamp": params['timeStamp'],
-                       'nonceStr': params['nonceStr'],
-                       'package': 'prepay_id=' + params['prepay_id'],
-                       'signType': 'MD5',
-                   },
-                   API_KEY
-               )
-    ret_params = {
-        'package': "prepay_id=" + params['prepay_id'],
-        'appid': APPID,
-        'timeStamp': str(params['timeStamp']),
-        'nonceStr': params['nonceStr'],
-        'sign': params['sign'],
-
-    }
-    return ret_params
+    #params['sign'] = get_sign(params, API_KEY)
+    #notify_result = wx_pay_unifiedorder(params)
+    #notify_result = xmltodict.parse(notify_result)['xml']
+    client = WeChatPay(APPID, API_KEY, MCHID)
+    wxobj = WeChatOrder(client=client)
+   
+    try:
+        notify_result = wxobj.create(
+                params['trade_type'], 
+                params['body'], 
+                params['total_fee'], 
+                params['notify_url'], 
+                client_ip = params['spbill_create_ip'], 
+                user_id = params['openid'], 
+                out_trade_no = params['out_trade_no']
+            )
+        logging.error(notify_result)
+    except Exception:
+        pass
+    return {'error': 'Prepay_id not returned successfully'}
 
 
 # 统一下单
@@ -247,13 +244,39 @@ def send_xml_request(url, param):
     # xml 2 dict
     #msg = response.text
     #xmlmsg = xmltodict.parse(msg)
-    response.encoding = 'utf-8'
+    response.encoding = 'utf8'
     #return trans_xml_to_dict(response.text)
     return xmltodict.parse(response.text)
 
 
 # 统一下单
 def iget_jsapi_params(openid, details, fee):
+    notify_result = {}
+    if 'return_code' in notify_result and notify_result['return_code'] == 'FAIL':
+        return {'error': notify_result['return_msg']}
+    if 'prepay_id' not in notify_result:
+        params['prepay_id'] = notify_result['prepay_id']
+        params['timeStamp'] = int(time.time())
+        params['nonceStr'] = random_str(16)
+        params['sign'] = get_sign({'appId': APPID,
+                           "timeStamp": params['timeStamp'],
+                           'nonceStr': params['nonceStr'],
+                           'package': 'prepay_id=' + params['prepay_id'],
+                           'signType': 'MD5',
+                       },
+                       API_KEY
+                   )
+        ret_params = {
+            'package': "prepay_id=" + params['prepay_id'],
+            'appid': APPID,
+            'timeStamp': str(params['timeStamp']),
+            'nonceStr': params['nonceStr'],
+            'sign': params['sign'],
+
+        }
+        return ret_params
+
+
     url = WXORDER_URL
     nonce_str = generate_randomStr()        # 订单中加nonce_str字段记录（回调判断使用）
     out_trade_no = order_num('1202')     # 支付单号，只能使用一次，不可重复支付
@@ -279,6 +302,9 @@ def iget_jsapi_params(openid, details, fee):
     sign = generate_sign(param)
     param["sign"] = sign  # 加入签名
     # 3. 调用接口
+
+
+
 
     xmlmsg = send_xml_request(url, param)
     # 4. 获取prepay_id

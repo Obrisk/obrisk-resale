@@ -36,6 +36,7 @@ django_celery_beat>=1.5.0 #https://github.com/celery/django-celery-beat
 djangorestframework #https://github.com/encode/django-rest-framework
 django-ipware #https://github.com/un33k/django-ipware
 xmltodict #https://github.com/martinblech/xmltodict
+wechatpy #https://github.com/wechatpy/wechatpy
 
 
 # Channels
