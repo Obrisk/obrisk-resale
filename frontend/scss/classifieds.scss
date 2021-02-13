@@ -311,8 +311,8 @@ a:hover.btn-action {
   align-items: flex-end;
   margin: 0;
   margin-top: 4px;
-   justify-content: space-between;
-   width: 100%;
+  justify-content: space-evenly;
+  width: 100%;
 }
 
 
@@ -512,6 +512,25 @@ a {
 
 .btn-email {
      width: 70%;
+}
+
+.round-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    a {
+        border-radius: 50%;
+        padding: 0px;
+        width: 42px;
+      }
+}
+
+.vd-container {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
 }
 
 .off-ac {
