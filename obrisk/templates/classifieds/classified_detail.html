@@ -183,12 +183,14 @@
         <br/>
 
         {% if classified.video %}
-              <video id="classified-video" class="vd-container"
+              <video id="classified-video" class="vd-container" height="400vh" preload="metadata" 
                   x5-video-player-type="h5-page" controls controlsList="nodownload"
-                  crossorigin webkit-playsinline playsinline preload control>
-                  <source src="{{oss}}/{{classified.video}}" type="video/mp4">
+                  crossorigin webkit-playsinline playsinline preload control
+		  poster="{{oss}}/{{images.0.image_thumb }}" style="background-color: #000;" >
+                  <source src="{{oss}}/{{classified.video}}#t=0.5" type="video/mp4">
                   Your browser doesn' t support HTML5 video tag. 
               </video>
+	<br/> <br/><br/>
         {% endif %}
 
         <!-- Similar lassified -->
