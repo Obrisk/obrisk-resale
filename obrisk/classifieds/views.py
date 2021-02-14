@@ -77,14 +77,14 @@ def classified_list(request, tag_slug=None):
         city = request.user.city
     else:
         city = cache.get(
-                f'user_city_{request.COOKIES.get("visitor_id")}'
+                f'user_city_{request.session.get("visitor_id")}'
             )
+
         if city is None:
             client_ip, _ = get_client_ip(
                     request,
                     proxy_trusted_ips=['63.0.0.5','63.1']
                 )
-            logging.error(f'client IP {client_ip}')
 
             if client_ip is None:
                 city = "Hangzhou"
@@ -93,7 +93,7 @@ def classified_list(request, tag_slug=None):
                 city = json.loads(info.text)['city']
 
             city = cache.set(
-                    f'user_city_{request.COOKIES.get("visitor_id")}',
+                    f'user_city_{request.session.get("visitor_id")}',
                     city,
                     60 * 60 * 2
                 )

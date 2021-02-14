@@ -538,20 +538,20 @@ class AuthView(WechatViewSet):
 
         if request.COOKIES.get("active-chat") is not None:
             cache.set(
-                f'chat_cookie_{request.COOKIES.get("visitor_id")}',
+                f'chat_cookie_{request.session.get("visitor_id")}',
                 request.COOKIES.get("active-chat"),
                 1500
             )
 
         if nxt is not None and nxt != 'None':
             cache.set(
-                f'nxt_{request.COOKIES.get("visitor_id")}',
+                f'nxt_{request.session.get("visitor_id")}',
                 nxt,
                 1500
             )
         if request.COOKIES.get("classified") is not None:
             cache.set(
-                f'classified_{request.COOKIES.get("visitor_id")}',
+                f'classified_{request.session.get("visitor_id")}',
                 request.COOKIES.get("classified"),
                 1500
             )
@@ -561,13 +561,13 @@ class AuthView(WechatViewSet):
 
 def redirect_after_login(request, social_login=None):
     nxt = cache.get(
-        f'nxt_{request.COOKIES.get("visitor_id")}'
+        f'nxt_{request.session.get("visitor_id")}'
     )
     classified = cache.get(
-        f'classified_{request.COOKIES.get("visitor_id")}'
+        f'classified_{request.session.get("visitor_id")}'
     )
     chat_cookie = cache.get(
-       f'chat_cookie_{request.COOKIES.get("visitor_id")}'
+       f'chat_cookie_{request.session.get("visitor_id")}'
     )
 
 
@@ -593,13 +593,13 @@ def redirect_after_login(request, social_login=None):
 
 def ajax_redirect_after_login(request, social_login=None):
     nxt = cache.get(
-        f'nxt_{request.COOKIES.get("visitor_id")}',
+        f'nxt_{request.session.get("visitor_id")}',
     )
     classified = cache.get(
-        f'classified_{request.COOKIES.get("visitor_id")}',
+        f'classified_{request.session.get("visitor_id")}',
     )
     chat_cookie = cache.get(
-       f'chat_cookie_{request.COOKIES.get("visitor_id")}'
+       f'chat_cookie_{request.session.get("visitor_id")}'
     )
 
     if nxt is None:
@@ -910,7 +910,7 @@ def wechat_auto_login(request, **kwargs):
     )
 
     nxt = request.META.get('HTTP_REFERER')
-    cache.set(f'nxt_{request.COOKIES.get("visitor_id")}', nxt, 60)
+    cache.set(f'nxt_{request.session.get("visitor_id")}', nxt, 60)
 
     return ajax_redirect_after_login(request)
 
