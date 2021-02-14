@@ -202,11 +202,9 @@ def get_jsapi_params(request, openid, title, details, total_fee):
                 params['notify_url'], 
                 client_ip = params['spbill_create_ip'], 
                 user_id = params['openid'], 
-                out_trade_no = params['out_trade_no']
             )
-        logging.error(notify_result)
-    except Exception:
-        pass
+    except Exception as e:
+        logging.error('Wechat py Exception', exc_info=e)
     return {'error': 'Prepay_id not returned successfully'}
 
 
