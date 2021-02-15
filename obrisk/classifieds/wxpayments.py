@@ -15,6 +15,7 @@ from config.settings.base import env
 
 from wechatpy.pay.api import WeChatOrder
 from wechatpy.pay import WeChatPay
+from wechatpy.exceptions import WeChatPayException
 
 
 APPID = env('WECHAT_APPID')
@@ -192,20 +193,46 @@ def get_jsapi_params(request, openid, title, details, total_fee):
     #notify_result = wx_pay_unifiedorder(params)
     #notify_result = xmltodict.parse(notify_result)['xml']
     client = WeChatPay(APPID, API_KEY, MCHID)
-    wxobj = WeChatOrder(client=client)
    
     try:
-        notify_result = wxobj.create(
+        notify_result = client.order.create(
                 params['trade_type'], 
                 params['body'], 
                 params['total_fee'], 
                 params['notify_url'], 
-                client_ip = params['spbill_create_ip'], 
                 user_id = params['openid'], 
+                client_ip = params['spbill_create_ip']
             )
+    except WeChatPayException as e:
+        return {'error': e}
     except Exception as e:
         logging.error('Wechat py Exception', exc_info=e)
-    return {'error': 'Prepay_id not returned successfully'}
+        return {'error': f'Wechat pay failed {e}'}
+
+    else:
+        if 'return_code' in notify_result and notify_result['return_code'] == 'FAIL':
+            return {'error': notify_result['return_msg']}
+        if 'prepay_id' not in notify_result:
+            params['prepay_id'] = notify_result['prepay_id']
+            params['timeStamp'] = int(time.time())
+            params['nonceStr'] = random_str(16)
+            params['sign'] = get_sign({'appId': APPID,
+                               "timeStamp": params['timeStamp'],
+                               'nonceStr': params['nonceStr'],
+                               'package': 'prepay_id=' + params['prepay_id'],
+                               'signType': 'MD5',
+                           },
+                           API_KEY
+                       )
+            ret_params = {
+                'package': "prepay_id=" + params['prepay_id'],
+                'appid': APPID,
+                'timeStamp': str(params['timeStamp']),
+                'nonceStr': params['nonceStr'],
+                'sign': params['sign'],
+
+            }
+            return ret_params
 
 
 # 统一下单
@@ -249,32 +276,6 @@ def send_xml_request(url, param):
 
 # 统一下单
 def iget_jsapi_params(openid, details, fee):
-    notify_result = {}
-    if 'return_code' in notify_result and notify_result['return_code'] == 'FAIL':
-        return {'error': notify_result['return_msg']}
-    if 'prepay_id' not in notify_result:
-        params['prepay_id'] = notify_result['prepay_id']
-        params['timeStamp'] = int(time.time())
-        params['nonceStr'] = random_str(16)
-        params['sign'] = get_sign({'appId': APPID,
-                           "timeStamp": params['timeStamp'],
-                           'nonceStr': params['nonceStr'],
-                           'package': 'prepay_id=' + params['prepay_id'],
-                           'signType': 'MD5',
-                       },
-                       API_KEY
-                   )
-        ret_params = {
-            'package': "prepay_id=" + params['prepay_id'],
-            'appid': APPID,
-            'timeStamp': str(params['timeStamp']),
-            'nonceStr': params['nonceStr'],
-            'sign': params['sign'],
-
-        }
-        return ret_params
-
-
     url = WXORDER_URL
     nonce_str = generate_randomStr()        # 订单中加nonce_str字段记录（回调判断使用）
     out_trade_no = order_num('1202')     # 支付单号，只能使用一次，不可重复支付
