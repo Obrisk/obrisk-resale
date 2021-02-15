@@ -192,7 +192,13 @@ def get_jsapi_params(request, openid, title, details, total_fee):
     #params['sign'] = get_sign(params, API_KEY)
     #notify_result = wx_pay_unifiedorder(params)
     #notify_result = xmltodict.parse(notify_result)['xml']
-    client = WeChatPay(APPID, API_KEY, MCHID)
+    client = WeChatPay(
+            APPID,
+            API_KEY,
+            MCHID,
+            mch_cert='/home/ubuntu/obdev2018/certs/apiclient_cert.pem',
+            mch_key='/home/ubuntu/obdev2018/certs/apiclient_key.pem'
+        )
    
     try:
         notify_result = client.order.create(

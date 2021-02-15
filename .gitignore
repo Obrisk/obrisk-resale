@@ -77,6 +77,8 @@ obrisk/static/frontend/
 
 node_modules/
 
+certs/
+
 *.out
 
 celerybeat*
