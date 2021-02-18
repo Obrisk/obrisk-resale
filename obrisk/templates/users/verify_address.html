@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %} Verify Address{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/classified_order.css' %}" rel="stylesheet">
+
+{% endblock head %}
+
+{% block content %}
+<div>
+  <div class="profile-header">
+      {% if object.picture %}
+          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
+            style="width:250px;height:250px;border-radius: 50%;" id="avatar" class="mr-4">
+      {% else %}
+          <img id="avatar" src="{% static 'img/user.png' %}" height="250px" class="mr-4"
+            style="width:250px;height:250px;border-radius: 50%;" alt="No Profile Picture" />
+      {% endif %}
+
+      <h1 class="title is-4">{{ object.username }}</h1>
+
+      <form enctype="multipart/form-data" class="update form-horizontal m-3" method="post"
+        action="{% url 'users:update_address' %}">
+        {% csrf_token %}
+        {{ form|crispy }}
+        
+        <div class="grp-btns controls">
+          <button type="submit" class="button accent-button">{% trans 'Verify Address' %}</button>
+        </div>
+      </form>
+  </div>
+
+
+</div>
+{% endblock content %}

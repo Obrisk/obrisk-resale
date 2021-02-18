@@ -235,13 +235,15 @@ class ClassifiedOrder(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = first_slug = slugify(
-                    f"{self.classified.title}-{uuid.uuid8().hex}",
+                    f"{self.classified.title}-{uuid.uuid4().hex}",
                     to_lower=True, max_length=300)
 
             for x in itertools.count(1):
                 if not ClassifiedOrder.objects.filter(slug=self.slug).exists():
                     break
                 self.slug = '%s-%d' % (first_slug, x)
+
+        super().save(*args, **kwargs)
 
 
 class OfficialAd(models.Model):

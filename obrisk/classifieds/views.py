@@ -464,7 +464,6 @@ def initiate_wxpy_info(request, *args, **kwargs):
 
     if classified:
         openid = request.user.wechat_openid
-
         if openid:
             return render(
                 request,
@@ -480,9 +479,6 @@ def initiate_wxpy_info(request, *args, **kwargs):
                   )
                 }
             )
-            #3 hours cache in case Wechat delays to notify us of a
-            #successful payment
-            cache.set(f'wxpy_order_{openid}', classified.id, 10800)
         else:
             messages.success(
                     request,
@@ -499,6 +495,27 @@ class Wxpay_Result(View):
     """
     微信支付结果回调通知路由
     """
+    def get(self, request, *args, **kwargs):
+        classified = Classified.objects.filter(
+                slug=request.GET.get('sg', None)
+            ).first()
+
+        if classified:
+            classified.status='E'
+            classified.save()
+
+            ClassifiedOrder.objects.create(
+               buyer=request.user,
+               classified=classified
+            )
+            return JsonResponse({
+                'success': True
+            })
+        else:
+            return JsonResponse({
+                'success': False
+            })
+
     def post(self, request, *args, **kwargs):
         """
         微信支付成功后会自动回调
@@ -539,21 +556,13 @@ class Wxpay_Result(View):
         #Return the received result to WeChat otherwise
         #WeChat will send a post request every 8 minutes
         if sign == back_sign and data_dict['return_code'] == 'SUCCESS':
-            classified = cache.get(f"wxpy_order_{data_dict['openid']}")
-            if classified:
-                ClassifiedOrder.objects.create(
-                   buyer=user_model.objects.filter(openid=data_dict['openid']).first(),
-                   classified=Classified.objects.filter(id=classified).first(),
-                   buyer_transaction_id = data_dict['transaction_id']
-                )
-                return HttpResponse(xmltodict.unparse(
-                            {'return_code': 'SUCCESS', 'return_msg': 'OK'},
-                            pretty=True
-                        )
+            logging.error(
+                f'Payment succeeded with signature {sign}'
+            )
+            return HttpResponse(xmltodict.unparse(
+                        {'return_code': 'SUCCESS', 'return_msg': 'OK'},
+                        pretty=True
                     )
-            else:
-                logging.error(
-                    f'Payment succeeded but classified is not cached {data_dict}'
                 )
         return HttpResponse(xmltodict.unparse(
                 {'return_code': 'FAIL', 'return_msg': 'SIGNERROR'},

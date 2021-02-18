@@ -14,6 +14,7 @@ from django.core.cache import cache
 from config.settings.base import env
 
 from wechatpy.pay.api import WeChatOrder
+from wechatpy.pay.api.jsapi import WeChatJSAPI
 from wechatpy.pay import WeChatPay
 from wechatpy.exceptions import WeChatPayException
 
@@ -176,8 +177,8 @@ def get_jsapi_params(request, openid, title, details, total_fee):
             )
     params = {
         'appid': APPID,  # APPID
-        'body':  '{0}'.format(details), # 商品描述
-        'attach': '{0}'.format(title),  # 商品描述
+        'body': '{0}'.format(title[:127]),  # 商品描述
+        'detail':  '{0}'.format(details[:5999]), # 商品描述
         'mch_id': MCHID,  # 商户号
         'nonce_str': random_str(16),  # 随机字符串
         'notify_url': NOTIFY_URL,  # 微信支付结果回调url
@@ -189,15 +190,10 @@ def get_jsapi_params(request, openid, title, details, total_fee):
     }
     # 调用微信统一下单支付接口url
 
-    #params['sign'] = get_sign(params, API_KEY)
-    #notify_result = wx_pay_unifiedorder(params)
-    #notify_result = xmltodict.parse(notify_result)['xml']
     client = WeChatPay(
             APPID,
             API_KEY,
             MCHID,
-            mch_cert='/home/ubuntu/obdev2018/certs/apiclient_cert.pem',
-            mch_key='/home/ubuntu/obdev2018/certs/apiclient_key.pem'
         )
    
     try:
@@ -207,7 +203,8 @@ def get_jsapi_params(request, openid, title, details, total_fee):
                 params['total_fee'], 
                 params['notify_url'], 
                 user_id = params['openid'], 
-                client_ip = params['spbill_create_ip']
+                client_ip = params['spbill_create_ip'],
+                detail = params['detail']
             )
     except WeChatPayException as e:
         return {'error': e}
@@ -218,27 +215,18 @@ def get_jsapi_params(request, openid, title, details, total_fee):
     else:
         if 'return_code' in notify_result and notify_result['return_code'] == 'FAIL':
             return {'error': notify_result['return_msg']}
-        if 'prepay_id' not in notify_result:
-            params['prepay_id'] = notify_result['prepay_id']
-            params['timeStamp'] = int(time.time())
-            params['nonceStr'] = random_str(16)
-            params['sign'] = get_sign({'appId': APPID,
-                               "timeStamp": params['timeStamp'],
-                               'nonceStr': params['nonceStr'],
-                               'package': 'prepay_id=' + params['prepay_id'],
-                               'signType': 'MD5',
-                           },
-                           API_KEY
-                       )
-            ret_params = {
-                'package': "prepay_id=" + params['prepay_id'],
-                'appid': APPID,
-                'timeStamp': str(params['timeStamp']),
-                'nonceStr': params['nonceStr'],
-                'sign': params['sign'],
 
-            }
-            return ret_params
+        jsclient = WeChatJSAPI(client=client)
+        data = jsclient.get_jsapi_params(notify_result["prepay_id"], jssdk=True)
+        ret_params = {
+            'package': data["package"],
+            'appid': data['appId'],
+            'timestamp': str(data['timestamp']),
+            'nonceStr': data['nonceStr'],
+            'sign': data['paySign'],
+            'signType': data['signType'],
+        }
+        return ret_params 
 
 
 # 统一下单

@@ -59,7 +59,7 @@ from obrisk.users.tasks import update_prof_pic_async
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm,
-        SocialSignupCompleteForm )
+        SocialSignupCompleteForm, VerifyAddressForm)
 from .models import User
 from .phone_verification import send_sms
 
@@ -887,6 +887,22 @@ def complete_authentication(request):
 
     else:
         return redirect_after_login(request)
+
+
+
+class VerifyAddressView(LoginRequiredMixin, UpdateView):
+    form_class = VerifyAddressForm
+    template_name = 'users/verify_address.html'
+    model = User
+
+    def get_success_url(self):
+        messages.success(request, 'Delivery address confirmed!')
+        return reverse('classified:list')
+
+    def get_object(self):
+        # Only get the User record for the user making the request
+        return User.objects.get(username=self.request.user.username)
+
 
 
 @ajax_required

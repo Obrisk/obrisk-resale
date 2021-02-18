@@ -272,6 +272,37 @@ class UserForm(forms.ModelForm):
         }
 
 
+class VerifyAddressForm(forms.ModelForm):
+    province_region = ProvinceChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'province',
+                    'class': 'custom-select',
+                    'name': 'province_region',
+                    'autocomplete': 'on'
+            })
+        )
+    city = CityChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'city',
+                    'class': 'custom-select',
+                    'name': 'city',
+                    'autocomplete': 'on'
+            })
+        )
+
+    chinese_address = forms.CharField(required=False, label=("Full address (In Chinese)"))
+    phone_number = forms.CharField(required=False, label=("Full address (In Chinese)"))
+
+    class Meta:
+        model = User
+        fields = (
+                    "province_region", "city", "chinese_address", "phone_number"
+                )
+        help_texts = {
+            "chinese_address": "Full address in Chinese to be delivery services",
+        }
+
+
 class EmailSignupForm(SignupForm):
     province_region = forms.CharField(widget=forms.HiddenInput())
     city = forms.CharField(widget=forms.HiddenInput())
