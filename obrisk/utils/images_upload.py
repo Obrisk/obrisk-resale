@@ -19,7 +19,7 @@ from botocore.exceptions import ClientError
 import oss2
 from aliyunsdkcore import client
 from aliyunsdksts.request.v20150401 import AssumeRoleRequest
-from obrisk.classifieds.models import ClassifiedImages
+from obrisk.classifieds.models import ClassifiedImages, Classified
 from obrisk.stories.models import StoryImages, Stories
 from config.settings.base import env
 
@@ -348,6 +348,9 @@ def multipleImagesPersist(request, images_list, app, obj):
 
             else:
                 img_obj.image_thumb = thumb_name
+                if saved_objs == 0:
+                    obj.thumbnail = thumb_name
+                    obj.save()
                 if img_mid_name:
                     img_obj.image_mid_size = img_mid_name
                 img_obj.save()
@@ -432,37 +435,16 @@ def videoPersist(request, video, app, obj):
 
 @login_required
 @require_http_methods(["GET"])
-def bulk_update_classifieds_mid_images(request):
+def bulk_update_classifieds_thumb(request):
     """Function to update all images objects to have
     the mid size image."""
-    imgs = ClassifiedImages.objects.all()
+    cls = Classified.objects.all()
 
-    for index, img in enumerate(imgs):
-        d = str(datetime.datetime.now())
-
-        img_mid_name = "classifieds/" + slugify(str(img.classified.user)) + "/" + \
-                slugify(str(img.classified.title), allow_unicode=True, to_lower=True) + "/mid-size/" + d + str(index)
-
-        style_mid = 'image/resize,m_fill,h_400'
-
-        try:
-            process = "{0}|sys/saveas,o_{1},b_{2}".format(style_mid,
-                oss2.compat.to_string(base64.urlsafe_b64encode(
-                    oss2.compat.to_bytes(img_mid_name))),
-                oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
-            bucket.process_object(img.image, process)
-
-
-        except oss2.exceptions.NoSuchKey as e:
-            messages.error(request, f"Object with details doesn't exist {e}")
-            return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
-        except Exception as e:
-            logging.error(e)
-            messages.error(request, "This is trouble, restart the process!")
-            return HttpResponse("Error in updating mid-size-classifieds images!", content_type='text/plain')
-        else:
-            img.image_mid_size = img_mid_name
-            img.save()
+    for cl in cls:
+        img = ClassifiedImages.objects.filter(classified=cl).first()
+        if img is not None:
+            cl.thumbnail = img.image_thumb
+            cl.save()
 
     return redirect('classifieds:list')
 

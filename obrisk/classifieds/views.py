@@ -2,6 +2,7 @@ import logging
 import re
 import requests
 import json
+import urllib
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -11,11 +12,13 @@ from django.views.generic import (
         CreateView, UpdateView,
         DetailView, DeleteView)
 from django.urls import reverse, reverse_lazy
-from django.shortcuts import render, get_object_or_404
+
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.utils.decorators import method_decorator
 from django.http import (
-        JsonResponse, HttpResponse, HttpResponseRedirect
+        JsonResponse, HttpResponse,
+        HttpResponseRedirect, HttpResponseBadRequest
     )
 from django.views.decorators.http import require_http_methods
 from django.conf import settings
@@ -29,18 +32,28 @@ from django.db.models import (
         When, Value, IntegerField, Count)
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+import xmltodict
 from dal import autocomplete
 from ipware import get_client_ip
-from obrisk.utils.helpers import AuthorRequiredMixin
+from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.classifieds.models import (
-        Classified, OfficialAd,
+        Classified, OfficialAd, ClassifiedOrder,
         ClassifiedImages, ClassifiedTags)
 from obrisk.classifieds.forms import (
         ClassifiedForm, OfficialAdForm,
         ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
+from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
+from config.settings.base import env
+try:
+    from django.contrib.auth import get_user_model
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+    user_model = User
 
 
+API_KEY = env('WECHAT_API_V3_KEY')
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 
@@ -63,14 +76,13 @@ def classified_list(request, tag_slug=None):
     if request.user.is_authenticated:
         city = request.user.city
     else:
-        city = "Hangzhou"
-        '''city = cache.get(
-                f'user_city_{request.COOKIES.get("visitor_id")}'
+        city = cache.get(
+                f'user_city_{request.session.get("visitor_id")}'
             )
+
         if city is None:
             client_ip, _ = get_client_ip(
                     request,
-                    proxy_count=2,
                     proxy_trusted_ips=['63.0.0.5','63.1']
                 )
 
@@ -81,10 +93,10 @@ def classified_list(request, tag_slug=None):
                 city = json.loads(info.text)['city']
 
             city = cache.set(
-                    f'user_city_{request.COOKIES.get("visitor_id")}',
+                    f'user_city_{request.session.get("visitor_id")}',
                     city,
                     60 * 60 * 2
-                )'''
+                )
 
     classifieds_list = Classified.objects.get_active().values(
                     'title','price','city','slug'
@@ -303,8 +315,11 @@ class CreateClassifiedView(CreateView):
                     user.phone_number.national_number != 13300000000):
                 classified.phone_number = user.phone_number
 
-        if not classified.address and user.address:
-            classified.address = user.address
+        if not classified.english_address and user.english_address:
+            classified.english_address = user.english_address
+
+        if not classified.chinese_address and user.chinese_address:
+            classified.chinese_address = user.chinese_address
 
         classified.save()
 
@@ -429,3 +444,132 @@ class DetailClassifiedView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+@login_required
+@require_http_methods(["GET"])
+def initiate_wxpy_info(request, *args, **kwargs):
+    """
+    用户点击一个路由或者扫码进入这个views.py中的函数，首先获取用户的openid,
+    使用jsapi方式支付需要此参数
+    :param self:
+    :param request:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    classified = Classified.objects.filter(
+            slug=request.GET.get('sg', None)
+        ).first()
+
+    if classified:
+        openid = request.user.wechat_openid
+        if openid:
+            return render(
+                request,
+                'classifieds/create_classified_order.html',
+                {
+                 'classified': classified,
+                 'data': get_jsapi_params(
+                     request,
+                     openid,
+                     classified.title,
+                     classified.details,
+                     classified.price
+                  )
+                }
+            )
+        else:
+            messages.success(
+                    request,
+                    "You need to login with wechat to be able to pay"
+                )
+            return redirect('classifieds:classified', classified.slug)
+
+    else:
+        return HttpResponseBadRequest(
+                content=_('The request is invalid'))
+
+
+class Wxpay_Result(View):
+    """
+    微信支付结果回调通知路由
+    """
+    def get(self, request, *args, **kwargs):
+        classified = Classified.objects.filter(
+                slug=request.GET.get('sg', None)
+            ).first()
+
+        if classified:
+            classified.status='E'
+            classified.save()
+
+            ClassifiedOrder.objects.create(
+               buyer=request.user,
+               classified=classified
+            )
+            return JsonResponse({
+                'success': True
+            })
+        else:
+            return JsonResponse({
+                'success': False
+            })
+
+    def post(self, request, *args, **kwargs):
+        """
+        微信支付成功后会自动回调
+        返回参数为：
+        {'mch_id': '',
+        'time_end': '',
+        'nonce_str': '',
+        'out_trade_no': '',
+        'trade_type': '',
+        'openid': '',
+         'return_code': '',
+         'sign': '',
+         'bank_type': '',
+         'appid': '',
+         'transaction_id': '',
+          'cash_fee': '',
+          'total_fee': '',
+          'fee_type': '', '
+          is_subscribe': '',
+          'result_code': 'SUCCESS'}
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        Check the status of the corresponding business data
+        to determine whether the notification has been processed.
+        If it has not been processed, then proceed with the processing.
+        If it has been processed, the result will be returned directly.
+        Processing payment success logic
+        """
+
+        # 回调数据转字典 # print('支付回调结果', data_dict)
+        data_dict = xmltodict.parse(request.body)
+        sign = data_dict.pop('sign')  # 取出签名
+        back_sign = get_sign(data_dict, API_KEY)  # 计算签名
+
+        #Return the received result to WeChat otherwise
+        #WeChat will send a post request every 8 minutes
+        if sign == back_sign and data_dict['return_code'] == 'SUCCESS':
+            logging.error(
+                f'Payment succeeded with signature {sign}'
+            )
+            return HttpResponse(xmltodict.unparse(
+                        {'return_code': 'SUCCESS', 'return_msg': 'OK'},
+                        pretty=True
+                    )
+                )
+        return HttpResponse(xmltodict.unparse(
+                {'return_code': 'FAIL', 'return_msg': 'SIGNERROR'},
+                pretty=True
+            )
+        )
+
+
+class ClassifiedOrderView(DetailView):
+    model = ClassifiedOrder

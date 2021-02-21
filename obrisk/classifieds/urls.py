@@ -2,11 +2,8 @@ from django.views.generic.base import TemplateView
 from django.conf.urls import url
 from django.views.generic import TemplateView
 from obrisk.classifieds.search import SearchListView, get_suggestions
-from obrisk.classifieds.views import (
-        classified_list, ClassifiedTagsAutoComplete,
-        CreateClassifiedView, EditClassifiedView,
-        ClassifiedDeleteView, ReportClassifiedView,
-        DetailClassifiedView)
+from obrisk.classifieds.views import *
+from obrisk.utils.images_upload import bulk_update_classifieds_thumb
 
 app_name = 'classifieds'
 
@@ -30,14 +27,22 @@ urlpatterns = [
         SearchListView.as_view(),
         name='classifieds_results'),
     url(
-        r'^wxtest/$',
-        TemplateView.as_view(template_name="classifieds/share.html"),
-        name='wxsharetest'
+        r'^clsupdate/$',
+        bulk_update_classifieds_thumb,
+        name='bulk-update'
         ),
     url(
         r'^classifieds-suggestions/$',
         get_suggestions,
         name='classifieds_suggestions'),
+    url(
+        r'^orders/wxpy-complete/$',
+        initiate_wxpy_info,
+        name='initiate_wxpy_info'),
+    url(
+        r'^wsguatpotlfwccdi/wxjsapipy/inwxpy_results/$',
+        Wxpay_Result.as_view(),
+        name='inwxpy_res'),
     url(
         r'^report/(?P<pk>\d+)/$',
         ReportClassifiedView.as_view(),
@@ -50,6 +55,10 @@ urlpatterns = [
         r'^delete/(?P<pk>[-\w]+)/$',
         ClassifiedDeleteView.as_view(),
         name='delete_classified'),
+    url(
+        r'^orders/wsguatpotlfwccdi/(?P<slug>[-\w]+)/$',
+        ClassifiedOrderView.as_view(),
+        name='order_detail'),
     url(
         r'^(?P<slug>[-\w]+)/$',
         DetailClassifiedView.as_view(),

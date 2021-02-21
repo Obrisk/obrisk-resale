@@ -8,22 +8,90 @@
 {% endblock head %}
 
 {% block content %}
-<div class="mt-1">
-  <form class="mb-5" action="{% url 'classifieds:edit_classified' form.instance.pk %}" enctype="multipart/form-data"
-    id="classified-form" method="post" role="form">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <div class="form-group">
-      <a href="{% url 'classifieds:list' %}" class="button red-button">{% trans 'Cancel' %}</a>
-      <button type="submit" class="button accent-button update">{% trans 'Update' %}</button>
-    </div>
+
+    <form action="{% url 'classifieds:edit_classified' form.instance.pk %}"
+          name="classifiedForm" enctype="multipart/form-data"
+          id="classified-form" method="post" role="form">
+          {% csrf_token %}
+
+          <div class="notification is-danger is-hidden" role="alert">
+            <button type="button" class="delete close-dj-messages"></button>
+            <p id="notf-msg"></p>
+          </div>
+
+          <div class="column">
+                  <div class="field">
+                        <label>
+                            {% trans 'Title*' %}
+                        </label>
+                        <div class="control">
+                          <input type="text" id="id_title" name="title" maxlength="80" class="input" required
+                           placeholder="Enter your item title" value="{{ form.title.value|default_if_none:'' }}">
+                        </div>
+                  </div>
+
+                  <div class="field">
+                        <label>
+                            {% trans 'Details*' %}
+                        </label>
+                        <div class="control">
+                          <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required
+                            class="textarea" placeholder="Provide enough details">
+                            {{ form.details.value|default_if_none:"" }}
+                          </textarea>
+                        </div>
+                  </div>
+
+                  <div class="price">
+                      <label>
+                          {% trans 'Price*' %}
+                      </label>
+                      <span> ¥
+                          <input type="number" id="id_price" name="price" class="numberinput input" id="id_price"
+                            required step=".01" value="{{ form.price.value|default_if_none:'' }}" placeholder="Item price">
+                      <span>
+                  </div>
+                  <small> {% trans '0 for GIVEAWAY' %}
+                  </small>
+
+                  <div class="field">
+                        <label>
+                            {% trans 'Address (English)' %}
+                        </label>
+                        <div class="control">
+                              <input type="text" name="english_address" value="{{ form.english_address.value|default_if_none:'' }}"
+                              class="textinput textInput form-control" id="id_english_address">
+                        </div>
+                  </div>
+
+                  <div class="field">
+                        <label>
+                            {% trans 'Tags' %}
+                        </label>
+
+                        <div class="control">
+                            <input type="text" name="tags" value="{{ form.tags.value|default_if_none:'' }}"
+                            class="tagwidget form-control" id="id_tags">
+                        </div>
+                  </div>
+
+                  <div class="hidden-fields">
+                    <input type="hidden" id="id_edited" name="edited" class="input">
+                    <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
+                  </div>
+
+            <br/>
+            <div class="form-group">
+              <a href="{% url 'classifieds:list' %}" class="button red-button">{% trans 'Cancel' %}</a>
+              <button type="submit" class="button accent-button update">{% trans 'Update' %}</button>
+            </div>
+
+          <br/>
+
+     <!-- close form column -->
+     </div>
   </form>
 
-  <a href="{% url 'classifieds:delete_classified' classified.pk %}">
-    <span class="pull-right" aria-hidden="true" title="{% trans 'Delete this classified post' %}"> 🗑️Delete </span>
-  </a>
-
-</div>
 
 {{ form.media }}
 

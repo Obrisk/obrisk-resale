@@ -1,0 +1,69 @@
+@import "partials/simple-defaults";
+
+.cancel-button {
+   background-color: #81C1FF;
+   margin: auto 6% auto auto;
+}
+
+.clear {
+  clear: both;
+}
+
+.card-img {
+  border: 5px solid #fff;
+  border-radius: 10%;
+  object-fit: cover;
+  background-color: #fff;
+  width:250px;
+  height:250px;
+}
+
+.profile-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 25px;
+  background: #F6F6F6;
+  box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
+  padding: 15%;
+  margin-top: 18%;
+}
+
+.profile-wrapper {
+  border-radius: 10px;
+  background: #F6F6F6;
+  box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
+  padding: 45px;
+  margin-top: 45px;
+
+
+}
+
+.lazy-img {
+    text-align: center;
+    font-size: 10px;
+}
+
+@media screen and (max-width: 991px) {
+
+  .media-body {
+    margin-top: -10px;
+  }
+
+}
+
+
+
+@media screen and (max-width: 400px) {
+  .profile-header-avatar {
+    width : 175px;
+    height : 175px;
+  }
+
+}
+
+.media-body {
+  font-size: 32px;
+}
+
+

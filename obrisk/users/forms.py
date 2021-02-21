@@ -256,18 +256,50 @@ class UserForm(forms.ModelForm):
             })
         )
 
-    address = forms.CharField(required=False)
+    english_address = forms.CharField(required=False, label=("Address (English)"))
+    chinese_address = forms.CharField(required=False, label=("Full address (Chinese)"))
 
     class Meta:
         model = User
         fields = (
                     "name", "job_title","bio",
-                    "province_region", "city", "address"
+                    "province_region", "city", "chinese_address", "english_address"
                 )
         help_texts = {
             "bio": "A short introduction about yourself",
-            "address": "English address is preferred, \
-                        don't include your City and Province",
+            "english_address": "Don't include your City and Province",
+            "chinese_address": "Full address to be used for delivery services",
+        }
+
+
+class VerifyAddressForm(forms.ModelForm):
+    province_region = ProvinceChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'province',
+                    'class': 'custom-select',
+                    'name': 'province_region',
+                    'autocomplete': 'on'
+            })
+        )
+    city = CityChoiceField(
+        widget = SelectWidget(attrs={
+                    'id': 'city',
+                    'class': 'custom-select',
+                    'name': 'city',
+                    'autocomplete': 'on'
+            })
+        )
+
+    chinese_address = forms.CharField(required=False, label=("Full address (In Chinese)"))
+    phone_number = forms.CharField(required=False, label=("Full address (In Chinese)"))
+
+    class Meta:
+        model = User
+        fields = (
+                    "province_region", "city", "chinese_address", "phone_number"
+                )
+        help_texts = {
+            "chinese_address": "Full address in Chinese to be delivery services",
         }
 
 
