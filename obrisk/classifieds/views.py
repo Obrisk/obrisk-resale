@@ -53,7 +53,7 @@ except ImportError:
     user_model = User
 
 
-API_KEY = env('WECHAT_API_V3_KEY')
+API_KEY = env('WECHAT_API KEY')
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 
