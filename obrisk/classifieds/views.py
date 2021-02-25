@@ -487,8 +487,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
             return redirect('classifieds:classified', classified.slug)
 
     else:
-        return HttpResponseBadRequest(
-                content=_('The request is invalid'))
+        return redirect('classifieds:classified', classified.slug)
 
 
 class Wxpay_Result(View):
