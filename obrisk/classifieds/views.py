@@ -53,7 +53,7 @@ except ImportError:
     user_model = User
 
 
-API_KEY = env('WECHAT_API KEY')
+API_KEY = env('WECHAT_API_KEY')
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
 
@@ -87,7 +87,8 @@ def classified_list(request, tag_slug=None):
                 )
 
             if client_ip is None:
-                city = "Hangzhou"
+                city = ''
+                logging.error('cant get client ip')
             else:
                 info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
                 city = json.loads(info.text)['city']
@@ -487,7 +488,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
             return redirect('classifieds:classified', classified.slug)
 
     else:
-        return redirect('classifieds:classified', classified.slug)
+        return redirect('classifieds:list')
 
 
 class Wxpay_Result(View):
