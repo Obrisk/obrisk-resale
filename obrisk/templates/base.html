@@ -41,6 +41,24 @@
   {% block cdn %}
       <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
       <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+
+      <script src="{% static 'js/vendor/sentrysdk.min.js' %}"></script>
+      <script>
+        Sentry.init({
+          dsn: "https://556a74cc3c4244d382e196b2cd9339b4@o231693.ingest.sentry.io/1392035"
+
+          // Alternatively, use `process.env.npm_package_version` for a dynamic release version
+          // if your build tool supports it.
+          //integrations: [new Integrations.BrowserTracing()],
+          //release: "my-project-name@2.3.12",
+
+          // Set tracesSampleRate to 1.0 to capture 100%
+          // of transactions for performance monitoring.
+          // We recommend adjusting this value in production
+          //tracesSampleRate: 1.0,
+
+        });
+    </script>
   {% endblock cdn %}
 
   {% block head %}
