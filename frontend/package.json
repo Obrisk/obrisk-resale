@@ -41,6 +41,8 @@
   "dependencies": {
     "@fengyuanchen/datepicker": "^0.6.5",
     "@mdi/font": "^3.4.93",
+    "@sentry/browser": "^6.2.1",
+    "@sentry/tracing": "^6.2.1",
     "bulma-extensions": "^1.0.14",
     "bulma-scss": "^0.9.0-1",
     "cropperjs": "^1.5.5",
