@@ -88,7 +88,6 @@ def classified_list(request, tag_slug=None):
 
             if client_ip is None:
                 city = ''
-                logging.error('cant get client ip')
             else:
                 info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
                 city = json.loads(info.text)['city']
