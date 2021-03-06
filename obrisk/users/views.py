@@ -30,6 +30,7 @@ from django.db import IntegrityError
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
+from django.utils.text import slugify as dj_slugify
 
 from django.http import (
     HttpResponseServerError,
@@ -42,10 +43,11 @@ from allauth.account.views import (
     _ajax_response,
     PasswordResetFromKeyView as AllauthPasswordResetFromKeyView
 )
+
+from slugify import slugify
 from allauth.account.forms import UserTokenForm
 from allauth.account.utils import user_pk_to_url_str, url_str_to_user_pk
 from allauth.utils import build_absolute_uri
-from slugify import slugify
 from phonenumbers import PhoneNumber
 from friendship.models import Friend, Follow
 from rest_framework.decorators import api_view
@@ -635,10 +637,8 @@ class GetInfoView(WechatViewSet):
                 code = request.GET['code']
                 token, openid = self.wechat_api.get_access_token(code)
             except TypeError:
-                logging.error('TypeError: NoneType object is not iterable')
-                return HttpResponseServerError(
-                        'Sorry we are currently unable to process this request, try again later'
-                    )
+                return redirect('account_signup')
+            
             else:
                 if token is None or openid is None:
                     logging.error('Wechat auth failed')
@@ -665,16 +665,16 @@ class GetInfoView(WechatViewSet):
                 if user.count() == 0:
                     cache.set(user_data['ui'], user_info['headimgurl'], 3000)
 
-                    user_data['nck'] = first_name = slugify(
+                    tentative_name = first_name = dj_slugify(
                             user_data['nck'],
-                            max_length=16
+                            allow_unicode=True
                         )
 
                     for x in itertools.count(1):
                         if not User.objects.filter(
-                                username=user_data['nck']).exists():
+                                username=tentative_name).exists():
                             break
-                        user_data['nck'] = '%s-%d' % (first_name, x)
+                        tentative_name = '%s-%d' % (first_name, x)
 
                     in_china=False
                     if str(user_data['cnt']) == 'China':
@@ -682,7 +682,7 @@ class GetInfoView(WechatViewSet):
 
                     form = SocialSignupCompleteForm(
                                 initial={
-                                    'username': user_data['nck'],
+                                    'username': tentative_name,
                                     'gender': user_data['sx'],
                                     'wechat_openid': user_data['ui'],
                                 }
@@ -730,9 +730,9 @@ def wechat_getinfo_view_test(request):
                 'https://obrisk.oss-cn-hangzhou.aliyuncs.com/static/img/homepage-bg.jpg', #noqa
                 3000)
 
-            user_data['nck'] = first_name = slugify(
+            user_data['nck'] = first_name = dj_slugify(
                     user_data['nck'],
-                    max_length=16
+                    allow_unicode=True
                 )
 
             for x in itertools.count(1):

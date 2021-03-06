@@ -2,6 +2,7 @@ import logging
 import hashlib
 import random
 import time
+
 from urllib import parse
 from xml.etree.ElementTree import fromstring
 import requests
@@ -127,16 +128,20 @@ class WechatLogin(WechatAPI):
             'code': code,
             'grant_type': 'authorization_code'
         }
-        token, err = self.process_response_login(
-                requests.get(
-                    self.config.defaults.get(
-                        'wechat_browser_access_token'
-                    ),
-                    params=params
-                  )
-                )
+
+        response = requests.get(
+                self.config.defaults.get(
+                    'wechat_browser_access_token'
+                ),
+                params=params
+            )
+        response.encoding = 'utf8'
+
+        token, err = self.process_response_login(response)
         if err:
-            logging.error(f'Wechat login failed: {err}')
+            if err['code'] != 40163:
+                logging.error(f'Wechat login failed: {err}')
+
             return None
         else:
             self._access_token = token['access_token']
@@ -150,11 +155,13 @@ class WechatLogin(WechatAPI):
             'openid': openid,
             'lang': self.config.LANG
         }
-        return self.process_response_login(
-                requests.get(
-                    self.config.defaults.get(
-                        'wechat_browser_user_info'
-                    ),
-                    params=params
-                )
+
+        response = requests.get(
+                self.config.defaults.get(
+                    'wechat_browser_user_info'
+                ),
+                params=params
             )
+        response.encoding = 'utf8'
+
+        return self.process_response_login(response)
