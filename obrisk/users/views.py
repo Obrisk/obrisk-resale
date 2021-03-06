@@ -667,8 +667,7 @@ class GetInfoView(WechatViewSet):
 
                     user_data['nck'] = first_name = slugify(
                             user_data['nck'],
-                            max_length=16,
-                            allow_unicode=True
+                            max_length=16
                         )
 
                     for x in itertools.count(1):
