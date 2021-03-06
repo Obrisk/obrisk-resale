@@ -6,7 +6,8 @@ from phonenumber_field.formfields import PhoneNumberField
 class ClassifiedForm(forms.ModelForm):
     details = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4}),
-        required=False
+        required=False,
+        label=("details (Optional)")
     )
     status = forms.CharField(
             widget=forms.HiddenInput(),
