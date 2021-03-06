@@ -4,6 +4,10 @@ from obrisk.classifieds.models import Classified, OfficialAd
 from phonenumber_field.formfields import PhoneNumberField
 
 class ClassifiedForm(forms.ModelForm):
+    details = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 4}),
+        required=False
+    )
     status = forms.CharField(
             widget=forms.HiddenInput(),
             required=False
@@ -53,7 +57,8 @@ class ClassifiedEditForm(forms.ModelForm):
             required=False, initial=False
         )
     details = forms.CharField(
-        widget=forms.Textarea(attrs={"rows": 4})
+        widget=forms.Textarea(attrs={"rows": 4}),
+        required=False
     )
     english_address = forms.CharField(
             required=False, label=("Address (English)")

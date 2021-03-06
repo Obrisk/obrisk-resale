@@ -70,6 +70,40 @@ def set_popular_tags():
             content_type='text/plain')
 
 
+
+def get_ip_address_from_request(request):
+    """ Makes the best attempt to get the client's real IP or return the loopback """
+    PRIVATE_IPS_PREFIX = ('10.', '172.', '192.', '127.')
+    ip_address = ''
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    if x_forwarded_for and ',' not in x_forwarded_for:
+        if not x_forwarded_for.startswith(PRIVATE_IPS_PREFIX) and is_valid_ip(x_forwarded_for):
+            ip_address = x_forwarded_for.strip()
+    else:
+        ips = [ip.strip() for ip in x_forwarded_for.split(',')]
+        for ip in ips:
+            if ip.startswith(PRIVATE_IPS_PREFIX):
+                continue
+            elif not is_valid_ip(ip):
+                continue
+            else:
+                ip_address = ip
+                break
+    if not ip_address:
+        x_real_ip = request.META.get('HTTP_X_REAL_IP', '')
+        if x_real_ip:
+            if not x_real_ip.startswith(PRIVATE_IPS_PREFIX) and is_valid_ip(x_real_ip):
+                ip_address = x_real_ip.strip()
+    if not ip_address:
+        remote_addr = request.META.get('REMOTE_ADDR', '')
+        if remote_addr:
+            if not remote_addr.startswith(PRIVATE_IPS_PREFIX) and is_valid_ip(remote_addr):
+                ip_address = remote_addr.strip()
+    if not ip_address:
+        ip_address = '127.0.0.1'
+    return ip_address
+
+
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
 
@@ -79,14 +113,15 @@ def classified_list(request, tag_slug=None):
         city = cache.get(
                 f'user_city_{request.session.get("visitor_id")}'
             )
+        city = None
 
         if city is None:
-            client_ip, _ = get_client_ip(
-                    request,
-                    proxy_trusted_ips=['63.0.0.5','63.1']
+            client_ip = get_ip_address_from_request(
+                    request
                 )
 
             if client_ip is None:
+                logging.error("Still cannot detect client_ip")
                 city = ''
             else:
                 info = requests.get(f'https://geolocation-db.com/json/{client_ip}')

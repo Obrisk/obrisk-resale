@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.db import models
 from django.db.models import Count
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from slugify import slugify
 from taggit.managers import TaggableManager
@@ -67,6 +68,15 @@ class Classified(models.Model):
         (EXPIRED, _("Expired")),
     )
 
+    OFFLINE = "O"
+    SHIPPING = "S"
+    ANY = "A"
+    HANDOVER = (
+        (OFFLINE, _("Offline_pickup")),
+        (SHIPPING, _("Shipping")),
+        (ANY, _("any")),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.CASCADE)
@@ -77,7 +87,7 @@ class Classified(models.Model):
             blank=True, unique=True, editable=False
         )
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
-    details = models.CharField(max_length=2000)
+    details = models.CharField(max_length=2000, null=True, blank=True)
     price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
     english_address = models.CharField (max_length=300, null=True, blank=True)
     chinese_address = models.CharField (max_length=300, null=True, blank=True)
@@ -92,6 +102,10 @@ class Classified(models.Model):
     show_phone = models.BooleanField(default=True)
     tags = TaggableManager(through=TaggedClassifieds, blank=True)
     priority = models.IntegerField(default=0)
+    shipping_price = models.DecimalField(
+            max_digits=15, decimal_places=2, default=0.00
+        )
+    handover_method = models.CharField(max_length=1, choices=HANDOVER, default=ANY)
     #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)
     # search_vector = SearchVectorField(null=True)
