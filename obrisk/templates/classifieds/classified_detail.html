@@ -58,7 +58,11 @@
               <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
 
               <!-- Price -->
-              <strong class="price"> ¥{{ classified.price }} </strong>
+              {% if classified.price != 0.00 %}
+                  <strong class="price"> ¥{{ classified.price }} </strong>
+              {% else %}
+                  <strong class="price"> FREE </strong>
+              {% endif %}
 
               <div class="meta-details">
 

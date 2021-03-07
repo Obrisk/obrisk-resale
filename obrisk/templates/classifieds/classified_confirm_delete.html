@@ -2,20 +2,26 @@
 
 {% load i18n %}
 
-{# block head_title %}{% trans "Delete stories" %}{% endblock #}
-
 {% block content %}
-<h1>{% trans "Delete a classified post" %}</h1>
 
-<p>{% trans 'Are you sure you want to continue? If you do this you will delete this classified post and all of its related content! Also note, this action cannot be reversed.' %}</p>
+<div class="view-wrapper">
+    <h1 class="title is-5">{% trans "Remove the item" %}</h1>
 
-<form method="post" action="{% url 'classifieds:delete_classified' classified.pk %}">
-  {% csrf_token %}
-  <button class="btn btn-dark" type="submit">{% trans 'Delete' %}</button>
-  <a href="{% url 'classifieds:classified' classified.slug %}" class="btn btn-danger">Cancel</a>
+    <p>{% trans 'This action will remove this post from any listing on the platform, the post wont be deleted immediately' %}</p>
+    <p>{% trans ' Are you sure you want to continue?' %} </p>
 
-</form>
+    <form method="post" action="{% url 'classifieds:delete_classified' classified.pk %}">
+      {% csrf_token %}
+      
+      <div class="is-flex">
+      <button class="button is-solid raised accent-button" type="submit" style="margin-right:6px;">
+          {% trans 'Delete' %}
+      </button>
+      <a href="{% url 'classifieds:classified' classified.slug %}" class="button is-solid raised red-button">Cancel</a>
+    </div>
 
+    </form>
+</div>
 
 
 {% endblock %}
