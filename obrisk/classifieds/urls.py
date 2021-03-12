@@ -36,6 +36,10 @@ urlpatterns = [
         get_suggestions,
         name='classifieds_suggestions'),
     url(
+        r'^orders/create-clsd-order/$',
+        create_classified_order,
+        name='create_order'),
+    url(
         r'^orders/wxpy-complete/$',
         initiate_wxpy_info,
         name='initiate_wxpy_info'),

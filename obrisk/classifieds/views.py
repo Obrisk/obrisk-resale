@@ -41,7 +41,7 @@ from obrisk.classifieds.models import (
         ClassifiedImages, ClassifiedTags)
 from obrisk.classifieds.forms import (
         ClassifiedForm, OfficialAdForm,
-        ClassifiedEditForm)
+        ClassifiedEditForm, ClassifiedOrderForm)
 from obrisk.utils.images_upload import multipleImagesPersist
 from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
 from config.settings.base import env
@@ -446,6 +446,50 @@ class DetailClassifiedView(DetailView):
         return context
 
 
+
+@login_required
+@require_http_methods(["GET"])
+def create_classified_order(request, *args, **kwargs):
+    """
+    用户点击一个路由或者扫码进入这个views.py中的函数，首先获取用户的openid,
+    使用jsapi方式支付需要此参数
+    :param self:
+    :param request:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    classified = Classified.objects.filter(
+            slug=request.GET.get('sg', None)
+        ).first()
+
+    if classified:
+        openid = request.user.wechat_openid
+        if openid:
+            initial_dict = {
+                "recipient_chinese_address" : request.user.chinese_address,
+                "recipient_phone_number": str(
+                        request.user.phone_number
+                    ).replace('+86', '')
+            }
+
+            form = ClassifiedOrderForm(initial = initial_dict)
+            return render(
+                request,
+                'classifieds/create_classified_order.html',
+                {'classified': classified, form: form}
+            )
+        else:
+            messages.success(
+                    request,
+                    "You need to login with wechat to be able to pay"
+                )
+            return redirect('classifieds:classified', classified.slug)
+
+    else:
+        return redirect('classifieds:list')
+
+
 @login_required
 @require_http_methods(["GET"])
 def initiate_wxpy_info(request, *args, **kwargs):
@@ -467,7 +511,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
         if openid:
             return render(
                 request,
-                'classifieds/create_classified_order.html',
+                'classifieds/pay_order.html',
                 {
                  'classified': classified,
                  'data': get_jsapi_params(

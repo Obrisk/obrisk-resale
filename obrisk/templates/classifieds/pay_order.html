@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block title %}{{ classified.title }}{% endblock %}
+
+{% block head %}
+<link href="{% static 'css/classified_order.css' %}" rel="stylesheet">
+
+{% endblock head %}
+
+{% block content %}
+<div class="notification is-danger is-hidden" role="alert">
+    <button type="button" class="delete close-dj-messages"></button>
+    <p id="notf-msg"></p>
+</div>
+<div>
+  <div class="profile-header">
+      {% if classified.thumbnail %}
+      <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
+            width="250px" height="250px">
+      {% else %}
+      <img class="card-img lazyload" src="{{oss}}/classifieds/default.jpg"
+            width="250px" height="250px">
+      {% endif %}
+
+      <h1 class="title is-4">{{ classified.title }}</h1>
+      <h1> Address: {{ classified.english_address }}</h1>
+      <h1> {{ classified.city }}, {{ classified.province_region }} </h1>
+
+      </br>
+      <h1 class="mt-0"> Price: {{ classified.price }} CNY</h1>
+
+      <div class="notification is-warning is-hidden" id="success-notify">
+	  <p>The order is successfully placed. If the item is not picked offline,
+	  please choose to verify your address below
+	  and we will arrange the delivery ASAP. <p>
+	  <br/>
+	  <div class="is-flex">
+	          <a class="button accent-button m-2 p-2" href="{% url 'classifieds:classified' classified.slug %}">
+		    {%  trans 'Offline pickup' %}
+		  </a>
+
+		  <a class="button accent-button m-2 p-2" href="{% url 'users:update_address' %}">
+		    {%  trans 'Verify address' %}
+		  </a>
+          </div>
+      </div>
+
+  </div>
+
+
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+
+<script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
+<script>
+
+function wxpayFail() {
+      document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
+      document.getElementById(
+              'notf-msg'
+          ).innerHTML = "Sorry payments feature is currently unavailable, contact the seller directly";
+
+      setTimeout(() => {  
+          window.location.href="{% url 'classifieds:classified' classified.slug %}";
+      }, 7000);
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  fetch("{% url 'wx_req_cred' %}", {
+      headers: {
+    "X-Requested-With": "XMLHttpRequest"
+      },
+      credentials: 'same-origin',
+      redirect: 'follow'
+    }).then (resp => resp.json())
+      .then (strData => {
+      try {
+          let data = JSON.parse(strData);
+          if (data.success === true) {
+            wx.config({
+                debug: false, 
+                appId: data.id,
+                timestamp: data.timestamp,
+                nonceStr: data.noncestr,
+                signature: data.signature,
+                jsApiList: [
+                   'chooseWXPay'
+                ] 
+            });
+
+          } else {
+	      wxpayFail();
+              console.log('failure to init wx');
+          }
+      } catch {
+          wxpayFail();
+          console.log('failure to init wx');
+      }
+    })
+
+    wx.ready(function(){
+        if ("{{data.error}}".length > 1) {
+           wxpayFail();
+           console.log('{{data.error}}');
+        }else {
+	      try {
+		    wx.chooseWXPay({
+			timestamp: "{{data.timestamp}}", 
+			nonceStr: "{{data.nonceStr}}",
+			package: "{{data.package}}", 
+			signType: "{{data.signType}}",
+			paySign: "{{data.sign}}",
+			trigger: function (res) {
+			    console.log(JSON.stringify(res));
+			},
+			success: function (res) {
+			  fetch("{% url 'classifieds:inwxpy_res' %}?sg={{classified.slug}}", {
+			      headers: {
+				 "X-Requested-With": "XMLHttpRequest"
+			      },
+			      credentials: 'same-origin',
+			      redirect: 'follow'
+			    }).then (resp => resp.json())
+			      .then (strData => {
+				  let data = JSON.parse(strData);
+				  console.log('order creation returned')
+				  if (data.success === true) {
+				     console.log('display success called')
+				     document.getElementById('success-notify').classList.remove('is-hidden'); 
+				  }
+			      })
+			},
+			fail: function (res) {
+			    wxpayFail();
+			    console.log(JSON.stringify(res));
+			},
+			cancel: function (res) {
+			    wxpayFail();
+			    console.log(JSON.stringify(res));
+			}
+		    });
+	      } catch {
+		  wxpayFail();
+		  console.log('failure to init payments, exception happened');
+	      }
+       }
+   });
+
+    wx.error(function(res){
+        wxpayFail();
+        console.log(res);
+    });
+
+});
+</script>
+
+{% endblock extra_js %}
