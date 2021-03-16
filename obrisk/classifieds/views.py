@@ -90,6 +90,12 @@ def classified_list(request, tag_slug=None):
                 city = ''
             else:
                 info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
+                country = json.loads(info.text)['country_name']
+                if country != 'China' and country != 'Not found':
+                    messages.error(
+                        request,
+                        "This platform is for China users, if you're: please switch off the vpn"
+                    )
                 city = json.loads(info.text)['city']
 
             cache.set(
