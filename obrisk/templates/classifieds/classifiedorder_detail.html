@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static i18n %}
+{% load crispy_forms_tags thumbnail humanize %}
+
+{% block head %}
+<link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/share.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor/slider-pro.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
+
+<title>{{ classifiedorder.classified.title|title }}</title>
+
+{% endblock head %}
+
+
+{% block content %}
+<!-- Page Content -->
+<div class="container view-wrapper">
+   <section class="classified-wrapper">
+
+       <div class="slider-wrapper">
+          <div class="slider-pro" id="image-slider">
+            <div class="sp-slides">
+              {% for image in images %}
+              <div class="sp-slide">
+                  <a href="{{oss}}/{{ image.image }}"
+                  data-fancybox="classified-gallery">
+                  <img class="sp-image" src=""
+                    data-src="{{oss}}/{{ image.image_mid_size }}" />
+                </a>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <div class="classified-meta">
+              <!-- Title -->
+              <h3 class="cls-title title is-5">{{ classifiedorder.classified.title|title }}</h3>
+
+              <!-- Price -->
+              {% if classifiedorder.price != 0.00 %}
+                  <strong class="price"> ¥{{ classifiedorder.classified.price }} </strong>
+              {% else %}
+                  <strong class="price"> FREE </strong>
+              {% endif %}
+
+              <div class="meta-details">
+
+                <div class="meta-right">
+                  <a class="user-link" href="{% url 'users:detail' classifiedorder.classified.user.username %}">
+                    {% if classifiedorder.classified.user.thumbnail %}
+                    <img src="{{oss}}/{{classifiedorder.classified.user.thumbnail}}"
+                      alt="Picture Profile" id="pic">
+                    {% else %}
+                    <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
+                    {% endif %}
+                  </a>
+
+                  <div class="meta-left">
+                    <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                      href="{% url 'users:detail' classifiedorder.classified.user.username %}">
+                      <strong itemprop="name" id="classified-user">
+                        {{ classifiedorder.classified.user.get_profile_name|title }} </strong>
+                    </a>
+
+                    <div class="location">
+                      <span class="card-subtitle">
+                        {% if classifiedorder.classified.english_address  %}
+                           📍{{ classifiedorder.classified.english_address }}, {{ classifiedorder.classified.city }}
+                        {% else %}
+                           📍{{ classifiedorder.classified.user.city }}
+                        {% endif %} </span>
+                    </div>
+                  </div>
+                </div>
+
+              <div class="notification is-warning">
+                  <p>You've purchased this item <p>
+                  <p>The delivery confirmation is pending, we will update you on every step </p>
+              </div>
+
+          </div>
+
+        <div class="card-text">{{ classifiedorder.classified.details }}</div>
+
+        <br/>
+        {% if classifiedorder.video %}
+              <video id="classified-video" class="vd-container" height="400vh" preload="metadata" 
+                  x5-video-player-type="h5-page" controls controlsList="nodownload"
+                  crossorigin webkit-playsinline playsinline preload control
+		  poster="{{oss}}/{{images.0.image_thumb }}" style="background-color: #000;" >
+                  <source src="{{oss}}/{{classifiedorder.video}}#t=0.5" type="video/mp4">
+                  Your browser doesn' t support HTML5 video tag. 
+              </video>
+        <br/> <br/><br/>
+        {% endif %}
+
+        <!-- Similar lassified -->
+        {% if similar_classifieds %}
+          <h5 class="title related-title">Related Classifieds</h5>
+          <div class="related">
+            <!-- Classified Entries Column -->
+            {% for classified in similar_classifieds %}
+                <div class="card classified-card">
+                  <!--Display image-->
+                  <a href="{% url 'classifieds:classified' classified.slug %}"
+                    style="color:black; text-decoration:none; background-color:none">
+                    <div class="card-img-top img-responsive">
+
+                      {% if classified.image_thumb %}
+                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+                        width="154px" height="154px">
+                      {% else %}
+                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+                        width="154px" height="154px">
+                      {% endif %}
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="card-body">
+                      <h6 class="card-title"> {{ classified.title}} </h6>
+
+                      {% if classified.price != 0.00 %}
+                          <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
+                      {% else %}
+                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                      {% endif %}
+                      <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+
+                    </div>
+                    {% if classified.priority > 0 %}
+                    <div class="priority">
+                      Featured
+                    </div>
+                    {% endif %}
+
+                  </a>
+                </div>
+
+            {% endfor %}
+        </div>
+
+      </div>
+      {% endif %}
+
+   </section>
+</div>
+
+{% endblock content %}
+
+{% block extra_js %}
+
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script defer src="{% static 'js/vendor/fancybox.min.js' %}"></script>
+<script defer src="{% static 'js/vendor/jquery.sliderPro.min.js' %}"></script>
+<script type="text/javascript">
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  const image_count = {{ images| length}}
+
+  if (image_count > 1) {
+    $(".slider-pro").sliderPro({
+      arrows: true,
+      width: 960,
+      fade: true,
+      autoplay: false,
+      autoScaleLayers: false,
+          autoHeight: true,
+
+        });
+      } else {
+        $(".slider-pro").sliderPro({
+          arrows: true,
+          width: 960,
+          fade: true,
+          autoplay: false,
+          autoScaleLayers: false,
+          autoHeight: true,
+          touchSwipe: false,//disable touch swipe if we have only one image
+        });
+      }
+  });
+
+</script>
+
+{% endblock extra_js %}

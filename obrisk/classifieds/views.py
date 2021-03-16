@@ -541,7 +541,7 @@ def wxpyjs_success(request, *args, **kwargs):
         if request.POST.get('addr', None) is None:
             is_offline = True
 
-        ClassifiedOrder.objects.create(
+        order = ClassifiedOrder.objects.create(
            buyer=request.user,
            classified=classified,
            is_offline=is_offline,
@@ -549,7 +549,8 @@ def wxpyjs_success(request, *args, **kwargs):
            recipient_phone_number=request.POST.get('phone', None)
         )
         return JsonResponse({
-            'success': True
+            'success': True,
+            'order_slug': order.slug
         })
     else:
         return JsonResponse({
@@ -624,3 +625,34 @@ class Wxpay_Result(View):
 
 class ClassifiedOrderView(DetailView):
     model = ClassifiedOrder
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(
+                ClassifiedOrderView, self
+            ).get_context_data(**kwargs)
+
+        classified_tags_ids = self.object.classified.tags.values_list('id', flat=True)
+        similar_classifieds = Classified.objects.get_active().filter(
+                tags__in=classified_tags_ids)\
+            .exclude(id=self.object.classified.id).annotate (
+                image_thumb = Subquery (
+                    ClassifiedImages.objects.filter(
+                        classified=OuterRef('pk'),
+                    ).values(
+                        'image_thumb'
+                    )[:1]
+                )
+            )
+
+        # Add in a QuerySet of all the images
+        context['images'] = ClassifiedImages.objects.filter(
+                classified=self.object.classified.id
+            )
+
+        context['images_no'] = len(context['images'])
+        context['similar_classifieds'] = similar_classifieds.annotate(
+                same_tags=Count('tags'))\
+            .order_by('-same_tags', '-timestamp')[:6]
+
+        return context

@@ -160,7 +160,7 @@ document.addEventListener('DOMContentLoaded', function () {
                       .then (strData => {
                       let data = JSON.parse(strData);
                       if (data.success === true) {
-                          window.location.replace="{% url 'classifieds:classified' classified.slug %}";
+                          window.location.replace=`classifieds/orders/wsguatpotlfwccdi/${data.order_slug}`;
                       }
                   })
                 },
