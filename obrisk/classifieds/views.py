@@ -41,7 +41,7 @@ from obrisk.classifieds.models import (
         ClassifiedImages, ClassifiedTags)
 from obrisk.classifieds.forms import (
         ClassifiedForm, OfficialAdForm,
-        ClassifiedEditForm, ClassifiedOrderForm)
+        ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
 from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
 from config.settings.base import env
@@ -466,18 +466,10 @@ def create_classified_order(request, *args, **kwargs):
     if classified:
         openid = request.user.wechat_openid
         if openid:
-            initial_dict = {
-                "recipient_chinese_address" : request.user.chinese_address,
-                "recipient_phone_number": str(
-                        request.user.phone_number
-                    ).replace('+86', '')
-            }
-
-            form = ClassifiedOrderForm(initial = initial_dict)
             return render(
                 request,
                 'classifieds/create_classified_order.html',
-                {'classified': classified, form: form}
+                {'classified': classified}
             )
         else:
             messages.success(
@@ -534,29 +526,45 @@ def initiate_wxpy_info(request, *args, **kwargs):
         return redirect('classifieds:list')
 
 
+@login_required
+@require_http_methods(["POST"])
+def wxpyjs_success(request, *args, **kwargs):
+    classified = Classified.objects.filter(
+            slug=request.POST.get('sg', None)
+        ).first()
+
+    if classified:
+        classified.status='E'
+        classified.save()
+
+        is_offline = False
+        if request.POST.get('addr', None) is None:
+            is_offline = True
+
+        ClassifiedOrder.objects.create(
+           buyer=request.user,
+           classified=classified,
+           is_offline=is_offline,
+           recipient_chinese_address=request.POST.get('addr', None),
+           recipient_phone_number=request.POST.get('phone', None)
+        )
+        return JsonResponse({
+            'success': True
+        })
+    else:
+        return JsonResponse({
+            'success': False
+        })
+
+
 class Wxpay_Result(View):
     """
     微信支付结果回调通知路由
     """
     def get(self, request, *args, **kwargs):
-        classified = Classified.objects.filter(
-                slug=request.GET.get('sg', None)
-            ).first()
-
-        if classified:
-            classified.status='E'
-            classified.save()
-
-            ClassifiedOrder.objects.create(
-               buyer=request.user,
-               classified=classified
-            )
             return JsonResponse({
-                'success': True
-            })
-        else:
-            return JsonResponse({
-                'success': False
+                'success': False,
+                'message': 'Request is invalid'
             })
 
     def post(self, request, *args, **kwargs):

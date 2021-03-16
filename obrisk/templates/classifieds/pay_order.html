@@ -13,8 +13,9 @@
     <button type="button" class="delete close-dj-messages"></button>
     <p id="notf-msg"></p>
 </div>
+
 <div>
-  <div class="profile-header">
+  <div class="order-box">
       {% if classified.thumbnail %}
       <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
             width="250px" height="250px">
@@ -24,26 +25,44 @@
       {% endif %}
 
       <h1 class="title is-4">{{ classified.title }}</h1>
-      <h1> Address: {{ classified.english_address }}</h1>
+
+      {% if classified.english_address %}
+          <h1> Address: {{ classified.english_address }}</h1>
+      {% endif %}
       <h1> {{ classified.city }}, {{ classified.province_region }} </h1>
 
       </br>
       <h1 class="mt-0"> Price: {{ classified.price }} CNY</h1>
 
-      <div class="notification is-warning is-hidden" id="success-notify">
-	  <p>The order is successfully placed. If the item is not picked offline,
-	  please choose to verify your address below
-	  and we will arrange the delivery ASAP. <p>
-	  <br/>
-	  <div class="is-flex">
-	          <a class="button accent-button m-2 p-2" href="{% url 'classifieds:classified' classified.slug %}">
-		    {%  trans 'Offline pickup' %}
-		  </a>
+      <div class="radio-tile-group">
+            <div class="input-container">
+              <input id="offline" class="radio-button" type="radio" name="radio"/>
+              <div class="radio-tile">
+                <div class="icon walk-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                </div>
+                <label for="walk" class="radio-tile-label">Offline pickup</label>
+              </div>
+            </div>
 
-		  <a class="button accent-button m-2 p-2" href="{% url 'users:update_address' %}">
-		    {%  trans 'Verify address' %}
-		  </a>
-          </div>
+            <div class="input-container">
+              <input id="delivery" class="radio-button"  type="radio" name="radio" />
+              <div class="radio-tile">
+                <div class="icon bike-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-box">
+                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                        <line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+                </div>
+                <label for="bike" class="radio-tile-label">Express Delivery</label>
+              </div>
+            </div>
       </div>
 
   </div>
@@ -109,43 +128,53 @@ document.addEventListener('DOMContentLoaded', function () {
         }else {
 	      try {
 		    wx.chooseWXPay({
-			timestamp: "{{data.timestamp}}", 
-			nonceStr: "{{data.nonceStr}}",
-			package: "{{data.package}}", 
-			signType: "{{data.signType}}",
-			paySign: "{{data.sign}}",
-			trigger: function (res) {
-			    console.log(JSON.stringify(res));
-			},
-			success: function (res) {
-			  fetch("{% url 'classifieds:inwxpy_res' %}?sg={{classified.slug}}", {
-			      headers: {
-				 "X-Requested-With": "XMLHttpRequest"
-			      },
-			      credentials: 'same-origin',
-			      redirect: 'follow'
-			    }).then (resp => resp.json())
-			      .then (strData => {
-				  let data = JSON.parse(strData);
-				  console.log('order creation returned')
-				  if (data.success === true) {
-				     console.log('display success called')
-				     document.getElementById('success-notify').classList.remove('is-hidden'); 
-				  }
-			      })
-			},
-			fail: function (res) {
-			    wxpayFail();
-			    console.log(JSON.stringify(res));
-			},
-			cancel: function (res) {
-			    wxpayFail();
-			    console.log(JSON.stringify(res));
-			}
+                timestamp: "{{data.timestamp}}", 
+                nonceStr: "{{data.nonceStr}}",
+                package: "{{data.package}}", 
+                signType: "{{data.signType}}",
+                paySign: "{{data.sign}}",
+                trigger: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                success: function (res) {
+                  let phone = null;
+                  let addr = null; 
+                  if (!getCookie('classified-order-is-offline')) {
+                      phone = getCookie('classified-order-phone');
+                      addr = getCookie('classified-order-address');
+                  }
+
+                  fetch("{% url 'classifieds:wxpyjs_success' %}", {
+                      method : "POST",
+                      body: JSON.stringify({
+                          addr:addr,
+                          phone: phone,
+                          sg:"{{classified.slug}}"
+                      }),
+                      headers: {
+                         "X-Requested-With": "XMLHttpRequest"
+                      },
+                      credentials: 'same-origin',
+                      redirect: 'follow'
+                    }).then (resp => resp.json())
+                      .then (strData => {
+                      let data = JSON.parse(strData);
+                      if (data.success === true) {
+                          window.location.replace="{% url 'classifieds:classified' classified.slug %}";
+                      }
+                  })
+                },
+                fail: function (res) {
+                    wxpayFail();
+                    console.log(JSON.stringify(res));
+                },
+                cancel: function (res) {
+                  window.location.replace="{% url 'classifieds:classified' classified.slug %}";
+                }
 		    });
 	      } catch {
-		  wxpayFail();
-		  console.log('failure to init payments, exception happened');
+              wxpayFail();
+              console.log('failure to init payments, exception happened');
 	      }
        }
    });
@@ -157,5 +186,4 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 </script>
-
 {% endblock extra_js %}

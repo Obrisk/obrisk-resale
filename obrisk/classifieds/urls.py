@@ -44,7 +44,11 @@ urlpatterns = [
         initiate_wxpy_info,
         name='initiate_wxpy_info'),
     url(
-        r'^wsguatpotlfwccdi/wxjsapipy/inwxpy_results/$',
+        r'^orders/wsguatpotlfwccdi/wxjs-success/$',
+        wxpyjs_success,
+        name='wxpyjs_success'),
+    url(
+        r'^wsguatpotlfwccdi/wxjsapipy/inwxpy-results/$',
         Wxpay_Result.as_view(),
         name='inwxpy_res'),
     url(

@@ -26,7 +26,7 @@ API_KEY = env('WECHAT_API_KEY')
 MCH_ID = env.int('WECHAT_MERCHANT_ID')
 MCHID = MCH_ID + 1 - 1
 WXORDER_URL = "https://api.mch.weixin.qq.com/pay/unifiedorder"
-NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy_results"
+NOTIFY_URL = "https://obrisk.com/classifieds/wsguatpotlfwccdi/wxjsapipy/inwxpy-results"
 
 
 def get_md5(data, salt=True):
@@ -195,7 +195,6 @@ def get_jsapi_params(request, openid, title, details, total_fee):
             API_KEY,
             MCHID,
         )
-   
     try:
         notify_result = client.order.create(
                 params['trade_type'], 
