@@ -1,0 +1,175 @@
+@import "partials/layout-colors";
+@import "partials/layout-navbar";
+@import "partials/simple-defaults";
+
+.container {
+    margin: 3.5rem auto;
+}
+
+//standard slim
+.has-slimscroll {
+    overflow: hidden !important;
+
+    &::-webkit-scrollbar {
+        width: 4px !important;
+    }
+
+    &::-webkit-scrollbar-track-piece {
+        background: $opt-accent !important;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 10px !important;
+        color: $accent !important;
+    }
+}
+
+.nav-inner {
+    align-items: stretch;
+    display: flex;
+    font-size: 1rem;
+    justify-content: space-between;
+    overflow: hidden;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
+
+a {
+  color: #202024 !important;
+}
+
+.nav-inner.is-toggle li+li {
+    margin-left: -1px;
+}
+
+.nav-inner.is-fullwidth li {
+    flex-grow: 1;
+    flex-shrink: 0;
+}
+
+.tp-nav-ul {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.nav-logo {
+    justify-content: flex-start !important;
+}
+
+.muted-grey .navbar-nav .nav-link {
+  font-weight: 600;
+  font-size: 15px;
+  color: $muted-grey;
+}
+
+.notification {
+    margin-top: 8px;
+}
+
+.notif-li {
+    display: flex;
+    justify-content: center;
+}
+
+.top-nav-user {
+    display: flex;
+    justify-content: space-between;
+}
+
+.top-nav-user-li {
+    display: flex !important;
+    justify-content: flex-end;
+}
+
+.guest-user {
+    justify-content: flex-end;
+}
+
+.is-auth-user {
+    justify-content: space-between;
+}
+
+.account-item {
+    border-color: #dbdbdb;
+    border-style: solid;
+    border-width: 1px;
+    margin-bottom: 0;
+}
+
+.navbar .navbar-item .is-navbarTop:after {
+  display: none;
+}
+
+#navbarTop > .nav-inner {
+    overflow-x: hidden;
+}
+
+.bt-nav-ul {
+    display: flex;
+    justify-content: space-around;
+    font-size: 1rem;
+    white-space: nowrap;
+    color: $muted-grey !important;
+    overflow: auto hidden;
+    padding: 1px 0px 0px 0px;
+    margin: 1px 6px 0 6px;
+    border: 0px;
+    box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
+}
+
+.bt-nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 6px;
+    font-size: 13px;
+    
+   .is-active & {
+      color: darken($accent, 10%) !important;
+    }
+}
+
+.nav-icons {
+  margin-bottom: -6px;
+}
+
+.nav-back-btn {
+  margin-top: 13px;
+  margin-left:  3px;
+}
+
+#navbarBottom .navbar .navbar-item .nav-drop:before {
+  left: auto !important;
+  right: 7% !important;
+}
+
+#navbarBottom .navbar .navbar-item .nav-drop {
+  right: 0 !important;
+  left: auto !important;
+}
+
+#navbarBottom .navbar .navbar-item .nav-drop:after,
+.navbar .navbar-item .nav-drop:before {
+  left: auto !important;
+}
+
+.msg-notification {
+    position:absolute;
+    right: 12%;
+}
+
+.new-msgs-icon {
+    display: none;
+    position: absolute;
+    right: 20px;
+    position: absolute;
+    left: 25px;
+    color: #fb4133;
+    font-size: 12px;
+}
+
+.iphone-nav-bt {
+    margin-bottom: 4px;
+}

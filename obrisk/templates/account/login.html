@@ -4,215 +4,249 @@
 {% load socialaccount %}
 {% load crispy_forms_tags %}
 {% get_providers as socialaccount_providers %}
+
 {% block head %}
 <title>{% trans 'Account Login' %}</title>
-<link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-<script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
-
 {% endblock head %}
 
 {% block content %}
-<div class="view-wrapper">
-  <div class="container">
     <div id="" class="view-wrap true-dom">
       <div class="columns is-centered">
-
-
-        <div class="column is-half is-one-third-desktop has-background-white p-4 text-center">
-
-          <dis class="is-flex row">
-            <span class="login100-form-title p-b-32 col-12 ">{% trans 'Account Login' %}</span>
-
-            <span class="errors col-12"></span>
-          </dis>
+          <br/>
+          <h1 class="login100-form-title "> {% trans 'Account Login' %}</h1>
+          <div class="errors"></div>
 
           <!--Login Form-->
-          <div class="hero-body p-0">
             <div class="form-wrapper">
               <!--Form-->
-              <div class="login-form">
+                  <form class="login is-hidden" id="login-form" method="POST" action="{% url 'account_login' %}">
+                      {% csrf_token %}
 
-                <div class="login-wrapper">
-                  <div class="outer-panel">
-                    <div class="outer-panel-inner">
+                        <label for="phone_number">
+                              {% trans 'Phone / Username' %}
+                        </label>
+                        {{ form.login }}
 
-                      <form class="login" method="POST" action="{% url 'account_login' %}">
-                        {% csrf_token %}
-                        <div id="signup-panel-1" class="process-panel-wrap is-narrow is-active ">
-                          <div class="form-panel">
-                            <div class="form-row mt-3">
-                              <div class="form-group col-md-12 mb-0">
-                                <div class="input-group">
-                                  <label for="phone_number">
-                                    Phone number / Username / Email
-                                  </label>
-                                </div>
-                                {{ form.login }}
-                              </div>
-                            </div>
-                            <div class="form-row">
+                        <label for="password">
+                          {% trans 'Password' %}
+                        </label>
+                        {{ form.password }}
 
-                              <div class="form-group col-md-12 mb-0">
-                                <div class="input-group">
-                                  <label for="password">
-                                    Password
-                                  </label>
-                                </div>
-                                {{ form.password }}
-                              </div>
-                            </div>
-
-                          </div>
-                          {% if redirect_field_value %}
+                        {% if redirect_field_value %}
                           <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-                          {% endif %}
-                          <div class="form-group container-login100-form-btn mt-3">
-                            <button type="submit"
-                              class="button is-rounded is-solid accent-button raised is-fullwidth ">{% trans 'Login' %}</button>
-                          </div>
-                          <div class="form-group container-login100-form-btn d-flex justify-content-between">
-                            <a href="{% url 'account_signup' %}"
-                              class="button is-solid dark-grey-button raised">{% trans 'Sign up' %}</a>
+                        {% endif %}
+
+                        <button type="submit"
+                          class="button is-rounded is-solid accent-button raised login-submit-btn">
+                            {% trans 'Login' %}
+                        </button>
+
+                        <div class="phone-options-btn" >
                             <a href="{% url 'users:phone_password_reset' %}"
-                              class="button is-solid dark-grey-button raised">{% trans 'Reset Password' %}</a>
-                          </div>
+                              class="button is-solid accent-button raised">
+                               {% trans 'Renew password' %}
+                            </a>
 
+                            <a id="open-options" href="#"
+                              class="button is-solid accent-button raised">
+                              {% trans 'More options' %}
+                            </a>
                         </div>
-                      </form>
-                    </div>
+                  </form>
+
+                  <div id="options-wrapper" class="page-popup-wrapper">
+                      <div class="options-btns">
+                        <a class="button raised is-solid wechat-button"
+                            href="{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"
+                            width="16px" height="16px"><path fill="#c2e8ff"
+                            d="M4.433,22.306l-0.176-0.205C2.453,20.001,1.5,17.546,1.5,15C1.5,8.107,8.453,2.5,17,2.5 S32.5,8.107,32.5,15S25.547,27.5,17,27.5c-2.527,0-5.044-0.508-7.275-1.468L9.55,25.957l-6.809,2.269L4.433,22.306z"/>
+                            <path fill="#7496c4" 
+                            d="M17,3c8.271,0,15,5.383,15,12s-6.729,12-15,12c-2.46,0-4.907-0.494-7.078-1.428l-0.35-0.151 l-0.361,0.12l-5.728,1.909l1.357-4.75l0.148-0.518l-0.351-0.409C2.912,19.767,2,17.424,2,15C2,8.383,8.729,3,17,3 M17,2 C8.163,2,1,7.82,1,15c0,2.763,1.069,5.32,2.878,7.427L2,29l7.527-2.509C11.758,27.451,14.299,28,17,28c8.837,0,16-5.82,16-13 S25.837,2,17,2L17,2z"/>
+                            <path fill="#f2faff"
+                            d="M32.484,35.343l-0.208,0.089C30.623,36.141,28.848,36.5,27,36.5c-6.341,0-11.5-4.262-11.5-9.5 s5.159-9.5,11.5-9.5s11.5,4.262,11.5,9.5c0,1.673-0.546,3.327-1.58,4.784l-0.131,0.186l1.479,6.128L32.484,35.343z"/>
+                            <path fill="#788b9c"
+                            d="M27,18c6.065,0,11,4.037,11,9c0,1.568-0.514,3.122-1.488,4.495l-0.263,0.371l0.107,0.442 l1.18,4.887l-4.632-2.206l-0.408-0.194l-0.416,0.178C30.488,35.654,28.779,36,27,36c-6.065,0-11-4.037-11-9S20.935,18,27,18 M27,17c-6.627,0-12,4.477-12,10c0,5.523,5.373,10,12,10c1.974,0,3.831-0.404,5.473-1.108L39,39l-1.672-6.927 C38.384,30.585,39,28.854,39,27C39,21.477,33.627,17,27,17L27,17z"/>
+                            <path fill="#424e5c"
+                            d="M22.5 24A1.5 1.5 0 1 0 22.5 27 1.5 1.5 0 1 0 22.5 24zM31.5 24A1.5 1.5 0 1 0 31.5 27 1.5 1.5 0 1 0 31.5 24zM12 9A2 2 0 1 0 12 13 2 2 0 1 0 12 9zM22 9A2 2 0 1 0 22 13 2 2 0 1 0 22 9z"/>
+                        </svg>
+                        Wechat Login
+                        </a>
+                        <a class="button raised is-solid accent-button" id="phone-login" href="#">
+                           📱 Phone/Username Login </a>
+                        </a>
+                        <a href="{% url 'account_signup' %}"
+                          class="button is-solid accent-button raised">
+                          {% trans '🤗 Sign up' %}
+                        </a>
+
+                        <a href="#lh"
+                           class="login-help button is-solid opt-accent-button raised">
+                           {% trans '🙋 Need help?' %}
+                        </a>
+
+                        <p id="lh">
+                           <a href='mailto:support@obrisk.com' class='underline-me'>
+                           {% trans 'Click here to email us' %}</a>
+                           {% trans 'Or add WechatID: Obrisk' %}
+                       </p>
+                        <br/>
+                        <br/>
+                        <p id="login-loading" class="is-hidden"> </p>
+                     </div>
                   </div>
-
-                </div>
-              </div>
-
             </div>
-          </div>
-
-          <div> <small class="mt-5" id="support"> Login problem?
-              <a class="blue-link" href="mailto:support@obrisk.com"> click here </a> to contact us or add WechatID:
-              <span class="blue-link"> Obrisk. </span> </small> </div>
-
-        </div>
+         </div>
       </div>
-    </div>
-  </div>
-</div>
+{% endblock content %}
+
+{% block extra_js %}
 
 <script>
+  const csrftoken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+  const login_form = document.getElementById('login-form');
+  const options_wrapper = document.getElementById('options-wrapper');
+  const lg_loading = document.getElementById('login-loading');
+  const login_errors = document.querySelector(".errors");
 
-  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+  function phoneLoginActive() {
+        login_form.classList.remove('is-hidden');
+        options_wrapper.style.display = 'none';
+        document.getElementById('id_login').focus();
+  }
+
+  document.getElementById('phone-login').addEventListener('click', e => {
+      phoneLoginActive();
+  });
+
+
+  document.getElementById('open-options').addEventListener('click', e => {
+        login_form.classList.add('is-hidden');
+        options_wrapper.style.display = 'flex';
+  });
 
   window.mobileUtil = (function (win, doc) {
-    var UA = navigator.userAgent,
-      isAndroid = /android|adr/gi.test(UA),
-      isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
-      isBlackBerry = /BlackBerry/i.test(UA),
-      isWindowPhone = /IEMobile/i.test(UA),
-      isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
-    return {
-      isAndroid: isAndroid,
-      isIOS: isIOS,
-      isMobile: isMobile,
-      isWeixin: /MicroMessenger/gi.test(UA),
-      isQQ: /QQ/gi.test(UA)
-    };
+        const UA = navigator.userAgent,
+          isAndroid = /android|adr/gi.test(UA),
+          isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
+          isBlackBerry = /BlackBerry/i.test(UA),
+          isWindowPhone = /IEMobile/i.test(UA),
+          isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
+
+        return {
+          isAndroid: isAndroid,
+          isIOS: isIOS,
+          isMobile: isMobile,
+          isWeixin: /MicroMessenger/gi.test(UA),
+          isQQ: /QQ/gi.test(UA)
+        };
   })(window, document);
+
   const isInStandaloneMode = () =>
     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
 
-
-  //NOTE!!!
-  //This auto-login mechanism is a quick hack around to solve the problem of iOS 11 and weixin browsers
-  //There could be security risks in the future therefore not recommended as permanent fix
-  //All the variables with /stories URL represents the login url where the user will be redirected
-  //after a successful login
+  //Auto-login is a quick hack to solve the problem of iOS and weixin browser
+  //Variables with /classifieds URL are login url
   if (mobileUtil.isWeixin || mobileUtil.isIOS) {
+
     if (!localStorage.getItem('auth')) {
-      //When user click on login save the auth details only after successfull ajax login then redirect
-      //else allow user to retry login
-      $('.login100-form-btn').click(function (event) {
-        event.preventDefault();
-        var username = $('[name="login"]').val();
-        var pass = $('[name="password"]').val();
+          //When user click on login save the auth details only after successfull ajax login then redirect
+          //else allow user to retry login
+          document.querySelector('.login-submit-btn').addEventListener('click', function (event) {
+            event.preventDefault();
+            const username = document.querySelector('[name="login"]').value;
+            const pass = document.querySelector('[name="password"]').value;
 
-        var ajax = new XMLHttpRequest();
-        ajax.onreadystatechange = function () {
-          if (this.readyState == 4 && this.status == 200) {
-            //This condition marks false while things are true
-            if (this.responseURL && /stories/gi.test(this.responseURL)) {
-              var auth = {
-                username: username,
-                password: pass
+            const ajax = new XMLHttpRequest();
+            ajax.onreadystatechange = function () {
+              if (this.readyState == 4 && this.status == 200) {
+                  //This condition marks false while things are true
+                  if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+                      const auth = {
+                        username: username,
+                        password: pass
+                      }
+
+                      localStorage.setItem('autologintry', false);
+                      localStorage.setItem('auth', JSON.stringify(auth))
+
+                    if (navigator.storage && navigator.storage.persist) {
+                        navigator.storage.persisted();
+                        navigator.storage.persist();
+                    }
+                    location.replace('/classifieds');
+
+                  } else {
+                    login_errors.innerHTML =
+                        `<small class="error-text">The phone/username or password are not correct.</small>`
+                }
               }
-              localStorage.setItem('autologintry', false);
-              localStorage.setItem('auth', JSON.stringify(auth))
+            }
 
-              if (navigator.storage && navigator.storage.persist)
-                navigator.storage.persisted().then(persistent => {
-                  if (persistent)
-                    console.log("Storage will not be cleared except by explicit user action");
-                  else
-                    console.log("Storage may be cleared by the UA under storage pressure.");
-                });
-              if (navigator.storage && navigator.storage.persist)
-                navigator.storage.persist().then(granted => {
-                  if (granted)
-                    console.log("Storage will not be cleared except by explicit user action");
-                  else
-                    console.log("Storage may be cleared by the UA under storage pressure.");
-                });
-              location.replace('/stories')
+            ajax.open("POST", "/auth/login/");
+            ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
+
+          })
+
+    } else {
+        lg_loading.innerHTML = 
+          `<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg"
+            xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+            width="24px" height="30px" viewBox="0 0 24 30" 
+            style="enable-background:new 0 0 50 50;" xml:space="preserve">
+            <rect x="0" y="0" width="4" height="10" fill="#333">
+              <animateTransform attributeType="xml"
+                attributeName="transform" type="translate"
+                values="0 0; 0 20; 0 0"
+                begin="0" dur="0.6s" repeatCount="indefinite" />
+            </rect>
+            <rect x="10" y="0" width="4" height="10" fill="#333">
+              <animateTransform attributeType="xml"
+                attributeName="transform" type="translate"
+                values="0 0; 0 20; 0 0"
+                begin="0.2s" dur="0.6s" repeatCount="indefinite" />
+            </rect>
+            <rect x="20" y="0" width="4" height="10" fill="#333">
+              <animateTransform attributeType="xml"
+                attributeName="transform" type="translate"
+                values="0 0; 0 20; 0 0"
+                begin="0.4s" dur="0.6s" repeatCount="indefinite" />
+            </rect>
+          </svg>
+        Autologin</p>`;
+
+        const auth = JSON.parse(localStorage.getItem('auth'));
+        const ajax = new XMLHttpRequest();
+
+        ajax.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+              if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+                  location.replace('/classifieds')
+
+              } else {
+                localStorage.setItem('autologintry', true);
+                phoneLoginActive();
+                login_errors.innerHTML =
+                    `<small class="error-text">The phone/username or password are not correct.</small>`
+                location.replace('/auth/login/');
+              }
             }
-            else {
-              bootbox.alert('Failed to login, please verify your username or password');
-            }
-          }
         }
 
-        ajax.open("POST", "/accounts-authorization/login/");
+        ajax.open("POST", "/auth/login/");
         ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-        ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + username + "&password=" + pass);
-
-      })
-
-    }
-    else {
-
-      var dialog = bootbox.dialog({
-        message: '<p class="text-center mb-0"><i class="fa fa-spin fa-cog"></i> Autologin</p>',
-        closeButton: false
-      });
-
-      var auth = JSON.parse(localStorage.getItem('auth'));
-      var ajax = new XMLHttpRequest();
-      ajax.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          console.log('autologin');
-          if (this.responseURL && /stories/gi.test(this.responseURL)) {
-
-            location.replace('/stories')
-
-          } else {
-            //try auto login only once
-            localStorage.setItem('autologintry', true);
-            alert('Autologin failed please try manual login');
-            location.replace('/accounts-authorization/login/');
-          }
-        }
-      }
-      var auth = JSON.parse(localStorage.getItem('auth'));
-      ajax.open("POST", "/accounts-authorization/login/");
-      ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-      ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
+        ajax.send("csrfmiddlewaretoken=" + csrftoken + "&login=" + auth.username + "&password=" + auth.password);
     }
 
   }
 
   {% if form.errors %}
-  $(".errors").append(`<small class="pass-text" style="color: #ff5f59;">The phone number/username or password you specified are not correct.</small>`)
+        phoneLoginActive();
+        login_errors.innerHTML =
+            `<small class="error-text">The phone/username or password are not correct.</small>`
   {% endif %}
 
 </script>
-{% endblock content %}
+{% endblock extra_js %}

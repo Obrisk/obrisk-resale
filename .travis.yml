@@ -1,53 +1,50 @@
-  
 language: python
 dist: bionic
 python:
-  - "3.6"
+- '3.6'
 env:
   global:
-  - PGPORT=5433
-  - DJANGO_VERSION=2.2.9
+  - PGPORT=5432
+  - DJANGO_VERSION=2.2.11
+  - DJANGO_SETTINGS_MODULE="config.settings.test"
+  - PIP_USE_MIRRORS=true
+  - secure: 2b4MDCQbS2EwBf1LNzn1merhbRO38h59qRyRtnZ3SYYJlAWjPgoWOdgCWAihJH8KXicdyhCZIhFLKN0Qu+fO07gSisdSx+Rt695Sx5Bp5MGH6MOW5nG9g+WMhQI/JBzOF/Xyb1GOylpKSxed2ges9e59b8QEBqsQ1B+VAnfxFX8Ikgm+OwP0EJstqZsVZv/VP6DmTvz6OWKecpdBxZJOTk/3yoP1u4x+a51tIaxgKR8PJs0Wim4BAJTDzLw54j7dhT1Eg9ChlscEqT7F8gvXnL5GVrVRCWbSI+YG1SNMjzXgEW4LHVq5xigCEJ4bkQKxDQ1K9Ka2ltpHBs+WTAvrAuX+a3Lpn9ITs+dBLogNV4wV2AUljFA9Y75jL0s3JC2KkYIlRs9D7hgWNt3H7y59JegEyVLW9o4+3WtdtI66XR7sw14o1BuEuZdgBaKbDq8Et+13pqmK9B97ux2LIaX8fMGC6K4USfpCIvgobGYRyNkj78E5zgJyw29nZA6M4cJxOYZhJxQa1PayLDzFR7cGNz0euXbPlrlS0XXGY8oCcu6bbQK+rBpkK/f9uLesueuO3YmHiKCoBEktLxkMdpnjxch31JvbntzJhwflgs4/UYw644sm+s/4s8SyCfbrC9JPiK8UrjgdwMRVNm8uDuVmDvznTQb2jIOqqy1pSXHev2k=
+  - secure: UcObXaa82Fpm2EYNckAJPu9jm6h9zqILl/xnh+qZKKvwBN+kf/g7YGVY9ByDSRSeoicBotJc+h5ErND4KG+1iDs5CpACBKQdMQRyWXxgVtqGW+Cb9p8OoxLfH1ndisK0pXesXJeQxGdhFSrooAu6sN3grn/0M67ssG/Z1rjZHQzVKH9M5kivaqPy4oEcmKU4BiqHHmkeahrr1siZKKFQ/bqghxmuyqqnWqmXxoo2sNzq7P8in2/v7hM7gNFm2iXFn/9wJxwhtz91nXYR9XOkjGpGnJc4Hj1MeVRSuwqNR2ZigpcJgaENzZtprx9usE/Jwu8yMq29jX5b+R8wUuTm4ElSMvSf0GAzPEZWwCOkCUNFBTBERE2BIXXIMXBSvwyO9LD2hGBcii/DNEDIomi2grW1NHz3J2IVba6H7B32Uc1NQ9tygyjVqEN4soSnFLJFfm6OWItWpdyaKAVvtQnkSW5JnWMfC2/Bqkr0vO6G0EW0CB/NfMzBYHJq+mY2DD5zwO/mKeW7AXg/KRjqkFOCRioSxLAAgc5pSyC3epgh/cWv9UyNzq9VIboQoPlvHm2YSswJ+ypbcFJJFApxKhCkIw0agcU0lKemLEhtTsCx/gCc30gVaqRuGt8jpmJf/wzScNEG8O60EXcI2f1zWtSrIhrRdUoqNpVWH6ymixBQvIk=
+
 branches:
   only:
-    - master
-# Start docker services.
+  - master
 services:
-  - redis-server
-  - postgresql
-# command to install dependencies
-
-addons:
-  postgresql: "11"
-  apt:
-    packages:
-    - postgresql-11
-    - postgresql-client-11
-
+- redis-server
+- postgresql
 before_install:
-  - pip install -U pip
-  - pip install python-coveralls
-
+- pip install -U pip
+- pip install python-coveralls
 install:
-  - pip install -r requirements/local.txt
-
-
-before_install:
-  - sudo apt-get update
-  - sudo apt-get --yes remove postgresql\*
-  - sudo apt-get install -y postgresql-11 postgresql-client-11
-  - sudo cp /etc/postgresql/{9.6,11}/main/pg_hba.conf
-  - sudo service postgresql restart 11  
-
+- pip install -q Django==2.2.11
+- pip install -r requirements/local.txt
 before_script:
-  - psql --version
-  - psql -c "CREATE DATABASE obdev;" -U postgres
-  - psql -c 'CREATE ROLE travis SUPERUSER LOGIN CREATEDB;' -U postgres  
-  - cp travis.env .env
-  - python manage.py migrate --settings=config.settings.local
-
-# command to run tests
+- psql --version
+- psql -c "CREATE DATABASE obdev;" -U postgres
+- cp travis.env .env
+- python manage.py migrate --settings=config.settings.test
 script:
-  - pytest
+- pytest
 after_success:
-  - coveralls
-
+- coveralls
+notifications:
+  slack:
+    rooms:
+      - secure: zlwBq1K9AIi0Rlb7eNjOieYfScLNVrK8FOFsM5QapeJ1Yw7hMR9DgWOKL14hL84tn2heQRmbTAXvKnzrA5XLT/O4hATWWPx6FRPwZibwLJ/qNmwaaqbERgzZu/attGA4eQgDwGO4z7FOAEj6jmpgvBtp67ilpUEY+bLbodOa9dRNDQySriQirXo3NyiwYYOZs5z3kQzl83coW9XQQ1zXUiczXVdNAYuK1cvWJdrowowpd3HF7SY5dcBNcTdienge9ipVItU4HkaB+LfC3mC7LstiJ74GSRbf2t9YfD7LP1bRpkIfPjXpYL2nN7MVCHutCmaHe6RakkkPPwl7NXW5TRPzjlOQZ8VjtCAc6SmKNw39FIf+CtbnJUlEjrRHG6tmx2WJD4zH3s2ad8eZd07lDTDkcnRJe0GhuQhKg8LXLhgd05LSzhnUY0J0OJa3BtWtBILknXB7a9T5jmtVaQMNlys2eNKsMNJGr1VwKDZnOXFcYGViO22qevIZxbBdHjLJgcGk0w67IjZq1mdEf4/dZiQ2ftBiykhokJ7e959Ft+8TEk91xgYU3fR22et7q5otUVBgbz+KLbhbb4sdfpuoxKDj5CzvB4TfjK+QgTf68gSOF0AFgj7a78GeKTXGvJ/C+fsdD3IDnvQgNheE2+io9SfrHWFPP4Qw44CMuokJdcg=
+deploy:
+- provider: codedeploy
+  revision_type: github
+  access_key_id: $AWS_ACCESS_KEY_ID
+  secret_access_key: $AWS_SECRET_ACCESS_KEY
+  application: Obdev-ec2-deploy-app
+  deployment_group: Obdev-ec2-c5d-DepGrp
+  region: cn-northwest-1
+  wait_until_deployed: true
+  edge: true
+  on:
+    branch: master

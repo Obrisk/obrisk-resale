@@ -1,4 +1,4 @@
-/*! core.scss | Friendkit | © Css Ninja. 2018-2019 */
+/*! core.scss | Obrisk-team | */
 
 /* ==========================================================================
 Core SCSS file
@@ -10,7 +10,6 @@ Core SCSS file
 
 /* ==========================================================================
 0. Imports
-========================================================================== */
 
 @import "partials/layout-colors";
 @import "partials/layout-pageloader";
@@ -19,33 +18,24 @@ Core SCSS file
 @import "partials/layout-sidebar";
 @import "partials/layout-placeholders";
 @import "partials/components-cards";
-@import "partials/components-widgets";
 @import "partials/components-buttons";
 @import "partials/components-dropdowns";
 @import "partials/components-tabs";
 @import "partials/components-modals";
-@import "partials/components-uploaders";
-@import "partials/components-video";
 @import "partials/components-datepicker";
 @import "partials/components-forms";
 @import "partials/components-radios";
 @import "partials/components-switch";
 @import "partials/components-popovers";
-@import "partials/components-tooltips";
 @import "partials/components-checkboxes";
 @import "partials/components-animations";
 @import "partials/components-utils";
 @import "partials/app-chat";
 @import "partials/app-feed";
-@import "partials/app-inbox";
 @import "partials/app-profile";
 @import "partials/app-friends";
-@import "partials/app-events";
-@import "partials/app-news";
-@import "partials/app-questions";
-@import "partials/app-videos";
-@import "partials/app-landing";
 @import "partials/app-signup";
 @import "partials/app-login";
-@import "partials/app-demo";
+@import "partials/app-stories";
 @import "partials/layout-responsive";
+========================================================================== */

@@ -5,8 +5,7 @@
 {# block head_title %}{% trans "Sign Out" %}{% endblock #}
 
 {% block content %}
-<div class="container mt-5 pt-4 pb-4 mb-5">
-  <h1>{% trans "Sign Out" %}</h1>
+  <h1 class="title is-5">{% trans "Sign Out" %}</h1>
 
   <p>{% trans 'Are you sure you want to sign out?' %}</p>
 
@@ -15,17 +14,24 @@
     {% if redirect_field_value %}
     <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
     {% endif %}
-    <button id="confirmlogout" class="btn btn-dark" type="submit">{% trans 'Sign Out' %}</button>
-    <button class="btn btn-danger"> <a href="{% url 'stories:list' %}"> {% trans 'Cancel' %} </a> </button>
-  </form>
+    <button id="confirmlogout" class="button accent-button" type="submit">{% trans 'Sign Out' %}</button>
+    <button class="button red-button"> 
+        <a class="border-0" href="javascript:history.back()">
+            {% trans 'Cancel' %}
+        </a> 
+    </button>
+   </form>
 
-  <!-- <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script> -->
+{% endblock content %}
+
+{% block extra_js %}
+
   <script>
-    $("#confirmlogout").click(function () {
-      localStorage.setItem('auth', "");
+    document.querySelector("#confirmlogout").addEventListener('click', function () {
+      localStorage.removeItem('auth');
+      localStorage.removeItem('new-classified');
     })
   </script>
 </div>
 
-
-{% endblock %}
+{% endblock extra_js %}

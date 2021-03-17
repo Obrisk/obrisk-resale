@@ -8,6 +8,10 @@ urlpatterns = [
         view=views.UserListView.as_view(),
         name='list'),
 
+    url(regex=r'^social-form-final/$',
+        view=views.SocialPostView.as_view(),
+        name='social_final_form'),
+
     url(regex=r'^signup/$',
         view=views.EmailSignUp.as_view(),
         name='email_signup'),
@@ -23,6 +27,26 @@ urlpatterns = [
     url(regex=r'^phone-verify/$',
         view=views.phone_verify,
         name='phone_verify'),
+
+    url(r'^wechat-auth/$',
+        views.AuthView.as_view(),
+        name='wechat_auth'),
+
+    url(r'^wechat-test/$',
+        views.wechat_getinfo_view_test,
+        name='wechat_test'),
+
+    url(regex=r'^cmplt-wx-reg-149eb8766awswdff224fgo029k12ol8/$',
+        view=views.complete_wechat_reg,
+        name='complete_wechat'),
+
+    url(regex=r'^wx-auto-login-149eb8766awswdff224fgo029k12ol8/$',
+        view=views.wechat_auto_login,
+        name='wx_auto'),
+
+    url(regex=r'^username-exists/$',
+        view=views.username_exists,
+        name='username_exists'),
 
     url(regex=r'^bulk-phone-update/$',
         view=views.bulk_update_user_phone_no,
@@ -47,6 +71,10 @@ urlpatterns = [
     url(regex=r'^~update/$',
         view=views.UserUpdateView.as_view(),
         name='update'),
+
+    url(regex=r'^~update/$',
+        view=views.VerifyAddressView.as_view(),
+        name='update_address'),
 
     url(regex=r'^(?P<username>[\w.@+-]+)/$',
         view=views.UserDetailView.as_view(),

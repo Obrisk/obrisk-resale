@@ -1,30 +1,100 @@
 from django import forms
-from markdownx.fields import MarkdownxFormField
+from django.contrib.postgres.forms import JSONField
+from django.utils.translation import ugettext_lazy as _
+from dal import autocomplete
 from obrisk.posts.models import Post, Comment
-
+from obrisk.utils.fields import RichTextFormField
 
 class PostForm(forms.ModelForm):
-    status = forms.CharField(widget=forms.HiddenInput())
+    status = forms.CharField(
+            widget=forms.HiddenInput(), required=False
+    )
     edited = forms.BooleanField(
-        widget=forms.HiddenInput(), required=False, initial=False)
-    image = forms.CharField(required=False, max_length=150, label=('Cover photo URL'))
-    content = MarkdownxFormField()
+        widget=forms.HiddenInput(), required=False, initial=False
+    )
+    image = forms.CharField(
+        required=False,
+        max_length=150,
+        widget=forms.HiddenInput(),
+    )
+    content_html = RichTextFormField(
+        widget=forms.HiddenInput(), required=False
+    )
+    content_json = JSONField(widget=forms.HiddenInput())
 
     class Meta:
         model = Post
-        fields = ["title", "content", "image", "tags",
-                "status", "edited", "category"]
+        fields = [
+            "title",
+            "content_html",
+            "content_json",
+            "image",
+            "tags",
+            "status",
+            "edited",
+            "category",
+        ]
+        widgets = {
+            'tags': autocomplete.TagSelect2(url='posts:tags_autocomplete')
+        }
+
         help_texts = {
-            "title": "Make it short but descriptive, the maximum is 80 characters.",
+            "title": _(
+                "Make it short but descriptive, maximum 80 characters."
+            ),
+        }
+
+
+class PostEditForm(forms.ModelForm):
+    status = forms.CharField(
+            widget=forms.HiddenInput(), required=False
+    )
+    edited = forms.BooleanField(
+        widget=forms.HiddenInput(), required=False, initial=False
+    )
+    image = forms.CharField(
+        required=False,
+        max_length=150,
+        widget=forms.HiddenInput(),
+    )
+    content_html = RichTextFormField(
+        widget=forms.HiddenInput(), required=False
+    )
+    content_json = JSONField(widget=forms.HiddenInput())
+
+    class Meta:
+        model = Post
+        fields = [
+            "title",
+            "content_html",
+            "content_json",
+            "image",
+            "tags",
+            "status",
+            "edited",
+            "category",
+        ]
+        widgets = {
+            'tags': autocomplete.TagSelect2(url='posts:tags_autocomplete')
+        }
+
+        help_texts = {
+            "title": _("Make it short but descriptive, maximum 80 characters."),
         }
 
 
 class CommentForm(forms.ModelForm):
-
     class Meta:
         model = Comment
-        fields = ('body',)
+        fields = ("body",)
         widgets = {
-            'body': forms.Textarea(attrs={'rows': 3, 'cols': 'auto'}),
+            "body": forms.Textarea(
+                attrs={
+                    "placeholder":_('Leave a comment...'),
+                     "rows": 3, "cols": "auto"
+                 })
         }
-        labels = {'body': '', }
+
+        labels = {
+            "body": "",
+        }

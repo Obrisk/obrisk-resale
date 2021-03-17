@@ -1,47 +1,116 @@
-from celery import shared_task
-from obrisk.users.models import User
 import requests
-from slugify import slugify
-# from django.http import JsonResponse
-# import base64
 import datetime
-# import oss2
-from allauth.socialaccount.models import SocialAccount, SocialLogin
+import time
+import oss2
+import uuid
+
+from django.core.cache import cache
+from celery import shared_task
+from slugify import slugify
+
+from allauth.socialaccount.models import (
+        SocialAccount, SocialLogin
+    )
 from obrisk.utils.images_upload import bucket
+from obrisk.users.models import User
 
 
-@shared_task
-def update_profile_picture(user_id):
-    '''
-    A function to add the background task to update user picture download it from
-    Linkedin and save it to our bucket using requests package
-    '''
-    
-    # get  the user object
-    user = SocialAccount.objects.get(user=User.objects.get(id=user_id))
+def update_prof_pic_sync(user, thumb, mid, full):
+    """
+    Runs the bg task to update user picture download it from
+    social app and save it to our bucket
+    It has to sleep for sometime or execution will fail
+    """
+    try:
+        # timeout is high because it is task.py
+        thumbnail = requests.get(thumb, timeout=30)
+        picture = requests.get(mid, timeout=30)
+        org_picture = requests.get(full, timeout=30)
 
-    # check if the user is a social user and get the info from linkedin
-    if user.socialaccount_set.all() and not user.picture:
-        mid_size = user.socialaccount_set.all()[0].extra_data['profilePicture']['displayImage~']['elements'][2]['identifiers'][0]['identifier']
-        thumbnail = user.socialaccount_set.all()[0].extra_data['profilePicture']['displayImage~']['elements'][0]['identifiers'][0]['identifier']
-        full_image = user.socialaccount_set.all()[0].extra_data['profilePicture']['displayImage~']['elements'][3]['identifiers'][0]['identifier']
+    except (requests.ConnectionError,
+            requests.RequestException,
+            requests.HTTPError,
+            requests.Timeout,
+            requests.TooManyRedirects) as e:
+        logging.error("Failed to download social pic" + e)
+        return None
 
-        # downloading the images
-        thumbnail = requests.get(thumbnail)
-        picture = requests.get(mid_size)
-        org_picture = requests.get(full_image)
+    # naming them in our oss
+    salt = uuid.uuid4().hex[:12]
+    thumb_name = "media/images/profile_pics/" + slugify(
+            str(user.username)
+        ) + "/thumbnails/" + "thumb-" + salt + ".jpeg"
+    pic_name = "media/images/profile_pics/" + slugify(
+                str(user.username)
+            ) + "/mid-thumbnails/" + "dp-" + salt + ".jpeg"
+    org_pic_name = "media/images/profile_pics/" + slugify(
+            str(user.username)
+        ) + "/full-pic/" + "org-dp-" + salt + ".jpeg"
 
-        # naming them in our oss
-        d = str(datetime.datetime.now())
-        thumb_name = "media/profile_pics/" + slugify(str(user)) + "/thumbnails/" + "thumb-" + d
-        pic_name = "media/profile_pics/" + slugify(str(user)) + "/thumbnails" + "dp-" + d
-        org_pic_name = "media/profile_pics/" + slugify(str(user)) + "/thumbnails" + "org-dp-" + d
-
-        # upoad them in our oss
+    # upoad them in our oss
+    try:
         bucket.put_object(thumb_name, thumbnail.content)
         bucket.put_object(pic_name, picture.content)
         bucket.put_object(org_pic_name, org_picture.content)
 
+    except (oss2.exceptions.ClientError,
+            oss2.exceptions.RequestError) as e:
+        logging.error("Failed to upload social Image" + e)
+
+    else:
+        #saving and updating user credentials .
+        user.thumbnail = thumb_name
+        user.picture = pic_name
+        user.org_picture = picture
+        user.save()
+
+
+@shared_task
+def update_prof_pic_async(user_id, thumb, mid, full):
+    """
+    Runs the bg task to update user picture download it from
+    social app and save it to our bucket
+    It has to sleep for sometime for the view to save user to database
+    """
+    time.sleep(5)
+    user = User.objects.get(id=user_id)
+
+    try:
+        thumbnail = requests.get(thumb, timeout=180)
+        picture = requests.get(mid, timeout=180)
+        org_picture = requests.get(full, timeout=180)
+
+    except (requests.ConnectionError,
+            requests.RequestException,
+            requests.HTTPError,
+            requests.Timeout,
+            requests.TooManyRedirects) as e:
+        logging.error("Failed to download social pic" + e)
+        return None
+
+    # naming them in our oss
+    salt = uuid.uuid4().hex[:12]
+    thumb_name = "media/images/profile_pics/" + slugify(
+            str(user.username)
+        ) + "/thumbnails/" + "thumb-" + salt + ".jpeg"
+    pic_name = "media/images/profile_pics/" + slugify(
+                str(user.username)
+            ) + "/mid-thumbnails/" + "dp-" + salt + ".jpeg"
+    org_pic_name = "media/images/profile_pics/" + slugify(
+            str(user.username)
+        ) + "/full-pic/" + "org-dp-" + salt + ".jpeg"
+
+    # upoad them in our oss
+    try:
+        bucket.put_object(thumb_name, thumbnail.content)
+        bucket.put_object(pic_name, picture.content)
+        bucket.put_object(org_pic_name, org_picture.content)
+
+    except (oss2.exceptions.ClientError,
+            oss2.exceptions.RequestError) as e:
+        logging.error("Failed to upload social Image" + e)
+
+    else:
         #saving and updating user credentials .
         user.thumbnail = thumb_name
         user.picture = pic_name

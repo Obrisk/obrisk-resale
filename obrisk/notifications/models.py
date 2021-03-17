@@ -226,11 +226,11 @@ def notification_handler(actor, recipient, verb, is_msg=False, **kwargs):
     """
     key = kwargs.pop('key', 'notification')
     id_value = kwargs.pop('id_value', None)
-    
+
     if is_msg:
-        
+
         notification_broadcast(actor, key, is_msg, recipient=recipient.username)
-        
+
     elif recipient == 'global':
         users = get_user_model().objects.all().exclude(username=actor.username)
         for user in users:

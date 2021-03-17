@@ -4,18 +4,18 @@ Requires=uvicorn.socket
 After=network.target
 
 [Service]
-PIDFile=/home/obdev-user/run/uvicorn/pid
-User=obdev-user
+PIDFile=/home/ubuntu/run/uvicorn/pid
+User=ubuntu
 Group=www-data
-WorkingDirectory=/home/obdev-user/obdev2018
+WorkingDirectory=/home/ubuntu/obdev2018
 Environment="DJANGO_SETTINGS_MODULE=config.settings.production"
-ExecStart=/home/obdev-user/obdev2018/venv_obrisk/bin/gunicorn \
+ExecStart=/home/ubuntu/obdev2018/venv_obrisk/bin/gunicorn \
           -k uvicorn.workers.UvicornWorker \
           --workers 6 \
-          --bind unix:/run/gunicorn.sock \
-          --log-level critical \
-	  --access-logfile '/home/obdev-user/logs/gunicorn-error.log' \
-	  --error-logfile '/home/obdev-user/logs/gunicorn-error.log' \
+          --bind unix:/run/uvicorn.sock \
+          --log-level info \
+	  --access-logfile '/home/ubuntu/logs/uvicorn-access.log' \
+	  --error-logfile '/home/ubuntu/logs/uvicorn-error.log' \
           config.asgi:application
 
 [Install]

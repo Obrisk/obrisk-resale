@@ -4,218 +4,217 @@
 {% block title %}{{ object.username }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/user_profile.css' %}?v=200719" rel="stylesheet">
+<link href="{% static 'css/user_profile.css' %}" rel="stylesheet">
 
 {% endblock head %}
 
 {% block content %}
-<a href="{% url 'stories:list' %}" class="d-sm-block d-md-none btn btn-dark"> <i class="fa fa-chevron-left"
-    aria-hidden="true"></i></a>
 
-<div class="col-md-8 m-auto">
-  <div class="media user-profile profile-header d-flex flex-column">
+<div>
+  <div class="media profile profile-header m-2">
     {% if object.picture %}
-    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
-      class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid profile-pic" id="pic">
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
+          class="mb-3 profile-header-avatar img-fluid profile-pic" id="pic">
     {% else %}
-    <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
-    <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
+        <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
+        <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
     {% endif %}
 
-    <div class="media-body">
-      <h1 class="mt-0">{{ object.username|title }}</h1>
+    <h1 class="media-body mt-0">{{ object.username|title }}</h1>
 
-    </div>
     <div class="profile-points">
-      <div class="point-label"> <i class="fa fa-gift"> </i> {% trans 'Points' %}</div>
+      <div class="point-label">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round"
+            class="feather feather-gift">
+            <polyline points="20 12 20 22 4 22 4 12"></polyline>
+            <rect x="2" y="7" width="20" height="5"></rect>
+            <line x1="12" y1="22" x2="12" y2="7"></line>
+            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+        </svg>
+        {% trans 'Points' %}
+      </div>
       <div class="points"> {{ object.points }} </div>
     </div>
 
-    <div>
       {% if request.user.username == object.username %}
-      <div class="d-flex mb-2">
-        <a class="btn btn-dark m-auto" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+          <div class="is-flex mb-2">
+            <a class="button accent-button m-2" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
+          </div>
 
-      </div>
-
-      <div class="">
-        {%if object.is_official %}
-        <a class="button has-min-width m-auto"
-          href="{% url 'connections:friendship_followers'  %}">{% trans 'Followers🤝' %}</a>
-        {% else %}
-        <a class="button has-min-width m-auto"
-          href="{% url 'connections:friendship_following' %}">{% trans 'Following' %}</a>
-        {% endif %}
-
-        <a class=" button has-min-width m-auto"
-          href="{% url 'connections:friendship_view_friends' %}">{% trans 'Connects' %}</a>
-      </div>
       {% else %}
-      <div class="d-flex mb-2">
-
-
-        {% if object in friends %}
-        <a class="button has-min-width m-auto go-to-chat"
-          data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
-        {% elif object in pending %}
-        <a class="btn btn-dark m-auto" href="#">{% trans 'Pending' %}</a>
-        {% elif object in pended%}
-        {{object.username|title }} wants to connect with you! 🔌
-         
-         <a href="{% url 'connections:friendship_request_list' %}">view all requests</a>
-        {% else %}
-        <a class="connect-btn button has-min-width m-auto" href="#">{% trans '➕Connect' %}</a>
-        {% endif %}
-      </div>
-      <div class="d-flex mb-2">
-        {% if object in following %}
-        <a class="btn btn-outline-danger m-auto"
-          href="{% url 'connections:follower_remove'  object.username  %}">{% trans 'Unfollow' %}</a>
-        {% else %}
-        {% if object.is_official %}
-        <a class="button has-min-width m-auto"
-          href="{% url 'connections:follower_add'   object.username %}">{% trans 'Follow' %}</a>
-        {% endif %}
-        {% endif %}
-      </div>
+          <div class="is-flex mb-2">
+            {% if object in friends %}
+                <a class="button accent-button m-2 go-to-chat"
+                  data-url="{% url 'messager:conversation_detail' object.username  %}">{% trans '💬Chat' %}</a>
+            {% elif object in pending %}
+                <a class="button accent-button m-2" href="#">{% trans 'Pending' %}</a>
+            {% elif object in pended%}
+                {{object.username|title }} Wants to connect with you 🔌
+                <a class="button accent-button m-2" 
+                    href="{% url 'connections:friendship_request_list' %}">view all requests</a>
+            {% else %}
+                <a class="connect-btn button accent-button m-2" href="#">{% trans '➕Connect' %}</a>
+            {% endif %}
+          </div>
       {% endif %}
-    </div>
-    <!--This is else statement. <i class="fa fa-envelope" aria-hidden="true"></i><a class="email" href="mailto:{{ object.email }}">   {{ object.email }}</a><br /> -->
   </div>
+
   <div class="container profile-wrapper">
 
     <div id="contact-info" class="vcard">
-
-      {% if object.is_seller %}
-
-      {% endif %}
-
       <p>
+        {% if object.facebook_account %}
+            <a href="https://www.facebook.com/{{ object.facebook_account }}"
+               style="font-size: 2em"
+              title="{% trans 'Facebook Profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="#354BF5" stroke="#354BF5"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-facebook">
+                    <path
+                        d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z">
+                    </path>
+                </svg>
+            </a>
+        {% endif %}
+
         {% if object.instagram_account %}
-        <a href="https://www.instagram.com/{{ object.instagram_account }}" style="font-size: 2em"
-          title="{% trans 'Instagram Profile' %}"><i class="fa fa-instagram"></i> </a>
+            <a href="https://www.instagram.com/{{ object.instagram_account }}"
+               style="font-size: 2em"
+               title="{% trans 'Instagram Profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-instagram">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5">
+                    </rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z">
+                    </path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+            </a>
         {% endif %}
 
         {% if object.linkedin_account %}
-        <a href="https://www.linkedin.com/in/{{ object.linkedin_account }}" style="font-size: 2em"
-          title="{% trans 'LinkedIn Profile' %}"><i class="fa fa-linkedin"></i> </a>
+            <a href="https://www.linkedin.com/in/{{ object.linkedin_account }}" style="font-size: 2em"
+              title="{% trans 'LinkedIn Profile' %}">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="#357BF5" stroke="#357BF5"
+                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                    class="feather feather-linkedin">
+                    <path 
+                        d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z">
+                    </path>
+                    <rect x="2" y="9" width="4" height="12"></rect>
+                    <circle cx="4" cy="4" r="2"></circle>
+                </svg>
+            </a>
         {% endif %}
-
-        {% if object.snapchat_account %}
-        <a href="https://www.snapchat.com/add/{{ object.snapchat_account }}" style="font-size: 2em"
-          title="{% trans 'Snapchat Profile' %}"><i class="fa fa-snapchat"></i> </a>
-        {% endif %}
-
-        {% if object.facebook_account %}
-        <a href="https://www.facebook.com/{{ object.facebook_account }}" style="font-size: 2em"
-          title="{% trans 'Facebook Profile' %}"><i class="fa fa-facebook"></i> </a>
-        {% endif %}
-
         <br />
+
         {% if object.name %}
-        👤{{ object.name|title  }}
+            👤{{ object.name|title  }} <br />
         {% endif %}
 
-        <br />
         {% if object.city %}
-        <span class="fa"> 📍{{ object.city }} </span> <br />
+             📍{{ object.city }} <br />
         {% endif %}
         <br />
+
         {% if object.job_title %}
-        💼{{ object.job_title }} <br />
+            💼{{ object.job_title }} <br />
         {% else %}
-        <p>🛌 {{ object.username }} is too lazy to add a job title.</p>
+            <p>🛌 {{ object.username }} is too lazy to add a job title.</p>
         {% endif %}
       </p>
 
       {% if object.bio %}
-      <div class="panel-body" id="objective">
-        <p>📇{{ object.bio }}</p>
-      </div>
+          <div class="panel-body" id="objective">
+            <p>📇{{ object.bio }}</p>
+          </div>
       {% else %}
-      <p> 🛌{{ object.username}} is too lazy to write a short bio.</p>
+          <p> 🛌{{ object.username}} is too lazy to write a short bio.</p>
       {% endif %}
+
       <div class="clear"></div>
     </div>
 
   </div>
   {% csrf_token %}
 </div>
-<script>
-  function getCookie(name) {
-    // Function to get any cookie available in the session.
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== "") {
-      var cookies = document.cookie.split(";");
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === name + "=") {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
-      }
-    }
-    return cookieValue;
-  }
 
+{% endblock content %}
+
+{% block extra_js %}
+
+<link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
+
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
+<script>
+  const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   const username = "{{ object.username }}";
-  var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val()
 
   $(".connect-btn").click(function (e) {
-    bootbox.confirm("Send friend request ?", function (result) {
-      if (result) {
-        $.ajax({
-          beforeSend: function (xhr, settings) {
-            xhr.setRequestHeader("X-CSRFToken", csrftoken);
-          },
-          type: "POST",
-          url: "/connections/friend/add/" + username + "/",
-          data: {
-            to_username: username
-          },
-          dataType: "json",
-          success: function (response) {
-            if (response) {
-              bootbox.alert({
-                message: response.message,
-                size: 'small'
-              });
-            } else {
-              bootbox.alert({
-                message: "Sorry something went wrong , Please try again later.",
-                size: 'small'
-              });
-            }
 
-          }
-
-        });
+    $.ajax({
+      type: "POST",
+      url: "/connections/friend/add/" + username + "/",
+      data: {
+        to_username: username
+      },
+      dataType: "json",
+      success: function (response) {
+        if (response) {
+          $.wnoty({
+            type: "success",
+            message: response.message,
+          });
+        } else {
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "Sorry something went wrong , Please try again later.",
+          });
+        }
       }
     });
-
   });
 
 
-  //setcookies to open chat window
-  var setCookie = function (name, value, days) {
-    if (!name && !value) {
-      return false;
-    } else if (days) {
-      var date = new Date();
-      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-      var expires = "; expires=" + date.toGMTString();
-    }
-    else var expires = "";
-    document.cookie = name + "=" + value + expires + "; path=/";
-    return true;
-  }
+  $(".follow-btn").click(function (e) {
+
+    $.ajax({
+      type: "POST",
+      url: "/connections/follower/add/" + username + "/",
+      data: {
+        followee_username: username
+      },
+      dataType: "json",
+      success: function (response) {
+        if (response) {
+          $.wnoty({
+            type: "success",
+            message: "You're now following" + username + "🔌",
+          });
+        } else {
+          $.wnoty({
+            type: "error",
+            autohide: false,
+            message: "Sorry something went wrong , Please try again later.",
+          });
+        }
+      }
+    });
+  });
+
   $(".go-to-chat").click(function (e) {
     e.preventDefault();
-    setCookie("active-chat", $(this).data("url"), 1);
-    location.href = "/ws/messages";
+    setCookie("active-chat", $(this).data("url"), 120);
+    location.href = "/ws/messages/";
 
   });
 </script>
 
-{% endblock content %}
+{% endblock extra_js %}

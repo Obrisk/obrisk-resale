@@ -1,0 +1,1 @@
+{"version":3,"sources":["account.scss"],"names":[],"mappings":"AAAA,cACI,mCAAoC,AACpC,uCAA0C,AAC1C,eAAgB,CACnB","file":"../../../obdev2018/frontend/scss/account.css","sourcesContent":[".page-wrapper {\n    border: 1px solid #A1DBD2 !important;\n    box-shadow: 2px 2px 0px #3EC4E2 !important;\n    background: #fff;\n}"]}

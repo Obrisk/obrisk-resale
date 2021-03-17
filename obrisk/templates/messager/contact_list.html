@@ -2,142 +2,159 @@
 {% load static i18n %}
 
 {% block head %}
-<link href="{% static 'css/contact-list.css' %}" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
 <title>{% trans 'Messages' %}</title>
 {% endblock head %}
 
 {% block content %}
-<div class="container mt-5 mb-md-5">
+    <h1 class="title is-5"> {% trans 'Recent Messages' %} </h1>
 
-  <div class="column row mt-md-5">
-
-    <div class="col-md-8 m-auto pb-4">
-
-      <div class="row">
-        <div class="questions col-12 col-md-10 m-auto">
-          <ul class="nav  justify-content-between mb-2">
-            <li class="nav-item">
-              <h3 style="color: black;"> <strong> {% trans 'Recent Messages' %} </strong></h3>
-            </li>
-
-            <li class="nav-item">
-              <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
-                {% trans "Discover" %}
-              </a>
-            </li>
-
-
-          </ul>
-        </div>
-
-        <div class="col-lg-10 users-list">
-          {% for con in convs %}
+    <div class="users-list">
+      {% for con in convs %}
           {% if con.first_user.username == request.user.username %}
-          <a href="#chat-window" data-toggle="modal"
-            data-url="{% url 'messager:conversation_detail' con.second_user.username %}"
-            class="card flex-row mb-1 pb-2 pl-3 pr-3 pt-2 open-chat">
-            {% if con.second_user.thumbnail %}
-            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
-              style="width:40px;height:40px;border-radius: 50%;"
-              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2">
-            {% else %}
-            <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
-              alt="No Pic" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2" />
-            {% endif %}
+              <a href="#chat-window" data-toggle="modal"
+                data-url="{% url 'messager:conversation_detail' con.second_user.username %}"
+                id="{{ con.key }}" class="card contact-card open-chat">
+                {% if con.second_user.thumbnail %}
+                <img src="{{oss}}/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
+                  style="width:40px;height:40px;border-radius: 50%;"
+                  class="rounded-circle profile-header-avatar img-fluid">
+                {% else %}
+                <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
+                  alt="No Pic" class="profile-header-avatar img-fluid" />
+                {% endif %}
 
-            <div class="w-100">
-              <div class="d-flex justify-content-between">
-                <strong> {{ con.second_user.get_profile_name|title }} </strong>
-                <small> {{ con.time|date:'N d G:i' }} </small>
-              </div>
+                <div class="contact-card-meta">
+                  <div class="name-time-section">
+                        <strong> {{ con.second_user.get_profile_name|title }} </strong>
+                        <small class="timestamp" {% if forloop.first %} id="last-timestamp" {% endif %}>
+                            {{ con.time|date:'N d G:i' }}
+                        </small>
+                  </div>
 
-              {% if con.last_msg %}
-              <small> {{ con.last_msg|truncatechars:50 }} </small>
-              {% elif con.img or con.attachment %}
-              <small> Attachment </small>
-              {% else %}
-              <small> New conversation </small>
-              {% endif %}
+                  <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}> 
+                      {% if con.last_msg %}
+                          {{ con.last_msg|truncatechars:50 }}
+                      {% elif con.img or con.attachment %}
+                          Attachment
+                      {% else %}
+                          New conversation
+                      {% endif %}
+                   </small>
 
-              {%  if con.unread and request.user.id == con.recipient %}
-              <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-              {% endif %}
-            </div>
-          </a>
+                  {%  if con.unread and request.user.id == con.recipient %}
+                      <span id="new-msgs">
+                        <span class="msg-notification">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </span>
+                      </span>
+                  {% endif %}
+                </div>
+              </a>
 
           {% else %}
-          <a href="#chat-window" data-toggle="modal"
-            data-url="{% url 'messager:conversation_detail' con.first_user.username %}"
-            class="card flex-row mb-1 pb-2 pl-3 pr-3 pt-2 open-chat ">
-            {% if con.first_user.thumbnail %}
-            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{con.first_user.thumbnail}}" alt="Picture Profile"
-              style="width:40px;height:40px;border-radius: 50%;"
-              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2" id="pic">
-            {% else %}
-            <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
-              alt="No Profile Picture" class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid mr-2" />
-            {% endif %}
+              <a href="#chat-window" data-toggle="modal"
+                data-url="{% url 'messager:conversation_detail' con.first_user.username %}"
+                id="{{ con.key }}" class="card contact-card open-chat">
+                {% if con.first_user.thumbnail %}
+                    <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
+                      style="width:40px;height:40px;border-radius: 50%;"
+                      class="rounded-circle profile-header-avatar img-fluid" id="pic">
+                {% else %}
+                    <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
+                      alt="No Profile Picture" class="profile-header-avatar img-fluid" />
+                {% endif %}
 
-            <div class="w-100">
-              <div class="d-flex justify-content-between">
-                <strong> {{ con.first_user.get_profile_name|title }} </strong>
-                <small> {{ con.time|date:'N d G:i' }} </small>
-              </div>
+                <div class="contact-card-meta">
+                  <div class="name-time-section">
+                    <strong> {{ con.first_user.get_profile_name|title }} </strong>
+                    <small class="timestamp" {% if forloop.first %} id="last-timestamp" {% endif %}>
+                        {{ con.time|date:'N d G:i' }}
+                    </small>
+                  </div>
 
+                  <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}>
+                      {% if con.last_msg %}
+                          {{ con.last_msg|truncatechars:50 }}
+                      {% elif con.img or con.attachment %}
+                          Attachment
+                      {% else %}
+                          New conversation
+                      {% endif %}
+                   </small>
 
-              {% if con.last_msg %}
-              <small> {{ con.last_msg|truncatechars:50 }} </small>
-              {% elif con.img or con.attachment %}
-              <small> Attachment </small>
-              {% else %}
-              <small> New conversation </small>
-              {% endif %}
-
-              {%  if con.unread and request.user.id == con.recipient %}
-              <span class="pull-right" id="new-msgs"> <i class="fa fa-circle" aria-hidden="true"></i> </span>
-              {% endif %}
-            </div>
-          </a>
+                  {%  if con.unread and request.user.id == con.recipient %}
+                      <span id="new-msgs">
+                        <span class="msg-notification">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                                viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
+                                stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
+                            </svg>
+                        </span>
+                      </span>
+                  {% endif %}
+                </div>
+              </a>
           {% endif %}
 
-          {% empty %}
+      {% empty %}
+          <div class="card">
+              <div class="card-body">
+                  <strong> {% trans "No contacts" %} </strong>
+                  <p> {% trans "Invite your friends Or chat with our team members" %}</p>
+              </div>
+          </div>
 
-
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb" style="background-color: #3EC4E2;">
-              <li class="breadcrumb-item">
-                <h4> {% trans "No contacts" %} </h4>
-              </li>
-            </ol>
-          </nav>
-
-          <p>
-            {% trans "Start a chat from the classifieds details or invite friends, Or you can chat with the available Obrisk team member" %}
-          </p>
-
-          <a href="{% url 'messager:conversation_detail' super_users.first.username  %}"
-            class="list-group-item list-group-item-action ">
+          <a href="#chat-window" data-toggle="modal"
+            data-url="{% url 'messager:conversation_detail' super_users.first.username %}"
+            id="{{super_users.first.id}}.{{request.user.id}}" class="card contact-card open-chat ">
             {% if super_users.first.thumbnail %}
-            <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{super_users.first.thumbnail}}" alt="Picture Profile"
-              style="width:40px;height:40px;border-radius: 50%;"
-              class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+                <img src="{{oss}}/{{super_users.first.thumbnail}}" alt="Picture Profile"
+                  style="width:40px;height:40px;border-radius: 50%;"
+                  class="rounded-circle profile-header-avatar img-fluid" id="pic">
             {% else %}
-            <img src="{% static 'img/user.png' %}" width="40px" alt="No Profile Picture"
-              class="mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" />
+                <img src="{% static 'img/user.png' %}" width="40px" alt="No Profile Picture"
+                  class="profile-header-avatar img-fluid" />
             {% endif %}
-            <strong> {{ super_users.first.get_profile_name|title }} </strong> </a>
 
-          {% endfor %}
-        </div>
-        <div class="has-text-centered col-12 col-md-10 m-auto">
+            <div class="contact-card-meta">
+                  <div class="name-time-section">
+                        <strong>{{ super_users.first.get_profile_name|title }} </strong>
+                        <small class="timestamp" id="last-timestamp" >
+                            {%  now 'N d G:i' %}
+                        </small>
+                  </div>
 
-          <span onclick="shareMe()" class="button has-min-width">
+                  <small class="msg" id="last-msg">
+                     New conversation 
+                  </small>
+            </div>
+           </a>
+      {% endfor %}
+
+      </div>
+
+      <div class="action-buttons">
+
+          <a onclick="shareMe()" class="button is-solid accent-button">
             {% trans "Invite Friends" %}
-          </span>
+          </a>
 
-        </div>
+          <!--a href="{% url 'connections:friendship_view_friends' %}" 
+              class="button is-solid accent-button">
+            {% trans "Discover" %}
+          </a-->
+      </div>
+
       </div>
     </div>
+
     <div id="chat-window" class="modal">
 
       <div class="chat-wrapper is-standalone">
@@ -149,8 +166,6 @@
               <div class="recipient-block">
                 <div class="avatar-container">
                   <!--Add image -->
-
-
                 </div>
                 <div class="username">
 
@@ -168,12 +183,10 @@
             </div>
           </div>
 
-
           <!-- Chat body -->
           <div id="chat-body" class="chat-body" style="display: flex;height: 100vh;flex-direction: column;">
             <!-- Conversation with Dan -->
-            <div id="conversation" class="chat-body-inner has-slimscroll" style="flex-grow: 1;">
-
+            <div id="conversation" class="chat-body-inner" style="flex-grow: 1;">
 
               <div class="send-message"> </div>
             </div>
@@ -188,14 +201,9 @@
                       <div class="is-flex message-scroll">
                         {% csrf_token %}
                         <input type="hidden" class="sendTo" name="to" value="">
-                        <textarea class="form-control mr-2 textarea comment-textarea" autocomplete="off"
+                        <textarea class="form-control textarea comment-textarea" autocomplete="off"
                           maxlength="1000" id="sendText" placeholder="{% trans 'Write a message...' %}" name="message"
                           autofocus rows="2" cols="2"></textarea>
-
-
-                        <a id="chooseFile" href="#" class="p-2">
-                          <i class="fa fa-paperclip" style="font-size: 1.2em"></i>
-                        </a>
                       </div>
 
                     </form>
@@ -209,11 +217,15 @@
                         <div class="is-flex">
                           <div class="add-button" id="addBtn">
                             <div class="button-inner">
-                              <i class="mdi mdi-camera" style="color: white;"></i>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"
+                                    viewBox="0 0 512 512">
+                                    <path d="M456,64H56A24,24,0,0,0,32,88V424a24,24,0,0,0,24,24H456a24,24,0,0,0,24-24V88A24,24,0,0,0,456,64ZM331.62,128.2a48,48,0,1,1-43.42,43.42A48,48,0,0,1,331.62,128.2ZM76,416a12,12,0,0,1-12-12V316.37L192.64,202l96.95,96.75L172.37,416Zm372-12a12,12,0,0,1-12,12H217.63L367.16,266.47,448,333.84Z"/>
+                                </svg>
                             </div>
                           </div>
+
                           <button id="send-text"
-                            class="add-button button is-hidden-mobile is-solid accent-button is-bold raised">
+                            class="button add-button is-solid accent-button is-bold raised">
                             <small><strong>Send</strong></small>
                           </button>
 
@@ -228,58 +240,44 @@
               </div>
             </div>
 
-
           </div>
+{% endblock content %}
 
-        </div>
-      </div>
-    </div>
-    {% endblock content %}
+{% block extra_js %}
+    <link rel="stylesheet" href="{% static 'css/share.css' %}">
 
-
-
-    {% block extra_js %}
     <script>
       var activeUser = "{{ active }}";
-      var currentUser = "{{ request.user.username }}";
-      {% if request.user.thumbnail %}
-      var currentUserThumbnail = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ request.user.thumbnail }}"
-      {% else %}
-      var currentUserThumbnail = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{% static 'img/user.png' %}"
-      {% endif %}
-      var activeUser = "";
       const oss_url = "{% url 'get_oss_auth' %}";
 
-      {% if active.thumbnail %}
-      var user_thumb = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ active.thumbnail}}"
+
+      {% if request.user.thumbnail %}
+          const currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
       {% else %}
-      var user_thumb = "{% static 'img/user.png' %}"
+          const currentUserThumbnail = "{{oss}}/{% static 'img/user.png' %}"
       {% endif %}
 
 
+      {% if active.thumbnail %}
+          const user_thumb = "{{oss}}/{{ active.thumbnail }}"
+      {% else %}
+          const user_thumb = "{% static 'img/user.png' %}"
+      {% endif %}
 
-
-
-    </script>
-    <script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/bootbox.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/moment.min.js' %}"></script>
-    <script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/fancybox.min.js' %}"></script>
-
-    <link rel="stylesheet" href="{% static 'css/fancybox.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/share.css' %}">
-    <script>
       function shareMe() {
         navigator.share({
           title: 'Join Obrisk Today!',
-          text: "Checkout Obrisk.com, social network for foreigners in China",
+          text: "Checkout Obrisk.com, the best secondhand platform for foreigners in China",
           url: 'https://obrisk.com/',
         })
       }
     </script>
 
-
-    {% endblock extra_js %}
+    <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/modal.js' %}" type="text/javascript"></script>
+    <script src="{% static 'js/vendor/moment.min.js' %}"></script>
+    <script defer src="{% static 'js/vendor/fancybox.min.js' %}"></script>
+    <script defer src="{% static 'js/vendor/aliyun-oss.min.js' %}" type="text/javascript"></script>
+    <script defer src="{% static 'js/vendor/transliteration.min.js' %}" type="text/javascript"></script>
+    <script defer src="{% static 'js/messager.js' %}" type="text/javascript"></script>
+{% endblock extra_js %}

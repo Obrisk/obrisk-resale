@@ -22,6 +22,7 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+*.txt
 
 # Installer logs
 pip-log.txt
@@ -70,17 +71,13 @@ CODEOWNERS
 
 frontend/node_modules/
 
-obrisk/static/frontend/
-
 obrisk/templates/serviceworker.js
 
-# Aliyun CLI 
-aliyun/
-
-# This files maybe needed by some packages
-obrisk/static/assets/
+obrisk/static/frontend/
 
 node_modules/
+
+certs/
 
 *.out
 
@@ -88,3 +85,6 @@ celerybeat*
 
 *.sw*
 
+# Aliyun CLI 
+aliyun/
+search.txt

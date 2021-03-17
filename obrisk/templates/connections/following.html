@@ -11,15 +11,14 @@
             <!-- Profile page main wrapper -->
             <div id="profile-friends" class="view-wrap is-headless">
 
-
                   <div class="columns">
                         <div class="column">
-                              {% load friendshiptags %}
+                          {% load friendshiptags %}
 
-                              {% for f in following %}
+                          {% for f in following %}
                               {% if f.thumbnail %}
                               <a href="{% url 'users:detail' f.username %}">
-                                    <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{f.thumbnail}}"
+                                    <img src="{{ oss }}/{{f.thumbnail}}"
                                           alt="Picture Profile" style="width:40px;height:40px;border-radius: 50%;"
                                           class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
                                           id="pic"> </a>
@@ -29,32 +28,25 @@
                               </a>
                               {% endif %}
 
-                              <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a>
-                                    {% empty %}
-                                    Sorry {{ request.user.username | title }}, you do not follow any official account right now
-                                    😞
+                          <strong> <a href="{% url 'users:detail' f.username %}"> {{ f.username | title}} </a> </strong>
+                            
+                          {% empty %}
+                            <p> Hey {{ request.user.username | title }}, you are not following any account.</p>
+                            <p> Connect and follow the accounts you like </p> <br/>
 
-                                    {% endfor %}
+                        {% endfor %}
 
-                                    <div>
-                                          <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
-                                                {% trans "Keep Connecting" %} 
-                                              </a>
-                                    </div>
-
-                                    <div class="mt-3">
-                                    <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
-                                    class="fa fa-chevron-left" aria-hidden="true"></i> Back </button>
-                              
-                                    
-                                    </div>
                         </div>
-                  </div>
+                      </div> 
+
+                      <hr style="height: 2px;background-color:#28bddf;"/>
+
+                    <div class="m-2">
+                      <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
+                            {% trans "Discover Connections" %} 
+                          </a>
+                    </div>
             </div>
       </div>
 </div>
 {% endblock content %}
-
-{% block extra_js %}
-<script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
-{% endblock extra_js %}

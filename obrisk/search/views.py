@@ -180,3 +180,4 @@ def all_search(request, **kwargs):
 
 #    return render(request, 'search/search_results.html',
 #                {'stories_results': stories_results })
+

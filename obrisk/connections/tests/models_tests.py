@@ -2,13 +2,11 @@ import os
 from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import IntegrityError
-from django.urls import reverse
 from django.test import TestCase
-from django.contrib.auth import get_user_model
-User = get_user_model()
-
 from friendship.exceptions import AlreadyExistsError, AlreadyFriendsError
 from friendship.models import Friend, Follow, FriendshipRequest, Block
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 
 TEST_TEMPLATES = os.path.join(os.path.dirname(__file__), "templates")

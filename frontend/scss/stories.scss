@@ -1,0 +1,303 @@
+@import "partials/layout-colors";
+@import "partials/layout-extra-colors";
+@import "partials/components-cards";
+@import "partials/components-buttons";
+
+@import "partials/components-dropdowns";
+@import "partials/components-modals";
+@import "partials/components-forms";
+@import "partials/components-popovers";
+@import "partials/components-checkboxes";
+@import "partials/components-utils";
+@import "partials/app-feed";
+@import "partials/app-stories";
+@import "partials/layout-responsive";
+
+.top-space {
+    top: 30px;
+}
+
+.stream {
+  margin: 2em 0 0 0;
+  padding: 0;
+}
+
+.like-wrapper .like-button {
+  background: #e9bdbd;
+}
+
+.stream li {
+  list-style: none;
+  border-style: solid none solid none;
+}
+
+.stream li:last-child {
+  border-bottom: none;
+}
+
+.post {
+  margin-left: 10px;
+  padding: 0 0 0 1.2em;
+  overflow-x: auto;
+}
+
+.timestamp {
+  font-size: 0.8em;
+  color: grey;
+  float: right;
+}
+
+.profile-picture {
+  margin-right: 0.5em;
+  float: left;
+}
+
+.post-media {
+  margin-left: -16px;
+  margin-right: -16px;
+}
+
+.interaction {
+  padding-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+.interaction a {
+  margin-right: 1.3em;
+  font-size: 1.1em;
+  text-decoration: none;
+}
+
+.interaction a span {
+  margin-left: 0.5em;
+}
+
+.stream-update {
+  text-align: center;
+  border-bottom: 1px solid #eeeeee;
+  display: none;
+}
+
+.stream-update a {
+  display: block;
+  padding: 0.6em 0;
+  background-color: #f5f8fa;
+}
+
+.heart,
+.comment,
+.like-count,
+.fa-times {
+  color: #8b2100;
+}
+
+.col-centered {
+  float: none;
+  margin-right: auto;
+  margin-left: auto;
+}
+
+.compose h2 {
+  font-size: 1.4em;
+}
+
+.comments {
+  margin-top: 0.6em;
+  display: none;
+}
+
+.comments ol {
+  margin: 0.8em 0 0;
+  padding: 0.2em 0;
+  background-color: #f4f4f4;
+  border-radius: 3px;
+  overflow-x: auto;
+}
+
+.comments ol li {
+  list-style: none;
+  padding: 0;
+}
+
+.comments ol li img.user-comment {
+  width: 35px;
+  border-radius: 4px;
+  float: left;
+  margin-left: 10px;
+}
+
+.comments ol li div {
+  margin-left: 45px;
+  padding: 0 0.8em;
+  font-size: 0.9em;
+}
+
+.comments ol li {
+  padding: 0.6em 0.6em 0.6em 0;
+  border-bottom: none;
+}
+
+.comments ol li h4 {
+  margin: 0;
+  margin-left: 45px;
+  padding: 0 0 0.2em 0.8em;
+  font-size: 0.9em;
+}
+
+.comments ol li h4 small {
+  margin-left: 0.3em;
+}
+
+.empty {
+  margin: 0 0.8em;
+  font-size: 0.9em;
+}
+
+.load {
+  text-align: center;
+  padding-top: 1em;
+  border-top: 1px solid #eeeeee;
+  display: none;
+  padding: 15px 0;
+}
+
+.loadcomment {
+  text-align: center;
+}
+
+.remove-stories {
+  color: #bbbbbb;
+  font-size: 0.8em;
+  padding-top: 0.2em;
+  float: right;
+  cursor: pointer;
+}
+
+
+.infinite-item {
+  border: 1px solid #a1dbd2 !important;
+  box-shadow: 2px 2px 0px #3ec4e2 !important;
+  background: #fff;
+}
+
+.story-modal-header {
+  position: sticky;
+  top: 0px;
+  z-index: 99999;
+  background: #3ec4e2;
+}
+
+.tabs.is-toggle li.is-active a {
+  background: #3ec4e2;
+  background-color: #3ec4e2;
+}
+
+.block-scroll {
+  margin: 0 !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  position: fixed !important;
+}
+
+.img1 {
+    border-radius:8px;
+    max-height:400px;
+    width: 100%;
+    object-position:top;
+    object-fit:cover;
+}
+
+
+.grid-1 {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "img1";
+}
+
+
+@media all and (-ms-high-contrast: none) {
+  .grid-container {
+    display: -ms-grid;
+    -ms-grid-columns: 1fr 1fr;
+    -ms-grid-rows: 1fr 1fr;
+  }
+
+  .img1 {
+    -ms-grid-row: 1;
+    -ms-grid-row-span: 1;
+    -ms-grid-column: 1;
+    -ms-grid-column-span: 1;
+  }
+
+}
+
+.card.is-post .content-wrap .card-footer .likers-group a {
+  border-radius: 50%;
+}
+
+.card.is-post .content-wrap .card-footer .likers-group a:not(:first-child) {
+  margin-left: -12px;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.card.is-post .content-wrap .post-actions .like-wrapper .like-button {
+  width: 28px;
+  height: 28px;
+}
+
+.fab-wrapper, .like-wrapper, .is-share {
+    display: flex;
+    align-items: center;
+}
+
+.card.is-post .content-wrap .post-actions .fab-wrapper .small-fab {
+  width: 28px;
+  height: 28px;
+}
+
+.likes-count {
+    margin-left: 2px;
+}
+
+.count {
+    margin-left: 2px;
+}
+
+.like-overlay {
+  width: 100% !important;
+  height: 100% !important;
+}
+.image img {
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+}
+
+.post-media {
+  transition: all 0.2s;
+}
+
+.post-media.smaller {
+  transform: scale(0.5);
+  transform-origin: left top;
+}
+
+.grid-1.smaller {
+  width: auto;
+  max-height: 300px;
+  min-height: 50px;
+  margin-bottom: -50px;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: ".";
+}
+
+.smaller .img1,
+{
+  grid-area: auto;
+}

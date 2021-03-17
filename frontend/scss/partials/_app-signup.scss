@@ -404,6 +404,11 @@ Signup styles
 
 @media (max-width: 767px) {
     .signup-wrapper {
+
+        .process-bar-wrap {
+            padding: 0 0 0 0;
+        }
+
         .outer-panel {
             .outer-panel-inner {
                 max-width: 330px;

@@ -1,0 +1,1 @@
+function goToEdit(){window.location.href=editUrl}function shareMe(t,o){navigator.share({title:t,text:o,url:location.href})}

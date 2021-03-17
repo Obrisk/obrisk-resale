@@ -1,0 +1,4 @@
+ignore:
+  - "*.min.js"
+  - "images/**"
+  - "*aws*.js"

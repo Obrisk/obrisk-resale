@@ -2,19 +2,14 @@ import json
 
 from slugify import slugify
 from channels.generic.websocket import AsyncWebsocketConsumer
-from channels.db import database_sync_to_async	
-from django.core.cache import cache	
-from django.core.cache.backends.base import DEFAULT_TIMEOUT	
-from config.settings.base import SESSION_COOKIE_AGE
-from asgiref.sync import sync_to_async
+from channels.db import database_sync_to_async
 
- 
 from obrisk.users.models import User
 
 
 class MessagerConsumer(AsyncWebsocketConsumer):
     """Consumer to manage WebSocket connections for the Messager app. """
-    
+
     async def connect(self):
         """Consumer Connect implementation, to validate user status and prevent
         non authenticated user to take advante from the connection."""
@@ -27,7 +22,7 @@ class MessagerConsumer(AsyncWebsocketConsumer):
             await self.update_user_status_to_online(user)
             username = slugify(self.scope['user'].username)
             # Accept the connection
-            
+
             await self.channel_layer.group_add(f"{username}", self.channel_name)
             await self.accept()
 
@@ -52,7 +47,7 @@ class MessagerConsumer(AsyncWebsocketConsumer):
         storing the current user to redis key is his id and value is none then later being updated when sending the msg
         """
         return User.objects.filter(username=user).update(status=1)
-        
+
 
     @database_sync_to_async
     def update_user_status_to_offline(self, user):

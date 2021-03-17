@@ -1,94 +1,122 @@
+import logging
+import re
+import requests
+import json
+import urllib
+
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.views import View
-from django.views.generic import FormView, CreateView, ListView, UpdateView, DetailView, DeleteView
-from django.views.generic.edit import BaseFormView
-from django.urls import reverse
-from django.shortcuts import render, redirect, get_object_or_404
+from django.views.generic import (
+        CreateView, UpdateView,
+        DetailView, DeleteView)
+from django.urls import reverse, reverse_lazy
+
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
-from django.template import RequestContext
-from django.core.mail import send_mail
 from django.utils.decorators import method_decorator
-from django.http import HttpResponse, HttpResponseRedirect
-from django.db.models import Count
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django import forms
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
-from django.urls import reverse_lazy
-from django.core.mail import send_mail
-from slugify import slugify
-
-from taggit.models import Tag, TaggedItemBase
-from obrisk.utils.helpers import AuthorRequiredMixin
-from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedImages, OfficialAdImages, ClassifiedTags
-from obrisk.classifieds.forms import ClassifiedForm, OfficialAdForm, ClassifiedEditForm
-from obrisk.utils.images_upload import multipleImagesPersist
-# For images
-import json
-import re
-import base64
-import datetime
-
-import oss2
-from aliyunsdkcore import client
-from aliyunsdksts.request.v20150401 import AssumeRoleRequest
-
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
+from django.http import (
+        JsonResponse, HttpResponse,
+        HttpResponseRedirect, HttpResponseBadRequest
+    )
 from django.views.decorators.http import require_http_methods
 from django.conf import settings
 from django.core.cache import cache
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from obrisk.utils.helpers import ajax_required
+from django.core.paginator import (
+        Paginator, EmptyPage,
+        PageNotAnInteger)
+from django.db.models import (
+        OuterRef, Subquery, Case,
+        When, Value, IntegerField, Count)
+from django.views.decorators.csrf import ensure_csrf_cookie
 
+import xmltodict
 from dal import autocomplete
+from ipware import get_client_ip
+from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
+from obrisk.classifieds.models import (
+        Classified, OfficialAd, ClassifiedOrder,
+        ClassifiedImages, ClassifiedTags)
+from obrisk.classifieds.forms import (
+        ClassifiedForm, OfficialAdForm,
+        ClassifiedEditForm)
+from obrisk.utils.images_upload import multipleImagesPersist
+from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
+from config.settings.base import env
+try:
+    from django.contrib.auth import get_user_model
+    user_model = get_user_model()
+except ImportError:
+    from django.contrib.auth.models import User
+    user_model = User
 
+
+API_KEY = env('WECHAT_API_KEY')
 TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
 
+
 def set_popular_tags():
-    popular_tags = Classified.objects.get_counted_tags()[:30]
+    popular_tags = Classified.objects.get_active(
+            ).get_counted_tags()[:10]
 
-    cache.set('popular_tags', list(popular_tags), timeout=TAGS_TIMEOUT)
+    cache.set('popular_tags_mb',
+                list(popular_tags), timeout=TAGS_TIMEOUT
+            )
 
-    return HttpResponse("Successfully sorted the popular tags!", content_type='text/plain')
+    return HttpResponse(
+            "Successfully sorted the popular tags!",
+            content_type='text/plain')
 
 
-#People can view without login
+
 @require_http_methods(["GET"])
 def classified_list(request, tag_slug=None):
 
     if request.user.is_authenticated:
         city = request.user.city
     else:
-        city = "Hangzhou"
-    
-    #Try to Get the popular tags from cache
-    popular_tags = cache.get('popular_tags')
+        city = cache.get(
+                f'user_city_{request.session.get("visitor_id")}'
+            )
 
-    if popular_tags == None:
-        popular_tags = Classified.objects.get_counted_tags()
-    
-    #Get classifieds
-    classifieds_list = Classified.objects.get_active().annotate(
-        order = Case (
-            When(city=city, then=Value(1)),
-            default=Value(2),
-            output_field=IntegerField(),
-        )
-    ).annotate (
-        image_thumb = Subquery (
-            ClassifiedImages.objects.filter(
-                classified=OuterRef('pk'),
-            ).values(
-                'image_thumb'
-            )[:1]
-        )
-    ).order_by('order', '-priority', '-timestamp')
+        if city is None:
+            client_ip, _ = get_client_ip(
+                    request
+                )
 
-    #official_ads = OfficialAd.objects.all() 
+            if client_ip is None:
+                city = ''
+            else:
+                info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
+                city = json.loads(info.text)['city']
 
-    paginator = Paginator(classifieds_list, 30)  # 30 classifieds in each page
+            cache.set(
+                f'user_city_{request.session.get("visitor_id")}',
+                city,
+                60 * 60 * 2
+            )
+
+    classifieds_list = Classified.objects.get_active().values(
+                    'title','price','city','slug'
+                ).annotate(
+                    order = Case (
+                        When(city=city, then=Value(1)),
+                        default=Value(2),
+                        output_field=IntegerField(),
+                    )
+                ).annotate (
+                    image_thumb = Subquery (
+                        ClassifiedImages.objects.filter(
+                            classified=OuterRef('pk'),
+                        ).values(
+                            'image_thumb'
+                        )[:1]
+                    )
+                ).order_by('order', '-priority', '-timestamp')
+
+    paginator = Paginator(classifieds_list, 6)  #6 @ page in mobile
     page = request.GET.get('page')
 
     try:
@@ -97,19 +125,47 @@ def classified_list(request, tag_slug=None):
         # If page is not an integer deliver the first page
         classifieds = paginator.page(1)
     except EmptyPage:
-        if request.is_ajax():            
-            # If the request is AJAX and the page is out of range
-            # return an empty page            
-            return HttpResponse('')
-        # If page is out of range deliver last page of results
-        classifieds = paginator.page(paginator.num_pages)     
-        
+        if request.is_ajax():
+            classifieds = Classified.objects.get_expired().values(
+                            'title','price','city','slug'
+                        ).annotate (
+                            image_thumb = Subquery (
+                                ClassifiedImages.objects.filter(
+                                    classified=OuterRef('pk'),
+                                ).values(
+                                    'image_thumb'
+                                )[:1]
+                            )
+                        ).order_by('-timestamp')
+
+            return JsonResponse({
+                'classifieds': list(classifieds), 'end':'end'
+                })
+        else:
+            classifieds = paginator.page(paginator.num_pages)
+
+    if request.is_ajax():
+        return JsonResponse({
+                'classifieds': list(classifieds)
+            })
+
+    #Try to Get the popular tags from cache
+    popular_tags = cache.get('popular_tags_mb')
+
+    if popular_tags is None:
+        popular_tags = Classified.objects.get_active(
+                ).get_counted_tags()[:10]
+        cache.set('popular_tags_mb',
+                    list(popular_tags), timeout=TAGS_TIMEOUT
+                )
+
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
 
         tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
-        classifieds = Classified.objects.get_active().filter(tags__in=[tag]).annotate (
+        classifieds = Classified.objects.get_active().filter(
+                tags__in=[tag]).annotate (
             image_thumb = Subquery (
                 ClassifiedImages.objects.filter(
                     classified=OuterRef('pk'),
@@ -118,23 +174,11 @@ def classified_list(request, tag_slug=None):
                 )[:1]
             )
         ).order_by('-timestamp')
-    
-    if request.is_ajax():        
-       return render(request,'classifieds/classified_list_ajax.html',
-                    {'page': page, 'popular_tags': popular_tags,
-                    'classifieds': classifieds, 'base_active': 'classifieds'})   
-    
-    return render(request, 'classifieds/classified_list.html', 
-                {'page': page, 'popular_tags': popular_tags,
-                'classifieds': classifieds, 'tag': tag, 'base_active': 'classifieds'})
 
-# class ExpiredListView(ClassifiedsListView):
-#     """Overriding the original implementation to call the expired classifieds
-#     list."""
-
-#     def get_queryset(self, **kwargs):
-#         return Classified.objects.get_expired()
-
+    return render(request, 'classifieds/classified_list.html',
+            {'page': page, 'popular_tags': popular_tags,
+            'city': city,'classifieds': classifieds,
+            'tag': tag, 'base_active': 'classifieds'})
 
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
@@ -150,8 +194,9 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 
     def Classified(self, request, *args, **kwargs):
         """
-        Handles Classified requests, instantiating a form instance and its inline
-        formsets with the passed Classified variables and then checking them for
+        Handles Classified requests, instantiate a form instance
+        and its inline formsets with the passed Classified
+        variables and then checking them for
         validity.
         """
         form = OfficialAdForm(self.request.Classified)
@@ -183,7 +228,8 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
         return reverse('classifieds:list')
 
 
-class CreateClassifiedView(LoginRequiredMixin, CreateView):
+@method_decorator(login_required, name='post')
+class CreateClassifiedView(CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = Classified
     message = _("Your classified has been created.")
@@ -211,77 +257,92 @@ class CreateClassifiedView(LoginRequiredMixin, CreateView):
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
- 
+
     def form_invalid(self, form, data=None):
         '''Render the invalid form messages as json responses
         instead of html form. '''
         if data:
             if data['status'] == '400':
-                return JsonResponse(data) 
+                return JsonResponse(data)
         if form.errors:
+            error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
             data = {
                 'status': '400',
-                'error_message': f'Your form is having invalid input on: {form.errors} Correct your input and submit again'
+                'error_message': _(
+                    f'Form error on {error_msg}')
             }
         else:
             data = {
                 'status': '400',
-                'error_message': 'We are having trouble to process your post, please try again later' 
+                'error_message': _(
+                    'Sorry we can\'t process your post \
+                        please try again later')
             }
         return JsonResponse(data)
-     
+
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
         img_errors = form.cleaned_data['img_error']
         show_phone = form.cleaned_data['show_phone']
-        
+        user = self.request.user
+
         failure_data = {
             'status': '400',
-            'error_message': 'Sorry, the image(s) were not successful uploaded, please try again'
+            'error_message': _(
+                'Sorry, the image(s) were not successfully uploaded, \
+                    please try again')
         }
+
         if not images_json:
             #The front-end will add the default images in case of errors 
             #Empty images_json means this form bypassed our front-end upload.
             return self.form_invalid(form, data=failure_data)
-        
+
         if img_errors:
             #Send this email in a celery task to improve performance
-            send_mail('JS ERRORS ON IMAGE UPLOADING', str(img_errors) , 'errors@obrisk.com', ['admin@obrisk.com',])
+            logging.error(
+                    'JS ERRORS ON IMAGE UPLOADING:' + \
+                    str(img_errors)
+                )
 
         #Phone number needs no backend verification, it is just a char field. 
-        form.instance.user = self.request.user
+        form.instance.user = user
         classified = form.save(commit=False)
-        
+
         #Empty phone number is +8613300000000 for all old users around 150 users
-        if self.request.user.phone_number != '' and show_phone == True: 
-            if not classified.phone_number and self.request.user.phone_number.national_number != 13300000000:
-                classified.phone_number = self.request.user.phone_number
-            
-        if not classified.address and self.request.user.address:
-            classified.address = self.request.user.address
-        
+        if user.phone_number is not '' and show_phone:
+            if (not classified.phone_number and
+                    user.phone_number.national_number != 13300000000):
+                classified.phone_number = user.phone_number
+
+        if not classified.english_address and user.english_address:
+            classified.english_address = user.english_address
+
+        if not classified.chinese_address and user.chinese_address:
+            classified.chinese_address = user.chinese_address
+
         classified.save()
-        
-        # split one long string of images into a list of string each for one JSON obj
+
         images_list = images_json.split(",")
-        if multipleImagesPersist(self.request, images_list, 'classifieds', classified):    
+        if multipleImagesPersist(
+                self.request, images_list,
+                'classifieds', classified):
             messages.success(self.request, self.message)
             data = {
                 'status': '200',
-                'success_message': 'Successfully created a new classified post'
+                'success_message': _(
+                    'Successfully created a new classified post'
+                )
             }
             return JsonResponse(data)
         else:
             form = ClassifiedForm()
             return self.form_invalid(form,data=failure_data)
 
-    #def get_success_url(self):
-        #This method is never called
 
-@method_decorator(login_required, name='dispatch')
-class TagsAutoComplete(autocomplete.Select2QuerySetView):
+class ClassifiedTagsAutoComplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
-        qs = Tag.objects.all()
+        qs = ClassifiedTags.objects.all()
 
         if self.q:
             qs = qs.filter(name__icontains=self.q)
@@ -289,14 +350,16 @@ class TagsAutoComplete(autocomplete.Select2QuerySetView):
         return qs
 
 
-class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
+class EditClassifiedView(
+        LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""
     model = Classified
     message = _("Your classified has been updated.")
     form_class = ClassifiedEditForm
     template_name = 'classifieds/classified_update.html'
 
-    # In this form there is an image that is not saved, deliberately since you can't upload images.
+    # In this form there is an image that is not saved
+    #deliberately since you can't upload images.
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
@@ -307,9 +370,8 @@ class EditClassifiedView(LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
 
 
 class ReportClassifiedView(LoginRequiredMixin, View):
-    """This class has to inherit FormClass model but failed to implement that
-    Update view will use the model Classified which is not a nice implementation.
-    There is no need of a model here just render a form and the send email. """
+    """This class has is not working as expected
+    No need of a model just render a form, send email. """
 
     message = _("Your report has been submitted.")
     template_name = 'classifieds/classified_report.html'
@@ -323,18 +385,21 @@ class ReportClassifiedView(LoginRequiredMixin, View):
         return reverse('classifieds:list')
 
 
-
-class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
-    """Implementation of the DeleteView overriding the delete method to
+class ClassifiedDeleteView(
+        LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
+    """Implementation of the DeleteView
+    overriding the delete method to
     allow a no-redirect response to use with AJAX call."""
     model = Classified
-    message = _("Your classified post has been deleted successfully!")
+    message = _(
+            "Your classified post has been deleted successfully!")
     success_url = reverse_lazy("classifieds:list")
 
 
     def delete(self, request, *args, **kwargs):
         """
-        Call the delete() method on the fetched object and then redirect to the
+        Call the delete() method on the fetched object
+        and then redirect to the
         success URL. This method is called by post.
         """
         self.object = self.get_object()
@@ -343,16 +408,21 @@ class ClassifiedDeleteView(LoginRequiredMixin, AuthorRequiredMixin, DeleteView):
         self.object.save()
         return HttpResponseRedirect(success_url)
 
+
 class DetailClassifiedView(DetailView):
-    """Basic DetailView implementation to call an individual classified."""
-    model = Classified       
-    
+    """Basic DetailView implementation
+    to call an individual classified."""
+    model = Classified
+
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
-        context = super(DetailClassifiedView, self).get_context_data(**kwargs)
+        context = super(
+                DetailClassifiedView, self
+            ).get_context_data(**kwargs)
 
         classified_tags_ids = self.object.tags.values_list('id', flat=True)
-        similar_classifieds = Classified.objects.get_active().filter(tags__in=classified_tags_ids)\
+        similar_classifieds = Classified.objects.get_active().filter(
+                tags__in=classified_tags_ids)\
             .exclude(id=self.object.id).annotate (
                 image_thumb = Subquery (
                     ClassifiedImages.objects.filter(
@@ -364,10 +434,141 @@ class DetailClassifiedView(DetailView):
             )
 
         # Add in a QuerySet of all the images
-        context['images'] = ClassifiedImages.objects.filter(classified=self.object.id)
-        
+        context['images'] = ClassifiedImages.objects.filter(
+                classified=self.object.id
+            )
+
         context['images_no'] = len(context['images'])
-        context['similar_classifieds'] = similar_classifieds.annotate(same_tags=Count('tags'))\
+        context['similar_classifieds'] = similar_classifieds.annotate(
+                same_tags=Count('tags'))\
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+@login_required
+@require_http_methods(["GET"])
+def initiate_wxpy_info(request, *args, **kwargs):
+    """
+    用户点击一个路由或者扫码进入这个views.py中的函数，首先获取用户的openid,
+    使用jsapi方式支付需要此参数
+    :param self:
+    :param request:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    classified = Classified.objects.filter(
+            slug=request.GET.get('sg', None)
+        ).first()
+
+    if classified:
+        openid = request.user.wechat_openid
+        if openid:
+            return render(
+                request,
+                'classifieds/create_classified_order.html',
+                {
+                 'classified': classified,
+                 'data': get_jsapi_params(
+                     request,
+                     openid,
+                     classified.title,
+                     classified.details,
+                     classified.price
+                  )
+                }
+            )
+        else:
+            messages.success(
+                    request,
+                    "You need to login with wechat to be able to pay"
+                )
+            return redirect('classifieds:classified', classified.slug)
+
+    else:
+        return redirect('classifieds:list')
+
+
+class Wxpay_Result(View):
+    """
+    微信支付结果回调通知路由
+    """
+    def get(self, request, *args, **kwargs):
+        classified = Classified.objects.filter(
+                slug=request.GET.get('sg', None)
+            ).first()
+
+        if classified:
+            classified.status='E'
+            classified.save()
+
+            ClassifiedOrder.objects.create(
+               buyer=request.user,
+               classified=classified
+            )
+            return JsonResponse({
+                'success': True
+            })
+        else:
+            return JsonResponse({
+                'success': False
+            })
+
+    def post(self, request, *args, **kwargs):
+        """
+        微信支付成功后会自动回调
+        返回参数为：
+        {'mch_id': '',
+        'time_end': '',
+        'nonce_str': '',
+        'out_trade_no': '',
+        'trade_type': '',
+        'openid': '',
+         'return_code': '',
+         'sign': '',
+         'bank_type': '',
+         'appid': '',
+         'transaction_id': '',
+          'cash_fee': '',
+          'total_fee': '',
+          'fee_type': '', '
+          is_subscribe': '',
+          'result_code': 'SUCCESS'}
+
+        :param request:
+        :param args:
+        :param kwargs:
+        :return:
+        Check the status of the corresponding business data
+        to determine whether the notification has been processed.
+        If it has not been processed, then proceed with the processing.
+        If it has been processed, the result will be returned directly.
+        Processing payment success logic
+        """
+
+        # 回调数据转字典 # print('支付回调结果', data_dict)
+        data_dict = xmltodict.parse(request.body)
+        sign = data_dict.pop('sign')  # 取出签名
+        back_sign = get_sign(data_dict, API_KEY)  # 计算签名
+
+        #Return the received result to WeChat otherwise
+        #WeChat will send a post request every 8 minutes
+        if sign == back_sign and data_dict['return_code'] == 'SUCCESS':
+            logging.error(
+                f'Payment succeeded with signature {sign}'
+            )
+            return HttpResponse(xmltodict.unparse(
+                        {'return_code': 'SUCCESS', 'return_msg': 'OK'},
+                        pretty=True
+                    )
+                )
+        return HttpResponse(xmltodict.unparse(
+                {'return_code': 'FAIL', 'return_msg': 'SIGNERROR'},
+                pretty=True
+            )
+        )
+
+
+class ClassifiedOrderView(DetailView):
+    model = ClassifiedOrder

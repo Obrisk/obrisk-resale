@@ -4,258 +4,108 @@
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
 {% block head %}
-<link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="{% static 'css/classifieds-list.css' %}" rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/uploader.css' %}" />
-<link rel="stylesheet" href="{% static 'css/classified-create.css' %}" />
 <title>Obrisk Classifieds </title>
 {% endblock head %}
 
-
-
 {% block content %}
-<div class="app-overlay"></div>
 
-<div class="view-wrapper" style="padding-top: 75px;">
-  <!-- Container -->
-  <div id="main-feed" class="container">
-    <div id="" class="view-wrap true-dom">
-      <div class="columns">
+        <!-- Cloud Tag Widget -->
+        <div class="tags-card-wrapper">
+          <div class="card is-weather-card">
+              <h5 class="card-heading has-text-weight-medium has-text-white	">{% trans 'Popular tags' %}</h5>
 
-        <!-- Left side column -->
-        <!-- For small devices the tags is disabled because of a bug, when fixed also update listing.js(23)-->
-        <div class="column is-3 is-hidden-mobile is-hidden-tablet-only is-hidden-desktop-only"
-          style="height: 500px;position: sticky;top: 0px;">
-          <!-- Sidebar Widgets Column -->
-          <!-- Cloud Tag Widget -->
-          <div class="card is-weather-card position-fixed" style="width: 300px;">
-            <div class="card-heading">
-              <h5 class="has-text-weight-medium	 has-text-white	">{% trans 'Popular tags' %}</h5>
-
-            </div>
             <div class="card-body">
-
-
-              <div class="previsions d-block">
+              <div class="previsions">
                 {% for tag, count in popular_tags %}
-                <a href="{% url 'classifieds:list_by_tag' tag %}"><span class="tag is-white">{{ count }}
-                    {{ tag }}</span></a>
+                <a href="{% url 'classifieds:list_by_tag' tag %}">
+                    <span class="tag is-white"> {{ tag }}</span>
+                </a>
                 {% endfor %}
-
               </div>
 
             </div>
           </div>
         </div>
-        <!-- /Left side column -->
 
-        <!-- Middle column -->
-        <div class="column is-9-fullhd">
-          <div class="col-md-8 m-auto mt-0 p-sm-0">
-            <div id="compose-card" class="card is-new-content d-none p-2">
-              <!-- Top tabs -->
-              <div class="tabs-wrapper">
-                <div class="tabs is-boxed is-fullwidth">
-                  <ul>
-                    <li class="is-active">
-                      <a>
-                        <i data-feather="edit-3"></i>
-                        <span>Publish</span>
-                      </a>
-                    </li>
-                    <!-- Close X button -->
-                    <li class="close-wrap d-none">
-                      <span class="close-publish">
-                        <i data-feather="x"></i>
-                      </span>
-                    </li>
-                  </ul>
-                </div>
+        <div class="column is-9-fullhd classifieds-list-wrapper">
 
-                <!-- Tab content -->
-                <div class="alert alert-error d-none">
-                  <strong><span id="data-errors"> </span></strong>
-                </div>
+          <div id="classifieds" class="small-cards-listing">
+             {% for classified in classifieds %}
+                <div class="card classified-card">
+                  <!--Display image-->
+                  <a href="{% url 'classifieds:classified' classified.slug %}"
+                    style="color:black; text-decoration:none; background-color:none">
+                    <div class="card-img-top img-responsive">
 
-                <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
-                  id="classified-form" method="post" role="form">
-                  {% csrf_token %}
-
-                  <div class="column">
-                    <div class="form-panel">
-                      <div class="field">
-                        <label>Title*</label>
-                        <div class="control">
-                          <input type="text" id="id_title" name="title" maxlength="80" class="input" required
-                            placeholder="Enter your item title">
-                        </div>
-                      </div>
-                      <div class="field">
-                        <label>Details*</label>
-                        <div class="control">
-                          <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required
-                            class="textarea" placeholder="Enter your item details"></textarea>
-                        </div>
-                      </div>
-                      <div class="field d-flex justify-content-between">
-                        <div class="">
-                          <label>Price*</label>
-                          <small class="form-text text-muted" id="hint_id_price">Numbers only. 0 means FREE</small>
-                        </div>
-                        <div class="control">
-                          <input type="number" id="id_price" name="price" class="numberinput input w-100" id="id_price"
-                            required step="1.00" value="0" placeholder="Enter your item price">
-                        </div>
-                      </div>
-
-
-                      <div class="hidden-fields">
-                        <input type="hidden" id="id_images" name="images" maxlength="3000" class="input" required>
-                        <input type="hidden" id="id_img_errors" name="img_errors" maxlength="2000" class="input">
-                        <input type="hidden" id="id_edited" name="edited" class="input">
-                        <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
-                      </div>
-
-                      {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
-                      <div class="field is-flex justify-content-between">
-                        <label> Include your phone no? </label>
-                        <label class="f-switch is-accent">
-                          <input type="checkbox" checked class="is-switch" name="show_phone" id="id_show_phone">
-                          <i></i>
-                        </label>
-                      </div>
-
+                      {% if classified.image_thumb %}
+                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+                        width="154px" height="154px">
                       {% else %}
-                      <div class="field">
-                        <label for="id_phone_number" class="">
-                          Phone number(optional)
-                        </label>
-                        <input type="tel" name="phone_number" placeholder="Don't enter country code" class="input"
-                          id="id_phone_number">
-                      </div>
+                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+                        width="154px" height="154px">
                       {% endif %}
                     </div>
-                    <div class="field">
 
-                      <label>Images*</label>
-                      <div class="control">
-                        <div id="wrapper" class="mb-4">
-                          <div id="container">
-                            <div id="uploader">
-                              <div class="queueList">
-                                <ul class="filelist"></ul>
-                              </div>
-                            </div>
-                            <div id="statusBar" class="statusBar  flex-column align-items-center" style="display:none">
-                              <div class="total-progress">
-                                <div id="totalProgressBar" class="total-progress-bar" role="progressbar"
-                                  aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
-                                </div>
-                              </div>
-                              <div class="upload-btn d-flex flex-column flex-md-row">
-                                <div class="start-uploader startUploadBtn ml-2 mr-2">
-                                  <a id="startUpload" href="javascript:void(0);" class="text">Upload images</a>
-                                </div>
-                                <div class="start-uploader addBtn ml-2 mr-2">
-                                  <a id="addBtn" href="javascript:void(0);" class="text button">Add images</a>
-                                </div>
-                              </div>
-                            </div>
-                            <div class="m-auto justify-content-center d-flex ">
-                              <div id="uploaderPick">
-                                <a id="chooseFile" href="javascript:void(0);" class="text m-auto button">Add images</a>
-                              </div>
-                            </div>
-                            <div class="" style="clear: both;">
-                              <p class="text-center">
-                                Notes:
-                                Can select up to 8 multiple images & Max size per image is 13MB
-                              </p>
-                            </div>
-                          </div>
-                        </div>
+                    <div class="divider"></div>
 
-                        <div class="container bs-docs-container">
-                          <form id="form">
-                            <input id="image-file" type="file" style="display:none;" multiple="multiple"
-                              accept="image/*" />
-                          </form>
-                        </div>
-                      </div>
+                    <div class="card-body">
+                      <h6 class="card-title"> {{ classified.title}} </h6>
+
+                      {% if classified.price != 0.00 %}
+                          <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
+                      {% else %}
+                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                      {% endif %}
+
+                    <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+
+
                     </div>
-                  </div>
+                    {% if classified.priority > 0 %}
+                    <div class="priority">
+                      Featured
+                    </div>
+                    {% endif %}
 
-                  <div class="buttons">
-                    <button id="create-btn" type="button"
-                      class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
-                    <!--button type="button" class="btn btn-default draft">{% trans 'Save as draft' %}</button-->
-                    <a href="{% url 'classifieds:list' %}"
-                      class="ml-4 button is-solid dark-grey-button raised">{% trans 'Cancel' %}</a>
-                  </div>
-                </form>
+                  </a>
+                  <script type="application/ld+json">
+                  {
+                     "@context":"http://schema.org/",
+                     "@type":"Product",
+                     "name":"{{ classified.title}}",
+                     "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
+                     "image":[
+                        "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+                     ],
+                     "brand":"",
+                     "offers":{
+                        "@type":"Offer",
+                        "priceCurrency":"CNY",
+                        "price":{{ classified.price|title }},
+                        "availability":"http://schema.org/InStock",
+                        "itemCondition":"http://schema.org/UsedCondition",
+                        "url":"{% url 'classifieds:classified' classified.slug %}"
+                     }
+                  }
+                  </script>
 
-                {{ form.media }}
-
-              </div>
-            </div>
-          </div>
-
-
-          <div class="d-flex flex-end mb-4" style="justify-content: flex-end; position: absolute;top:-40px;right: 0px;">
-
-            <!-- <div class="justify-content-center mt-5 mr-0">
-            <div class="justify-content-end ml-auto d-flex flex-row">
-            <form class="form-inline navbar-left" role="search" action="/classifieds/classifieds-search-results/">
-              <div class="input-group">
-                <input name="query" type="search" id="searchInput" class="form-control" aria-label="Search">
-                <div class="input-group-append">
-                  <span class="input-group-text"><i class="fa fa-search" aria-hidden="true"></i></span>
                 </div>
-              </div>
-            </form>
-            </div>
-        
-            <div class="d-flex justify-content-center h-100">
-        
-            </div> -->
 
-
-            <!-- Write Classified Widget -->
-
-            <a class="button is-solid accent-button raised align-self-center" id="addNewClassified" href="#"
-              title="Write a new classified"><i class=" mr-2" data-feather="plus-circle"></i> Add new item</a>
+            {% empty %}
+                <small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
+                  {% trans 'It looks like there are no items near you.' %}
+                  <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a>
+                </small>
+                <br />
+            {% endfor %}
 
           </div>
-          <div id="classifieds" class="p-0 row justify-content-center justify-content-lg-start">
-            {% include "classifieds/classified_list_ajax.html" %}
-
-          </div>
-          <div class="loading classified-card m-auto d-none">
+          <div class="loading classified-card is-hidden">
             <div class="stage">
               <div class="dot-pulse"></div>
             </div>
           </div>
-
-
-        </div>
-
-      </div>
-      <!-- /Middle column -->
-
-      <!-- official ads for pc sized-->
-      {% if official_ads %}
-      <div class="right-sidebar d-none d-lg-block">
-        {% include 'classifieds/ads.html' %}
-      </div>
-      {% endif %}
-
-    </div>
-  </div>
-</div>
-
-
-
 
 {% endblock content %}
 
@@ -270,253 +120,80 @@
   const title_id = "{{ form.title.auto_id }}";
   const details_id = "{{ form.details.auto_id }}";
   const address = "{{ form.address.auto_id }}";
-  //const tags = "{{ form.tags.auto_id }}";
-</script>
 
-<script src="{% static 'js/aliyun-oss.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/classifieds.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/multipleUploader.js' %}" type="text/javascript"></script>
-
-<script src="{% static 'js/listing.js' %}" type="text/javascript"></script>
-
-
-<script>
-  function shareMe(title, text, url) {
-    navigator.share({
-      title: title,
-      text: text,
-      url: location.host + url,
-    })
-  }
-
-
-</script>
-
-<script>
   var page = 1;
   var empty_page = false;
   var block_request = false;
   var is_tag_page = "{{tag}}";
+  var lastScrollTop = 0;
+
   if (is_tag_page == "None") {
-    $(window).scroll(function () {
+    window.addEventListener('scroll', function () {
       if (empty_page == false && block_request == false) {
         block_request = true;
         page += 1;
-        $('.loading').removeClass('d-none')
-        $.get('?page=' + page, function (data) {
-          if (data == '') {
-            empty_page = true;
-            $('.loading').addClass('d-none')
-            $('.classifieds-container').append('<div class="m-auto"> End of Classifieds</div>')
-          } else {
-            $('.loading').addClass('d-none');
-            block_request = false;
-            $('#classifieds').append(data);
+        document.querySelector('.loading').classList.remove('is-hidden')
+
+        fetch(`/classifieds/?page=${page}`,
+        {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest"
           }
+        }).then (resp => resp.json())
+        .then (data => {
+
+            document.querySelector('.loading').classList.add('is-hidden');
+            block_request = false;
+
+              for (const cls of data.classifieds) {
+                  let img, price; 
+
+                  if ( cls.image_thumb != "" ) {
+                    img = `<img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${cls.image_thumb}" width="154px" height="154px">`;
+                  }else {
+                    img = "<img class='card-img lazyload' src='https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg' width='154px' height='154px'>";
+                  }
+
+                  if (cls.price != 0.00){
+                      price = `<p class="card-subtitle"> ¥${cls.price} </p>`;
+                  } else {
+                      price = "<p class='card-subtitle'> FREE </p>";
+                  }
+
+                  template = `
+                    <div class="card classified-card">
+                      <a href="${cls.slug}"
+                        style="color:black; text-decoration:none; background-color:none">
+
+                        <div class="card-img-top img-responsive">
+                            ${img}
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-body">
+                          <h6 class="card-title"> ${cls.title} </h6>
+                           ${price}
+
+                        <span class="card-text small "><small>📍</small> ${ cls.city}</span>
+
+                        </div>
+                      </a>
+                    </div>
+                        `;
+                  document.querySelector('#classifieds').insertAdjacentHTML('beforeend', template);
+              }
+
+              if (data.end === "end") {
+                empty_page = true;
+                document.querySelector('.loading').classList.add('is-hidden');
+                document.querySelector('.classifieds-list-wrapper').insertAdjacentHTML('beforeend', '<div class="end-classifieds"> End of Classifieds</div>')
+              } 
+
+        }).catch (err => {
+            console.log(err);
         });
       }
     });
   }
-</script>
 
-<script>
-  /**
-   * Vic Shóstak <truewebartisans@gmail.com>
-   * Copyright (c) 2019 True web artisans https://1wa.co
-   * http://opensource.org/licenses/MIT The MIT License (MIT)
-   *
-   * a2hs.js v0.4.5 at 13/05/2019
-   *
-   * Add to Home Screen
-   *
-   * A useful modern JavaScript solution for adding a progressive
-   * web application (PWA) to the home screen of your mobile
-   * iOS device.
-   *
-   * @param settings Initial settings.
-   * @return {HTMLElement}
-   *
-   * @example
-   * import AddToHomeScreen from "a2hs.js";
-   * AddToHomeScreen({
-   *  brandName: "Demo",
-   *  fontFamily: "Tahoma, sans-serif",
-   *  backgroundColor: "red",
-   *  color: "white"
-   * });
-   */
-  var AddToHomeScreen = function (settings = {}) {
-    // Container styles
-    var backgroundColor = settings.backgroundColor || "#f9f9f9";
-    var padding = settings.padding || "10px";
-    var shadowColor = settings.shadowColor || "#e9e9e9";
-    var shadowSize = settings.shadowSize || "10px";
-    // Content styles
-    var fontFamily = settings.fontFamily || "-apple-system, sans-serif";
-    var color = settings.color || "#5d5d5d";
-    var fontSize = settings.fontSize || "0.9rem";
-    // Content
-    var brandName = settings.brandName || "";
-    var logoImage =
-      settings.logoImage ||
-      `<svg enable-background="new 0 0 1952.00 734.93" height="25" viewBox="0 0 1952 734.93" width="70" xmlns="http://www.w3.org/2000/svg">
-                <g stroke-linejoin="round" stroke-width=".2">
-                  <path d="m1436.62 603.304 56.39-142.599h162.82l-77.27-216.315 96.64-244.38947166 276.8 734.93247166h-204.13l-47.3-131.629z" fill="#3d3d3d"/>
-                  <path d="m1262.47 734.935 296.32-734.93343407-196.45.00097657-202.7 474.9304575-144.14-474.92948094h-151.001l-154.768 474.92948094-109.146-216.416-98.773 304.302 100.284 172.116h193.331l139.857-425.91 133.346 425.91z" fill="#5a0fc8"/>
-                  <path d="m186.476 482.643h121.003c36.654 0 69.293-4.091 97.917-12.273l31.293-96.408 87.459-269.446c-6.664-10.5625-14.272-20.5493-22.824-29.9591-44.905-49.7049-110.605-74.55649373-197.102-74.55649373h-304.22200381v734.93259373h186.47600381zm160.166-313.564c17.54 17.653 26.309 41.276 26.309 70.871 0 29.822-7.713 53.474-23.138 70.956-16.91 19.425-48.047 29.137-93.409 29.137h-69.928v-197.445h70.442c42.277 0 72.185 8.827 89.724 26.481z" fill="#3d3d3d"/>
-                </g>
-              </svg>`;
-    var htmlContent =
-      settings.htmlContent ||
-      `Install ${brandName} app on your device: On safari, tap share and Add to Home Screen ↓`;
-    // Define iOS User-Agent variable
-    var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-    var isWX = /wxwork/gi.test(window.navigator.userAgent);
-    var isWeixin = /MicroMessenger/gi.test(window.navigator.userAgent)
-    // Define standalone mode variable
-    var standalone =
-      "standalone" in window.navigator && window.navigator.standalone;
-    // Check localStorage before render a2hs container
-    if (iOS && !standalone && isSafari && !isWX && !isWeixin && !window.localStorage.a2hs_message) {
-      // Define container variable
-      var div = document.createElement("div");
-      // Define style variable
-      var style = document.createElement("style");
-      // Create styles
-      style.innerHTML = `
-              .a2hs__container {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: fixed;
-                box-sizing: border-box;
-                box-shadow: ${shadowColor} 0 0 ${shadowSize};
-                background-color: ${backgroundColor};
-                padding: ${padding};
-                width: 100%;
-                bottom: 50px;
-                right: 0;
-                left: 0;
-              }
-              .a2hs__container .a2hs__logo {
-                padding: ${padding};
-              }
-              .a2hs__container .a2hs__text {
-                font-family: ${fontFamily};
-                font-size: ${fontSize};
-                color: ${color};
-              }`;
-      // Create message
-      div.innerHTML = `
-              <div class="a2hs__text">${htmlContent}</div>`;
-      // Add class to container
-      div.setAttribute("class", "a2hs__container");
-      // Add onClick function
-      div.onclick = function (event) {
-        // Prevent default click
-        event.preventDefault();
-        // Hide a2hs_message
-        window.localStorage.setItem("a2hs_message", "hide");
-        // Remove a2hs container from DOM
-        document.querySelector(".a2hs__container").remove();
-      };
-      // Render elements
-      document.head.appendChild(style);
-      document.body.appendChild(div);
-    }
-  };
-  AddToHomeScreen({
-    brandName: "Obrisk",
-    fontFamily: "Tahoma, sans-serif",
-    backgroundColor: "#3ec4e2",
-    color: "white",
-
-  });
-  var NugUser = function (settings = {}) {
-    // Container styles
-    var backgroundColor = settings.backgroundColor || "#f9f9f9";
-    var padding = settings.padding || "10px";
-    var shadowColor = settings.shadowColor || "#e9e9e9";
-    var shadowSize = settings.shadowSize || "10px";
-    // Content styles
-    var fontFamily = settings.fontFamily || "-apple-system, sans-serif";
-    var color = settings.color || "#5d5d5d";
-    var fontSize = settings.fontSize || "0.9rem";
-    // Content
-    var brandName = settings.brandName || "";
-    var logoImage =
-      settings.logoImage ||
-      `<svg enable-background="new 0 0 1952.00 734.93" height="25" viewBox="0 0 1952 734.93" width="70" xmlns="http://www.w3.org/2000/svg">
-                <g stroke-linejoin="round" stroke-width=".2">
-                  <path d="m1436.62 603.304 56.39-142.599h162.82l-77.27-216.315 96.64-244.38947166 276.8 734.93247166h-204.13l-47.3-131.629z" fill="#3d3d3d"/>
-                  <path d="m1262.47 734.935 296.32-734.93343407-196.45.00097657-202.7 474.9304575-144.14-474.92948094h-151.001l-154.768 474.92948094-109.146-216.416-98.773 304.302 100.284 172.116h193.331l139.857-425.91 133.346 425.91z" fill="#5a0fc8"/>
-                  <path d="m186.476 482.643h121.003c36.654 0 69.293-4.091 97.917-12.273l31.293-96.408 87.459-269.446c-6.664-10.5625-14.272-20.5493-22.824-29.9591-44.905-49.7049-110.605-74.55649373-197.102-74.55649373h-304.22200381v734.93259373h186.47600381zm160.166-313.564c17.54 17.653 26.309 41.276 26.309 70.871 0 29.822-7.713 53.474-23.138 70.956-16.91 19.425-48.047 29.137-93.409 29.137h-69.928v-197.445h70.442c42.277 0 72.185 8.827 89.724 26.481z" fill="#3d3d3d"/>
-                </g>
-              </svg>`;
-    var htmlContent =
-      settings.htmlContent |
-      `Install <strong>${brandName}`;
-    // Define iOS User-Agent variable
-    var iOS = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase());
-    var isSafari = !!navigator.userAgent.match(/Version\/[\d\.]+.*Safari/);
-    var isWX = /wxwork/gi.test(window.navigator.userAgent);
-    var isWeixin = /MicroMessenger/gi.test(window.navigator.userAgent)
-    // Define standalone mode variable
-    var standalone =
-      "standalone" in window.navigator && window.navigator.standalone;
-    // Check localStorage before render a2hs container
-    if (isWeixin) {
-      // Define container variable
-      var div = document.createElement("div");
-      // Define style variable
-      var style = document.createElement("style");
-      // Create styles
-      style.innerHTML = `
-              .weixin__container {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                position: fixed;
-                box-sizing: border-box;
-                box-shadow: ${shadowColor} 0 0 ${shadowSize};
-                background-color: ${backgroundColor};
-                padding: ${padding};
-                width: 30%;
-                bottom: 0;
-                left: 0;
-              }
-              .weixin__container .weixin__logo {
-                padding: ${padding};
-              }
-              .weixin__container .weixin__text {
-                font-family: ${fontFamily};
-                font-size: ${fontSize};
-                color: ${color};
-              }`;
-      // Create message
-      div.innerHTML = `
-              <div class="weixin__text"> Install Obrisk </div>`;
-      // Add class to container
-      div.setAttribute("class", "weixin__container");
-      // Add onClick function
-      div.onclick = function (event) {
-        // Prevent default click
-        event.preventDefault();
-        // Hide a2hs_message
-        location.replace('/download-pwa/');
-      };
-      // Render elements
-      document.head.appendChild(style);
-      document.body.appendChild(div);
-    }
-  };
-  NugUser({
-    brandName: "Obrisk",
-    fontFamily: "Tahoma, sans-serif",
-    backgroundColor: "#3ec4e2",
-    color: "white"
-
-  });
 </script>
 {% endblock extra_js %}

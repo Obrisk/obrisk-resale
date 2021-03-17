@@ -17,7 +17,7 @@
             <div class="card-body">
               <div class="profile-picture">
                 {% if request.user.picture %}
-                <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{request.user.picture}}" alt="Picture Profile"
+                <img src="{{ oss }}/{{request.user.picture}}" alt="Picture Profile"
                   style="width:30px;height:30px;border-radius: 50%;"
                   class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
                 {% else %}
@@ -50,14 +50,3 @@
     </div>
   </div>
 </div>
-
-{% block extra_js %}
-<script>
-  $(document).ready(function () {
-    $('#replyStories').prop('disabled', true);
-    $('#replyInput').keyup(function () {
-      $('#replyStories').prop('disabled', this.value == "" ? true : false);
-    })
-  });
-</script>
-{% endblock extra_js %}

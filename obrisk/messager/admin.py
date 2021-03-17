@@ -5,5 +5,5 @@ admin.site.register(Conversation)
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
-    list_display = ("sender", "recipient", "timestamp")
+    list_display = ("sender", "recipient", "timestamp", "message","classified", "image")
     list_filter = ("sender", "recipient")

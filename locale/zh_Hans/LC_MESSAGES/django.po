@@ -1,0 +1,1571 @@
+# FIRST TRANSLATION TO CHINESE.
+# Copyright (C) 2020
+# creator: Elisha Kingdom <el@obrisk.com>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ver120420001\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-04-15 18:43+0800\n"
+"PO-Revision-Date: 2020-04-12 19:07+0800\n"
+"Last-Translator: Elisha Kingdom <el@obrisk.com>\n"
+"Language-Team: Chinese <translation@jifeng.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Translated-Using: django-rosetta 0.9.3\n"
+
+#: config/settings/base.py:44
+msgid "English"
+msgstr "英语"
+
+#: config/settings/base.py:45
+msgid " Simplified Chinese"
+msgstr "简体中文"
+
+#: obrisk/classifieds/apps.py:7 obrisk/classifieds/models.py:94
+#: obrisk/templates/base.html:125 obrisk/templates/base.html:275
+#: obrisk/templates/base.html:523 obrisk/templates/base.html:576
+#: obrisk/templates/classifieds/classified_list.html:4
+#: obrisk/templates/classifieds/official_ad_create.html:13
+#: obrisk/templates/classifieds/search_results.html:36
+#: obrisk/templates/search/search_results.html:36
+#: obrisk/templates/stories/search_results.html:36
+msgid "Classifieds"
+msgstr "二手交易"
+
+#: obrisk/classifieds/models.py:14
+msgid "Classifieds Tag"
+msgstr "分类标签"
+
+#: obrisk/classifieds/models.py:15
+msgid "Classifieds Tags"
+msgstr "分类标签"
+
+#: obrisk/classifieds/models.py:24
+msgid "Classified tag"
+msgstr "分类标签"
+
+#: obrisk/classifieds/models.py:25
+msgid "Classified Tags"
+msgstr "分类标签"
+
+#: obrisk/classifieds/models.py:60
+msgid "Active"
+msgstr "活性"
+
+#: obrisk/classifieds/models.py:61
+msgid "Expired"
+msgstr "关闭"
+
+#: obrisk/classifieds/models.py:93
+msgid "Classified"
+msgstr ""
+
+#: obrisk/classifieds/models.py:155
+msgid "OfficialAd"
+msgstr ""
+
+#: obrisk/classifieds/models.py:156
+msgid "OfficialAds"
+msgstr ""
+
+#: obrisk/classifieds/views.py:141 obrisk/classifieds/views.py:187
+msgid "Your classified has been created."
+msgstr ""
+
+#: obrisk/classifieds/views.py:293
+msgid "Your classified has been updated."
+msgstr ""
+
+#: obrisk/classifieds/views.py:312
+msgid "Your report has been submitted."
+msgstr ""
+
+#: obrisk/classifieds/views.py:329
+msgid "Your classified post has been deleted successfully!"
+msgstr ""
+
+#: obrisk/connections/apps.py:7 obrisk/templates/connections/friends.html:50
+msgid "Connections"
+msgstr ""
+
+#: obrisk/messager/apps.py:7
+msgid "Messager"
+msgstr ""
+
+#: obrisk/messager/models.py:52
+msgid "Conversation"
+msgstr ""
+
+#: obrisk/messager/models.py:53
+msgid "Conversations"
+msgstr ""
+
+#: obrisk/messager/models.py:91
+msgid "Sender"
+msgstr ""
+
+#: obrisk/messager/models.py:94
+msgid "Recipient"
+msgstr ""
+
+#: obrisk/messager/models.py:107
+msgid "Message"
+msgstr ""
+
+#: obrisk/messager/models.py:108 obrisk/templates/messager/contact_list.html:6
+msgid "Messages"
+msgstr "短信"
+
+#: obrisk/notifications/apps.py:7 obrisk/notifications/models.py:146
+#: obrisk/templates/notifications/notification_dropdown.html:3
+#: obrisk/templates/notifications/notification_list.html:3
+msgid "Notifications"
+msgstr "通知"
+
+#: obrisk/notifications/models.py:105
+msgid "connection accepted"
+msgstr ""
+
+#: obrisk/notifications/models.py:106
+msgid "connection rejected"
+msgstr ""
+
+#: obrisk/notifications/models.py:107
+msgid "started following you"
+msgstr ""
+
+#: obrisk/notifications/models.py:108
+msgid "new connection request"
+msgstr ""
+
+#: obrisk/notifications/models.py:109
+msgid "new message"
+msgstr ""
+
+#: obrisk/notifications/models.py:110
+msgid "liked"
+msgstr ""
+
+#: obrisk/notifications/models.py:111
+msgid "commented"
+msgstr ""
+
+#: obrisk/notifications/models.py:112
+msgid "cavorited"
+msgstr ""
+
+#: obrisk/notifications/models.py:113
+msgid "answered"
+msgstr ""
+
+#: obrisk/notifications/models.py:114
+msgid "accepted"
+msgstr ""
+
+#: obrisk/notifications/models.py:115
+msgid "edited"
+msgstr ""
+
+#: obrisk/notifications/models.py:116
+msgid "also commented"
+msgstr ""
+
+#: obrisk/notifications/models.py:117
+msgid "logged in"
+msgstr ""
+
+#: obrisk/notifications/models.py:118
+msgid "logged out"
+msgstr ""
+
+#: obrisk/notifications/models.py:119
+msgid "voted on"
+msgstr ""
+
+#: obrisk/notifications/models.py:120
+msgid "shared"
+msgstr ""
+
+#: obrisk/notifications/models.py:121
+msgid "created an account"
+msgstr ""
+
+#: obrisk/notifications/models.py:122
+msgid "replied to"
+msgstr ""
+
+#: obrisk/notifications/models.py:145
+msgid "Notification"
+msgstr ""
+
+#: obrisk/notifications/views.py:32
+#, python-brace-format
+msgid "All notifications to {request.user.username} have been marked as read."
+msgstr ""
+
+#: obrisk/notifications/views.py:50
+#, python-brace-format
+msgid "The notification {notification.slug} has been marked as read."
+msgstr ""
+
+#: obrisk/posts/apps.py:6 obrisk/posts/models.py:100
+#: obrisk/templates/posts/draft_list.html:6
+#: obrisk/templates/posts/draft_list.html:23
+#: obrisk/templates/posts/draft_list.html:24
+#: obrisk/templates/posts/post_list.html:5
+msgid "Posts"
+msgstr "文章"
+
+#: obrisk/posts/models.py:24
+msgid "Post Tag"
+msgstr "文章标签"
+
+#: obrisk/posts/models.py:25
+msgid "Post Tags"
+msgstr "文章标签"
+
+#: obrisk/posts/models.py:67 obrisk/qa/models.py:89
+#: obrisk/templates/posts/post_list.html:36
+msgid "Draft"
+msgstr ""
+
+#: obrisk/posts/models.py:68
+msgid "Published"
+msgstr ""
+
+#: obrisk/posts/models.py:75
+msgid "Article"
+msgstr "文章"
+
+#: obrisk/posts/models.py:76
+msgid "Event"
+msgstr ""
+
+#: obrisk/posts/models.py:77
+msgid "Job"
+msgstr ""
+
+#: obrisk/posts/models.py:99
+msgid "Post"
+msgstr "文章"
+
+#: obrisk/posts/views.py:53
+msgid "Your Post has been created."
+msgstr ""
+
+#: obrisk/posts/views.py:122
+msgid "Your Post has been updated."
+msgstr ""
+
+#: obrisk/qa/apps.py:7 obrisk/templates/base.html:530
+msgid "Q&A"
+msgstr "问题与答案"
+
+#: obrisk/qa/models.py:22
+msgid "Qa Tag"
+msgstr ""
+
+#: obrisk/qa/models.py:23
+msgid "Qa Tags"
+msgstr ""
+
+#: obrisk/qa/models.py:47
+msgid "Vote"
+msgstr ""
+
+#: obrisk/qa/models.py:48 obrisk/templates/qa/question_detail.html:37
+#: obrisk/templates/qa/question_sample.html:22
+msgid "Votes"
+msgstr ""
+
+#: obrisk/qa/models.py:87
+msgid "Open"
+msgstr ""
+
+#: obrisk/qa/models.py:88
+msgid "Closed"
+msgstr ""
+
+#: obrisk/qa/models.py:105
+msgid "Question"
+msgstr ""
+
+#: obrisk/qa/models.py:106 obrisk/templates/qa/question_list.html:4
+#: obrisk/templates/search/search_results.html:42
+#: obrisk/templates/stories/search_results.html:42
+msgid "Questions"
+msgstr ""
+
+#: obrisk/qa/models.py:165 obrisk/templates/qa/answer_form.html:19
+msgid "Answer"
+msgstr ""
+
+#: obrisk/qa/models.py:166 obrisk/templates/qa/question_detail.html:85
+#: obrisk/templates/qa/question_sample.html:20
+msgid "Answers"
+msgstr ""
+
+#: obrisk/qa/views.py:71
+msgid "Your question has been created."
+msgstr ""
+
+#: obrisk/qa/views.py:107
+msgid "Thank you! Your answer has been posted."
+msgstr ""
+
+#: obrisk/qa/views.py:146 obrisk/qa/views.py:176
+msgid "Database integrity error."
+msgstr ""
+
+#: obrisk/search/apps.py:7 obrisk/templates/base.html:146
+#: obrisk/templates/stories/search.html:6
+msgid "Search"
+msgstr "搜索"
+
+#: obrisk/stories/apps.py:7 obrisk/stories/models.py:108
+#: obrisk/stories/models.py:109 obrisk/templates/base.html:121
+#: obrisk/templates/base.html:259 obrisk/templates/base.html:520
+#: obrisk/templates/base.html:560
+#: obrisk/templates/search/search_results.html:39
+#: obrisk/templates/stories/search_results.html:39
+msgid "Stories"
+msgstr "看一看"
+
+#: obrisk/stories/models.py:19
+msgid "Story Tag"
+msgstr "标签"
+
+#: obrisk/stories/models.py:20
+msgid "Story Tags"
+msgstr "标签"
+
+#: obrisk/stories/models.py:30
+msgid "Tagged story"
+msgstr ""
+
+#: obrisk/stories/models.py:31
+msgid "Tagged stories"
+msgstr ""
+
+#: obrisk/stories/models.py:75 obrisk/templates/stories/stories_list.html:144
+#: obrisk/templates/stories/stories_list.html:168
+msgid "Public"
+msgstr "上市"
+
+#: obrisk/stories/models.py:76
+msgid "around"
+msgstr "附近"
+
+#: obrisk/stories/models.py:77 obrisk/templates/stories/stories_list.html:188
+#: obrisk/templates/users/user_detail.html:51
+msgid "Connects"
+msgstr "好友"
+
+#: obrisk/stories/models.py:91
+msgid "User created tags?"
+msgstr ""
+
+#: obrisk/stories/models.py:98
+msgid "Is a reply?"
+msgstr ""
+
+#: obrisk/stories/views.py:252 obrisk/stories/views.py:265
+msgid "The story post is invalid"
+msgstr ""
+
+#: obrisk/stories/views.py:372
+msgid "Text length is longer than accepted characters."
+msgstr ""
+
+#: obrisk/templates/403_csrf.html:12 obrisk/templates/account/login.html:72
+#: obrisk/templates/account/password_reset_from_key.html:68
+#: obrisk/templates/account/password_reset_from_key_done.html:21
+#: obrisk/templates/account/signup.html:151 obrisk/templates/base.html:536
+#: obrisk/templates/classifieds/classified_detail.html:194
+#: obrisk/templates/pages/home.html:103
+#: obrisk/templates/posts/post_detail.html:228
+msgid "Login"
+msgstr "登录"
+
+#: obrisk/templates/account/account_inactive.html:8
+msgid "Account Inactive"
+msgstr ""
+
+#: obrisk/templates/account/account_inactive.html:9
+msgid ""
+"This account is inactive. Please contact customer support to activate it!"
+msgstr ""
+
+#: obrisk/templates/account/email.html:11
+msgid "E-mail Addresses"
+msgstr ""
+
+#: obrisk/templates/account/email.html:14
+msgid "The following e-mail addresses are associated with your account:"
+msgstr ""
+
+#: obrisk/templates/account/email.html:30
+msgid "Verified"
+msgstr ""
+
+#: obrisk/templates/account/email.html:32
+msgid "Unverified"
+msgstr ""
+
+#: obrisk/templates/account/email.html:34
+msgid "Primary"
+msgstr ""
+
+#: obrisk/templates/account/email.html:41
+msgid "Make Primary"
+msgstr ""
+
+#: obrisk/templates/account/email.html:43
+msgid "Re-send Verification"
+msgstr ""
+
+#: obrisk/templates/account/email.html:44
+msgid "Remove"
+msgstr ""
+
+#: obrisk/templates/account/email.html:51
+msgid "Warning:"
+msgstr ""
+
+#: obrisk/templates/account/email.html:52
+msgid ""
+"You currently do not have any e-mail address set up. You should really add "
+"an e-mail address so you can receive notifications, reset your password, etc."
+msgstr ""
+
+#: obrisk/templates/account/email.html:58
+msgid "Add E-mail Address"
+msgstr ""
+
+#: obrisk/templates/account/email.html:63
+msgid "Add E-mail"
+msgstr ""
+
+#: obrisk/templates/account/email.html:73
+msgid "Do you really want to remove the selected e-mail address?"
+msgstr ""
+
+#: obrisk/templates/account/email/email_confirmation_signup_message.txt:2
+#, python-format
+msgid ""
+"\n"
+"\n"
+"Hello %(user_display)s!\n"
+"\n"
+"First, we want to warmly welcome you!. You're receiving this e-mail because "
+"user %(user_display)s has given your e-mail address to sign-up for Obrisk.\n"
+"\n"
+"To confirm this is correct, kindly go to %(activate_url)s\n"
+msgstr ""
+
+#: obrisk/templates/account/email/email_confirmation_signup_message.txt:10
+msgid ""
+" and simply log-in to the website and you're good to go.\n"
+"\n"
+"Please not use this email to reply back to us. Please contact us via e-mail "
+"address, support@obrisk.com, incase you are facing any problem with signing "
+"up or getting started using the website. \n"
+"We will reply back within the shortest time possible. \n"
+"\n"
+"Regards,\n"
+"Obrisk team!\n"
+"\n"
+"www.obrisk.com | Copyright © 2019  \n"
+"\n"
+msgstr ""
+
+#: obrisk/templates/account/email_confirm.html:11
+msgid "Confirm E-mail Address"
+msgstr ""
+
+#: obrisk/templates/account/email_confirm.html:17
+#, python-format
+msgid ""
+"Please confirm that <a\n"
+"            href=\"mailto:%(email)s\">%(email)s</a> is an e-mail address for "
+"user\n"
+"        %(user_display)s."
+msgstr ""
+
+#: obrisk/templates/account/email_confirm.html:23
+msgid "Confirm"
+msgstr ""
+
+#: obrisk/templates/account/email_confirm.html:30
+#, python-format
+msgid ""
+"This e-mail confirmation link expired or is invalid. Please <a href="
+"\"%(email_url)s\">issue a new\n"
+"            e-mail confirmation request</a>."
+msgstr ""
+
+#: obrisk/templates/account/email_signup.html:7
+#: obrisk/templates/account/signup.html:8
+#: obrisk/templates/account/signup.html:66
+msgid "Account Signup"
+msgstr "注册"
+
+#: obrisk/templates/account/email_signup.html:35
+msgid "Account Creation"
+msgstr "注册"
+
+#: obrisk/templates/account/email_signup.html:37
+#, python-format
+msgid ""
+"Already have an account? Then please sign in <a href=\"%(login_url)s\">\n"
+"\t\t\t\t\t\t\there</a>."
+msgstr "<a href=\"%(login_url)s\">登录 </a>"
+
+#: obrisk/templates/account/email_signup.html:70
+#: obrisk/templates/account/signup.1.html:9
+#: obrisk/templates/account/signup.1.html:19
+#: obrisk/templates/account/signup.html:226
+msgid "Sign Up"
+msgstr "注册"
+
+#: obrisk/templates/account/login.html:8 obrisk/templates/account/login.html:25
+#: obrisk/templates/account/phone_ps_reset_confirm.html:9
+msgid "Account Login"
+msgstr "登录"
+
+#: obrisk/templates/account/login.html:48
+msgid "Phone number / Username / Email"
+msgstr "手机号/用户名"
+
+#: obrisk/templates/account/login.html:59
+#: obrisk/templates/account/signup.html:186 obrisk/users/forms.py:82
+#: obrisk/users/forms.py:150
+msgid "Password"
+msgstr "密码"
+
+#: obrisk/templates/account/login.html:76
+msgid "Sign up"
+msgstr "注册"
+
+#: obrisk/templates/account/login.html:78
+msgid "Reset Password"
+msgstr "重设密码"
+
+#: obrisk/templates/account/login.html:93
+msgid "Login problem?"
+msgstr "无法登录？"
+
+#: obrisk/templates/account/login.html:95
+msgid "click here "
+msgstr "点击这里"
+
+#: obrisk/templates/account/login.html:97
+msgid "to contact us or add WechatID:"
+msgstr "与我们联系或加我们的微信帐号"
+
+#: obrisk/templates/account/logout.html:9
+#: obrisk/templates/account/logout.html:18
+msgid "Sign Out"
+msgstr "登出"
+
+#: obrisk/templates/account/logout.html:11
+msgid "Are you sure you want to sign out?"
+msgstr "您确定要注销吗？"
+
+#: obrisk/templates/account/logout.html:19
+#: obrisk/templates/classifieds/classified_create-old.html:150
+#: obrisk/templates/classifieds/classified_create.html:138
+#: obrisk/templates/classifieds/classified_list.html:224
+#: obrisk/templates/classifieds/classified_update.html:19
+#: obrisk/templates/classifieds/official_ad_create.html:26
+#: obrisk/templates/posts/post_create.html:31
+#: obrisk/templates/posts/post_update.html:21
+#: obrisk/templates/qa/answer_form.html:20
+#: obrisk/templates/qa/question_form.html:20
+#: obrisk/templates/stories/stories_form_modal.html:25
+msgid "Cancel"
+msgstr "取消"
+
+#: obrisk/templates/account/messages/email_confirmation_sent.txt:2
+#, python-format
+msgid ""
+"E-mail sent to %(email)s. Please confirm your email address or this a/c will "
+"be terminated."
+msgstr ""
+
+#: obrisk/templates/account/password_change.html:15
+#: obrisk/templates/account/password_change.html:20
+#: obrisk/templates/account/password_reset_from_key.html:6
+#: obrisk/templates/account/password_reset_from_key.html:22
+#: obrisk/templates/account/password_reset_from_key_done.html:14
+msgid "Change Password"
+msgstr "更改密码"
+
+#: obrisk/templates/account/password_reset.html:8
+#: obrisk/templates/account/password_reset.html:31
+#: obrisk/templates/account/password_reset_done.html:15
+msgid "Password Reset"
+msgstr "重设密码"
+
+#: obrisk/templates/account/password_reset.html:39
+msgid ""
+"Enter your registered e-mail address and we'll send the link to reset your "
+"password!"
+msgstr ""
+
+#: obrisk/templates/account/password_reset.html:46
+#: obrisk/templates/account/password_reset_from_key.html:60
+msgid "Reset My Password"
+msgstr "重设密码"
+
+#: obrisk/templates/account/password_reset.html:51
+msgid "Use Phone number"
+msgstr "使用手机号码"
+
+#: obrisk/templates/account/password_reset.html:53
+msgid ""
+"If you have any problem, please\n"
+"                        <a href=\"mailto:support@obrisk.com\"> click here </"
+"a> to contact us (support@obrisk.com)\n"
+"                        or add\n"
+"                        WechatID:\n"
+"                        <span class=\"blue-link\"> Obrisk."
+msgstr ""
+"如果您有任何问题，请\n"
+"<a href=\"mailto:support@obrisk.com\"> 点击这里 </a> 与我们联系"
+"(support@obrisk.com) 或加我们的微信帐号:\n"
+"                        <span class=\"blue-link\"> Obrisk."
+
+#: obrisk/templates/account/password_reset_done.html:21
+msgid ""
+"We have sent you an e-mail with the link to reset your password. Please "
+"follow the link in\n"
+"            the\n"
+"            email to the reset password page. "
+msgstr ""
+
+#: obrisk/templates/account/password_reset_done.html:24
+msgid ""
+" Kindly note that the link is valid for only 72 hours (3 Day). be sure to "
+"use the link\n"
+"            before it\n"
+"            expires. "
+msgstr ""
+
+#: obrisk/templates/account/password_reset_from_key.html:22
+msgid "Bad Token"
+msgstr ""
+
+#: obrisk/templates/account/password_reset_from_key.html:39
+msgid ""
+" The password reset link was invalid, possibly because it\n"
+"                                                has already been used. "
+"Please\n"
+"                                                request a "
+msgstr ""
+
+#: obrisk/templates/account/password_reset_from_key.html:44
+msgid " <br> <br>If you have any problem, Click "
+msgstr ""
+
+#: obrisk/templates/account/password_reset_from_key.html:64
+#: obrisk/templates/account/password_reset_from_key_done.html:15
+msgid "Your password is now changed."
+msgstr ""
+
+#: obrisk/templates/account/password_set.html:15
+#: obrisk/templates/account/password_set.html:20
+msgid "Set Password"
+msgstr ""
+
+#: obrisk/templates/account/phone_password_reset.html:28
+msgid "RESET PASSWORD"
+msgstr "重设密码"
+
+#: obrisk/templates/account/phone_password_reset.html:89
+msgid "Use email Address"
+msgstr ""
+
+#: obrisk/templates/account/phone_password_reset.html:96
+msgid ""
+"Any problem?\n"
+"                                                <a href=\"mailto:"
+"support@obrisk.com\" class=\"blue-link\"> click here </a>\n"
+"                                                to\n"
+"                                                contact us or\n"
+"                                                add WechatID:\n"
+"                                                <span class=\"blue-link\"> "
+"Obrisk </span>"
+msgstr ""
+"任何问题？\n"
+"                                                <a href=\"mailto:"
+"support@obrisk.com\" class=\"blue-link\"> 点击这里 </a>\n"
+" 与我们联系(support@obrisk.com) 或加我们的微信帐号 \n"
+"<span class=\"blue-link\"> Obrisk </span>"
+
+#: obrisk/templates/account/phone_ps_reset_confirm.html:78
+msgid ""
+"If you have any problem, please\n"
+"                                                <a href=\"mailto:"
+"support@obrisk.com\"> click here </a> to contact us or\n"
+"                                                via WechatID:\n"
+"                                                <span style=\"font-weight:"
+"bold; color: #0aeee3\"> Obrisk\n"
+"                                                </span>"
+msgstr ""
+
+#: obrisk/templates/account/signup.1.html:11
+#, python-format
+msgid ""
+"Already have an account? Then please <a href=\"%(login_url)s\">sign in</a>."
+msgstr ""
+
+#: obrisk/templates/account/signup.html:76
+msgid "Phone Number"
+msgstr "手机号码"
+
+#: obrisk/templates/account/signup.html:86
+msgid "Verify"
+msgstr "确认"
+
+#: obrisk/templates/account/signup.html:91
+msgid "Don't include the country code!"
+msgstr "不包含国家/地区代码"
+
+#: obrisk/templates/account/signup.html:100
+msgid "Code*"
+msgstr "验证码"
+
+#: obrisk/templates/account/signup.html:138
+msgid "I Agree to"
+msgstr "我同意"
+
+#: obrisk/templates/account/signup.html:140
+msgid "Terms & Conditions"
+msgstr "条款和条件"
+
+#: obrisk/templates/account/signup.html:142
+msgid "and the regulations of the country residing."
+msgstr "和居住国家的规定"
+
+#: obrisk/templates/account/signup.html:153
+msgid "Can't signup?"
+msgstr "联系客户支持"
+
+#: obrisk/templates/account/signup.html:158
+msgid "Any problem? add our WechatID:"
+msgstr "任何问题？ 加我们的微信账号"
+
+#: obrisk/templates/account/signup.html:175 obrisk/users/forms.py:49
+msgid "Username"
+msgstr "用户名"
+
+#: obrisk/templates/account/signup.html:199 obrisk/users/models.py:33
+msgid "Province"
+msgstr "省"
+
+#: obrisk/templates/account/signup.html:209 obrisk/users/models.py:34
+msgid "City"
+msgstr "市"
+
+#: obrisk/templates/account/signup_closed.html:8
+msgid "Sign Up Closed"
+msgstr "注册已关闭"
+
+#: obrisk/templates/account/signup_closed.html:10
+msgid "We are sorry, but the sign up is currently closed."
+msgstr "非常抱歉，注册已关闭"
+
+#: obrisk/templates/account/verification_sent.html:18
+msgid "Please Verify Your E-mail Address"
+msgstr "请验证您的电子邮件地址"
+
+#: obrisk/templates/account/verification_sent.html:27
+msgid ""
+"We have sent an e-mail to the address you have provided for verification.\n"
+"                            Follow the link provided in the e-mail to "
+"finalize the sign-up process. </p>\n"
+"                        <p>If you do not receive the confirmation e-mail "
+"within a few minutes,\n"
+"                            be sure to check the <strong> spam/junk </"
+"strong> folder for the e-mail. <br>\n"
+"                            Please <a href=\"mailto:support@obrisk.com\"> "
+"click here </a> to contact us, incase you still\n"
+"                            have problems\n"
+"                            with signing up.\n"
+"                        </p> "
+msgstr ""
+
+#: obrisk/templates/account/verified_email_required.html:10
+msgid "Please verify Your e-mail address"
+msgstr ""
+
+#: obrisk/templates/account/verified_email_required.html:14
+msgid ""
+"This part of the site requires us to verify that\n"
+"        you are who you claim to be. For this purpose, we require that you\n"
+"        verify ownership of your e-mail address. "
+msgstr ""
+
+#: obrisk/templates/account/verified_email_required.html:18
+msgid ""
+"We have sent an e-mail to you for\n"
+"        verification. Please click on the link inside the e-mail.\n"
+"        "
+msgstr ""
+
+#: obrisk/templates/account/verified_email_required.html:22
+#, python-format
+msgid ""
+"<strong>Note:</strong> you can still <a href=\"%(email_url)s\">change your e-"
+"mail address by\n"
+"            clicking here. </a>.\n"
+"        <br> <br>If you have any problem, Click <a href=\"mailto:"
+"support@obrisk.com\"> here </a> to contact us. Thank you!\n"
+"        "
+msgstr ""
+
+#: obrisk/templates/base.html:129 obrisk/templates/base.html:290
+#: obrisk/templates/base.html:526 obrisk/templates/base.html:591
+msgid "Articles"
+msgstr "文章部分"
+
+#: obrisk/templates/base.html:139 obrisk/templates/base.html:307
+#: obrisk/templates/base.html:608
+msgid "Chat"
+msgstr "讯息"
+
+#: obrisk/templates/base.html:186 obrisk/templates/base.html:446
+msgid "CLOSE"
+msgstr "取消"
+
+#: obrisk/templates/base.html:203 obrisk/templates/base.html:463
+msgid "My Profile"
+msgstr "个人资料页面"
+
+#: obrisk/templates/base.html:206 obrisk/templates/base.html:466
+msgid "Access your profile."
+msgstr "访问您的个人资料页面"
+
+#: obrisk/templates/base.html:224 obrisk/templates/base.html:484
+msgid "Log out"
+msgstr "登出"
+
+#: obrisk/templates/base.html:227 obrisk/templates/base.html:487
+msgid "Log out from your account."
+msgstr "登出"
+
+#: obrisk/templates/base.html:539
+msgid "Signup"
+msgstr "注册"
+
+#: obrisk/templates/classifieds/classified_confirm_delete.html:8
+msgid "Delete a classified post"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_confirm_delete.html:10
+msgid ""
+"Are you sure you want to continue? If you do this you will delete this "
+"classified post and all of its related content! Also note, this action "
+"cannot be reversed."
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_confirm_delete.html:14
+#: obrisk/templates/stories/stories_confirm_delete.html:14
+msgid "Delete"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_create-old.html:148
+#: obrisk/templates/classifieds/classified_create.html:127
+#: obrisk/templates/classifieds/classified_list.html:213
+#: obrisk/templates/classifieds/official_ad_create.html:24
+#: obrisk/templates/connections/add_friends.html:24
+msgid "Submit"
+msgstr "确定"
+
+#: obrisk/templates/classifieds/classified_create-old.html:149
+#: obrisk/templates/classifieds/classified_update.html:18
+#: obrisk/templates/classifieds/official_ad_create.html:25
+#: obrisk/templates/posts/post_create.html:30
+#: obrisk/templates/posts/post_update.html:20
+#: obrisk/templates/qa/question_form.html:19
+msgid "Save as draft"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_detail.html:91
+#: obrisk/templates/stories/story_detail.html:91
+msgid "CNY"
+msgstr "¥"
+
+#: obrisk/templates/classifieds/classified_detail.html:203
+#: obrisk/templates/classifieds/search_results.html:39
+#: obrisk/templates/posts/post_detail.html:200
+#: obrisk/templates/search/search_results.html:45
+#: obrisk/templates/stories/search_results.html:45
+#: obrisk/templates/stories/story_detail.html:159
+msgid "Tags"
+msgstr "标签"
+
+#: obrisk/templates/classifieds/classified_detail.html:216
+msgid "Edit this classified"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_detail.html:217
+#: obrisk/templates/stories/story_detail.html:173
+msgid "Edit"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_detail.html:220
+msgid "Report this classified"
+msgstr "举报此分类"
+
+#: obrisk/templates/classifieds/classified_detail.html:220
+#: obrisk/templates/stories/story_detail.html:176
+msgid "Report"
+msgstr "举报"
+
+#: obrisk/templates/classifieds/classified_detail.html:223
+#: obrisk/templates/stories/story_detail.html:179
+msgid "Home"
+msgstr "主页"
+
+#: obrisk/templates/classifieds/classified_list.html:34
+#: obrisk/templates/qa/question_list.html:37
+msgid "Popular tags"
+msgstr "热门标签"
+
+#: obrisk/templates/classifieds/classified_list.html:65
+#: obrisk/templates/posts/post_create.html:29
+#: obrisk/templates/qa/question_form.html:18
+#: obrisk/templates/stories/stories_form_modal.html:23
+#: obrisk/templates/stories/stories_list.html:50
+#: obrisk/templates/stories/stories_list.html:274
+msgid "Publish"
+msgstr "发布"
+
+#: obrisk/templates/classifieds/classified_list.html:91
+msgid "Title*"
+msgstr "标题*"
+
+#: obrisk/templates/classifieds/classified_list.html:100
+msgid "Details*"
+msgstr "细节*"
+
+#: obrisk/templates/classifieds/classified_list.html:110
+msgid "Price*"
+msgstr "价钱*"
+
+#: obrisk/templates/classifieds/classified_list.html:113
+msgid "Numbers only. 0 means FREE"
+msgstr "仅输入数字。 留下0可免费获得"
+
+#: obrisk/templates/classifieds/classified_list.html:133
+msgid "Include your phone no? "
+msgstr "您要包括您的手机号码吗？"
+
+#: obrisk/templates/classifieds/classified_list.html:144
+msgid "Phone number(optional)"
+msgstr "手机号码（可选)"
+
+#: obrisk/templates/classifieds/classified_list.html:154
+msgid "Images*"
+msgstr "图片*"
+
+#: obrisk/templates/classifieds/classified_list.html:173
+#: obrisk/templates/stories/stories_list.html:236
+msgid "Upload images"
+msgstr "上传图片"
+
+#: obrisk/templates/classifieds/classified_list.html:178
+#: obrisk/templates/classifieds/classified_list.html:186
+msgid "Add images"
+msgstr "添加图片"
+
+#: obrisk/templates/classifieds/classified_list.html:192
+#: obrisk/templates/stories/stories_list.html:243
+msgid "Notes:"
+msgstr "笔记："
+
+#: obrisk/templates/classifieds/classified_list.html:193
+msgid "Can select up to 8 multiple images & Max size per image is 13MB"
+msgstr "最多可以选择8张多张图像，每张图像的最大大小为13MB"
+
+#: obrisk/templates/classifieds/classified_list.html:217
+msgid "Login & Post "
+msgstr "登录并发布"
+
+#: obrisk/templates/classifieds/classified_list.html:261
+msgid "Add new item"
+msgstr "添加新帖子"
+
+#: obrisk/templates/classifieds/classified_list_ajax.html:108
+msgid "😃 Welcome"
+msgstr "欢迎"
+
+#: obrisk/templates/classifieds/classified_list_ajax.html:109
+msgid "It looks like there are no items near you."
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_list_ajax.html:110
+msgid " Be the first to post"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_report.html:22
+msgid " Choose the reason and complete the form why the ad is inappropiate."
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_report.html:33
+msgid "Submit the report"
+msgstr "确定"
+
+#: obrisk/templates/classifieds/classified_update.html:17
+#: obrisk/templates/posts/post_update.html:19
+msgid "Update"
+msgstr ""
+
+#: obrisk/templates/classifieds/classified_update.html:24
+msgid "Click to delete this classified post"
+msgstr ""
+
+#: obrisk/templates/classifieds/official_ad_create.html:14
+msgid "Write a new classified"
+msgstr ""
+
+#: obrisk/templates/classifieds/search_results.html:5
+#: obrisk/templates/connections/search_results.html:5
+#: obrisk/templates/search/search_results.html:5
+#: obrisk/templates/stories/search_results.html:5
+msgid "Search Results"
+msgstr "搜索结果"
+
+#: obrisk/templates/classifieds/search_results.html:80
+#: obrisk/templates/search/search_results.html:86
+#: obrisk/templates/stories/search_results.html:86
+msgid "There are no results related to your search in classifieds"
+msgstr ""
+
+#: obrisk/templates/classifieds/search_results.html:92
+#: obrisk/templates/search/search_results.html:112
+#: obrisk/templates/stories/search_results.html:112
+msgid "There are no results related to your search in tags"
+msgstr ""
+
+#: obrisk/templates/connections/add_block.html:3
+#: obrisk/templates/connections/add_follower.html:3
+#: obrisk/templates/connections/blockers.html:3
+#: obrisk/templates/connections/blocking.html:3
+#: obrisk/templates/connections/followers.html:3
+#: obrisk/templates/connections/following.html:3
+#: obrisk/templates/connections/friend_requests_list.html:3
+#: obrisk/templates/connections/friends.html:3
+#: obrisk/templates/connections/pending_request.html:3
+#: obrisk/templates/connections/remove_block.html:3
+#: obrisk/templates/connections/remove_follower.html:3
+#: obrisk/templates/connections/requests.html:3
+#: obrisk/templates/users/user_list.html:3
+#: obrisk/templates/users/user_list.html:12
+msgid "Contacts"
+msgstr "通讯录"
+
+#: obrisk/templates/connections/add_friends.html:3
+msgid "Add connection"
+msgstr "加为好友"
+
+#: obrisk/templates/connections/followers.html:38
+#: obrisk/templates/messager/contact_list.html:25
+msgid "Discover"
+msgstr "发现"
+
+#: obrisk/templates/connections/following.html:41
+msgid "Keep Connecting"
+msgstr "继续加为好友"
+
+#: obrisk/templates/connections/friends.html:25
+#: obrisk/templates/users/user_detail.html:47
+msgid "Following"
+msgstr "关注"
+
+#: obrisk/templates/connections/friends.html:30
+msgid "Friend Requests"
+msgstr "邀请已收到"
+
+#: obrisk/templates/connections/friends.html:96
+msgid "Discover People"
+msgstr "发现"
+
+#: obrisk/templates/connections/friends.html:140
+msgid "Followers"
+msgstr "位关注者"
+
+#: obrisk/templates/connections/search_results.html:44 obrisk/users/apps.py:7
+msgid "Users"
+msgstr ""
+
+#: obrisk/templates/messager/contact_list.html:20
+msgid "Recent Messages"
+msgstr "最近的消息"
+
+#: obrisk/templates/messager/contact_list.html:108
+msgid "No contacts"
+msgstr "通讯录为空"
+
+#: obrisk/templates/messager/contact_list.html:114
+msgid ""
+"Go to the discover and send friend requests or invite friends, Or you can "
+"chat with one Obrisk team member"
+msgstr "转到发现并发送好友请求或邀请朋友，或者您可以与一位Obrisk小组成员聊天"
+
+#: obrisk/templates/messager/contact_list.html:136
+msgid "Invite Friends"
+msgstr "邀请好友"
+
+#: obrisk/templates/messager/contact_list.html:193
+#: obrisk/templates/messager/message_list.html:156
+#: obrisk/templates/messager/message_list_old.html:106
+msgid "Write a message..."
+msgstr "输入讯息"
+
+#: obrisk/templates/messager/message_list.html:109
+#: obrisk/templates/messager/message_list_old.html:66
+msgid "Hello "
+msgstr "你好"
+
+#: obrisk/templates/messager/message_list.html:109
+#: obrisk/templates/messager/message_list_old.html:66
+msgid " nice to meet you"
+msgstr " 很高兴见到你"
+
+#: obrisk/templates/messager/message_list.html:110
+#: obrisk/templates/messager/message_list_old.html:67
+msgid "I am "
+msgstr " 我的名字是"
+
+#: obrisk/templates/messager/message_list.html:110
+#: obrisk/templates/messager/message_list_old.html:67
+msgid ", Let's talk!"
+msgstr ", 聊吧"
+
+#: obrisk/templates/notifications/most_recent.html:5
+msgid "Unread notifications"
+msgstr "最近通知"
+
+#: obrisk/templates/notifications/most_recent.html:61
+#: obrisk/templates/notifications/notification_dropdown.html:110
+#: obrisk/templates/notifications/notification_list.html:16
+msgid "Mark all as read"
+msgstr "标记为已读"
+
+#: obrisk/templates/notifications/most_recent.html:62
+msgid "View All"
+msgstr "查看全部"
+
+#: obrisk/templates/notifications/notification_dropdown.html:66
+#: obrisk/templates/notifications/notification_list.html:13
+msgid "Unread notifications for"
+msgstr "的未读通知"
+
+#: obrisk/templates/notifications/notification_list.html:42
+msgid "Mark as read"
+msgstr "标记为已读"
+
+#: obrisk/templates/pages/home.html:94
+msgid "Hi! Welcome to Obrisk"
+msgstr "基于位置的社交网络"
+
+#: obrisk/templates/pages/home.html:95
+msgid "Socialize, Share and Stay Connected..."
+msgstr "社交，分享，保持联系"
+
+#: obrisk/templates/pages/home.html:100
+msgid "Sign up now"
+msgstr "注册"
+
+#: obrisk/templates/pages/home.html:118
+msgid "Stories posts"
+msgstr "看一看"
+
+#: obrisk/templates/pages/home.html:119
+msgid "Read and share brief informative content"
+msgstr "阅读并分享简要信息"
+
+#: obrisk/templates/pages/home.html:121
+msgid "View Stories"
+msgstr "查看看一看"
+
+#: obrisk/templates/pages/home.html:128
+msgid "Secondhand platform"
+msgstr "二手网上市场"
+
+#: obrisk/templates/pages/home.html:129
+msgid "Buy or sell secondhand items closer to your location."
+msgstr "与您附近的人一起买卖二手物品"
+
+#: obrisk/templates/pages/home.html:131
+msgid "View Classifieds"
+msgstr "查看二手市场"
+
+#: obrisk/templates/pages/home.html:138
+msgid "Published articles"
+msgstr "文章"
+
+#: obrisk/templates/pages/home.html:139
+msgid "Read, discuss and share helpful ideas"
+msgstr "阅读，讨论和分享有用的想法"
+
+#: obrisk/templates/pages/home.html:141
+msgid "View Post"
+msgstr "查看文章部分"
+
+#: obrisk/templates/pages/home.html:156
+msgid "About "
+msgstr "关于我们"
+
+#: obrisk/templates/pages/home.html:157
+msgid "Terms and condition"
+msgstr "条款和条件"
+
+#: obrisk/templates/pages/home.html:158
+msgid "Privacy policy "
+msgstr "隐私政策"
+
+#: obrisk/templates/pagination.html:7
+msgid "Previous"
+msgstr "以前"
+
+#: obrisk/templates/pagination.html:19
+msgid "Next"
+msgstr "下一个"
+
+#: obrisk/templates/posts/draft_list.html:22
+#: obrisk/templates/posts/post_list.html:35
+msgid "New Post"
+msgstr "新文章"
+
+#: obrisk/templates/posts/draft_list.html:78
+msgid "You have no any drafts posts, "
+msgstr ""
+
+#: obrisk/templates/posts/draft_list.html:79
+msgid "publish one post now!"
+msgstr ""
+
+#: obrisk/templates/posts/draft_list.html:86
+#: obrisk/templates/posts/post_list.html:163
+#: obrisk/templates/qa/question_list.html:78
+msgid "Newer"
+msgstr ""
+
+#: obrisk/templates/posts/draft_list.html:100
+#: obrisk/templates/posts/post_list.html:176
+#: obrisk/templates/qa/question_list.html:91
+msgid "Older"
+msgstr ""
+
+#: obrisk/templates/posts/post_create.html:22
+msgid "Upload Cover Image"
+msgstr ""
+
+#: obrisk/templates/posts/post_list.html:37
+msgid " Drafts"
+msgstr ""
+
+#: obrisk/templates/posts/post_list.html:155
+msgid ""
+"There is no published post yet. Do you have any important info, events ,jobs "
+"opportunities e.t.c?! Be the first one to"
+msgstr ""
+
+#: obrisk/templates/posts/post_list.html:156
+msgid "publish one"
+msgstr ""
+
+#: obrisk/templates/qa/answer_form.html:10
+msgid "Answer a question"
+msgstr ""
+
+#: obrisk/templates/qa/answer_sample.html:10
+#: obrisk/templates/qa/question_detail.html:31
+msgid "Click to up vote; click again to toggle"
+msgstr ""
+
+#: obrisk/templates/qa/answer_sample.html:13
+#: obrisk/templates/qa/question_detail.html:36
+msgid "Click to down vote; click again to toggle"
+msgstr ""
+
+#: obrisk/templates/qa/answer_sample.html:17
+msgid "Click to unaccept the answer"
+msgstr ""
+
+#: obrisk/templates/qa/answer_sample.html:22
+msgid "Click to accept the answer"
+msgstr ""
+
+#: obrisk/templates/qa/question_detail.html:17
+#: obrisk/templates/qa/question_list.html:27
+msgid "Ask a Question"
+msgstr ""
+
+#: obrisk/templates/qa/question_detail.html:83
+msgid "Submit an answer"
+msgstr ""
+
+#: obrisk/templates/qa/question_detail.html:93
+msgid "There are no answers yet."
+msgstr ""
+
+#: obrisk/templates/qa/question_detail.html:94
+msgid "Submit your answer now."
+msgstr ""
+
+#: obrisk/templates/qa/question_form.html:10
+msgid "Ask a question"
+msgstr ""
+
+#: obrisk/templates/qa/question_list.html:54
+msgid "Unanswered"
+msgstr ""
+
+#: obrisk/templates/qa/question_list.html:59
+msgid "Answered"
+msgstr ""
+
+#: obrisk/templates/qa/question_list.html:64
+msgid "All Questions"
+msgstr ""
+
+#: obrisk/templates/qa/question_list.html:71
+msgid "No question to display"
+msgstr ""
+
+#: obrisk/templates/qa/question_sample.html:25
+msgid "Asked"
+msgstr ""
+
+#: obrisk/templates/qa/question_sample.html:25
+msgid "by"
+msgstr ""
+
+#: obrisk/templates/search/search_results.html:95
+#: obrisk/templates/stories/search_results.html:95
+msgid "There are no results related to your search in stories"
+msgstr ""
+
+#: obrisk/templates/search/search_results.html:102
+#: obrisk/templates/stories/search_results.html:102
+msgid "There are no results related to your search in question and anwser"
+msgstr ""
+
+#: obrisk/templates/stories/stories_confirm_delete.html:8
+msgid "Delete a posted story"
+msgstr ""
+
+#: obrisk/templates/stories/stories_confirm_delete.html:10
+msgid ""
+"Are you sure you want to continue? If you do this you will delete this story"
+msgstr ""
+
+#: obrisk/templates/stories/stories_detail.html:44
+#: obrisk/templates/stories/stories_list.html:296
+msgid "There are new stories"
+msgstr "有新帖子"
+
+#: obrisk/templates/stories/stories_form_modal.html:7
+msgid "Share something new!"
+msgstr "分享一些令人兴奋的信息"
+
+#: obrisk/templates/stories/stories_list.html:84
+msgid "Characters"
+msgstr "个字符"
+
+#: obrisk/templates/stories/stories_list.html:115
+msgid "Image"
+msgstr "图片"
+
+#: obrisk/templates/stories/stories_list.html:125
+msgid "Video"
+msgstr "视频"
+
+#: obrisk/templates/stories/stories_list.html:171
+msgid "Anyone can see this post."
+msgstr "任何人都可以看到此信息"
+
+#: obrisk/templates/stories/stories_list.html:191
+msgid "Only connects can see this post"
+msgstr "只有好友可以看到此信息"
+
+#: obrisk/templates/stories/stories_list.html:205
+msgid "Around"
+msgstr "附近"
+
+#: obrisk/templates/stories/stories_list.html:209
+msgid "Only people in your city can see this post."
+msgstr "只有您所在城市的人可以看到此信息。"
+
+#: obrisk/templates/stories/stories_list.html:244
+msgid "Not more than 8 images &amp; Max size per image is 13MB"
+msgstr "最多可以选择8张多张图像，每张图像的最大大小为13MB"
+
+#: obrisk/templates/stories/stories_list.html:248
+msgid "Retry"
+msgstr "重试"
+
+#: obrisk/templates/stories/stories_list.html:280
+msgid "Login & Post"
+msgstr "登录并发布"
+
+#: obrisk/templates/stories/stories_thread.html:57
+msgid "Click to delete this reply"
+msgstr ""
+
+#: obrisk/templates/stories/stories_thread_modal.html:43
+msgid "Reply"
+msgstr "回复"
+
+#: obrisk/templates/stories/story_detail.html:172
+msgid "Edit this story"
+msgstr ""
+
+#: obrisk/templates/stories/story_detail.html:176
+msgid "Report this story"
+msgstr ""
+
+#: obrisk/templates/users/user_detail.html:30 obrisk/users/models.py:42
+msgid "Points"
+msgstr "点"
+
+#: obrisk/templates/users/user_detail.html:37
+msgid "Update Profile"
+msgstr "更新个人资料"
+
+#: obrisk/templates/users/user_detail.html:44
+msgid "Followers🤝"
+msgstr "位关注者"
+
+#: obrisk/templates/users/user_detail.html:59
+msgid "💬Chat"
+msgstr "讯息"
+
+#: obrisk/templates/users/user_detail.html:61
+msgid "Pending"
+msgstr "待定"
+
+#: obrisk/templates/users/user_detail.html:67
+msgid "➕Connect"
+msgstr "加好友"
+
+#: obrisk/templates/users/user_detail.html:73
+msgid "Unfollow"
+msgstr "取消关注"
+
+#: obrisk/templates/users/user_detail.html:77
+msgid "Follow"
+msgstr "关注"
+
+#: obrisk/templates/users/user_detail.html:96
+msgid "Instagram Profile"
+msgstr ""
+
+#: obrisk/templates/users/user_detail.html:101
+msgid "LinkedIn Profile"
+msgstr ""
+
+#: obrisk/templates/users/user_detail.html:106
+msgid "Snapchat Profile"
+msgstr ""
+
+#: obrisk/templates/users/user_detail.html:111
+msgid "Facebook Profile"
+msgstr ""
+
+#: obrisk/templates/users/user_form.html:72
+msgid "Save Profile"
+msgstr "保存个人资料"
+
+#: obrisk/users/forms.py:56
+msgid "Permanent action. < 16 letters."
+msgstr "以后无法更改"
+
+#: obrisk/users/forms.py:61 obrisk/users/forms.py:215 obrisk/users/models.py:43
+msgid "Phone number"
+msgstr "手机号码"
+
+#: obrisk/users/forms.py:93 obrisk/users/forms.py:153
+msgid "Password (again)"
+msgstr "密码"
+
+#: obrisk/users/forms.py:140
+msgid "E-mail"
+msgstr ""
+
+#: obrisk/users/forms.py:146
+msgid "E-mail address"
+msgstr ""
+
+#: obrisk/users/forms.py:182
+msgid "This account is currently inactive."
+msgstr ""
+
+#: obrisk/users/forms.py:185
+msgid "The phone number/username or password you specified are not correct."
+msgstr "您提供的手机号码或用户名或密码不正确"
+
+#: obrisk/users/forms.py:188
+msgid "The e-mail address or password you specified are not correct."
+msgstr "您提供的电子邮件地址或密码不正确"
+
+#: obrisk/users/forms.py:202
+msgid "Phone or username or email"
+msgstr "手机号/用户名"
+
+#: obrisk/users/forms.py:218
+msgid "Phone number you registered with"
+msgstr "您注册的手机号码"
+
+#: obrisk/users/models.py:13
+msgid "Full name"
+msgstr "全名"
+
+#: obrisk/users/models.py:19
+msgid "Job title"
+msgstr "职称"
+
+#: obrisk/users/models.py:21
+msgid "Personal URL"
+msgstr ""
+
+#: obrisk/users/models.py:23
+msgid "Facebook a/c profile name"
+msgstr ""
+
+#: obrisk/users/models.py:25
+msgid "Instagram a/c profile name"
+msgstr ""
+
+#: obrisk/users/models.py:27
+msgid "LinkedIn a/c profile name"
+msgstr ""
+
+#: obrisk/users/models.py:29
+msgid "Snapchat a/c profile name"
+msgstr ""
+
+#: obrisk/users/models.py:35
+msgid "Nationality"
+msgstr ""
+
+#: obrisk/users/models.py:37
+msgid "Describe yourself"
+msgstr "您的短传"
+
+#: obrisk/users/models.py:39
+msgid "Short bio"
+msgstr "您的短传"
+
+#: obrisk/users/models.py:41
+msgid "Country"
+msgstr "国家"

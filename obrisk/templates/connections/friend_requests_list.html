@@ -56,6 +56,10 @@
                         <div class="community-content">
                             <div>
                                 <p>You have received no requests</p><br>
+
+                                  <a href="{% url 'connections:friendship_view_friends' %}" class="button has-min-width">
+                                        {% trans "Discover Connections" %} 
+                                      </a>
                             </div>
                         </div>
                     </div>
@@ -63,9 +67,6 @@
                 </div>
             </div>
             <br>
-
-            <button type="button" class="btn btn-dark " onclick="javascript:history.back()"> <i
-                    class="fa fa-chevron-left" aria-hidden="true"></i> Back </button>
         </div>
     </div>
     {% csrf_token %}
@@ -98,73 +99,72 @@
     var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val()
 
     function accept(id) {
-        bootbox.confirm("Accept friend request ?", function (result) {
-            if (result) {
-                $.ajax({
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    },
-                    type: "POST",
-                    url: "/connections/request/accept/" + id + "/",
-                    data: {
-                        friendship_request_id: id
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        if (response) {
-                            bootbox.alert({
-                                message: response.message,
-                                size: 'small'
-                            });
-                            element = `[data-id="${id}"]`
-                            $(element).remove();
-                        } else {
-                            bootbox.alert({
-                                message: "Sorry something went wrong , Please try again later.",
-                                size: 'small'
-                            });
-                        }
 
-                    }
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            type: "POST",
+            url: "/connections/request/accept/" + id + "/",
+            data: {
+                friendship_request_id: id
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response) {
+                    $.wnoty({
+                        type: "success",
+                        message: response.message,
+                    });
+                    element = `[data-id="${id}"]`
+                    $(element).remove();
+                } else {
+                    $.wnoty({
+                        type: "error",
+                        autohide: false,
+                        message: "Sorry something went wrong , Please try again later.",
 
-                });
+                    });
+                }
+
             }
+
         });
+
 
     }
     function decline(id) {
-        bootbox.confirm("Decline friend request ?", function (result) {
-            if (result) {
-                $.ajax({
-                    beforeSend: function (xhr, settings) {
-                        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-                    },
-                    type: "POST",
-                    url: "/connections/request/reject/" + id + "/",
-                    data: {
-                        friendship_request_id: id
-                    },
-                    dataType: "json",
-                    success: function (response) {
-                        if (response) {
-                            bootbox.alert({
-                                message: response.message,
-                                size: 'small'
-                            });
-                            element = `[data-id="${id}"]`
-                            $(element).remove();
-                        } else {
-                            bootbox.alert({
-                                message: "Sorry something went wrong , Please try again later.",
-                                size: 'small'
-                            });
-                        }
 
-                    }
+        $.ajax({
+            beforeSend: function (xhr, settings) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            type: "POST",
+            url: "/connections/request/reject/" + id + "/",
+            data: {
+                friendship_request_id: id
+            },
+            dataType: "json",
+            success: function (response) {
+                if (response) {
+                    $.wnoty({
+                        type: "success",
+                        message: response.message,
+                    });
+                    element = `[data-id="${id}"]`
+                    $(element).remove();
+                } else {
+                    $.wnoty({
+                        type: "error",
+                        autohide: false,
+                        message: "Sorry something went wrong , Please try again later.",
+                    });
+                }
 
-                });
             }
+
         });
+
 
     }
 </script>

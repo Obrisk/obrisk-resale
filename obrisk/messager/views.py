@@ -1,34 +1,37 @@
 #Please ignore pylint hint on Classified.DoesNotExist
 #This code is valid
+import time
+import base64
+import datetime
+import oss2
+import logging
 
+from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
-from django.shortcuts import render, redirect, get_object_or_404, get_list_or_404
+from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.cache import cache
+from django.conf import settings
+from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.views.generic import ListView
-from django.urls import reverse
-from django.db.models import Q
-from django.db.models import OuterRef, Subquery, Case, When, Value, IntegerField
-from django.core import serializers
-
-import time
-import os
-import base64
-import datetime
-import oss2
-from collections import OrderedDict
+from django.db.models import OuterRef, Subquery
 
 from slugify import slugify
 from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
-from obrisk.utils.helpers import ajax_required 
+from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
-from obrisk.notifications.models import Notification, notification_handler
+from obrisk.messager.tasks import send_messages_notifications
 
-from config.settings.base import SESSION_COOKIE_AGE
+from obrisk.notifications.models import Notification, notification_handler
+from obrisk.users.phone_verification import send_sms
+import uuid
+import ast
+import os
 
 try:
     from django.contrib.auth import get_user_model
@@ -37,9 +40,9 @@ except ImportError:
     from django.contrib.auth.models import User
     user_model = User
 
-from django.core.cache import cache	
-
-
+SESSION_COOKIE_AGE = getattr(
+        settings, 'SESSION_COOKIE_AGE', DEFAULT_TIMEOUT
+    )
 
 class ContactsListView(LoginRequiredMixin, ListView):
     """This CBV is used to filter the list of contacts in the user"""
@@ -51,47 +54,47 @@ class ContactsListView(LoginRequiredMixin, ListView):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
 
-        #Instead of running this query, be storing the last image on every conversation. 
+        #Instead of running this query, be storing the last image on every conversation.
         context['convs'] = Conversation.objects.get_conversations(
                         self.request.user
                     ).select_related('first_user','second_user').annotate(
-                    time = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('timestamp', flat=True).order_by('-timestamp')[:1]
-                    ), 
-                    last_msg = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('message', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    img = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('image', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    attachment = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('attachment', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    unread = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('unread', flat=True).order_by('-timestamp')[:1]
-                    ),
-                    recipient = Subquery (
-                        Message.objects.filter(
-                            conversation=OuterRef('pk'),
-                        ).values_list('recipient', flat=True).order_by('-timestamp')[:1]
-                    )
+                        time = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('timestamp', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        last_msg = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('message', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        img = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('image', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        attachment = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('attachment', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        unread = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('unread', flat=True).order_by('-timestamp')[:1]
+                        ),
+                        recipient = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('recipient', flat=True).order_by('-timestamp')[:1]
+                        )
                 ).order_by('-time')
-
 
         context['super_users'] = get_user_model().objects.filter(is_superuser=True)
         context['base_active'] = 'chat'
 
-        #This is for active user in the messages.js, I was trying to quickly make push notifications work
+        #This is for active user in the messages.js,
+        #I was trying to quickly make push notifications work
         #now there is probably no need.
         if context['convs']:
             if context['convs'][0].first_user == self.request.user:
@@ -100,13 +103,15 @@ class ContactsListView(LoginRequiredMixin, ListView):
                 context['active'] = context['convs'][0].first_user.username
         return context
 
+
+@ensure_csrf_cookie
 @login_required
 @require_http_methods(["GET"])
 def messagesView(request, username):
     """CBV to render the inbox, showing a specific conversation with a given
     user, who requires to be active too."""
     if request.method == 'GET':
-        try:   
+        try:
             active_user = get_user_model().objects.get(
                         username=username)
 
@@ -115,22 +120,22 @@ def messagesView(request, username):
                 'status': '404',
                 'message': 'This user does not exist'
             })
-        
+
         else:
             key = "{}.{}".format(*sorted([request.user.pk, active_user.pk]))
-           
+
             conv, is_created = Conversation.objects.get_or_create(key=key)
             if is_created:
                 conv.first_user = request.user
                 conv.second_user = active_user
                 conv.save()
 
-            msgs_100 = conv.messages.all().select_related(
+            msgs_all = conv.messages.all().select_related(
                     'sender',
                     'recipient',
                     'classified'
-                ).values('message', 
-                        'timestamp', 
+                ).values('message',
+                        'timestamp',
                         'classified_thumbnail',
                         'img_preview',
                         'image',
@@ -159,44 +164,69 @@ def messagesView(request, username):
                         Classified.objects.filter(
                             message=OuterRef('pk'),
                         ).values_list('price', flat=True)[:1]),
-                    )[:100]
+                    classified_slug = Subquery (
+                        Classified.objects.filter(
+                            message=OuterRef('pk'),
+                        ).values_list('slug', flat=True)[:1]),
+                    )
 
-            msgs_data = list(msgs_100)
-            #Celery task: This query takes some time 
-            conv.messages.all().update(unread=False)
+            msgs_data = list(msgs_all)
 
+            #If update is called on the query, the order 'll be distorted
+            msgs_all.update(unread=False)
+
+            unread_msgs = cache.get(f'msg_{request.user.pk}')
+            if unread_msgs is not None:
+                values = list(unread_msgs)
+
+                if key in values:
+                    values = values.remove(key)
+                    cache.set(
+                        f'msg_{request.user.pk}',
+                        values,
+                        timeout=SESSION_COOKIE_AGE
+                    )
+
+            #could be sliced but the order needs to be reversed first
+            #Slicing is at end to allow the update query to run
+            #Eg 'msgs': msgs_data[:100],
             return JsonResponse({
-                'msgs': msgs_data, 
+                'msgs': msgs_data,
                 'active_username': active_user.username,
-                'active_thumbnail': active_user.thumbnail
+                'active_thumbnail': active_user.thumbnail,
+                'current_conv': key
             })
-    
+
     else:
         return JsonResponse ({
             'status': '403',
             'message': 'Invalid request'
         })
 
-         
+
 @login_required
 @ajax_required
 @require_http_methods(["POST"])
 def send_message(request):
-    """AJAX Functional view to recieve just the minimum information, process
-    and create the new message and return the new data to be attached to the
-    conversation stream."""
+    """AJAX view to recieve just the minimum information,
+    and create the new message and return the new data
+    to be attached to the conversation stream."""
     sender = request.user
     recipient_username = request.POST.get('to')
     try:
-        recipient = get_user_model().objects.get(username=recipient_username)
+        recipient = get_user_model().objects.get(
+                    username=recipient_username
+                )
     except get_user_model().DoesNotExist:
-        return HttpResponseNotFound("The user account appears to not exist or it has been freezed!")
+        return HttpResponseNotFound(
+                "This account doesn't exist or it is freezed!")
 
-    #Django-channels doesn't accept group names that are chinese characters
-    #This is a trivial workaround to avoid an error to happen in case the name of user is in chinese characters
-   
-    recipient.username = slugify(recipient_username)
-    sender.username = slugify(request.user.username)
+    #Django-channels doesn't accept group names that are chinese
+    #This is a trivial workaround to avoid an error to happen
+    #in case the name of user is in chinese characters
+
+    recipient.username = slugify(recipient_username, to_lower=True)
+    sender.username = slugify(request.user.username, to_lower=True)
 
     message = request.POST.get('message')
     image = request.POST.get('image')
@@ -205,64 +235,65 @@ def send_message(request):
 
     if not message and not image and not attachment:
         return HttpResponse()
-    
+
     if image:
-        if image.startswith(f'messages/{sender.username}/{recipient.username}') == False:
-            print(f'messages/{sender.username}/{recipient.username}')             
+        if image.startswith(
+            f'media/images/messages/{sender.username}/{recipient.username}' #noqa
+          ) == False:
             image = None
 
         else:
             d = str(datetime.datetime.now())
-            img_preview = "messages/" + slugify(str(request.user.username)) + slugify(str(recipient_username)) + "/preview/" + "prv-" + d 
+            img_preview = "media/images/messages/" + slugify(
+                    str(request.user.username)) + "/" + slugify(
+                            str(recipient_username)
+                        ) + "/preview/" + "prv-" + d + ".jpeg"
             style1 = 'image/resize,m_fill,h_250,w_250'
 
             try:
                 process1 = "{0}|sys/saveas,o_{1},b_{2}".format(style1,
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(
+                                                            oss2.compat.to_string(
+                                                                base64.urlsafe_b64encode(
                                                                 oss2.compat.to_bytes(img_preview))),
-                                                            oss2.compat.to_string(base64.urlsafe_b64encode(oss2.compat.to_bytes(bucket_name))))
+                                                            oss2.compat.to_string(
+                                                                base64.urlsafe_b64encode(
+                                                                    oss2.compat.to_bytes(bucket_name))))
                 bucket.process_object(image, process1)
             except:
                 image = None
                 img_preview = None
-    
-    if message:
-        if len(message.strip()) == 0:
-            return HttpResponse()
-  
+
+    if message and len(message.strip()) == 0:
+        return HttpResponse()
+
     if sender != recipient:
         msg = Message.send_message(sender, recipient, message,
-                            image=image, img_preview=img_preview, attachment=attachment)
-        notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='new_message')            
-        
-        # creating a key for the chatting users and updating a value for the key
-        # value = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
-        # cache.set(f'joint_chat_{sender.pk}', value, timeout=SESSION_COOKIE_AGE)
-        
-        # # keys from caches
-        # sender_key = cache.get(f'joint_chat_{sender.pk}')
-        # recipient_key = cache.get(f'joint_chat_{recipient.pk}')
-        # print('sender key:', sender_key, "and recipient key", recipient_key )
-        
-        # if recipient_key is None and recipient_key !=sender_key:
-        #     #notification
-        #     notification_handler(actor=sender, recipient=recipient, verb=Notification.NEW_MESSAGE, is_msg=True, key='message')            
-        
-        return render(request, 'messager/single_message.html', {'message': msg})
+                            image=image, img_preview=img_preview,
+                            attachment=attachment)
+
+        key = "{}.{}".format(*sorted([sender.pk, recipient.pk]))
+
+        send_messages_notifications.delay(sender.pk, recipient.pk, key)
+
+        return render(
+                request, 'messager/single_message.html',
+                {'message': msg}
+            )
 
     return HttpResponse()
+
 
 @login_required
 @ajax_required
 @require_http_methods(["GET"])
 def receive_message(request):
-    """Simple AJAX functional view to return a rendered single message on the
+    """AJAX view to return a rendered single message on the
     receiver side providing realtime connections."""
     try:
         message_id = request.GET.get('message_id')
         message = Message.objects.get(pk=message_id)
     except:
-        time.sleep(5)
+        time.sleep(2)
         message_id = request.GET.get('message_id')
         message = Message.objects.get(pk=message_id)
     return render(request,
@@ -272,22 +303,28 @@ def receive_message(request):
 @login_required
 @require_http_methods(["GET"])
 def classified_chat(request, to, classified):
-    """ Create a Conversation object btn 2 users with 
+    """ Create a Conversation object btn 2 users with
     classified post as the initial message """
     try:
         to_user = get_user_model().objects.get(username=to)
         from_user = request.user
         classified = Classified.objects.get(id=classified)
-    
+
+        if classified.user != to_user:
+            return redirect('messager:contacts_list')
+
     except get_user_model().DoesNotExist:
-        messages.error(request, f"Sorry, The user {to}, doesn't exist!")
+        messages.error(request, f"Sorry, The account {to} is unavailable!")
         return redirect('messager:contacts_list')
 
     except Classified.DoesNotExist:
-        #This error message assumes that the classifieds items are never deleted completely.
-        #If the user reaches here then he/she was playing with url parameters.
-        messages.error(request, f"Hello there, your request is invalid!")
-        return redirect('messager:contacts_list')  
+        #This error message assumes that the classifieds items
+        #are never deleted completely.
+        messages.error(
+                request,
+                f"Invalid request or the classified is unavailable!"
+            )
+        return redirect('messager:contacts_list')
 
     else:
         classified_thumbnail = ClassifiedImages.objects.values_list(
@@ -295,37 +332,25 @@ def classified_chat(request, to, classified):
                 classified=classified
             )[:1]
 
-        if Conversation.objects.conversation_exists(from_user, to_user):
+        if not Conversation.objects.conversation_exists(from_user, to_user):
+
+            key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+            conv = Conversation(first_user=from_user,
+                            second_user=to_user,
+                            key=key)
+            conv.save()
+
+        if not Message.objects.msg_clsf_exists(
+                from_user, to_user, classified
+            ):
             Message.objects.create(
                 sender=from_user,
                 recipient=to_user,
                 classified=classified,
                 classified_thumbnail=str(classified_thumbnail[0])
             )
-            return redirect("messager:conversation_detail" , to)
-        
-        else:
-            #This condition assumes classified parameter should never be null.
-            if classified.user == to_user:
-                key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
-                conv = Conversation(first_user=from_user,
-                                second_user=to_user,
-                                key=key)
-                conv.save()
-                
-                Message.objects.create(
-                    conversation=conv,
-                    sender=from_user,
-                    recipient=to_user,
-                    classified=classified,
-                    classified_thumbnail=str(classified_thumbnail[0])
-                )
-                return redirect('messager:conversation_detail', to)
-            else:
-                messages.error(request, f"Hey you there, it looks like you're trying to do something bad. \
-                    Your account { from_user}, has been flagged, and if this happens again, you will be blocked!")
-                return redirect('messager:contacts_list')
-            
+        return redirect("messager:conversation_detail" , to)
+
 
 
 @login_required
@@ -348,7 +373,7 @@ def make_conversations(request):
             #the undelying problem of why the conversation had no key
             message.conversation = Conversation.objects.get(key=key)
             message.save()
-            continue            
+            continue
         else:
             key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
             conv = Conversation(first_user=from_user, second_user=to_user, key=key)
@@ -356,7 +381,7 @@ def make_conversations(request):
 
             message.conversation = conv
             message.save()
-        
+
     return redirect('messager:contacts_list')
 
 

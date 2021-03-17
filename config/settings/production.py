@@ -1,5 +1,6 @@
 import logging,os
 import sentry_sdk
+import requests
 
 from .base import *
 from .base import env
@@ -8,9 +9,8 @@ from django.utils import timezone
 from django.conf import settings
 from sentry_sdk.integrations.django import DjangoIntegration
 
-#from obrisk.utils.cloudfront import STATIC_VERSION or None
-#e.g TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
-STATIC_VERSION = None
+#This has to be updated manually in cases we want rapid deployment
+STATIC_VERSION = 'ver0203210001' #DDMMYY####
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -18,8 +18,23 @@ STATIC_VERSION = None
 SECRET_KEY = env('SECRET_KEY')
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-#https://stackoverflow.com/questions/16676314/should-server-ip-address-be-in-allowed-hosts-django-setting
-ALLOWED_HOSTS = ['www.obrisk.com', 'obrisk.com']
+# ALB health check requests should be allowed, whitelist IP address 
+def get_ec2_instance_ip():
+    """
+    Try to obtain the IP address of the current EC2 instance in AWS
+    """
+    try:
+        ip = requests.get(
+          'http://169.254.169.254/latest/meta-data/local-ipv4',
+          timeout=5
+        ).text
+    except requests.exceptions.ConnectionError:
+        return None
+    return ip
+
+AWS_LOCAL_IP = get_ec2_instance_ip()
+
+ALLOWED_HOSTS = [AWS_LOCAL_IP, 'www.obrisk.com', 'obrisk.com', 'in.obrisk.com']
 
 # DATABASES
 # ------------------------------------------------------------------------------
@@ -30,11 +45,29 @@ DATABASES['default']['CONN_MAX_AGE'] = env.int('CONN_MAX_AGE', default=0)  # Fro
 
 # CACHES
 # ------------------------------------------------------------------------------
-CACHES = {
+
+# REDIS setup
+REDIS_URL = f'{env("PRIMARY_REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'
+
+CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': REDIS_URL,
-        'OPTIONS': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL, ],
+        },
+    }
+}
+
+CELERY_BROKER_URL = REDIS_URL
+
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": [
+            REDIS_URL,
+            #env('SLAVE_REDIS_URL'),
+        ],
+        "OPTIONS": {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
             # Mimicing memcache behavior.
             # http://niwinz.github.io/django-redis/latest/#_memcached_exceptions_behavior
@@ -57,11 +90,16 @@ SESSION_COOKIE_HTTPONLY = True
 CSRF_COOKIE_SECURE = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#csrf-cookie-httponly
 CSRF_COOKIE_HTTPONLY = True
+# This is not so important but added here to avoid confusion
+# when generating CSRF token on Ajax requests
+#https://docs.djangoproject.com/en/2.2/ref/csrf/#django.views.decorators.csrf.ensure_csrf_cookie
+#https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-CSRF_USE_SESSIONS
+CSRF_USE_SESSIONS = True
 
 # https://docs.djangoproject.com/en/dev/topics/security/#ssl-https
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-seconds
 # TODO: set this to 60 seconds first and then to 518400 once you prove the former works
-SECURE_HSTS_SECONDS = 60
+SECURE_HSTS_SECONDS = 518400
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-include-subdomains
 SECURE_HSTS_INCLUDE_SUBDOMAINS = env.bool('SECURE_HSTS_INCLUDE_SUBDOMAINS', default=True)
 # https://docs.djangoproject.com/en/dev/ref/settings/#secure-hsts-preload
@@ -74,9 +112,7 @@ SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
 # https://github.com/aliyun/django-oss-storage
-
 INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
-
 
 # STATIC
 # ----------------------------------------------------------------------------
@@ -84,28 +120,24 @@ INSTALLED_APPS += ['storages','django_oss_storage']  # noqa F405
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 #STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
-if os.getenv('USE_S3_STATICFILES'):
+if env.bool('USE_S3_STATICFILES'):
     AWS_ACCESS_KEY_ID = os.getenv('AWS_STATIC_S3_KEY_ID')
 
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_STATIC_S3_S3KT')
 
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME')
-    
+
     AWS_S3_REGION_NAME=os.getenv('AWS_S3_REGION_NAME')
-    
+
     AWS_S3_HOST=os.getenv('AWS_S3_HOST_NAME')
 
     AWS_DEFAULT_ACL = 'public-read'
-    
+
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
-    # s3 static settings
-    if STATIC_VERSION is None:
-        STATIC_VERSION=str(timezone.now().date())
-    
     STATIC_URL = f'https://dist.obrisk.com/static/{STATIC_VERSION}/'
-         
-    if not os.getenv('CLOUDFRONT'):
+
+    if not env.bool('CLOUDFRONT'):
         STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/static/{STATIC_VERSION}/'
 
     AWS_S3_CUSTOM_DOMAIN= 'dist.obrisk.com'
@@ -119,9 +151,9 @@ if os.getenv('USE_S3_STATICFILES'):
     #https://www.caktusgroup.com/blog/2014/11/10/Using-Amazon-S3-to-store-your-Django-sites-static-and-media-files/
     #If this import goes before secret key, raises errors
     STATICFILES_LOCATION = f'static/{STATIC_VERSION}'
-    
+
     #The value from docs is 'storages.backends.s3boto3.S3Boto3Storage'
-    STATICFILES_STORAGE = 'custom_storages.StaticStorage'
+    STATICFILES_STORAGE = 'config.custom_storages.StaticStorage'
 
 else:
     STATICFILES_STORAGE = 'django_oss_storage.backends.OssStaticStorage'
@@ -151,7 +183,6 @@ else:
     OSS_FILE_SAVE_AS_URL = False
 
     STATIC_URL =  '/static/'
-
 
 
 # MEDIA
@@ -236,11 +267,8 @@ sentry_sdk.init(
 #    'DSN': SENTRY_DSN
 #}
 
-# Other stuffs...
-# ------------------------------------------------------------------------------
-
 #SESSION
-#Improve performance
+#Improve performance #Support multiple servers
 SESSION_ENGINE = "django.contrib.sessions.backends.cache"
 SESSION_CACHE_ALIAS = "default"
 

@@ -1,7 +1,5 @@
 from django.conf.urls import url
-from obrisk.connections.search import SearchListView, get_suggestions
-
-from . import views
+from obrisk.connections.search import SearchListView
 
 # friendship
 from obrisk.connections.views import (

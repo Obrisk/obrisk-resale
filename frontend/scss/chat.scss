@@ -1,0 +1,99 @@
+@charset "UTF-8";
+
+@import "partials/layout-colors";
+@import "partials/layout-extra-colors";
+@import "partials/components-cards";
+@import "partials/components-buttons";
+@import "partials/app-chat";
+
+html,
+body,
+.chat {
+  width: 100% !important;
+}
+
+.title {
+    margin: auto 3%;
+}
+
+.users-list {
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: auto;
+}
+
+.contact-card {
+    display: flex;
+    margin: 3%;
+    padding: 4px 12px;
+}
+
+.contact-card-meta {
+    width: 90%;
+    margin: auto 6px;
+}
+
+.name-time-section {
+    display: flex;
+    justify-content: space-between;
+}
+
+.fa-circle {
+  font-size: 11px;
+  color: #cf0808;
+}
+
+h4 {
+  color: white;
+}
+
+h5 {
+  font-size: 1.5rem;
+}
+
+.status {
+  color: black;
+}
+
+.word-break {
+  word-break: break-all;
+}
+
+.btn-dark:disabled {
+  color: #cccccc !important;
+  background: gray !important;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+
+    a {
+        width: 40%;
+    }
+}
+
+@media screen and (max-width: 450px) {
+  .card {
+    max-width: none;
+  }
+  .users-list {
+    margin-bottom: 11%;
+  }
+
+  .username {
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 1.5%;
+    margin-left: 3%;
+  }
+
+  .profile-header-avatar {
+    margin-left: -2%;
+  }
+
+  #new-msgs {
+    margin-left: 4%;
+  }
+}

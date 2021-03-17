@@ -1,0 +1,201 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load account socialaccount %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+<title>{% trans 'Finish Signup' %}</title>
+
+<link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
+
+{% endblock head %}
+
+{% block content %}
+
+<div class=" hero form-hero form-wrapper">
+    <!--Form-->
+    <div id= "wechat-signup-form" class="login-form  hero-body">
+
+        <div class="signup-wrapper">
+            <div class="outer-panel">
+
+                <form class="signup" id="signup_form" method="post" name="social_signup_form"
+                    action="{% url 'users:complete_wechat' %}" role="form">
+
+                    {% csrf_token %}
+
+                    <div id="signup-panel-1"
+                        class=" step-dot-1 process-panel-wrap is-narrow is-active">
+
+                        <div class="box">
+                            <p class="title is-5 has-text-centered"> {% trans "🎉 You're Welcome 🎉 " %}</p>
+                        </div>
+
+                        <p class="title is-6"> {% trans "Let's get things ready..." %}</p>
+
+                        <div class="form-panel form-panel-top">
+                            <div class="notification is-danger is-hidden" role="alert">
+                                <button type="button" class="delete close-dj-messages"></button>
+                                <p id="notf-msg"></p>
+                            </div>
+
+                            <div id="username">
+                                <label for="username">
+                                    {% trans 'Pick a username' %}
+                                </label>
+                                {{form.username}}
+                                <small id='username-errors' class='error-text'> </small>
+                            </div>
+
+                             </br>
+
+                             {% if not in_china %}
+                                 <small class='blue-link'> We currently support China users only! </small>
+                             {% endif %}
+
+                            <label class="" for="province">
+                                {% trans 'Province' %}
+                            </label>
+                            {{ form.province_region }}
+
+                            <label class="" for="city">
+                                {% trans 'City' %}
+                            </label>
+                            {{ form.city }}
+
+                            </br>
+                            <button id="confirm"
+                                class="button is-solid accent-button raised is-rounded is-fullwidth"
+                                type="button">
+                                {% trans 'Confirm' %}
+                            </button>
+
+                        <!--Close the form-panel -->
+                        </div>
+
+                    <!--Close the signup-panel-1 -->
+                    </div>
+
+                    <div id="signup-panel-2" class="is-hidden step-dot-2 process-panel-wrap is-narrow blur-out">
+
+                        <label for="phone_number">
+                            {% trans 'Phone Number' %}
+                        </label>
+                        {{ form.phone_number }}
+
+                        <button
+                            class="button is-solid accent-button raised is-rounded is-fullwidth"
+                            id="send-code" type="button">
+                            {% trans 'Verify' %}
+                        </button>
+
+                        <div id="code-notice" style="font-weight:bold;"></div>
+
+                        <div class="is-hidden" id="code">
+                                <label for="code">
+                                    {% trans 'Code*' %}
+                                </label>
+
+                                <div class="is-flex">
+                                    {{ form.verify_code }}
+
+                                    <span>
+                                        <svg class="loading is-hidden"
+                                            xmlns="http://www.w3.org/2000/svg" width="24"
+                                            height="24" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round"
+                                            class="feather feather-loader">
+                                            <line x1="12" y1="2" x2="12" y2="6"></line>
+                                            <line x1="12" y1="18" x2="12" y2="22"></line>
+                                            <line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
+                                            </line>
+                                            <line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
+                                            </line>
+                                            <line x1="2" y1="12" x2="6" y2="12"></line>
+                                            <line x1="18" y1="12" x2="22" y2="12"></line>
+                                            <line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
+                                            </line>
+                                            <line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
+                                            </line>
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <div></div>
+
+                              <div id="results" style="font-weight:bold;"> </div>
+
+                              <br/>
+                              <button id="submit-code" type="button"  
+                                   class="button accent-button raised is-rounded is-fullwidth"> {% trans 'Submit' %} 
+                              </button>
+
+                          <!-- close is-hidden for the code -->
+                          </div>
+
+                      <!--Close the signup-panel-2 -->
+                      </div>
+
+                      {% if redirect_field_value %}
+                          <input type="hidden" name="{{ redirect_field_name }}"
+                          value="{{ redirect_field_value }}" />
+                      {% endif %}
+
+                      {{ form.wechat_openid }}
+                      {{ form.gender }}
+
+                </form>
+
+              <div id='signup-loading-popup' class='page-popup-wrapper has-text-centered' > 
+                  <p> Redirecting... Please wait... <p>
+              </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block extra_js  %}
+
+<script type="text/javascript">
+	var current_url = "{{ request.path }}";
+	var errors = false;
+    var in_china = false;
+    var province = '';
+    var city = '';
+
+	{% if form.errors %}
+        errors = true;
+        {% if "phone_number" in form.errors %}
+            $("#id_phone_number").attr("disabled", false);
+            $("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
+        {% else %}
+            $("#id_phone_number").attr("disabled", true);
+            $("input[name='verified_no']").val("VAL");
+            $("#signup-panel-1").removeClass("is-active");
+            $("#signup-panel-2").addClass("is-active");
+        {% endif %}
+
+    {% endif %}
+    
+    {% if "username" in form.errors %}
+        $("#username").append(`<small class="pass-text red"> {{form.errors.username}} </small>`)
+    {% endif %}
+
+    {% if in_china %}
+        in_china = true;
+        province = '{{ form.province_region.value }}';
+        city = '{{ form.city.value }}';
+    {% endif %}
+</script>
+
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script src="{% static 'js/wechat-signup.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/location.js' %}"  type="text/javascript"> </script>
+
+{% endblock extra_js  %}

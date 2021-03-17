@@ -7,263 +7,251 @@
 {% block head %}
 <title>{% trans 'Account Signup' %}</title>
 <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
-
-<link rel="stylesheet" type="text/css" href="{% static 'fonts/Linearicons-Free-v1.0.0/icon-font.min.css' %}">
-<link rel="stylesheet" type="text/css" href="{% static 'css/util.css' %}">
 {% endblock head %}
 
 {% block content %}
-<script>
-	function disableSubmit() {
-		document.getElementById("phone-signup-submit").disabled = true;
-	}
-
-	function activateButton(element) {
-
-		if (element.checked) {
-			document.getElementById("phone-signup-submit").disabled = false;
-		}
-		else {
-			document.getElementById("phone-signup-submit").disabled = true;
-		}
-	}
-</script>
-
 <!-- Main Wrapper -->
-<div class="login-wrapper columns is-gapless">
-	<!--Left Side (Desktop Only)-->
-	<div class="column is-6 is-hidden-mobile hero-banner">
-		<div class="hero is-fullheight is-login">
-			<div class="hero-body">
-				<div class="container">
-					<div class="left-caption">
-						<h2>Join an Exciting Social Experience.</h2>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<!--Right Side-->
-	<div class="column is-6">
-		<div class="hero form-hero is-fullheight">
-			<a href="{% provider_login_url 'linkedin_oauth2' method='oauth2' %}">Linkedin </a>
+  <div class="login-wrapper form-wrapper columns">
+     <!--Form-->
+      <form class="signup" id="signup_form" method="post"
+            action="">
+            {% csrf_token %}
+              <br/>
+              <h1 class="text-center login100-form-title">
+                    {% trans 'Account Signup' %}
+              </h1>
 
-			<!--Signup Form-->
-			<div class="hero-body p-0">
-				<div class="form-wrapper">
-					<!--Form-->
-					<div class="login-form">
+              <div id="signup-panel-1"
+                 class="is-hidden step-dot-1 process-panel-wrap is-narrow is-active">
 
-						<div class="signup-wrapper">
-							<div class="outer-panel">
-								<div class="outer-panel-inner">
-									<form class="signup" id="signup_form" method="post"
-										action="{% url 'account_signup' %}">
-										{% csrf_token %}
-										<div class="text-center">
-											<span
-												class="login100-form-title p-b-32 ">{% trans 'Account Signup' %}</span>
+                        <label for="phone_number">
+                            {% trans 'Phone Number' %}
+                        </label>
+                        {{ form.phone_number }}
 
-										</div>
-										<div id="signup-panel-1"
-											class=" step-dot-1 process-panel-wrap is-narrow is-active">
+                        <button
+                            class="button is-solid raised accent-button is-rounded is-fullwidth"
+                            id="send-code" type="button"> {% trans 'Verify' %}
+                        </button>
 
-											<div class="form-panel">
-												<div class=" mb-0">
-													<div class="input-group">
-														<label for="phone_number">
-															Phone Number
-														</label>
-													</div>
-													{{ form.phone_number }}
-												</div>
+                        <div id="code-notice" style="font-weight:bold;">
+                        </div>
 
-												<div class=" mt-2">
-													<button
-														class="button is-solid primary-button raised is-rounded is-fullwidth"
-														id="send-code" type="button">
-														Verify</button>
-												</div>
+                         <div class="is-hidden" id="code-section">
+                            <label for="code">
+                                {% trans 'Code*' %}
+                            </label>
 
-												<small class="text-muted phone_label" id="phone_label"> Don't include
-													the
-													country
-													code!</small>
+                            <div class="is-flex">
+                                <input  id="code" class="col-10" maxlength="6" minlength="6" type="tel"
+                                    pattern="[0-9]{6}" name="code">
+                                    <svg class="loading is-hidden"
+                                        xmlns="http://www.w3.org/2000/svg" width="24"
+                                        height="24" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-loader">
+                                        <line x1="12" y1="2" x2="12" y2="6"></line>
+                                        <line x1="12" y1="18" x2="12" y2="22"></line>
+                                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
+                                        </line>
+                                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
+                                        </line>
+                                        <line x1="2" y1="12" x2="6" y2="12"></line>
+                                        <line x1="18" y1="12" x2="22" y2="12"></line>
+                                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
+                                        </line>
+                                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
+                                        </line>
+                                    </svg>
+                              </div>
 
-												<div id="code-notice" style="font-weight:bold;"></div>
+                              <div id="results"> 
+                              </div>
 
-												<div class="d-none" id="code">
-													<div class="form-group ">
-														<div class="input-group">
-															<label for="code"> Code* </label>
-														</div>
-														<div class="d-flex">
-															<input class="col-10" maxlength="6" minlength="6" type="tel"
-																pattern="[0-9]{6}" name="code" id="code">
-															<div class="">
-																<svg class="loading d-none"
-																	xmlns="http://www.w3.org/2000/svg" width="24"
-																	height="24" viewBox="0 0 24 24" fill="none"
-																	stroke="currentColor" stroke-width="2"
-																	stroke-linecap="round" stroke-linejoin="round"
-																	class="feather feather-loader">
-																	<line x1="12" y1="2" x2="12" y2="6"></line>
-																	<line x1="12" y1="18" x2="12" y2="22"></line>
-																	<line x1="4.93" y1="4.93" x2="7.76" y2="7.76">
-																	</line>
-																	<line x1="16.24" y1="16.24" x2="19.07" y2="19.07">
-																	</line>
-																	<line x1="2" y1="12" x2="6" y2="12"></line>
-																	<line x1="18" y1="12" x2="22" y2="12"></line>
-																	<line x1="4.93" y1="19.07" x2="7.76" y2="16.24">
-																	</line>
-																	<line x1="16.24" y1="7.76" x2="19.07" y2="4.93">
-																	</line>
-																</svg>
-															</div>
-														</div>
+                              <br/>
+                              <button id="submit-code" type="button"  
+                                   class="button accent-button raised is-rounded is-fullwidth"> {% trans 'Submit' %} 
+                              </button>
 
-														<div></div>
-													</div>
+                          <!-- close is-hidden -->
+                          </div>
 
-												</div>
-												<div id="results" style="font-weight:bold;"> </div>
-												<input type="hidden" name="verified_no" id="verified_no">
-												<input type="checkbox" name="terms" id="terms"
-													onchange="activateButton(this)">
-												<div class="mt-2">
-													I Agree to <a href="{% url 'terms_and_conditions' %}">Terms &
-														Conditions
-													</a> and to
-													abide
-													with
-													the
-													laws and regulations of the country residing.</a>
+                    <input type="hidden" name="verified_no" id="verified_no">
 
-													{% if redirect_field_value %}
-													<input type="hidden" name="{{ redirect_field_name }}"
-														value="{{ redirect_field_value }}" />
-													{% endif %}
-												</div>
-											</div>
-										</div>
+                    <p id='agree' class="is-hidden">
+                        {% trans 'I agree to' %}
+                        <a href="{% url 'terms_and_conditions' %}">
+                            {% trans 'Terms & Conditions' %} </a> 
+                    </p>
+                    <input type="checkbox" name="terms" id="terms"
+                        onchange="activateButton(this)">
+                    <br/>
 
-										<div id="signup-panel-2" class=" step-dot-2 process-panel-wrap is-narrow ">
-											<div class="form-panel">
-												<div class="form-row mt-3">
-													<div class="form-group col-md-12 mb-0" id="username">
-														<div class="input-group">
-															<label for="username">
-																User name
-															</label>
-														</div>
-														{{ form.username }}
-													</div>
-												</div>
-												<div class="form-row">
+                    <div class="phone-options-btn" >
+                        <a href="{% url 'account_login' %}"
+                            class="button is-solid accent-button raised">{% trans 'Login' %}</a>
+                        <a href="#" id="open-options"
+                            class="button is-solid accent-button raised">{% trans "More options?" %}</a>
+                    </div>
 
-													<div class="form-group col-md-12 mb-0">
-														<div class="input-group">
-															<label for="password1">
-																Password
-															</label>
-														</div>
-														{{ form.password1 }}
-													</div>
-												</div>
-												<div class="form-row">
-													<div class="form-group col-md-12 mb-0">
-														<div class="input-group">
-															<label for="password2">
-																Repeat Password
-															</label>
-														</div>
-														{{ form.password2 }}
-													</div>
-												</div>
-											</div>
+                    {% if redirect_field_value %}
+                        <input type="hidden" name="{{ redirect_field_name }}"
+                            value="{{ redirect_field_value }}" />
+                    {% endif %}
 
-											<div class="buttons">
-												<a class="button is-rounded process-button is-next is-hidden"
-													data-step="step-dot-3">Next</a>
-											</div>
-										</div>
+             <!-- Close signup-panel-1 -->
+            </div>
 
-										<div id="signup-panel-3" class=" step-dot-3 process-panel-wrap is-narrow">
-											<div class="form-panel">
-												<div class="input-group mb-3 mt-4">
-													<div class="input-group">
-														<label class="" for="province">Province</label>
-													</div>
-													<select class="custom-select" id="province" name="province"
-														autocomplete="on"></select>
-												</div>
+            <div id="signup-panel-2" class="is-hidden step-dot-2 process-panel-wrap is-narrow">
 
-												<div class="input-group mb-3">
-													<div class="input-group">
-														<label class="" for="city">City</label>
-													</div>
-													<select class="custom-select" id="city" name="city"
-														autocomplete="on">
-													</select>
-												</div>
+                <div class="notification is-danger is-hidden" role="alert">
+                    <button type="button" class="delete close-dj-messages"></button>
+                    <p id="notf-msg"></p>
+                </div>
 
-												<!-- These 2 fields are hidden fields!-->
-												<div class="form-row">
-													<div class="form-group col-md-12 mb-0">
-														{{ form.province_region }}
-														{{ form.city }}
-													</div>
-												</div>
-												<a id="phone-signup-submit"
-													class="button is-rounded is-solid accent-button raised is-fullwidth"
-													data-step="step-dot-4">{% trans 'Sign Up' %}</a>
-											</div>
+                    <label for="username" id="username">
+                        {% trans 'Username' %}
+                    </label>
+                    {{ form.username }}
+
+                    <div class="form-row">
+                          <label for="password1">
+                                {% trans 'Password' %}
+                          </label>
+                        {{ form.password1 }}
+                    </div>
+                    <br/>
+
+                    <label class="" for="province">
+                        {% trans 'Province' %}
+                    </label>
+                    {{ form.province_region }}
+
+                    <label class="" for="city">
+                        {% trans 'City' %}
+                    </label>
+                    {{ form.city }}
+
+                    <br/>
+                    <a id="phone-signup-submit"
+                        class="button is-rounded is-solid accent-button raised is-fullwidth"
+                        data-step="step-dot-4">{% trans 'Sign Up' %}
+                    </a>
+              </div>
+      </form>
+
+      <div id="options-wrapper" class="page-popup-wrapper">
+          <div class="options-btns" >
+            <a class="button raised is-solid wechat-button"
+                href="{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"
+                width="16px" height="16px"><path fill="#c2e8ff"
+                d="M4.433,22.306l-0.176-0.205C2.453,20.001,1.5,17.546,1.5,15C1.5,8.107,8.453,2.5,17,2.5 S32.5,8.107,32.5,15S25.547,27.5,17,27.5c-2.527,0-5.044-0.508-7.275-1.468L9.55,25.957l-6.809,2.269L4.433,22.306z"/>
+                <path fill="#7496c4" 
+                d="M17,3c8.271,0,15,5.383,15,12s-6.729,12-15,12c-2.46,0-4.907-0.494-7.078-1.428l-0.35-0.151 l-0.361,0.12l-5.728,1.909l1.357-4.75l0.148-0.518l-0.351-0.409C2.912,19.767,2,17.424,2,15C2,8.383,8.729,3,17,3 M17,2 C8.163,2,1,7.82,1,15c0,2.763,1.069,5.32,2.878,7.427L2,29l7.527-2.509C11.758,27.451,14.299,28,17,28c8.837,0,16-5.82,16-13 S25.837,2,17,2L17,2z"/>
+                <path fill="#f2faff"
+                d="M32.484,35.343l-0.208,0.089C30.623,36.141,28.848,36.5,27,36.5c-6.341,0-11.5-4.262-11.5-9.5 s5.159-9.5,11.5-9.5s11.5,4.262,11.5,9.5c0,1.673-0.546,3.327-1.58,4.784l-0.131,0.186l1.479,6.128L32.484,35.343z"/>
+                <path fill="#788b9c"
+                d="M27,18c6.065,0,11,4.037,11,9c0,1.568-0.514,3.122-1.488,4.495l-0.263,0.371l0.107,0.442 l1.18,4.887l-4.632-2.206l-0.408-0.194l-0.416,0.178C30.488,35.654,28.779,36,27,36c-6.065,0-11-4.037-11-9S20.935,18,27,18 M27,17c-6.627,0-12,4.477-12,10c0,5.523,5.373,10,12,10c1.974,0,3.831-0.404,5.473-1.108L39,39l-1.672-6.927 C38.384,30.585,39,28.854,39,27C39,21.477,33.627,17,27,17L27,17z"/>
+                <path fill="#424e5c"
+                d="M22.5 24A1.5 1.5 0 1 0 22.5 27 1.5 1.5 0 1 0 22.5 24zM31.5 24A1.5 1.5 0 1 0 31.5 27 1.5 1.5 0 1 0 31.5 24zM12 9A2 2 0 1 0 12 13 2 2 0 1 0 12 9zM22 9A2 2 0 1 0 22 13 2 2 0 1 0 22 9z"/>
+            </svg>
+            Wechat signup</a>
+            </a>
+            <a class="button raised is-solid accent-button" id="phone-login" href="#">
+                📱 Phone no Signup </a>
+            </a>
+
+            <a href="{% url 'account_login' %}"
+              class="button is-solid accent-button raised">
+              {% trans '🤗 Login' %}
+            </a>
+
+            <a href="#lh"
+               class="login-help button is-solid opt-accent-button raised">
+               {% trans '🙋 Need help?' %}
+            </a>
+
+            <p id="lh">
+               <a href='mailto:support@obrisk.com' class='underline-me'>
+               {% trans 'Click here to email us' %}</a>
+               {% trans 'Or add WechatID:Obrisk' %}
+           </p>
 
 
+         </div>
+    </div>
+{% endblock content %}
 
-										</div>
-
-									</form>
-
-
-								</div>
-							</div>
-
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
+{% block extra_js  %}
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script type="text/javascript">
-	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-	var current_url = "{{ request.path }}";
+
+    const panel_one = document.getElementById('signup-panel-1');
+    const panel_two = document.getElementById('signup-panel-2');
+    const options_wrapper = document.getElementById('options-wrapper');
+
+    function disableSubmit() {
+        document.getElementById("phone-signup-submit").disabled = true;
+    }
+
+    function activateButton(element) {
+
+        if (element.checked) {
+            document.getElementById("phone-signup-submit").disabled = false;
+        }
+        else {
+            document.getElementById("phone-signup-submit").disabled = true;
+        }
+    }
+
+    function phoneLoginActive() {
+        panel_one.classList.remove('is-hidden');
+        options_wrapper.style.display = 'none';
+        document.getElementById('id_phone_number').focus();
+    }
+
+    document.getElementById('phone-login').addEventListener('click', e => {
+        phoneLoginActive();
+    });
+
+    document.getElementById('open-options').addEventListener('click', e => {
+        panel_one.classList.add('is-hidden');
+        options_wrapper.style.display = 'flex';
+    });
+
+	const current_url = "{{ request.path }}";
+    const in_china = "{{ in_china }}";
+    const phone_signup_url = "{% url 'account_signup' %}";
 	var errors = false;
+
 	{% if form.errors %}
-	errors = true;
-	{% if "phone_number" in form.errors %}
-	$("#id_phone_number").attr("disabled", false);
-	$("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
-	{% else %}
-	$("#id_phone_number").attr("disabled", true);
-	$("input[name='verified_no']").val("VAL");
-	$("#signup-panel-1").removeClass("is-active");
-	$("#signup-panel-2").addClass("is-active");
-	{% endif %}
-	{% endif %}
-	{% if "username" in form.errors %}
-	$("#username").append(`<small class="pass-text red">Username taken, please try another username.</small>`)
-	{% endif %}
+        errors = true;
+        phoneLoginActive();
 
+        {% if "phone_number" in form.errors %}
+            $("#id_phone_number").attr("disabled", false);
+            $("#id_phone_number").val($("#id_phone_number").val().replace('+86', ''));
+        {% else %}
+            $("#id_phone_number").attr("disabled", true);
+            $("input[name='verified_no']").val("VAL");
+            panel_one.classList.add('is-hidden');
+            panel_one.classList.remove('is-active');
+            panel_two.classList.add('is-active');
+            document.querySelector('.step-dot-2').classList.remove('is-hidden');
+            document.querySelector('.step-dot-2').classList.add('is-active');
+        {% endif %}
 
+    {% endif %}
+    
+    {% if "username" in form.errors %}
+        $("#username").append(`<small class="error-text"> {{form.errors.username}} </small>`)
+    {% endif %}
 
 </script>
 
-<script src="{% static 'js/user-form.js' %}" type="text/javascript"> </script>
+<script src="{% static 'js/phone-signup.js' %}" type="text/javascript"> </script>
 <script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
-<!-- <script src="{% static 'js/toast-msg.js' %}?v=0208191" type="text/javascript"> </script> -->
 
-{% endblock content %}
+{% endblock extra_js  %}

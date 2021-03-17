@@ -1,10 +1,33 @@
-    
+import os
 import logging
+import logging.config
+import socket
 
-from django.utils.log import DEFAULT_LOGGING
-
+#from django.utils.log import DEFAULT_LOGGING
 from .base import *  # noqa
 from .base import env
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'WARNING',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'INFO'),
+            'propagate': False,
+        },
+    },
+}
+
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -71,8 +94,7 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ['127.0.0.1', '10.0.2.2']
-import socket
-import os
+
 if os.environ.get('USE_DOCKER') == 'yes':
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
     INTERNAL_IPS += [ip[:-1] + '1' for ip in ips]
@@ -86,12 +108,10 @@ INSTALLED_APPS += ['django_extensions']  # noqa F405
 # ------------------------------------------------------------------------------
 PHONE_SIGNUP_DEBUG = True
 
-APPEND_SLASH = False
 # These are added to pass deepsource fails
-SOCIALACCOUNT_ADAPTER = SOCIALACCOUNT_ADAPTER
-SOCIALACCOUNT_FORMS = SOCIALACCOUNT_FORMS
-SOCIALACCOUNT_PROVIDERS = SOCIALACCOUNT_PROVIDERS
-LINKEDIN_OAUTH2_KEY = LINKEDIN_OAUTH2_KEY
-LINKEDIN_OAUTH2_SECRET = LINKEDIN_OAUTH2_SECRET
-SOCIALACCOUNT_QUERY_EMAIL = SOCIALACCOUNT_QUERY_EMAIL
-
+#SOCIALACCOUNT_ADAPTER = SOCIALACCOUNT_ADAPTER
+#SOCIALACCOUNT_FORMS = SOCIALACCOUNT_FORMS
+#SOCIALACCOUNT_PROVIDERS = SOCIALACCOUNT_PROVIDERS
+#LINKEDIN_OAUTH2_KEY = LINKEDIN_OAUTH2_KEY
+#LINKEDIN_OAUTH2_SECRET = LINKEDIN_OAUTH2_SECRET
+#SOCIALACCOUNT_QUERY_EMAIL = SOCIALACCOUNT_QUERY_EMAIL

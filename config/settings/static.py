@@ -67,5 +67,3 @@ OSS_STATIC_LOCATION = '/static/'
 STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 
 STATIC_URL =  '/static/'
-
-

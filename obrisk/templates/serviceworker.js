@@ -29,7 +29,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classified-create.css",
-    "revision": "36ff5e54c3dbe754c7cad54a70e7a95d"
+    "revision": "a06cbd408b88eb787c36513382e8f32e"
   },
   {
     "url": "/static/css/classified-details.css",
@@ -41,7 +41,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/classifieds.css",
-    "revision": "82bef65d2772dff792bd77781d75b7d4"
+    "revision": "2e8cf3ed2c0064953906d30556233e41"
   },
   {
     "url": "/static/css/colors.css",
@@ -64,16 +64,12 @@ workbox.precaching.precacheAndRoute([
     "revision": "a2d42584292f64c5827e8b67b1b38726"
   },
   {
-    "url": "/static/css/images/blank.gif",
-    "revision": "07b31fa8a00640021b3997ebe4562b70"
-  },
-  {
     "url": "/static/css/listing.css",
     "revision": "82cb2d0cc455218a5e35998a5aea27e9"
   },
   {
     "url": "/static/css/login.css",
-    "revision": "e8d7f8ce72703b8d49fd74aad7cb0cac"
+    "revision": "8e8e8318dae724d73bf9eb5e34cd7073"
   },
   {
     "url": "/static/css/messages.css",
@@ -81,7 +77,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/nav.css",
-    "revision": "8348ee23460aa81ecfb494b2b64cc5af"
+    "revision": "f6015156064b3bbd74b03319f24dcaca"
   },
   {
     "url": "/static/css/notifications.css",
@@ -89,7 +85,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/obrisk.css",
-    "revision": "89e582dda35230e4e6f95db79c8c7b5c"
+    "revision": "c4a43ff5b4b6852f828d2d420f767cf4"
   },
   {
     "url": "/static/css/photoswipe.min.css",
@@ -112,10 +108,6 @@ workbox.precaching.precacheAndRoute([
     "revision": "157e23707df89649711ee7f70c470827"
   },
   {
-    "url": "/static/css/preloader.gif",
-    "revision": "4cc848b538580780aa52b50a7a18e1fa"
-  },
-  {
     "url": "/static/css/qa.css",
     "revision": "ddd3af46392bc5e6c808ab15ff48ee28"
   },
@@ -129,7 +121,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/css/stories.css",
-    "revision": "c2cac86e85b3a8aafb3d394c93859b5b"
+    "revision": "6489e063bebc7741eabac34490cfb9f7"
   },
   {
     "url": "/static/css/swiper.min.css",
@@ -156,6 +148,10 @@ workbox.precaching.precacheAndRoute([
     "revision": "9cabf2d2ce5a30ae04a9a78140e4b73e"
   },
   {
+    "url": "/static/css/wnoty.css",
+    "revision": "040f1b3aad51c03add68ec5abdd182e0"
+  },
+  {
     "url": "/static/fonts/font-awesome-4.7.0/css/font-awesome.css",
     "revision": "9a3bd468dfed15febd11a01cb96dd38f"
   },
@@ -164,20 +160,16 @@ workbox.precaching.precacheAndRoute([
     "revision": "b5bc723666dd5b1462ea526587683e80"
   },
   {
-    "url": "/static/fonts/Linearicons-Free-v1.0.0/icon-font.min.css",
-    "revision": "94bcf8939dee79dd4259c0cc53cfb277"
-  },
-  {
-    "url": "/static/frontend/assets/css/ajax-loader.gif",
-    "revision": "c5cd7f5300576ab4c88202b42f6ded62"
-  },
-  {
     "url": "/static/frontend/assets/css/app.css",
-    "revision": "29629a61fa5e93899c1baa402ba11e02"
+    "revision": "03efa11960fbf317addbf8b9dc1a59c4"
   },
   {
     "url": "/static/frontend/assets/css/bulma.css",
-    "revision": "5853a1a9df4005500d5690e0f4ff50bd"
+    "revision": "4a9a178adeac28389492e5963f30efe6"
+  },
+  {
+    "url": "/static/frontend/assets/css/core.css",
+    "revision": "55e368fd4f1d73cdaa3ae96d89a14f0b"
   },
   {
     "url": "/static/frontend/assets/css/materialdesignicons.min.css",
@@ -189,23 +181,11 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/frontend/assets/js/app.js",
-    "revision": "48e7ab1f4eec9f82d73849752c787fc3"
-  },
-  {
-    "url": "/static/frontend/assets/js/autocompletes.js",
-    "revision": "a84c9e2e8b09234eebf8b94f4e7a6a88"
+    "revision": "35c13a015cbf82e2693c33796eb78e3d"
   },
   {
     "url": "/static/frontend/assets/js/chat.js",
     "revision": "a3172027f3176521cfe7403431289892"
-  },
-  {
-    "url": "/static/frontend/assets/js/elements.js",
-    "revision": "a32f46c2a4b411950b1b891c192b6c10"
-  },
-  {
-    "url": "/static/frontend/assets/js/events.js",
-    "revision": "24e63a872b5cbf926826ce79c41336b0"
   },
   {
     "url": "/static/frontend/assets/js/explorer.js",
@@ -224,92 +204,28 @@ workbox.precaching.precacheAndRoute([
     "revision": "aacebb1f448797470ccad76067d8ac83"
   },
   {
-    "url": "/static/frontend/assets/js/go-live.js",
-    "revision": "bf76b7cd1a32e52388d32c932242b435"
-  },
-  {
-    "url": "/static/frontend/assets/js/inbox.js",
-    "revision": "04068a235862aa45574e287165d94559"
-  },
-  {
-    "url": "/static/frontend/assets/js/landing.js",
-    "revision": "1c90809f8d2f444c6d7b47a1576b88a2"
-  },
-  {
-    "url": "/static/frontend/assets/js/lightbox.js",
-    "revision": "ea87e91145637177d1641359bcd1307f"
+    "url": "/static/frontend/assets/js/highlight.min.js",
+    "revision": "9a7f83e578e9800e85279f2231b0e7b0"
   },
   {
     "url": "/static/frontend/assets/js/main.js",
     "revision": "bfa3a9f4dcf53fe0a8c8bbaf9d26b62c"
   },
   {
-    "url": "/static/frontend/assets/js/modal-uploader.js",
-    "revision": "cd66113247e284c73cb78d462f6fc040"
-  },
-  {
-    "url": "/static/frontend/assets/js/news.js",
-    "revision": "0044306da774b6bbf76d8f369bb236ac"
-  },
-  {
-    "url": "/static/frontend/assets/js/popovers-pages.js",
-    "revision": "84703e877b88d17bf2bb6febcba204d5"
-  },
-  {
-    "url": "/static/frontend/assets/js/popovers-users.js",
-    "revision": "7b103ef98cf014962eb7d08ce3347b61"
-  },
-  {
-    "url": "/static/frontend/assets/js/profile.js",
-    "revision": "22232474dae8182c745b52a7df32748d"
-  },
-  {
-    "url": "/static/frontend/assets/js/questions.js",
-    "revision": "765dca8c12dd834efd4773c7b204f18e"
-  },
-  {
-    "url": "/static/frontend/assets/js/signup.js",
-    "revision": "7760e1216245b3896ef0da25f0a0108b"
-  },
-  {
-    "url": "/static/frontend/assets/js/touch.js",
-    "revision": "1140bb01d2a04b048245c5a1036be175"
-  },
-  {
-    "url": "/static/frontend/assets/js/tour.js",
-    "revision": "18de6e2130b112c2961f2cfd603f69f6"
-  },
-  {
-    "url": "/static/frontend/assets/js/videos.js",
-    "revision": "a1ab8ad0ce3e68f7841518cda5b562a4"
-  },
-  {
-    "url": "/static/frontend/assets/js/widgets.js",
-    "revision": "b8e215360a354e57aa6c753016e03fe0"
-  },
-  {
-    "url": "/static/img/ajax-loader.gif",
-    "revision": "04836c514aea7d3d203112128be81fd6"
-  },
-  {
     "url": "/static/img/android-chrome-192x192.png",
-    "revision": "5de38bb634e3365ccad6a5808cbfbe22"
+    "revision": "83763c96d4a2dfbaa0bc84739a464659"
   },
   {
     "url": "/static/img/android-chrome-512x512.png",
-    "revision": "382e988c80d4b854aaccbb149c5f4b98"
+    "revision": "61678795edacc3db463077102233608e"
   },
   {
     "url": "/static/img/apple-touch-icon.png",
-    "revision": "df28f0ba4dd3a8bd08f39269d6e686e2"
+    "revision": "f784ffd3e5494fcd8c7047a35e3638d5"
   },
   {
     "url": "/static/img/bg.png",
     "revision": "8ddad23ce6dcc70bf111b23ae022f10c"
-  },
-  {
-    "url": "/static/img/blank.gif",
-    "revision": "07b31fa8a00640021b3997ebe4562b70"
   },
   {
     "url": "/static/img/chat.png",
@@ -329,19 +245,15 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/img/favicon-16x16.png",
-    "revision": "333313efcf24c4341fe3315cb71a264d"
+    "revision": "791bf66fe880c78d3af46782af534b2f"
   },
   {
     "url": "/static/img/favicon-32x32.png",
-    "revision": "e317d20287c3df252fa904b8d9e27324"
-  },
-  {
-    "url": "/static/img/favicon.ico",
-    "revision": "402f6510d7a32c2be9dd508de3aac6f1"
+    "revision": "9862950cc40e5ce4becd79238cceafcc"
   },
   {
     "url": "/static/img/favicon.png",
-    "revision": "32df020bf3cf44d3f5f70ab72af802e1"
+    "revision": "90a5ca3cac34705dd661fd7b748e7878"
   },
   {
     "url": "/static/img/full-logo-v2.png",
@@ -352,36 +264,12 @@ workbox.precaching.precacheAndRoute([
     "revision": "a13a4dc172f8d57764ee034d622dbc6c"
   },
   {
-    "url": "/static/img/header.jpg",
-    "revision": "4022b04bd355362d9479bd9815f8618f"
-  },
-  {
-    "url": "/static/img/homepage-bg.jpg",
-    "revision": "17b3eb9f6992a754f6cc5978798189a2"
-  },
-  {
     "url": "/static/img/icons.png",
     "revision": "c9ceb83c0a247ae47f54c3e1d3cb4bac"
   },
   {
     "url": "/static/img/image.png",
     "revision": "6b00566e6a7a54df0b83fe8a1d8b9427"
-  },
-  {
-    "url": "/static/img/Jcrop.gif",
-    "revision": "7a4b4c6ebdb549fcbe47408f9457493e"
-  },
-  {
-    "url": "/static/img/loading-anti-clockwise.gif",
-    "revision": "24403b4fe8914bc583ae9b0ab09bf0e2"
-  },
-  {
-    "url": "/static/img/loading-block-puzzle.gif",
-    "revision": "2b018964331551ec6c27f81efc8b160c"
-  },
-  {
-    "url": "/static/img/loading.gif",
-    "revision": "387d69b4eb5cdf1e050cc89cc20b5f5c"
   },
   {
     "url": "/static/img/logo_blue.png",
@@ -397,7 +285,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/img/mstile-150x150.png",
-    "revision": "4a8ef4624beca0e213045d529e3a5541"
+    "revision": "e19502cab20336b9188fdf9b87a6e0f5"
   },
   {
     "url": "/static/img/mstile-310x150.png",
@@ -421,43 +309,43 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/img/splashscreens/ipad_splash.png",
-    "revision": "df7171a93c5a2ab28d4011270552d2de"
+    "revision": "a44a9f2a323fc44105c960ad4032a59f"
   },
   {
     "url": "/static/img/splashscreens/ipadpro1_splash.png",
-    "revision": "46a7dc1cb23a7a27eb3e971c14a10a4b"
+    "revision": "642c441ec8313a3547ef98462c15138a"
   },
   {
     "url": "/static/img/splashscreens/ipadpro2_splash.png",
-    "revision": "c223af204360e620fca989ed7be2c320"
+    "revision": "2dce0f0e649fc0f447886e78cf123e8b"
   },
   {
     "url": "/static/img/splashscreens/ipadpro3_splash.png",
-    "revision": "33863983c6e16f1444a0835ccf52dd4d"
+    "revision": "4d2f8df0042c6ac20ba59c9118551a65"
   },
   {
     "url": "/static/img/splashscreens/iphone5_splash.png",
-    "revision": "5f3497cea1628ec2dd1a5f01e6c9ebaa"
+    "revision": "d0ac57dcc13ce9cd08718452ac6d63a5"
   },
   {
     "url": "/static/img/splashscreens/iphone6_splash.png",
-    "revision": "54d184fd4a2077605b92b8969ef61881"
+    "revision": "1b08ee90693fc08f2fcd739649fb1570"
   },
   {
     "url": "/static/img/splashscreens/iphoneplus_splash.png",
-    "revision": "2ff520b9ccab49ae3c5fb3a6e97497eb"
+    "revision": "1b6c2a1d1a5b7202fc28965c61726e11"
   },
   {
     "url": "/static/img/splashscreens/iphonex_splash.png",
-    "revision": "814b71a601c8d9e5dee7c8fb8ba833a8"
+    "revision": "2f9f59a6b1a8b21e2d916d6f04154799"
   },
   {
     "url": "/static/img/splashscreens/iphonexr_splash.png",
-    "revision": "007b1bb0e8e02cd12cd24ca17787f9e6"
+    "revision": "3cb448df5e5a3802551d66e5c925eceb"
   },
   {
     "url": "/static/img/splashscreens/iphonexsmax_splash.png",
-    "revision": "a34f53814d16ee3a7aae497f09f32eee"
+    "revision": "566144ae53db57307db0826fc19043c6"
   },
   {
     "url": "/static/img/stories.png",
@@ -470,10 +358,6 @@ workbox.precaching.precacheAndRoute([
   {
     "url": "/static/img/user.png",
     "revision": "6aadcee86193ab8e487ec40871a206ce"
-  },
-  {
-    "url": "/static/js/afterglow.js",
-    "revision": "e7261acc6d62556168cfd3dd30920299"
   },
   {
     "url": "/static/js/aliyun-oss.min.js",
@@ -493,7 +377,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/classifieds.js",
-    "revision": "bfcb79f117d2e1b09980120762bb61c1"
+    "revision": "403cb439d098716f592053d9e7482f49"
   },
   {
     "url": "/static/js/fancybox.min.js",
@@ -529,7 +413,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/listing.js",
-    "revision": "548da0625fb5256127b9a7ffab8aed3e"
+    "revision": "9ef56367aefea3ae6b79bef9d2fcbf05"
   },
   {
     "url": "/static/js/location.js",
@@ -537,7 +421,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/messager.js",
-    "revision": "67ad5fb2f17ec420e5c9effebb5404cf"
+    "revision": "1ff3dfbab752def3d16fff5479f878f8"
   },
   {
     "url": "/static/js/moment.min.js",
@@ -545,7 +429,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/multipleUploader.js",
-    "revision": "836733f7d133cf24a12f38cab06fa5dd"
+    "revision": "881aba930504dad61530144a4daee0d2"
   },
   {
     "url": "/static/js/nav.js",
@@ -557,7 +441,7 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/obrisk.js",
-    "revision": "74ea2840b2d6944215e8bdf22bf2e7ca"
+    "revision": "48739b99bdb0b389d420ecb48080e22f"
   },
   {
     "url": "/static/js/photoswipe-ui-default.min.js",
@@ -568,20 +452,16 @@ workbox.precaching.precacheAndRoute([
     "revision": "c260bce75dabf9ffef99b5d743638db5"
   },
   {
-    "url": "/static/js/popper.min.js",
-    "revision": "354e13e7651ee5d25b68e43282911d33"
-  },
-  {
     "url": "/static/js/post-uploader.js",
-    "revision": "d299ce34ae034e1b780b8696b636943d"
+    "revision": "7e3b824340d53b5acabd6cb31b7cbdf5"
   },
   {
     "url": "/static/js/posts.js",
-    "revision": "31df2b7ca86ce8cfc652629144a99184"
+    "revision": "60c600c6e470d68e52231a60008175eb"
   },
   {
     "url": "/static/js/profile-uploader.js",
-    "revision": "1b336e42d3b08f44d47f59345e4d6779"
+    "revision": "e756797bfe972cf90e7a2d3d348785f4"
   },
   {
     "url": "/static/js/qa.js",
@@ -593,31 +473,27 @@ workbox.precaching.precacheAndRoute([
   },
   {
     "url": "/static/js/stories.js",
-    "revision": "1c7166c4411e5bea74876bc9b36c3315"
+    "revision": "09f9e9035a19b456df543063bb3bfa3d"
   },
   {
     "url": "/static/js/swiper.min.js",
     "revision": "7513a78ef80742576aee1bdd39d217ed"
   },
   {
-    "url": "/static/js/toast-msg.js",
-    "revision": "af82356c546778cbdf17b6f9ae8b79d7"
-  },
-  {
     "url": "/static/js/uploader.js",
-    "revision": "eda88ca267350c06bd2b0b7cf8fe91c4"
+    "revision": "b2e2b9d6d520af3a9ef978e417467639"
   },
   {
     "url": "/static/js/user-form.js",
-    "revision": "c2326ba12422ce75194316fa2fa3db18"
-  },
-  {
-    "url": "/static/js/videoUploader.js",
-    "revision": "b9739fb017a6fc9ced896d674ebc470d"
+    "revision": "87e102e37b64e6c0f631e4851c0cb7a5"
   },
   {
     "url": "/static/js/websocketbridge.js",
     "revision": "cdf4bd9dbfc48c91b2869b8f15fcb25c"
+  },
+  {
+    "url": "/static/js/wnoty.js",
+    "revision": "3c5e81bd9ffc8a2d83556293d6cdc2db"
   },
   {
     "url": "/static/webpush/webpush.js",
