@@ -1,3 +1,10 @@
+from django.db.models import Q
+from django.http import JsonResponse
+from django.views.generic import ListView
+from taggit.models import Tag
+from obrisk.classifieds.models import Classified, ClassifiedImages
+from obrisk.utils.helpers import ajax_required
+
 from elasticsearch_dsl.connections import connections
 from elasticsearch_dsl import Document, Text, Date, Search
 from elasticsearch.helpers import bulk
@@ -30,18 +37,7 @@ def search(author):
     return response
 
 
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
-from django.http import JsonResponse
-from django.views.generic import ListView
-from taggit.models import Tag
-from obrisk.classifieds.models import Classified, ClassifiedImages
-from obrisk.utils.helpers import ajax_required
-
-
-class SearchListView(LoginRequiredMixin, ListView):
+class SearchListView(ListView):
     """CBV to contain all the search results"""
     model = Classified
     template_name = "classifieds/search_results.html"
@@ -68,7 +64,6 @@ class SearchListView(LoginRequiredMixin, ListView):
 
 
 # For autocomplete suggestions
-@login_required
 @ajax_required
 def get_suggestions(request):
     # Convert classifieds objects into list to be

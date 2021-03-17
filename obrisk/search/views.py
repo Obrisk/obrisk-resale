@@ -1,6 +1,4 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView
@@ -24,7 +22,7 @@ from obrisk.qa.documents import QuestionDocument
 from elasticsearch_dsl.connections import connections
 
 
-class SearchListView(LoginRequiredMixin, ListView):
+class SearchListView(ListView):
     """CBV to contain all the search results"""
     model = Stories
     template_name = "search/search_results.html"
@@ -62,7 +60,6 @@ class SearchListView(LoginRequiredMixin, ListView):
 
 
 # For autocomplete suggestions
-@login_required
 @ajax_required
 def get_suggestions(request):
     # Convert users, classifieds, questions objects into list to be
@@ -107,7 +104,6 @@ def get_suggestions(request):
 connections.create_connection()
 
 
-@login_required
 @require_http_methods(["GET"])
 def all_search(request, **kwargs):
     # to avoid name collision,Q is imported here
@@ -158,7 +154,9 @@ def all_search(request, **kwargs):
 
         qa_results = [
             {'content': t.content} for t in QuestionDocument.search().filter(
-                ("term", content=query))]
+                "term", content=query
+            )
+        ]
 
         return render(request, 'qa/search_results.html',
                 {'qa_results': qa_results,
@@ -168,7 +166,9 @@ def all_search(request, **kwargs):
 
         posts_results = [
             {'content': t.content} for t in PostsDocument.search().filter(
-                ("term", content=query))]
+                "term", content=query
+            )
+        ]
 
         return render(request, 'posts/search_results.html',
                 {'posts_results': posts_results,
