@@ -256,49 +256,33 @@
         {% else %}
             <li class="top-nav-user-li">
             <a href="#d" class="user-image navbar-item is-account drop-trigger">
-                      <img class="user-image" src="{% static 'img/user.png' %}"
-                        height="30px" width="30px" alt="No Profile Picture" />
+              <img class="user-image" src="{% static 'img/location.png' %}"
+                height="30px" width="30px" alt="No Pic" />
             </a>
 
             <div id="d" class="has-caret">
                   <div class="nav-drop is-navbarTop is-account-dropdown">
                     <div class="inner">
-                          <div class="nav-drop-header guest-user">
+                          <div class="nav-drop-header is-auth-user">
+                            <span class="username"> CITY </span>
                             <a href="#" id="close">❌ CLOSE</a>
                           </div>
 
                           <div class="nav-drop-body account-items">
-                                <a class="account-item" href="{% url 'account_login' %}">
+                            {% for city in popular_cities %}
+                                <a class="account-item" href="{% url 'classifieds:list_by_city' city %}">
                                   <div class="media">
                                     <div class="icon-wrap">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-user">
-                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-                                        <circle cx="12" cy="7" r="4" /></svg>
+                                        <img class="user-image" src="{% static 'img/city_icon.png' %}"
+                                            height="20px" width="20px" alt="No Pic" />
                                     </div>
                                     <div>
-                                      <h3>Login</h3>
+                                    <h3> {{ city }}</h3>
                                     </div>
                                   </div>
                                 </a>
+                            {% endfor %}
 
-                                <a class="account-item" href="{% url 'account_signup' %}">
-                                  <div class="media">
-                                    <div class="icon-wrap">
-                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                        class="feather feather-user-plus">
-                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                                        <circle cx="8.5" cy="7" r="4" />
-                                        <line x1="20" y1="8" x2="20" y2="14" />
-                                        <line x1="23" y1="11" x2="17" y2="11" /></svg>
-                                    </div>
-                                    <div>
-                                      <h3>Sign up</h3>
-                                    </div>
-                                  </div>
-                                </a>
                             </div>
                      <!-- close inner, nav-drop, ac-dropdown -->
                     </div>
@@ -351,27 +335,42 @@
           </li>
 
           <li class="bt-nav-item {% if base_active == 'chat' %} is-active {% endif %}">
-            <a class="bt-nav-link" href="{% url 'messager:contacts_list' %}">
-              <span class="nav-icons">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
-                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                  class="feather feather-message-square">
-                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                </svg>
-              </span>
-              <span class="nav-label">
-                {% trans 'Chat' %}
-              </span>
-              {% if request.user.is_authenticated %}
-                  <span } class="msg-notification ">
+          {% if request.user.is_authenticated %}
+                <a class="bt-nav-link" href="{% url 'messager:contacts_list' %}">
+                  <span class="nav-icons">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-message-square">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </span>
+                  <span class="nav-label">
+                    {% trans 'Chat' %}
+                  </span>
+
+                  <span class="msg-notification ">
                     <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
                         viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
                         stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
                         class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
                     </svg>
                   </span>
-              {% endif %}
-            </a>
+                </a>
+           {% else %}
+                <a class="bt-nav-link" href="{% url 'account_login' %}">
+                  <span class="nav-icons">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </span>
+                  <span class="nav-label">
+                    {% trans 'Login' %}
+                  </span>
+                </a>
+          {% endif %}
           </li>
 
         </ul>

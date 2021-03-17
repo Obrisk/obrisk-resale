@@ -72,16 +72,16 @@ def set_popular_tags():
 
 
 @require_http_methods(["GET"])
-def classified_list(request, tag_slug=None):
+def classified_list(request, city=None, tag_slug=None):
 
     if request.user.is_authenticated:
         city = request.user.city
     else:
-        city = cache.get(
-                f'user_city_{request.session.get("visitor_id")}'
-            )
-
         if city is None:
+            city = cache.get(
+                    f'user_city_{request.session.get("visitor_id")}'
+                )
+
             client_ip, _ = get_client_ip(
                     request
                 )
@@ -105,20 +105,12 @@ def classified_list(request, tag_slug=None):
             )
 
     classifieds_list = Classified.objects.get_active().values(
-                    'title','price','city','slug'
+                    'title','price','city','slug', 'thumbnail'
                 ).annotate(
                     order = Case (
                         When(city=city, then=Value(1)),
                         default=Value(2),
                         output_field=IntegerField(),
-                    )
-                ).annotate (
-                    image_thumb = Subquery (
-                        ClassifiedImages.objects.filter(
-                            classified=OuterRef('pk'),
-                        ).values(
-                            'image_thumb'
-                        )[:1]
                     )
                 ).order_by('order', '-priority', '-timestamp')
 
@@ -133,15 +125,7 @@ def classified_list(request, tag_slug=None):
     except EmptyPage:
         if request.is_ajax():
             classifieds = Classified.objects.get_expired().values(
-                            'title','price','city','slug'
-                        ).annotate (
-                            image_thumb = Subquery (
-                                ClassifiedImages.objects.filter(
-                                    classified=OuterRef('pk'),
-                                ).values(
-                                    'image_thumb'
-                                )[:1]
-                            )
+                            'title','price','city','slug', 'thumbnail'
                         ).order_by('-timestamp')
 
             return JsonResponse({
@@ -155,36 +139,18 @@ def classified_list(request, tag_slug=None):
                 'classifieds': list(classifieds)
             })
 
-    #Try to Get the popular tags from cache
-    popular_tags = cache.get('popular_tags_mb')
-
-    if popular_tags is None:
-        popular_tags = Classified.objects.get_active(
-                ).get_counted_tags()[:10]
-        cache.set('popular_tags_mb',
-                    list(popular_tags), timeout=TAGS_TIMEOUT
-                )
-
     # Deal with tags in the end to override other_classifieds.
     tag = None
     if tag_slug:
-
         tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
         classifieds = Classified.objects.get_active().filter(
-                tags__in=[tag]).annotate (
-            image_thumb = Subquery (
-                ClassifiedImages.objects.filter(
-                    classified=OuterRef('pk'),
-                ).values(
-                    'image_thumb'
-                )[:1]
-            )
-        ).order_by('-timestamp')
+                tags__in=[tag]).order_by('-timestamp')
 
     return render(request, 'classifieds/classified_list.html',
-            {'page': page, 'popular_tags': popular_tags,
-            'city': city,'classifieds': classifieds,
-            'tag': tag, 'base_active': 'classifieds'})
+            {'page': page, 'city': city,'classifieds': classifieds,
+            'tag': tag, 'base_active': 'classifieds'}
+        )
+
 
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
@@ -429,15 +395,7 @@ class DetailClassifiedView(DetailView):
         classified_tags_ids = self.object.tags.values_list('id', flat=True)
         similar_classifieds = Classified.objects.get_active().filter(
                 tags__in=classified_tags_ids)\
-            .exclude(id=self.object.id).annotate (
-                image_thumb = Subquery (
-                    ClassifiedImages.objects.filter(
-                        classified=OuterRef('pk'),
-                    ).values(
-                        'image_thumb'
-                    )[:1]
-                )
-            )
+            .exclude(id=self.object.id)
 
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(
@@ -641,15 +599,7 @@ class ClassifiedOrderView(DetailView):
         classified_tags_ids = self.object.classified.tags.values_list('id', flat=True)
         similar_classifieds = Classified.objects.get_active().filter(
                 tags__in=classified_tags_ids)\
-            .exclude(id=self.object.classified.id).annotate (
-                image_thumb = Subquery (
-                    ClassifiedImages.objects.filter(
-                        classified=OuterRef('pk'),
-                    ).values(
-                        'image_thumb'
-                    )[:1]
-                )
-            )
+            .exclude(id=self.object.classified.id)
 
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(

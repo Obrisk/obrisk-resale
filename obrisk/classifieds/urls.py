@@ -23,6 +23,10 @@ urlpatterns = [
         classified_list,
         name='list_by_tag'),
     url(
+        r'^city/([-\w]+)/$',
+        classified_list,
+        name='list_by_city'),
+    url(
         r'^classifieds-search-results/$',
         SearchListView.as_view(),
         name='classifieds_results'),
