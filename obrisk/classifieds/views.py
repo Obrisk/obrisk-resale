@@ -72,7 +72,7 @@ def set_popular_tags():
 
 
 @require_http_methods(["GET"])
-def classified_list(request, city=None, tag_slug=None):
+def classified_list(request, city=None):
 
     if request.user.is_authenticated:
         city = request.user.city
@@ -139,15 +139,28 @@ def classified_list(request, city=None, tag_slug=None):
                 'classifieds': list(classifieds)
             })
 
-    # Deal with tags in the end to override other_classifieds.
-    tag = None
-    if tag_slug:
-        tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
-        classifieds = Classified.objects.get_active().filter(
-                tags__in=[tag]).order_by('-timestamp')
-
     return render(request, 'classifieds/classified_list.html',
             {'page': page, 'city': city,'classifieds': classifieds,
+            'base_active': 'classifieds'}
+        )
+
+
+
+
+@require_http_methods(["GET"])
+def classified_list_by_tags(request, tag_slug=None):
+    tag = None
+    if tag_slug:
+        try:
+            tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
+            classifieds = Classified.objects.get_active().filter(
+                    tags__in=[tag]).order_by('-timestamp')
+        except:
+            pass
+
+    page = request.GET.get('page')
+    return render(request, 'classifieds/classified_list.html',
+            {'page': page,  'classifieds': classifieds,
             'tag': tag, 'base_active': 'classifieds'}
         )
 

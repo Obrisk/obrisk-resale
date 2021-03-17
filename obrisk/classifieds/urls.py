@@ -20,7 +20,7 @@ urlpatterns = [
         name='tags_autocomplete'),
     url(
         r'^tag/([-\w]+)/$',
-        classified_list,
+        classified_list_by_tags,
         name='list_by_tag'),
     url(
         r'^city/([-\w]+)/$',
