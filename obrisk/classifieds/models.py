@@ -89,7 +89,7 @@ class Classified(models.Model):
     phone_number = models.CharField (max_length=150, null=True, blank=True)
     wechat_id = models.CharField (max_length=150, null=True, blank=True)
     country = models.CharField(max_length= 100)
-    thumbnail = models.CharField(max_length= 300)
+    thumbnail = models.CharField(max_length= 300, null=True, blank=True)
     video = models.CharField(max_length= 300, null=True, blank=True)
     edited = models.BooleanField(default=False)
     show_phone = models.BooleanField(default=True)
