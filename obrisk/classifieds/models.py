@@ -64,6 +64,15 @@ class Classified(models.Model):
         (EXPIRED, _("Expired")),
     )
 
+    OFFLINE = "O"
+    SHIPPING = "S"
+    ANY = "A"
+    HANDOVER = (
+        (OFFLINE, _("Offline_pickup")),
+        (SHIPPING, _("Shipping")),
+        (ANY, _("any")),
+    )
+
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, null=True, related_name="creater",
         on_delete=models.CASCADE)
@@ -86,6 +95,11 @@ class Classified(models.Model):
     show_phone = models.BooleanField(default=True)
     tags = TaggableManager(through=TaggedClassifieds, blank=True)
     priority = models.IntegerField(default=0)
+    shipping_price = models.DecimalField(
+            max_digits=15, decimal_places=2, default=0.00
+        )
+    handover_method = models.CharField(max_length=1, choices=HANDOVER, default=ANY)
+
     #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)
     # search_vector = SearchVectorField(null=True)
