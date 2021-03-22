@@ -1,9 +1,23 @@
 #!/bin/bash -xe
-# These are the list of commands on how to deploy obrisk on a fresh Ubuntu 18.04 OS running on AWS Lightsail.
-# Some command requires raw password input and they can't be automated
-# Examples are creating linux user, and github keys. In such cases raw values can be passed when script is started by someone
-# sudo vim /etc/redis/redis.conf #Then change line 147 from 'supervised no' to 'supervised systemd'
-# Also check for safe ways to inject .env in the middle of this script
+# These are the list of commands on how to deploy obrisk on a fresh Ubuntu 18.04 OS running on AWS EC2
+
+#TOKEN='xxxxxxxxxsecret-tokenxxxxxxxxxx'
+#See how to get this token https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
+
+#Beware of the space btn file name and -q to mean quiet
+#Make sure the key is created as id_rsa the default name
+#ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "$1"
+
+#eval "$(ssh-agent -s)"
+#ssh-add -k ~/.ssh/id_rsa
+
+#RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
+
+#Sometimes pasting these lines to other editors destroy the spacing encoding and the bash will fail to parse spaces
+#curl -H "Authorization: token $TOKEN" --data '{"title":"EC2-ubuntu-instance-$3","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
+
+#git clone git@github.com:elshaddae/obdev2018.git
+#git checkout <to the specific branch related with ec2 instance>
 
 #It is possible to store all passwords in a separate script that will echo them when runnning specific commands.
 #https://serverfault.com/questions/815043/how-to-give-username-password-to-git-clone-in-a-script-but-not-store-credential
@@ -30,24 +44,8 @@ sudo apt install python3-venv gcc python3-pip python3-dev libpq-dev python3-whee
 sudo -H pip3 install --upgrade pip wheel setuptools
 
 
-#Beware of the space btn file name and -q to mean quiet
-#Make sure the key is created as id_rsa the default name
-ssh-keygen -b 2048 -t rsa -f ~/.ssh/id_rsa -q -N "" -C "$1"
-
-eval "$(ssh-agent -s)"
-ssh-add -k ~/.ssh/id_rsa
-
-RSA_KEY=$(cat ~/.ssh/id_rsa.pub)
-TOKEN='xxxxxxxxxsecret-tokenxxxxxxxxxx'
-#See how to get this token https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token
-
-#Sometimes pasting these lines to other editors destroy the spacing encoding and the bash will fail to parse spaces
-curl -H "Authorization: token $TOKEN" --data '{"title":"EC2-ubuntu-instance-$3","key":"'"$RSA_KEY"'"}' https://api.github.com/user/keys
-
-git clone git@github.com:elshaddae/obdev2018.git
-
 #Create them here so that they are out of git VCS
-mkdir ./logs ./run
+mkdir ./logs ./run /home/ubuntu/.pip
 chmod 764 -R ./logs ./run ~/.pip
 
 touch ./logs/gunicorn-access.log ./logs/gunicorn-error.log ./logs/nginx-access.log ./logs/nginx-error.log ./logs/celery-access.log ./logs/celery-error.log
@@ -103,12 +101,18 @@ sudo cnpm install gulp workbox-cli -g
 sudo systemctl start gulp.service
 
 #/home/obdev-user/obdev2018/frontend/node_modules/gulp/bin/gulp.js build
-gulp build #Globally installed.
+#gulp build #Globally installed.
 cd ..
-#static files on the local(static) to be served by Nginx for PWA features.
-python manage.py collectstatic --noinput --settings=config.settings.static 
 
-#DONE!
+echo 'DONE!!!'
+
+#static files on the local(static) to be served by Nginx for PWA features.
+
+# Now create .env in the middle of this script
+#python manage.py collectstatic --noinput --settings=config.settings.static 
+#DONE! DONE! DONE!
+
+
 #In case of errors check below commands 
 #sudo systemctl status <service-name.service>
 #journalctl -u <service-name.service>
