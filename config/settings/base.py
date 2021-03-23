@@ -422,7 +422,9 @@ APPEND_SLASH = True
 # USER_AGENTS_CACHE = 'default'
 
 ELASTICSEARCH_DSL = {
-    "default": {"hosts": "elasticsearch:9200"},
+    'default': {
+        'hosts': 'elasticsearch:9200'
+    },
 }
 
 # REDIS setup

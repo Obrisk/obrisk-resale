@@ -28,7 +28,7 @@ body {
     margin: 0;
     border: 0;
     background-color: transparent;
-    margin-bottom: -42px;
+    margin-bottom: -4em;
 }
 
 #cover
@@ -39,13 +39,13 @@ body {
     transform: scale(0.8);
     margin-top: 5rem;
     margin-bottom: 1rem;
-    height: 70px;
+    height: 60px;
     //box-shadow: 0 10px 40px #3ECBE9, 0 0 0 20px #EBFFFF;
 }
 
 form
 {
-    height: 96px;
+    height: 60px;
 }
 
 #search-input
@@ -75,18 +75,18 @@ form
 {
     position: relative;
     display: block;
-    width: 84px;
-    height: 96px;
+    width: 75px;
+    height: 60px;
     cursor: pointer;
 }
 
 #s-circle
 {
     position: relative;
-    top: -21px;
+    top: -25px;
     left: 18px;
-    width: 30px;
-    height: 30px;
+    width: 26px;
+    height: 26px;
     margin-top: 0;
     border-width: 15px;
     border: 5px solid #3EC4E2;
@@ -98,11 +98,9 @@ form
 button span
 {
     position: absolute;
-    top: 43px;
-    left: 52px;
+    top: 32px;
+    left: 49px;
     display: block;
-    width: 8px;
-    height: 14px;
     background-color: transparent;
     border-radius: 10px;
     transform: rotateZ(52deg);
@@ -116,7 +114,7 @@ button span
     bottom: 0;
     right: 0;
     width: 24px;
-    height: 5px;
+    height: 4px;
     background-color: #3EC4E2;
     border-radius: 10px;
     transform: rotateZ(0);
@@ -125,9 +123,9 @@ button span
 
 #s-cover:hover #s-circle
 {
-    top: -13px;
-    width: 48px;
-    height: 6px;
+    top: -18px;
+    width: 36px;
+    height: 4px;
     border-width: 0;
     background-color: #3EC4E2;
     border-radius: 20px;
@@ -144,20 +142,20 @@ button span
 
 #s-cover:hover button span:before
 {
-    bottom: 23px;
-    transform: rotateZ(30deg);
+    bottom: 15px;
+    transform: rotateZ(36deg);
 }
 
 #s-cover:hover button span:after
 {
-    bottom: 8px;
-    transform: rotateZ(-33deg);
+    bottom: -1px;
+    transform: rotateZ(-38deg);
 }
 
 #s-cover:hover button span:before, #s-cover:hover button span:after
 {
-    right: 14px;
-    width: 28px;
+    right: 19px;
+    width: 30px;
     background-color: #3EC4E2;
 }
 
@@ -178,8 +176,6 @@ button span
   z-index: 125;
 }
 
-
-
 .tags-card-wrapper {
     display: flex;
     justify-content: center;
@@ -198,8 +194,6 @@ button span
    display: flex;
    flex-wrap: wrap;
    justify-content: center;
-   margin-left: 4%;
-   margin-right: 4%;
 }
 
 .pagination {
@@ -324,6 +318,8 @@ button span
   /* or any custom size */
   height: 100%;
   object-fit: contain;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
 }
 
 /* Classified details swap thumbnails */
