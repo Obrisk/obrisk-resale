@@ -11,7 +11,7 @@ WorkingDirectory=/home/ubuntu/obdev2018
 Environment="DJANGO_SETTINGS_MODULE=config.settings.production"
 ExecStart=/home/ubuntu/obdev2018/venv_obrisk/bin/gunicorn \
           -k uvicorn.workers.UvicornWorker \
-          --workers 6 \
+          --workers 4 \
           --bind unix:/run/gunicorn.sock \
           --log-level critical \
 	  --access-logfile '/home/ubuntu/logs/gunicorn-error.log' \
