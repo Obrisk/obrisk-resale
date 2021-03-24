@@ -421,9 +421,13 @@ APPEND_SLASH = True
 # cache alias will be used. Set to `None` to disable caching.
 # USER_AGENTS_CACHE = 'default'
 
+
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'elasticsearch:9200'
+        'hosts': env(
+            "ELASTICSEARCH_URL",
+             default='localhost:9200'
+         )
     },
 }
 
