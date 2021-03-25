@@ -19,9 +19,13 @@
 #git clone git@github.com:elshaddae/obdev2018.git
 #git checkout <to the specific branch related with ec2 instance>
 
+#CREATE .ENV FILE
+
 #It is possible to store all passwords in a separate script that will echo them when runnning specific commands.
 #https://serverfault.com/questions/815043/how-to-give-username-password-to-git-clone-in-a-script-but-not-store-credential
 
+#THE BASH MUST BE EXECUTED FROM THE ~/ DIRECTORY (HOME DIRECTORY)
+#The default folder when login on ubuntu18 aws image
 sudo apt-get -y update
 
 #First, install codedeploy agent.
@@ -64,7 +68,8 @@ source venv_obrisk/bin/activate
 #It is not a guarantee that this process will pass smoothly
 #Always when there is a failure update the req files and rerun the command.
 pip install wheel
-pip install -r requirements/production.txt
+python3 -m pip install --upgrade pip setuptools wheel
+pip install -r requirements/production.txt --timeout 120 --retries 10
 
 #This step onwards needs the env variables loaded
 #vim .env #Add all the settings parameters.
