@@ -1,23 +1,23 @@
 # PRECAUTION: avoid production dependencies that aren't in development
 
 -r base.txt
-gevent>=1.2.2  # https://github.com/gevent/gevent
-raven>=6.6.0  # https://github.com/getsentry/raven-python
-gunicorn>=19.9.0  #https://gunicorn.org/
-uvicorn>=0.6.1 #https://github.com/encode/uvicorn
+gevent==1.2.2  # https://github.com/gevent/gevent
+raven==6.6.0  # https://github.com/getsentry/raven-python
+gunicorn==19.9.0  #https://gunicorn.org/
+uvicorn==0.6.1 #https://github.com/encode/uvicorn
 
 #https://serverfault.com/questions/635100/django-conn-max-age-persists-connections-but-doesnt-reuse-them-with-postgresq
-django-db-geventpool>=3.1.0   #https://github.com/jneight/django-db-geventpool
+django-db-geventpool==3.1.0   #https://github.com/jneight/django-db-geventpool
 
 # Django
 # ------------------------------------------------------------------------------
-django-anymail>=2.0  # https://github.com/anymail/django-anymail
-sentry_sdk>=0.14.1 #https://sentry.io/obrisk/obrisk-e7/getting-started/python-django/
+django-anymail==2.0  # https://github.com/anymail/django-anymail
+sentry_sdk==0.14.1 #https://sentry.io/obrisk/obrisk-e7/getting-started/python-django/
 #iocontextvars #https://docs.sentry.io/platforms/python/django/#a-note-on-django-channels
 
 #Below oss package will install django-oss-storage 1.2 better than aliyun package
-#It needs username and password, I'm not sure why
 #git+https://gitee.com/enlangs/django-oss-storage.git #https://gitee.com/enlangs/django-oss-storage
 django-oss-storage
-django-storages>=1.6.5  # https://github.com/jschneier/django-storages
+django-storages==1.6.5  # https://github.com/jschneier/django-storages
+
 
