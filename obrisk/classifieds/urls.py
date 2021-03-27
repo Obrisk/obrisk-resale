@@ -1,7 +1,7 @@
 from django.views.generic.base import TemplateView
 from django.conf.urls import url
 from django.views.generic import TemplateView
-from obrisk.classifieds.search import SearchListView, get_suggestions
+from obrisk.classifieds.search import classifieds_search, get_suggestions
 from obrisk.classifieds.views import *
 from obrisk.utils.images_upload import bulk_update_classifieds_thumb
 
@@ -28,7 +28,7 @@ urlpatterns = [
         name='list_by_city'),
     url(
         r'^classifieds-search-results/$',
-        SearchListView.as_view(),
+        classifieds_search,
         name='classifieds_results'),
     url(
         r'^clsupdate/$',

@@ -176,6 +176,16 @@ button span
   z-index: 125;
 }
 
+#not-found {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 3%;
+    margin-right: 3%;
+    box-shadow: 0 0.5em 1em -0.125em rgba(0, 0, 0, .01), 0 0 0 1px rgba(0, 0, 0, .1);
+}
+
+
 .tags-card-wrapper {
     display: flex;
     justify-content: center;

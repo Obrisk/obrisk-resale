@@ -1,21 +1,48 @@
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView
+from django.views.decorators.http import require_http_methods
 
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 from obrisk.utils.helpers import ajax_required
 from obrisk.classifieds.models import Classified
+from obrisk.classifieds.documents import ClassifiedDocument
 
-class SearchListView(ListView):
-    """CBV to contain all the search results"""
-    model = Classified
-    template_name = "classifieds/search_results.html"
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        query = self.request.GET.get("query")
-        context["active"] = 'classified'
-        context["classifieds_list"] = Classified.objects.all()
-        return context
+client = Elasticsearch()
+my_search = Search(using=client)
+
+
+@require_http_methods(["GET"])
+def classifieds_search(request):
+    """view to render the search results"""
+
+    query_str = request.GET.get("query")
+    if len(query_str) < 2:
+        return JsonResponse({
+                'code': 601
+            })
+
+    qs = ClassifiedDocument.search().query(
+            'match',
+            details=query_str
+        ).to_queryset().values(
+            'title','price','city','slug', 'thumbnail'
+        ).order_by('-timestamp')
+
+    #query = my_search.query("match", title=title)
+    #response = query.execute()
+
+    if qs.count() < 1:
+        return JsonResponse({
+                'code': 602
+            })
+
+    return JsonResponse({
+            'code': 201,
+            'classifieds': list(qs),
+        },safe=False)
 
 
 # For autocomplete suggestions
@@ -43,5 +70,3 @@ def get_suggestions(request):
             data_json['value'] = data.title
         results.append(data_json)
     return JsonResponse(results, safe=False)
-
-
