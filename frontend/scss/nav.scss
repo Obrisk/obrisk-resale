@@ -66,6 +66,7 @@ a {
 
 .notification {
     margin-top: 8px;
+    margin-bottom: -40px !important
 }
 
 .notif-li {
@@ -136,8 +137,8 @@ a {
 }
 
 .nav-back-btn {
-  margin-top: 13px;
-  margin-left:  3px;
+  margin-top: 0.9rem;
+  margin-left: 0.5rem;
 }
 
 #navbarBottom .navbar .navbar-item .nav-drop:before {

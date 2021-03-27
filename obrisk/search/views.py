@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView
+from django.views.decorators.http import require_http_methods
+from django.shortcuts import render
 
 from taggit.models import Tag
 
@@ -12,8 +12,13 @@ from obrisk.stories.models import Stories
 from obrisk.utils.helpers import ajax_required
 from obrisk.qa.models import Question
 
+# documents
+from obrisk.users.documents import UsersDocument
 
-class SearchListView(LoginRequiredMixin, ListView):
+from elasticsearch_dsl.connections import connections
+
+
+class SearchListView(ListView):
     """CBV to contain all the search results"""
     model = Stories
     template_name = "search/search_results.html"
@@ -36,7 +41,7 @@ class SearchListView(LoginRequiredMixin, ListView):
         #     Q(username__icontains=query) | Q(
         #         name__icontains=query)).distinct()
 
-        context["images"]  = ClassifiedImages.objects.all()
+        context["images"] = ClassifiedImages.objects.all()
 
         context["stories_count"] = context["stories_list"].count()
         context["classifieds_count"] = context["classifieds_list"].count()
@@ -51,7 +56,6 @@ class SearchListView(LoginRequiredMixin, ListView):
 
 
 # For autocomplete suggestions
-@login_required
 @ajax_required
 def get_suggestions(request):
     # Convert users, classifieds, questions objects into list to be
@@ -90,3 +94,42 @@ def get_suggestions(request):
         results.append(data_json)
 
     return JsonResponse(results, safe=False)
+
+
+# creating a connection to Elastic search
+connections.create_connection()
+
+
+@require_http_methods(["GET"])
+def all_search(request, **kwargs):
+    # to avoid name collision,Q is imported here
+    from elasticsearch_dsl import Q
+
+    query = request.GET.get('query')
+
+    if request.GET.get('c') is 1:
+        classifieds_results = [{
+            'title': t.title,
+            'details': t.details
+        }]
+
+        return render(request, 'classifieds/search_results.html',
+                {'classifieds_results': classifieds_results,
+                 'stories_results': stories_results})
+
+    elif request.GET.get('u') is 1:
+        users_results = [
+            {'username': t.username} for t in UsersDocument.search().filter(
+                "term", username=query)]
+
+        return render(request, 'connections/search_results.html',
+                {'users_results': users_results,
+                 'stories_results': stories_results})
+
+
+    else:
+        return render(request, 'search/search_results.html',
+                {'stories_results': stories_results})
+
+#    return render(request, 'search/search_results.html',
+#                {'stories_results': stories_results })

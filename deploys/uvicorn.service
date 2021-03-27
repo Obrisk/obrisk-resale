@@ -14,8 +14,8 @@ ExecStart=/home/ubuntu/obdev2018/venv_obrisk/bin/gunicorn \
           --workers 6 \
           --bind unix:/run/uvicorn.sock \
           --log-level info \
-	  --access-logfile '/home/ubuntu/logs/uvicorn-access.log' \
-	  --error-logfile '/home/ubuntu/logs/uvicorn-error.log' \
+	  --access-logfile '/home/ubuntu/logs/gunicorn-access.log' \
+	  --error-logfile '/home/ubuntu/logs/gunicorn-error.log' \
           config.asgi:application
 
 [Install]

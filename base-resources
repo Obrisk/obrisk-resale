@@ -6,6 +6,139 @@ var vConsole = new VConsole();
 
 
 
+        {% if request.user.is_authenticated %}
+          <li class="top-nav-user-li">
+            <a href="#du" class="user-image navbar-item is-account drop-trigger">
+                  {% if request.user.thumbnail %}
+                    <img   src="{{ oss }}/{{request.user.thumbnail}}" alt="Picture Profile"
+                      style="width:30px;height:30px;border-radius: 50%;"
+                      class="img-drop-trigger rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
+                  {% else %}
+                    <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No Profile Picture" />
+                  {% endif %}
+            </a>
+
+            <div id="du" class="has-caret">
+                  <div class="nav-drop is-account-dropdown">
+                    <div class="inner">
+                      <div class="nav-drop-header is-auth-user">
+                        <span class="username">{{ request.user.username|truncatechars:12}}</span>
+                        <a href="#" id="close">❌ 
+                            {% trans 'CLOSE' %}
+                        </a>
+                      </div>
+
+                      <div class="nav-drop-body account-items">
+                        <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
+                          <div class="media">
+                            <div class="icon-wrap">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-user">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                <circle cx="12" cy="7" r="4" /></svg>
+                            </div>
+                            <div>
+                                <h3>
+                                    {% trans 'My Profile' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Access profile & settings' %}
+                                </small>
+                            </div>
+                          </div>
+                        </a>
+
+                        <a class="account-item" href="{% url 'account_logout' %}">
+                          <div class="media">
+                            <div class="icon-wrap">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-power">
+                                <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
+                                <line x1="12" y1="2" x2="12" y2="12"></line>
+                              </svg>
+                            </div>
+                            <div>
+                                <h3>
+                                    {% trans 'Log out' %}
+                                </h3>
+                                <small>
+                                    {% trans 'Log out from your account.' %}
+                                </small>
+                            </div>
+                          </div>
+                        </a>
+                      <!-- close nav-drop-body -->
+                      </div>
+
+                   <!-- close inner div-->
+                   </div>
+
+                <div class="nav-drop acc-nav-toggle" id=""> 
+                </div>
+
+               <!-- close inner, nav-drop, ac-dropdown -->
+              </div>
+            </div>
+          </li>
+
+        {% else %}
+            <li class="top-nav-user-li">
+            <a href="#d" class="user-image navbar-item is-account drop-trigger">
+                      <img class="user-image" src="{% static 'img/user.png' %}"
+                        height="30px" width="30px" alt="No Profile Picture" />
+            </a>
+
+            <div id="d" class="has-caret">
+                  <div class="nav-drop is-navbarTop is-account-dropdown">
+                    <div class="inner">
+                          <div class="nav-drop-header guest-user">
+                            <a href="#" id="close">❌ CLOSE</a>
+                          </div>
+
+                          <div class="nav-drop-body account-items">
+                                <a class="account-item" href="{% url 'account_login' %}">
+                                  <div class="media">
+                                    <div class="icon-wrap">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-user">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                        <circle cx="12" cy="7" r="4" /></svg>
+                                    </div>
+                                    <div>
+                                      <h3>Login</h3>
+                                    </div>
+                                  </div>
+                                </a>
+
+                                <a class="account-item" href="{% url 'account_signup' %}">
+                                  <div class="media">
+                                    <div class="icon-wrap">
+                                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                        class="feather feather-user-plus">
+                                        <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="8.5" cy="7" r="4" />
+                                        <line x1="20" y1="8" x2="20" y2="14" />
+                                        <line x1="23" y1="11" x2="17" y2="11" /></svg>
+                                    </div>
+                                    <div>
+                                      <h3>Sign up</h3>
+                                    </div>
+                                  </div>
+                                </a>
+                            </div>
+                     <!-- close inner, nav-drop, ac-dropdown -->
+                    </div>
+                  </div>
+                </div>
+          </li>
+       {% endif %}
+
+
+
 BEFORE AJAX
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 

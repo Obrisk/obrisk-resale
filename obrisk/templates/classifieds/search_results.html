@@ -5,100 +5,195 @@
 {% block title %} {% trans 'Search Results' %} {% endblock %}
 
 {% block head %}
-<link href="{% static 'css/listing.css' %}" rel="stylesheet">
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
-<link href="{% static 'css/classifieds-list.css' %}?v=1908301" rel="stylesheet">
-<link href="{% static 'css/stories.css' %}?v=1" rel="stylesheet">
-<link href="{% static 'css/qa.css' %}" rel="stylesheet">
+<title>Obrisk Classifieds </title>
 {% endblock head %}
 
 {% block content %}
 
-<!-- Page Content -->
-<div class="container search-results">
-  <!-- This search bar should be displayed with pre-filled in values that user searched for. -->
-  <!-- currently it is not doing so -->
-  <div class="col-md-3 mb-5 mt-5">
-    <div class="justify-content-end ml-auto d-flex flex-row">
-      <form class="searchbar" id="classifiedsearch" action="{% url 'classifieds:classifieds_results' %}" style="display:inline;">
-        <input type="text" name="query" placeholder="Search...">
-        <div class="search"></div>
+    <div id="cover">
+      <form method="get" role="search" action="/classifieds/classifieds-search-results/">
+        <div class="tb">
+          <div class="td">
+              <input id="search-input" type="text" placeholder="Search" required>
+          </div>
+          <div class="td" id="s-cover">
+            <button id="search-btn" type="submit">
+              <div id="s-circle"></div>
+              <span></span>
+            </button>
+          </div>
+        </div>
       </form>
-
     </div>
-  </div>
 
-  <!-- row -->
-  <div class="row">
-    <div class="col-md-3">
-      <div class="list-group" id="list-tab" role="tablist">
-        <a class="list-group-item list-group-item-action active" id="list-classifieds-list" data-toggle="list"
-          href="#list-classifieds" role="tab" aria-controls="classifieds">{% trans 'Classifieds' %}<span
-            class="badge btn-dark pull-right">{{ classifieds_count }}</span></a>
-        <a class="list-group-item list-group-item-action" id="list-tags-list" data-toggle="list" href="#list-tags"
-          role="tab" aria-controls="tags">{% trans 'Tags' %}<span
-            class="badge btn-dark pull-right">{{ tags_count }}</span></a>
-      </div>
-    </div>
-    <div class="col-md-9 p-0">
-      <div class="tab-content" id="nav-tabContent">
-        <div class="tab-pane fade my-4 show active" id="list-classifieds" role="tabpanel"
-          aria-labelledby="list-classifieds-list">
-          <div class="classifieds col-12 m-auto d-flex flex-wrap p-0 justify-content-lg-start justify-content-center">
-            {% for classified in classifieds_list %}
-            <div class="card classified-card mr-2 mb-3 justify-content-center">
+  <div class="is-9-fullhd classifieds-list-wrapper">
+      <div id="classifieds" class="small-cards-listing">
+         {% for classified in classifieds_list %}
+            <div class="card classified-card">
               <!--Display image-->
               <a href="{% url 'classifieds:classified' classified.slug %}"
                 style="color:black; text-decoration:none; background-color:none">
-                <div class="card-img-top img-responsive">
 
-                  {% for photo in images %}
-                  {% if photo.classified == classified %}
-                  <img class="card-img" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ photo.image_thumb }}">
-                  {{ "<!--" }}
+                <div class="card-img-top img-responsive">
+                  {% if classified.thumbnail %}
+                  <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.thumbnail }}"
+                    width="154px" height="154px">
+                  {% else %}
+                  <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+                    width="154px" height="154px">
                   {% endif %}
-                  {% endfor %}
-                  {{ "-->" }}
                 </div>
+
                 <div class="divider"></div>
+
                 <div class="card-body">
                   <h6 class="card-title"> {{ classified.title}} </h6>
-                  <p class="card-subtitle O-cl-red"> CNY {{ classified.price|title }} </p>
-                  <div class="card-meta d-flex justify-content-between">
-                    <div class="d-flex location">
-                      <small>📍</small>
-                      <span class="card-text small "> {{ classified.city|safe }}</span>
-                    </div>
-                    <div class="share-card">
-                      <small>🔗</small>
-                    </div>
-                  </div>
+
+                  {% if classified.price != 0.00 %}
+                      <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
+                  {% else %}
+                      <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                  {% endif %}
+
+                <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+
+
                 </div>
+                {% if classified.priority > 0 %}
+                <div class="priority">
+                  Featured
+                </div>
+                {% endif %}
+
               </a>
+              <script type="application/ld+json">
+              {
+                 "@context":"http://schema.org/",
+                 "@type":"Product",
+                 "name":"{{ classified.title}}",
+                 "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
+                 "image":[
+                    "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.thumbnail }}"
+                 ],
+                 "brand":"",
+                 "offers":{
+                    "@type":"Offer",
+                    "priceCurrency":"CNY",
+                    "price":{{ classified.price|title }},
+                    "availability":"http://schema.org/InStock",
+                    "itemCondition":"http://schema.org/UsedCondition",
+                    "url":"{% url 'classifieds:classified' classified.slug %}"
+                 }
+              }
+              </script>
+
             </div>
-            {% empty %}
-            <h4 class="card-body card card">{% trans 'There are no results related to your search in classifieds' %}.
-            </h4>
-            {% endfor %}
-          </div>
-        </div>
-        
-        <div class="tab-pane fade my-4 " id="list-tags" role="tabpanel" aria-labelledby="list-tags-list">
-          <div class="card">
-            <div class="card-body">
-              {% for tag in tags_list %}
-              <a href="#"><span class="badge badge-info">{{ tag }}</span></a>
-              {% empty %}
-              <h4>{% trans 'There are no results related to your search in tags' %}.</h4>
-              {% endfor %}
-            </div>
-          </div>
+
+        {% empty %}
+            <small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
+              {% trans 'It looks like there are no items near you.' %}
+              <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a>
+            </small>
+            <br />
+        {% endfor %}
+
+      </div>
+      <div class="loading classified-card is-hidden">
+        <div class="stage">
+          <div class="dot-pulse"></div>
         </div>
       </div>
-    </div>
-  </div>
-  <!-- /.row -->
-</div>
-<!-- /.container -->
 
 {% endblock content %}
+
+{% block extra_js %}
+
+<script type="text/javascript">
+
+  const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
+  const user = "{{ request.user.username }}";
+  const app = "classifieds";
+
+  const title_id = "{{ form.title.auto_id }}";
+  const details_id = "{{ form.details.auto_id }}";
+  const address = "{{ form.address.auto_id }}";
+
+  var page = 1;
+  var empty_page = false;
+  var block_request = false;
+  var is_tag_page = "{{tag}}";
+  var lastScrollTop = 0;
+
+  if (is_tag_page == "None") {
+    window.addEventListener('scroll', function () {
+      if (empty_page == false && block_request == false) {
+        block_request = true;
+        page += 1;
+        document.querySelector('.loading').classList.remove('is-hidden')
+
+        fetch(`/classifieds/?page=${page}`,
+        {
+          headers: {
+            "X-Requested-With": "XMLHttpRequest"
+          }
+        }).then (resp => resp.json())
+        .then (data => {
+
+            document.querySelector('.loading').classList.add('is-hidden');
+            block_request = false;
+
+              for (const cls of data.classifieds) {
+                  let img, price; 
+
+                  if ( cls.thumbnail != "" ) {
+                    img = `<img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${cls.thumbnail}" width="154px" height="154px">`;
+                  }else {
+                    img = "<img class='card-img lazyload' src='https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg' width='154px' height='154px'>";
+                  }
+
+                  if (cls.price != 0.00){
+                      price = `<p class="card-subtitle"> ¥${cls.price} </p>`;
+                  } else {
+                      price = "<p class='card-subtitle'> FREE </p>";
+                  }
+
+                  template = `
+                    <div class="card classified-card">
+                      <a href="${cls.slug}"
+                        style="color:black; text-decoration:none; background-color:none">
+
+                        <div class="card-img-top img-responsive">
+                            ${img}
+                        </div>
+                        <div class="divider"></div>
+                        <div class="card-body">
+                          <h6 class="card-title"> ${cls.title} </h6>
+                           ${price}
+
+                        <span class="card-text small "><small>📍</small> ${ cls.city}</span>
+
+                        </div>
+                      </a>
+                    </div>
+                        `;
+                  document.querySelector('#classifieds').insertAdjacentHTML('beforeend', template);
+              }
+
+              if (data.end === "end") {
+                empty_page = true;
+                document.querySelector('.loading').classList.add('is-hidden');
+                document.querySelector('.classifieds-list-wrapper').insertAdjacentHTML('beforeend', '<div class="end-classifieds"> End of Classifieds</div>')
+              } 
+
+        }).catch (err => {
+            console.log(err);
+        });
+      }
+    });
+  }
+
+</script>
+{% endblock extra_js %}
+
+

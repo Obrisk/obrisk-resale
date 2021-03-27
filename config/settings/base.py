@@ -4,7 +4,6 @@ Base settings to build other settings files upon.
 import environ
 from django.utils.translation import gettext_lazy as _
 
-
 ROOT_DIR = environ.Path(__file__) - 3  # (obrisk/config/settings/base.py - 3 = obrisk/)
 APPS_DIR = ROOT_DIR.path("obrisk")
 
@@ -421,9 +420,6 @@ APPEND_SLASH = True
 # cache alias will be used. Set to `None` to disable caching.
 # USER_AGENTS_CACHE = 'default'
 
-ELASTICSEARCH_DSL = {
-    "default": {"hosts": "elasticsearch:9200"},
-}
 
 # REDIS setup
 REDIS_URL = f'{env("REDIS_URL", default="redis://127.0.0.1:6379")}/{0}'

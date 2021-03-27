@@ -1,6 +1,6 @@
 from django import forms
 from dal import autocomplete
-from obrisk.classifieds.models import Classified, OfficialAd
+from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedOrder
 from phonenumber_field.formfields import PhoneNumberField
 
 class ClassifiedForm(forms.ModelForm):
@@ -49,6 +49,25 @@ class ClassifiedForm(forms.ModelForm):
         model = Classified
         fields = ["title", "details", "status", "edited",
                  "price", "english_address", "phone_number", "show_phone"]
+
+
+
+class ClassifiedOrderForm(forms.ModelForm):
+    recipient_chinese_address = forms.CharField(
+            required=False, label=("Address (in Chinese)")
+        )
+    recipient_phone_number = forms.CharField(
+            required=False,
+            label=("Phone number")
+        )
+    is_offline = forms.BooleanField(
+            widget=forms.HiddenInput(),
+            required=False, initial=False
+        )
+
+    class Meta:
+        model = ClassifiedOrder
+        fields = ["recipient_chinese_address", "recipient_phone_number", "is_offline"]
 
 
 class ClassifiedEditForm(forms.ModelForm):

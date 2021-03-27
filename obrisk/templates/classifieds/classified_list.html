@@ -10,108 +10,113 @@
 
 {% block content %}
 
-        <!-- Cloud Tag Widget -->
-        <div class="tags-card-wrapper">
-          <div class="card is-weather-card">
-              <h5 class="card-heading has-text-weight-medium has-text-white	">{% trans 'Popular tags' %}</h5>
-
-            <div class="card-body">
-              <div class="previsions">
-                {% for tag, count in popular_tags %}
-                <a href="{% url 'classifieds:list_by_tag' tag %}">
-                    <span class="tag is-white"> {{ tag }}</span>
-                </a>
-                {% endfor %}
-              </div>
-
-            </div>
+    <div id="cover">
+      <form id="search-form" method="get" role="search">
+        <div class="tb">
+          <div class="td">
+              <input id="search-input" type="search" placeholder="Search">
+          </div>
+          <div class="td" id="s-cover">
+            <button id="search-btn" type="button">
+              <div id="s-circle"></div>
+              <span></span>
+            </button>
           </div>
         </div>
+      </form>
+    </div>
 
-        <div class="column is-9-fullhd classifieds-list-wrapper">
+  <div class="box" id="not-found">
+      <img id="notfound-img" width="160px" height="160px"
+          src="{% static 'img/query-not-found.gif' %}">
+      <h1 class="title is-6"> Oh boy! no body z selling this </h1>
+  </div>
 
-          <div id="classifieds" class="small-cards-listing">
-             {% for classified in classifieds %}
-                <div class="card classified-card">
-                  <!--Display image-->
-                  <a href="{% url 'classifieds:classified' classified.slug %}"
-                    style="color:black; text-decoration:none; background-color:none">
-                    <div class="card-img-top img-responsive">
+  <div class="is-9-fullhd classifieds-list-wrapper">
+      <div id="classifieds" class="small-cards-listing">
+         {% for classified in classifieds %}
+            <div class="card classified-card">
+              <!--Display image-->
+              <a href="{% url 'classifieds:classified' classified.slug %}"
+                style="color:black; text-decoration:none; background-color:none">
 
-                      {% if classified.image_thumb %}
-                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
-                        width="154px" height="154px">
-                      {% else %}
-                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
-                        width="154px" height="154px">
-                      {% endif %}
-                    </div>
-
-                    <div class="divider"></div>
-
-                    <div class="card-body">
-                      <h6 class="card-title"> {{ classified.title}} </h6>
-
-                      {% if classified.price != 0.00 %}
-                          <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
-                      {% else %}
-                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
-                      {% endif %}
-
-                    <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
-
-
-                    </div>
-                    {% if classified.priority > 0 %}
-                    <div class="priority">
-                      Featured
-                    </div>
-                    {% endif %}
-
-                  </a>
-                  <script type="application/ld+json">
-                  {
-                     "@context":"http://schema.org/",
-                     "@type":"Product",
-                     "name":"{{ classified.title}}",
-                     "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
-                     "image":[
-                        "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
-                     ],
-                     "brand":"",
-                     "offers":{
-                        "@type":"Offer",
-                        "priceCurrency":"CNY",
-                        "price":{{ classified.price|title }},
-                        "availability":"http://schema.org/InStock",
-                        "itemCondition":"http://schema.org/UsedCondition",
-                        "url":"{% url 'classifieds:classified' classified.slug %}"
-                     }
-                  }
-                  </script>
-
+                <div class="card-img-top img-responsive">
+                  {% if classified.thumbnail %}
+                  <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
+                    width="154px" height="154px">
+                  {% else %}
+                  <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
+                    width="154px" height="154px">
+                  {% endif %}
                 </div>
 
-            {% empty %}
-                <small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
-                  {% trans 'It looks like there are no items near you.' %}
-                  <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a>
-                </small>
-                <br />
-            {% endfor %}
+                <div class="divider"></div>
 
-          </div>
-          <div class="loading classified-card is-hidden">
-            <div class="stage">
-              <div class="dot-pulse"></div>
+                <div class="card-body">
+                  <h6 class="card-title"> {{ classified.title}} </h6>
+
+                  {% if classified.price != 0.00 %}
+                      <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
+                  {% else %}
+                      <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                  {% endif %}
+
+                <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+
+
+                </div>
+                {% if classified.priority > 0 %}
+                <div class="priority">
+                  Featured
+                </div>
+                {% endif %}
+
+              </a>
+              <script type="application/ld+json">
+              {
+                 "@context":"http://schema.org/",
+                 "@type":"Product",
+                 "name":"{{ classified.title}}",
+                 "description":"Visit https://obrisk.com{% url 'classifieds:classified' classified.slug %} for more details",
+                 "image":[
+                    "https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.thumbnail }}"
+                 ],
+                 "brand":"",
+                 "offers":{
+                    "@type":"Offer",
+                    "priceCurrency":"CNY",
+                    "price":{{ classified.price|title }},
+                    "availability":"http://schema.org/InStock",
+                    "itemCondition":"http://schema.org/UsedCondition",
+                    "url":"{% url 'classifieds:classified' classified.slug %}"
+                 }
+              }
+              </script>
+
             </div>
-          </div>
+
+        {% empty %}
+            <small class="empty-ad">{% trans '😃 Welcome' %} {{ request.user.username }}.
+              {% trans 'It looks like there are no items near you.' %}
+              <a href="{% url 'classifieds:write_new' %}"> {% trans ' Be the first to post' %}</a>
+            </small>
+            <br />
+        {% endfor %}
+
+      </div>
+      <div class="loading classified-card is-hidden">
+        <div class="stage">
+          <div class="dot-pulse"></div>
+        </div>
+      </div>
 
 {% endblock content %}
 
 {% block extra_js %}
 
 <script type="text/javascript">
+
+document.addEventListener('DOMContentLoaded', function() {
 
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const user = "{{ request.user.username }}";
@@ -126,6 +131,45 @@
   var block_request = false;
   var is_tag_page = "{{tag}}";
   var lastScrollTop = 0;
+
+  function renderClassifieds(classifieds) {
+          for (const cls of classifieds) {
+              let img, price; 
+
+              if ( cls.thumbnail != "" ) {
+                img = `<img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${cls.thumbnail}" width="154px" height="154px">`;
+              }else {
+                img = "<img class='card-img lazyload' src='https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg' width='154px' height='154px'>";
+              }
+
+              if (cls.price != 0.00){
+                  price = `<p class="card-subtitle"> ¥${cls.price} </p>`;
+              } else {
+                  price = "<p class='card-subtitle'> FREE </p>";
+              }
+
+              template = `
+                <div class="card classified-card">
+                  <a href="${cls.slug}"
+                    style="color:black; text-decoration:none; background-color:none">
+
+                    <div class="card-img-top img-responsive">
+                        ${img}
+                    </div>
+                    <div class="divider"></div>
+                    <div class="card-body">
+                      <h6 class="card-title"> ${cls.title} </h6>
+                       ${price}
+
+                    <span class="card-text small "><small>📍</small> ${ cls.city}</span>
+
+                    </div>
+                  </a>
+                </div>
+                    `;
+              document.querySelector('#classifieds').insertAdjacentHTML('beforeend', template);
+          }
+    }
 
   if (is_tag_page == "None") {
     window.addEventListener('scroll', function () {
@@ -144,43 +188,7 @@
 
             document.querySelector('.loading').classList.add('is-hidden');
             block_request = false;
-
-              for (const cls of data.classifieds) {
-                  let img, price; 
-
-                  if ( cls.image_thumb != "" ) {
-                    img = `<img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/${cls.image_thumb}" width="154px" height="154px">`;
-                  }else {
-                    img = "<img class='card-img lazyload' src='https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg' width='154px' height='154px'>";
-                  }
-
-                  if (cls.price != 0.00){
-                      price = `<p class="card-subtitle"> ¥${cls.price} </p>`;
-                  } else {
-                      price = "<p class='card-subtitle'> FREE </p>";
-                  }
-
-                  template = `
-                    <div class="card classified-card">
-                      <a href="${cls.slug}"
-                        style="color:black; text-decoration:none; background-color:none">
-
-                        <div class="card-img-top img-responsive">
-                            ${img}
-                        </div>
-                        <div class="divider"></div>
-                        <div class="card-body">
-                          <h6 class="card-title"> ${cls.title} </h6>
-                           ${price}
-
-                        <span class="card-text small "><small>📍</small> ${ cls.city}</span>
-
-                        </div>
-                      </a>
-                    </div>
-                        `;
-                  document.querySelector('#classifieds').insertAdjacentHTML('beforeend', template);
-              }
+            renderClassifieds(data.classifieds) 
 
               if (data.end === "end") {
                 empty_page = true;
@@ -195,5 +203,34 @@
     });
   }
 
+  const searchForm = document.getElementById('search-form')
+  const formInput = document.getElementById("search-input");
+
+  searchForm.addEventListener('submit', function(e) {
+      e.preventDefault();                                                                                                          
+      if (formInput.value.length > 1) {
+          fetch("{% url 'classifieds:classifieds_results' %}?query=" + formInput.value, {
+            credentials: 'same-origin',
+            headers: {
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            redirect: 'follow',
+          }).then (resp => resp.json())
+            .then (data => {
+                if (data.code == 201) {
+                    renderClassifieds(data.classifieds) 
+                } else {
+                    if (data.code == 602) {
+                        console.log('msdf')
+                        document.getElementById('not-found').style.display = 'flex';
+                    }
+                }
+            })
+      }
+  });
+
+});
+
 </script>
+
 {% endblock extra_js %}

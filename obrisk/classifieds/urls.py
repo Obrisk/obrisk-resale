@@ -1,7 +1,7 @@
 from django.views.generic.base import TemplateView
 from django.conf.urls import url
 from django.views.generic import TemplateView
-from obrisk.classifieds.search import SearchListView, get_suggestions
+from obrisk.classifieds.search import classifieds_search, get_suggestions
 from obrisk.classifieds.views import *
 from obrisk.utils.images_upload import bulk_update_classifieds_thumb
 
@@ -20,11 +20,15 @@ urlpatterns = [
         name='tags_autocomplete'),
     url(
         r'^tag/([-\w]+)/$',
-        classified_list,
+        classified_list_by_tags,
         name='list_by_tag'),
     url(
+        r'^city/([-\w]+)/$',
+        classified_list,
+        name='list_by_city'),
+    url(
         r'^classifieds-search-results/$',
-        SearchListView.as_view(),
+        classifieds_search,
         name='classifieds_results'),
     url(
         r'^clsupdate/$',
@@ -36,11 +40,19 @@ urlpatterns = [
         get_suggestions,
         name='classifieds_suggestions'),
     url(
+        r'^orders/create-clsd-order/$',
+        create_classified_order,
+        name='create_order'),
+    url(
         r'^orders/wxpy-complete/$',
         initiate_wxpy_info,
         name='initiate_wxpy_info'),
     url(
-        r'^wsguatpotlfwccdi/wxjsapipy/inwxpy_results/$',
+        r'^orders/wsguatpotlfwccdi/wxjs-success/$',
+        wxpyjs_success,
+        name='wxpyjs_success'),
+    url(
+        r'^wsguatpotlfwccdi/wxjsapipy/inwxpy-results/$',
         Wxpay_Result.as_view(),
         name='inwxpy_res'),
     url(

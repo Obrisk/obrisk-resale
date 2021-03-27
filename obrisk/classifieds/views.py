@@ -72,16 +72,16 @@ def set_popular_tags():
 
 
 @require_http_methods(["GET"])
-def classified_list(request, tag_slug=None):
+def classified_list(request, city=None):
 
     if request.user.is_authenticated:
         city = request.user.city
     else:
-        city = cache.get(
-                f'user_city_{request.session.get("visitor_id")}'
-            )
-
         if city is None:
+            city = cache.get(
+                    f'user_city_{request.session.get("visitor_id")}'
+                )
+
             client_ip, _ = get_client_ip(
                     request
                 )
@@ -90,6 +90,12 @@ def classified_list(request, tag_slug=None):
                 city = ''
             else:
                 info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
+                country = json.loads(info.text)['country_name']
+                if country != 'China' and country != 'Not found':
+                    messages.error(
+                        request,
+                        "This platform is for China users, if you're: please switch off the vpn"
+                    )
                 city = json.loads(info.text)['city']
 
             cache.set(
@@ -99,20 +105,12 @@ def classified_list(request, tag_slug=None):
             )
 
     classifieds_list = Classified.objects.get_active().values(
-                    'title','price','city','slug'
+                    'title','price','city','slug', 'thumbnail'
                 ).annotate(
                     order = Case (
                         When(city=city, then=Value(1)),
                         default=Value(2),
                         output_field=IntegerField(),
-                    )
-                ).annotate (
-                    image_thumb = Subquery (
-                        ClassifiedImages.objects.filter(
-                            classified=OuterRef('pk'),
-                        ).values(
-                            'image_thumb'
-                        )[:1]
                     )
                 ).order_by('order', '-priority', '-timestamp')
 
@@ -127,15 +125,7 @@ def classified_list(request, tag_slug=None):
     except EmptyPage:
         if request.is_ajax():
             classifieds = Classified.objects.get_expired().values(
-                            'title','price','city','slug'
-                        ).annotate (
-                            image_thumb = Subquery (
-                                ClassifiedImages.objects.filter(
-                                    classified=OuterRef('pk'),
-                                ).values(
-                                    'image_thumb'
-                                )[:1]
-                            )
+                            'title','price','city','slug', 'thumbnail'
                         ).order_by('-timestamp')
 
             return JsonResponse({
@@ -149,36 +139,31 @@ def classified_list(request, tag_slug=None):
                 'classifieds': list(classifieds)
             })
 
-    #Try to Get the popular tags from cache
-    popular_tags = cache.get('popular_tags_mb')
+    return render(request, 'classifieds/classified_list.html',
+            {'page': page, 'city': city,'classifieds': classifieds,
+            'base_active': 'classifieds'}
+        )
 
-    if popular_tags is None:
-        popular_tags = Classified.objects.get_active(
-                ).get_counted_tags()[:10]
-        cache.set('popular_tags_mb',
-                    list(popular_tags), timeout=TAGS_TIMEOUT
-                )
 
-    # Deal with tags in the end to override other_classifieds.
+
+
+@require_http_methods(["GET"])
+def classified_list_by_tags(request, tag_slug=None):
     tag = None
     if tag_slug:
+        try:
+            tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
+            classifieds = Classified.objects.get_active().filter(
+                    tags__in=[tag]).order_by('-timestamp')
+        except:
+            pass
 
-        tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
-        classifieds = Classified.objects.get_active().filter(
-                tags__in=[tag]).annotate (
-            image_thumb = Subquery (
-                ClassifiedImages.objects.filter(
-                    classified=OuterRef('pk'),
-                ).values(
-                    'image_thumb'
-                )[:1]
-            )
-        ).order_by('-timestamp')
-
+    page = request.GET.get('page')
     return render(request, 'classifieds/classified_list.html',
-            {'page': page, 'popular_tags': popular_tags,
-            'city': city,'classifieds': classifieds,
-            'tag': tag, 'base_active': 'classifieds'})
+            {'page': page,  'classifieds': classifieds,
+            'tag': tag, 'base_active': 'classifieds'}
+        )
+
 
 
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
@@ -423,15 +408,7 @@ class DetailClassifiedView(DetailView):
         classified_tags_ids = self.object.tags.values_list('id', flat=True)
         similar_classifieds = Classified.objects.get_active().filter(
                 tags__in=classified_tags_ids)\
-            .exclude(id=self.object.id).annotate (
-                image_thumb = Subquery (
-                    ClassifiedImages.objects.filter(
-                        classified=OuterRef('pk'),
-                    ).values(
-                        'image_thumb'
-                    )[:1]
-                )
-            )
+            .exclude(id=self.object.id)
 
         # Add in a QuerySet of all the images
         context['images'] = ClassifiedImages.objects.filter(
@@ -444,6 +421,42 @@ class DetailClassifiedView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+
+@login_required
+@require_http_methods(["GET"])
+def create_classified_order(request, *args, **kwargs):
+    """
+    用户点击一个路由或者扫码进入这个views.py中的函数，首先获取用户的openid,
+    使用jsapi方式支付需要此参数
+    :param self:
+    :param request:
+    :param args:
+    :param kwargs:
+    :return:
+    """
+    classified = Classified.objects.filter(
+            slug=request.GET.get('sg', None)
+        ).first()
+
+    if classified:
+        openid = request.user.wechat_openid
+        if openid:
+            return render(
+                request,
+                'classifieds/create_classified_order.html',
+                {'classified': classified}
+            )
+        else:
+            messages.success(
+                    request,
+                    "You need to login with wechat to be able to pay"
+                )
+            return redirect('classifieds:classified', classified.slug)
+
+    else:
+        return redirect('classifieds:list')
 
 
 @login_required
@@ -467,7 +480,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
         if openid:
             return render(
                 request,
-                'classifieds/create_classified_order.html',
+                'classifieds/pay_order.html',
                 {
                  'classified': classified,
                  'data': get_jsapi_params(
@@ -490,29 +503,46 @@ def initiate_wxpy_info(request, *args, **kwargs):
         return redirect('classifieds:list')
 
 
+@login_required
+@require_http_methods(["POST"])
+def wxpyjs_success(request, *args, **kwargs):
+    classified = Classified.objects.filter(
+            slug=request.POST.get('sg', None)
+        ).first()
+
+    if classified:
+        classified.status='E'
+        classified.save()
+
+        is_offline = False
+        if request.POST.get('addr', None) is None:
+            is_offline = True
+
+        order = ClassifiedOrder.objects.create(
+           buyer=request.user,
+           classified=classified,
+           is_offline=is_offline,
+           recipient_chinese_address=request.POST.get('addr', None),
+           recipient_phone_number=request.POST.get('phone', None)
+        )
+        return JsonResponse({
+            'success': True,
+            'order_slug': order.slug
+        })
+    else:
+        return JsonResponse({
+            'success': False
+        })
+
+
 class Wxpay_Result(View):
     """
     微信支付结果回调通知路由
     """
     def get(self, request, *args, **kwargs):
-        classified = Classified.objects.filter(
-                slug=request.GET.get('sg', None)
-            ).first()
-
-        if classified:
-            classified.status='E'
-            classified.save()
-
-            ClassifiedOrder.objects.create(
-               buyer=request.user,
-               classified=classified
-            )
             return JsonResponse({
-                'success': True
-            })
-        else:
-            return JsonResponse({
-                'success': False
+                'success': False,
+                'message': 'Request is invalid'
             })
 
     def post(self, request, *args, **kwargs):
@@ -572,3 +602,26 @@ class Wxpay_Result(View):
 
 class ClassifiedOrderView(DetailView):
     model = ClassifiedOrder
+
+    def get_context_data(self, **kwargs):
+        # Call the base implementation first to get a context
+        context = super(
+                ClassifiedOrderView, self
+            ).get_context_data(**kwargs)
+
+        classified_tags_ids = self.object.classified.tags.values_list('id', flat=True)
+        similar_classifieds = Classified.objects.get_active().filter(
+                tags__in=classified_tags_ids)\
+            .exclude(id=self.object.classified.id)
+
+        # Add in a QuerySet of all the images
+        context['images'] = ClassifiedImages.objects.filter(
+                classified=self.object.classified.id
+            )
+
+        context['images_no'] = len(context['images'])
+        context['similar_classifieds'] = similar_classifieds.annotate(
+                same_tags=Count('tags'))\
+            .order_by('-same_tags', '-timestamp')[:6]
+
+        return context

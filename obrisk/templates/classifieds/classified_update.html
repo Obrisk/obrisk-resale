@@ -101,6 +101,11 @@
 <script type="text/javascript">
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    if (document.querySelector("input[name='tags']").value == '[]') {
+        document.querySelector("input[name='tags']").value = '';
+    }
+
     document.querySelector(".update").addEventListener('click', function () {
       document.querySelector("input[name='status']").value = "A";
       //This image below is just to pass the form validation, but it is not saved.

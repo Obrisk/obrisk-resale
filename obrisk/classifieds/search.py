@@ -1,74 +1,51 @@
-from elasticsearch_dsl.connections import connections
-from elasticsearch_dsl import Document, Text, Date, Search
-from elasticsearch.helpers import bulk
-from elasticsearch import Elasticsearch
-from . import models
-
-# Create a connection to ElasticSearch
-connections.create_connection()
-
-# ElasticSearch "model" mapping out what fields to index
-class ClassifiedPostIndex(Document):
-    author = Text()
-    posted_date = Date()
-    title = Text()
-    text = Text()
-
-    class Meta:
-        index = 'blogpost-index'
-
-# Bulk indexing function, run in shell
-def bulk_indexing():
-    ClassifiedPostIndex.init()
-    es = Elasticsearch()
-    bulk(client=es, actions=(b.indexing() for b in models.ClassifiedPost.objects.all().iterator()))
-
-# Simple search function
-def search(author):
-    s = Search().filter('term', author=author)
-    response = s.execute()
-    return response
-
-
-
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.http import JsonResponse
 from django.views.generic import ListView
-from taggit.models import Tag
-from obrisk.classifieds.models import Classified, ClassifiedImages
+from django.views.decorators.http import require_http_methods
+
+from elasticsearch import Elasticsearch
+from elasticsearch_dsl import Search
 from obrisk.utils.helpers import ajax_required
+from obrisk.classifieds.models import Classified
+from obrisk.classifieds.documents import ClassifiedDocument
 
 
-class SearchListView(LoginRequiredMixin, ListView):
-    """CBV to contain all the search results"""
-    model = Classified
-    template_name = "classifieds/search_results.html"
+client = Elasticsearch()
+my_search = Search(using=client)
 
-    def get_context_data(self, *args, **kwargs):
-        context = super().get_context_data(*args, **kwargs)
-        query = self.request.GET.get("query")
-        context["active"] = 'classified'
-        context["tags_list"] = Tag.objects.filter(name=query).distinct()
-        context["classifieds_list"] = Classified.objects.none()
-        #This query is very expensive it does 200 queries.
-            #title__icontains=query) | Q(details__icontains=query) | Q(
-                #tags__name__icontains=query) | Q(
-                #title__trigram_similar=query) | Q(
-                #details__trigram_similar=query)
-                #).distinct()
-       
-        context["images"]  = ClassifiedImages.objects.all()
-        context["classifieds_count"] = context["classifieds_list"].count()
-        context["tags_count"] = context["tags_list"].count()
 
-        return context
+@require_http_methods(["GET"])
+def classifieds_search(request):
+    """view to render the search results"""
 
+    query_str = request.GET.get("query")
+    if len(query_str) < 2:
+        return JsonResponse({
+                'code': 601
+            })
+
+    qs = ClassifiedDocument.search().query(
+            'match',
+            details=query_str
+        ).to_queryset().values(
+            'title','price','city','slug', 'thumbnail'
+        ).order_by('-timestamp')
+
+    #query = my_search.query("match", title=title)
+    #response = query.execute()
+
+    if qs.count() < 1:
+        return JsonResponse({
+                'code': 602
+            })
+
+    return JsonResponse({
+            'code': 201,
+            'classifieds': list(qs),
+        },safe=False)
 
 
 # For autocomplete suggestions
-@login_required
 @ajax_required
 def get_suggestions(request):
     # Convert classifieds objects into list to be
@@ -80,8 +57,6 @@ def get_suggestions(request):
                 title__trigram_similar=query) | Q(
                 details__trigram_similar=query) | Q(
                 tags__trigram_similar=query)))
-                
-
 
     # Add all the retrieved classifieds to data_retrieved
     # list.
@@ -95,5 +70,3 @@ def get_suggestions(request):
             data_json['value'] = data.title
         results.append(data_json)
     return JsonResponse(results, safe=False)
-
-
