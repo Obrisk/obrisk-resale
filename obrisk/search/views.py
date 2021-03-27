@@ -14,10 +14,6 @@ from obrisk.qa.models import Question
 
 # documents
 from obrisk.users.documents import UsersDocument
-from obrisk.stories.documents import StoriesDocument
-from obrisk.classifieds.document import ClassifiedDocument
-from obrisk.posts.documents import PostsDocument
-from obrisk.qa.documents import QuestionDocument
 
 from elasticsearch_dsl.connections import connections
 
@@ -108,34 +104,14 @@ connections.create_connection()
 def all_search(request, **kwargs):
     # to avoid name collision,Q is imported here
     from elasticsearch_dsl import Q
-    '''
-    s means (search in) stories
-    p means (search in) posts
-    q means (search in) qa
-    u means (search in) users
-    c means (search in) classifieds
-    '''
 
     query = request.GET.get('query')
-    # The commented part will be used if search on will involve more than one field
-    # stories_results = [{'content':t.content,
-    #                     'tags':t.tags} for t in StoriesDocument.search().filter(
-    #                             Q("match", title='query') |
-    #                             Q("match", details='ahaain'))]
-
-    stories_results = [
-        {'content': t.content} for t in StoriesDocument.search().filter(
-            "term", content=query)]
 
     if request.GET.get('c') is 1:
         classifieds_results = [{
             'title': t.title,
-            'details': t.details,
-            'price': t.price} for t in ClassifiedDocument.search().filter(
-                                                    Q("match", title=query) |
-                                                    Q("match", price=query) |
-                                                    Q("match", details=query)
-                                                    )]
+            'details': t.details
+        }]
 
         return render(request, 'classifieds/search_results.html',
                 {'classifieds_results': classifieds_results,
@@ -150,29 +126,6 @@ def all_search(request, **kwargs):
                 {'users_results': users_results,
                  'stories_results': stories_results})
 
-    elif request.GET.get('q') is 1:
-
-        qa_results = [
-            {'content': t.content} for t in QuestionDocument.search().filter(
-                "term", content=query
-            )
-        ]
-
-        return render(request, 'qa/search_results.html',
-                {'qa_results': qa_results,
-                 'stories_results': stories_results})
-
-    elif request.GET.get('p') is 1:
-
-        posts_results = [
-            {'content': t.content} for t in PostsDocument.search().filter(
-                "term", content=query
-            )
-        ]
-
-        return render(request, 'posts/search_results.html',
-                {'posts_results': posts_results,
-                 'stories_results': stories_results})
 
     else:
         return render(request, 'search/search_results.html',
@@ -180,4 +133,3 @@ def all_search(request, **kwargs):
 
 #    return render(request, 'search/search_results.html',
 #                {'stories_results': stories_results })
-
