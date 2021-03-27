@@ -14,6 +14,22 @@ from elasticsearch import RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 
 
+# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
+# ALB health check requests should be allowed, whitelist IP address 
+def get_ec2_instance_ip():
+    """
+    Try to obtain the IP address of the current EC2 instance in AWS
+    """
+    try:
+        ip = requests.get(
+          'http://169.254.169.254/latest/meta-data/local-ipv4',
+          timeout=5
+        ).text
+    except requests.exceptions.ConnectionError:
+        return None
+    return ip
+
+
 class AWSHttpConnection(RequestsHttpConnection):
     def perform_request(
         self, method, url, params=None, body=None, timeout=None, ignore=(), headers=None
@@ -35,7 +51,6 @@ class AWSHttpConnection(RequestsHttpConnection):
         )
 
 
-
 #This has to be updated manually in cases we want rapid deployment
 STATIC_VERSION = 'ver1603210001' #DDMMYY####
 
@@ -43,21 +58,6 @@ STATIC_VERSION = 'ver1603210001' #DDMMYY####
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env('SECRET_KEY')
-
-# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-# ALB health check requests should be allowed, whitelist IP address 
-def get_ec2_instance_ip():
-    """
-    Try to obtain the IP address of the current EC2 instance in AWS
-    """
-    try:
-        ip = requests.get(
-          'http://169.254.169.254/latest/meta-data/local-ipv4',
-          timeout=5
-        ).text
-    except requests.exceptions.ConnectionError:
-        return None
-    return ip
 
 AWS_LOCAL_IP = get_ec2_instance_ip()
 
