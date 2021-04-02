@@ -146,7 +146,6 @@ def classified_list(request, city=None):
 
 
 
-
 @require_http_methods(["GET"])
 def classified_list_by_tags(request, tag_slug=None):
     tag = None

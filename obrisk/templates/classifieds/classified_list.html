@@ -116,8 +116,6 @@
 
 <script type="text/javascript">
 
-document.addEventListener('DOMContentLoaded', function() {
-
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
   const user = "{{ request.user.username }}";
   const app = "classifieds";
@@ -129,7 +127,6 @@ document.addEventListener('DOMContentLoaded', function() {
   var page = 1;
   var empty_page = false;
   var block_request = false;
-  var is_tag_page = "{{tag}}";
   var lastScrollTop = 0;
 
   function renderClassifieds(classifieds) {
@@ -171,8 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
           }
     }
 
-  if (is_tag_page == "None") {
-    window.addEventListener('scroll', function () {
+   window.addEventListener('scroll', function () {
       if (empty_page == false && block_request == false) {
         block_request = true;
         page += 1;
@@ -201,31 +197,36 @@ document.addEventListener('DOMContentLoaded', function() {
         });
       }
     });
-  }
 
-  const searchForm = document.getElementById('search-form')
+document.addEventListener('DOMContentLoaded', function() {
+
+  const searchForm = document.getElementById('search-form');
   const formInput = document.getElementById("search-input");
 
   searchForm.addEventListener('submit', function(e) {
       e.preventDefault();                                                                                                          
       if (formInput.value.length > 1) {
-          fetch("{% url 'classifieds:classifieds_results' %}?query=" + formInput.value, {
-            credentials: 'same-origin',
-            headers: {
-                "X-Requested-With": "XMLHttpRequest"
-            },
-            redirect: 'follow',
-          }).then (resp => resp.json())
-            .then (data => {
-                if (data.code == 201) {
-                    renderClassifieds(data.classifieds) 
-                } else {
-                    if (data.code == 602) {
-                        console.log('msdf')
-                        document.getElementById('not-found').style.display = 'flex';
-                    }
-                }
-            })
+	  try{
+		  fetch("{% url 'classifieds:classifieds_results' %}?query=" + formInput.value, {
+		    credentials: 'same-origin',
+		    headers: {
+			"X-Requested-With": "XMLHttpRequest"
+		    },
+		    redirect: 'follow',
+		  }).then (resp => resp.json())
+		    .then (data => {
+			if (data.code == 201) {
+			    renderClassifieds(data.classifieds) 
+			} else {
+			    if (data.code == 602) {
+				document.getElementById('not-found').style.display = 'flex';
+			    }
+			}
+		    })
+	  }catch (e){
+	      console.log(e);
+	      document.getElementById('not-found').style.display = 'flex';
+         }
       }
   });
 

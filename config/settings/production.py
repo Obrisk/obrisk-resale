@@ -18,22 +18,21 @@ class AWSHttpConnection(RequestsHttpConnection):
     def perform_request(
         self, method, url, params=None, body=None, timeout=None, ignore=(), headers=None
     ):
-        region = "cn-northwest-1"
+        region = os.getenv('AWS_S3_REGION_NAME')
         service = "es"
-        credentials = boto3.Session().get_credentials()
+
+        #credentials = boto3.Session().get_credentials()
         awsauth = AWS4Auth(
-            credentials.access_key,
-            credentials.secret_key,
+            os.getenv('AWS_STATIC_S3_KEY_ID'),
+            os.getenv('AWS_STATIC_S3_S3KT'),
             region,
-            service,
-            session_token=credentials.token,
+            service
         )
         if awsauth is not None:
             self.session.auth = awsauth
         return super().perform_request(
             method, url, params, body, timeout, ignore, headers
         )
-
 
 
 #This has to be updated manually in cases we want rapid deployment
@@ -103,19 +102,52 @@ CACHES = {
     }
 }
 
+#from elasticsearch import Elasticsearch
 
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': env(
-            "ELASTICSEARCH_URL",
-            default='localhost:9200'
-         ),
-        "use_ssl": True,
-        "verify_certs": False,
-        "connection_class": AWSHttpConnection,
-    },
+# you can use RFC-1738 to specify the url
+#es = Elasticsearch(['https://user:secret@localhost:443'])
+
+
+#session = session.Session()
+#credentials = session.get_credentials()
+#region = session.region_name or settings.AWS_S3_REGION_NAME
+
+#http_auth = AWSV4Sign(credentials, region, service)
+
+
+region = os.getenv('AWS_S3_REGION_NAME')
+service = "es"
+
+#credentials = boto3.Session().get_credentials()
+awsauth = AWS4Auth(
+    os.getenv('AWS_STATIC_S3_KEY_ID'),
+    os.getenv('AWS_STATIC_S3_S3KT'),
+    region,
+    service
+)
+
+#connections.configure(**settings.ELASTICSEARCH_DSL)
+
+#default={'hosts': 'localhost'},
+
+ELASTICSEARCH_URL={
+    'hosts': env(
+        "ELASTICSEARCH_URL",
+        default='localhost:9200'
+     ),
+    'timeout': 60,
+    'sniff_on_start': False
 }
 
+
+#ELASTICSEARCH_DSL = {
+#        'default': {
+#            'hosts': ''
+#        }
+        #'http_auth': awsauth,
+        #"use_ssl": True
+#}
+#"connection_class": RequestsHttpConnection
 
 # SECURITY
 # ------------------------------------------------------------------------------
