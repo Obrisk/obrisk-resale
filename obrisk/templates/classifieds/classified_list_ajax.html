@@ -14,10 +14,10 @@
         <div class="card-img-top img-responsive">
 
           {% if classified.image_thumb %}
-          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.image_thumb }}"
+	  <img class="card-img lazyload" src="{{oss}}/{{ classified.image_thumb }}"
             width="154px" height="154px">
           {% else %}
-          <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+	  <img class="card-img lazyload" src="{{oss}}/classifieds/default.jpg"
             width="154px" height="154px">
           {% endif %}
 
