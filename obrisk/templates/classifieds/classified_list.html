@@ -10,7 +10,7 @@
 
 {% block content %}
 
-    <div id="cover">
+  <div id="cover">
       <form id="search-form" method="get" role="search">
         <div class="tb">
           <div class="td">
@@ -221,6 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
 		  }).then (resp => resp.json())
 		    .then (data => {
                 if (data.code == 201) {
+                    document.getElementById('not-found').style.display = 'none';
                     document.getElementById('classifieds').remove();
                     document.querySelector(
                             '.classifieds-list-wrapper'

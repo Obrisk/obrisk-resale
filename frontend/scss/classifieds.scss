@@ -31,6 +31,10 @@ body {
     margin-bottom: -4em;
 }
 
+#search-input:focus{
+  outline: none;
+}
+
 #cover
 {
     background-color: #ffffff;

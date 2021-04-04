@@ -52,7 +52,7 @@ class AWSHttpConnection(RequestsHttpConnection):
 
 
 #This has to be updated manually in cases we want rapid deployment
-STATIC_VERSION = 'ver1603210001' #DDMMYY####
+STATIC_VERSION = 'ver0404210001' #DDMMYY####
 
 # GENERAL
 # ------------------------------------------------------------------------------
