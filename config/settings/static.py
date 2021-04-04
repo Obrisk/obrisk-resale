@@ -31,6 +31,15 @@ CACHES = {
     }
 }
 
+ELASTICSEARCH_URL={
+    'hosts': env(
+        "ELASTICSEARCH_URL",
+        default='localhost:9200'
+     ),
+    'timeout': 60,
+    'sniff_on_start': False
+}
+
 # TEMPLATES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
