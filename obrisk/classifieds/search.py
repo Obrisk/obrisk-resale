@@ -10,8 +10,8 @@ from obrisk.classifieds.models import Classified
 from obrisk.classifieds.documents import ClassifiedDocument
 
 
-client = Elasticsearch()
-my_search = Search(using=client)
+#client = Elasticsearch()
+#my_search = Search(using=client)
 
 
 @require_http_methods(["GET"])
@@ -25,7 +25,7 @@ def classifieds_search(request):
             })
 
     qs = ClassifiedDocument.search().query(
-            'match',
+            'match_phrase',
             details=query_str
         ).to_queryset().values(
             'title','price','city','slug', 'thumbnail'
