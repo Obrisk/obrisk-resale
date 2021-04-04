@@ -31,9 +31,6 @@ def classifieds_search(request):
             'title','price','city','slug', 'thumbnail'
         ).order_by('-timestamp')
 
-    #query = my_search.query("match", title=title)
-    #response = query.execute()
-
     if qs.count() < 1:
         return JsonResponse({
                 'code': 602

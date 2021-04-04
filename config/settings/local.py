@@ -62,13 +62,14 @@ CACHES = {
     }
 }
 
-ELASTICSEARCH_DSL = {
-    'default': {
-        'hosts': env(
-            "ELASTICSEARCH_URL",
-            default='localhost:9200'
-         )
-    },
+
+ELASTICSEARCH_URL={
+    'hosts': env(
+        "ELASTICSEARCH_URL",
+        default='localhost:9200'
+     ),
+    'timeout': 60,
+    'sniff_on_start': False
 }
 
 
