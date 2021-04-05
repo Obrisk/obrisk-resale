@@ -267,7 +267,6 @@ class CreateClassifiedView(CreateView):
     def form_valid(self, form):
         images_json = form.cleaned_data['images']
         img_errors = form.cleaned_data['img_error']
-        show_phone = form.cleaned_data['show_phone']
         user = self.request.user
 
         failure_data = {
@@ -294,9 +293,8 @@ class CreateClassifiedView(CreateView):
         classified = form.save(commit=False)
 
         #Empty phone number is +8613300000000 for all old users around 150 users
-        if user.phone_number is not '' and show_phone:
-            if (not classified.phone_number and
-                    user.phone_number.national_number != 13300000000):
+        if user.phone_number != '':
+            if user.phone_number.national_number != 13300000000:
                 classified.phone_number = user.phone_number
 
         if not classified.english_address and user.english_address:
@@ -346,7 +344,16 @@ class EditClassifiedView(
     #deliberately since you can't upload images.
     def form_valid(self, form):
         form.instance.user = self.request.user
+        show_phone = form.cleaned_data['show_phone']
+
+        classified = form.save(commit=False)
+        #Empty phone number is +8613300000000 for all old users around 150 users
+        if user.phone_number is not '' and show_phone:
+            if (user.phone_number.national_number != 13300000000):
+                classified.phone_number = user.phone_number
+        classified.save()
         return super().form_valid(form)
+
 
     def get_success_url(self):
         messages.success(self.request, self.message)
