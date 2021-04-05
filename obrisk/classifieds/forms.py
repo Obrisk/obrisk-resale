@@ -9,6 +9,9 @@ class ClassifiedForm(forms.ModelForm):
         required=False,
         label=("details (Optional)")
     )
+    price = forms.DecimalField(
+            required=False
+        )
     status = forms.CharField(
             widget=forms.HiddenInput(),
             required=False

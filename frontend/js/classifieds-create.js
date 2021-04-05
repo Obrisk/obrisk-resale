@@ -91,12 +91,10 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById("create-btn").addEventListener('click', function(event) {
 
       if (uploader.fileStats.totalFilesNum < 1 ||
-            document.getElementById('id_title').value.length < 2 ||
-            document.getElementById('id_details').value.length < 2) {
+            document.getElementById('id_title').value.length < 2 ) {
               printError(
-                "Please provide all the details and upload at least 1 image"
+                "Please provide the title & at least 1 image"
               );
-
         } else {
               if (images != "" && $("#id_images").val() == images) {
                     $("body").trigger("uploadComplete");

@@ -55,23 +55,7 @@
                     <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
                   </div>
 
-                  {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
-                      <div class="field include-phone">
-                        <label> 
-                            {% trans 'Include your phone no? ' %}
-                        </label>
-                        <label class="f-switch is-accent">
-                          <input type="checkbox" checked class="is-switch" name="show_phone" id="id_show_phone">
-                          <i></i>
-                        </label>
-                      </div>
-                  {% endif %}
-
                 <div class="field">
-                  <label>
-                      {% trans 'Images*' %}
-                  </label>
-
                   <div class="control" id="wrapper">
                         <div id="container">
                                 <div id="uploader">
@@ -110,14 +94,9 @@
                           </div>
                         </div>
 
-                        <div class="" style="clear: both;">
-                          <small>
-                              {% trans 'Notes:' %}
-                              {% trans 'Can select up to 8 multiple images & Max size per image is 13MB' %}
-                          </small>
-                        </div>
                 <!--close wrapper id -->
-                </div>
+                </div> <br/>
+
 
                 <div class="bs-docs-container">
                   <form id="form">

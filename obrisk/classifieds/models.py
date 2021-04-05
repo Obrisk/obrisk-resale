@@ -88,7 +88,10 @@ class Classified(models.Model):
         )
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
     details = models.CharField(max_length=2000, null=True, blank=True)
-    price = models.DecimalField(max_digits=15, decimal_places=2, default=0.00)
+    price = models.DecimalField(
+            blank=True, null=True,
+            max_digits=15, decimal_places=2, default=0.00
+        )
     english_address = models.CharField (max_length=300, null=True, blank=True)
     chinese_address = models.CharField (max_length=300, null=True, blank=True)
     city = models.CharField (max_length=200)

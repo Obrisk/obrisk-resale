@@ -17,8 +17,8 @@ var uploader = {
 const Buffer = OSS.Buffer;
 const STS = OSS.STS;
 const obrisk_oss_url = "https://obrisk.oss-cn-hangzhou.aliyuncs.com/";
-const MaxImageSize = 13000000;
-const MaxVideoSize = 200000000;
+const MaxImageSize = 30000000; //30MB
+const MaxVideoSize = 200000000; //200MB
 const s3Upload = false;
 const aliyunUpload = true;
 
@@ -35,7 +35,7 @@ var NumberOfSelectedFiles = 0;
 var hasErrors = false;
 var retryCount = 0;
 var retryCountMax = 5;
-var TotalFilesMaxSize = 8;
+var TotalFilesMaxSize = 10;
 
 
 OssUpload.prototype = {
@@ -433,7 +433,7 @@ OssUpload.prototype = {
                                 type: "error",
                                 autohide: false,
                                 message:
-                                  "Sorry! an error occured when uploading your image(s). You can still post without images"
+                                  "Sorry! an error occured. You can still post without images"
                               });
                             }
                           }
@@ -552,7 +552,7 @@ OssUpload.prototype = {
             type: "error",
             autohide: false,
             message:
-              "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
+              "Oops! an error occured. Try again later or contact us via support@obrisk.com"
           });
           console.log(e);
         });
@@ -690,15 +690,14 @@ OssUpload.prototype = {
                             type: "error",
                             autohide: false,
                             message:
-                              "Oops! an error occured when uploading your image(s). \
-                                                    But you can submit this post without images ."
+                              "Oops! an error occured. You can submit this post without images"
                           });
                         } else {
                           $.wnoty({
                             type: "error",
                             autohide: false,
                             message:
-                              "Sorry! an error occured when uploading your image(s). You can post without images"
+                              "Sorry! Images error occured. You can post without images"
                           });
                         }
                       }
@@ -712,7 +711,7 @@ OssUpload.prototype = {
               type: "error",
               autohide: false,
               message:
-                "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com"
+                "Oops! an error occured. Try again later or contact us via support@obrisk.com"
             });
             console.log(e);
           }
