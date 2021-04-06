@@ -94,11 +94,11 @@ class Classified(models.Model):
         )
     english_address = models.CharField (max_length=300, null=True, blank=True)
     chinese_address = models.CharField (max_length=300, null=True, blank=True)
-    city = models.CharField (max_length=200)
-    province_region = models.CharField(max_length= 200)
+    city = models.CharField (max_length=200, null=True, blank=True)
+    province_region = models.CharField(max_length= 200, null=True, blank=True)
     phone_number = models.CharField (max_length=150, null=True, blank=True)
     wechat_id = models.CharField (max_length=150, null=True, blank=True)
-    country = models.CharField(max_length= 100)
+    country = models.CharField(max_length= 100, null=True, blank=True)
     thumbnail = models.CharField (max_length=300, null=True, blank=True)
     video = models.CharField (max_length=300, null=True, blank=True)
     edited = models.BooleanField(default=False)
@@ -109,6 +109,13 @@ class Classified(models.Model):
             max_digits=15, decimal_places=2, default=0.00
         )
     handover_method = models.CharField(max_length=1, choices=HANDOVER, default=ANY)
+    bidding = models.BooleanField(default=False)
+    max_bid_price = models.DecimalField(
+            null=True, blank=True,
+            max_digits=15, decimal_places=2, default=0.00
+        )
+    bids_count = models.IntegerField(default=0)
+    deadline = models.DateTimeField(null=True, blank=True)
     #This date is used only for the slug and the timestamp for creation time.
     date = models.DateField(default=datetime.date.today)
     # search_vector = SearchVectorField(null=True)
