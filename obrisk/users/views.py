@@ -147,7 +147,7 @@ def send_code(phone_number, theme, user=None):
 
     success_resp = JsonResponse({
         'success': True,
-        'message': "Code sent, 10 minutes valid"
+        'message': "Ding ding🔔 Wait for the code😊"
     })
 
     if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
@@ -715,7 +715,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid44',
+            'ui': 'thisisaveryuniqueopenid45',
             'sx': 1,
             'nck':'admin 乔舒亚',
             'cnt':  'China'
