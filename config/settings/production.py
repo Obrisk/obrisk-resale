@@ -14,6 +14,9 @@ from elasticsearch import RequestsHttpConnection
 from requests_aws4auth import AWS4Auth
 
 
+#This has to be updated manually in cases we want rapid deployment
+STATIC_VERSION = 'ver0604210001' #DDMMYY####
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 # ALB health check requests should be allowed, whitelist IP address 
 def get_ec2_instance_ip():
@@ -50,9 +53,6 @@ class AWSHttpConnection(RequestsHttpConnection):
             method, url, params, body, timeout, ignore, headers
         )
 
-
-#This has to be updated manually in cases we want rapid deployment
-STATIC_VERSION = 'ver0404210001' #DDMMYY####
 
 # GENERAL
 # ------------------------------------------------------------------------------

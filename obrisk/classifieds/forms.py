@@ -95,6 +95,9 @@ class ClassifiedEditForm(forms.ModelForm):
 
         widgets = {
             'user': forms.HiddenInput(),
+            'tags': autocomplete.TaggitSelect2(
+                'tags_autocomplete'
+            )
         }
 
         help_texts = {
