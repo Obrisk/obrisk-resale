@@ -55,10 +55,12 @@
                 <div class="card-body">
                   <h6 class="card-title"> {{ classified.title}} </h6>
 
-                  {% if classified.price != 0.00 %}
-                      <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
-                  {% else %}
+                  {% if classified.price == 0.00 %}
                       <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                  {% elif classified.price is None %}
+                      <p class="card-subtitle">  {% trans 'BID PRICE' %} </p>
+                  {% else %}
+                      <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
                   {% endif %}
 
                 <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>

@@ -258,7 +258,7 @@ def multipleImagesPersist(request, images_list, app, obj):
 
     for index, str_result in enumerate(images_list):
         if str_result.startswith(
-                f'media/images/{app}/{username}/{title}') is False:
+                f'media/images/{app}/') is False:
             #Check if it was default image as it has no username.
             #This is the same default on all multiple upload apps
             #Though form shouldn't be submitted without images

@@ -58,10 +58,12 @@
               <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
 
               <!-- Price -->
-              {% if classified.price != 0.00 %}
-                  <strong class="price"> ¥{{ classified.price }} </strong>
+              {% if classified.price == 0.00 %}
+                  <strong class="price"> {% trans 'FREE' %} </strong>
+              {% elif classified.price is None %}
+                  <strong class="price">  {% trans 'BID PRICE' %} </strong>
               {% else %}
-                  <strong class="price"> FREE </strong>
+                  <strong class="price"> ¥{{ classified.price }} </strong>
               {% endif %}
 
               <div class="meta-details">
