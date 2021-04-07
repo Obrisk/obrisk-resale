@@ -215,10 +215,10 @@
                     <div class="card-img-top img-responsive">
 
                       {% if classified.thumbnail %}
-                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.thumbnail }}"
+                      <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
                         width="154px" height="154px">
                       {% else %}
-                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
+                      <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
                         width="154px" height="154px">
                       {% endif %}
                     </div>
@@ -303,80 +303,6 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-
-	  fetch('{% url 'wx_req_cred' %}', {
-	      headers: {
-		"X-Requested-With": "XMLHttpRequest"
-	      },
-	      credentials: 'same-origin',
-	      redirect: 'follow'
-	    }).then (resp => resp.json())
-	      .then (strData => {
-          try {
-              let data = JSON.parse(strData);
-              if (data.success === true) {
-                wx.config({
-                    debug: false, 
-                    appId: data.id,
-                    timestamp: data.timestamp,
-                    nonceStr: data.noncestr,
-                    signature: data.signature,
-                    jsApiList: [
-                       'updateAppMessageShareData',
-                       'updateTimelineShareData',
-                       'onMenuShareAppMessage',
-                       'onMenuShareTimeline'
-                    ] 
-                });
-
-              } else {
-                  console.log('failure to init wx');
-              }
-          } catch {
-		      console.log('failure to init wx');
-          }
-	    })
-
-        wx.ready(function(){
-	  const descr = "{{ classified.details | truncatechars:80 }}".replace(/[^a-zA-Z0-9 ]/g, '');
-          wx.onMenuShareAppMessage({ 
-                title: '{{classified.title}}', 
-                desc: 'CNY {{classified.price}} ' + descr, 
-                link: location.href, 
-                  imgUrl: '{{oss}}/{{ classified.thumbnail }}', 
-                trigger: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                success: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                fail: function (res) {
-                    console.log(JSON.stringify(res));
-                }
-            })
-
-          wx.onMenuShareTimeline({ 
-                title: '{{classified.title}}', 
-                desc: 'CNY {{classified.price}} ' + descr, 
-                link: location.href, 
-                imgUrl: '{{oss}}/{{ classified.thumbnail }}', 
-                trigger: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                success: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                fail: function (res) {
-                    console.log(JSON.stringify(res));
-                }
-            })
-
-      });
-
-      wx.error(function(res){
-        console.log(res);
-      });
-
   const image_count = {{ images| length}}
 
   if (image_count > 1) {
@@ -428,8 +354,84 @@
         }
       }
 
-  });
+	  fetch('{% url 'wx_req_cred' %}', {
+	      headers: {
+		"X-Requested-With": "XMLHttpRequest"
+	      },
+	      credentials: 'same-origin',
+	      redirect: 'follow'
+	    }).then (resp => resp.json())
+	      .then (strData => {
+          try {
+              let data = JSON.parse(strData);
+              if (data.success === true) {
+                wx.config({
+                    debug: false, 
+                    appId: data.id,
+                    timestamp: data.timestamp,
+                    nonceStr: data.noncestr,
+                    signature: data.signature,
+                    jsApiList: [
+                       'updateAppMessageShareData',
+                       'updateTimelineShareData',
+                       'onMenuShareAppMessage',
+                       'onMenuShareTimeline'
+                    ] 
+                });
 
+              } else {
+                  console.log('failure to init wx');
+              }
+          } catch {
+		      console.log('failure to init wx');
+          }
+	    })
+
+        wx.ready(function(){
+          try {
+              const descr = "{{ classified.details | truncatechars:80 }}".replace(/[^a-zA-Z0-9 ]/g, '');
+              const title = "{{ classified.title | truncatechars:80 }}".replace(/[^a-zA-Z0-9 ]/g, '');
+              wx.onMenuShareAppMessage({ 
+                    title: title, 
+                    desc: 'CNY {{classified.price}} ' + descr, 
+                    link: location.href, 
+                      imgUrl: '{{oss}}/{{ classified.thumbnail }}', 
+                    trigger: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    fail: function (res) {
+                        console.log(JSON.stringify(res));
+                    }
+                })
+
+              wx.onMenuShareTimeline({ 
+                    title: title, 
+                    desc: 'CNY {{classified.price}} ' + descr, 
+                    link: location.href, 
+                    imgUrl: '{{oss}}/{{ classified.thumbnail }}', 
+                    trigger: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    fail: function (res) {
+                        console.log(JSON.stringify(res));
+                    }
+                })
+            }catch (e) {
+                console.log(e);
+            }
+      });
+
+      wx.error(function(res){
+        console.log(res);
+      });
+
+  });
 </script>
 
 {% endblock extra_js %}

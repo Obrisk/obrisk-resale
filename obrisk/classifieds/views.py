@@ -348,9 +348,9 @@ class EditClassifiedView(
 
         classified = form.save(commit=False)
         #Empty phone number is +8613300000000 for all old users around 150 users
-        if user.phone_number is not '' and show_phone:
-            if (user.phone_number.national_number != 13300000000):
-                classified.phone_number = user.phone_number
+        if self.request.user.phone_number is not '' and show_phone:
+            if (self.request.user.phone_number.national_number != 13300000000):
+                classified.phone_number = self.request.user.phone_number
         classified.save()
         return super().form_valid(form)
 

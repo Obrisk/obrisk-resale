@@ -20,7 +20,7 @@
       <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
             width="200px" height="200px">
       {% else %}
-      <img class="card-img lazyload" src="{{oss}}/classifieds/default.jpg"
+      <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
             width="200px" height="200px">
       {% endif %}
 
@@ -65,10 +65,11 @@
   <small id="note"> We'll hold the money until you receive the item </small>
   <div id="order-address">
         <label>
-            {% trans 'Address (Chinese)' %}
+            {% trans 'Address' %} <small> {% trans '(Chinese)' %} </small>
         </label>
-        <input type="text" id="id_chinese_address" value="{{request.user.chinese_address | default_if_none:''}}"
-               name="address" maxlength="80" class="input" placeholder="Full address in chinese including city">
+        <textarea id="id_chinese_address" value="{{request.user.chinese_address | default_if_none:''}}"
+               name="address" rows="2" class="input" placeholder="Address in chinese including city">
+        </textarea>
         <label>
             {% trans 'Phone number' %}
         </label>

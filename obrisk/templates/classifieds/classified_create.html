@@ -23,22 +23,22 @@
                         </label>
                         <div class="control">
                           <input type="text" id="id_title" name="title" maxlength="80" class="input" required
-                            placeholder="Enter your item title">
+                            placeholder="Name or short description">
                         </div>
                   </div>
                   <div class="field">
                         <label>
-                            {% trans 'Details (Optional)' %}
+                            {% trans 'Details' %} <small> {% trans '(Optional)' %}</small>
                         </label>
                         <div class="control">
                           <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000"
-                            class="textarea" placeholder="Provide enough details"></textarea>
+                            class="textarea" placeholder="More info is better"></textarea>
                         </div>
                   </div>
 
                   <div class="price">
                       <label>
-                          {% trans 'Price*' %}
+                          {% trans 'Price' %}
                       </label>
                       <span> ¥
                           <input type="number" id="id_price" name="price" class="numberinput input" id="id_price"

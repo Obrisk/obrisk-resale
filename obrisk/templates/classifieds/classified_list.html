@@ -206,12 +206,7 @@
       }
     });
 
-document.addEventListener('DOMContentLoaded', function() {
-
-  const searchForm = document.getElementById('search-form');
-  const formInput = document.getElementById("search-input");
-
-  searchForm.addEventListener('submit', function(e) {
+  function searchSubmit(e, formInput) {
       e.preventDefault();                                                                                                          
       if (formInput.value.length > 1) {
 	  try{
@@ -243,8 +238,20 @@ document.addEventListener('DOMContentLoaded', function() {
 	      document.getElementById('not-found').style.display = 'flex';
          }
       }
+    }
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  const searchForm = document.getElementById('search-form');
+  const formInput = document.getElementById("search-input");
+
+  searchForm.addEventListener('submit', function(e) {
+      searchSubmit(e, formInput);
   });
 
+  document.getElementById('search-btn').addEventListener('click', function(e) {
+      searchSubmit(e, formInput);
+  });
 });
 
 </script>

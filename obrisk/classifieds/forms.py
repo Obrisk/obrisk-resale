@@ -20,10 +20,6 @@ class ClassifiedForm(forms.ModelForm):
             widget=forms.HiddenInput(),
             required=False, initial=False
         )
-    show_phone = forms.BooleanField(
-            widget=forms.HiddenInput(),
-            initial=True, required=False
-        )
     #100 for each image.
     images = forms.CharField(
             widget=forms.HiddenInput(),
@@ -51,7 +47,7 @@ class ClassifiedForm(forms.ModelForm):
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited",
-                 "price", "english_address", "phone_number", "show_phone"]
+                 "price", "english_address", "phone_number"]
 
 
 
@@ -86,12 +82,16 @@ class ClassifiedEditForm(forms.ModelForm):
     english_address = forms.CharField(
             required=False, label=("Address (English)")
         )
+    show_phone = forms.BooleanField(
+            widget=forms.HiddenInput(),
+            initial=True, required=False
+        )
     phone_number = forms.CharField(required=False)
 
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited", "price", "tags",
-         "english_address", "phone_number" ]
+         "english_address", "show_phone", "phone_number"]
 
         widgets = {
             'user': forms.HiddenInput(),
