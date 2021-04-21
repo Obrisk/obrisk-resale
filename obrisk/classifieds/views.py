@@ -89,14 +89,17 @@ def classified_list(request, city=None):
             if client_ip is None:
                 city = ''
             else:
-                info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
-                country = json.loads(info.text)['country_name']
-                if country != 'China' and country != 'Not found':
-                    messages.error(
-                        request,
-                        "This platform is for China users, if you're: please switch off the vpn"
-                    )
-                city = json.loads(info.text)['city']
+                try:
+                    info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
+                    country = json.loads(info.text)['country_name']
+                    if country != 'China' and country != 'Not found':
+                        messages.error(
+                            request,
+                            "This platform is for China users, if you're: please switch off the vpn"
+                        )
+                    city = json.loads(info.text)['city']
+                except Exception as e:
+                    city = ''
 
             cache.set(
                 f'user_city_{request.session.get("visitor_id")}',
@@ -168,7 +171,7 @@ def classified_list_by_tags(request, tag_slug=None):
 class CreateOfficialAdView(LoginRequiredMixin, CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = OfficialAd
-    message = _("Your classified has been created.")
+    message = _("Your item is ready to be bought✌️")
     form_class = OfficialAdForm
     template_name = 'classifieds/official_ad_create.html'
 

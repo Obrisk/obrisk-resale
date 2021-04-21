@@ -177,7 +177,7 @@
         page += 1;
         document.querySelector('.loading').classList.remove('is-hidden')
 
-        fetch(`/classifieds/?page=${page}`,
+        fetch(`${window.location.href}?page=${page}`,
         {
           headers: {
             "X-Requested-With": "XMLHttpRequest"

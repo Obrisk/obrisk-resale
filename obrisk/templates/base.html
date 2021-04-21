@@ -385,10 +385,10 @@
 
     <div class='container is-hidden-tablet'>
         <!-- These messages are not from chat, they are the notifications msgs
-        upon successful POST request on the chat the message context is message_list -->
+        upon successful POST request. Chat messages context name is message_list -->
         {% if messages %}
             {% for message in messages %}
-              <div class="notification 
+              <div style="margin-bottom: -4em;" class="notification 
                  {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
                 <button type="button" class="delete close-dj-messages"></button>
                 {{ message}}
