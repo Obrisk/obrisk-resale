@@ -86,9 +86,11 @@ def classified_list(request, city=None):
                     request
                 )
 
-            if client_ip is None:
-                city = ''
+            #if client_ip is None:
+            city = 'Shanghai'
+            '''
             else:
+                continue
                 try:
                     info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
                     country = json.loads(info.text)['country_name']
@@ -99,7 +101,8 @@ def classified_list(request, city=None):
                         )
                     city = json.loads(info.text)['city']
                 except Exception as e:
-                    city = ''
+                    city = 'Shanghai'
+                '''
 
             cache.set(
                 f'user_city_{request.session.get("visitor_id")}',
@@ -219,7 +222,7 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 class CreateClassifiedView(CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = Classified
-    message = _("Your classified has been created.")
+    message = _("Your item is ready to sell✌️ ")
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_create.html'
 
@@ -316,7 +319,7 @@ class CreateClassifiedView(CreateView):
             data = {
                 'status': '200',
                 'success_message': _(
-                    'Successfully created a new classified post'
+                    'Your item is ready to sell✌️ '
                 )
             }
             return JsonResponse(data)
