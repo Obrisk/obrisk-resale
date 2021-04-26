@@ -3,6 +3,7 @@ import re
 import requests
 import json
 import urllib
+import os
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -35,6 +36,13 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 import xmltodict
 from dal import autocomplete
 from ipware import get_client_ip
+
+from aliyunsdkcore.client import AcsClient
+from aliyunsdkcore.acs_exception.exceptions import ClientException
+from aliyunsdkcore.acs_exception.exceptions import ServerException
+from aliyunsdkgeoip.request.v20200101.DescribeIpv4LocationRequest import DescribeIpv4LocationRequest
+
+
 from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
 from obrisk.classifieds.models import (
         Classified, OfficialAd, ClassifiedOrder,
@@ -86,23 +94,34 @@ def classified_list(request, city=None):
                     request
                 )
 
-            #if client_ip is None:
-            city = 'Shanghai'
-            '''
+            if client_ip is None:
+                city = ''
             else:
-                continue
                 try:
-                    info = requests.get(f'https://geolocation-db.com/json/{client_ip}')
-                    country = json.loads(info.text)['country_name']
+                    access_key_id = os.getenv('RAM_USER_ID')
+                    access_key_secret = os.getenv('RAM_USER_S3KT_KEY')
+                    #Default timeout is 5 secs, but the server is far from aliyun
+                    #This is north China, there are 3 more data centers. try others
+                    client = AcsClient(
+                            access_key_id, access_key_secret,
+                            'cn-hangzhou',timeout=30, max_retry_time=3)
+
+                    req = DescribeIpv4LocationRequest()
+                    req.set_accept_format('json')
+                    req.set_Ip(client_ip)
+
+                    response = client.do_action_with_exception(req)
+                    info = str(response, encoding='utf-8')
+
+                    country = info['CountryEn']
                     if country != 'China' and country != 'Not found':
                         messages.error(
                             request,
-                            "This platform is for China users, if you're: please switch off the vpn"
+                            "This platform is for China users, if you're, pls switch off the vpn🙄"
                         )
-                    city = json.loads(info.text)['city']
+                    city = info['CityEn']
                 except Exception as e:
-                    city = 'Shanghai'
-                '''
+                    city = ''
 
             cache.set(
                 f'user_city_{request.session.get("visitor_id")}',

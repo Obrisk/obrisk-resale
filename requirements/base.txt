@@ -38,9 +38,10 @@ xmltodict #https://github.com/martinblech/xmltodict
 dicttoxml #
 wechatpy #https://github.com/wechatpy/wechatpy
 requests-aws4auth #https://pypi.org/project/requests-aws4auth/
+aliyun-python-sdk-geoip==1.0.4 #https://pypi.org/project/aliyun-python-sdk-geoip
 
 #Below is a fork for django-elasticsearch-dsl==7.1.0 #https://github.com/sabricot/django-elasticsearch-dsl
-git+https://github.com/elkd/django-es-dsl.git #https://github.com/elkd/django-es-dsl
+git+https://github.com/elkd/django-es-dsl.git
 
 
 # Channels
