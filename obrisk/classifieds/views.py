@@ -4,6 +4,7 @@ import requests
 import json
 import urllib
 import os
+import ast
 
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -85,17 +86,18 @@ def classified_list(request, city=None):
     if request.user.is_authenticated:
         city = request.user.city
     else:
+        city = city or cache.get(
+                f'user_city_{request.session.get("visitor_id")}'
+            )
         if city is None:
-            city = cache.get(
-                    f'user_city_{request.session.get("visitor_id")}'
-                )
-
             client_ip, _ = get_client_ip(
                     request
                 )
-
             if client_ip is None:
                 city = ''
+                logging.error(
+                        f'Cannot get user client_ip on classifieds list'
+                    )
             else:
                 try:
                     access_key_id = os.getenv('RAM_USER_ID')
@@ -111,23 +113,24 @@ def classified_list(request, city=None):
                     req.set_Ip(client_ip)
 
                     response = client.do_action_with_exception(req)
-                    info = str(response, encoding='utf-8')
+                    info = ast.literal_eval(str(response, encoding='utf-8'))
 
-                    country = info['CountryEn']
-                    if country != 'China' and country != 'Not found':
+                    city = info['CityEn']
+                    if info['CountryEn'] != 'China':
                         messages.error(
                             request,
                             "This platform is for China users, if you're, pls switch off the vpn🙄"
                         )
-                    city = info['CityEn']
+                    else:
+                        cache.set(
+                            f'user_city_{request.session.get("visitor_id")}',
+                            city,
+                            60 * 60 * 2
+                        )
                 except Exception as e:
+                    logging.error(f'Aliyun Geoip failed', exc_info=e)
                     city = ''
 
-            cache.set(
-                f'user_city_{request.session.get("visitor_id")}',
-                city,
-                60 * 60 * 2
-            )
 
     classifieds_list = Classified.objects.get_active().values(
                     'title','price','city','slug', 'thumbnail'
