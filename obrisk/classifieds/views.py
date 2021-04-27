@@ -79,7 +79,6 @@ def set_popular_tags():
             content_type='text/plain')
 
 
-
 @require_http_methods(["GET"])
 def classified_list(request, city=None):
 
@@ -121,16 +120,15 @@ def classified_list(request, city=None):
                             request,
                             "This platform is for China users, if you're, pls switch off the vpn🙄"
                         )
-                    else:
-                        cache.set(
-                            f'user_city_{request.session.get("visitor_id")}',
-                            city,
-                            60 * 60 * 2
-                        )
                 except Exception as e:
                     logging.error(f'Aliyun Geoip failed', exc_info=e)
                     city = ''
 
+            cache.set(
+                f'user_city_{request.session.get("visitor_id")}',
+                city,
+                60 * 60 * 2
+            )
 
     classifieds_list = Classified.objects.get_active().values(
                     'title','price','city','slug', 'thumbnail'
