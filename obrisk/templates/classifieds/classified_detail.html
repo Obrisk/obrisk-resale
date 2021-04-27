@@ -5,8 +5,7 @@
 {% block head %}
 <link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/share.css' %}">
-<link rel="stylesheet" href="{% static 'css/vendor/slider-pro.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/vendor/splide.min.css' %}">
 
 <title>{{ classified.title|title }}</title>
 
@@ -36,99 +35,94 @@
 <!-- Page Content -->
 <div class="container view-wrapper">
    <section class="classified-wrapper">
-
-       <div class="slider-wrapper">
-          <div class="slider-pro" id="image-slider">
-            <div class="sp-slides">
-              {% for image in images %}
-              <div class="sp-slide">
-                  <a href="{{oss}}/{{ image.image }}"
-                  data-fancybox="classified-gallery">
-                  <img class="sp-image" src=""
-                    data-src="{{oss}}/{{ image.image_mid_size }}" />
-                </a>
-              </div>
-              {% endfor %}
+        <div class="splide">
+            <div class="splide__track">
+                <ul class="splide__list">
+                    {% for image in images %}
+                      <div class="splide__slide">
+                        <a href="{{oss}}/{{ image.image }}"
+                          data-fslightbox="gallery">
+                          <img class="classified-image" src="{{oss}}/{{image.image_mid_size}}"/>
+                        </a>
+                     </div>
+                    {% endfor %}
+                </ul>
             </div>
-          </div>
         </div>
 
         <div class="classified-meta">
-              <!-- Title -->
-              <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
+            <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
+            <div class="meta-info">
+              <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
+                {% if classified.user.thumbnail %}
+                <img src="{{oss}}/{{classified.user.thumbnail}}"
+                  alt="Picture Profile" id="pic">
+                {% else %}
+                <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
+                {% endif %}
+              </a>
 
-              <!-- Price -->
-              {% if classified.price == 0.00 %}
-                  <strong class="price"> {% trans 'FREE' %} </strong>
-              {% elif classified.price is None %}
-                  <strong class="price">  {% trans 'BID PRICE' %} </strong>
-              {% else %}
-                  <strong class="price"> ¥{{ classified.price }} </strong>
-              {% endif %}
-
-              <div class="meta-details">
-
-                <div class="meta-right">
-                  <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
-                    {% if classified.user.thumbnail %}
-                    <img src="{{oss}}/{{classified.user.thumbnail}}"
-                      alt="Picture Profile" id="pic">
-                    {% else %}
-                    <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
-                    {% endif %}
-                  </a>
-
-                  <div class="meta-left">
+              <div class="meta-right">
+                  <div class="meta-right-top">
                     <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
                       href="{% url 'users:detail' classified.user.username %}">
                       <strong itemprop="name" id="classified-user">
                         {{ classified.user.get_profile_name|title }} </strong>
                     </a>
 
-                    <div class="location">
-                      <span class="card-subtitle">
-                        {% if classified.english_address  %}
-                           📍{{ classified.english_address }}, {{ classified.city }}
-                        {% else %}
-                           📍{{ classified.user.city }}
-                        {% endif %} </span>
-                    </div>
+                    <!-- Price -->
+                    {% if classified.price == 0.00 %}
+                      <strong class="price"> {% trans 'FREE' %} </strong>
+                    {% elif classified.price is None %}
+                      <strong class="price">  {% trans 'BID PRICE' %} </strong>
+                    {% else %}
+                      <strong class="price"> ¥{{ classified.price }} </strong>
+                    {% endif %}
                   </div>
-                </div>
 
-            {% if classified.status == 'A' %}
-                <div class="action-wrapper">
+                  <span class="location">
+                    {% if classified.english_address  %}
+                       📍{{ classified.english_address }}, {{ classified.city }}
+                    {% else %}
+                       📍{{ classified.user.city }}
+                    {% endif %}
+                  </span>
+              </div>
+           </div>
 
-                    {% if classified.user != request.user %}
-                        <button class="button chat-button"
-                            ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                              stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                              class="feather feather-message-square">
-                              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                            Chat
-                         </button>
+          {% if classified.status == 'A' %}
+            <div class="action-wrapper">
 
-                        <button class="button pay-button" onclick="javascript:callpay();return false;">
+                {% if classified.user != request.user %}
+                    <button class="button chat-button"
+                        ontouchstart="gotochat('{% url "messager:classified_chat" classified.user classified.id %}')">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                          stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                          class="feather feather-message-square">
+                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Chat
+                     </button>
+
+                    <button class="button pay-button" onclick="javascript:callpay();return false;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                           stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
                           <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
                           <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
                         </svg>
-                            Buy
-                        </button>
-                           
-                    {% else %}
-                        <a class="button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
-                          title="{% trans 'Edit this classified' %}">
-                          <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 🗑️{% trans 'Delete/Sold' %}</a>
+                        Buy
+                    </button>
+                       
+                {% else %}
+                    <a class="button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
+                      title="{% trans 'Edit this classified' %}">
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 🗑️{% trans 'Delete/Sold' %}</a>
 
-                        <a class="button pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
-                          title="{% trans 'Edit this classified' %}">
-                          <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-                    {% endif %}
+                    <a class="button pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
+                      title="{% trans 'Edit this classified' %}">
+                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+                {% endif %}
               </div>
           {% else %}
               <div class="notification is-warning">
@@ -136,7 +130,6 @@
               </div>
 
           {% endif %}
-          </div>
 
         <div class="card-text">{{ classified.details }}</div>
 
@@ -265,11 +258,10 @@
 
 {% block extra_js %}
 
-<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
-<script defer src="{% static 'js/vendor/fancybox.min.js' %}"></script>
-<script defer src="{% static 'js/vendor/jquery.sliderPro.min.js' %}"></script>
+<script src="{% static 'js/vendor/splide.min.js' %}"></script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
 <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
-<script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
+<script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
 <script type="text/javascript">
 
   function shareMe(title, text) {
@@ -303,29 +295,15 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-  const image_count = {{ images| length}}
+      const image_count = {{ images| length}}
 
-  if (image_count > 1) {
-    $(".slider-pro").sliderPro({
-      arrows: true,
-      width: 960,
-      fade: true,
-      autoplay: false,
-      autoScaleLayers: false,
-          autoHeight: true,
-
-        });
-      } else {
-        $(".slider-pro").sliderPro({
-          arrows: true,
-          width: 960,
-          fade: true,
-          autoplay: false,
-          autoScaleLayers: false,
-          autoHeight: true,
-          touchSwipe: false,//disable touch swipe if we have only one image
-        });
-      }
+      new Splide('.splide', {
+            type: 'loop',
+            perPage: 1,
+            height: '60vh',
+            cover: true
+      }).mount();
+      //new Splide( '.splide' ).mount();
 
       function copyToClipboard(text, el) {
         var copyTest = document.queryCommandSupported('copy');

@@ -126,60 +126,6 @@ button span
     transition: 0.5s ease all;
 }
 
-#s-cover:hover #s-circle
-{
-    top: -18px;
-    width: 36px;
-    height: 4px;
-    border-width: 0;
-    background-color: #3EC4E2;
-    border-radius: 20px;
-}
-
-#s-cover:hover span
-{
-    top: 50%;
-    left: 56px;
-    width: 25px;
-    margin-top: -9px;
-    transform: rotateZ(0);
-}
-
-#s-cover:hover button span:before
-{
-    bottom: 15px;
-    transform: rotateZ(36deg);
-}
-
-#s-cover:hover button span:after
-{
-    bottom: -1px;
-    transform: rotateZ(-38deg);
-}
-
-#s-cover:hover button span:before, #s-cover:hover button span:after
-{
-    right: 19px;
-    width: 30px;
-    background-color: #3EC4E2;
-}
-
-#ytd-url {
-  display: block;
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  padding: 10px 14px;
-  margin: 20px;
-  color: #fff;
-  font-family: Nunito;
-  font-size: 14px;
-  text-decoration: none;
-  background-color: #ff7575;
-  border-radius: 4px;
-  box-shadow: 0 10px 20px -5px rgba(255, 117, 117, 0.86);
-  z-index: 125;
-}
 
 #not-found {
     display: none;
@@ -366,6 +312,18 @@ button span
   margin-bottom: 10px;
 }
 
+.classified-image {
+    width: 100%;
+}
+
+.splide__pagination__page {
+    background: #3ec4e2 !important;
+}
+.splide__pagination__page.is-active {
+    background: #1FAECE !important;
+}
+
+
 .classified-meta {
    margin: 10px;
 }
@@ -382,105 +340,42 @@ button span
      flex-direction: column
  }
 
-.similar-ads {
-  background: rgb(224, 223, 223);
-}
-
-.swiper-container {
-  width: 100%;
-  height: 500px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.swiper-slide {
-  background-size: cover;
-  background-position: center;
-}
-
-.gallery-top {
-  height: 400px;
-  width: 100%;
-}
-
-.gallery-thumbs {
-  height: 140px;
-  box-sizing: border-box;
-  padding: 10px 0;
-}
-
-.gallery-thumbs .swiper-slide {
-  height: 100%;
-  opacity: 0.4;
-}
-
-.gallery-thumbs .swiper-slide-thumb-active {
-  opacity: 1;
-}
-
-.sp-selected-button {
-  background-color: #0aacec !important;
-}
-
-.sp-button {
-  border: 2px solid #0aacec !important;
-}
-.sp-arrow::before,
-.sp-arrow::after {
-  background-color: #0aacec !important;
-}
-
-.sp-button {
-  width: 12px !important;
-  height: 12px !important;
-}
-
-
-.price-time {
-    display: flex;
-    justify-content: space-between;
-    margin: 8px auto;
-}
 
 .price {
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
   font-size: 1rem;
-  color: #F22020 
 }
 
-.time {
-    margin-top: 2px;
-}
-
-#classified-user {
-  color: black;
-}
-
-.btn-action {
-  background: linear-gradient(45deg, #ee5757, #a10413);
-  color: #fff;
-  border-style: solid;
-}
-
-a:hover.btn-action {
-  color: #fff;
-  background: linear-gradient(45deg, #a10413, #ee5757);
-}
-
-.meta-left span {
-  color: rgba(0, 0, 0, 0.54) !important;
-  display: flex;
-  flex-direction: column;
+.meta-info {
+   display: flex;
 }
 
 .meta-right {
-   display: flex;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.meta-right-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .user-link {
     margin-right: 2px;
 }
+
+.location {
+  font-size: 14px;
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+  position: absolute;
+  top: 37.5em;
+  left: 3em;
+}
+
 
 #pic {
   height:35px;
@@ -497,11 +392,6 @@ a:hover.btn-action {
   width: 100%;
 }
 
-
-.chat-button {
-   margin-right: 2px;
-   padding: 0;
-}
 
 .button {
     padding: 1;
@@ -533,13 +423,14 @@ a:hover.btn-action {
 }
 
 .pay-button {
-    background-color: #3EC4E2;
+    background-color: #1FAECE;
     margin: auto auto auto 6%;
 }
     
 .chat-button {
-   background-color: #81C1FF;
+   background-color: #3ec4e2;
    margin: auto 6% auto auto;
+   padding: 0;
  }
 
 .classified-tags {
