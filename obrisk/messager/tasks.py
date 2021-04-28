@@ -7,6 +7,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from celery import shared_task
 from obrisk.notifications.models import Notification, notification_handler
 from obrisk.users.phone_verification import send_sms
+from obrisk.messager.models import Conversation
 
 try:
     from django.contrib.auth import get_user_model
@@ -28,7 +29,11 @@ def send_messages_notifications(sender_id, recipient_id, key):
         cache.set(f'msg_{recipient_id}', [key] , timeout=SESSION_COOKIE_AGE)
     else:
         values = list(recp_new_msgs).append(key)
-        cache.set(f'msg_{recipient_id}', values, timeout=SESSION_COOKIE_AGE)
+        cache.set(
+            f'msg_{recipient_id}',
+            values,
+            timeout=SESSION_COOKIE_AGE
+        )
 
     sender = user_model.objects.get(id=sender_id)
     recipient = user_model.objects.get(id=recipient_id)
@@ -61,3 +66,23 @@ def send_messages_notifications(sender_id, recipient_id, key):
 
             if response['Code'] == 'OK':
                 cache.set(f'notif_sms_{recipient_id}', 1 , 120)
+
+
+@shared_task
+def messages_list_cleanup(conv_key, user_pk):
+    unread_msgs = cache.get(f'msg_{user_pk}')
+    if unread_msgs is not None:
+        values = list(unread_msgs)
+
+        if key in values:
+            values = values.remove(conv_key)
+            cache.set(
+                f'msg_{user_pk}',
+                values,
+                timeout=SESSION_COOKIE_AGE
+            )
+
+    #If update is called on the query, the order 'll be distorted
+    Conversation.objects.get(
+            key=conv_key
+        ).messages.all().update(unread=False)

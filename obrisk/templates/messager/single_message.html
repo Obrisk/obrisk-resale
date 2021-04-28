@@ -19,7 +19,7 @@
             <div class="message-text">{{ message.message }}</div>
 
         {% elif message.img_preview %}
-            <a data-fancybox="gallery" href="{{oss}}/{{ message.img_preview }}"><img
+            <a data-fslightbox="gallery" href="{{oss}}/{{ message.img_preview }}"><img
                     style="width: 250px; height: 250px;"
                     src="{{oss}}/{{ message.img_preview }}" />
             </a>
@@ -79,7 +79,7 @@
         {% endif %}
 
         {% if message.img_preview %}
-        <a data-fancybox="gallery" style="width: 250px; height: 250px;"
+        <a data-fslightbox="gallery" style="width: 250px; height: 250px;"
             href="{{oss}}/{{ message.img_preview }}"><img
                 style="width: 250px; height: 250px;"
                 src="{{oss}}/{{ message.img_preview }}" /></a>

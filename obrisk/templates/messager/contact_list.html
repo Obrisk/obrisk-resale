@@ -13,8 +13,7 @@
     <div class="users-list">
       {% for con in convs %}
           {% if con.first_user.username == request.user.username %}
-              <a href="#chat-window" data-toggle="modal"
-                data-url="{% url 'messager:conversation_detail' con.second_user.username %}"
+              <a href="{% url 'messager:conversation_detail' con.second_user.username %}" data-toggle="modal"
                 id="{{ con.key }}" class="card contact-card open-chat">
                 {% if con.second_user.thumbnail %}
                 <img src="{{oss}}/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
@@ -35,7 +34,7 @@
 
                   <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}> 
                       {% if con.last_msg %}
-                          {{ con.last_msg|truncatechars:50 }}
+                          {{ con.last_msg|truncatechars:30 }}
                       {% elif con.img or con.attachment %}
                           Attachment
                       {% else %}
@@ -58,8 +57,7 @@
               </a>
 
           {% else %}
-              <a href="#chat-window" data-toggle="modal"
-                data-url="{% url 'messager:conversation_detail' con.first_user.username %}"
+             <a href="{% url 'messager:conversation_detail' con.first_user.username %}" data-toggle="modal"
                 id="{{ con.key }}" class="card contact-card open-chat">
                 {% if con.first_user.thumbnail %}
                     <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
@@ -80,7 +78,7 @@
 
                   <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}>
                       {% if con.last_msg %}
-                          {{ con.last_msg|truncatechars:50 }}
+                          {{ con.last_msg|truncatechars:30 }}
                       {% elif con.img or con.attachment %}
                           Attachment
                       {% else %}
@@ -155,90 +153,6 @@
       </div>
     </div>
 
-    <div id="chat-window" class="modal">
-
-      <div class="chat-wrapper is-standalone">
-        <div class="chat-inner">
-
-          <!-- Chat top navigation -->
-          <div class="chat-nav">
-            <div class="nav-start">
-              <div class="recipient-block">
-                <div class="avatar-container">
-                  <!--Add image -->
-                </div>
-                <div class="username">
-
-
-                </div>
-              </div>
-            </div>
-            <div class="nav-end">
-
-              <div>
-                <button data-toggle="modal" data-target="#chat-window" class="delete is-large"
-                  aria-label="close"></button>
-              </div>
-
-            </div>
-          </div>
-
-          <!-- Chat body -->
-          <div id="chat-body" class="chat-body" style="display: flex;height: 100vh;flex-direction: column;">
-            <!-- Conversation with Dan -->
-            <div id="conversation" class="chat-body-inner" style="flex-grow: 1;">
-
-              <div class="send-message"> </div>
-            </div>
-            <!-- Compose message area -->
-            <div class="chat-action" style="z-index: 9999;position: relative; bottom: 0;">
-              <div class="message-box">
-
-
-                <div class="chat-action-inner">
-                  <div class="control">
-                    <form role="form" method="post" action="#" id="send">
-                      <div class="is-flex message-scroll">
-                        {% csrf_token %}
-                        <input type="hidden" class="sendTo" name="to" value="">
-                        <textarea class="form-control textarea comment-textarea" autocomplete="off"
-                          maxlength="1000" id="sendText" placeholder="{% trans 'Write a message...' %}" name="message"
-                          autofocus rows="2" cols="2"></textarea>
-                      </div>
-
-                    </form>
-                    <form id="upload">
-                      {% csrf_token %}
-                      <input type="hidden" name="to" value="" class="sendTo">
-                      <input id="image" type="hidden" name="image">
-                      <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
-
-                      <div class="dropdown compose-dropdown is-spaced is-accent is-up dropdown-trigger">
-                        <div class="is-flex">
-                          <div class="add-button" id="addBtn">
-                            <div class="button-inner">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"
-                                    viewBox="0 0 512 512">
-                                    <path d="M456,64H56A24,24,0,0,0,32,88V424a24,24,0,0,0,24,24H456a24,24,0,0,0,24-24V88A24,24,0,0,0,456,64ZM331.62,128.2a48,48,0,1,1-43.42,43.42A48,48,0,0,1,331.62,128.2ZM76,416a12,12,0,0,1-12-12V316.37L192.64,202l96.95,96.75L172.37,416Zm372-12a12,12,0,0,1-12,12H217.63L367.16,266.47,448,333.84Z"/>
-                                </svg>
-                            </div>
-                          </div>
-
-                          <button id="send-text"
-                            class="button add-button is-solid accent-button is-bold raised">
-                            <small><strong>Send</strong></small>
-                          </button>
-
-                        </div>
-
-                      </div>
-                    </form>
-
-                  </div>
-
-                </div>
-              </div>
-            </div>
 
           </div>
 {% endblock content %}
@@ -249,7 +163,6 @@
     <script>
       var activeUser = "{{ active }}";
       const oss_url = "{% url 'get_oss_auth' %}";
-
 
       {% if request.user.thumbnail %}
           const currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
@@ -272,12 +185,5 @@
         })
       }
     </script>
-
-    <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
-    <script src="{% static 'js/modal.js' %}" type="text/javascript"></script>
     <script src="{% static 'js/vendor/moment.min.js' %}"></script>
-    <script defer src="{% static 'js/vendor/fancybox.min.js' %}"></script>
-    <script defer src="{% static 'js/vendor/aliyun-oss.min.js' %}" type="text/javascript"></script>
-    <script defer src="{% static 'js/vendor/transliteration.min.js' %}" type="text/javascript"></script>
-    <script defer src="{% static 'js/messager.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}

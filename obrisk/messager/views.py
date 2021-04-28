@@ -25,9 +25,12 @@ from obrisk.classifieds.models import Classified, ClassifiedImages
 from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
-from obrisk.messager.tasks import send_messages_notifications
-
-from obrisk.notifications.models import Notification, notification_handler
+from obrisk.messager.tasks import (
+        send_messages_notifications, messages_list_cleanup
+    )
+from obrisk.notifications.models import (
+        Notification, notification_handler
+    )
 from obrisk.users.phone_verification import send_sms
 import uuid
 import ast
@@ -170,32 +173,17 @@ def messagesView(request, username):
                         ).values_list('slug', flat=True)[:1]),
                     )
 
-            msgs_data = list(msgs_all)
-
-            #If update is called on the query, the order 'll be distorted
-            msgs_all.update(unread=False)
-
-            unread_msgs = cache.get(f'msg_{request.user.pk}')
-            if unread_msgs is not None:
-                values = list(unread_msgs)
-
-                if key in values:
-                    values = values.remove(key)
-                    cache.set(
-                        f'msg_{request.user.pk}',
-                        values,
-                        timeout=SESSION_COOKIE_AGE
-                    )
+            #msgs_data = list(msgs_all)
+            messages_list_cleanup.delay(key, request.user.pk)
 
             #could be sliced but the order needs to be reversed first
             #Slicing is at end to allow the update query to run
             #Eg 'msgs': msgs_data[:100],
-            return JsonResponse({
-                'msgs': msgs_data,
-                'active_username': active_user.username,
-                'active_thumbnail': active_user.thumbnail,
-                'current_conv': key
-            })
+            return render(
+                request,
+                'messager/messages_list.html',
+                {'messages_list': msgs_all, 'active': active_user}
+            )
 
     else:
         return JsonResponse ({
