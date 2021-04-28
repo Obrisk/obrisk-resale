@@ -316,13 +316,16 @@ button span
     width: 100%;
 }
 
+.splide__list {
+    background: rgba(0,0,0,.8);
+}
+
 .splide__pagination__page {
     background: #3ec4e2 !important;
 }
 .splide__pagination__page.is-active {
     background: #1FAECE !important;
 }
-
 
 .classified-meta {
    margin: 10px;
@@ -339,7 +342,6 @@ button span
      justify-content: space-between;
      flex-direction: column
  }
-
 
 .price {
   font-family: "Montserrat", sans-serif;
@@ -368,14 +370,10 @@ button span
 }
 
 .location {
-  font-size: 14px;
+  font-size: 13px;
   font-family: "Montserrat", sans-serif;
   font-weight: 600;
-  position: absolute;
-  top: 37.5em;
-  left: 3em;
 }
-
 
 #pic {
   height:35px;
@@ -391,7 +389,6 @@ button span
   justify-content: space-evenly;
   width: 100%;
 }
-
 
 .button {
     padding: 1;

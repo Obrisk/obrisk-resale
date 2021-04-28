@@ -273,7 +273,8 @@ def multipleImagesPersist(request, images_list, app, obj):
             thumb_name = "media/images/classifieds/" + username + "/" + title + "/" + d + "/thumbnails/" + str(index) + ".jpeg" #noqa
             img_mid_name = "media/images/classifieds/" + username + "/" + title + "/" + d + "/mid-size/" + str(index) + ".jpeg" #noqa
             style = 'image/resize,m_fill,h_156,w_156'
-            style_mid = 'image/resize,m_fill,h_400'
+            style_mid = 'image/resize,m_pad,h_400'
+            #style_mid = 'image/resize,m_fill,h_400'
 
         elif app == 'stories':
             #The image here is full url to the OSS bucket

@@ -42,7 +42,7 @@
                       <div class="splide__slide">
                         <a href="{{oss}}/{{ image.image }}"
                           data-fslightbox="gallery">
-                          <img class="classified-image" src="{{oss}}/{{image.image_mid_size}}"/>
+                          <img class="classified-image" src="{{oss}}/{{ image.image_mid_size }}"/>
                         </a>
                      </div>
                     {% endfor %}
@@ -298,12 +298,8 @@
       const image_count = {{ images| length}}
 
       new Splide('.splide', {
-            type: 'loop',
-            perPage: 1,
-            height: '60vh',
-            cover: true
+            type: 'loop'
       }).mount();
-      //new Splide( '.splide' ).mount();
 
       function copyToClipboard(text, el) {
         var copyTest = document.queryCommandSupported('copy');
