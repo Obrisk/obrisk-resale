@@ -1,4 +1,4 @@
-/*! _chat.scss | Obrisk | ©Elisha Kingdom 2019-2020 */
+/*! _chat.scss | Obrisk | ©Elisha Kingdom 2019-2021 */
 
 /* ==========================================================================
 Chat window styles
@@ -89,11 +89,17 @@ Chat window styles
                         .user-avatar {
                             border-radius: 50%;
                         }
+
+                        //Avatar
+                        img.profile-header-avatar {
+                            display: block;
+                            height: 42px;
+                            width: 42px;
+                            border-radius: 50%;
+                        }
                     }
 
                     .username {
-                        margin-left: 8px;
-
                         span {
                             display: block;
 
@@ -302,10 +308,12 @@ Chat window styles
             position: absolute;
             bottom: 0;
             
-            height: 100%;
-            width: 100%;
             background: lighten($fade-grey, 3%);
             transition: all .3s;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100vh;
 
             //Opened state
             &.is-opened {
@@ -326,32 +334,6 @@ Chat window styles
                 overflow-y: auto;
                 animation-name: fadeInLeft;
                 animation-duration: .5s;
-
-                //Divider
-                .date-divider {
-                    position: relative;
-                    margin-bottom: 40px;
-                    margin-top: 20px;
-
-                    hr {
-                        margin: 10px 0;
-                        background: #ccc;
-                        height: 1px;
-                    }
-
-                    .date-divider-text {
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        padding: 5px 10px;
-                        background-color: lighten($fade-grey, 3%);
-                        color: #ccc;
-                        font-size: 13px;
-                        font-weight: 500;
-                        text-transform: uppercase;
-                        transform: translate(-50%, -50%);
-                    }
-                }
 
                 //Chat message shared styles
                 .chat-message {
@@ -638,40 +620,6 @@ Chat window styles
                                 }
                             }
 
-                            //User avatar
-                            .details-avatar {
-                                position: relative;
-                                height: 110px;
-                                width: 110px;
-                                margin: 10px auto;
-
-                                img.profile-header-avatar {
-                                    display: block;
-                                    border-radius: 50%;
-                                }
-
-                                .call-me {
-                                    position: absolute;
-                                    bottom: 0;
-                                    right: -12px;
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    height: 42px;
-                                    width: 42px;
-                                    border-radius: 50%;
-                                    border: 3px solid $white;
-                                    background: $accent;
-                                    cursor: pointer;
-                                    transition: all .3s;
-
-                                    i {
-                                        font-size: 20px;
-                                        color: $white-light;
-                                    }
-                                }
-                            }
-
                             //User meta
                             .user-meta {
                                 h3 {
@@ -685,146 +633,6 @@ Chat window styles
                                 h4 {
                                     font-size: .95rem;
                                     color: $muted-grey;
-                                }
-                            }
-
-                            //User hexagon badges
-                            .user-badges {
-                                display: flex;
-                                justify-content: center;
-                                align-items: center;
-                                margin: 20px 0;
-                                transform: scale(0.84);
-
-                                //Hexagon badge
-                                .hexagon {
-                                    width: 36px;
-                                    height: 20px;
-                                    background: #5F6062;
-                                    position: relative;
-                                    margin: 0 3px;
-                                    cursor: pointer;
-                                    text-align: center;
-                                    -webkit-transition: all 0.3s ease-in-out;
-                                    -moz-transition: all 0.3s ease-in-out;
-                                    -ms-transition: all 0.3s ease-in-out;
-                                    -o-transition: all 0.3s ease-in-out;
-                                    transition: all 0.3s ease-in-out;
-
-                                    &:before {
-                                        content: "";
-                                        position: absolute;
-                                        top: -12.2px;
-                                        left: 0;
-                                        width: 0;
-                                        height: 0;
-                                        border-left: 18px solid transparent;
-                                        border-right: 18px solid transparent;
-                                        border-bottom: 12.2px solid #5F6062;
-                                        -webkit-transition: all 0.3s ease-in-out;
-                                        -moz-transition: all 0.3s ease-in-out;
-                                        -ms-transition: all 0.3s ease-in-out;
-                                        -o-transition: all 0.3s ease-in-out;
-                                        transition: all 0.3s ease-in-out;
-                                    }
-
-                                    &:after {
-                                        content: "";
-                                        position: absolute;
-                                        bottom: -12px;
-                                        left: 0;
-                                        width: 0;
-                                        height: 0;
-                                        border-left: 18px solid transparent;
-                                        border-right: 18px solid transparent;
-                                        border-top: 12.5px solid #5F6062;
-                                        -webkit-transition: all 0.3s ease-in-out;
-                                        -moz-transition: all 0.3s ease-in-out;
-                                        -ms-transition: all 0.3s ease-in-out;
-                                        -o-transition: all 0.3s ease-in-out;
-                                        transition: all 0.3s ease-in-out;
-                                    }
-
-                                    //Color modifiers
-                                    &.is-red {
-                                        background: $red;
-
-                                        &:after {
-                                            border-top: 12.5px solid $red;
-                                        }
-
-                                        &:before {
-                                            border-bottom: 12.5px solid $red;
-                                        }
-                                    }
-
-                                    &.is-green {
-                                        background: $green;
-
-                                        &:after {
-                                            border-top: 12.5px solid $green;
-                                        }
-
-                                        &:before {
-                                            border-bottom: 12.5px solid $green;
-                                        }
-                                    }
-
-                                    &.is-accent {
-                                        background: $accent;
-
-                                        &:after {
-                                            border-top: 12.5px solid $accent;
-                                        }
-
-                                        &:before {
-                                            border-bottom: 12.5px solid $accent;
-                                        }
-                                    }
-
-                                    &.is-blue {
-                                        background: $blue;
-
-                                        &:after {
-                                            border-top: 12.5px solid $blue;
-                                        }
-
-                                        &:before {
-                                            border-bottom: 12.5px solid $blue;
-                                        }
-                                    }
-
-                                    &.is-orange {
-                                        background: $orange;
-
-                                        &:after {
-                                            border-top: 12.5px solid $orange;
-                                        }
-
-                                        &:before {
-                                            border-bottom: 12.5px solid $orange;
-                                        }
-                                    }
-
-                                    &.is-purple {
-                                        background: $purple;
-
-                                        &:after {
-                                            border-top: 12.5px solid $purple;
-                                        }
-
-                                        &:before {
-                                            border-bottom: 12.5px solid $purple;
-                                        }
-                                    }
-
-                                    .mdi {
-                                        position: relative;
-                                        top: -2px;
-                                        color: white;
-                                        font-size: 18px;
-                                        line-height: 16px;
-                                    }
                                 }
                             }
 

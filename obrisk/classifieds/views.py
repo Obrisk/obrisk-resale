@@ -115,7 +115,7 @@ def classified_list(request, city=None):
                     info = ast.literal_eval(str(response, encoding='utf-8'))
 
                     city = info['CityEn']
-                    if info['CountryEn'] != 'China':
+                    if info['CountryEn'] != 'China' and len(info['CountryEn']) > 1:
                         messages.error(
                             request,
                             "This platform is for China users, if you're, pls switch off the vpn🙄"

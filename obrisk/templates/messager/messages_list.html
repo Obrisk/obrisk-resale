@@ -1,13 +1,13 @@
 {% load static i18n %}
 
 {% block head %}
+<link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
 <title>Chatting with {{active.username|title}}</title>
 <!-- Fonts -->
 <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
 <link rel="stylesheet" href="{% static 'css/chat.css' %}">
-<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
 
 {% endblock head %}
 
@@ -22,26 +22,30 @@
             <div class="nav-start">
               <div class="recipient-block">
                 <div class="avatar-container">
-                  <!--Add image -->
+                  {% if message.sender.thumbnail %}
+                        <img class="user-avatar rounded-circle profile-header-avatar img-fluid"
+                        id="pic" alt="pic" src="{{oss}}/{{message.sender.thumbnail}}">
+                  {% else %}
+                        <img class="user-avatar rounded-circle profile-header-avatar img-fluid"
+                        id="pic" alt="pic" src="{% static 'img/user.png' %}">
+                  {% endif %}
                 </div>
                 <div class="username">
-
-
+                    <span> {{ active.username | title }} </span>
                 </div>
               </div>
             </div>
             <div class="nav-end">
-
               <div>
-                <button data-toggle="modal" data-target="#chat-window" class="delete is-large"
-                  aria-label="close"></button>
+                <a href="{% url 'messager:contacts_list' %}"
+                   class="delete is-large" aria-label="close">
+                </a>
               </div>
-
             </div>
           </div>
 
           <!-- Chat body -->
-          <div id="chat-body" class="chat-body" style="display: flex;height: 100vh;flex-direction: column;">
+          <div id="chat-body" class="chat-body" style="">
             <!-- Conversation with Dan -->
             <div id="conversation" class="chat-body-inner" style="flex-grow: 1;">
 
@@ -115,15 +119,12 @@
               {% endif %}
           {% endif %}
 
-
-            <div class="send-message"> </div>
+          <div class="send-message"> </div>
           </div>
-
 
             <!-- Compose message area -->
             <div class="chat-action" style="z-index: 9999;position: relative; bottom: 0;">
               <div class="message-box">
-
 
                 <div class="chat-action-inner">
                   <div class="control">
@@ -184,12 +185,6 @@
   var activeUser = "{{ active.username }}";
   const oss_url = "{% url 'get_oss_auth' %}";
 
-  {% if message.sender.thumbnail %}
-  var user_thumb = "{{oss}}/{{message.sender.thumbnail}}"
-    {% else %}
-  var user_thumb = "{% static 'img/user.png' %}"
-  {% endif %}
-
   //This scrolls the div #messages only to the bottom
   var d = document.getElementById('conversation');
   d.scrollTop = d.getAttribute("scrollHeight");
@@ -211,9 +206,9 @@
 
 </script>
 
-<script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
+<script async defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
+<script defer src="{% static 'js/vendor/dayjs.min.js' %}"></script>
 <script src="{% static 'js/vendor/aliyun-oss.min.js' %}" type="text/javascript"></script>
-<script defer src="{% static 'js/vendor/transliteration.min.js' %}" type="text/javascript"></script>
-<script src="{% static 'js/vendor/moment.min.js' %}"></script>
+<script src="{% static 'js/websocketbridge.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/messager.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}

@@ -3,7 +3,6 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/chat.css' %}">
-<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
 <title>{% trans 'Messages' %}</title>
 {% endblock head %}
 
@@ -185,5 +184,6 @@
         })
       }
     </script>
-    <script src="{% static 'js/vendor/moment.min.js' %}"></script>
+    <script src="{% static 'js/vendor/dayjs.min.js' %}"></script>
+    <script src="{% static 'js/contact-list.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}
