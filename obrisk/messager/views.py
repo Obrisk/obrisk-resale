@@ -207,7 +207,6 @@ def send_message(request):
     to be attached to the conversation stream."""
     sender = request.user
     recipient_username = request.POST.get('to')
-    print(recipient_username)
     try:
         recipient = get_user_model().objects.get(
                     username=recipient_username
