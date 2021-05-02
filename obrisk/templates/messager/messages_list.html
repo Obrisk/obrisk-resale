@@ -131,7 +131,7 @@
                     <form role="form" method="post" action="#" id="send">
                       <div class="is-flex message-scroll">
                         {% csrf_token %}
-                        <input type="hidden" class="sendTo" name="to" value="">
+                        <input type="hidden" class="sendTo" name="to" value="{{ active.username }}">
                         <textarea class="form-control textarea comment-textarea" autocomplete="off"
                           maxlength="1000" id="sendText" placeholder="{% trans 'Write a message...' %}" name="message"
                           autofocus rows="2" cols="2"></textarea>
@@ -140,8 +140,7 @@
                     </form>
                     <form id="upload">
                       {% csrf_token %}
-                      <!-- input type="hidden" name="to" value="{{ active.username }}"-->
-                      <input type="hidden" name="to" value="" class="sendTo">
+                      <input type="hidden" class="sendTo "name="to" value="{{ active.username }}">
                       <input id="image" type="hidden" name="image">
                       <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
 
@@ -183,7 +182,22 @@
 
   var currentUser = "{{ request.user.username }}";
   var activeUser = "{{ active.username }}";
-  const oss_url = "{% url 'get_oss_auth' %}";
+  var usernameSlug = "{{ req_username_slug }}";
+  var activeUserSlug = "{{ actv_username_slug }}"
+  var oss_url = "{% url 'get_oss_auth' %}";
+
+  {% if request.user.thumbnail %}
+      const currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
+  {% else %}
+      const currentUserThumbnail = "{{oss}}/{% static 'img/user.png' %}"
+  {% endif %}
+
+
+  {% if active.thumbnail %}
+      const user_thumb = "{{oss}}/{{ active.thumbnail }}"
+  {% else %}
+      const user_thumb = "{% static 'img/user.png' %}"
+  {% endif %}
 
   //This scrolls the div #messages only to the bottom
   var d = document.getElementById('conversation');

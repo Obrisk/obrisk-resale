@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
         load the received message in a proper way.*/
      fetch(
           "/ws/messages/receive-message/", {
-          method : "POST",
+          method : "GET",
           body: {
             message_id: message_id
           },
@@ -49,7 +49,7 @@ document.addEventListener('DOMContentLoaded', function() {
           headers: {
             "X-Requested-With": "XMLHttpRequest"
           }
-        }).then (resp => resp.json())
+        }).then (resp => resp.text())
           .then (data => {
             document.getElementById("conversation").insertAdjacentHTML('beforeend', data);
             setTimeout(function() {
@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     //make sure the textarea isn't empty before submitting the form
     if (document.querySelector(".textarea").value !== "") {
-      const tme_stamp = dayjs(new Date(), "MMM. DD HH:mm");
+      const tme_stamp = dayjs(new Date()).format("MMM DD HH:mm");
       //const tme_stamp = moment().format("MMM. Do h:mm");
 
       const msg = `<div class="chat-message is-sent">
@@ -101,10 +101,11 @@ document.addEventListener('DOMContentLoaded', function() {
           headers: {
             "X-Requested-With": "XMLHttpRequest"
           }
-        }).then (resp => resp.json())
+        }).then (resp => resp.text())
           .then (data => {
               document.getElementById("send").reset();
               document.querySelector("textarea").value = "";
+              document.getElementById("addBtn").classList.remove('is-hidden');
               document.querySelector("textarea[name='message']").focus();
               document.getElementById("conversation").scrollTop = 99999999999;
         })
@@ -122,11 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById("sendText").addEventListener('keyup', function(e) {
 
     const sendCode = event.which || event.keyCode || event.charCode
-    if (
-      sendCode == 13 &&
-      !e.shiftKey &&
-      !document.querySelector(".send-btn").disabled == true 
-    ) {
+    if ( sendCode == 13 && !e.shiftKey ) {
       document.getElementById("send").dispatchEvent(new Event("submit", { bubbles: true }));
       setTimeout(function(e) {
         document.getElementById("conversation").scrollTop=99999999999;
@@ -249,7 +246,7 @@ OssUpload.prototype = {
         const reader = new FileReader();
         reader.onload = function() {
 
-          const tme_stamp = dayjs(new Date(), "MMM. DD HH:mm");
+          const tme_stamp = dayjs(new Date()).format("MMM DD HH:mm");
 
           const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}"
                             alt="Picture Profile"
@@ -471,13 +468,13 @@ function submitOSSImage (res, upload) {
         //Send image to chat
         fetch(
           "/ws/messages/send-message/", {
-          method : "POST",
+          method: "POST",
           body: new FormData(document.getElementById("upload")),
           credentials: 'same-origin',
           headers: {
             "X-Requested-With": "XMLHttpRequest"
           }
-        }).then (resp => resp.json())
+        }).then (resp => resp.text())
           .then (data => {
               document.getElementById("image").value = "";
         }).catch (error => {
@@ -525,8 +522,8 @@ function OssUpload() {
 
 function genKey() {
   return (
-    "media/images/messages/" + slugify(currentUser) + "/" +
-    slugify(activeUser) + "/" +
+    "media/images/messages/" + usernameSlug + "/" +
+    activeUserSlug + "/" +
     "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(c) {
       const r = (Math.random() * 16) | 0,
         v = c == "x" ? r : (r & 0x3) | 0x8;

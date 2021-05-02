@@ -403,11 +403,9 @@
                   });
                 });
           </script>
-
         {% endif %}
 
         {% block content %}
-
         {% endblock content %}
     </div>
 
@@ -472,13 +470,11 @@
   </script>
 
   {% if request.user.is_authenticated %}
-
       <script type="text/javascript">
         currentUser = "{{ request.user.username}}";
         new_messages = "{{ new_msgs }}";
       </script>
       <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
-
   {% endif %}
 
   {% endblock javascript %}

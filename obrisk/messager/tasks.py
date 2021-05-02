@@ -74,7 +74,7 @@ def messages_list_cleanup(conv_key, user_pk):
     if unread_msgs is not None:
         values = list(unread_msgs)
 
-        if key in values:
+        if conv_key in values:
             values = values.remove(conv_key)
             cache.set(
                 f'msg_{user_pk}',

@@ -160,22 +160,6 @@
     <link rel="stylesheet" href="{% static 'css/share.css' %}">
 
     <script>
-      var activeUser = "{{ active }}";
-      const oss_url = "{% url 'get_oss_auth' %}";
-
-      {% if request.user.thumbnail %}
-          const currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
-      {% else %}
-          const currentUserThumbnail = "{{oss}}/{% static 'img/user.png' %}"
-      {% endif %}
-
-
-      {% if active.thumbnail %}
-          const user_thumb = "{{oss}}/{{ active.thumbnail }}"
-      {% else %}
-          const user_thumb = "{% static 'img/user.png' %}"
-      {% endif %}
-
       function shareMe() {
         navigator.share({
           title: 'Join Obrisk Today!',

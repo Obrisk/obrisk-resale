@@ -13,7 +13,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_http_methods
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
+
 from django.core.cache import cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
@@ -107,7 +108,7 @@ class ContactsListView(LoginRequiredMixin, ListView):
         return context
 
 
-@ensure_csrf_cookie
+#ensure_csrf_cookie
 @login_required
 @require_http_methods(["GET"])
 def messagesView(request, username):
@@ -181,8 +182,12 @@ def messagesView(request, username):
             #Eg 'msgs': msgs_data[:100],
             return render(
                 request,
-                'messager/messages_list.html',
-                {'messages_list': msgs_all, 'active': active_user}
+                'messager/messages_list.html', {
+                    'messages_list': msgs_all,
+                    'active': active_user,
+                    'req_username_slug': slugify(request.user.username, to_lower=True),
+                    'actv_username_slug': slugify(active_user.username, to_lower=True)
+                }
             )
 
     else:
@@ -192,6 +197,7 @@ def messagesView(request, username):
         })
 
 
+@csrf_exempt
 @login_required
 @ajax_required
 @require_http_methods(["POST"])
@@ -201,6 +207,7 @@ def send_message(request):
     to be attached to the conversation stream."""
     sender = request.user
     recipient_username = request.POST.get('to')
+    print(recipient_username)
     try:
         recipient = get_user_model().objects.get(
                     username=recipient_username
@@ -225,9 +232,7 @@ def send_message(request):
         return HttpResponse()
 
     if image:
-        if image.startswith(
-            f'media/images/messages/{sender.username}/{recipient.username}' #noqa
-          ) == False:
+        if image.startswith(f'media/images/messages/') == False:
             image = None
 
         else:
