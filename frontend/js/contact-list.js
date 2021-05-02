@@ -1,3 +1,13 @@
+
+function shareMe() {
+    navigator.share({
+      title: 'Checkout Obrisk!',
+      text: "Obrisk.com is a secondhand platform for foreigners in China",
+      url: 'https://obrisk.com/',
+    })
+}
+
+
 /* 
  * Sharing Code for inviting users on Chat
  */

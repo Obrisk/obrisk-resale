@@ -108,9 +108,9 @@
               </div>
           </div>
 
-          <a href="#chat-window" data-toggle="modal"
-            data-url="{% url 'messager:conversation_detail' super_users.first.username %}"
-            id="{{super_users.first.id}}.{{request.user.id}}" class="card contact-card open-chat ">
+          <a data-toggle="modal"
+            href="{% url 'messager:conversation_detail' super_users.first.username %}"
+            id="{{super_users.first.id}}.{{request.user.id}}" class="card contact-card open-chat">
             {% if super_users.first.thumbnail %}
                 <img src="{{oss}}/{{super_users.first.thumbnail}}" alt="Picture Profile"
                   style="width:40px;height:40px;border-radius: 50%;"
@@ -138,36 +138,21 @@
       </div>
 
       <div class="action-buttons">
-
           <a onclick="shareMe()" class="button is-solid accent-button">
             {% trans "Invite Friends" %}
           </a>
-
           <!--a href="{% url 'connections:friendship_view_friends' %}" 
               class="button is-solid accent-button">
             {% trans "Discover" %}
           </a-->
       </div>
 
-      </div>
     </div>
-
-
-          </div>
+  </div>
+</div>
 {% endblock content %}
 
 {% block extra_js %}
     <link rel="stylesheet" href="{% static 'css/share.css' %}">
-
-    <script>
-      function shareMe() {
-        navigator.share({
-          title: 'Join Obrisk Today!',
-          text: "Checkout Obrisk.com, the best secondhand platform for foreigners in China",
-          url: 'https://obrisk.com/',
-        })
-      }
-    </script>
-    <script src="{% static 'js/vendor/dayjs.min.js' %}"></script>
     <script src="{% static 'js/contact-list.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}

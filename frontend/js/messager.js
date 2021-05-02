@@ -13,6 +13,18 @@ function addListenerMulti(el, s, fn) {
   s.split(' ').forEach(e => el.addEventListener(e, fn, false));
 }
 
+function getFormatedTime() {
+  let a = [{month: 'short'}, {day: 'numeric'}];
+  const now = new Date();
+
+   function format(m) {
+      let f = new Intl.DateTimeFormat('en', m);
+      return f.format(now);
+   }
+
+  return a.map(format).join(' ') + ` ${now.getHours()}:${now.getMinutes()}`;
+}
+
 document.addEventListener('DOMContentLoaded', function() {
   //scroll when on textarea
   const div = document.querySelector(".message-scroll");
@@ -78,8 +90,8 @@ document.addEventListener('DOMContentLoaded', function() {
     e.preventDefault();
     //make sure the textarea isn't empty before submitting the form
     if (document.querySelector(".textarea").value !== "") {
-      const tme_stamp = dayjs(new Date()).format("MMM DD HH:mm");
-      //const tme_stamp = moment().format("MMM. Do h:mm");
+
+      const tme_stamp = getFormatedTime();
 
       const msg = `<div class="chat-message is-sent">
             <img src="${currentUserThumbnail}"
@@ -246,7 +258,7 @@ OssUpload.prototype = {
         const reader = new FileReader();
         reader.onload = function() {
 
-          const tme_stamp = dayjs(new Date()).format("MMM DD HH:mm");
+          const tme_stamp = getFormatedTime();
 
           const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}"
                             alt="Picture Profile"
@@ -254,7 +266,7 @@ OssUpload.prototype = {
                             class="rounded-circle profile-header-avatar img-fluid is-hidden-mobile"
                             id="pic">
                             <div class="message-block"><span>${tme_stamp} </span>
-                              <a data-fancybox="gallery" href="${reader.result}">
+                              <a data-fslightbox="gallery" href="${reader.result}">
                                 <img style="width: 250px; height: 250px;" src="${reader.result}">
                               </a>
                             </div>
