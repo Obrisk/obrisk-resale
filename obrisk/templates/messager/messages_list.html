@@ -189,7 +189,7 @@
   {% if request.user.thumbnail %}
       const currentUserThumbnail = "{{oss}}/{{ request.user.thumbnail }}"
   {% else %}
-      const currentUserThumbnail = "{{oss}}/{% static 'img/user.png' %}"
+      const currentUserThumbnail = "{% static 'img/user.png' %}"
   {% endif %}
 
 

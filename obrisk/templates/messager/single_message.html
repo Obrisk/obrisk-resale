@@ -1,6 +1,6 @@
 {% load static i18n humanize %}
 
-{% if request.user == message.sender %}
+{% if request.user.username == message.sender_username %}
     <div class="chat-message is-sent">
     {% if message.sender.thumbnail %}
         <img src="{{oss}}/{{message.sender.thumbnail}}" alt="Picture Profile"
@@ -25,7 +25,7 @@
             </a>
 
        {% elif message.classified %} 
-            <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
+            <div class="card classified-card" style="max-width: 295px">
                 <a href="{% url 'classifieds:classified' message.classified.slug %}"
                   style="color:black; text-decoration:none; background-color:none" class="is-flex">
 
@@ -56,11 +56,9 @@
             </a>
           </div>
        {% endif %}
-
-
-
     </div>
 </div>
+
 {% else %}
 
 <div class="chat-message is-received">
@@ -86,7 +84,7 @@
         {% endif %}
 
        {% if message.classified %} 
-          <div class="card classified-card mr-2 mb-3 justify-content-center is-flex p-2 " style="max-width: 295px">
+          <div class="card classified-card" style="max-width: 295px">
             <a href="{% url 'classifieds:classified' message.classified.slug %}"
               style="color:black; text-decoration:none; background-color:none" class="is-flex">
 

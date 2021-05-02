@@ -26,6 +26,7 @@ function getFormatedTime() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+  scrollMessages();
   //scroll when on textarea
   const div = document.querySelector(".message-scroll");
   const ta = document.querySelector("textarea");
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const msg = `<div class="chat-message is-sent">
             <img src="${currentUserThumbnail}"
-            alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;"
+            alt="Picture Profile" style="width:42px;height:42px;border-radius: 50%;"
             class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
             id="pic">
             <div class="message-block">
@@ -206,7 +207,6 @@ document.addEventListener('DOMContentLoaded', function() {
       default:
         break;
     }
-    scrollMessages();
   });
 
   ossUpload = new OssUpload();
@@ -262,8 +262,8 @@ OssUpload.prototype = {
 
           const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}"
                             alt="Picture Profile"
-                            style="width:30px;height:30px;border-radius: 50%;"
-                            class="rounded-circle profile-header-avatar img-fluid is-hidden-mobile"
+                            style="width:42px;height:42px;border-radius: 50%;"
+                            class="rounded-circle profile-header-avatar img-fluid"
                             id="pic">
                             <div class="message-block"><span>${tme_stamp} </span>
                               <a data-fslightbox="gallery" href="${reader.result}">
