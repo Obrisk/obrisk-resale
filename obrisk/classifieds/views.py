@@ -221,6 +221,7 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 
         classified = form.save(commit=False)
         classified.user = self.request.user
+        classified.details = str(classified.details).strip()
         classified.save()
 
         images_json = form.cleaned_data['images']
