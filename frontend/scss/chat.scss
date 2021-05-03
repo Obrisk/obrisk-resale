@@ -74,10 +74,58 @@ h5 {
     }
 }
 
+.message-block {
+    margin: auto 1em;
+}
+
+.classified-card {
+    display: flex;
+    align-items: center;
+    width: 60vw;
+    padding: 4%; 
+    top: -5px;
+
+    a {
+        color:black;
+        text-decoration:none;
+        background-color:none;
+    }
+
+    .cls-details {
+        margin-left: 1em;
+    }
+}
+
+.card-img {
+    max-width: 70px;
+}
+
+.chat-action {
+    z-index: 99;
+    position: relative;
+    bottom: 0;
+}
+
+.profile-avatar{
+    width:30px;
+    height:30px;
+    border-radius: 15%;
+}
+
+.contact-profile-avatar{
+    width:40px;
+    height:40px;
+    border-radius: 15%;
+}
+
+.chat-img {
+    width: 250px;
+    height: 250px;
+    border-radius: 3%;
+}
+
+
 @media screen and (max-width: 450px) {
-  .card {
-    max-width: none;
-  }
   .users-list {
     margin-bottom: 11%;
   }

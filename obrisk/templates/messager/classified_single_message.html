@@ -1,0 +1,13 @@
+<a class="card classified-card" href="{% url 'classifieds:classified' classified.slug %}">
+    {% if classified.thumbnail %}
+        <img class="card-img" src="{{oss}}/{{ classified.thumbnail }}">
+    {% else %}
+        <img class="card-img" src="{{oss}}/classifieds/default.jpg">
+    {% endif %}
+
+  <div class="cls-details">
+    <h6> {{ classified.title|title|truncatechars:60 }} </h6>
+    <p> CNY {{ classified.price|title }} </p>
+    <span> 📍 {{ classified.city|safe }}</span>
+  </div>
+</a>

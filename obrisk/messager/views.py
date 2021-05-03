@@ -138,42 +138,7 @@ def messagesView(request, username):
                     'sender',
                     'recipient',
                     'classified'
-                ).values('message',
-                        'timestamp',
-                        'classified_thumbnail',
-                        'img_preview',
-                        'image',
-                        'unread').annotate(
-                    sender_username = Subquery (
-                        user_model.objects.filter(
-                            sent_messages=OuterRef('pk'),
-                        ).values_list('username', flat=True)[:1]),
-                    sender_thumbnail = Subquery (
-                        user_model.objects.filter(
-                            sent_messages=OuterRef('pk'),
-                        ).values_list('thumbnail', flat=True)[:1]),
-                    recipient_username = Subquery (
-                        user_model.objects.filter(
-                            received_messages=OuterRef('pk'),
-                        ).values_list('username', flat=True)[:1]),
-                    recipient_thumbnail = Subquery (
-                        user_model.objects.filter(
-                            received_messages=OuterRef('pk'),
-                        ).values_list('thumbnail', flat=True)[:1]),
-                    classified_title = Subquery (
-                        Classified.objects.filter(
-                            message=OuterRef('pk'),
-                        ).values_list('title', flat=True)[:1]),
-                    classified_price = Subquery (
-                        Classified.objects.filter(
-                            message=OuterRef('pk'),
-                        ).values_list('price', flat=True)[:1]),
-                    classified_slug = Subquery (
-                        Classified.objects.filter(
-                            message=OuterRef('pk'),
-                        ).values_list('slug', flat=True)[:1]),
-                    )
-
+                )
             #msgs_data = list(msgs_all)
             messages_list_cleanup.delay(key, request.user.pk)
 

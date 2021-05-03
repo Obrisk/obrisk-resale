@@ -12,15 +12,14 @@
     <div class="users-list">
       {% for con in convs %}
           {% if con.first_user.username == request.user.username %}
-              <a href="{% url 'messager:conversation_detail' con.second_user.username %}" data-toggle="modal"
+              <a href="{% url 'messager:conversation_detail' con.second_user.username %}"
                 id="{{ con.key }}" class="card contact-card open-chat">
                 {% if con.second_user.thumbnail %}
-                <img src="{{oss}}/{{con.second_user.thumbnail}}" alt="Pic" width="40px"
-                  style="width:40px;height:40px;border-radius: 50%;"
-                  class="rounded-circle profile-header-avatar img-fluid">
+                <img src="{{oss}}/{{con.second_user.thumbnail}}"
+                  class="rounded-circle contact-profile-avatar img-fluid">
                 {% else %}
-                <img src="{% static 'img/user.png' %}" width="40px" style="width:40px;height:40px;border-radius: 50%;"
-                  alt="No Pic" class="profile-header-avatar img-fluid" />
+                <img src="{% static 'img/user.png' %}"
+                  alt="pic" class="contact-profile-avatar img-fluid" />
                 {% endif %}
 
                 <div class="contact-card-meta">
@@ -34,10 +33,8 @@
                   <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}> 
                       {% if con.last_msg %}
                           {{ con.last_msg|truncatechars:30 }}
-                      {% elif con.img or con.attachment %}
-                          Attachment
                       {% else %}
-                          New conversation
+                          Attachment
                       {% endif %}
                    </small>
 
@@ -56,15 +53,14 @@
               </a>
 
           {% else %}
-             <a href="{% url 'messager:conversation_detail' con.first_user.username %}" data-toggle="modal"
+             <a href="{% url 'messager:conversation_detail' con.first_user.username %}"
                 id="{{ con.key }}" class="card contact-card open-chat">
                 {% if con.first_user.thumbnail %}
-                    <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="Picture Profile"
-                      style="width:40px;height:40px;border-radius: 50%;"
-                      class="rounded-circle profile-header-avatar img-fluid" id="pic">
+                    <img src="{{oss}}/{{con.first_user.thumbnail}}" alt="pic"
+                      class="rounded-circle contact-profile-avatar img-fluid">
                 {% else %}
-                    <img src="{% static 'img/user.png' %}" height="40px" style="width:40px;height:40px;border-radius: 50%;"
-                      alt="No Profile Picture" class="profile-header-avatar img-fluid" />
+                    <img src="{% static 'img/user.png' %}" 
+                      alt="No Profile Picture" class="contact-profile-avatar img-fluid" />
                 {% endif %}
 
                 <div class="contact-card-meta">
@@ -78,10 +74,8 @@
                   <small class="msg" {% if forloop.first %} id="last-msg" {% endif %}>
                       {% if con.last_msg %}
                           {{ con.last_msg|truncatechars:30 }}
-                      {% elif con.img or con.attachment %}
+                      {% else%}
                           Attachment
-                      {% else %}
-                          New conversation
                       {% endif %}
                    </small>
 
@@ -114,7 +108,7 @@
             {% if super_users.first.thumbnail %}
                 <img src="{{oss}}/{{super_users.first.thumbnail}}" alt="Picture Profile"
                   style="width:40px;height:40px;border-radius: 50%;"
-                  class="rounded-circle profile-header-avatar img-fluid" id="pic">
+                  class="rounded-circle contact-profile-avatar img-fluid" id="pic">
             {% else %}
                 <img src="{% static 'img/user.png' %}" width="40px" alt="No Profile Picture"
                   class="profile-header-avatar img-fluid" />

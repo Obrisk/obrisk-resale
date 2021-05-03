@@ -1,16 +1,14 @@
 {% load static i18n humanize %}
 
-{% if request.user.username == message.sender_username %}
+{% if request.user == message.sender %}
     <div class="chat-message is-sent">
-    {% if message.sender_thumbnail %}
-        <img src="{{oss}}/{{message.sender_thumbnail}}" alt="Picture Profile"
-            style="width:30px;height:30px;border-radius: 50%;"
-            class="rounded-circle profile-header-avatar img-fluid" id="pic"/>
+    {% if message.sender.thumbnail %}
+        <img src="{{oss}}/{{message.sender.thumbnail}}" alt="pic"
+            class="rounded-circle profile-avatar img-fluid"/>
     {% else %}
         <img src="{% static 'img/user.png' %}"
-            style="border-radius: 50%;" height="30px" width="30px"
-            class="rounded-circle profile-header-avatar img-fluid"
-            alt="No Profile Picture" />
+            class="rounded-circle profile-avatar img-fluid"
+            alt="pic"/>
     {% endif %}
 
     <div class="message-block">
@@ -19,42 +17,12 @@
             <div class="message-text">{{ message.message }}</div>
 
         {% elif message.img_preview %}
-            <a data-fslightbox="gallery" href="{{oss}}/{{ message.image }}"><img
-                    style="width: 250px; height: 250px; border-radius: 3%;"
-                    src="{{oss}}/{{ message.img_preview }}" />
+            <a data-fslightbox="gallery" href="{{oss}}/{{ message.image }}">
+                <img class="chat-img" src="{{oss}}/{{ message.img_preview }}" />
             </a>
 
        {% elif message.classified %} 
-            <div class="card classified-card" style="max-width: 295px">
-                <a href="{% url 'classifieds:classified' message.classified.slug %}"
-                  style="color:black; text-decoration:none; background-color:none" class="is-flex">
-
-                <div class="card-img-top img-responsive column">
-                    {% if message.classified_thumbnail %}
-                        <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}"
-                        style="max-width: 70px">
-                    {% else %}
-                        <img class="card-img" src="{{oss}}/classifieds/default.jpg"
-                        style="max-width: 70px">
-                    {% endif %}
-                </div>
-             </div>
-
-             <div class="column">
-                <h6 class="card-title"> {{ message.classified.title|truncatechars:60 }} </h6>
-                <p class="card-subtitle O-cl-red"> CNY {{ message.classified.price|title }} </p>
-                <div class="card-meta is-flex justify-content-between">
-                  <div class="is-flex location">
-                    {%if message.classified.city %}
-                    <small>📍</small>
-                    <span class="card-text small "> {{ message.classified.city|safe }}</span>
-                    {%endif%}
-                  </div>
-                </div>
-
-              </div>
-            </a>
-          </div>
+            {% include 'messager/classified_single_message.html' with classified=message.classified %}
        {% endif %}
     </div>
 </div>
@@ -62,59 +30,26 @@
 {% else %}
 
 <div class="chat-message is-received">
-    {% if message.sender_thumbnail %}
-    <img src="{{oss}}/{{message.sender_thumbnail}}" alt="Picture Profile"
-        style="width:30px;height:30px;border-radius: 50%;"
-        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
+    {% if message.sender.thumbnail %}
+        <img src="{{oss}}/{{message.sender.thumbnail}}" alt="pic"
+            class="rounded-circle profile-avatar img-fluid">
     {% else %}
-    <img src="{% static 'img/user.png' %}" style="border-radius: 50%;" height="30px" width="30px"
-        class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" alt="No Profile Picture" />
+        <img src="{% static 'img/user.png' %}"
+            class="rounded-circle profile-avatar img-fluid" alt="pic" />
     {% endif %}
     <div class="message-block">
         <span>{{ message.timestamp|date:'N d G:i' }}</span>
         {% if message.message %}
-        <div class="message-text">{{ message.message }}</div>
-        {% endif %}
+            <div class="message-text">{{ message.message }}</div>
 
-        {% if message.img_preview %}
-        <a data-fslightbox="gallery" style="width: 250px; height: 250px;"
-            href="{{oss}}/{{ message.image }}"><img
-                style="width: 250px; height: 250px; border-radius: 3px;"
-                src="{{oss}}/{{ message.img_preview }}" /></a>
-        {% endif %}
-
-       {% if message.classified %} 
-          <div class="card classified-card" style="max-width: 295px">
-            <a href="{% url 'classifieds:classified' message.classified.slug %}"
-              style="color:black; text-decoration:none; background-color:none" class="is-flex">
-
-              <div class="card-img-top img-responsive column">
-                {% if message.classified_thumbnail %}
-                    <img class="card-img" src="{{oss}}/{{ message.classified_thumbnail }}"
-                    style="max-width: 70px">
-                {% else %}
-                    <img class="card-img" src="{{oss}}/classifieds/default.jpg"
-                    style="max-width: 70px">
-                {% endif %}
-              </div>
-
-              <div class="column">
-                <h6 class="card-title"> {{ message.classified.title|truncatechars:60 }} </h6>
-                <p class="card-subtitle O-cl-red"> CNY {{ message.classified.price|title }} </p>
-                <div class="card-meta is-flex justify-content-between">
-                  <div class="is-flex location">
-                    {%if message.classified.city %}
-                    <small>📍</small>
-                    <span class="card-text small "> {{ message.classified.city|safe }}</span>
-                    {%endif%}
-                  </div>
-                </div>
-
-              </div>
+        {% elif message.img_preview %}
+            <a data-fslightbox="gallery" href="{{oss}}/{{ message.image }}">
+                <img class="chat-img" src="{{oss}}/{{ message.img_preview }}" />
             </a>
-          </div>
-        {% endif %}
 
+       {% elif message.classified %} 
+            {% include 'messager/classified_single_message.html' with classified=message.classified %}
+       {% endif %}
     </div>
 </div>
 
