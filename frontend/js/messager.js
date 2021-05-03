@@ -96,9 +96,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const msg = `<div class="chat-message is-sent">
             <img src="${currentUserThumbnail}"
-            alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;"
-            class="rounded-circle profile-header-avatar img-fluid"
-            id="pic">
+            class="rounded-circle profile-avatar img-fluid" alt="pic">
             <div class="message-block">
                 <span>${tme_stamp}</span>
                 <div class="message-text">${document.getElementById("sendText").value}</div>
@@ -260,14 +258,13 @@ OssUpload.prototype = {
 
           const tme_stamp = getFormatedTime();
 
-          const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}"
-                            alt="Picture Profile"
-                            style="width:30px;height:30px;border-radius: 50%;"
-                            class="rounded-circle profile-header-avatar img-fluid"
-                            id="pic">
-                            <div class="message-block"><span>${tme_stamp} </span>
+          const image = `<div class="chat-message is-sent">
+                          <img src="${currentUserThumbnail}"
+                            alt="pic" class="rounded-circle profile-avatar img-fluid">
+                            <div class="message-block">
+                              <span> ${tme_stamp} </span>
                               <a data-fslightbox="gallery" href="${reader.result}">
-                                <img style="width: 250px; height: 250px; border-radius: 3%;" src="${reader.result}">
+                                <img class="chat-img" src="${reader.result}">
                               </a>
                             </div>
                         </div>`;
