@@ -2,8 +2,8 @@
 
 {% if request.user.username == message.sender_username %}
     <div class="chat-message is-sent">
-    {% if message.sender.thumbnail %}
-        <img src="{{oss}}/{{message.sender.thumbnail}}" alt="Picture Profile"
+    {% if message.sender_thumbnail %}
+        <img src="{{oss}}/{{message.sender_thumbnail}}" alt="Picture Profile"
             style="width:30px;height:30px;border-radius: 50%;"
             class="rounded-circle profile-header-avatar img-fluid" id="pic"/>
     {% else %}
@@ -14,13 +14,13 @@
     {% endif %}
 
     <div class="message-block">
-        <span>{{ message.timestamp|date:'M. d G:i' }}</span>
+        <span>{{ message.timestamp|date:'N d G:i' }}</span>
         {% if message.message %}
             <div class="message-text">{{ message.message }}</div>
 
         {% elif message.img_preview %}
-            <a data-fslightbox="gallery" href="{{oss}}/{{ message.img_preview }}"><img
-                    style="width: 250px; height: 250px;"
+            <a data-fslightbox="gallery" href="{{oss}}/{{ message.image }}"><img
+                    style="width: 250px; height: 250px; border-radius: 3%;"
                     src="{{oss}}/{{ message.img_preview }}" />
             </a>
 
@@ -62,8 +62,8 @@
 {% else %}
 
 <div class="chat-message is-received">
-    {% if message.sender.thumbnail %}
-    <img src="{{oss}}/{{message.sender.thumbnail}}" alt="Picture Profile"
+    {% if message.sender_thumbnail %}
+    <img src="{{oss}}/{{message.sender_thumbnail}}" alt="Picture Profile"
         style="width:30px;height:30px;border-radius: 50%;"
         class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
     {% else %}
@@ -78,8 +78,8 @@
 
         {% if message.img_preview %}
         <a data-fslightbox="gallery" style="width: 250px; height: 250px;"
-            href="{{oss}}/{{ message.img_preview }}"><img
-                style="width: 250px; height: 250px;"
+            href="{{oss}}/{{ message.image }}"><img
+                style="width: 250px; height: 250px; border-radius: 3px;"
                 src="{{oss}}/{{ message.img_preview }}" /></a>
         {% endif %}
 

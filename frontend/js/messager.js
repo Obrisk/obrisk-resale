@@ -96,8 +96,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
       const msg = `<div class="chat-message is-sent">
             <img src="${currentUserThumbnail}"
-            alt="Picture Profile" style="width:42px;height:42px;border-radius: 50%;"
-            class="rounded-circle  mb-3 mb-md-0 mr-md-3 profile-header-avatar img-fluid"
+            alt="Picture Profile" style="width:30px;height:30px;border-radius: 50%;"
+            class="rounded-circle profile-header-avatar img-fluid"
             id="pic">
             <div class="message-block">
                 <span>${tme_stamp}</span>
@@ -262,12 +262,12 @@ OssUpload.prototype = {
 
           const image = `<div class="chat-message is-sent"><img src="${currentUserThumbnail}"
                             alt="Picture Profile"
-                            style="width:42px;height:42px;border-radius: 50%;"
+                            style="width:30px;height:30px;border-radius: 50%;"
                             class="rounded-circle profile-header-avatar img-fluid"
                             id="pic">
                             <div class="message-block"><span>${tme_stamp} </span>
                               <a data-fslightbox="gallery" href="${reader.result}">
-                                <img style="width: 250px; height: 250px;" src="${reader.result}">
+                                <img style="width: 250px; height: 250px; border-radius: 3%;" src="${reader.result}">
                               </a>
                             </div>
                         </div>`;
@@ -280,9 +280,6 @@ OssUpload.prototype = {
       //The length of the file already in the plugin, append
       const curIndex = uploader.fileList.length;
       let file = null;
-
-      document.querySelector("#uploader .placeholder").classList.add('is-hidden');
-      document.getElementById("statusBar").style.display = "flex";
 
       if (files.length == 0) {
         alert("No image selected , Please select one or more images");
@@ -302,7 +299,7 @@ OssUpload.prototype = {
             );
           }
         }
-        document.querySelector(".addBtn").classList.add('is-hidden');
+        document.getElementById("addBtn").classList.add('is-hidden');
       }
       uploader.fileStats.totalFilesNum = uploader.fileList.length;
       if (uploader.fileStats.totalFilesNum == 0) {
@@ -365,7 +362,7 @@ OssUpload.prototype = {
                 }).then(function(res) {
                   //Try to get the dominat color from the uploaded image
                   //if it fails it means the image was corrupted during upload
-                     submitOSSImage(res, upload);
+                     submitOSSImage(res, upload, file);
                 }).catch(err => {
                   console.error(err);
                   console.log(`err.name : ${err.name}`);
@@ -382,16 +379,13 @@ OssUpload.prototype = {
                     } else {
                       //We have retried to the max and there is nothing we can do
                       //Allow the users to submit the form atleast with default image.
-                      document.querySelector("ul.filelist li")
-                        .querySelector(".success-span")
-                        .classList.add("fail");
                       img_error = err.name + ", Message: " +
                         err.message + ", RequestID: " + err.requestId;
 
                       if (!images) {
                         images = "undef,classifieds/error-img.jpg";
                         alert(
-                          "Oops! an error occured when uploading your image(s). Please try again later"
+                          "An error occured, Pls try again or add our wechatID: Obrisk"
                         );
                       }
                     }
@@ -402,7 +396,7 @@ OssUpload.prototype = {
                       err.message + ", RequestID: " + err.requestId;
 
                     if (!images) {
-                      images = "undef,classifieds/error-img.jpg";
+                      images = "classifieds/error-img.jpg";
                       alert(
                         "Oops! an error occured, Pls try again or add our wechatID: Obrisk"
                       );
@@ -446,31 +440,27 @@ var applyTokenDo = function() {
         "X-Requested-With": "XMLHttpRequest"
       }
     }).then (result =>  {
-        if (!response.ok) {
+        if (!result.ok) {
           throw new Error('Network response was not ok');
         }
-        resolve(result);
+        resolve(result.json());
 
     }).catch(error => {
-        reject(e);
+        reject(error);
     });
   });
 };
 
-function submitOSSImage (res, upload) {
+function submitOSSImage (res, upload, file) {
     fetch(
       obrisk_oss_url + res.name +"?x-oss-process=image/average-hue", {
       headers: {
         "X-Requested-With": "XMLHttpRequest"
       }
     }).then (resp =>  {
-        if (!response.ok) {
+        if (!resp.ok) {
           throw new Error('Network response was not ok');
         }
-        document.getElementById(file.id)
-            .children(".success-span").addClass("success");
-        document.getElementById(file.id)
-           .children(".file-panel").style.display = 'none';
         //Successfully uploaded + 1
         uploader.fileStats.uploadFinishedFilesNum++;
         //Currently uploaded file size
@@ -490,10 +480,11 @@ function submitOSSImage (res, upload) {
           .then (data => {
               document.getElementById("image").value = "";
         }).catch (error => {
-            printError('Image upload failed, please re-submit');
+            alert('Image upload failed, please re-submit');
         });
      }).catch(error => {
         // if a file is corrupted during upload retry 5 times to upload it
+        console.log(error);
         if (retryCount < retryCountMax) {
             retryCount++;
             console.error(`retryCount : ${retryCount}`);
@@ -508,7 +499,7 @@ function submitOSSImage (res, upload) {
               ", RequestID: " + res.name;
             if (!images) {
                 images = "undef,classifieds/error-img.jpg";
-                printError(
+                alert(
                   "Oops! an error occured, please try again later"
                 );
             }
