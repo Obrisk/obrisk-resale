@@ -15,6 +15,10 @@ urlpatterns = [
         r'^write-new-classified/$',
         CreateClassifiedView.as_view(),
         name='write_new'),
+    url(
+        r'^wsguatpotlfwccdi/admin-write-new-classified/$',
+        adminCreateClassified,
+        name='admin_new_classified'),
     url(r'^tags-autocomplete/$',
         ClassifiedTagsAutoComplete.as_view(),
         name='tags_autocomplete'),

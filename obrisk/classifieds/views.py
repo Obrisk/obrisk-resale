@@ -7,7 +7,9 @@ import os
 import ast
 
 from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (
+        LoginRequiredMixin
+    )
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.views.generic import (
@@ -41,15 +43,18 @@ from ipware import get_client_ip
 from aliyunsdkcore.client import AcsClient
 from aliyunsdkcore.acs_exception.exceptions import ClientException
 from aliyunsdkcore.acs_exception.exceptions import ServerException
-from aliyunsdkgeoip.request.v20200101.DescribeIpv4LocationRequest import DescribeIpv4LocationRequest
-
-
-from obrisk.utils.helpers import ajax_required, AuthorRequiredMixin
+from aliyunsdkgeoip.request.v20200101.DescribeIpv4LocationRequest import (
+        DescribeIpv4LocationRequest
+    )
+from obrisk.utils.helpers import (
+        ajax_required, AuthorRequiredMixin,
+        OfficialUserRequiredMixin
+    )
 from obrisk.classifieds.models import (
         Classified, OfficialAd, ClassifiedOrder,
         ClassifiedImages, ClassifiedTags)
 from obrisk.classifieds.forms import (
-        ClassifiedForm, OfficialAdForm,
+        ClassifiedForm, AdminClassifiedForm, OfficialAdForm,
         ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
 from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
@@ -243,7 +248,7 @@ class CreateOfficialAdView(LoginRequiredMixin, CreateView):
 class CreateClassifiedView(CreateView):
     """Basic CreateView implementation to create new classifieds."""
     model = Classified
-    message = _("Your item is ready to sell✌️ ")
+    message = _("Your item is ready to go✌️ ")
     form_class = ClassifiedForm
     template_name = 'classifieds/classified_create.html'
 
@@ -340,13 +345,101 @@ class CreateClassifiedView(CreateView):
             data = {
                 'status': '200',
                 'success_message': _(
-                    'Your item is ready to sell✌️ '
+                    'Your item is ready to go✌️ '
                 )
             }
             return JsonResponse(data)
         else:
             form = ClassifiedForm()
             return self.form_invalid(form,data=failure_data)
+
+
+
+@login_required
+def adminCreateClassified(request, *args, **kwargs):
+
+    if not request.user.is_superuser:
+        return HttpResponse(
+                "Hey, You are not authorized!",
+                content_type='text/plain')
+    if request.method == 'GET':
+
+        #form = AdminClassifiedForm()
+        return render(
+                request,
+                'classifieds/admin_classified_create.html',
+                {'form':AdminClassifiedForm()}
+            )
+
+    elif request.method == 'POST':
+        form = AdminClassifiedForm(request.POST)
+        data=None
+
+        if form.is_valid():
+            images_json = form.cleaned_data['images']
+            img_errors = form.cleaned_data['img_error']
+
+            if img_errors:
+                #Send this email in a celery task to improve performance
+                logging.error(
+                        'JS ERRORS ON IMAGE UPLOADING:' + \
+                        str(img_errors)
+                    )
+
+            #Phone number needs no backend verification, it is just a char field. 
+            #user = self.request.user
+            user = form.instance.user
+            classified = form.save(commit=False)
+
+            #Empty phone number is +8613300000000 for all old users around 150 users
+            if user.phone_number != '':
+                if user.phone_number.national_number != 13300000000:
+                    classified.phone_number = user.phone_number
+
+            if not classified.english_address and user.english_address:
+                classified.english_address = user.english_address
+
+            if not classified.chinese_address and user.chinese_address:
+                classified.chinese_address = user.chinese_address
+
+            classified.save()
+
+            images_list = images_json.split(",")
+            if multipleImagesPersist(
+                    request, images_list,
+                    'classifieds', classified):
+                messages.success(
+                    request,
+                    'Your item is ready to go✌️'
+                )
+                data = {
+                    'status': '200',
+                    'success_message': _(
+                        'Your item is ready to go✌️ '
+                    )
+                }
+                return JsonResponse(data)
+
+        if form.errors:
+            error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
+            data = {
+                'status': '400',
+                'error_message': _(
+                    f'Form error on {error_msg}')
+            }
+        else:
+            data = {
+                'status': '400',
+                'error_message': _(
+                    'Sorry we can\'t process your post \
+                        please try again later')
+            }
+        return JsonResponse(data)
+
+    else:
+        return HttpResponse(
+                "Hey, You are not authorized!",
+                content_type='text/plain')
 
 
 class ClassifiedTagsAutoComplete(autocomplete.Select2QuerySetView):

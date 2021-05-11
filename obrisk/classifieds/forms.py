@@ -3,6 +3,7 @@ from dal import autocomplete
 from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedOrder
 from phonenumber_field.formfields import PhoneNumberField
 
+
 class ClassifiedForm(forms.ModelForm):
     details = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4}),
@@ -47,6 +48,53 @@ class ClassifiedForm(forms.ModelForm):
     class Meta:
         model = Classified
         fields = ["title", "details", "status", "edited",
+                 "price", "english_address", "phone_number"]
+
+
+class AdminClassifiedForm(forms.ModelForm):
+    details = forms.CharField(
+        widget=forms.Textarea(attrs={"rows": 4}),
+        required=False,
+        label=("details (Optional)")
+    )
+    price = forms.DecimalField(
+            required=False
+        )
+    status = forms.CharField(
+            widget=forms.HiddenInput(),
+            required=False
+        )
+    edited = forms.BooleanField(
+            widget=forms.HiddenInput(),
+            required=False, initial=False
+        )
+    #100 for each image.
+    images = forms.CharField(
+            widget=forms.HiddenInput(),
+            max_length=1500, required=False
+        )
+    #Store images error for later debugging.
+    img_error = forms.CharField(
+            widget=forms.HiddenInput(),
+            max_length=500, required=False
+        )
+
+    english_address = forms.CharField(
+            required=False, label=("Address (English)")
+        )
+
+    phone_number = PhoneNumberField(required=False,
+            label=("Phone number(optional)"),
+            widget=forms.TextInput(
+                attrs={
+                    'placeholder': ('Don\'t enter country code')
+                }
+            )
+        )
+
+    class Meta:
+        model = Classified
+        fields = ["user", "title", "details", "status", "edited",
                  "price", "english_address", "phone_number"]
 
 
