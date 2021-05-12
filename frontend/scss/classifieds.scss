@@ -12,6 +12,7 @@ body {
 {
     display: table;
     width: 100%;
+    margin-left: 8px;
 }
 
 .td
@@ -25,7 +26,6 @@ body {
     font-family: Nunito;
     border: 0;
     background-color: transparent;
-    margin-bottom: -4em;
 }
 
 #search-input:focus{
@@ -37,7 +37,7 @@ body {
 #cover
 {
     background-color: #ffffff;
-    border: 0.1px solid #3EC4E2;
+    border: 2px solid #3EC4E2;
     border-radius: 20px;
     transform: scale(0.8);
     margin-top: 5rem;
