@@ -23,32 +23,26 @@ body {
 #search-input, #search-btn
 {
     font-family: Nunito;
-    padding: 0;
-    margin: 0;
     border: 0;
     background-color: transparent;
     margin-bottom: -4em;
 }
 
 #search-input:focus{
+  padding: 0;
+  margin: 0;
   outline: none;
 }
 
 #cover
 {
     background-color: #ffffff;
-    border: 2px solid #3EC4E2;
+    border: 0.1px solid #3EC4E2;
     border-radius: 20px;
     transform: scale(0.8);
     margin-top: 5rem;
     margin-bottom: 1rem;
-    height: 60px;
-    //box-shadow: 0 10px 40px #3ECBE9, 0 0 0 20px #EBFFFF;
-}
-
-form
-{
-    height: 60px;
+    box-shadow: 1px 4px #3EC4E2;
 }
 
 #search-input
@@ -63,68 +57,18 @@ form
     box-shadow: none;
 }
 
-#search-input::placeholder
-{
-    color: #3ec4e2;
-}
 
 #s-cover
 {
     width: 1px;
-    padding-left: 35px;
 }
 
 #search-btn
 {
-    position: relative;
     display: block;
-    width: 75px;
-    height: 60px;
-    cursor: pointer;
-    border: none;
-    outline: none;
+    margin: 1em;
 }
 
-#s-circle
-{
-    position: relative;
-    top: -25px;
-    left: 18px;
-    width: 26px;
-    height: 26px;
-    margin-top: 0;
-    border-width: 15px;
-    border: 5px solid #3EC4E2;
-    background-color: transparent;
-    border-radius: 50%;
-    transition: 0.5s ease all;
-}
-
-button span
-{
-    position: absolute;
-    top: 32px;
-    left: 49px;
-    display: block;
-    background-color: transparent;
-    border-radius: 10px;
-    transform: rotateZ(52deg);
-    transition: 0.5s ease all;
-}
-
-#search-btn span:before, #search-btn span:after
-{
-    content: '';
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 24px;
-    height: 4px;
-    background-color: #3EC4E2;
-    border-radius: 10px;
-    transform: rotateZ(0);
-    transition: 0.5s ease all;
-}
 
 
 #not-found {
