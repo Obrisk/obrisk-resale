@@ -94,7 +94,7 @@ class AdminClassifiedForm(forms.ModelForm):
 
     class Meta:
         model = Classified
-        fields = ["user", "title", "details", "status", "edited",
+        fields = ["user", "title", "details", "status", "edited","tags",
                  "price", "english_address", "phone_number"]
 
 
