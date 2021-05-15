@@ -194,43 +194,45 @@
    }
 
    window.addEventListener('scroll', function () {
-      let st = window.pageYOffset || document.documentElement.scrollTop;
+      if (document.getElementById('search-input').value === "") {
+	      let st = window.pageYOffset || document.documentElement.scrollTop;
 
-      if (empty_page == false && block_request == false && st > lastScrollTop) {
-        block_request = true;
-        page += 1;
-        document.querySelector('.loading').classList.remove('is-hidden')
+	      if (empty_page == false && block_request == false && st > lastScrollTop) {
+		block_request = true;
+		page += 1;
+		document.querySelector('.loading').classList.remove('is-hidden')
 
-        window.requestAnimationFrame(function() {
-            fetch(`${window.location.href.split('#')[0]}?page=${page}`,
-            {
-              headers: {
-                "X-Requested-With": "XMLHttpRequest"
-              }
-            }).then (resp => resp.json())
-            .then (data => {
+		window.requestAnimationFrame(function() {
+		    fetch(`${window.location.href.split('#')[0]}?page=${page}`,
+		    {
+		      headers: {
+			"X-Requested-With": "XMLHttpRequest"
+		      }
+		    }).then (resp => resp.json())
+		    .then (data => {
 
-                document.querySelector('.loading').classList.add('is-hidden');
-                block_request = false;
-                renderClassifieds(data.classifieds) 
+			document.querySelector('.loading').classList.add('is-hidden');
+			block_request = false;
+			renderClassifieds(data.classifieds) 
 
-                  if (data.end === "end") {
-                    empty_page = true;
-                    document.querySelector('.loading').classList.add('is-hidden');
-                    document.querySelector(
-                            '.classifieds-list-wrapper'
-                        ).insertAdjacentHTML(
-                            'beforeend',
-                            '<div class="end-classifieds">--Best things in life are actually really expensive😜--</div>'
-                        )
-                  } 
+			  if (data.end === "end") {
+			    empty_page = true;
+			    document.querySelector('.loading').classList.add('is-hidden');
+			    document.querySelector(
+				    '.classifieds-list-wrapper'
+				).insertAdjacentHTML(
+				    'beforeend',
+				    '<div class="end-classifieds">--Best things in life are actually really expensive😜--</div>'
+				)
+			  } 
 
-            }).catch (err => {
-                console.log(err);
-            });
-        });
-      }
-      lastScrollTop = st <= 0 ? 0 : st;
+		    }).catch (err => {
+			console.log(err);
+		    });
+		});
+	      }
+	      lastScrollTop = st <= 0 ? 0 : st;
+     }
     });
 
   function searchSubmit(e, formInput) {
