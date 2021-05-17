@@ -404,6 +404,9 @@ def adminCreateClassified(request, *args, **kwargs):
 
             classified.save()
 
+            for tag in form.cleaned_data['tags']:
+                classified.tags.add(tag)
+
             images_list = images_json.split(",")
             if multipleImagesPersist(
                     request, images_list,
