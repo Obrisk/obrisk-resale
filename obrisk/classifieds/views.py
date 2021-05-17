@@ -403,9 +403,10 @@ def adminCreateClassified(request, *args, **kwargs):
                 classified.chinese_address = user.chinese_address
 
             classified.save()
-
             for tag in form.cleaned_data['tags']:
                 classified.tags.add(tag)
+            classified.save()
+
 
             images_list = images_json.split(",")
             if multipleImagesPersist(

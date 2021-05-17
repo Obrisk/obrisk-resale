@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*                                    utils                                   */
 /* -------------------------------------------------------------------------- */
-
+const adminUrl = '/classifieds/wsguatpotlfwccdi/admin-write-new-classified/';
 
 //Print error message
 function printError(msg) {
@@ -48,13 +48,13 @@ document.addEventListener('DOMContentLoaded', function() {
     $("#id_img_error").val(img_error);
 
     $.ajax({
-      url: "/classifieds/wsguatpotlfwccdi/admin-write-new-classified/",
+      url: adminUrl,
       data: $("form").serialize(),
       type: "POST",
       cache: false,
       success: function(data) {
         if (data.status == "200") {
-            window.location.replace("/classifieds/");
+            window.location.replace(adminUrl);
         } else {
           //At this point check if the images variable exists and
           //update the thumbnail holder to show the uploaded images.
