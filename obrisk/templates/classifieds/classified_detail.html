@@ -188,10 +188,12 @@
                     <div class="card-body">
                       <h6 class="card-title"> {{ classified.title}} </h6>
 
-                      {% if classified.price != 0.00 %}
-                          <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
+                      {% if classified.price == 0.00 %}
+			  <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                      {% elif classified.price is None %}
+			  <p class="card-subtitle">  {% trans 'BID PRICE' %} </p>
                       {% else %}
-                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
+			  <p class="card-subtitle"> ¥{{ classified.price }} </p>
                       {% endif %}
                       <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
 
@@ -224,6 +226,15 @@
 <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
 <script type="text/javascript">
+
+
+  {% if classified.price == 0.00 %}
+      const price = "FREE "
+  {% elif classified.price is None %}
+      const price = "BID PRICE "
+  {% else %}
+      const price ="CNY {{classified.price }} "
+  {% endif %}
 
   function shareMe(title, text) {
         navigator.share({
@@ -262,33 +273,6 @@
             type: 'loop'
       }).mount();
 
-      function copyToClipboard(text, el) {
-        var copyTest = document.queryCommandSupported('copy');
-        var elOriginalText = el.attr('data-original-title');
-
-        if (copyTest === true) {
-          var copyTextArea = document.createElement("textarea");
-          copyTextArea.value = text;
-          document.body.appendChild(copyTextArea);
-          copyTextArea.select();
-          try {
-            var successful = document.execCommand('copy');
-            var msg = successful ? 'Copied!' : 'Whoops, not copied!';
-            $.wnoty({
-              type: "success",
-              message: "Copied"
-            })
-          } catch (err) {
-            console.log('Oops, unable to copy');
-          }
-          document.body.removeChild(copyTextArea);
-          el.attr('data-original-title', elOriginalText);
-        } else {
-          // Fallback if browser doesn't support .execCommand('copy')
-          window.prompt("Copy to clipboard: Ctrl+C or Command+C, Enter", text);
-        }
-      }
-
 	  fetch('{% url 'wx_req_cred' %}', {
 	      headers: {
 		"X-Requested-With": "XMLHttpRequest"
@@ -318,9 +302,9 @@
                   console.log('failure to init wx');
               }
           } catch {
-		      console.log('failure to init wx');
+	      console.log('failure to init wx');
           }
-	    })
+       })
 
         wx.ready(function(){
           try {
@@ -328,7 +312,7 @@
               const title = "{{ classified.title | truncatechars:80 }}".replace(/[^a-zA-Z0-9 ]/g, '');
               wx.onMenuShareAppMessage({ 
                     title: title, 
-                    desc: 'CNY {{classified.price}} ' + descr, 
+                    desc: price + descr, 
                     link: location.href, 
                       imgUrl: '{{oss}}/{{ classified.thumbnail }}', 
                     trigger: function (res) {
@@ -344,7 +328,7 @@
 
               wx.onMenuShareTimeline({ 
                     title: title, 
-                    desc: 'CNY {{classified.price}} ' + descr, 
+                    desc: price + descr, 
                     link: location.href, 
                     imgUrl: '{{oss}}/{{ classified.thumbnail }}', 
                     trigger: function (res) {
