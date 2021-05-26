@@ -9,7 +9,7 @@
 }
 
 .login {
-    margin: 8px;
+    margin: auto 2em;
 }
 
 .box {
@@ -55,6 +55,10 @@ label {
     margin: 5%;
 }
 
+#signup_form {
+    margin: 12%;
+}
+
 #send-code, .login-submit-btn {
    margin-top: 14px;
 }
@@ -94,7 +98,7 @@ label {
 
 .options-btns {
     position: relative;
-    width: 60%;
+    width: 75%;
     display: flex;
     flex-direction: column;
     align-content: center;
@@ -125,6 +129,10 @@ label {
     display: flex;
     margin: 14px auto;
     justify-content: space-around;
+}
+
+#wechat-text {
+    margin-left: 6px;
 }
 
 #lh {

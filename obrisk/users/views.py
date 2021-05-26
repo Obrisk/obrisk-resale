@@ -147,7 +147,7 @@ def send_code(phone_number, theme, user=None):
 
     success_resp = JsonResponse({
         'success': True,
-        'message': "Ding ding🔔 Wait for the code😊"
+        'message': "Ding ding🔔 Pls wait for the code😊"
     })
 
     if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
@@ -395,7 +395,7 @@ def phone_verify(request):
                 saved_code = cache.get(str(phone_no))
             except:
                 return JsonResponse({
-                    'error_message': "The verification code has expired or it is invalid!"})
+                    'error_message': "The verification code is invalid!"})
             else:
                 if saved_code == code:
                     if str(request.META.get(

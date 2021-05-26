@@ -260,6 +260,26 @@ $(function() {
   });
 
 
+  const username_el = document.getElementById("id_username");
+  const username_err = document.getElementById('username-errors');
+  const confirm_btn = document.getElementById('phone-signup-submit');
+
+  username_el.addEventListener('keyup', e => {
+      fetch(`/users/username-exists/?username=${e.target.value}`)
+      .then (resp => resp.json())
+      .then (data => {
+          if (data.status === '201') {
+            username_err.innerHTML= "This username is already taken!";
+            confirm_btn.disabled = true;
+          }
+          else {
+            username_err.innerHTML="";
+            confirm_btn.disabled = false;
+          }
+      })
+  });
+
+
   //Updated form to be use steps
   $(".process-button").on("click", function() {
     var $this = $(this);
