@@ -13,114 +13,114 @@
 
 {% block content %}
 <body class="has-slimscroll">
-  <div class="chat-wrapper is-standalone">
-          <!-- Chat top navigation -->
-          <div class="chat-nav">
-            <div class="nav-start">
-              <div class="recipient-block">
-                <div class="avatar-container">
-                  {% if active.thumbnail %}
-                        <img class="user-avatar rounded-circle profile-header-avatar img-fluid"
-                        alt="pic" src="{{oss}}/{{active.thumbnail}}">
-                  {% else %}
-                        <img class="user-avatar rounded-circle profile-header-avatar img-fluid"
-                        id="pic" alt="pic" src="{% static 'img/user.png' %}">
-                  {% endif %}
-                </div>
-                <div class="username">
-                    <span> {{ active.username | title }} </span>
-                </div>
-              </div>
-            </div>
-            <div class="nav-end">
-              <div>
-                <a href="{% url 'messager:contacts_list' %}"
-                   class="delete is-large" aria-label="close">
-                </a>
-              </div>
-            </div>
-          </div>
-
-          <!-- Chat body -->
-          <div id="chat-body" class="chat-body" style="">
-            <!-- Conversation with Dan -->
-            <div id="conversation" class="chat-body-inner" style="flex-grow: 1;">
-
-              {% if messages_list %}
-                  {% for message in messages_list %}
-                      {% include 'messager/single_message.html' with message=message %}
-                  {% endfor %}
-
+   <div class="chat-wrapper">
+     <!-- Chat top navigation -->
+      <div class="chat-nav">
+        <div class="nav-start">
+          <div class="recipient-block">
+            <div class="avatar-container">
+              {% if active.thumbnail %}
+                    <img class="user-avatar rounded-circle profile-header-avatar img-fluid"
+                    alt="pic" src="{{oss}}/{{active.thumbnail}}">
               {% else %}
-                  <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
-                  <p>{% trans "I am " %} {{ active.username }} {% trans ", Let's talk!" %}</p>
-
-                   {% if classified %}
-                        <div class="chat-message is-sent">
-                            {% if request.user.thumbnail %}
-                                <img src="{{oss}}/{{request.user.thumbnail}}" alt="pic"
-                                    class="rounded-circle profile-avatar img-fluid"/>
-                            {% else %}
-                                <img src="{% static 'img/user.png' %}" alt="pic" 
-                                    class="rounded-circle profile-avatar img-fluid"/>
-                            {% endif %}
-
-                            <div class="message-block">
-                                {% include 'messager/classified_single_message.html' with classified=classified %}
-                           </div>
-                       </div>
-                  {% endif %}
+                    <img class="user-avatar rounded-circle profile-header-avatar img-fluid"
+                    id="pic" alt="pic" src="{% static 'img/user.png' %}">
               {% endif %}
-
-          <div class="send-message"> </div>
+            </div>
+            <div class="username">
+                <span> {{ active.username | title }} </span>
+            </div>
           </div>
+        </div>
+        <div class="nav-end">
+          <div>
+            <a href="{% url 'messager:contacts_list' %}"
+               class="delete is-large" aria-label="close">
+            </a>
+          </div>
+        </div>
+      </div>
 
-            <!-- Compose message area -->
-            <div class="chat-action">
-              <div class="message-box">
-                <div class="chat-action-inner">
-                  <div class="control">
-                    <form role="form" method="post" action="#" id="send">
-                      <div class="is-flex message-scroll">
-                        {% csrf_token %}
-                        <input type="hidden" class="sendTo" name="to" value="{{ active.username }}">
-                        <textarea class="form-control textarea comment-textarea" autocomplete="off"
-                          maxlength="1000" id="sendText" placeholder="{% trans 'Write a message...' %}" name="message"
-                          autofocus rows="2" cols="2"></textarea>
-                      </div>
+      <!-- Chat body -->
+      <div id="chat-body" class="chat-body" style="">
+        <!-- Conversation with Dan -->
+        <div id="conversation" class="chat-body-inner" style="flex-grow: 1;">
 
-                    </form>
-                    <form id="upload">
-                      {% csrf_token %}
-                      <input type="hidden" class="sendTo "name="to" value="{{ active.username }}">
-                      <input id="image" type="hidden" name="image">
-                      <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+          {% if messages_list %}
+              {% for message in messages_list %}
+                  {% include 'messager/single_message.html' with message=message %}
+              {% endfor %}
 
-                      <div class="dropdown compose-dropdown is-spaced is-accent is-up dropdown-trigger">
-                        <div class="is-flex">
-                          <div class="add-button" id="addBtn">
-                            <div class="button-inner">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"
-                                    viewBox="0 0 512 512">
-                                    <path d="M456,64H56A24,24,0,0,0,32,88V424a24,24,0,0,0,24,24H456a24,24,0,0,0,24-24V88A24,24,0,0,0,456,64ZM331.62,128.2a48,48,0,1,1-43.42,43.42A48,48,0,0,1,331.62,128.2ZM76,416a12,12,0,0,1-12-12V316.37L192.64,202l96.95,96.75L172.37,416Zm372-12a12,12,0,0,1-12,12H217.63L367.16,266.47,448,333.84Z"/>
-                                </svg>
-                            </div>
-                          </div>
+          {% else %}
+              <strong>{% trans 'Hello '  %} {{ request.user.username| title }}{% trans ' nice to meet you' %}</strong>
+              <p>{% trans "I am " %} {{ active.username }} {% trans ", Let's talk!" %}</p>
 
-                          <button id="send-text"
-                            class="button add-button is-solid accent-button is-bold raised">
-                            <small><strong>Send</strong></small>
-                          </button>
+               {% if classified %}
+                    <div class="chat-message is-sent">
+                        {% if request.user.thumbnail %}
+                            <img src="{{oss}}/{{request.user.thumbnail}}" alt="pic"
+                                class="rounded-circle profile-avatar img-fluid"/>
+                        {% else %}
+                            <img src="{% static 'img/user.png' %}" alt="pic" 
+                                class="rounded-circle profile-avatar img-fluid"/>
+                        {% endif %}
 
-                        </div>
+                        <div class="message-block">
+                            {% include 'messager/classified_single_message.html' with classified=classified %}
+                       </div>
+                   </div>
+              {% endif %}
+          {% endif %}
 
-                      </div>
-                    </form>
+      <div class="send-message"> </div>
+      </div>
 
+        <!-- Compose message area -->
+        <div class="chat-action">
+          <div class="message-box">
+            <div class="chat-action-inner">
+              <div class="control">
+                <form role="form" method="post" action="#" id="send">
+                  <div class="is-flex message-scroll">
+                    {% csrf_token %}
+                    <input type="hidden" class="sendTo" name="to" value="{{ active.username }}">
+                    <textarea class="form-control textarea comment-textarea" autocomplete="off"
+                      maxlength="1000" id="sendText" placeholder="{% trans 'Write a message...' %}" name="message"
+                      autofocus rows="2" cols="2"></textarea>
                   </div>
 
-                </div>
+                </form>
+                <form id="upload">
+                  {% csrf_token %}
+                  <input type="hidden" class="sendTo "name="to" value="{{ active.username }}">
+                  <input id="image" type="hidden" name="image">
+                  <input id="image-file" type="file" style="display:none;" multiple="multiple" accept="image/*" />
+
+                  <div class="dropdown compose-dropdown is-spaced is-accent is-up dropdown-trigger">
+                    <div class="is-flex">
+                      <div class="add-button" id="addBtn">
+                        <div class="button-inner">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="512" height="512"
+                                viewBox="0 0 512 512">
+                                <path d="M456,64H56A24,24,0,0,0,32,88V424a24,24,0,0,0,24,24H456a24,24,0,0,0,24-24V88A24,24,0,0,0,456,64ZM331.62,128.2a48,48,0,1,1-43.42,43.42A48,48,0,0,1,331.62,128.2ZM76,416a12,12,0,0,1-12-12V316.37L192.64,202l96.95,96.75L172.37,416Zm372-12a12,12,0,0,1-12,12H217.63L367.16,266.47,448,333.84Z"/>
+                            </svg>
+                        </div>
+                      </div>
+
+                      <button id="send-text"
+                        class="button add-button is-solid accent-button is-bold raised">
+                        <small><strong>Send</strong></small>
+                      </button>
+
+                    </div>
+
+                  </div>
+                </form>
+
               </div>
+
+            </div>
+          </div>
   </div>
 </body>
 

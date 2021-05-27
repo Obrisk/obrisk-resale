@@ -6,7 +6,7 @@ function scrollMessages() {
         the most recent message.
     */
   document.querySelector("textarea[name='message']").focus();
-  document.querySelector("#conversation").scrollTop = 99999999999;
+  document.querySelector("#conversation").scrollTop = 9999;
 }
 
 function addListenerMulti(el, s, fn) {
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function() {
           .then (data => {
             document.getElementById("conversation").insertAdjacentHTML('beforeend', data);
             setTimeout(function() {
-              document.getElementById("conversation").scrollTop = 99999999999;
+              document.getElementById("conversation").scrollTop = 9999;
             }, 200);
         })
     scrollMessages();
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.querySelector("textarea[name='message']").addEventListener("focus", function(e) {
     document.getElementById("addBtn").classList.remove("is-hidden");
-    document.getElementById("conversation").scrollTop = 99999999999;
+    document.getElementById("conversation").scrollTop = 9999;
   });
 
   document.getElementById("send").addEventListener('submit', function(e) {
@@ -118,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
               document.querySelector("textarea").value = "";
               document.getElementById("addBtn").classList.remove('is-hidden');
               document.querySelector("textarea[name='message']").focus();
-              document.getElementById("conversation").scrollTop = 99999999999;
+              document.getElementById("conversation").scrollTop = 9999;
         })
     }
     return false;
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if ( sendCode == 13 && !e.shiftKey ) {
       document.getElementById("send").dispatchEvent(new Event("submit", { bubbles: true }));
       setTimeout(function(e) {
-        document.getElementById("conversation").scrollTop=99999999999;
+        document.getElementById("conversation").scrollTop=9999;
       }, 0);
     }
   });
@@ -269,7 +269,7 @@ OssUpload.prototype = {
                             </div>
                         </div>`;
           document.getElementById("conversation").insertAdjacentHTML('beforeend', image);
-          document.getElementById("conversation").scrollTop=99999999999;
+          document.getElementById("conversation").scrollTop=9999;
         };
         reader.readAsDataURL(e.target.files[0]);
       }
