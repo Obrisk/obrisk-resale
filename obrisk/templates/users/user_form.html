@@ -46,7 +46,7 @@
         {% csrf_token %}
         <div id="div_id_name" class="form-group"> 
             <label for="id_name" class="">
-                Full name
+                Full name:
             </label>
             <div class="">
                 <input type="text" value="{{form.name.value | default_if_none:''}}"
@@ -55,7 +55,7 @@
         </div>
         <div id="div_id_job_title" class="form-group">
             <label for="id_job_title" class="">
-                Occupation
+                Occupation:
             </label>
             <div class="">
                 <input type="text" value="{{form.job_title.value | default_if_none:''}}"
@@ -64,7 +64,7 @@
         </div>
         <div id="div_id_bio" class="form-group">
             <label for="id_bio" class="">
-                Bio
+                Bio:
             </label>
             <div class="">
                 <textarea name="bio"
@@ -75,7 +75,7 @@
         </div>
         <div id="div_id_province_region" class="form-group">
             <label for="province" class="">
-                Province region
+                Province region:
             </label>
             <div class="is-flex">
                 <p class='province-location'> {{form.province_region.value}} </p>
@@ -85,8 +85,8 @@
         </div>
 
         <div id="div_id_city" class="form-group">
-            <label for="city" class="">
-                City
+            <label for="city" class="region-label">
+                City:
             </label> 
             <div class="is-flex"> 
                 <p class='province-location'> {{form.city.value}} </p>
