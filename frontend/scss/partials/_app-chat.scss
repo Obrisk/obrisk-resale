@@ -15,331 +15,51 @@ Chat window styles
 
 //Main wrapper
 .chat-wrapper {
-    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
     background: $white;
-    opacity: 0;
-    transform: translateY(20px);
-    pointer-events: none;
-    z-index: -1;
-    transition: all .3s;
+    pointer-events: all;
 
-    //Active state
-    &.is-active, &.is-standalone {
-        pointer-events: all !important;
-        z-index: 1000 !important;
-        opacity: 1 !important;
-        transform: translateY(0) !important;
-    }
-
-    &.is-standalone {
-        .chat-inner {
-            .chat-nav {
-                .close-chat {
-                    display: none !important;
-                }
-            }
-        }
-    }
-
-    //Main wrapper inner
-    .chat-inner {
-        position: relative;
-        height: 100%;
+    //Chat top navigation
+    .chat-nav {
+        position: absolute;
+        top: 0;
+        
         width: 100%;
+        height: 60px;
+        background: $white;
 
-        //Chat top navigation
-        .chat-nav {
-            position: absolute;
-            top: 0;
-            
-            width: 100%;
-            height: 60px;
-            background: $white;
+        //box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
+        border-bottom: 1px solid darken($fade-grey, 3%);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 16px;
+        z-index: 99;
 
-            //box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.12);
-            border-bottom: 1px solid darken($fade-grey, 3%);
+        //Navbar start
+        .nav-start {
             display: flex;
-            justify-content: space-between;
+            justify-content: flex-start;
             align-items: center;
-            padding: 0 16px;
-            z-index: 99;
 
-            //Navbar start
-            .nav-start {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
+            //recipient
+            .recipient-block {
+                display: inherit;
+                justify-content: inherit;
+                align-items: inherit;
 
-                //recipient
-                .recipient-block {
-                    display: inherit;
-                    justify-content: inherit;
-                    align-items: inherit;
-
-                    .avatar-container {
-                        position: relative;
-                        height: 46px;
-                        width: 46px;
-                        border: 2px solid transparent;
-
-                        .user-avatar {
-                            border-radius: 50%;
-                        }
-
-                        //Avatar
-                        img.profile-header-avatar {
-                            display: block;
-                            height: 42px;
-                            width: 42px;
-                            border-radius: 50%;
-                        }
-                    }
-
-                    .username {
-                        span {
-                            display: block;
-
-                            &:first-child {
-                                font-weight: 500;
-                                color: $medium-text;
-                            }
-
-                            &:nth-child(2) {
-                                display: flex;
-                                align-items: center;
-
-                                svg {
-                                    height: 14px;
-                                    width: 14px;
-                                    stroke: $grey-text;
-                                    margin-right: 4px;
-                                }
-
-                                span {
-                                    font-size: .9rem;
-                                    color: $grey-text;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
-            //Navbar end
-            .nav-end {
-                display: flex;
-                justify-content: flex-start;
-                align-items: center;
-
-                //Dropdown
-                .dropdown {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 32px;
-                    width: 32px;
-                }
-
-                //Navbar item
-                .chat-nav-item {
-                    //Icon modifier
-                    &.is-icon {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 32px;
-                        width: 32px;
-
-                        &:last-child {
-                            margin-right: 4px;
-                        }
-
-                        svg {
-                            height: 20px;
-                            width: 20px;
-                            stroke: $grey-text;
-                        }
-                    }
-
-                    //Close chat window button
-                    &.close-chat {
-                        border-radius: 50%;
-                    }
-                }
-
-                //Chat navbar search
-                .chat-search {
-                    margin: 0 8px;
-
-                    .input {
-                        &:focus {
-                            border-color: $accent;
-
-                            + .form-icon svg {
-                                stroke: $accent;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //Chat sidebar
-        .users-sidebar {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 60px;
-            height: 100%;
-            background: $white;
-            border-right: 1px solid darken($fade-grey, 3%);
-
-            //Shared styles
-            .header-item, .user-item, .footer-item {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 60px;
-                width: 60px;
-            }
-
-            //Header
-            .header-item {
-                img {
-                    height: 38px !important;
-                    width: 38px !important;
-                }
-            }
-
-            //Avatar list
-            .conversations-list {
-                height: calc(100% - 120px);
-                overflow-y: auto;
-            }
-
-            //List item
-            .user-item {
-                cursor: pointer;
-
-                //Active state
-                &.is-active {
-                    background: lighten($fade-grey, 5%);
-
-                    .user-status {
-                        border-color: lighten($fade-grey, 5%) !important;
-                    }
-                }
-
-                //Avatar container
                 .avatar-container {
                     position: relative;
-                    height: 38px;
-                    width: 38px;
+                    height: 46px;
+                    width: 46px;
                     border: 2px solid transparent;
 
-                    //Avatar
                     .user-avatar {
                         border-radius: 50%;
                     }
-
-                    //Status dot
-                    .user-status {
-                        position: absolute;
-                        top: -3px;
-                        right: -1px;
-                        height: 12px;
-                        width: 12px;
-                        border-radius: 50%;
-                        background: $muted-grey;
-                        border: 2px solid $white;
-
-                        &.is-online {
-                            background: $green;
-                        }
-
-                        &.is-busy {
-                            background: $orange;
-                        }
-
-                        &.is-away {
-                            background: $red;
-                        }
-                    }
-                }
-            }
-
-            //Sidebar footer
-            .footer-item {
-                position: absolute;
-                bottom: 0;
-                left: 0;
-
-                //add conversation button
-                .add-button {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 42px;
-                    min-height: 42px;
-                    width: 42px;
-                    max-width: 42px;
-                    margin: 0 auto;
-                    border: 1.8px dashed $muted-grey;
-                    border-radius: 50%;
-                    transition: all .3s;
-                    cursor: pointer;
-
-                    svg {
-                        height: 18px;
-                        width: 18px;
-                        stroke: $muted-grey;
-                        transition: inherit;
-                    }
-                }
-            }
-        }
-
-        //Chat body
-        .chat-body {
-            position: absolute;
-            bottom: 0;
-            
-            background: lighten($fade-grey, 3%);
-            transition: all .3s;
-            display: flex;
-            flex-direction: column;
-            width: 100%;
-            height: 100vh;
-
-            //Opened state
-            &.is-opened {
-                width: calc(100% - 460px);
-
-                .chat-action {
-                    width: calc(100% - 460px) !important;
-                }
-            }
-
-            //Chat body inner
-            .chat-body-inner {
-                position: relative;
-                width: 100%;
-                height: 100%;
-                margin-top: 60px;
-                padding: 20px 20px 100px 20px;
-                overflow-y: auto;
-                animation-name: fadeInLeft;
-                animation-duration: .5s;
-
-                //Chat message shared styles
-                .chat-message {
-                    display: flex;
-                    align-items: start;
-                    margin-bottom: 40px;
 
                     //Avatar
                     img.profile-header-avatar {
@@ -348,347 +68,482 @@ Chat window styles
                         width: 42px;
                         border-radius: 50%;
                     }
+                }
+
+                .username {
+                    span {
+                        display: block;
+
+                        &:first-child {
+                            font-weight: 500;
+                            color: $medium-text;
+                        }
+
+                        &:nth-child(2) {
+                            display: flex;
+                            align-items: center;
+
+                            svg {
+                                height: 14px;
+                                width: 14px;
+                                stroke: $grey-text;
+                                margin-right: 4px;
+                            }
+
+                            span {
+                                font-size: .9rem;
+                                color: $grey-text;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        //Navbar end
+        .nav-end {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+
+            //Dropdown
+            .dropdown {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 32px;
+                width: 32px;
+            }
+
+            //Navbar item
+            .chat-nav-item {
+                //Icon modifier
+                &.is-icon {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 32px;
+                    width: 32px;
+
+                    &:last-child {
+                        margin-right: 4px;
+                    }
+
+                    svg {
+                        height: 20px;
+                        width: 20px;
+                        stroke: $grey-text;
+                    }
+                }
+
+                //Close chat window button
+                &.close-chat {
+                    border-radius: 50%;
+                }
+            }
+
+            //Chat navbar search
+            .chat-search {
+                margin: 0 8px;
+
+                .input {
+                    &:focus {
+                        border-color: $accent;
+
+                        + .form-icon svg {
+                            stroke: $accent;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    //Chat body
+    .chat-body {
+        position: absolute;
+        bottom: 0;
+        
+        background: lighten($fade-grey, 3%);
+        transition: all .3s;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        height: 100vh;
+
+        //Opened state
+        &.is-opened {
+            width: calc(100% - 460px);
+
+            .chat-action {
+                width: calc(100% - 460px) !important;
+            }
+        }
+
+        //Chat body inner
+        .chat-body-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            margin-top: 60px;
+            padding: 20px 20px 100px 20px;
+            overflow-y: auto;
+            animation-name: fadeInLeft;
+            animation-duration: .5s;
+
+            //Chat message shared styles
+            .chat-message {
+                display: flex;
+                align-items: start;
+                margin-bottom: 40px;
+
+                //Avatar
+                img.profile-header-avatar {
+                    display: block;
+                    height: 42px;
+                    width: 42px;
+                    border-radius: 50%;
+                }
+
+                //Message
+                .message-block {
+                    span {
+                        display: block;
+                        width: 100%;
+                        font-size: .8rem;
+                        color: $muted-grey;
+                    }
+
+                    .message-text {
+                        position: relative;
+                        display: block;
+                        width: auto;
+                        max-width: 320px;
+                        padding: 10px;
+                        border-radius: 3px;
+                        font-size: .9rem;
+
+                        //font-weight: 500;
+                        &:before {
+                            position: absolute;
+                            display: block;
+                            content: '';
+                            top: 0;
+                            width: 0;
+                            height: 0;
+                            border-left: 5px solid transparent;
+                            border-right: 5px solid transparent;
+                        }
+                    }
+                }
+
+                //Sent message
+                &.is-sent {
+                    flex-direction: row-reverse;
+
+                    //Avatar
+                    img.profile-header-avatar {
+                        margin-left: 20px;
+                    }
+
+                    //Message
+                    .message-block {
+                        .message-text {
+                            color: $medium-text;
+                            background-color: $white;
+
+                            &:before {
+                                right: -5px;
+                                border-top: 5px solid $white;
+                            }
+                        }
+                    }
+
+                    //hide avatar on consecutive messages
+                    + .is-sent {
+                        margin-top: -16px !important;
+
+                    }
+                }
+
+                //Received message
+                &.is-received {
+                    //Avatar
+                    img.profile-header-avatar {
+                        margin-right: 20px;
+                    }
 
                     //Message
                     .message-block {
                         span {
-                            display: block;
-                            width: 100%;
-                            font-size: .8rem;
-                            color: $muted-grey;
+                            text-align: right;
                         }
 
                         .message-text {
-                            position: relative;
-                            display: block;
-                            width: auto;
-                            max-width: 320px;
-                            padding: 10px;
-                            border-radius: 3px;
-                            font-size: .9rem;
+                            color: $white-light;
+                            background-color: lighten($accent, 7%);
 
-                            //font-weight: 500;
                             &:before {
-                                position: absolute;
-                                display: block;
-                                content: '';
-                                top: 0;
-                                width: 0;
-                                height: 0;
-                                border-left: 5px solid transparent;
-                                border-right: 5px solid transparent;
+                                left: -5px;
+                                border-top: 5px solid lighten($accent, 7%);
                             }
                         }
                     }
 
-                    //Sent message
-                    &.is-sent {
-                        flex-direction: row-reverse;
-
-                        //Avatar
-                        img.profile-header-avatar {
-                            margin-left: 20px;
-                        }
-
-                        //Message
-                        .message-block {
-                            .message-text {
-                                color: $medium-text;
-                                background-color: $white;
-
-                                &:before {
-                                    right: -5px;
-                                    border-top: 5px solid $white;
-                                }
-                            }
-                        }
-
-                        //hide avatar on consecutive messages
-                        + .is-sent {
-                            margin-top: -16px !important;
-
-                        }
-                    }
-
-                    //Received message
-                    &.is-received {
-                        //Avatar
-                        img.profile-header-avatar {
-                            margin-right: 20px;
-                        }
-
-                        //Message
-                        .message-block {
-                            span {
-                                text-align: right;
-                            }
-
-                            .message-text {
-                                color: $white-light;
-                                background-color: lighten($accent, 7%);
-
-                                &:before {
-                                    left: -5px;
-                                    border-top: 5px solid lighten($accent, 7%);
-                                }
-                            }
-                        }
-
-                        //Hide avatar on consecutive messages
-                        + .is-received {
-                            margin-top: -16px !important;
-                        }
+                    //Hide avatar on consecutive messages
+                    + .is-received {
+                        margin-top: -16px !important;
                     }
                 }
             }
         }
+    }
 
-        //Chat action area
-        .chat-action {
-            position: fixed;
-            bottom: 0;
-            
-            width: 100%;
-            height: 60px;
-            padding: 0;
-            background: lighten($fade-grey, 3%);
+    //Chat action area
+    .chat-action {
+        position: fixed;
+        bottom: 0;
+        
+        width: 100%;
+        height: 60px;
+        padding: 0;
+        background: lighten($fade-grey, 3%);
 
-            //Inner wrap
-            .chat-action-inner {
-                position: relative;
-                display: flex;
-                align-items: center;
-                height: 100%;
-                width: 100%;
-
-                //Input wrapper
-                .control {
-                    position: relative;
-                    width: 100%;
-
-                    //Input
-                    .textarea {
-                        resize: none;
-                        height: 44px;
-                        max-height: 44px;
-                        min-height: 44px;
-                        padding: 5px 9px;
-                        padding-right: 54px;
-                        transition: all .3s;
-
-                        &:focus {
-                            border-color: $fade-grey !important;
-                        }
-                    }
-
-                    //Dropdown
-                    .compose-dropdown {
-                        position: absolute;
-                        top: 0;
-                        right:0;
-                    }
-
-                    //Add content button
-                    .add-button {
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 44px;
-                        width: 44px;
-
-                        .button-inner {
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                            height: 34px;
-                            min-height: 34px;
-                            width: 34px;
-                            max-width: 34px;
-                            border: 1px solid $accent;
-                            border-radius: 4px;
-                            background: $accent;
-                            transition: all .3s;
-                            cursor: pointer;
-                        }
-
-                        svg {
-                            height: 18px;
-                            width: 18px;
-                            stroke: $white-light;
-                            transition: inherit;
-                        }
-                    }
-                }
-            }
-        }
-
-        //Chat right panel
-        .chat-panel {
-            position: absolute;
-            bottom: 0;
-            right: 0;
+        //Inner wrap
+        .chat-action-inner {
+            position: relative;
+            display: flex;
+            align-items: center;
             height: 100%;
-            width: 400px;
-            background: $white;
-            border-left: 1px solid $fade-grey;
-            transform: translateX(400px);
-            transition: all .3s;
+            width: 100%;
 
-            //Opened state
-            &.is-opened {
-                transform: translateX(0);
-            }
-
-            //Panel inner
-            .panel-inner {
+            //Input wrapper
+            .control {
                 position: relative;
                 width: 100%;
-                height: 100%;
 
-                //Header
-                .panel-header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    height: 60px;
-                    width: 100%;
-                    background: $white;
-                    padding: 16px;
+                //Input
+                .textarea {
+                    resize: none;
+                    height: 44px;
+                    max-height: 44px;
+                    min-height: 44px;
+                    padding: 5px 9px;
+                    padding-right: 54px;
+                    transition: all .3s;
 
-                    h3 {
-                        font-size: 1.2rem;
-                        font-weight: 500;
+                    &:focus {
+                        border-color: $fade-grey !important;
                     }
+                }
 
-                    //Close button
-                    .panel-close {
+                //Dropdown
+                .compose-dropdown {
+                    position: absolute;
+                    top: 0;
+                    right:0;
+                }
+
+                //Add content button
+                .add-button {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 44px;
+                    width: 44px;
+
+                    .button-inner {
                         display: flex;
                         justify-content: center;
                         align-items: center;
-                        height: 36px;
-                        width: 36px;
-                        border-radius: 50%;
+                        height: 34px;
+                        min-height: 34px;
+                        width: 34px;
+                        max-width: 34px;
+                        border: 1px solid $accent;
+                        border-radius: 4px;
+                        background: $accent;
                         transition: all .3s;
                         cursor: pointer;
+                    }
 
-                        svg {
-                            height: 20px;
-                            width: 20px;
-                            stroke: $muted-grey;
-                            transition: inherit;
-                        }
+                    svg {
+                        height: 18px;
+                        width: 18px;
+                        stroke: $white-light;
+                        transition: inherit;
                     }
                 }
+            }
+        }
+    }
 
-                //Body
-                .panel-body {
-                    position: absolute;
-                    position: absolute;
-                    bottom: 0;
-                    right: 0;
-                    width: 100%;
-                    height: 100%;
+    //Chat right panel
+    .chat-panel {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        height: 100%;
+        width: 400px;
+        background: $white;
+        border-left: 1px solid $fade-grey;
+        transform: translateX(400px);
+        transition: all .3s;
 
-                    //User details
-                    &.is-user-details {
-                        .panel-body-inner {
-                            padding: 16px;
-                            animation-name: fadeInLeft;
-                            animation-duration: .5s;
+        //Opened state
+        &.is-opened {
+            transform: translateX(0);
+        }
 
-                            //Header
-                            .subheader {
+        //Panel inner
+        .panel-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            //Header
+            .panel-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                height: 60px;
+                width: 100%;
+                background: $white;
+                padding: 16px;
+
+                h3 {
+                    font-size: 1.2rem;
+                    font-weight: 500;
+                }
+
+                //Close button
+                .panel-close {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 36px;
+                    width: 36px;
+                    border-radius: 50%;
+                    transition: all .3s;
+                    cursor: pointer;
+
+                    svg {
+                        height: 20px;
+                        width: 20px;
+                        stroke: $muted-grey;
+                        transition: inherit;
+                    }
+                }
+            }
+
+            //Body
+            .panel-body {
+                position: absolute;
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+                height: 100%;
+
+                //User details
+                &.is-user-details {
+                    .panel-body-inner {
+                        padding: 16px;
+                        animation-name: fadeInLeft;
+                        animation-duration: .5s;
+
+                        //Header
+                        .subheader {
+                            display: flex;
+                            justify-content: flex-start;
+                            align-items: center;
+                            margin-bottom: 40px;
+
+                            .action-icon {
                                 display: flex;
-                                justify-content: flex-start;
+                                justify-content: center;
                                 align-items: center;
-                                margin-bottom: 40px;
+                                height: 40px;
+                                width: 40px;
+                                cursor: pointer;
+                                border-radius: 6px;
+                                transition: all .3s;
 
-                                .action-icon {
-                                    display: flex;
-                                    justify-content: center;
-                                    align-items: center;
-                                    height: 40px;
-                                    width: 40px;
-                                    cursor: pointer;
-                                    border-radius: 6px;
-                                    transition: all .3s;
-
-                                    i {
-                                        font-size: 22px;
-                                        color: $grey-text;
-                                    }
-                                }
-                            }
-
-                            //User meta
-                            .user-meta {
-                                h3 {
-                                    text-align: center;
-                                    color: $dark-text;
-                                    font-weight: 500;
-                                    font-size: 1.3rem;
-                                    line-height: 1.2;
-                                }
-
-                                h4 {
-                                    font-size: .95rem;
-                                    color: $muted-grey;
-                                }
-                            }
-
-                            //About cards
-                            .user-about {
-                                margin: 20px 0;
-
-                                //label
-                                label {
-                                    display: block;
-                                    text-transform: uppercase;
-                                    font-size: .8rem;
-                                    font-weight: 500;
+                                i {
+                                    font-size: 22px;
                                     color: $grey-text;
-                                    margin-bottom: 16px;
+                                }
+                            }
+                        }
+
+                        //User meta
+                        .user-meta {
+                            h3 {
+                                text-align: center;
+                                color: $dark-text;
+                                font-weight: 500;
+                                font-size: 1.3rem;
+                                line-height: 1.2;
+                            }
+
+                            h4 {
+                                font-size: .95rem;
+                                color: $muted-grey;
+                            }
+                        }
+
+                        //About cards
+                        .user-about {
+                            margin: 20px 0;
+
+                            //label
+                            label {
+                                display: block;
+                                text-transform: uppercase;
+                                font-size: .8rem;
+                                font-weight: 500;
+                                color: $grey-text;
+                                margin-bottom: 16px;
+                            }
+
+                            //Box
+                            .about-block {
+                                display: flex;
+                                align-items: start;
+                                border: 1px solid $fade-grey;
+                                border-radius: 6px;
+                                padding: 12px;
+                                margin-bottom: 10px;
+
+                                &:last-child {
+                                    margin-bottom: 0;
                                 }
 
-                                //Box
-                                .about-block {
-                                    display: flex;
-                                    align-items: start;
-                                    border: 1px solid $fade-grey;
-                                    border-radius: 6px;
-                                    padding: 12px;
-                                    margin-bottom: 10px;
+                                i {
+                                    font-size: 22px;
+                                    color: $medium-text;
+                                }
 
-                                    &:last-child {
-                                        margin-bottom: 0;
-                                    }
+                                //Content
+                                .about-text {
+                                    margin-left: 12px;
 
-                                    i {
-                                        font-size: 22px;
-                                        color: $medium-text;
-                                    }
+                                    span {
+                                        display: block;
 
-                                    //Content
-                                    .about-text {
-                                        margin-left: 12px;
-
-                                        span {
-                                            display: block;
-
-                                            &:first-child {
-                                                font-size: .8rem;
-                                                font-weight: 500;
-                                            }
-
-                                            &:nth-child(2) {
-                                                font-size: .8rem;
-                                                color: $muted-grey;
-                                            }
+                                        &:first-child {
+                                            font-size: .8rem;
+                                            font-weight: 500;
                                         }
 
-                                        a {
+                                        &:nth-child(2) {
+                                            font-size: .8rem;
                                             color: $muted-grey;
                                         }
+                                    }
+
+                                    a {
+                                        color: $muted-grey;
                                     }
                                 }
                             }
