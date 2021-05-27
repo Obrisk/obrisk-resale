@@ -233,13 +233,14 @@ class CustomUserChangeForm(UserChangeForm):
 
 class UserForm(forms.ModelForm):
     bio = forms.CharField(
-        widget=forms.Textarea(attrs={"rows": 3}),
+        widget=forms.Textarea(attrs={"rows": 2}),
         required=False
     )
     job_title = forms.CharField(
             required=False, label=("Occupation"))
 
     province_region = ProvinceChoiceField(
+        required=False,
         widget = SelectWidget(attrs={
                     'id': 'province',
                     'class': 'custom-select',
@@ -248,6 +249,7 @@ class UserForm(forms.ModelForm):
             })
         )
     city = CityChoiceField(
+        required=False,
         widget = SelectWidget(attrs={
                     'id': 'city',
                     'class': 'custom-select',

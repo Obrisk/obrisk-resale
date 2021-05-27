@@ -274,6 +274,33 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     form_class = UserForm
     model = User
 
+    def post(self, request, *args, **kwargs):
+        """
+        Handle POST requests: instantiate a form instance with the passed
+        POST variables and then check if it's valid.
+        """
+        self.object = self.get_object()
+        form = self.get_form()
+        updated_form_data = form.data.copy()
+        if form['province_region'].value() == '':
+            updated_form_data.update({
+                'province_region': self.request.user.province_region,
+                'city': self.request.user.city
+            })
+            form.data = updated_form_data
+        else:
+            if form['city'].value() == '':
+                messages.error(
+                        self.request,
+                        'Province and city must be updated together'
+                    )
+                return self.form_invalid(form)
+
+        if form.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
     # send the user back to their own page after a successful update
     def get_success_url(self):
         return reverse('users:detail',
@@ -638,7 +665,7 @@ class GetInfoView(WechatViewSet):
                 token, openid = self.wechat_api.get_access_token(code)
             except TypeError:
                 return redirect('account_signup')
-            
+
             else:
                 if token is None or openid is None:
                     logging.error('Wechat auth failed')

@@ -1,3 +1,21 @@
+//Print error message
+function printError(msg) {
+  document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
+  document.getElementById('notf-msg').innerHTML = msg;
+  window.scroll({
+      top: 0, 
+      left: 0, 
+      behavior: 'smooth'
+  });
+}
+
+function choosePic() {
+    document.getElementById('temp_pic').click();
+    document.getElementById('startUpload').classList.remove('is-hidden');
+    document.getElementById('choosePic').classList.add('is-hidden');
+}
+
+
 /**
  * Upload file object
  * fileStats: File statistics
@@ -14,7 +32,7 @@ var uploader = {
 //Upload instance object
 var Buffer = OSS.Buffer;
 var STS = OSS.STS;
-var FileMaxSize = 13000000;
+var FileMaxSize = 200000000; //20MB
 var TotalFilesMaxSize = 1;
 var image; //holds all uploaded images as a string
 var client;
@@ -38,19 +56,10 @@ OssUpload.prototype = {
 
       //check if the upload quantity has reach max
       if (!file) {
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message: "No image selected , Please select one or more images"
-        });
+          printError("No image selected , Pls select an image first");
       } else {
         if (file.size <= 5000) {
-          $.wnoty({
-            type: "error",
-            autohide: false,
-            message:
-              "The image you've chosen is too small. Please choose a file greater than 5KB but lower than 13MB!"
-          });
+          printError("The image is too small. Pls choose image greater than 5KB");
         }
 
         //don't upload files with size greater than 13MB
@@ -58,12 +67,7 @@ OssUpload.prototype = {
           uploader.file = file;
           uploader.totalFilesSize = file.size;
         } else {
-          $.wnoty({
-            type: "error",
-            autohide: false,
-            message:
-              "This image/file is larger than 13MB, please select images small than 13MB "
-          });
+          printError("This image is larger than 20MB, pls select smaller image ");
         }
       }
       uploader.totalFilesNum = 1;
@@ -72,16 +76,10 @@ OssUpload.prototype = {
     $("#startUpload").click(function(event) {
       if (uploader.totalFilesNum == 0) {
         event.preventDefault();
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message:
-            "Please select the image to be saved by clicking the choose pic button!"
-        });
+        printError("Please select the image to be saved by clicking the choose pic button!");
       } else {
         var filename = genKey();
         var file = uploader.file;
-        $totalProgressbar.css("width", "100%").html("Upload started...");
         $("#startUpload").hide();
         _this.uploadFile(file, filename);
       }
@@ -120,7 +118,6 @@ OssUpload.prototype = {
             try {
               const results = await client
                 .multipartUpload(filename, file, {
-                  progress: progress,
                   partSize: 200 * 1024, //Minimum is 100*1024
                   timeout: 120000 // 2 minutes timeout
                 })
@@ -128,14 +125,9 @@ OssUpload.prototype = {
                   uploader.uploadFinishedFilesNum++;
                   uploader.curFileSize += file.size;
 
-                  progressBarNum = (1).toFixed(2) * 100;
-                  progressBar = (1).toFixed(2) * 100 + "%";
+                  var progressBarNum = (1).toFixed(2) * 100;
 
                   if (progressBarNum == 100) {
-                    $totalProgressbar
-                      .css("width", "100%")
-                      .html("Processing....");
-
                     //Try to edit the uploaded image, if it fails it means the image
                     //was corrupted during upload
                     $.ajax({
@@ -153,21 +145,14 @@ OssUpload.prototype = {
                           type: "POST",
                           success: function(result) {
                             if (result.success) {
-                              $totalProgressbar
-                                .css("width", "100%")
-                                .html("New pic is saved successfully!");
                               $("#startUpload").hide();
+                              document.getElementById('choosePic').classList.remove('is-hidden');
+                              document.getElementById('successText').innerHTML = 'The photo has been updated✔️';
                             } else {
-                              $totalProgressbar
-                                .css("width", "100%")
-                                .html("<p>" + result.error_message + "</p>");
                               $("#startUpload").show();
                             }
                           },
                           error: function(e) {
-                            $totalProgressbar
-                              .css("width", "100%")
-                              .html("<p> Upload failed </p>");
                             console.log(e);
                             $("#startUpload").show();
                           }
@@ -209,31 +194,12 @@ OssUpload.prototype = {
                       uploadRetryCount++;
                       console.error(`uploadRetryCount : ${uploadRetryCount}`);
                       upload();
-                    } else {
-                      //We have retried to the max and there is nothing we can do
-                      //Allow the users to submit the form atleast with default image.
-                      $totalProgressbar
-                        .css("width", "100%")
-                        .html("Upload failed!");
-                    }
-                  } else {
-                    //Not timeout out error and there is nothing we can do
-                    //Allow the users to submit the form atleast with default image.
-                    $totalProgressbar
-                      .css("width", "100%")
-                      .html("Upload failed!");
-                  }
+                    } 
+                  } 
                 });
               return results;
             } catch (e) {
-              $.wnoty({
-                type: "error",
-                autohide: false,
-                message:
-                  "Oops! an error occured during the image upload, \
-                    Please try again later or contact us via support@obrisk.com" +
-                  e
-              });
+              printError("Oops! an error has occured. Pls try again or add our wechat Obrisk");
               $(".start-uploader").css("display", "block");
               console.log(e);
             }
@@ -241,24 +207,12 @@ OssUpload.prototype = {
 
           return upload();
         } else {
-          $.wnoty({
-            type: "error",
-            autohide: false,
-            message:
-              "Oops!, it looks like there is a network problem, \
-            Please try again later or contact us at support@obrisk.com"
-          });
+          printError("Oops! an error has occured. Pls try again or add our wechat Obrisk")
           $(".start-uploader").css("display", "block");
         }
       })
       .catch(e => {
-        $.wnoty({
-          type: "error",
-          autohide: false,
-          message:
-            "Oops! an error occured before upload started, Please try again later or contact us via support@obrisk.com" +
-            e
-        });
+        printError("Oops! an error has occured. Pls try again or add our wechat Obrisk")
         console.log(e);
       });
   }
@@ -277,31 +231,10 @@ function uploadPreview(input) {
     };
 
     reader.readAsDataURL(input.files[0]);
-
-    $totalProgressbar.css("width", "100%");
     $("#startUpload").show();
   }
 }
 
-/**
- * Create progress bar
- */
-var progressBar = 0;
-var progress = "";
-var $wrap = $("#uploader"),
-  // Picture container
-  $queue = $('<ul class="filelist"></ul>').appendTo($wrap.find(".queueList")),
-  $totalProgressbar = $("#totalProgressBar");
-
-var progress = function(p) {
-  //p percentage 0~1
-  return function(done) {
-    $totalProgressbar
-      .css("width", "100%")
-      .html("Upload started, please wait...");
-    done();
-  };
-};
 
 /**
  * get sts token
@@ -375,7 +308,15 @@ function slugify(string) {
     .replace(/-+$/, ""); // Trim - from end of text
 }
 
-$(function() {
+
+document.addEventListener('DOMContentLoaded', function() {
+  document.querySelectorAll('.close-dj-messages').forEach(item => {
+            item.addEventListener('click', e => {
+                e.currentTarget.parentElement.classList.add('is-hidden');
+                e.stopPropagation();
+            });
+      });
+
   function csrfSafeMethod(method) {
     // These HTTP methods do not require CSRF protection
     return /^(GET|HEAD|OPTIONS|TRACE)$/.test(method);
@@ -395,19 +336,14 @@ $(function() {
   ossUpload.init();
 
   $("#update-profile").click(function(event) {
-    if (!$("select[name='city']").val() || !$("select[name='province']")) {
-      event.preventDefault();
-      $.wnoty({
-        type: "error",
-        autohide: false,
-        message: "Please enter your address!"
-      });
+    if ($("select[name='province']").val() && !$("select[name='city']").val()) {
+        event.preventDefault();
+        printError('Province and city must be updated together');
     } else {
       $("input[name='city']").val($("select[name='city']").val());
-      $("input[name='province_region']").val(
-        $("select[name='province']").val()
-      );
+      $("input[name='province_region']").val($("select[name='province']").val());
       $("#update").submit();
     }
   });
+
 });

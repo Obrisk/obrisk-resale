@@ -12,48 +12,113 @@
 
 <div class="column profile m-2">
   <div class="user-profile">
-      <h1 class="title is-5">{{ user.username|title }}</h1>
 
-      {% if user.name %}
-          <p class="lead">{{ user.name }}</p>
-      {% endif %}
+      <div class="notification is-danger is-hidden" role="alert">
+        <button type="button" class="delete close-dj-messages"></button>
+        <p id="notf-msg"></p>
+      </div>
 
       {% if object.picture %}
-          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
-            style="width:250px;height:250px;border-radius: 50%;" id="avatar" class="mr-4">
+          <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Pic"
+            id="avatar">
       {% else %}
-          <img id="avatar" src="{% static 'img/user.png' %}" height="250px" class="mr-4"
-            style="width:250px;height:250px;border-radius: 50%;" alt="No Profile Picture" />
+          <img id="avatar" src="{% static 'img/user.png' %}" height="250px"
+            alt="Picture" />
       {% endif %}
 
       <input type="file" name="temp_pic" onchange="uploadPreview(this)" accept="image/*" id="temp_pic">
+      <p id="successText"></p>
 
       <div class="grp-btns" >
-        <button class="button is-solid opt-accent-button" onclick="document.getElementById('temp_pic').click();"> Choose pic </button>
-        <button class="button accent-button" id="startUpload" type="button"> Save pic</button>
-      </div>
-
-      <div id="statusBar" class="statusBar"
-        style="display:none; font-size:14px; font-weight:bold;">
-        <div class="total-progress">
-          <div id="totalProgressBar" class="total-progress-bar"
-             role="progressbar" aria-valuenow="0" aria-valuemin="0"
-             aria-valuemax="100">
-          </div>
-        </div>
+        <button class="button is-solid accent-button" id="choosePic"
+            onclick="choosePic();"> Update pic
+        </button>
+        <button class="button opt-accent-button is-hidden"
+            id="startUpload" type="button"> Save new pic
+        </button>
       </div>
 
     </div>
 
-      <form enctype="multipart/form-data" class="update form-horizontal m-3" method="post"
+      <form enctype="multipart/form-data" class="update form-horizontal" method="post"
         action="{% url 'users:update' %}">
         <small> <strong> All fields are optional </strong> </small>
         {% csrf_token %}
-        {{ form|crispy }}
-        
+        <div id="div_id_name" class="form-group"> 
+            <label for="id_name" class="">
+                Full name
+            </label>
+            <div class="">
+                <input type="text" value="{{form.name.value | default_if_none:''}}"
+                  name="name" maxlength="255" class="textinput textInput form-control" id="id_name"> 
+            </div>
+        </div>
+        <div id="div_id_job_title" class="form-group">
+            <label for="id_job_title" class="">
+                Occupation
+            </label>
+            <div class="">
+                <input type="text" value="{{form.job_title.value | default_if_none:''}}"
+                name="job_title" class="textinput textInput form-control" id="id_job_title">
+            </div>
+        </div>
+        <div id="div_id_bio" class="form-group">
+            <label for="id_bio" class="">
+                Bio
+            </label>
+            <div class="">
+                <textarea name="bio"
+                    cols="40" rows="2" class="textarea form-control" id="id_bio">
+                {{form.bio.value | default_if_none:''}}
+                </textarea>
+            </div>
+        </div>
+        <div id="div_id_province_region" class="form-group">
+            <label for="province" class="">
+                Province region
+            </label>
+            <div class="is-flex">
+                <p class='province-location'> {{form.province_region.value}} </p>
+                <select name="province_region" id="province" class="custom-select selectwidget form-control" autocomplete="on"><option value="">Change</option><option value="Anhui">Anhui</option><option value="Beijing">Beijing</option><option value="Chongqing">Chongqing</option><option value="Fujian">Fujian</option><option value="Gansu">Gansu</option><option value="Guangdong">Guangdong</option><option value="Guangxi">Guangxi</option><option value="Guizhou">Guizhou</option><option value="Hainan">Hainan</option><option value="Hebei">Hebei</option><option value="Heilongjiang">Heilongjiang</option><option value="Henan">Henan</option><option value="Hubei">Hubei</option><option value="Hunan">Hunan</option><option value="Inner Mongolia">Inner Mongolia</option><option value="Jiangsu">Jiangsu</option><option value="Jiangxi">Jiangxi</option><option value="Jilin">Jilin</option><option value="Liaoning">Liaoning</option><option value="Ningxia">Ningxia</option><option value="Qinghai">Qinghai</option><option value="Shaanxi">Shaanxi</option><option value="Shandong">Shandong</option><option value="Shanghai">Shanghai</option><option value="Shanxi">Shanxi</option><option value="Sichuan">Sichuan</option><option value="Tianjin">Tianjin</option><option value="Tibet">Tibet</option><option value="Xinjiang">Xinjiang</option><option value="Yunnan">Yunnan</option><option value="Zhejiang">Zhejiang</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="div_id_city" class="form-group">
+            <label for="city" class="">
+                City
+            </label> 
+            <div class="is-flex"> 
+                <p class='province-location'> {{form.city.value}} </p>
+                <select name="city" id="city" class="custom-select selectwidget form-control" autocomplete="on">
+                    <option value="">Change</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="div_id_chinese_address" class="form-group">
+            <label for="id_chinese_address" class="">
+                Full address (Chinese)
+            </label>
+            <div class="">
+                <input type="text" value="{{form.chinese_address.value | default_if_none:''}}"
+                name="chinese_address" class="textinput textInput form-control" id="id_chinese_address">
+            </div>
+        </div>
+
+        <div id="div_id_english_address" class="form-group">
+            <label for="id_english_address" class="">
+                Address (English)
+            </label>
+            <div class="">
+                <input type="text" value="{{form.english_address.value | default_if_none:''}}"
+                name="english_address" class="textinput textInput form-control" id="id_english_address">
+            </div>
+        </div>
+
         <div class="grp-btns controls">
           <button type="submit" id="update-profile" class="button accent-button">{% trans 'Save Profile' %}</button>
-          <a href="/users/{{ user.username}}/" class="button red-button">Cancel</a>
+          <a href="/users/{{ user.username}}/" class="button red-button">Cancel/Back</a>
         </div>
 
       </form>

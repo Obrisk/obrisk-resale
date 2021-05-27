@@ -1,3 +1,10 @@
+//Author: Elisha Kingdom @ 2020
+//Converting to vanilla js:
+//
+//https://www.studentstutorial.com/javascript/country-state-city-select.php
+//attr equivalent https://stackoverflow.com/questions/54992319/vanilla-js-equivalent-of-jquery-attr-attributename-function
+//
+//
 var helpers = {
 	province: function (result, dropdown, emptyMessage) {
 		// Remove current options

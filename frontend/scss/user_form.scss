@@ -1,6 +1,12 @@
 .profile {
-    margin-top: 1em;
+    margin-top: 4em;
     margin-bottom: 2em;
+}
+
+#avatar {
+  width:250px;
+  height:250px;
+  border-radius: 6%;
 }
 
 .user-profile .picture {
@@ -40,21 +46,18 @@
     font-weight: 600;
 }
 
-.btn-primary {
-    color: #fff;
-    background-color: #50a1ff;
-    border-color: #50a1ff;
+#successText {
+    margin: 10px;
+    color: #00b300;
+} 
+
+.button {
+    margin: 10px;
+    padding: 0 2em;
 }
 
-.btn {
-    font-size: 11px;
-    padding: 8px 26px 6px;
-    letter-spacing: 1.7px;
-    text-transform: uppercase;
-    border-radius: 2px;
-    outline: none;
-    -webkit-transition: 0.15s linear;
-    transition: 0.15s linear;
+.province-location {
+    margin: 10px;
 }
 
 .nav-link.active {
