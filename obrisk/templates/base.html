@@ -181,7 +181,7 @@
             <a href="#du" class="user-image navbar-item is-account drop-trigger">
                   {% if request.user.thumbnail %}
                     <img   src="{{ oss }}/{{request.user.thumbnail}}" alt="Pic"
-                      style="width:30px;height:30px;border-radius: 50%;"
+                      style="width:30px;height:30px;border-radius: 20%;"
                       class="img-drop-trigger rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
                   {% else %}
                     <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No pic" />

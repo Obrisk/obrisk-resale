@@ -24,8 +24,8 @@
             width="200px" height="200px">
       {% endif %}
 
-      <div> 
-          <strong> {{ classified.title }} </strong>
+      <div id="order-summary-meta"> 
+          <strong> {{ classified.title | title }} </strong>
           <h1> {{ classified.city }}, {{ classified.province_region }} </h1>
           <h1 class="mt-0"> Price: {{ classified.price }} CNY</h1>
       </div>

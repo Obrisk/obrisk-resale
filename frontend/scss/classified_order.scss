@@ -37,8 +37,16 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-left: -20px;
-  margin-right: -20px;
+  width: 110%;
+}
+
+#order-summary-meta {
+    margin-left: 1em;
+}
+
+#order-address {
+    margin: .5em;
+    width: 110%;
 }
 
 .lazy-img {
