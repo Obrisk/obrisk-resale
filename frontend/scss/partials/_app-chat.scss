@@ -39,6 +39,10 @@ Chat window styles
         padding: 0 16px;
         z-index: 99;
 
+        a {
+            color: #4a4a4a;
+        }
+
         //Navbar start
         .nav-start {
             display: flex;
