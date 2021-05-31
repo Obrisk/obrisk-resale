@@ -130,6 +130,7 @@
               </div>
 
           {% endif %}
+          <p id="payError"> </p>
 
         <div class="card-text">{{ classified.details }}</div>
 
@@ -226,14 +227,12 @@
 <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
 <script type="text/javascript">
-
-
   {% if classified.price == 0.00 %}
-      const price = "FREE "
+      const price = "FREE ";
   {% elif classified.price is None %}
-      const price = "BID PRICE "
+      const price = "BID PRICE ";
   {% else %}
-      const price ="CNY {{classified.price }} "
+      const price ="CNY {{classified.price }} ";
   {% endif %}
 
   function shareMe(title, text) {
@@ -262,6 +261,16 @@
   }
 
   function callpay() {
+    if (isNaN("{{classified.price}}")) {
+        document.getElementById('payError').innerHTML = "Only priced items can accept payments";        
+
+      setTimeout(() => {  
+         document.getElementById('payError').innerHTML = "";
+      }, 7000);
+
+      return;
+    }
+
 	  const sg = encodeURIComponent("{{classified.slug}}");
 	  window.location.replace("{% url 'classifieds:create_order' %}?sg=" + sg);
   }
@@ -308,7 +317,7 @@
 
         wx.ready(function(){
           try {
-              const descr = "{{ classified.details | truncatechars:80 }}".replace(/[^a-zA-Z0-9 ]/g, '');
+              const descr = "{{ classified.details | truncatechars:100 }}".replace(/[^a-zA-Z0-9 ]/g, '');
               const title = "{{ classified.title | truncatechars:80 }}".replace(/[^a-zA-Z0-9 ]/g, '');
               wx.onMenuShareAppMessage({ 
                     title: title, 

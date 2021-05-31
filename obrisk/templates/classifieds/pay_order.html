@@ -73,117 +73,18 @@
 
 {% block extra_js %}
 
-<script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
-<script>
-
-function wxpayFail() {
-      document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
-      document.getElementById(
-              'notf-msg'
-          ).innerHTML = "Sorry payments feature is currently unavailable, contact the seller directly";
-
-      setTimeout(() => {  
-          window.location.href="{% url 'classifieds:classified' classified.slug %}";
-      }, 7000);
-}
-
-document.addEventListener('DOMContentLoaded', function () {
-
-  fetch("{% url 'wx_req_cred' %}", {
-      headers: {
-    "X-Requested-With": "XMLHttpRequest"
-      },
-      credentials: 'same-origin',
-      redirect: 'follow'
-    }).then (resp => resp.json())
-      .then (strData => {
-      try {
-          let data = JSON.parse(strData);
-          if (data.success === true) {
-            wx.config({
-                debug: false, 
-                appId: data.id,
-                timestamp: data.timestamp,
-                nonceStr: data.noncestr,
-                signature: data.signature,
-                jsApiList: [
-                   'chooseWXPay'
-                ] 
-            });
-
-          } else {
-	      wxpayFail();
-              console.log('failure to init wx');
-          }
-      } catch {
-          wxpayFail();
-          console.log('failure to init wx');
-      }
-    })
-
-    wx.ready(function(){
-        if ("{{data.error}}".length > 1) {
-           wxpayFail();
-           console.log('{{data.error}}');
-        }else {
-	      try {
-		    wx.chooseWXPay({
-                timestamp: "{{data.timestamp}}", 
-                nonceStr: "{{data.nonceStr}}",
-                package: "{{data.package}}", 
-                signType: "{{data.signType}}",
-                paySign: "{{data.sign}}",
-                trigger: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                success: function (res) {
-                  let phone = null;
-                  let addr = null; 
-                  if (!getCookie('classified-order-is-offline')) {
-                      phone = getCookie('classified-order-phone');
-                      addr = getCookie('classified-order-address');
-                  }
-
-                  fetch("{% url 'classifieds:wxpyjs_success' %}", {
-                      method : "POST",
-                      body: JSON.stringify({
-                          addr:addr,
-                          phone: phone,
-                          sg:"{{classified.slug}}"
-                      }),
-                      headers: {
-                         "X-Requested-With": "XMLHttpRequest"
-                      },
-                      credentials: 'same-origin',
-                      redirect: 'follow'
-                    }).then (resp => resp.json())
-                      .then (strData => {
-                      let data = JSON.parse(strData);
-                      if (data.success === true) {
-                          window.location.replace=`classifieds/orders/wsguatpotlfwccdi/${data.order_slug}`;
-                      }
-                  })
-                },
-                fail: function (res) {
-                    wxpayFail();
-                    console.log(JSON.stringify(res));
-                },
-                cancel: function (res) {
-                  window.location.replace="{% url 'classifieds:classified' classified.slug %}";
-                }
-		    });
-	      } catch {
-              wxpayFail();
-              console.log('failure to init payments, exception happened');
-	      }
-       }
-   });
-
-    wx.error(function(res){
-        wxpayFail();
-        console.log(res);
-    });
-
-});
+<script type="text/javascript">
+    var slugURL = "{% url 'classifieds:classified' classified.slug %}";
+    var slug = "{{classified.slug}}";
+    var wxCredURL = "{% url 'wx_req_cred' %}";
+    var dataError = "{{data.error}}";
+    var timestamp = "{{data.timestamp}}"; 
+    var nonceStr = "{{data.nonceStr}}";
+    var packge = "{{data.package}}";
+    var signType = "{{data.signType}}";
+    var paySign = "{{data.sign}}";
+    var paySuccessURL = "{% url 'classifieds:wxpyjs_success' %}";
 </script>
+<script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
+<script src="{% static 'js/pay-order.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}
