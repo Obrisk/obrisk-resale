@@ -6,6 +6,11 @@
 @import "partials/components-buttons";
 @import "partials/app-chat";
 
+
+html {
+    overflow-y: hidden;
+}
+
 html,
 body,
 .chat {

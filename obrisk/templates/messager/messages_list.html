@@ -17,7 +17,7 @@
      <!-- Chat top navigation -->
       <div class="chat-nav">
         <div class="nav-start">
-            <a  href="javascript:history.back()">
+            <a  href="{% url 'messager:contacts_list' %}">
                 <svg  class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
                      width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
@@ -29,7 +29,7 @@
         </div>
 
         <div class="username">
-            <span> {{ active.username | title }} </span>
+            <a href="{% url 'users:detail' active.username %}"> {{ active.username | title }} </span>
         </div>
 
         <div class="nav-end">

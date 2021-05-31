@@ -72,6 +72,11 @@ class ContactsListView(LoginRequiredMixin, ListView):
                                 conversation=OuterRef('pk'),
                             ).values_list('message', flat=True).order_by('-timestamp')[:1]
                         ),
+                        unread = Subquery (
+                            Message.objects.filter(
+                                conversation=OuterRef('pk'),
+                            ).values_list('unread', flat=True).order_by('-timestamp')[:1]
+                        ),
                         img = Subquery (
                             Message.objects.filter(
                                 conversation=OuterRef('pk'),
@@ -81,11 +86,6 @@ class ContactsListView(LoginRequiredMixin, ListView):
                             Message.objects.filter(
                                 conversation=OuterRef('pk'),
                             ).values_list('attachment', flat=True).order_by('-timestamp')[:1]
-                        ),
-                        unread = Subquery (
-                            Message.objects.filter(
-                                conversation=OuterRef('pk'),
-                            ).values_list('unread', flat=True).order_by('-timestamp')[:1]
                         ),
                         recipient = Subquery (
                             Message.objects.filter(
@@ -140,7 +140,8 @@ def messagesView(request, username):
                     'classified'
                 )
             #msgs_data = list(msgs_all)
-            messages_list_cleanup.delay(key, request.user.pk)
+            print(msgs_all.last().sender.id)
+            messages_list_cleanup.delay(key, request.user.pk, msgs_all.last().recipient.id)
 
             #could be sliced but the order needs to be reversed first
             #Slicing is at end to allow the update query to run

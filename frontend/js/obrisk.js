@@ -524,7 +524,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const socket_notif = new Audio("/static/sound/knock_brush.ogg");
   const ws_path = ws_scheme + "://" + window.location.host + "/ws/notifications/";
   const webSocket = new channels.WebSocketBridge();
-
+  
   if (new_messages === "None" )
       document.querySelector(".msg-notification").style.display = 'none';
 

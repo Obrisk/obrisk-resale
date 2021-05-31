@@ -69,7 +69,7 @@ def send_messages_notifications(sender_id, recipient_id, key):
 
 
 @shared_task
-def messages_list_cleanup(conv_key, user_pk):
+def messages_list_cleanup(conv_key, user_pk, last_receiver_pk):
     unread_msgs = cache.get(f'msg_{user_pk}')
     if unread_msgs is not None:
         values = list(unread_msgs)
@@ -83,6 +83,7 @@ def messages_list_cleanup(conv_key, user_pk):
             )
 
     #If update is called on the query, the order 'll be distorted
-    Conversation.objects.get(
-            key=conv_key
-        ).messages.all().update(unread=False)
+    if user_pk == last_receiver_pk:
+        Conversation.objects.get(
+                key=conv_key
+            ).messages.all().update(unread=False)
