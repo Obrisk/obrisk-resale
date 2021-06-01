@@ -24,7 +24,7 @@ Chat window styles
 
     //Chat top navigation
     .chat-nav {
-        position: absolute;
+        position: fixed;
         top: 0;
         
         width: 100%;
@@ -37,129 +37,10 @@ Chat window styles
         justify-content: space-between;
         align-items: center;
         padding: 0 16px;
-        z-index: 99;
+        z-index: 3;
 
         a {
             color: #4a4a4a;
-        }
-
-        //Navbar start
-        .nav-start {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-
-            //recipient
-            .recipient-block {
-                display: inherit;
-                justify-content: inherit;
-                align-items: inherit;
-
-                .avatar-container {
-                    position: relative;
-                    height: 46px;
-                    width: 46px;
-                    border: 2px solid transparent;
-
-                    .user-avatar {
-                        border-radius: 50%;
-                    }
-
-                    //Avatar
-                    img.profile-header-avatar {
-                        display: block;
-                        height: 42px;
-                        width: 42px;
-                        border-radius: 50%;
-                    }
-                }
-
-                .username {
-                    span {
-                        display: block;
-
-                        &:first-child {
-                            font-weight: 500;
-                            color: $medium-text;
-                        }
-
-                        &:nth-child(2) {
-                            display: flex;
-                            align-items: center;
-
-                            svg {
-                                height: 14px;
-                                width: 14px;
-                                stroke: $grey-text;
-                                margin-right: 4px;
-                            }
-
-                            span {
-                                font-size: .9rem;
-                                color: $grey-text;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        //Navbar end
-        .nav-end {
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-
-            //Dropdown
-            .dropdown {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                height: 32px;
-                width: 32px;
-            }
-
-            //Navbar item
-            .chat-nav-item {
-                //Icon modifier
-                &.is-icon {
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    height: 32px;
-                    width: 32px;
-
-                    &:last-child {
-                        margin-right: 4px;
-                    }
-
-                    svg {
-                        height: 20px;
-                        width: 20px;
-                        stroke: $grey-text;
-                    }
-                }
-
-                //Close chat window button
-                &.close-chat {
-                    border-radius: 50%;
-                }
-            }
-
-            //Chat navbar search
-            .chat-search {
-                margin: 0 8px;
-
-                .input {
-                    &:focus {
-                        border-color: $accent;
-
-                        + .form-icon svg {
-                            stroke: $accent;
-                        }
-                    }
-                }
-            }
         }
     }
 
@@ -174,15 +55,6 @@ Chat window styles
         flex-direction: column;
         width: 100%;
         height: 100vh;
-
-        //Opened state
-        &.is-opened {
-            width: calc(100% - 460px);
-
-            .chat-action {
-                width: calc(100% - 460px) !important;
-            }
-        }
 
         //Chat body inner
         .chat-body-inner {
@@ -312,7 +184,8 @@ Chat window styles
         width: 100%;
         height: 60px;
         padding: 0;
-        background: lighten($fade-grey, 3%);
+        background: #fff; 
+        border-radius: 5px;
 
         //Inner wrap
         .chat-action-inner {
@@ -326,6 +199,10 @@ Chat window styles
             .control {
                 position: relative;
                 width: 100%;
+
+                #send {
+                    margin: 10px;
+                }
 
                 //Input
                 .textarea {
@@ -345,7 +222,7 @@ Chat window styles
                 //Dropdown
                 .compose-dropdown {
                     position: absolute;
-                    top: 0;
+                    top: 10px;
                     right:0;
                 }
 

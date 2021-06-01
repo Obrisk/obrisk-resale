@@ -6,11 +6,6 @@
 @import "partials/components-buttons";
 @import "partials/app-chat";
 
-
-html {
-    overflow-y: hidden;
-}
-
 html,
 body,
 .chat {
@@ -105,12 +100,6 @@ h5 {
     max-width: 70px;
 }
 
-.chat-action {
-    z-index: 99;
-    position: relative;
-    bottom: 0;
-}
-
 .profile-avatar{
     width:30px;
     height:30px;
@@ -128,7 +117,6 @@ h5 {
     height: 250px;
     border-radius: 3%;
 }
-
 
 @media screen and (max-width: 450px) {
   .users-list {
