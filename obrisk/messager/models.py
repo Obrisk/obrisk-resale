@@ -18,7 +18,7 @@ class ConversationQuerySet(models.query.QuerySet):
 
     def get_conversations(self, user):
         """ Get all conversations of a specific user """
-        return self.filter( Q(first_user=user) | Q(second_user=user))
+        return self.filter( (Q(first_user=user) | Q(second_user=user)) & Q(is_empty=False))
 
     #TODO: check conversation exists only by checking the key
     def conversation_exists(self, user1, user2):
