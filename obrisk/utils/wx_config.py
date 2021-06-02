@@ -44,26 +44,53 @@ class Sign:
         return self.ret
 
 
-def get_fresh_token():
-    url = f'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}' #noqa
+def get_access_token():
 
+    wxtkn = cache.get('wx_access_tkn')
+    if wxtkn is not None:
+        return wxtkn
+
+    url = f'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid={APPID}&secret={APPSECRET}' #noqa
     try:
         token = requests.get(url, timeout=30)
         if token.ok:
             tkn = json.loads(token.text)
-            ACCESS_TOKEN = tkn['access_token']
+            cache.set(
+                    'wx_access_tkn',
+                    tkn['access_token'],
+                    tkn['expires_in'] - 300
+                )
+            return tkn['access_token']
         else:
-            return False
+            return None
+
+    except KeyError as e:
+        try:
+            tkn = json.loads(token.text)
+            if tkn['errcode'] == -1:
+                time.sleep(1)
+                return get_access_token()
+
+        except Exception as e:
+            logging.error(
+                    f"Failed to get Wechat access token and errcode is not -1 {e}"
+                )
+            return None
 
     except (AttributeError,
-            KeyError,
             TypeError,
             requests.ConnectionError,
             requests.RequestException,
             requests.HTTPError,
             requests.Timeout,
             requests.TooManyRedirects) as e:
-        logging.error(f"Failed to request wx credentials {e}")
+        logging.error(f"Failed to request access token from Wechat {e}")
+        return None
+
+
+def get_fresh_token():
+    ACCESS_TOKEN = get_access_token()
+    if ACCESS_TOKEN is None:
         return False
 
     try:
@@ -93,6 +120,7 @@ def get_fresh_token():
 class SignEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__
+
 
 @ajax_required
 @require_http_methods(["GET"])

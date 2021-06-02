@@ -27,12 +27,14 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.messager.tasks import (
-        send_messages_notifications, messages_list_cleanup
+        send_messages_notifications, messages_list_cleanup,
+        check_unread_msgs
     )
 from obrisk.notifications.models import (
         Notification, notification_handler
     )
 from obrisk.users.phone_verification import send_sms
+from obrisk.messager.send_wxtemplate import unread_msgs_wxtemplate
 import uuid
 import ast
 import os
@@ -140,7 +142,7 @@ def messagesView(request, username):
                     'classified'
                 )
             #msgs_data = list(msgs_all)
-            print(msgs_all.last().sender.id)
+            #print(msgs_all.last().sender.id)
             messages_list_cleanup.delay(key, request.user.pk, msgs_all.last().recipient.id)
 
             #could be sliced but the order needs to be reversed first
@@ -369,3 +371,18 @@ def make_classifieds_as_messages(request):
                     classified_thumbnail=str(classified_thumbnail)
                 )
     return HttpResponse("Done!")
+
+
+
+@require_http_methods(["GET"])
+def test_unread_messages(request):
+    check_unread_msgs()
+    return HttpResponse("Huuuuuraaaay!")
+
+
+@require_http_methods(["GET"])
+def test_send_wxtemplate(request, userid=None):
+    if userid == None:
+        return HttpResponse("Invalid!")
+    unread_msgs_wxtemplate(userid, "Elisha", "Attachment")
+    return HttpResponse("Huuuuuraaaay!")

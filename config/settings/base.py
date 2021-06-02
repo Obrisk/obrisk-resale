@@ -448,6 +448,12 @@ CELERY_BEAT_SCHEDULE = {
         # Every 24 hours
         "schedule": 86400.0,
         # If you're using any arguments
+    },
+    "wxtemplate-msg-notif-6-hours": {
+        "task": "obrisk.messager.tasks.send_wxtemplate_notif",
+        # Every 15 mins = 900
+        "schedule": 900.0,
+        # If you're using any arguments
     }
 }
 

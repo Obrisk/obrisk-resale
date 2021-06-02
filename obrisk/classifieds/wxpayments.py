@@ -197,11 +197,11 @@ def get_jsapi_params(request, openid, title, details, total_fee):
         )
     try:
         notify_result = client.order.create(
-                params['trade_type'], 
-                params['body'], 
-                params['total_fee'], 
-                params['notify_url'], 
-                user_id = params['openid'], 
+                params['trade_type'],
+                params['body'],
+                params['total_fee'],
+                params['notify_url'],
+                user_id = params['openid'],
                 client_ip = params['spbill_create_ip'],
                 detail = params['detail']
             )
@@ -225,7 +225,7 @@ def get_jsapi_params(request, openid, title, details, total_fee):
             'sign': data['paySign'],
             'signType': data['signType'],
         }
-        return ret_params 
+        return ret_params
 
 
 # 统一下单

@@ -68,7 +68,11 @@ except ImportError:
 
 
 API_KEY = env('WECHAT_API_KEY')
-TAGS_TIMEOUT = getattr(settings, 'TAGS_CACHE_TIMEOUT', DEFAULT_TIMEOUT)
+TAGS_TIMEOUT = getattr(
+        settings,
+        'TAGS_CACHE_TIMEOUT',
+        DEFAULT_TIMEOUT
+    )
 
 
 def set_popular_tags():

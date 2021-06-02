@@ -1,13 +1,16 @@
 import os
 import ast
 import uuid
+from datetime import timedelta
+
 from django.core.cache import cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.db.models.functions import Now
 from celery import shared_task
 from obrisk.notifications.models import Notification, notification_handler
 from obrisk.users.phone_verification import send_sms
-from obrisk.messager.models import Conversation
+from obrisk.messager.models import Conversation, Message
 
 try:
     from django.contrib.auth import get_user_model
@@ -87,3 +90,26 @@ def messages_list_cleanup(conv_key, user_pk, last_receiver_pk):
         Conversation.objects.get(
                 key=conv_key
             ).messages.all().update(unread=False)
+
+
+def check_unread_msgs():
+    older = Now() - timedelta(seconds=120)
+
+    for msg in Message.objects.filter(timestamp__lt=older, unread=True):
+        if msg.recipient.wechat_openid is None:
+            continue
+
+        if cache.get(f'wxtemplate_notif_{msg.recipient.wechat_openid}') is None:
+            #Never push again in the next 6 hours
+            cache.set(
+                f'wxtemplate_notif_{msg.recipient.wechat_openid}',
+                1,
+                timeout=21600
+            )
+        else:
+            continue
+
+
+@shared_task
+def send_wxtemplate_notif():
+    check_unread_msgs()
