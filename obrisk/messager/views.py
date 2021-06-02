@@ -141,9 +141,8 @@ def messagesView(request, username):
                     'recipient',
                     'classified'
                 )
-            #msgs_data = list(msgs_all)
-            #print(msgs_all.last().sender.id)
-            messages_list_cleanup.delay(key, request.user.pk, msgs_all.last().recipient.id)
+            if msgs_all.last() is not None:
+                messages_list_cleanup.delay(key, request.user.pk, msgs_all.last().recipient.id)
 
             #could be sliced but the order needs to be reversed first
             #Slicing is at end to allow the update query to run
