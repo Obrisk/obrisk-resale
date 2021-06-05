@@ -112,4 +112,4 @@ def check_unread_msgs():
 
 @shared_task
 def send_wxtemplate_notif():
-    check_unread_msgs()
+    pass
