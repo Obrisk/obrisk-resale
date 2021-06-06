@@ -14,10 +14,10 @@ def cached_queries(request):
     else:
         popular_cities = [
                 'Beijing',
+                'Guangzhou',
                 'Hangzhou',
                 'Ningbo',
-                'Shanghai',
-                'Guangzhou'
+                'Shanghai'
             ]
 
     env = 'local'
