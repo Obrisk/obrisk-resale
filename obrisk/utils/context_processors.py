@@ -12,7 +12,13 @@ def cached_queries(request):
     if request.user.is_authenticated:
         new_msgs = cache.get(f'msg_{request.user.pk}')
     else:
-        popular_cities = ['Hangzhou', 'Ningbo', 'Shanghai']
+        popular_cities = [
+                'Beijing',
+                'Hangzhou',
+                'Ningbo',
+                'Shanghai',
+                'Guangzhou'
+            ]
 
     env = 'local'
     if not getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
