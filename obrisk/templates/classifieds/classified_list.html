@@ -136,6 +136,7 @@
 
 {% block extra_js %}
 
+<script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
 <script type="text/javascript">
 
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
@@ -283,6 +284,82 @@ document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('search-btn').addEventListener('click', function(e) {
       searchSubmit(e, formInput);
   });
+
+  fetch('{% url 'wx_req_cred' %}', {
+      headers: {
+    "X-Requested-With": "XMLHttpRequest"
+      },
+      credentials: 'same-origin',
+      redirect: 'follow'
+    }).then (resp => resp.json())
+      .then (strData => {
+      try {
+          let data = JSON.parse(strData);
+          if (data.success === true) {
+            wx.config({
+                debug: false, 
+                appId: data.id,
+                timestamp: data.timestamp,
+                nonceStr: data.noncestr,
+                signature: data.signature,
+                jsApiList: [
+                   'updateAppMessageShareData',
+                   'updateTimelineShareData',
+                   'onMenuShareAppMessage',
+                   'onMenuShareTimeline'
+                ] 
+            });
+
+          } else {
+              console.log('failure to init wx');
+          }
+      } catch {
+      console.log('failure to init wx');
+      }
+   })
+
+    wx.ready(function(){
+      try {
+          wx.onMenuShareAppMessage({ 
+                title: "Obrisk Secondhand Marketplace", 
+                desc: "Easy way to sell, give and buy secondhand items in China", 
+                link: location.href, 
+                  imgUrl: '{% static 'img/favicon.png' %}', 
+                trigger: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                success: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                fail: function (res) {
+                    console.log(JSON.stringify(res));
+                }
+            })
+
+          wx.onMenuShareTimeline({ 
+                title: "Obrisk Secondhand Marketplace", 
+                desc: "Easy way to sell, give and buy secondhand items in China", 
+                link: location.href, 
+                imgUrl: '{% static 'img/favicon.png' %}', 
+                trigger: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                success: function (res) {
+                    console.log(JSON.stringify(res));
+                },
+                fail: function (res) {
+                    console.log(JSON.stringify(res));
+                }
+            })
+        }catch (e) {
+            console.log(e);
+        }
+  });
+
+  wx.error(function(res){
+    console.log(res);
+  });
+
 });
 
 </script>

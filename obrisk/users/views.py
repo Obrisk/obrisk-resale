@@ -329,6 +329,11 @@ def user_classifieds_list(request, rq_user=None):
                         'title','price','city','slug', 'thumbnail'
                     ).order_by('-priority', '-timestamp')
 
+    if classifieds_list.exists():
+        share_img = classifieds_list.first()['thumbnail']
+    else:
+        share_img = 'https://dist.obrisk.com/static/ver0106210002/img/favicon.ico'
+
     paginator = Paginator(classifieds_list, 6)  #6 @ page in mobile
     page = None
 
@@ -356,7 +361,11 @@ def user_classifieds_list(request, rq_user=None):
             })
 
     return render(request, 'users/user_classifieds.html',
-            {'page': page, 'classifieds': classifieds}
+            {'page': page,
+             'classifieds': classifieds,
+             'user': user.first(),
+             'share_img': share_img
+            }
         )
 
 

@@ -10,6 +10,21 @@
 
 {% block content %}
 
+<div>
+  <div class="media profile profile-header">
+    {% if user.picture %}
+        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.picture}}" alt="Picture Profile"
+          class="mb-3 profile-header-avatar img-fluid profile-pic" id="pic">
+    {% else %}
+        <img class="pull-right" src="{% static 'img/user.png' %}" height="80px" alt="No Profile Picture" />
+    {% endif %}
+
+    <h1 class="media-body">{{ user.username|title }}</h1>
+    <p> {{ user.username|title }} gotta these items to offer 😊 </p>
+
+    </div>
+  </div>
+
   <div class="is-9-fullhd classifieds-list-wrapper">
       <div id="classifieds" class="small-cards-listing">
          {% for classified in classifieds %}
@@ -89,6 +104,7 @@
 
 {% block extra_js %}
 
+<script src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
 <script type="text/javascript">
 
   const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
@@ -189,6 +205,80 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
+	  fetch('{% url 'wx_req_cred' %}', {
+	      headers: {
+		"X-Requested-With": "XMLHttpRequest"
+	      },
+	      credentials: 'same-origin',
+	      redirect: 'follow'
+	    }).then (resp => resp.json())
+	      .then (strData => {
+          try {
+              let data = JSON.parse(strData);
+              if (data.success === true) {
+                wx.config({
+                    debug: false, 
+                    appId: data.id,
+                    timestamp: data.timestamp,
+                    nonceStr: data.noncestr,
+                    signature: data.signature,
+                    jsApiList: [
+                       'updateAppMessageShareData',
+                       'updateTimelineShareData',
+                       'onMenuShareAppMessage',
+                       'onMenuShareTimeline'
+                    ] 
+                });
+
+              } else {
+                  console.log('failure to init wx');
+              }
+          } catch {
+	      console.log('failure to init wx');
+          }
+       })
+
+        wx.ready(function(){
+          try {
+              wx.onMenuShareAppMessage({ 
+                    title: "Secondhand items for sale", 
+                    desc: "Check out several items are available right now!", 
+                    link: location.href, 
+                    imgUrl: '{{share_img}}', 
+                    trigger: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    fail: function (res) {
+                        console.log(JSON.stringify(res));
+                    }
+                })
+
+              wx.onMenuShareTimeline({ 
+                    title: "Secondhand items for sale", 
+                    desc: "Check out several items are available right now!", 
+                    link: location.href, 
+                    imgUrl: '{{share_img}}', 
+                    trigger: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    success: function (res) {
+                        console.log(JSON.stringify(res));
+                    },
+                    fail: function (res) {
+                        console.log(JSON.stringify(res));
+                    }
+                })
+            }catch (e) {
+                console.log(e);
+            }
+      });
+
+      wx.error(function(res){
+        console.log(res);
+      });
 
 });
 

@@ -552,7 +552,7 @@ class DetailClassifiedView(DetailView):
         context['images_no'] = len(context['images'])
         context['similar_classifieds'] = similar_classifieds.annotate(
                 same_tags=Count('tags'))\
-            .order_by('-same_tags', '-timestamp')[:6]
+            .order_by('-same_tags', '-timestamp')[:8]
 
         return context
 
