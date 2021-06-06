@@ -76,6 +76,10 @@ urlpatterns = [
         view=views.VerifyAddressView.as_view(),
         name='update_address'),
 
+    url(regex=r'^i/(?P<rq_user>[\w.@+-]+)/$',
+        view=views.user_classifieds_list,
+        name='user_classifieds'),
+
     url(regex=r'^(?P<username>[\w.@+-]+)/$',
         view=views.UserDetailView.as_view(),
         name='detail'),

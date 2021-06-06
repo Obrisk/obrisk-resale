@@ -31,6 +31,9 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from django.utils.decorators import method_decorator
 from django.utils.http import is_safe_url
 from django.utils.text import slugify as dj_slugify
+from django.core.paginator import (
+        Paginator, EmptyPage,
+        PageNotAnInteger)
 
 from django.http import (
     HttpResponseServerError,
@@ -64,6 +67,7 @@ from .forms import (
         SocialSignupCompleteForm, VerifyAddressForm)
 from .models import User
 from .phone_verification import send_sms
+from obrisk.classifieds.models import Classified
 
 try:
     from django.contrib.auth import get_user_model
@@ -309,6 +313,51 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
     def get_object(self):
         # Only get the User record for the user making the request
         return User.objects.get(username=self.request.user.username)
+
+
+
+@require_http_methods(["GET"])
+def user_classifieds_list(request, rq_user=None):
+
+    user = User.objects.filter(username=rq_user)
+    if user is None:
+        classifieds_list = Classified.objects.get_active().values(
+                        'title','price','city','slug', 'thumbnail'
+                    ).order_by('-priority', '-timestamp')
+    else:
+        classifieds_list = Classified.objects.filter(user=user.first()).values(
+                        'title','price','city','slug', 'thumbnail'
+                    ).order_by('-priority', '-timestamp')
+
+    paginator = Paginator(classifieds_list, 6)  #6 @ page in mobile
+    page = None
+
+    try:
+        page = request.GET.get('page')
+        classifieds = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer deliver the first page
+        classifieds = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            classifieds = Classified.objects.get_expired().values(
+                            'title','price','city','slug', 'thumbnail'
+                        ).order_by('-timestamp')
+
+            return JsonResponse({
+                'classifieds': list(classifieds), 'end':'end'
+                })
+        else:
+            classifieds = paginator.page(paginator.num_pages)
+
+    if request.is_ajax():
+        return JsonResponse({
+                'classifieds': list(classifieds)
+            })
+
+    return render(request, 'users/user_classifieds.html',
+            {'page': page, 'classifieds': classifieds}
+        )
 
 
 @ajax_required

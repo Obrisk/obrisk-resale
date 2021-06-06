@@ -199,7 +199,7 @@
                       </div>
 
                       <div class="nav-drop-body account-items">
-                        <a class="account-item" href="{% url 'users:detail' request.user.username  %}">
+                        <a class="account-item" href="{% url 'users:detail' request.user.username %}">
                           <div class="media">
                             <div class="icon-wrap">
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -219,7 +219,7 @@
                           </div>
                         </a>
 
-                        <a class="account-item" href="{% url 'account_logout' %}">
+                        <a class="account-item" href="{% url 'users:user_classifieds' request.user.username %}">
                           <div class="media">
                             <div class="icon-wrap">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
