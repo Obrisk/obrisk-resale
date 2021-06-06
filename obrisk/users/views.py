@@ -345,10 +345,6 @@ def user_classifieds_list(request, rq_user=None):
         classifieds = paginator.page(1)
     except EmptyPage:
         if request.is_ajax():
-            classifieds = Classified.objects.get_expired().values(
-                            'title','price','city','slug', 'thumbnail'
-                        ).order_by('-timestamp')
-
             return JsonResponse({
                 'classifieds': list(classifieds), 'end':'end'
                 })
