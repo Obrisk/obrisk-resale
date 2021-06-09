@@ -354,7 +354,7 @@ def user_classifieds_list(request, rq_user=None):
     except EmptyPage:
         if request.is_ajax():
             return JsonResponse({
-                'classifieds': list(classifieds), 'end':'end'
+                 'end':'end'
                 })
         else:
             classifieds = paginator.page(paginator.num_pages)

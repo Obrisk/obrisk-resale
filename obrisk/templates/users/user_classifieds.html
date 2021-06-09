@@ -196,7 +196,6 @@
 
 			document.querySelector('.loading').classList.add('is-hidden');
 			block_request = false;
-			renderClassifieds(data.classifieds) 
 
 			  if (data.end === "end") {
 			    empty_page = true;
@@ -208,6 +207,9 @@
 				    '<div class="end-classifieds">--Best things in life are actually really expensive😜--</div>'
 				)
 			  } 
+              else {
+                renderClassifieds(data.classifieds) 
+              }
 
 		    }).catch (err => {
 			console.log(err);
