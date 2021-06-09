@@ -68,6 +68,7 @@ class SendSmsRequest(RpcRequest):
     def set_OutId(self,OutId):
         self.add_query_param('OutId',OutId)
 
+
 def send_sms(business_id, phone_numbers, sign_name,
         template_code,template_param=None):
     """

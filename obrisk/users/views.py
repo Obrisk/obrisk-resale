@@ -8,6 +8,7 @@ import oss2
 import boto3
 import logging
 import itertools
+import time
 from urllib.parse import urlsplit
 
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -78,6 +79,8 @@ except ImportError:
 
     user_model = User
 
+
+SMS_SEND_RETRY = 0
 
 class SocialPostView(FormView):
     form_class = CusSocialSignupForm
@@ -153,54 +156,59 @@ def send_code(phone_number, theme, user=None):
         'success': True,
         'message': "Ding ding🔔 Pls wait for the code😊"
     })
+    fail_resp = JsonResponse({
+        'success': False,
+        'error_message': "Sorry we couldn't send the code, try again later!"
+    })
 
     if getattr(settings, 'PHONE_SIGNUP_DEBUG', False):
         print("Your phone number verification is....")
         print(random)
         return success_resp
 
-    else:
-        try:
-            #try with Aliyun first
-            ret = aliyun_send_code(random, phone_number)
+    try:
+        #try with Aliyun first
+        ret = aliyun_send_code(random, phone_number)
 
-            if ret['Code'] == 'OK':
-                return success_resp
-            else:
-                #retry with AWS
-                response = aws_send_code(theme, random, phone_number)
-                if response['HTTPStatusCode'] == 200:
-                    return success_resp
+        if ret['Code'] == 'OK':
+            return success_resp
 
-                else:
-                    logging.error(
-                            f'AWS & Ali SMS failed. ALI:{ret}, AWS:{response}'
-                        )
-                    return JsonResponse({
-                        'success': False,
-                        'error_message': "Sorry we couldn't send the code, try again later!"
-                    })
+        time.sleep(3)
+        SMS_SEND_RETRY += 1
 
-        except Exception as e:
+        if SMS_SEND_RETRY > 4:
+            logging.error(
+                    f'Ali SMS failed 4 times. Code:{ret["Code"]}, ret: {ret}'
+                )
             #retry with AWS
             response = aws_send_code(theme, random, phone_number)
             if response['HTTPStatusCode'] == 200:
                 return success_resp
 
-            else:
-                #retry with Aliyun again
-                ret = aliyun_send_code(random, phone_number)
-                if ret['Code'] == 'OK':
-                    return success_resp
+            logging.error(
+                    f'AWS & Ali SMS failed. ALI:{ret}, AWS:{response}'
+                )
+            return fail_resp
+        return send_code(phone_number, theme, user)
 
-                else:
-                    logging.error(
-                            f'AWS & Ali SMS failed. ALI:{ret}, AWS:{response}, e:{e}'
-                        )
-                    return JsonResponse({
-                        'success': False,
-                        'error_message': "Sorry we couldn't send the code, try again later!"
-                    })
+    except Exception as e:
+        #retry with AWS
+        try:
+            response = aws_send_code(theme, random, phone_number)
+            if response['HTTPStatusCode'] == 200:
+                return success_resp
+
+            #retry with Aliyun again
+            ret = aliyun_send_code(random, phone_number)
+            if ret['Code'] == 'OK':
+                return success_resp
+
+        except Exception as e:
+            pass
+        logging.error(
+                f'AWS & Ali SMS failed. ALI:{ret}, AWS:{response}, e:{e}'
+            )
+        return fail_resp
 
 
 def get_users(phone_number):
