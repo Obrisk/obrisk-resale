@@ -11,16 +11,16 @@
 {% block content %}
 
 <div>
-  <div class="media profile profile-header m-2">
+  <div class="media profile profile-header">
     {% if object.picture %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{object.picture}}" alt="Picture Profile"
-          class="mb-3 profile-header-avatar img-fluid profile-pic" id="pic">
+        <img src="{{oss}}/{{object.picture}}" alt="Pic"
+          class="profile-header-avatar img-fluid profile-pic" id="pic">
     {% else %}
-        <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="No Profile Picture" />
+        <img class="pull-right" src="{% static 'img/user.png' %}" height="250px" alt="pic" />
         <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
     {% endif %}
 
-    <h1 class="media-body mt-0">{{ object.username|title }}</h1>
+    <h1 class="media-body">{{ object.username|title }}</h1>
 
     <div class="profile-points">
       <div class="point-label">

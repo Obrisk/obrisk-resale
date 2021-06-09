@@ -13,17 +13,24 @@
 <div>
   <div class="media profile profile-header">
     {% if user.picture %}
-        <img src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{user.picture}}" alt="Picture Profile"
-          class="mb-3 profile-header-avatar img-fluid profile-pic" id="pic">
+        <img src="{{oss}}/{{user.picture}}" alt="Picture Profile"
+          class="profile-header-avatar img-fluid profile-pic" id="pic">
     {% else %}
         <img class="pull-right" src="{% static 'img/user.png' %}" height="80px" alt="No Profile Picture" />
     {% endif %}
 
     <h1 class="media-body">{{ user.username|title }}</h1>
-    <p> {{ user.username|title }} gotta these items to offer 😊 </p>
 
-    </div>
+    {% if user.english_address  %}
+        <p>📍{{ user.english_address }}, {{ user.city }} </p>
+    {% else %}
+        <p> 📍{{ user.city }} </p>
+    {% endif %}
+    {% if user.notes %}
+        <small style="text-align: center; margin-top:6px;"> {{ user.notes|title }} </small>
+    {% endif %}
   </div>
+</div>
 
   <div class="is-9-fullhd classifieds-list-wrapper">
       <div id="classifieds" class="small-cards-listing">

@@ -41,8 +41,8 @@ class MyUserAdmin(AuthUserAdmin):
                 {'fields':
                     ('name', 'is_official', 'is_seller', 'points', 'city',
                         'province_region', 'country', 'phone_number', 'picture',
-                        'thumbnail', 'org_picture', 'instagram_account', 'linkedin_account',
-                        'snapchat_account', 'facebook_account', 'english_address', 'chinese_address', 'gender', 'wechat_openid',
+                        'thumbnail', 'org_picture', 'linkedin_account', 'wechat_id', 'notes',
+                        'english_address', 'chinese_address', 'gender', 'wechat_openid',
                     )
                 }
             ),
