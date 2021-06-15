@@ -17,7 +17,8 @@ def cached_queries(request):
                 'Guangzhou',
                 'Hangzhou',
                 'Ningbo',
-                'Shanghai'
+                'Shanghai',
+                'Shenzhen'
             ]
 
     env = 'local'
