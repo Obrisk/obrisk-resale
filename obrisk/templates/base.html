@@ -432,6 +432,7 @@
 
 
   {% block javascript %}
+  <script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
   <script type="text/javascript">
     var currentUser;
     var new_messages;
@@ -495,7 +496,7 @@
         currentUser = "{{ request.user.username}}";
         new_messages = "{{ new_msgs }}";
       </script>
-      <script src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
+      <script defer src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
   {% endif %}
 
   {% endblock javascript %}
