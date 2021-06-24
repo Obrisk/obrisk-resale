@@ -10,8 +10,7 @@
 
 {% block content %}
 
-<div>
-  <div class="media profile profile-header">
+  <div class="profile-header">
     {% if user.picture %}
         <img src="{{oss}}/{{user.picture}}" alt="Pic"  height="120px"
           class="profile-header-avatar img-fluid profile-pic" id="pic">
@@ -30,7 +29,6 @@
         <small style="text-align: center; margin-top:6px;"> {{ user.notes|title }} </small>
     {% endif %}
   </div>
-</div>
 
   <div class="is-9-fullhd classifieds-list-wrapper">
       <div id="classifieds" class="small-cards-listing">
