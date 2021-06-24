@@ -5,6 +5,7 @@ from django.core.cache import cache
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import JsonResponse
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 from obrisk.notifications.models import (
         notification_handler, Notification
     )
@@ -91,6 +92,7 @@ def view_friends(request, template_name="connections/friends.html"):
 
 
 @login_required
+@csrf_exempt
 def friendship_add_friend(
     request, to_username, template_name="connections/add_friends.html"
 ):
@@ -243,6 +245,7 @@ def following(request, template_name="connections/following.html"):
 
 
 @login_required
+@csrf_exempt
 def follower_add(
     request, followee_username, template_name="connections/add_follower.html"
 ):
@@ -254,7 +257,12 @@ def follower_add(
         follower = request.user
         try:
             Follow.objects.add_follower(follower, followee)
-            notification_handler(actor=follower, verb=Notification.NEW_FOLLOWER, recipient=followee, key='connection_notification')
+            notification_handler(
+                    actor=follower,
+                    verb=Notification.NEW_FOLLOWER,
+                    recipient=followee,
+                    key='connection_notification'
+                )
 
         except AlreadyExistsError:
             return following(request, followee)

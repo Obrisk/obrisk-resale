@@ -11,10 +11,10 @@
 {% block content %}
 
 <div>
-  <div class="media profile profile-header">
+  <div class="profile-header">
     {% if object.picture %}
         <img src="{{oss}}/{{object.picture}}" alt="Pic"
-          class="profile-header-avatar img-fluid profile-pic" id="pic">
+          class="profile-header-avatar" id="pic">
     {% else %}
         <img class="pull-right" src="{% static 'img/user.png' %}" height="180px" alt="pic" />
         <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
@@ -68,7 +68,6 @@
   </div>
 
   <div class="container profile-wrapper">
-
     <div id="contact-info" class="vcard">
       <p>
         {% if object.linkedin_account %}
@@ -128,7 +127,6 @@
 <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 <script>
-  const csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
   const username = "{{ object.username }}";
 
   $(".connect-btn").click(function (e) {
@@ -157,31 +155,37 @@
     });
   });
 
-
   $(".follow-btn").click(function (e) {
-
-    $.ajax({
-      type: "POST",
-      url: "/connections/follower/add/" + username + "/",
-      data: {
-        followee_username: username
-      },
-      dataType: "json",
-      success: function (response) {
-        if (response) {
-          $.wnoty({
-            type: "success",
-            message: "You're now following" + username + "🔌",
-          });
-        } else {
+    try {
+        $.ajax({
+          type: "POST",
+          url: "/connections/follower/add/" + username + "/",
+          data: {
+            followee_username: username
+          },
+          dataType: "json",
+          success: function (response) {
+            if (response) {
+              $.wnoty({
+                type: "success",
+                message: "You're now following" + username + "🔌",
+              });
+            } else {
+              $.wnoty({
+                type: "error",
+                autohide: false,
+                message: "Sorry something went wrong , Please try again later.",
+              });
+            }
+          }
+        });
+      } catch {
           $.wnoty({
             type: "error",
             autohide: false,
-            message: "Sorry something went wrong , Please try again later.",
+            message: "This feature isn't available now, pls try later🙃",
           });
-        }
       }
-    });
   });
 
 </script>

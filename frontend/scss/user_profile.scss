@@ -1,34 +1,5 @@
 @import "partials/simple-defaults";
 
-.clear {
-  clear: both;
-}
-
-.fa-instagram {
-  color: #cf153d;
-}
-
-.fa-linkedin {
-  color: #1556cf;
-}
-
-.fa-facebook {
-  color: #2815cf;
-}
-
-.fa-snapchat {
-  color: #ecde16;
-}
-
-.profile-header-avatar {
-  border: 5px solid #fff;
-  border-radius: 15%;
-  object-fit: cover;
-  background-color: #fff;
-  width:250px;
-  height:250px;
-}
-
 .profile-header {
   display: flex;
   flex-direction: column;
@@ -36,18 +7,41 @@
   align-items: center;
   border-radius: 10px;
   box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
-  padding: 45px;
-  margin-top: 45px;
+  margin: 4em .5em auto;
+  padding: 1em;
 }
 
 .profile-wrapper {
   border-radius: 10px;
   background: #F6F6F6;
   box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
-  padding: 45px;
-  margin-top: 45px;
+  margin: 1em .5em;
+  padding: 1em;
+}
 
+.profile-header-avatar {
+  border: 5px solid #fff;
+  border-radius: 15%;
+  object-fit: cover;
+  background-color: #fff;
+  width:200px;
+  height:200px;
+}
 
+.left-button {
+    margin-left: 6px;
+}
+
+.lazy-img {
+    text-align: center;
+    font-size: 10px;
+}
+
+@media screen and (max-width: 400px) {
+  .profile-header-avatar {
+    width : 175px;
+    height : 175px;
+  }
 }
 
 .profile-points {
@@ -71,37 +65,27 @@
   margin-top: 25%;
 }
 
-.left-button {
-    margin-left: 6px;
+.clear {
+  clear: both;
 }
 
-@media screen and (max-width: 991px) {
-
-  .profile-header,
-  .profile-wrapper {
-    margin-top: 15px;
-  }
-  .media-body {
-    margin-top: -10px;
-  }
+.fa-instagram {
+  color: #cf153d;
 }
 
-
-.lazy-img {
-    text-align: center;
-    font-size: 10px;
+.fa-linkedin {
+  color: #1556cf;
 }
 
-@media screen and (max-width: 400px) {
-  .profile-header-avatar {
-    width : 175px;
-    height : 175px;
-  }
-
+.fa-facebook {
+  color: #2815cf;
 }
+
+.fa-snapchat {
+  color: #ecde16;
+}
+
 
 .media-body {
   font-size: 32px;
 }
-
-
