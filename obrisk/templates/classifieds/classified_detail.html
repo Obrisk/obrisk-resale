@@ -4,7 +4,6 @@
 
 {% block head %}
 <link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/share.css' %}">
 <link rel="stylesheet" href="{% static 'css/vendor/splide.min.css' %}">
 
 <title>{{ classified.title|title }}</title>
@@ -170,11 +169,8 @@
             <!-- Classified Entries Column -->
             {% for classified in similar_classifieds %}
                 <div class="card classified-card">
-                  <!--Display image-->
-                  <a href="{% url 'classifieds:classified' classified.slug %}"
-                    style="color:black; text-decoration:none; background-color:none">
+                  <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link">
                     <div class="card-img-top img-responsive">
-
                       {% if classified.thumbnail %}
                       <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
                         width="154px" height="154px">
@@ -190,11 +186,11 @@
                       <h6 class="card-title"> {{ classified.title}} </h6>
 
                       {% if classified.price == 0.00 %}
-			  <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
                       {% elif classified.price is None %}
-			  <p class="card-subtitle">  {% trans 'BID PRICE' %} </p>
+                          <p class="card-subtitle">  {% trans 'BID PRICE' %} </p>
                       {% else %}
-			  <p class="card-subtitle"> ¥{{ classified.price }} </p>
+                          <p class="card-subtitle"> ¥{{ classified.price }} </p>
                       {% endif %}
                       <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
 

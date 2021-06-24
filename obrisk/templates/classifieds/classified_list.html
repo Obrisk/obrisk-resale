@@ -57,9 +57,7 @@
          {% for classified in classifieds %}
             <div class="card classified-card">
               <!--Display image-->
-              <a href="{% url 'classifieds:classified' classified.slug %}"
-                style="color:black; text-decoration:none; background-color:none">
-
+              <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link">
                 <div class="card-img-top img-responsive">
                   {% if classified.thumbnail %}
                   <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
@@ -232,11 +230,26 @@
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        if ( parseFloat(sessionStorage["scrollPosition"]) > 0 ) {
+        if ( sessionStorage["restoreScroll"] === "true" ) {
+            page = parseInt(sessionStorage["page"]);
+            document.getElementById('classifieds').remove();
+            document.querySelector(
+                    '.classifieds-list-wrapper'
+                ).innerHTML = JSON.parse(localStorage.getItem('loadedPosts'));
+            
+            const end = document.querySelector('.end-classifieds')
+            if (end !== null) end.remove();
+
             document.body.scrollTop = sessionStorage.getItem("scrollPosition");
             document.documentElement.scrollTop = sessionStorage.getItem("scrollPosition");
+            sessionStorage.removeItem("restoreScroll");
             sessionStorage.setItem("scrollPosition", "0");
+            sessionStorage.setItem("page", "0");
         }
+
+        document.querySelector('.classifieds-list-wrapper').addEventListener('click', e => {
+           sessionStorage.setItem("restoreScroll", true);
+        });
 
        const topLeftLi = document.querySelector('.tp-nav-ul > li');
        const defaultLeftNav = topLeftLi.innerHTML;
@@ -318,11 +331,19 @@
             formInput.focus();
       });
 
-      window.onbeforeunload = function () {
+      window.onbeforeunload = function (event) {
           sessionStorage.setItem(
               "scrollPosition",
               Math.max(document.body.scrollTop, document.documentElement.scrollTop)
           );
+          sessionStorage.setItem(
+              "page",
+               page
+          );
+        const htmlContents = document.querySelector(
+                        '.classifieds-list-wrapper'
+                    ).innerHTML;
+        localStorage.setItem('loadedPosts', JSON.stringify(htmlContents));
       }
 
       searchForm.addEventListener('submit', function(e) {
