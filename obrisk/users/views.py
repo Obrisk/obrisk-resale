@@ -254,7 +254,7 @@ def phone_password_reset(request):
 
 
 @method_decorator(ensure_csrf_cookie, name="get")
-class UserDetailView(LoginRequiredMixin, DetailView):
+class UserDetailView(DetailView):
     model = User
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
@@ -263,13 +263,14 @@ class UserDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs):
         context = super(UserDetailView, self).get_context_data(**kwargs)
 
-        user = self.request.user
-        sent_requests = Friend.objects.sent_requests(user)
-        in_coming_reqst = Friend.objects.requests(user)
+        if self.request.user.is_authenticated:
+            user = self.request.user
+            sent_requests = Friend.objects.sent_requests(user)
+            in_coming_reqst = Friend.objects.requests(user)
 
-        context['pending'] = [u.to_user for u in sent_requests]
-        context['pended'] = [u.from_user for u in in_coming_reqst]
-        context['friends'] = Friend.objects.friends(user)
+            context['pending'] = [u.to_user for u in sent_requests]
+            context['pended'] = [u.from_user for u in in_coming_reqst]
+            context['friends'] = Friend.objects.friends(user)
 
         return context
 

@@ -38,32 +38,33 @@
       </div>
     </div>
 
-      {% if request.user.username == object.username %}
-          <div class="is-flex">
-            <a class="button accent-button" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
-          </div>
+    <div class="is-flex">
+        {% if request.user.is_authenticated %}
+          {% if request.user.username == object.username %}
+                <a class="button accent-button" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
 
-      {% else %}
-          <div class="is-flex">
-            {% if object in friends %}
-                <a class="button accent-button"
-                  url="{% url 'messager:conversation_detail' classified.user %}">{% trans '💬Chat' %}</a>
-            {% elif object in pending %}
-                <a class="button accent-button" href="#">{% trans '✨ Pending' %}</a>
-            {% elif object in pended%}
-                <p>{{object.username|title }} Wants to connect with you 🔌 </p>
-                <a class="button accent-button" 
-                    href="{% url 'connections:friendship_request_list' %}">View requests</a>
-            {% else %}
-                <a class="connect-btn button accent-button" href="#">
-                    {% trans '➕ Connect' %}
-                </a>
-            {% endif %}
+          {% else %}
+                {% if object in friends %}
+                    <a class="button accent-button"
+                      url="{% url 'messager:conversation_detail' classified.user %}">{% trans '💬Chat' %}</a>
+                {% elif object in pending %}
+                    <a class="button accent-button" href="#">{% trans '✨ Pending' %}</a>
+                {% elif object in pended%}
+                    <p>{{object.username|title }} Wants to connect with you 🔌 </p>
+                    <a class="button accent-button" 
+                        href="{% url 'connections:friendship_request_list' %}">View requests</a>
+                {% else %}
+                    <a class="connect-btn button accent-button" href="#">
+                        {% trans '➕ Connect' %}
+                    </a>
+                {% endif %}
+          {% endif %}
 
-            <a class="button accent-button" style="margin-left: 6px;"
-               href="{% url 'users:user_classifieds' object.username %}">{% trans '🛍️View posts' %}</a>
-          </div>
       {% endif %}
+
+      <a class="button accent-button" style="margin-left: 6px;"
+           href="{% url 'users:user_classifieds' object.username %}">{% trans '🛍️View posts' %}</a>
+    </div>
   </div>
 
   <div class="container profile-wrapper">

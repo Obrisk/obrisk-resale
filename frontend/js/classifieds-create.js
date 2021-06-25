@@ -83,7 +83,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (currentUser == undefined) {
       let draft_post = Object.fromEntries(new FormData(document.querySelector("form")));
       localStorage.setItem('new-classified', JSON.stringify(draft_post));
-      window.location.replace('/auth/login/?next=/classifieds/write-new-classified/');
+      if (wechat_browser){
+          window.location.replace('/users/wechat-auth/?next=/classifieds/write-new-classified/');
+      }else {
+          window.location.replace('/auth/login/?next=/classifieds/write-new-classified/');
+      }
     }
   });
 

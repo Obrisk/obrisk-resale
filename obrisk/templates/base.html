@@ -377,7 +377,7 @@
                   </span>
                 </a>
            {% else %}
-                <a class="bt-nav-link" href="{% url 'account_login' %}">
+                <a class="bt-nav-link" id="auth-button">
                   <span class="nav-icons">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -493,6 +493,17 @@
 
 
     document.addEventListener('DOMContentLoaded', function () {
+
+      const authButton = document.getElementById('auth-button');
+      if ( authButton !== null ) {
+          authButton.addEventListener('click', () => {
+              if (wechat_browser) {
+                window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+              }else {
+                window.location.href = "{% url 'account_login' %}";
+              }
+          });
+       }
 	  fetch('{% url 'wx_req_cred' %}', {
 	      headers: {
 		"X-Requested-With": "XMLHttpRequest"
