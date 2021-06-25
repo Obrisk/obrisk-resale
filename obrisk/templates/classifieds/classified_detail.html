@@ -12,15 +12,15 @@
 
 {# We need to check if the classified has images or else this will break #}
 {% block icon %}
-<link rel="icon" type="image/png" href="{{oss}}/{{ classified.thumbnail }}">
-<link rel="shortcut icon" href="{{oss}}/{{ classified.thumbnail }}">
-<link rel="apple-touch-icon" sizes="180x180"
-  href="{{oss}}/{{ classified.thumbnail }}">
-<link rel="icon" type="image/png" sizes="32x32"
-  href="{{oss}}/{{  classified.thumbnail }}">
-<link rel="icon" type="image/png" sizes="16x16"
-  href="{{oss}}/{{ classified.thumbnail }}">
-<link rel="mask-icon" href="{{oss}}/{{ classified.thumbnail }}" color="#5bbad5">
+	<link rel="icon" type="image/png" href="{{oss}}/{{ classified.thumbnail }}">
+	<link rel="shortcut icon" href="{{oss}}/{{ classified.thumbnail }}">
+	<link rel="apple-touch-icon" sizes="180x180"
+	  href="{{oss}}/{{ classified.thumbnail }}">
+	<link rel="icon" type="image/png" sizes="32x32"
+	  href="{{oss}}/{{  classified.thumbnail }}">
+	<link rel="icon" type="image/png" sizes="16x16"
+	  href="{{oss}}/{{ classified.thumbnail }}">
+	<link rel="mask-icon" href="{{oss}}/{{ classified.thumbnail }}" color="#5bbad5">
 {% endblock %}
 
 {% block meta %}
@@ -93,8 +93,7 @@
             <div class="action-wrapper">
 
                 {% if classified.user != request.user %}
-                    <a class="button chat-button"
-                       href="{% url 'messager:classified_chat' classified.user classified.id %}">
+                    <a class="button chat-button" id="chat-button-id">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                           stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                           class="feather feather-message-square">
@@ -256,7 +255,7 @@
   }
 
   function callpay() {
-    if (isNaN("{{classified.price}}")) {
+    if (isNaN("{{classified.price}}") || "{{classified.price}}" === "0.00") {
         document.getElementById('payError').innerHTML = "Only priced items can accept payments";        
 
       setTimeout(() => {  
@@ -271,6 +270,19 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+
+    document.getElementById('chat-button-id').addEventListener('click', () => {
+      if (currentUser !== undefined) {
+	window.location.href = "{% url 'messager:classified_chat' classified.user classified.id %}";
+      }else {
+	      if (wechat_browser) {
+		window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+	      }else {
+		window.location.href = "{% url 'account_login' %}";
+	      }
+      }
+    });
+
       const image_count = {{ images| length}}
 
       new Splide('.splide', {

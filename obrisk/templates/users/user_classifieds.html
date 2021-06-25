@@ -222,7 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
           try {
               wx.onMenuShareAppMessage({ 
                     title: "Secondhand items for sale", 
-                    desc: "Check out several items are available right now!", 
+	      desc: "Check out several items {{ user.username|title }} has posted", 
                     link: location.href, 
 	            imgUrl: '{{oss}}/{{share_img}}', 
                     trigger: function (res) {
