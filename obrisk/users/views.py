@@ -805,7 +805,7 @@ def wechat_getinfo_view_test(request):
     if request.method == 'GET':
 
         user_data = {
-            'ui': 'thisisaveryuniqueopenid45',
+            'ui': 'thisisaveryuniqueopenid47',
             'sx': 1,
             'nck':'admin 乔舒亚',
             'cnt':  'China'
