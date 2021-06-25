@@ -21,12 +21,13 @@ body {
   font-size: 32px;
 }
 
-
 .profile-header-avatar {
   border: 5px solid #fff;
   border-radius: 15%;
   object-fit: cover;
   background-color: #fff;
+  height: 120px;
+  width: 120px;
 }
 
 .profile-header {
