@@ -51,7 +51,7 @@
                             required step=".01" value="{{ form.price.value|default_if_none:'' }}" placeholder="Item price">
                       <span>
                   </div>
-                  <small> {% trans '0 for GIVEAWAY' %}
+                  <small> {% trans '0 for GIVEAWAY, empty for BID PRICE' %}
                   </small>
 
                   <div class="field">
@@ -63,30 +63,6 @@
                               class="textinput textInput form-control" id="id_english_address">
                         </div>
                   </div>
-
-                  <div class="field">
-                        <label>
-                            {% trans 'Tags' %}
-                        </label>
-
-                        <div class="control">
-                            <input type="text" name="tags" value="{% for tag in form.tags.all %} {{ tag |default_if_none:''}} {% endfor %}"
-                            class="tagwidget form-control" id="id_tags" placeholder="Separate words by comma">
-                        </div>
-                  </div>
-
-                  {% if request.user.phone_number.national_number != 13300000000 and request.user.phone_number.national_number >= 1 %}
-                      <div class="field include-phone">
-                        <label> 
-                            {% trans 'Include your phone no? ' %}
-                        </label>
-                        <label class="f-switch is-accent">
-                          <input type="checkbox" checked class="is-switch" name="show_phone" id="id_show_phone">
-                          <i></i>
-                        </label>
-                      </div>
-                  {% endif %}
-
 
                   <div class="hidden-fields">
                     <input type="hidden" id="id_edited" name="edited" class="input">
@@ -115,10 +91,6 @@
 <script type="text/javascript">
 
 document.addEventListener('DOMContentLoaded', function() {
-
-    if (document.getElementById("id_tags").value == '[]') {
-        document.getElementById("id_tags").value = '';
-    }
 
     document.querySelector(".update").addEventListener('click', function () {
       document.querySelector("input[name='status']").value = "A";

@@ -130,16 +130,11 @@ class ClassifiedEditForm(forms.ModelForm):
     english_address = forms.CharField(
             required=False, label=("Address (English)")
         )
-    show_phone = forms.BooleanField(
-            widget=forms.HiddenInput(),
-            initial=True, required=False
-        )
-    phone_number = forms.CharField(required=False)
 
     class Meta:
         model = Classified
-        fields = ["title", "details", "status", "edited", "price", "tags",
-         "english_address", "show_phone", "phone_number"]
+        fields = ["title", "details", "status", "edited", "price",
+         "english_address"]
 
         widgets = {
             'user': forms.HiddenInput(),
