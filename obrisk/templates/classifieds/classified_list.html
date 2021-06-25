@@ -227,26 +227,26 @@
       }
     }
 
+    if ( !iPhone && sessionStorage["restoreScroll"] === "true" ) {
+        page = parseInt(sessionStorage["page"]);
+    is_search = JSON.parse(sessionStorage["is_search"]);
+        document.getElementById('classifieds').remove();
+        document.querySelector(
+                '.classifieds-list-wrapper'
+            ).innerHTML = JSON.parse(localStorage.getItem('loadedPosts'));
+        
+        const end = document.querySelector('.end-classifieds')
+        if (end !== null) end.remove();
+
+        document.body.scrollTop = sessionStorage.getItem("scrollPosition");
+        document.documentElement.scrollTop = sessionStorage.getItem("scrollPosition");
+        sessionStorage.removeItem("restoreScroll");
+        sessionStorage.setItem("scrollPosition", "0");
+        sessionStorage.setItem("page", "0");
+        sessionStorage.setItem("page", "false");
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-
-        if ( !iPhone && sessionStorage["restoreScroll"] === "true" ) {
-            page = parseInt(sessionStorage["page"]);
-	    is_search = JSON.parse(sessionStorage["is_search"]);
-            document.getElementById('classifieds').remove();
-            document.querySelector(
-                    '.classifieds-list-wrapper'
-                ).innerHTML = JSON.parse(localStorage.getItem('loadedPosts'));
-            
-            const end = document.querySelector('.end-classifieds')
-            if (end !== null) end.remove();
-
-            document.body.scrollTop = sessionStorage.getItem("scrollPosition");
-            document.documentElement.scrollTop = sessionStorage.getItem("scrollPosition");
-            sessionStorage.removeItem("restoreScroll");
-            sessionStorage.setItem("scrollPosition", "0");
-            sessionStorage.setItem("page", "0");
-            sessionStorage.setItem("page", "false");
-        }
 
         document.querySelector('.classifieds-list-wrapper').addEventListener('click', e => {
            sessionStorage.setItem("restoreScroll", true);
