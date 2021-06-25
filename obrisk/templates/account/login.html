@@ -115,28 +115,10 @@
       phoneLoginActive();
   });
 
-
   document.getElementById('open-options').addEventListener('click', e => {
         login_form.classList.add('is-hidden');
         options_wrapper.style.display = 'flex';
   });
-
-  window.mobileUtil = (function (win, doc) {
-        const UA = navigator.userAgent,
-          isAndroid = /android|adr/gi.test(UA),
-          isIOS = /iphone|ipod|ipad/gi.test(UA) && !isAndroid,
-          isBlackBerry = /BlackBerry/i.test(UA),
-          isWindowPhone = /IEMobile/i.test(UA),
-          isMobile = isAndroid || isIOS || isBlackBerry || isWindowPhone;
-
-        return {
-          isAndroid: isAndroid,
-          isIOS: isIOS,
-          isMobile: isMobile,
-          isWeixin: /MicroMessenger/gi.test(UA),
-          isQQ: /QQ/gi.test(UA)
-        };
-  })(window, document);
 
   const isInStandaloneMode = () =>
     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);

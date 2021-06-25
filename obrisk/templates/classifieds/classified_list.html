@@ -229,8 +229,9 @@
 
     document.addEventListener('DOMContentLoaded', function() {
 
-        if ( sessionStorage["restoreScroll"] === "true" ) {
+        if ( !iPhone && sessionStorage["restoreScroll"] === "true" ) {
             page = parseInt(sessionStorage["page"]);
+	    is_search = JSON.parse(sessionStorage["is_search"]);
             document.getElementById('classifieds').remove();
             document.querySelector(
                     '.classifieds-list-wrapper'
@@ -244,6 +245,7 @@
             sessionStorage.removeItem("restoreScroll");
             sessionStorage.setItem("scrollPosition", "0");
             sessionStorage.setItem("page", "0");
+            sessionStorage.setItem("page", "false");
         }
 
         document.querySelector('.classifieds-list-wrapper').addEventListener('click', e => {
@@ -338,6 +340,10 @@
           sessionStorage.setItem(
               "page",
                page
+          );
+          sessionStorage.setItem(
+              "is_search",
+               is_search
           );
         const htmlContents = document.querySelector(
                         '.classifieds-list-wrapper'

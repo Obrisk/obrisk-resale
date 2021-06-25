@@ -450,7 +450,7 @@
     }
 
     //fix navbar bottom on iphone X families
-    let iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
+    var iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
     let aspect = window.screen.width / window.screen.height;
     if (
       iPhone && (aspect.toFixed(3) === "0.462" ||
