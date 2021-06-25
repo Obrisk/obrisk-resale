@@ -256,6 +256,9 @@
        const defaultLeftNav = topLeftLi.innerHTML;
 
        window.addEventListener('scroll', function () {
+          if (!iPhone && document.getElementById('navbarBottom').style.display === 'none'){
+              document.getElementById('navbarBottom').style.display = 'block';
+          }
 
           if(document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
               topLeftLi.innerHTML = scrollBtn.innerHTML; 
