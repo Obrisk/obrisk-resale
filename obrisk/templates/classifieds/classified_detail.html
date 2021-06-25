@@ -261,19 +261,32 @@
       setTimeout(() => {  
          document.getElementById('payError').innerHTML = "";
       }, 7000);
-
       return;
     }
 
-	  const sg = encodeURIComponent("{{classified.slug}}");
-	  window.location.replace("{% url 'classifieds:create_order' %}?sg=" + sg);
+    if (currentUser !== undefined) {
+	    const sg = encodeURIComponent("{{classified.slug}}");
+	    window.location.href = "{% url 'classifieds:create_order' %}?sg=" + sg;
+        return;
+    }
+
+    if (wechat_browser) {
+        window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+        return;
+    }
+
+    document.getElementById('payError').innerHTML = "Sorry the payment feature is currently unavailable";        
+    setTimeout(() => {  
+         document.getElementById('payError').innerHTML = "";
+    }, 7000);
+      
   }
 
   document.addEventListener('DOMContentLoaded', function () {
 
     document.getElementById('chat-button-id').addEventListener('click', () => {
       if (currentUser !== undefined) {
-	window.location.href = "{% url 'messager:classified_chat' classified.user classified.id %}";
+        window.location.href = "{% url 'messager:classified_chat' classified.user classified.id %}";
       }else {
 	      if (wechat_browser) {
 		window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
