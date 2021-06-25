@@ -491,9 +491,22 @@
         }
     }
 
-
     document.addEventListener('DOMContentLoaded', function () {
+      if ( !iPhone) {
+          if('visualViewport' in window) {
+		window.visualViewport.addEventListener('resize', function(event) {
+	     	    if(event.target.height + 30 < document.scrollingElement.clientHeight) {
+			document.getElementById('navbarBottom').style.display = 'none';
+		    } else {
+			document.getElementById('navbarBottom').style.display = 'block';
+		    }
+	       });
 
+ 	       document.querySelector('form').addEventListener('blur', e => {
+		    document.getElementById('navbarBottom').style.display = 'block';
+	       }, true);
+	  }
+      }
       const authButton = document.getElementById('auth-button');
       if ( authButton !== null ) {
           authButton.addEventListener('click', () => {
@@ -504,7 +517,10 @@
               }
           });
        }
-	  fetch('{% url 'wx_req_cred' %}', {
+
+
+
+       fetch('{% url 'wx_req_cred' %}', {
 	      headers: {
 		"X-Requested-With": "XMLHttpRequest"
 	      },
