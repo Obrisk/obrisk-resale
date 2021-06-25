@@ -11,38 +11,6 @@ function wxpayFail() {
 
 document.addEventListener('DOMContentLoaded', function () {
 
-  fetch(wxCredURL, {
-      headers: {
-    "X-Requested-With": "XMLHttpRequest"
-      },
-      credentials: 'same-origin',
-      redirect: 'follow'
-    }).then (resp => resp.json())
-      .then (strData => {
-          try {
-              let data = JSON.parse(strData);
-              if (data.success === true) {
-                wx.config({
-                    debug: false, 
-                    appId: data.id,
-                    timestamp: data.timestamp,
-                    nonceStr: data.noncestr,
-                    signature: data.signature,
-                    jsApiList: [
-                       'chooseWXPay'
-                    ] 
-                });
-
-              } else {
-              wxpayFail();
-                  console.log('failure to init wx');
-              }
-          } catch {
-              wxpayFail();
-              console.log('failure to init wx');
-          }
-    });
-
     wx.ready(function(){
         if (dataError.length > 1) {
            wxpayFail();

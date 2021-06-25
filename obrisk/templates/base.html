@@ -436,6 +436,7 @@
   <script type="text/javascript">
     var currentUser;
     var new_messages;
+    var wechat_browser = false;
 
     function registerServiceWorker() {
       // register sw script in supporting browsers
@@ -489,6 +490,44 @@
           return true;
         }
     }
+
+
+    document.addEventListener('DOMContentLoaded', function () {
+	  fetch('{% url 'wx_req_cred' %}', {
+	      headers: {
+		"X-Requested-With": "XMLHttpRequest"
+	      },
+	      credentials: 'same-origin',
+	      redirect: 'follow'
+	    }).then (resp => resp.json())
+	      .then (strData => {
+          try {
+              let data = JSON.parse(strData);
+              if (data.success === true) {
+                wx.config({
+                    debug: false, 
+                    appId: data.id,
+                    timestamp: data.timestamp,
+                    nonceStr: data.noncestr,
+                    signature: data.signature,
+                    jsApiList: [
+                       'updateAppMessageShareData',
+                       'updateTimelineShareData',
+                       'onMenuShareAppMessage',
+                       'onMenuShareTimeline',
+                       'chooseWXPay'
+                    ] 
+                });
+                wechat_browser = true;
+
+              } else {
+                  console.log('failure to init wx');
+              }
+          } catch {
+	      console.log('failure to init wx');
+          }
+       })
+   })
   </script>
 
   {% if request.user.is_authenticated %}
