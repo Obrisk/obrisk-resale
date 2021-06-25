@@ -436,6 +436,7 @@
   <script type="text/javascript">
     var currentUser;
     var new_messages;
+    var iPhone = false;
     var wechat_browser = false;
 
     function registerServiceWorker() {
@@ -450,7 +451,7 @@
     }
 
     //fix navbar bottom on iphone X families
-    var iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
+    iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
     let aspect = window.screen.width / window.screen.height;
     if (
       iPhone && (aspect.toFixed(3) === "0.462" ||
@@ -502,23 +503,14 @@
                 }
 	         });
 
- 	         document.querySelector('form').addEventListener('blur', e => {
-                document.getElementById('navbarBottom').style.display = 'block';
-	         }, true);
-	      }
+ 	       const pageForm = document.querySelector('form');
+	       if ( pageForm !== null ){
+		    pageForm.addEventListener('blur', e => {
+			document.getElementById('navbarBottom').style.display = 'block';
+		    }, true);
+	       }
+	   }
       }
-      const authButton = document.getElementById('auth-button');
-      if ( authButton !== null ) {
-          authButton.addEventListener('click', () => {
-              if (wechat_browser) {
-                window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
-              }else {
-                window.location.href = "{% url 'account_login' %}";
-              }
-          });
-       }
-
-
 
        fetch('{% url 'wx_req_cred' %}', {
 	      headers: {
@@ -553,8 +545,19 @@
           } catch {
 	      console.log('failure to init wx');
           }
-       })
-   })
+       });
+
+      const authButton = document.getElementById('auth-button');
+      if ( authButton !== null ) {
+          authButton.addEventListener('click', () => {
+              if (wechat_browser) {
+                window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+              }else {
+                window.location.href = "{% url 'account_login' %}";
+              }
+          });
+       }
+   });
   </script>
 
   {% if request.user.is_authenticated %}
