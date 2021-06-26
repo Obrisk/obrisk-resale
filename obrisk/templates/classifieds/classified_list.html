@@ -257,7 +257,10 @@
 
        window.addEventListener('scroll', function () {
           if (!iPhone && document.getElementById('navbarBottom').style.display === 'none'){
-              document.getElementById('navbarBottom').style.display = 'block';
+
+                if(visualViewport.height + 30 > document.scrollingElement.clientHeight) {
+                    document.getElementById('navbarBottom').style.display = 'block';
+                } 
           }
 
           if(document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
