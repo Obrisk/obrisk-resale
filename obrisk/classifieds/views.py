@@ -472,13 +472,9 @@ class EditClassifiedView(
     #deliberately since you can't upload images.
     def form_valid(self, form):
         form.instance.user = self.request.user
-        show_phone = form.cleaned_data['show_phone']
 
         classified = form.save(commit=False)
-        #Empty phone number is +8613300000000 for all old users around 150 users
-        if self.request.user.phone_number is not '' and show_phone:
-            if (self.request.user.phone_number.national_number != 13300000000):
-                classified.phone_number = self.request.user.phone_number
+        #Can do custom updates here
         classified.save()
         return super().form_valid(form)
 
