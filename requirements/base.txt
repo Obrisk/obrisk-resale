@@ -11,6 +11,7 @@ oss2  #https://github.com/aliyun/aliyun-oss-python-sdk
 aliyun-python-sdk-sts>=3.0.1 #https://github.com/aliyun/aliyun-openapi-python-sdk
 celery>=4.3.0 #https://github.com/celery/celery
 boto3>=1.6.2  # pyup: update minor  # https://github.com/boto/boto3
+werobot #https://github.com/offu/WeRoBot
 #pypiwin32      #This is only for windows OS   
 
 

@@ -9,6 +9,9 @@ from django.views.generic import RedirectView
 
 from graphene_django.views import GraphQLView
 from pwa_webpush.views import save_info
+from werobot.contrib.django import make_view
+
+from obrisk.users.wechat.wx_chatbot import wxbot
 from obrisk.users.views import (
     PasswordResetFromKeyView,
     GetInfoView
@@ -138,6 +141,10 @@ urlpatterns = [
         sitemap,
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
+    ),
+    url(
+        r"^wx/biR07IOg1Xgy66Hpypet/obdev2018-wsguatpotlfwccdi-wxbot/",
+        make_view(wxbot), name="wechat_users"
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
