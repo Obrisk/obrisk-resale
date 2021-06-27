@@ -101,11 +101,9 @@ class User(AbstractUser):
     points = models.IntegerField(  _('Points'), default=0)
     #Needs a country's code 
     phone_number = PhoneNumberField(('Phone number'))
-
     unverified_phone = PhoneNumberField (_('Unverified_phone'),
             blank=True, null=True
         )
-
     notes = models.CharField(
             max_length=1000, null=True, blank=True
         )
@@ -117,11 +115,8 @@ class User(AbstractUser):
 
     #The values are per month, so reset every month.
     classifieds_transactions_received = models.IntegerField(default=0)
-    no_of_classifieds_posted = models.IntegerField( default=0)
+    no_of_classifieds_posted = models.IntegerField(default=0)
     no_of_classifieds_negotiated = models.IntegerField( default=0)
-    no_of_jobs_applied =  models.IntegerField( default=0)
-    no_of_jobs_posted =  models.IntegerField( default=0)
-    no_of_events_registered =  models.IntegerField( default=0)
     status = models.IntegerField(default=0)
     # near future please add unique 12 digit ID
     #to use instead of username for url's especially in chat.
@@ -137,6 +132,61 @@ class User(AbstractUser):
 
     def get_profile_name(self):
         return self.username
+
+
+
+class WechatUser(models.Model):
+    name = models.CharField(
+            _("Full name"), blank=True, max_length=255
+        )
+    org_picture = models.CharField(
+            max_length=150, null=True, blank=True
+        )
+    picture = models.CharField(
+            max_length=150, null=True, blank=True
+        )
+    thumbnail = models.CharField(
+            max_length=150, null=True, blank=True
+        )
+    gender = models.CharField (
+            max_length=1, null=True,
+            blank=True, choices=GENDER,
+    )
+    wechat_id = models.CharField (
+            max_length=150, null=True, blank=True
+        )
+
+    wechat_openid = models.CharField(
+            max_length=100,blank=True,
+            null=True,verbose_name="wechat_openid",
+            unique=True
+    )
+    #This will become useful when we have multiple
+    #We can therefore share data of one user across.
+    wechat_unionid = models.CharField(
+            max_length=100,blank=True,
+            null=True,verbose_name="wechat_unionid"
+    )
+    #Without blank=True the forms add is required label
+    address = models.CharField(
+            max_length=300, null=True, blank=True
+        )
+    province_region = models.CharField (
+            _('Province'), max_length=200,
+            null=True, blank=True
+        )
+    city = models.CharField  (_('City'), max_length=200)
+    country = models.CharField(
+        _('Country'), max_length=100, default="China")
+
+    notes = models.CharField(
+            max_length=1000, null=True, blank=True
+        )
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.name
+
 
 
 def broadcast_login(sender, user, request, **kwargs):
