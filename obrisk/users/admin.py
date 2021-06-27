@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
-from obrisk.users.models import User
+from obrisk.users.models import User, WechatUser
 
 
 class MyUserChangeForm(CustomUserChangeForm):
@@ -51,3 +51,6 @@ class MyUserAdmin(AuthUserAdmin):
         'city', 'province_region', 'thumbnail', 'points')
     search_fields = ['username', 'phone_number', 'email', 'city']
     #readonly_fields = ('phone_number',)
+
+
+admin.site.register(WechatUser)

@@ -21,7 +21,6 @@ class WechatPush():
     def do_push(self,touser,template_id,url,topcolor,data):
         '''推送消息 '''
         token = get_access_token()
-        print(token)
         if token is None:
             return None
 
