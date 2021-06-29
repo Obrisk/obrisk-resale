@@ -117,6 +117,31 @@ def get_fresh_token():
     return False
 
 
+def get_user_info(token, user_id, lang='en_US'):
+    try:
+        response = requests.get(
+            url="https://api.weixin.qq.com/cgi-bin/user/info",
+            params={
+                "access_token": token,
+                "openid": user_id,
+                "lang": lang
+            }
+        )
+        response.encoding = 'utf8'
+        if response.ok:
+            return response.json()
+
+    except (AttributeError,
+            TypeError,
+            requests.ConnectionError,
+            requests.RequestException,
+            requests.HTTPError,
+            requests.Timeout,
+            requests.TooManyRedirects) as e:
+        logging.error(f"Failed to request access token from Wechat {e}")
+    return None
+
+
 class SignEncoder(JSONEncoder):
     def default(self, o):
         return o.__dict__

@@ -9,6 +9,9 @@ from django.views.generic import RedirectView
 
 from graphene_django.views import GraphQLView
 from pwa_webpush.views import save_info
+from werobot.contrib.django import make_view
+
+from obrisk.users.wechat.wx_chatbot import wxbot
 from obrisk.users.views import (
     PasswordResetFromKeyView,
     GetInfoView
@@ -25,8 +28,8 @@ from obrisk.utils.sentry import trigger_error
 sitemaps = {
     "pages": StaticSitemap,
     "classifieds": ClassifiedsSitemap,
-    "posts": PostsSitemap,
     "questions": QASitemap,
+    "posts": PostsSitemap
 }
 
 
@@ -38,6 +41,10 @@ urlpatterns = [
     ),
     url(r'^i18n/',
         include('django.conf.urls.i18n')
+    ),
+    url(r'^MP_verify_HTQQQmxtxv6VNTtN.txt$',
+        TemplateView.as_view(template_name="MP_verify_HTQQQmxtxv6VNTtN.txt",
+        content_type="text/plain"), name="MP_verify_HTQQQmxtxv6VNTtN.txt"
     ),
     url(
         r"^download-pwa/$",
@@ -126,6 +133,9 @@ urlpatterns = [
     url(r"^qa/",
         include("obrisk.qa.urls",
         namespace="qa")),
+    url(r"^posts/",
+        include("obrisk.posts.urls",
+        namespace="qa")),
     url(r"^search/",
         include("obrisk.search.urls",
         namespace="search")),
@@ -138,6 +148,10 @@ urlpatterns = [
         sitemap,
         {"sitemaps": sitemaps},
         name="django.contrib.sitemaps.views.sitemap",
+    ),
+    url(
+        r"^biR07IOg1Xgy66Hpypet-wsguatpotlfwccdi-wxbot/",
+        make_view(wxbot), name="wechat_users"
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
