@@ -60,13 +60,6 @@
     <!-- Blog Entries Column -->
     <div class="post-wrapper col-lg-6">
 
-  <!-- Write New post Widget -->
-  <div class="author-buttons">
-    {% if request.user.is_authenticated %}
-    <a class="btn btn-dark" href="{% url 'posts:drafts' %}" title="{% trans 'Draft' %}">
-      📚 {% trans ' Drafts' %}</a>
-    {% endif %}
-
   </div>
       {% for post in posts %}
       <!-- Blog Post -->
@@ -145,7 +138,7 @@
       {% empty %}
       <h4 class="no-data">
         {% trans 'There is no published post yet. Do you have any important info?' %}.
-        <a href="{% url 'posts:write_new' %}">{% trans 'publish one' %}!</a></h4>
+        {% trans 'publish one' %}!</a></h4>
       {% endfor %}
 
       {% if is_paginated %}
