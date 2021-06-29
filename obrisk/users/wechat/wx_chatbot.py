@@ -16,7 +16,7 @@ session_storage = RedisStorage(db, prefix="wxbot_")
 wxbot = WeRoBot(
             token=env('WXBOT_TOKEN'),
             app_id=env('WECHAT_APPID'),
-            app_secret=env('WECHAT_APPSECRET')
+            app_secret=env('WECHAT_APPSECRET'),
             enable_session=True,
             session_storage=session_storage
         )
