@@ -1,4 +1,5 @@
 #wechat chatbot
+import logging
 import redis
 from django.conf import settings
 from werobot import WeRoBot
@@ -14,9 +15,18 @@ db = redis.Redis(settings.REDIS_URL)
 session_storage = RedisStorage(db, prefix="wxbot_")
 wxbot = WeRoBot(
             token=env('WXBOT_TOKEN'),
+            app_id=env('WECHAT_APPID'),
+            app_secret=env('WECHAT_APPSECRET')
             enable_session=True,
             session_storage=session_storage
         )
+client=wxbot.client
+
+
+@wxbot.handler
+def hello(message):
+    return 'Hello World!'
+
 
 @wxbot.text
 def handle_text(message, session):
