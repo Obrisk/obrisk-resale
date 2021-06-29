@@ -163,7 +163,8 @@
 
         <!-- Similar lassified -->
         {% if similar_classifieds %}
-	<h5 class="title related-title">Related Items <small>(Swipe left)</small></h5>
+	<h5 class="title related-title">Related Items
+	  {% if similar_classifieds|length > 2 %}<small>(Swipe left)</small>{% endif %} </h5>
           <div class="related">
             <!-- Classified Entries Column -->
             {% for classified in similar_classifieds %}
