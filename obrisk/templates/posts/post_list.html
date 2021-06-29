@@ -5,8 +5,7 @@
 {% block title %} {% trans 'Posts' %} {% endblock %}
 
 {% block head %}
-<link href="{% static 'css/listing.css' %}" rel="stylesheet">
-<link href="{% static 'css/post-list.css' %}?v=200719" rel="stylesheet">
+<link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
 <title>Obrisk Post</title>
 
 {% endblock head %}
@@ -14,92 +13,43 @@
 {% block content %}
 
 <!-- Page Content -->
-<div class="sidebar-overlay"></div>
-<div class="container pt-3 pb-4 mb-5">
-
-  {% comment %}
-  <div
-    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
-    <div class="toggle-tags d-lg-none">
-      <a href=""></a>
-      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-    </div>
-  </div>
-  {% endcomment %}
-
-
-  {% comment %}
-  <div
-    class="d-flex align-items-center justify-content-between justify-content-lg-end mb-5 mt-3 col-lg-9 ml-auto  mr-auto">
-    <div class="toggle-tags d-lg-none">
-      <a href=""></a>
-      <span><i class="fa fa-hashtag" id="sidebarBtnOpen"></i></span>
-    </div>
-  </div>
-  <!-- Sidebar Widgets Column -->
-
-  <div id="sidebar" class="sidebar mr-4">
-    <!-- Cloud Tag Widget -->
-
-    <div class="card">
-      <div class="card-header">
-        <h5>{% trans 'Popular tags' %}</h5>
-      </div>
-
-      <div class="card-body">
-        {% for tag, count in popular_tags %}
-        <!--When adding the href, remember the tag url to have tag.slug and not tag itself-->
-        <a href="#"><span class="badge badge-info"> {{ count }} {{ tag }}</span></a>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-  {% endcomment %}
-
-  <div class="row">
-    <!-- Blog Entries Column -->
-    <div class="post-wrapper col-lg-6">
-
-  </div>
+<div class="is-9-fullhd classifieds-list-wrapper">
+    <br/>
       {% for post in posts %}
-      <!-- Blog Post -->
-      <div class="single-post mt-4 mb-4">
-        <div class="single-post-body p-0">
-          <!-- Card image -->
-          <div class="row">
-            <div class="col-12">
-              <a href="{% url 'posts:post' post.slug %}"
+       <div class="card">
+          <a href="{% url 'posts:post' post.slug %}"
                 style="color:black; text-decoration:none; background-color:none">
                 {% if post.image %}
-                    <div class="card-img-top"
+                    <div class="card-img-top img-responsive"
                          style="background: url({{oss}}/{{post.image}}); padding-top:42%; background-size: cover;">
                     </div>
                 {% endif %}
-            </div>
 
-            <div class="col-12 pl-5 pr-5 pt-4 pb-4">
-              <h3 class="pr-3 title"> {{ post.title|title|truncatechars:60 }} </h3>
+            <div class="card-body">
+              <h6 class="card-title">  {{ post.title|title|truncatechars:60 }} </h6>
               <div class="card-details">
-                {% if post.user.thumbnail %}
-                <img src="{{oss}}/{{post.user.thumbnail}}" alt="Picture Profile"
-                  style="width:30px;height:30px;border-radius: 50%;"
-                  class="rounded-circle  mb-0 mb-md-0 mr-md-3 profile-header-avatar img-fluid" id="pic">
-                {% else %}
-                <img class="pull-left" src="{% static 'img/user.png' %}" height="30px" width="30px"
-                  alt="No Profile Picture" />
-                {% endif %}
-                <div id="post-user">
-                  <div class="d-flex flex-row mt-2">
-                    <strong class="ml-0 mr-3">{{ post.user.get_profile_name|title|truncatechars:12 }}</strong>
+
+                <div class="meta-info">
+                    {% if post.user.thumbnail %}
+                        <img src="{{oss}}/{{post.user.thumbnail}}"
+                          alt="Picture Profile" id="pic">
+                        {% else %}
+                        <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="pic" />
+                    {% endif %}
+
+                  <div class="meta-right">
+                      <div class="meta-right-top">
+                          <strong itemprop="name" >
+                            {{ post.user.get_profile_name|title|truncatechars:12 }}</strong>
+                      </div>
                   </div>
-                </div>
-                <span class="time pull-right"><small>⏲️</small><span>{{ post.timestamp|naturaltime }} </span></span>
-              </div>
-              </a>
-            </div>
+                 </div>
+               <div class="time pull-right"><small>
+                       ⏲️</small>   {{ post.timestamp|naturaltime }} </div>
           </div>
+          </div>
+         </a>
         </div>
-      </div>
 
       <script type="application/ld+json">
           {
