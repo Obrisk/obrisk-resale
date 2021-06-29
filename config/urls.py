@@ -135,7 +135,7 @@ urlpatterns = [
         namespace="qa")),
     url(r"^posts/",
         include("obrisk.posts.urls",
-        namespace="qa")),
+        namespace="posts")),
     url(r"^search/",
         include("obrisk.search.urls",
         namespace="search")),

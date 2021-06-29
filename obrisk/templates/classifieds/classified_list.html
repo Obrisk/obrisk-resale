@@ -366,10 +366,10 @@
         wx.ready(function(){
           try {
               wx.onMenuShareAppMessage({ 
-                    title: "Obrisk Secondhand Marketplace", 
+                    title: "Online Secondhand Marketplace", 
                     desc: "Easy way to sell, give and buy secondhand items in China", 
                     link: location.href, 
-                      imgUrl: '{% static 'img/obrisk-logo-sqr.jpg' %}', 
+                    imgUrl: "{{oss}}/{{ classifieds.first.thumbnail }}", 
                     trigger: function (res) {
                         console.log(JSON.stringify(res));
                     },
@@ -382,10 +382,10 @@
                 })
 
               wx.onMenuShareTimeline({ 
-                    title: "Obrisk Secondhand Marketplace", 
+                    title: "Online Secondhand Marketplace", 
                     desc: "Easy way to sell, give and buy secondhand items in China", 
                     link: location.href, 
-                    imgUrl: '{% static 'img/obrisk-logo-sqr.jpg' %}', 
+                    imgUrl: "{{oss}}/{{ classifieds.first.thumbnail }}", 
                     trigger: function (res) {
                         console.log(JSON.stringify(res));
                     },
