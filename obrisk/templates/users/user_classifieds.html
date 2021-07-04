@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
         wx.ready(function(){
           try {
               wx.onMenuShareAppMessage({ 
-                    title: "Secondhand items for sale", 
+	      title: "Secondhand items selling now in {{ user.city| title }}", 
 	      desc: "Check out several items {{ user.username|title }} has posted", 
                     link: location.href, 
 	            imgUrl: '{{oss}}/{{share_img}}', 
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 })
 
               wx.onMenuShareTimeline({ 
-                    title: "Secondhand items for sale", 
+                    title: "Secondhand items selling now in {{ user.city| title }}", 
                     desc: "Check out several items are available right now!", 
                     link: location.href, 
 	            imgUrl: '{{oss}}/{{share_img}}', 
