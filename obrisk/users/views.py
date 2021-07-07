@@ -42,6 +42,8 @@ from django.http import (
     HttpResponseBadRequest,
     JsonResponse
 )
+from django.db.models import IntegerField, Case, When, Value
+
 from allauth.account.views import (
     SignupView, LoginView,
     _ajax_response,
@@ -334,9 +336,16 @@ def user_classifieds_list(request, rq_user=None):
                         'title','price','city','slug', 'thumbnail'
                     ).order_by('-priority', '-timestamp')
     else:
-        classifieds_list = Classified.objects.filter(user=user.first()).values(
-                        'title','price','city','slug', 'thumbnail'
-                    ).order_by('-priority', '-timestamp')
+        classifieds_list = Classified.objects.filter(
+                user=user.first()).values(
+                        'title','price','city','slug', 'thumbnail', 'status'
+                    ).annotate(
+                    order = Case (
+                        When(status='A', then=Value(1)),
+                        default=Value(2),
+                        output_field=IntegerField(),
+                    )
+                ).order_by('order', '-priority', '-timestamp')
 
     if classifieds_list.exists():
         share_img = classifieds_list.first()['thumbnail']
