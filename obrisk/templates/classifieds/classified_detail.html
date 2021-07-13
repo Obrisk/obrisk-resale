@@ -309,8 +309,9 @@
 
         wx.ready(function(){
           try {
-              const descr = "{{ classified.details | truncatechars:100 }}".replace(/[^a-zA-Z0-9 ]/g, '');
-              const title = "{{ classified.title | truncatechars:80 }}".replace(/[^a-zA-Z0-9 ]/g, '');
+              const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, '');
+              const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, '');
+              console.log(descr);
               wx.onMenuShareAppMessage({ 
                     title: title, 
                     desc: price + descr, 
