@@ -25,9 +25,7 @@ from django.http import (
         HttpResponseRedirect, HttpResponseBadRequest
     )
 from django.views.decorators.http import require_http_methods
-from django.conf import settings
 from django.core.cache import cache
-from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.core.paginator import (
         Paginator, EmptyPage,
         PageNotAnInteger)
@@ -57,6 +55,7 @@ from obrisk.classifieds.forms import (
         ClassifiedForm, AdminClassifiedForm, OfficialAdForm,
         ClassifiedEditForm)
 from obrisk.utils.images_upload import multipleImagesPersist
+from obrisk.classifieds.tasks import add_tags
 from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
 from config.settings.base import env
 try:
@@ -68,24 +67,6 @@ except ImportError:
 
 
 API_KEY = env('WECHAT_API_KEY')
-TAGS_TIMEOUT = getattr(
-        settings,
-        'TAGS_CACHE_TIMEOUT',
-        DEFAULT_TIMEOUT
-    )
-
-
-def set_popular_tags():
-    popular_tags = Classified.objects.get_active(
-            ).get_counted_tags()[:10]
-
-    cache.set('popular_tags_mb',
-                list(popular_tags), timeout=TAGS_TIMEOUT
-            )
-
-    return HttpResponse(
-            "Successfully sorted the popular tags!",
-            content_type='text/plain')
 
 
 @require_http_methods(["GET"])
@@ -340,6 +321,7 @@ class CreateClassifiedView(CreateView):
             classified.chinese_address = user.chinese_address
 
         classified.save()
+        add_tags.delay(classified.id)
 
         images_list = images_json.split(",")
         if multipleImagesPersist(
