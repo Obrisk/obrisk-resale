@@ -1,6 +1,8 @@
 import time
+from django.core.cache import cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
+from django.http import HttpResponse
 from celery import shared_task
 from obrisk.classifieds.models import Classified, ClassifiedTags
 
