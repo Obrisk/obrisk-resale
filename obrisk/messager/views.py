@@ -380,8 +380,12 @@ def test_unread_messages(request):
 
 
 @require_http_methods(["GET"])
-def test_send_wxtemplate(request, userid=None):
-    if userid == None:
+def test_send_wxtemplate(request, username=None):
+    if username == None:
         return HttpResponse("Invalid!")
+    user = user_model.objects.get(username=username)
+    userid = user.wechat_openid
+    if userid == None:
+        return HttpResponse("This user has no userid")
     unread_msgs_wxtemplate(userid, "Elisha", "Attachment")
     return HttpResponse("Huuuuuraaaay!")
