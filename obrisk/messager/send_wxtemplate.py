@@ -4,6 +4,7 @@
 from urllib.request import urlopen
 import json
 import logging
+import requests
 from obrisk.utils.wx_config import get_access_token
 
 
@@ -36,9 +37,23 @@ class WechatPush():
                 'data':data
             }
         json_template = json.dumps(dict_arr)
-        content = self.post_data(request_url + token, json_template)
+        #transfer to requests.
+
+        #url, data=xml.encode('utf-8'),
+        response = requests.post(
+                request_url + token,
+                data=json_template,
+                headers={'Content-Type': 'application/json'}
+            )
+        #response.encoding = 'utf8'
+        #msg = response.text
+        #xmlmsg = xmltodict.parse(msg)
+        #return trans_xml_to_dict(response.text)
         #读取json数据
-        j = json.loads(content)
+
+        #j = json.loads(content)
+        logging.error(f'Testing the response', extra={'response': response})
+        j = response.json()
         j.keys()
 
         if j['errcode'] != 0:
