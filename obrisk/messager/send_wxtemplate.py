@@ -65,23 +65,26 @@ class WechatPush():
 
 def unread_msgs_wxtemplate(userid, sender, last_msg):
     wx_push = WechatPush()
-    template_id = "8un0scoGsT6XKQkm0sMPXqj8WngXfW7YBbPp4KoIz6U"
+    template_id = "NRK2BaSoEtf7SRImLTddE4EqzZvu4Lry84Yfh3Of_Kc"
     url = "https://www.obrisk.com/ws/messages/?dd=" + userid
 
-    color = "#1faece"
+    color = "#173177"
     title = "Hi you have received new messages, Open the app to view them"
     tail = "Thank you for using Obrisk"
 
     data={
             "first": {"value":title},
             "keyword1":{
-                "value":last_msg,"color":color
-            },
-            "keyword2":{
                 "value":sender,"color":color
             },
+            "keyword2":{
+                "value":last_msg,"color":color
+            },
             "keyword3":{
-                "value":"Unread messages","color":color
+                "value":"22:11 20-July-21","color":color
+            },
+            "keyword4":{
+                "value":"Please reply ASAP","color":color
             },
             "remark": {"value":tail}
         }

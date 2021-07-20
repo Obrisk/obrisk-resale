@@ -387,5 +387,5 @@ def test_send_wxtemplate(request, username=None):
     userid = user.wechat_openid
     if userid == None:
         return HttpResponse("This user has no userid")
-    unread_msgs_wxtemplate(userid, "Elisha", "Attachment")
+    unread_msgs_wxtemplate(userid, "Elisha", "Attachment file")
     return HttpResponse("Huuuuuraaaay!")
