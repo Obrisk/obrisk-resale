@@ -379,13 +379,20 @@ def test_unread_messages(request):
     return HttpResponse("Huuuuuraaaay!")
 
 
-@require_http_methods(["GET"])
-def test_send_wxtemplate(request, username=None):
-    if username == None:
+@login_required
+def test_send_wxtemplate(request, user, sender, time):
+
+    if not request.user.is_superuser:
+        return HttpResponse(
+                "Hey, You are not authorized!",
+                content_type='text/plain')
+
+    if user == None:
         return HttpResponse("Invalid!")
-    user = user_model.objects.get(username=username)
+    user = user_model.objects.get(username=user)
     userid = user.wechat_openid
     if userid == None:
-        return HttpResponse("This user has no userid")
-    unread_msgs_wxtemplate(userid, "Elisha", "Attachment file")
+        return HttpResponse("This user has no Wechat userid yet")
+    time = time.replace('-', ' ')
+    unread_msgs_wxtemplate(userid, sender, time)
     return HttpResponse("Huuuuuraaaay!")

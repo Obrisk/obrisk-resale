@@ -52,7 +52,6 @@ class WechatPush():
         #读取json数据
 
         #j = json.loads(content)
-        logging.error(f'Testing the response', extra={'response': response})
         j = response.json()
         j.keys()
 
@@ -63,10 +62,10 @@ class WechatPush():
                 )
 
 
-def unread_msgs_wxtemplate(userid, sender, last_msg):
+def unread_msgs_wxtemplate(userid, sender, time):
     wx_push = WechatPush()
-    template_id = "NRK2BaSoEtf7SRImLTddE4EqzZvu4Lry84Yfh3Of_Kc"
-    url = "https://www.obrisk.com/ws/messages/?dd=" + userid
+    template_id = "TiTwvX3G9CshOdDUC0_-6XsEuTEhNMvqXaeeyznEvos"
+    url = "https://obrisk.com/ws/messages/?dd=" + userid
 
     color = "#173177"
     title = "Hi you have received new messages, Open the app to view them"
@@ -75,16 +74,13 @@ def unread_msgs_wxtemplate(userid, sender, last_msg):
     data={
             "first": {"value":title},
             "keyword1":{
-                "value":sender,"color":color
-            },
-            "keyword2":{
                 "value":last_msg,"color":color
             },
-            "keyword3":{
-                "value":"22:11 20-July-21","color":color
+            "keyword2":{
+                "value":sender,"color":color
             },
-            "keyword4":{
-                "value":"Please reply ASAP","color":color
+            "keyword3":{
+                "value":time,"color":color
             },
             "remark": {"value":tail}
         }
