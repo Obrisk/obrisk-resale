@@ -6,6 +6,7 @@ import datetime
 import oss2
 import logging
 
+from django.contrib.auth import login
 from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
 from django.contrib import messages
 from django.contrib.auth import get_user_model
@@ -50,12 +51,29 @@ SESSION_COOKIE_AGE = getattr(
         settings, 'SESSION_COOKIE_AGE', DEFAULT_TIMEOUT
     )
 
-class ContactsListView(LoginRequiredMixin, ListView):
+
+class ContactsListView(ListView):
     """This CBV is used to filter the list of contacts in the user"""
     """and allow the user to select the active one before chatting"""
     model = Message
     paginate_by = 50
     template_name = "messager/contact_list.html"
+
+    def get(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            userid = request.GET.get("dd", None)
+
+            if userid is not None:
+                current_user = user_model.objects.filter(wechat_openid=userid)
+                if current_user.exists():
+                    login(
+                        request, current_user.first(),
+                        backend='django.contrib.auth.backends.ModelBackend'
+                    )
+                    return super().get(self, request, *args, **kwargs)
+            return redirect('account_login')
+
+        return super().get(self, request, *args, **kwargs)
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)

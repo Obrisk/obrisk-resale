@@ -448,6 +448,13 @@ class UserListView(LoginRequiredMixin, ListView):
     slug_field = 'username'
     slug_url_kwarg = 'username'
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser:
+            return HttpResponse(
+                    "Hey, You are not authorized!",
+                    content_type='text/plain')
+        return super().dispatch(self, request, *args, **kwargs)
+
 
 @ajax_required
 @require_http_methods(["GET", "POST"])
