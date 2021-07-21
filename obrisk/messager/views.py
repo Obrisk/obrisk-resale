@@ -413,5 +413,6 @@ def test_send_wxtemplate(request, user, last_msg, sender, time):
         return HttpResponse("This user has no Wechat userid yet")
     time = time.replace('-', ' ')
     last_msg = last_msg.replace('-', ' ')
+    sender = sender.replace('-', ' ')
     unread_msgs_wxtemplate(userid, last_msg, sender, time)
     return HttpResponse("Huuuuuraaaay!")
