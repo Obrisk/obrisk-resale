@@ -62,7 +62,7 @@ class WechatPush():
                 )
 
 
-def unread_msgs_wxtemplate(userid, sender, time):
+def unread_msgs_wxtemplate(userid, last_msg, sender, time):
     wx_push = WechatPush()
     template_id = "TiTwvX3G9CshOdDUC0_-6XsEuTEhNMvqXaeeyznEvos"
     url = "https://obrisk.com/ws/messages/?dd=" + userid

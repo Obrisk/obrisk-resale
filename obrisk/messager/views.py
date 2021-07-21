@@ -398,7 +398,7 @@ def test_unread_messages(request):
 
 
 @login_required
-def test_send_wxtemplate(request, user, sender, time):
+def test_send_wxtemplate(request, user, last_msg, sender, time):
 
     if not request.user.is_superuser:
         return HttpResponse(
@@ -412,5 +412,6 @@ def test_send_wxtemplate(request, user, sender, time):
     if userid == None:
         return HttpResponse("This user has no Wechat userid yet")
     time = time.replace('-', ' ')
-    unread_msgs_wxtemplate(userid, sender, time)
+    last_msg = last_msg.replace('-', ' ')
+    unread_msgs_wxtemplate(userid, last_msg, sender, time)
     return HttpResponse("Huuuuuraaaay!")

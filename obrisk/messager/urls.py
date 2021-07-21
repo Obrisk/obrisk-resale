@@ -16,7 +16,7 @@ urlpatterns = [
         views.receive_message,
         name='receive_message'
     ),
-    url(r'^wsguatpotlfwccdi/send-wx-template/(?P<user>([^/]+))/(?P<sender>[-\w]+)/(?P<time>[-\w]+)/$',
+    url(r'^wsguatpotlfwccdi/send-wx-template/(?P<user>([^/]+))/(?P<last_msg>[-\w]+)/(?P<sender>[-\w]+)/(?P<time>[-\w]+)/$',
         views.test_send_wxtemplate,
         name='send_wxtemplate'
     ),
