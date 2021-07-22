@@ -169,11 +169,32 @@ def classified_list_by_tags(request, tag_slug=None):
         try:
             tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
             classifieds = Classified.objects.get_active().filter(
-                    tags__in=[tag]).order_by('-timestamp')
+                    tags__in=[tag]).values(
+                            'title','price','city','slug', 'thumbnail'
+                        ).order_by('-timestamp')
         except:
             pass
 
+    paginator = Paginator(classifieds, 6)  #6 @ page in mobile
     page = request.GET.get('page')
+
+    try:
+        classifieds = paginator.page(page)
+    except PageNotAnInteger: # If page is not an integer deliver the first page
+        classifieds = paginator.page(1)
+    except EmptyPage:
+        if request.is_ajax():
+            return JsonResponse({
+                 'end':'end'
+                })
+        else:
+            classifieds = paginator.page(paginator.num_pages)
+
+    if request.is_ajax():
+        return JsonResponse({
+                'classifieds': list(classifieds)
+            })
+
     return render(request, 'classifieds/classified_list.html',
             {'page': page,  'classifieds': classifieds,
             'tag': tag, 'base_active': 'classifieds'}
