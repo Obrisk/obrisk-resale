@@ -22,7 +22,7 @@ def classifieds_search(request):
     qs = ClassifiedDocument.search().query(
             Q('match_phrase', title=query_str) |
             Q('match_phrase', details=query_str) |
-            Q('match_phrase', tags__name=query_str)
+            Q('match_phrase', tags=query_str)
         ).to_queryset().values(
             'title','price','city','slug', 'thumbnail'
         ).order_by('-timestamp')
