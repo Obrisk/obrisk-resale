@@ -184,8 +184,12 @@ def classified_list_by_tags(request, tag_slug=None):
         classifieds = paginator.page(1)
     except EmptyPage:
         if request.is_ajax():
+            classifieds = Classified.objects.get_expired().filter(
+                    tags__in=[tag]).values(
+                            'title','price','city','slug', 'thumbnail'
+                        ).order_by('-timestamp')
             return JsonResponse({
-                 'end':'end'
+                'classifieds': list(classifieds), 'end':'end'
                 })
         else:
             classifieds = paginator.page(paginator.num_pages)
