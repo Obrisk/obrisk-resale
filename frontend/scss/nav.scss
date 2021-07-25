@@ -3,7 +3,7 @@
 @import "partials/simple-defaults";
 
 .container {
-    margin: 3.5rem auto;
+    margin-top: 4.5rem auto;
 }
 
 //standard slim
@@ -38,15 +38,6 @@ a {
   color: #202024 !important;
 }
 
-.nav-inner.is-toggle li+li {
-    margin-left: -1px;
-}
-
-.nav-inner.is-fullwidth li {
-    flex-grow: 1;
-    flex-shrink: 0;
-}
-
 .tp-nav-ul {
     display: flex;
     justify-content: space-between;
@@ -54,7 +45,10 @@ a {
 }
 
 .nav-logo {
-    justify-content: flex-start !important;
+    svg {
+        margin-top: 1em;
+        margin-left: .5em;
+    }
 }
 
 .muted-grey .navbar-nav .nav-link {

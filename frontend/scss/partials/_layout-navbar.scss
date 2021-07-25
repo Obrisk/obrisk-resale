@@ -10,9 +10,11 @@ Navbar styles
     width: 100%;
     z-index: 99;
     transition: all .3s;
+    height: 4rem; 
+    //border-radius: 10px;
+    //box-shadow: 0 0.5em 1em -0.125em rgba(black, 0.1), 0 0px 0 1px rgba(black, 0.02);
 
     font-family: "Montserrat", sans-serif;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
 
     &.is-active {
         transform: translateY(0);
@@ -51,7 +53,6 @@ Navbar styles
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            margin-left: 16px;
             cursor: pointer;
 
             //Avatar

@@ -70,7 +70,7 @@
       <div class="nav-inner isible is-toggle is-fullwidth">
         <ul class="tp-nav-ul">
           <li >
-            {% if request.META.HTTP_REFERER %}
+            {% if request.META.HTTP_REFERER and request.path != '/classifieds/' %}
                 <a  href="javascript:history.back()">
                     <svg  class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
                          width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -81,99 +81,69 @@
                     </svg>
                 </a>
             {% else  %}
-
-            <a class="nav-logo" href="{% url 'classifieds:list' %}">
-              <svg width="64" height="48" viewBox="0 0 64 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g filter="url(#filter0_i)">
-                  <path d="M23.4699 10.0511C23.1315 9.98326 22.8706 9.90461 22.7042 9.81386L23.4699 10.0511Z"
-                    fill="url(#paint0_linear)" />
-                  <path
-                    d="M14.0874 16.5869C19.4435 21.3157 27.2428 27.6592 32.564 31.2283L35.5688 18.659L38.5202 16.5869C34.6513 15.6786 35.5853 15.8594 30.0091 13.677C26.4935 12.301 7.02249 2.924 7.02249 2.924C10.3003 6.22432 23.2722 15.2348 28.8079 17.6348C22.0029 16.3408 15.2866 12.0666 10.3798 8.94405L10.2721 8.87547C4.00446 4.88709 0.880462 3.05549 0 2.10975C1.78415 6.11332 8.73125 11.8582 14.0874 16.5869Z"
-                    fill="url(#paint1_linear)" />
-                  <path
-                    d="M16.0371 23.2212C19.7932 29.0869 24.8639 32.8112 29.2773 37.6527L28.6308 36.7285L28.119 35.8043L27.2904 33.9558L26.6934 32.1074L26.3052 30.259L30.3991 32.0303C27.3054 31.2284 19.1046 26.2317 16.0371 23.2212Z"
-                    fill="#00BAF6" />
-                  <path
-                    d="M22.7981 9.62769L33.0334 13.0726L34.1603 12.2347L35.4749 11.3887L36.9208 10.6519L38.4798 10.0249C36.8834 10.956 30.4042 10.2794 29.0895 10.2794C28.0378 10.2794 24.457 9.8139 22.7981 9.62769Z"
-                    fill="#00BAF6" />
-                  <path
-                    d="M63.27 27.411C63.27 17.2296 54.9458 8.97595 44.6773 8.97595C40.2126 8.97595 36.2386 10.4719 33.0334 13.0726C33.0029 13.0623 33.075 13.0502 33.0334 13.0726L37.2951 14.5424C39.426 13.3687 41.879 12.7002 44.4895 12.7002C52.6835 12.7002 59.3261 19.2865 59.3261 27.411C59.3261 35.5356 52.6835 42.1218 44.4895 42.1218C37.9229 42.1218 32.3527 37.8919 30.3991 32.0303L28.9956 31.535L27.7749 30.982L26.3052 30.259C27.6861 39.0881 35.3857 45.8461 44.6773 45.8461C54.9458 45.8461 63.27 37.5924 63.27 27.411Z"
-                    fill="#00BAF6" />
-                  <path
-                    d="M26.0982 26.7007C26.1107 26.374 26.1317 26.0495 26.1611 25.7274C26.134 26.0455 26.1129 26.37 26.0982 26.7007Z"
-                    fill="#00BAF6" />
-                  <g filter="url(#filter1_d)">
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                      d="M44.4897 14.9348C51.439 14.9348 57.0726 20.5206 57.0726 27.411C57.0726 34.3014 51.439 39.8873 44.4897 39.8873C37.5403 39.8873 31.9067 34.3014 31.9067 27.411C31.9067 20.5206 37.5403 14.9348 44.4897 14.9348Z"
-                      fill="url(#paint2_radial)" />
-                    <path fill-rule="evenodd" clip-rule="evenodd"
-                      d="M44.4897 14.9348C51.439 14.9348 57.0726 20.5206 57.0726 27.411C57.0726 34.3014 51.439 39.8873 44.4897 39.8873C37.5403 39.8873 31.9067 34.3014 31.9067 27.411C31.9067 20.5206 37.5403 14.9348 44.4897 14.9348Z"
-                      fill="url(#paint3_linear)" />
-                  </g>
-                  <g opacity="0.6" filter="url(#filter2_d)">
-                    <path
-                      d="M57.1561 27.3172C57.1561 20.4268 51.5225 14.8409 44.5732 14.8409C37.6238 14.8409 31.9902 20.4268 31.9902 27.3172C31.9902 34.2076 37.6238 39.7934 44.5732 39.7934C51.5225 39.7934 57.1561 34.2076 57.1561 27.3172Z"
-                      fill="#00BAF6" />
-                  </g>
-                </g>
-                <defs>
-                  <filter id="filter0_i" x="0" y="-2.89025" width="63.27" height="48.7363" filterUnits="userSpaceOnUse"
-                    color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
-                      result="hardAlpha" />
-                    <feOffset dy="-5" />
-                    <feGaussianBlur stdDeviation="30" />
-                    <feComposite in2="hardAlpha" operator="arithmetic" k2="-1" k3="1" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.6 0" />
-                    <feBlend mode="overlay" in2="shape" result="effect1_innerShadow" />
-                  </filter>
-                  <filter id="filter1_d" x="27.9067" y="14.9348" width="33.1659" height="32.9525"
-                    filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                    <feOffset dy="4" />
-                    <feGaussianBlur stdDeviation="2" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
-                  </filter>
-                  <filter id="filter2_d" x="27.9902" y="14.8409" width="33.1659" height="32.9525"
-                    filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" />
-                    <feOffset dy="4" />
-                    <feGaussianBlur stdDeviation="2" />
-                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0" />
-                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow" />
-                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape" />
-                  </filter>
-                  <linearGradient id="paint0_linear" x1="55.2858" y1="38.3233" x2="13.1949" y2="-9.44434"
-                    gradientUnits="userSpaceOnUse">
-                    <stop offset="0.270833" stop-color="#EB5757" />
-                    <stop offset="0.557292" stop-color="#56CCF2" />
-                  </linearGradient>
-                  <linearGradient id="paint1_linear" x1="55.2858" y1="38.3233" x2="13.1949" y2="-9.44434"
-                    gradientUnits="userSpaceOnUse">
-                    <stop offset="0.270833" stop-color="#EB5757" />
-                    <stop offset="0.557292" stop-color="#56CCF2" />
-                  </linearGradient>
-                  <radialGradient id="paint2_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
-                    gradientTransform="translate(49.9663 30.4821) rotate(-128.694) scale(17.7726 13.2688)">
-                    <stop offset="0.015625" stop-color="#EB5757" />
-                    <stop offset="1" stop-color="#56CCF2" />
-                  </radialGradient>
-                  <linearGradient id="paint3_linear" x1="44.4897" y1="39.8873" x2="44.4897" y2="14.9348"
-                    gradientUnits="userSpaceOnUse">
-                    <stop stop-color="white" />
-                    <stop offset="1" stop-color="white" stop-opacity="0" />
-                  </linearGradient>
-                </defs>
-              </svg>
-            </a>
+                <a class="nav-logo" href="{% url 'classifieds:list' %}">
+                    <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <g filter="url(#filter0_d)">
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="url(#paint0_radial)"
+                                d="M15.9721 0.0145836C22.5841 0.0145836 27.9442 5.3839 27.9442 12.0073C27.9442 18.6307 22.5841 24 15.9721 24C9.36009 24 4 18.6307 4 12.0073C4 5.3839 9.36009 0.0145836 15.9721 0.0145836Z"/>
+                            <path fill-rule="evenodd" clip-rule="evenodd" fill="url(#paint1_linear)"
+                                d="M15.9721 0.0145836C22.5841 0.0145836 27.9442 5.3839 27.9442 12.0073C27.9442 18.6307 22.5841 24 15.9721 24C9.36009 24 4 18.6307 4 12.0073C4 5.3839 9.36009 0.0145836 15.9721 0.0145836Z"/>
+                        </g>
+                        <g opacity="0.6" filter="url(#filter1_d)">
+                            <path d="M28 11.9926C28 5.36925 22.6399 -6.36842e-05 16.0279 -6.36842e-05C9.41587 -6.36842e-05 4.05579 5.36925 4.05579 11.9926C4.05579 18.616 9.41587 23.9854 16.0279 23.9854C22.6399 23.9854 28 18.616 28 11.9926Z" fill="url(#paint2_radial)"/>
+                            <path fill="url(#paint3_linear)"
+                                d="M28 11.9926C28 5.36925 22.6399 -6.36842e-05 16.0279 -6.36842e-05C9.41587 -6.36842e-05 4.05579 5.36925 4.05579 11.9926C4.05579 18.616 9.41587 23.9854 16.0279 23.9854C22.6399 23.9854 28 18.616 28 11.9926Z"/>
+                        </g>
+                        <defs>
+                        <filter id="filter0_d" x="0" y="0.0146484" width="31.9442" height="31.9854" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                            <feOffset dy="4"/>
+                            <feGaussianBlur stdDeviation="2"/>
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+                        </filter>
+                        <filter id="filter1_d" x="0.0557861" y="0" width="31.9442" height="31.9854" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                            <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                            <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+                            <feOffset dy="4"/>
+                            <feGaussianBlur stdDeviation="2"/>
+                            <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"/>
+                            <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+                            <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+                        </filter>
+                        <radialGradient id="paint0_radial" cx="0" cy="0" r="1"
+                            gradientUnits="userSpaceOnUse"
+                            gradientTransform="translate(21.1828 14.9594) rotate(-128.408) scale(17.016 12.6749)">
+                            <stop stop-color="#EB5757"/>
+                            <stop offset="0.984375" stop-color="#56CCF2"/>
+                            </radialGradient>
+                            <linearGradient id="paint1_linear" x1="15.9721" y1="24" x2="15.9721" y2="0.0145836" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="white"/>
+                            <stop offset="1" stop-color="white" stop-opacity="0"/>
+                        </linearGradient>
+                        <radialGradient id="paint2_radial" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse"
+                            gradientTransform="translate(21.2386 14.9447) rotate(-128.408) scale(17.016 12.6749)">
+                            <stop stop-color="#EB5757"/>
+                            <stop offset="0.984375" stop-color="#56CCF2"/>
+                        </radialGradient>
+                        <linearGradient id="paint3_linear" x1="16.0279" y1="23.9854"
+                            x2="16.0279" y2="-6.48499e-05" gradientUnits="userSpaceOnUse">
+                            <stop stop-color="white"/>
+                            <stop offset="1" stop-color="white" stop-opacity="0"/>
+                        </linearGradient>
+                        </defs>
+                    </svg>
+                </a>
 
             {% endif %}
+          </li>
+
+          <li>
+              <form id="search-form" method="get" action="#" >
+                  <input id="search-input" type="search" />
+              </form>
           </li>
 
         {% if request.user.is_authenticated %}
@@ -255,10 +225,10 @@
                             </div>
                             <div>
                                 <h3>
-                                    {% trans 'Log out' %}
+                                    {% trans 'Change City' %}
                                 </h3>
                                 <small>
-                                    {% trans 'Log out from your account.' %}
+                                    {% trans 'List of popular cities' %}
                                 </small>
                             </div>
                           </div>
@@ -409,7 +379,7 @@
         upon successful POST request. Chat messages context name is message_list -->
         {% if messages %}
             {% for message in messages %}
-              <div style="margin-bottom: -4em;" class="notification 
+              <div class="notification 
                  {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
                 <button type="button" class="delete close-dj-messages"></button>
                 {{ message}}
