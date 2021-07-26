@@ -100,6 +100,8 @@
 
 <script type="text/javascript">
 
+    document.querySelector('.tp-nav-ul > li').remove();
+
     const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
     const user = "{{ request.user.username }}";
     const app = "classifieds";
@@ -216,20 +218,11 @@
            sessionStorage.setItem("restoreScroll", true);
         });
 
-       const topLeftLi = document.querySelector('.tp-nav-ul > li');
-       const defaultLeftNav = topLeftLi.innerHTML;
 
        window.addEventListener('scroll', function () {
           if (!iPhone && document.getElementById('navbarBottom').style.display === 'none'){
                //if(visualViewport.height + 30 > document.scrollingElement.clientHeight) {
 	       document.getElementById('navbarBottom').style.display = 'block';
-          }
-
-          if(document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
-              topLeftLi.innerHTML = scrollBtn.innerHTML; 
-          }
-          else {
-              topLeftLi.innerHTML = defaultLeftNav; 
           }
 
           if (document.getElementById('search-input').value === "" || is_search === false) {
@@ -270,30 +263,6 @@
         const searchForm = document.getElementById('search-form');
         const formInput = document.getElementById("search-input");
 
-        const scrollBtn = document.createElement("button");
-        scrollBtn.classList.add('scroll-top-btn');
-
-        scrollBtn.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 34 34" width="34px" height="34px" style="margin-top:.5rem;margin-left:.5rem;">
-              <g id="surface55892828">
-                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(33.333334%,33.333334%,37.254903%);fill-opacity:1;"
-                d="M 13.28125 7.4375 C 10.625 7.4375 8.5 9.5625 8.5 12.21875 L 13.28125 12.21875 Z M 13.28125 7.4375 "/>
-                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(12.54902%,12.54902%,14.117648%);fill-opacity:1;"
-                d="M 13.28125 5.3125 C 9.472656 5.3125 6.375 8.410156 6.375 12.21875 C 6.375 16.027344 9.472656 19.128906 13.28125 19.128906 C 17.089844 19.128906 20.1875 16.027344 20.1875 12.21875 C 20.1875 8.410156 17.089844 5.3125 13.28125 5.3125 Z M 13.28125 18.0625 C 10.058594 18.0625 7.4375 15.441406 7.4375 12.21875 C 7.4375 8.996094 10.058594 6.375 13.28125 6.375 C 16.503906 6.375 19.125 8.996094 19.125 12.21875 C 19.125 15.441406 16.503906 18.0625 13.28125 18.0625 Z M 13.28125 18.0625 "/>
-                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(12.54902%,12.54902%,14.117648%);fill-opacity:1;"
-                d="M 29.097656 25.796875 L 24.445312 20.558594 C 24.066406 20.125 23.386719 20.066406 22.9375 20.425781 L 21.613281 21.476562 L 19.421875 18.824219 C 21.195312 17.171875 22.3125 14.828125 22.3125 12.21875 C 22.3125 7.238281 18.261719 3.1875 13.28125 3.1875 C 8.300781 3.1875 4.25 7.238281 4.25 12.21875 C 4.25 17.199219 8.300781 21.253906 13.28125 21.253906 C 15.273438 21.253906 17.109375 20.597656 18.605469 19.5 L 20.78125 22.136719 L 19.523438 23.132812 C 19.292969 23.316406 19.152344 23.574219 19.128906 23.863281 C 19.105469 24.148438 19.195312 24.425781 19.390625 24.644531 L 24.039062 29.886719 C 24.582031 30.496094 25.363281 30.8125 26.144531 30.8125 C 26.765625 30.8125 27.390625 30.613281 27.902344 30.207031 L 28.757812 29.53125 C 29.328125 29.074219 29.679688 28.433594 29.742188 27.722656 C 29.804688 27.019531 29.574219 26.335938 29.097656 25.796875 Z M 5.3125 12.21875 C 5.3125 7.824219 8.886719 4.25 13.28125 4.25 C 17.675781 4.25 21.25 7.824219 21.25 12.21875 C 21.25 16.613281 17.675781 20.191406 13.28125 20.191406 C 8.886719 20.191406 5.3125 16.613281 5.3125 12.21875 Z M 25.839844 23.730469 L 22.40625 26.457031 L 21.621094 25.574219 L 25.058594 22.847656 Z M 23.597656 21.257812 C 23.605469 21.253906 23.613281 21.253906 23.625 21.253906 C 23.636719 21.253906 23.648438 21.253906 23.652344 21.261719 L 24.351562 22.050781 L 20.914062 24.78125 L 20.1875 23.96875 Z M 28.09375 28.699219 L 27.242188 29.375 C 26.519531 29.949219 25.4375 29.863281 24.832031 29.179688 L 23.113281 27.25 L 26.546875 24.523438 L 28.300781 26.503906 C 28.582031 26.820312 28.71875 27.21875 28.683594 27.628906 C 28.648438 28.046875 28.4375 28.425781 28.09375 28.699219 Z M 28.09375 28.699219 "/>
-              </g>
-            </svg>`
-
-      topLeftLi.addEventListener('click', () =>{
-            window.scroll({
-                top: 0,
-                behavior: 'smooth',
-            });
-            formInput.focus();
-      });
-
       window.onbeforeunload = function (event) {
           sessionStorage.setItem(
               "scrollPosition",
@@ -317,11 +286,7 @@
           searchSubmit(e, formInput);
       });
 
-      document.getElementById('search-btn').addEventListener('click', function(e) {
-          searchSubmit(e, formInput);
-      });
-
-        wx.ready(function(){
+      wx.ready(function(){
           try {
               wx.onMenuShareAppMessage({ 
                     title: "Obrisk Secondhand Marketplace", 
@@ -362,7 +327,6 @@
       wx.error(function(res){
         console.log(res);
       });
-
 });
 
 </script>

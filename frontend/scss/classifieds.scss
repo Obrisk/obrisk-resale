@@ -2,6 +2,11 @@
 @import "partials/layout-extra-colors";
 @import "partials/components-cards";
 
+#search-item {
+    display: list-item;
+    width: 80%;
+}
+
 body {
   height: 100% !important;
   width: 100% !important;

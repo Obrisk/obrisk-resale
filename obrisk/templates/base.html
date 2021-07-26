@@ -67,9 +67,9 @@
   {% block body %}
 
     <nav id="navbarTop" class="navbar is-fixed-top">
-      <div class="nav-inner isible is-toggle is-fullwidth">
+      <div class="nav-inner is-toggle is-fullwidth">
         <ul class="tp-nav-ul">
-          <li >
+          <li>
             {% if request.META.HTTP_REFERER and request.path != '/classifieds/' %}
                 <a  href="javascript:history.back()">
                     <svg  class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
@@ -140,7 +140,7 @@
             {% endif %}
           </li>
 
-          <li>
+          <li id="search-item">
               <form id="search-form" method="get" action="#" >
                   <input id="search-input" type="search" />
               </form>
@@ -286,7 +286,7 @@
     </nav>
 
 
-    <nav id="navbarBottom" class="navbar fixed-bottom is-hidden-tablet">
+    <nav id="navbarBottom" class="navbar is-fixed-bottom is-hidden-tablet">
         <ul class="bt-nav-ul is-toggle is-fullwidth">
 
          <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">

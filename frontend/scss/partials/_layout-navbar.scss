@@ -4,13 +4,13 @@
 Navbar styles
 ========================================================================== */
 
+#search-item {
+    display: none;
+}
+
 .navbar {
-    position: fixed;
-    left: 0;
     width: 100%;
-    z-index: 99;
     transition: all .3s;
-    height: 4rem; 
     //border-radius: 10px;
     //box-shadow: 0 0.5em 1em -0.125em rgba(black, 0.1), 0 0px 0 1px rgba(black, 0.02);
 
@@ -25,9 +25,31 @@ Navbar styles
         padding-right: 12px !important;
     }
 
-    &.fixed-bottom{
-        bottom: -1px;
+    &.is-fixed-top {
+        height: 4.5em;
+        padding-top: 1em;
+
+        .nav-inner {
+            align-items: stretch;
+            display: flex;
+            font-size: 1rem;
+            justify-content: space-between;
+            overflow: hidden;
+            white-space: nowrap;
+
+            .tp-nav-ul {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+
+            }
+        }
     }
+
+    &.is-fixed-bottom{
+        height: 4rem; 
+    }
+
     &.no-shadow {
         box-shadow: none !important;
     }
