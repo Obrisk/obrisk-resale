@@ -137,18 +137,11 @@
 
         <!-- Cloud Tag Widget -->
         {% if classified.tags.all %}
-            <!-- Cloud Tag Widget -->
-              <div class="card classified-tags">
-                  <h5 class="card-heading has-text-weight-medium has-text-white	">{% trans 'Popular tags' %}</h5>
-
-                    <div class="card-body">
-                      <div class="previsions">
-                          {% for tag in classified.tags.all %}
-                              <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag is-white">{{ tag }}</span></a>
-                          {% endfor %}
-                      </div>
-                    </div>
-               </div>
+          <div class="classifieds-tags previsions">
+              {% for tag in classified.tags.all %}
+                  <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag-item">{{ tag }}</span></a>
+              {% endfor %}
+          </div>
         {% endif %}
         <br/>
 
@@ -203,6 +196,12 @@
             {% endfor %}
         </div>
       {% endif %}
+
+      <div class="notification" id="off-ac">
+        <img src="{% static 'img/qrcode.jpg' %}"
+           height="100px" width="100px" alt="Obrisk QRcode"/>
+        <span> Long press the QR code & follow our official account </span>
+     </div>
 
     </section>
 </article>
@@ -276,10 +275,16 @@
       
   }
 
-   
   window.onload = (event) => {
-      document.getElementById('image-overlay').style.top = 
-          document.querySelector('.is-active .classified-image').offsetHeight - 34 + 'px';
+       const height = Math.min(
+           document.querySelector('.is-active .classified-image').offsetHeight,
+           window.innerHeight * 0.7
+       )
+      document.getElementById('image-overlay').style.top =  height - 34 + 'px';
+
+      if (document.querySelector('article').clientHeight - 50 < window.innerHeight) {
+        document.getElementById('off-ac').style.display = 'flex';
+      }
   };
 
   document.addEventListener('DOMContentLoaded', function () {
