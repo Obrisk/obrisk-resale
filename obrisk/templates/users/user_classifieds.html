@@ -10,6 +10,7 @@
 
 {% block content %}
 
+  {% include 'nav_modal.html' %}
   <div class="profile-header">
     {% if user.picture %}
         <img src="{{oss}}/{{user.picture}}" alt="Pic"

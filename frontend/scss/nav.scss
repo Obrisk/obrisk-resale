@@ -2,6 +2,10 @@
 @import "partials/layout-navbar";
 @import "partials/simple-defaults";
 
+.overlay-back-btn {
+    position: absolute;
+}
+
 //standard slim
 .has-slimscroll {
     overflow: hidden !important;
