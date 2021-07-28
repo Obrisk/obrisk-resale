@@ -32,24 +32,26 @@
 
 {% block content %}
 <!-- Page Content -->
-<div class="container view-wrapper">
-   <section class="classified-wrapper">
-        <div class="splide">
+<article>
+     <section class="splide">
             <div class="splide__track">
                 <ul class="splide__list">
                     {% for image in images %}
-                      <div class="splide__slide">
-                        <a href="{{oss}}/{{ image.image }}"
-                          data-fslightbox="gallery">
-                          <img class="classified-image" src="{{oss}}/{{ image.image_mid_size }}"/>
-                        </a>
-                     </div>
+                          <div class="splide__slide">
+                            <a href="{{oss}}/{{ image.image }}"
+                              data-fslightbox="gallery">
+                              <img class="classified-image" src="{{oss}}/{{ image.image }}"/>
+                            </a>
+                         </div>
                     {% endfor %}
                 </ul>
             </div>
-        </div>
+        </section>
 
-        <div class="classified-meta">
+        <section id="image-overlay">
+        </section>
+
+        <section class="box classified-meta">
             <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
             <div class="meta-info">
               <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
@@ -200,19 +202,10 @@
 
             {% endfor %}
         </div>
-
-      </div>
       {% endif %}
 
-    <div class="notification off-ac">
-        <img src="{% static 'img/qrcode.jpg' %}"
-           height="100px" width="100px" alt="Obrisk QRcode"/>
-        <span> Long press the QR code & follow our platform </span>
-    </div>
-
-
-   </section>
-</div>
+    </section>
+</article>
 
 {% endblock content %}
 
@@ -283,6 +276,12 @@
       
   }
 
+   
+  window.onload = (event) => {
+      document.getElementById('image-overlay').style.top = 
+          document.querySelector('.is-active .classified-image').offsetHeight - 34 + 'px';
+  };
+
   document.addEventListener('DOMContentLoaded', function () {
 
     const chatBtn = document.getElementById('chat-button-id')
@@ -305,7 +304,6 @@
       new Splide('.splide', {
             type: 'loop'
       }).mount();
-
 
         wx.ready(function(){
           try {

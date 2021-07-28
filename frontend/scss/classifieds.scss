@@ -2,6 +2,7 @@
 @import "partials/layout-extra-colors";
 @import "partials/components-cards";
 
+
 #search-item {
     display: list-item;
     width: 80%;
@@ -148,17 +149,42 @@ body {
   border-top-right-radius: 8px;
 }
 
+article {
+  margin: auto auto 4rem;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
 
-.classified-wrapper {
-  border: 1px solid #a1dbd2 !important;
-  box-shadow: 2px 2px 0px #3ec4e2 !important;
-  margin: auto;
-  margin-bottom: 10px;
+section:nth-child(1) {
+    max-height: 70vh;
+
+    .splide__pagination {
+        z-index: 5;
+    }
+}
+
+section:nth-child(2) {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 35px;
+    background: #fff;
+}
+
+section:nth-child(2) {
+    z-index: 3;
+    border-radius: 50px 50px 0 0;
 }
 
 .classified-image {
     width: 100%;
 }
+
+.splide__arrows {
+    display: none;
+}
+
 
 .splide__list {
     background: rgba(0,0,0,.8);
@@ -169,10 +195,6 @@ body {
 }
 .splide__pagination__page.is-active {
     background: #1FAECE !important;
-}
-
-.classified-meta {
-   margin: 10px;
 }
 
 .cls-title {
