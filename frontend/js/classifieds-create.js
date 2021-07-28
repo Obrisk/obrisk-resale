@@ -76,8 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   if (user !== "" && typeof user !== 'undefined') {
       document.querySelector("#addBtn").addEventListener('click', function() {
-        $("#uploader").show();
-        document.getElementById('create-btn').style.display = 'flex';
+          $("#uploader").show();
       });
 
       document.querySelector("#chooseFile").addEventListener('click', function() {
@@ -91,26 +90,11 @@ document.addEventListener('DOMContentLoaded', function() {
           }
         }
       });
-  }
 
-  document.getElementById('login-to-post').addEventListener('click', e => {
-        setCookie(
-            "classified",
-            [document.getElementById('id_title'),
-             document.getElementById('id_details'),
-             document.getElementById('id_price')
-            ],
-            120
-        );
-        if (wechat_browser) {
-            location.href = wechat_url;
-        }
-        location.href = phone_no_url;
-  });
 
-  document.getElementById("create-btn").addEventListener('click', function(event) {
+     document.getElementById("create-btn").addEventListener('click', function(event) {
 
-      if (uploader.fileStats.totalFilesNum < 1 ||
+        if (uploader.fileStats.totalFilesNum < 1 ||
             document.getElementById('id_title').value.length < 2 ) {
               printError(
                 "Please provide the title & at least 1 image"
@@ -142,5 +126,22 @@ document.addEventListener('DOMContentLoaded', function() {
                   $("body").trigger("submitClicked");
             }
         }
-  });
+    });
+  } else {
+      document.getElementById('login-to-post').addEventListener('click', e => {
+            setCookie(
+                "classified",
+                [document.getElementById('id_title'),
+                 document.getElementById('id_details'),
+                 document.getElementById('id_price')
+                ],
+                120
+            );
+            if (wechat_browser) {
+                location.href = wechat_url;
+            }
+            location.href = phone_no_url;
+      });
+  }
+
 });

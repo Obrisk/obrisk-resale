@@ -1,6 +1,10 @@
 @import "partials/layout-colors";
 @import "partials/components-buttons";
 
+.login-to-post {
+    padding: 21px 31px;
+}
+
 .page-top {
     margin: 1em auto;
     display: flex;
@@ -8,8 +12,12 @@
 }    
 
 .top-title {
-    margin-top: 0.5em;
-    margin-left: 6em;
+    margin-top: 0.38em;
+    margin-left: 30%;
+}
+
+form {
+    margin-bottom: 3em;
 }
 
 .form-control {
@@ -336,13 +344,6 @@ textarea.textarea.is-button + .textarea-button button {
   position: relative;
 }
 
-#chooseFile,
-#startImgUpload {
-  padding: 8px;
-  background: linear-gradient(45deg, #0aacec, #0aeee3);
-}
-
-#uploaderPick,
 .start-uploader,
 .add-btn {
   font-size: 15px;
@@ -356,8 +357,13 @@ textarea.textarea.is-button + .textarea-button button {
 }
 
 #uploaderPick {
-  font-size: 18px;
-  line-height: 40px;
+  font-size: 15px;
+  line-height: 30px;
+  padding: 0 20px;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 #uploaderPick a,
