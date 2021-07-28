@@ -14,7 +14,6 @@ function printError(msg) {
   });
 }
 
-
 document.addEventListener('DOMContentLoaded', function() {
 
   if (getCookie("classified")) {
@@ -75,22 +74,39 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  document.querySelector("#addBtn").addEventListener('click', function() {
-    $("#uploader").show();
-  });
+  if (user !== "" && typeof user !== 'undefined') {
+      document.querySelector("#addBtn").addEventListener('click', function() {
+        $("#uploader").show();
+        document.getElementById('create-btn').style.display = 'flex';
+      });
 
-  document.querySelector("#chooseFile").addEventListener('click', function() {
-    if (currentUser == undefined) {
-      let draft_post = Object.fromEntries(new FormData(document.querySelector("form")));
-      localStorage.setItem('new-classified', JSON.stringify(draft_post));
-      if (wechat_browser){
-          window.location.replace('/users/wechat-auth/?next=/classifieds/write-new-classified/');
-      }else {
-          window.location.replace('/auth/login/?next=/classifieds/write-new-classified/');
-      }
-    }
-  });
+      document.querySelector("#chooseFile").addEventListener('click', function() {
+        if (currentUser == undefined) {
+          let draft_post = Object.fromEntries(new FormData(document.querySelector("form")));
+          localStorage.setItem('new-classified', JSON.stringify(draft_post));
+          if (wechat_browser){
+              window.location.replace('/users/wechat-auth/?next=/classifieds/write-new-classified/');
+          }else {
+              window.location.replace('/auth/login/?next=/classifieds/write-new-classified/');
+          }
+        }
+      });
+  }
 
+  document.getElementById('login-to-post').addEventListener('click', e => {
+        setCookie(
+            "classified",
+            [document.getElementById('id_title'),
+             document.getElementById('id_details'),
+             document.getElementById('id_price')
+            ],
+            120
+        );
+        if (wechat_browser) {
+            location.href = wechat_url;
+        }
+        location.href = phone_no_url;
+  });
 
   document.getElementById("create-btn").addEventListener('click', function(event) {
 
@@ -126,9 +142,5 @@ document.addEventListener('DOMContentLoaded', function() {
                   $("body").trigger("submitClicked");
             }
         }
-  });
-
-  document.getElementById('cancel-classified').addEventListener('click', function () {
-      localStorage.removeItem('new-classified');
   });
 });

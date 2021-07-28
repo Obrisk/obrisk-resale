@@ -7,6 +7,22 @@
 {% endblock head %}
 
 {% block content %}
+    <div class="page-top">
+        {% if request.META.HTTP_REFERER and request.path != '/classifieds/' %}
+            <a  href="javascript:history.back()">
+                <svg  class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
+                     width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 8 8 12 12 16"></polyline>
+                    <line x1="16" y1="12" x2="8" y2="12"></line>
+                </svg>
+            </a>
+        {% endif  %}
+
+        <h1 class="title is-5 top-title"> Let it go </h1>
+    </div>
+
     <form action="{% url 'classifieds:write_new' %}" name="classifiedForm" enctype="multipart/form-data"
           id="classified-form" method="post" role="form">
           {% csrf_token %}
@@ -45,7 +61,7 @@
                             required step=".01" value="0" placeholder="Item price">
                       <span>
                   </div>
-                  <small> {% trans '0 for FREE, empty for a BID PRICE' %}
+                  <small class="price-manual"> {% trans '0 for FREE, empty for a BID PRICE' %}
                   </small>
 
                   <div class="hidden-fields">
@@ -54,6 +70,15 @@
                     <input type="hidden" id="id_edited" name="edited" class="input">
                     <input type="hidden" id="id_status" name="status" maxlength="20" class="input">
                   </div>
+
+                 {% if not request.user.is_authenticated %}
+                  <div class="flexing-btn">
+                     <button id="login-to-post" type="button"
+                        class="login-to-post button is-solid accent-button raised"> 
+                          {% trans 'Login to post' %}
+                     </button>
+                  </div>
+                {% else %}
 
                 <div class="field">
                   <div class="control" id="wrapper">
@@ -91,6 +116,9 @@
                             <a id="chooseFile" href="javascript:void(0);" class="button is-solid accent-button">
                                 {% trans 'Add images' %}
                             </a>
+                            <button id="create-btn" type="button"
+                                class="button is-solid accent-button raised create submit-button is-hidden">{% trans 'Submit' %}
+                            </button>
                           </div>
                         </div>
 
@@ -104,22 +132,7 @@
                   </form>
                 </div>
 
-                <div class="buttons img-pick-wrapper">
-                  <button id="cancel-classified" type="button" class="button is-solid opt-accent-button raised"
-                    onclick="javascript:history.back()"> 
-                    {% trans 'Cancel' %}
-                  </button>
-
-                  {% if request.user.is_authenticated %}
-                      <button id="create-btn" type="button"
-                        class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
-                  {% else %}
-                      <button id="create-btn" type="button"
-                        class="login-to-post button is-solid accent-button raised"> 
-                          {% trans 'Login' %}
-                     </button>
-                  {% endif %}
-               </div>
+            {% endif %}
      <!-- close form column -->
      </div>
 
@@ -154,20 +167,9 @@
   const title_id = "{{ form.title.auto_id }}";
   const details_id = "{{ form.details.auto_id }}";
   const address = "{{ form.address.auto_id }}";
+  const wechat_url = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+  const phone_no_url = "{% url 'account_login' %}";
 
-  if (typeof user === 'undefined') {
-      document.getElementById('create-btn').addEventListener('click', e => {
-        setCookie(
-            "classified",
-            [document.getElementById('id_title'),
-             document.getElementById('id_details'),
-             document.getElementById('id_price')
-            ],
-            120
-        );
-        location.href = "/auth/login/";
-      });
-  }
 </script>
 
 <link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
