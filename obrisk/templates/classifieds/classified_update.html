@@ -8,9 +8,10 @@
 {% endblock head %}
 
 {% block content %}
+    {% include 'nav_modal.html' %}
 
     <form action="{% url 'classifieds:edit_classified' form.instance.pk %}"
-          name="classifiedForm" enctype="multipart/form-data"
+          name="classifiedForm" enctype="multipart/form-data" class="edit-form"
           id="classified-form" method="post" role="form">
           {% csrf_token %}
 
@@ -32,11 +33,10 @@
 
                   <div class="field">
                         <label>
-                            {% trans 'Details*' %}
+                            {% trans 'Details' %}
                         </label>
                         <div class="control">
-                          <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000" required
-                            class="textarea" placeholder="Provide enough details">
+                          <textarea name="details" id="id_details" cols="40" rows="3" class="textarea">
                             {{ form.details.value|default_if_none:"" }}
                           </textarea>
                         </div>
@@ -54,13 +54,14 @@
                   <small> {% trans '0 for GIVEAWAY, empty for BID PRICE' %}
                   </small>
 
-                  <div class="field">
+                  <br/>
+                  <div class="field address-field">
                         <label>
                             {% trans 'Address (English)' %}
                         </label>
                         <div class="control">
                               <input type="text" name="english_address" value="{{ form.english_address.value|default_if_none:'' }}"
-                              class="textinput textInput form-control" id="id_english_address">
+                              class="input" id="id_english_address">
                         </div>
                   </div>
 

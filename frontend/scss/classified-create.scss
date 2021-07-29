@@ -20,19 +20,23 @@ form {
 
     .form-field {
         border-radius: 0;
+        
+        &#id_title {
+            border-bottom-style: none;
+        }
+        &#id_details {
+            border-top-style: none;
+        }
     }
 
-    #id_title {
-        border-bottom-style: none;
-    }
-    #id_details {
-        border-top-style: none;
-    }
     textarea.textarea {
       transition: all 0.8s;
     }
 }
 
+.edit-form {
+    margin-top: 3.2em;
+}
 
 .col-form-label {
   font-family: "Montserrat", sans-serif;
@@ -58,6 +62,10 @@ form {
 
 .price-manual {
     margin-top: 6px;
+}
+
+.address-field {
+    margin-top: 1em;
 }
 
 .btn-primary {
