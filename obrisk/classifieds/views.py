@@ -73,7 +73,8 @@ API_KEY = env('WECHAT_API_KEY')
 def classified_list(request, city=None):
 
     if request.user.is_authenticated:
-        city = request.user.city
+        city = city or request.user.city
+
     else:
         city = city or cache.get(
                 f'user_city_{request.session.get("visitor_id")}'
