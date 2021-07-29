@@ -277,17 +277,18 @@
   window.onload = (event) => {
 	 let height = 0;
 	  if (iPhone) {
-	      height = Math.max(
-		   document.querySelector('.is-active .classified-image').offsetHeight,
-		   window.innerHeight * 0.7
+	      height = Math.min(
+               document.querySelector('.is-active .classified-image').offsetHeight,
+               visualViewport.height * 0.7
 	       )
+          document.getElementById('image-overlay').style.top =  height - 34 + 'px';
 	  } else {
 	      height = Math.min(
 		   document.querySelector('.is-active .classified-image').offsetHeight,
 		   window.innerHeight * 0.7
 	       )
+          document.getElementById('image-overlay').style.top =  height - 34 + 'px';
 	  }
-      document.getElementById('image-overlay').style.top =  height - 34 + 'px';
 
       if (document.querySelector('article').clientHeight - 50 < window.innerHeight) {
         document.getElementById('off-ac').style.display = 'flex';
