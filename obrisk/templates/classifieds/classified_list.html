@@ -33,6 +33,35 @@
               {% endif %}
         </a>
 
+        <div id="d" class="has-caret">
+          <div class="nav-drop is-navbarTop is-account-dropdown">
+            <div class="inner">
+                  <div class="nav-drop-header is-auth-user">
+                    <span class="username">POPULAR CITIES </span>
+                    <a href="#" id="close">❌ CLOSE</a>
+                  </div>
+
+                  <div class="nav-drop-body account-items">
+                    {% for city in popular_cities %}
+                        <a class="account-item" href="{% url 'classifieds:list_by_city' city %}">
+                          <div class="media">
+                            <div class="icon-wrap">
+                                <img class="user-image" src="{% static 'img/city_icon.png' %}"
+                                    height="20px" width="20px" alt="No Pic" />
+                            </div>
+                            <div>
+                            <h3> {{ city }}</h3>
+                            </div>
+                          </div>
+                        </a>
+                    {% endfor %}
+
+                    </div>
+             <!-- close inner, nav-drop, ac-dropdown -->
+            </div>
+          </div>
+        </div>
+
         <div id="du" class="has-caret">
               <div class="nav-drop is-account-dropdown">
                 <div class="inner">
@@ -88,22 +117,23 @@
                       </div>
                     </a>
 
-                    <a class="account-item" href="{% url 'account_logout' %}">
+                    <a class="account-item" href="#d">
                       <div class="media">
                         <div class="icon-wrap">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-power">
-                            <path d="M18.36 6.64a9 9 0 1 1-12.73 0"></path>
-                            <line x1="12" y1="2" x2="12" y2="12"></line>
-                          </svg>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-map-pin">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
                         </div>
                         <div>
                             <h3>
                                 {% trans 'Change City' %}
                             </h3>
                             <small>
-                                {% trans 'List of popular cities' %}
+                                {% trans 'List items by city' %}
                             </small>
                         </div>
                       </div>
