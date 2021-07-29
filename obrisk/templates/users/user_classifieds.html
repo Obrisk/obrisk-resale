@@ -22,7 +22,7 @@
     <h1 class="title is-4">{{ user.username|title }}</h1>
 
     {% if user.english_address  %}
-        <p>📍{{ user.english_address }}, {{ user.city }} </p>
+        <small>📍{{ user.english_address }}, {{ user.city }} </small>
     {% else %}
         <p> 📍{{ user.city }} </p>
     {% endif %}

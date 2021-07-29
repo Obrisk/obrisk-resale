@@ -2,6 +2,31 @@
 @import "partials/layout-extra-colors";
 @import "partials/components-cards";
 
+.is-fixed-top-cls {
+    height: 4.5em;
+    padding-top: 1em;
+    position: fixed;
+    right: 0;
+    left: 0;
+    top:0;
+    z-index: 30;
+
+    .nav-inner {
+        align-items: stretch;
+        display: flex;
+        font-size: 1rem;
+        justify-content: space-between;
+        overflow: hidden;
+        white-space: nowrap;
+
+        .tp-nav-ul {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+        }
+    }
+}
 
 #search-item {
     display: list-item;
@@ -45,8 +70,7 @@ body {
     border-radius: 10px;
     box-shadow: 0 0.5em 1em -0.125em rgba(black, 0.1), 0 0px 0 1px rgba(black, 0.02);
     height: 2.45em;
-    margin-top: .5em;
-    margin-left: 10px;
+    margin-top: .6em;
 }
 
 #search-input{
@@ -115,6 +139,7 @@ body {
 
 .classifieds-list-wrapper {
     padding-top: 0rem;
+    margin-bottom: 4em;
 }
 
 .card-meta {
