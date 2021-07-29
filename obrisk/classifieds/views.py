@@ -471,7 +471,7 @@ class EditClassifiedView(
         LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""
     model = Classified
-    message = _("Your classified has been updated.")
+    message = _("Ta-da! Everything is updated, as you wish😉")
     form_class = ClassifiedEditForm
     template_name = 'classifieds/classified_update.html'
 
