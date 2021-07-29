@@ -5,12 +5,6 @@
 {% block head %}
 <link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/vendor/splide.min.css' %}">
-
-<script src="{% static 'js/vendor/vconsole.min.js' %}"></script>
-<script>
-var vConsole = new VConsole();
-</script>
-
 <title>{{ classified.title|title }}</title>
 
 {% endblock head %}
@@ -303,7 +297,6 @@ var vConsole = new VConsole();
   document.addEventListener('DOMContentLoaded', function () {
 
     const chatBtn = document.getElementById('chat-button-id');
-
     if( chatBtn !== null) {
 	  chatBtn.addEventListener('click', () => {
 	      if (currentUser !== undefined) {
@@ -324,9 +317,9 @@ var vConsole = new VConsole();
 
         wx.ready(function(){
           try {
-              const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, '');
-              const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, '');
-              console.log(descr);
+              const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+              const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+
               wx.onMenuShareAppMessage({ 
                     title: title, 
                     desc: price + descr, 
