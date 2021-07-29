@@ -5,10 +5,11 @@
 
 {% block head %}
 <link href="{% static 'css/classified_order.css' %}" rel="stylesheet">
-
 {% endblock head %}
 
 {% block content %}
+
+{% include 'nav_modal.html' %}
 <div class="notification is-danger is-hidden" role="alert">
     <button type="button" class="delete close-dj-messages"></button>
     <p id="notf-msg"></p>

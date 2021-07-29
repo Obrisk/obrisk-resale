@@ -8,11 +8,11 @@
 <link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
 
 <title>{{ classifiedorder.classified.title|title }}</title>
-
 {% endblock head %}
 
-
 {% block content %}
+
+{% include 'nav_modal.html' %}
 <!-- Page Content -->
 <div class="container view-wrapper">
    <section class="classified-wrapper">
