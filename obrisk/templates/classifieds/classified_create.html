@@ -33,34 +33,21 @@
           </div>
 
           <div class="column">
-                  <div class="field">
-                        <label>
-                            {% trans 'Title*' %}
-                        </label>
-                        <div class="control">
-                          <input type="text" id="id_title" name="title" maxlength="80" class="input" required
-                            placeholder="Short and clear">
-                        </div>
-                  </div>
-                  <div class="field">
-                        <label>
-                            {% trans 'Details' %} <small> {% trans '(Optional)' %}</small>
-                        </label>
-                        <div class="control">
-                          <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000"
-                            class="textarea" placeholder="You too won't buy 2ndhand item without enough details🙄"></textarea>
-                        </div>
-                  </div>
+                  <input type="text" id="id_title" name="title" maxlength="80" class="input form-field" required
+                    placeholder="{% trans 'Short title' %}">
+                  <textarea name="details" id="id_details" cols="40" rows="3" maxlength="2000"
+                    class="textarea form-field" placeholder="{% trans 'Details (optional)' %}"></textarea>
 
                   <div class="price">
                       <label>
                           {% trans 'Price' %}
                       </label>
                       <span> ¥ &nbsp;
-                          <input type="number" id="id_price" name="price" class="numberinput input" id="id_price"
-                            required step=".01" value="0" placeholder="Item price">
+                          <input type="number" id="id_price" name="price" id="id_price"
+                          required step=".01" value="0"  class="numberinput input">
                       <span>
                   </div>
+
                   <small class="price-manual"> {% trans '0 for FREE, empty for a BID PRICE' %}
                   </small>
 

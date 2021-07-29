@@ -6,29 +6,33 @@
 }
 
 .page-top {
-    margin: 1em auto;
+    margin: 0.4em auto;
     display: flex;
     align-items: center;
 }    
 
 .top-title {
-    margin-top: 0.38em;
-    margin-left: 30%;
+    margin: 0.3em 0 0 30%;
 }
 
 form {
-    margin-bottom: 3em;
+    margin-bottom: 4em;
+
+    .form-field {
+        border-radius: 0;
+    }
+
+    #id_title {
+        border-bottom-style: none;
+    }
+    #id_details {
+        border-top-style: none;
+    }
+    textarea.textarea {
+      transition: all 0.8s;
+    }
 }
 
-.form-control {
-  background-color: #fff;
-  border: 2px solid #ccc;
-  color: #111;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 400;
-  padding: 10px;
-  width: 100%;
-}
 
 .col-form-label {
   font-family: "Montserrat", sans-serif;
@@ -39,7 +43,7 @@ form {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: -5px;
+    margin-top: 1.2em;
 
     span {
         display: flex;
@@ -84,244 +88,6 @@ form {
     justify-content: space-around;
 }
 
-.lds-roller {
-  display: inline-block;
-  position: relative;
-  width: 64px;
-  height: 64px;
-}
-
-.lds-roller div {
-  animation: lds-roller 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  transform-origin: 32px 32px;
-}
-
-.lds-roller div:after {
-  content: " ";
-  display: block;
-  position: absolute;
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #fff;
-  margin: -3px 0 0 -3px;
-}
-
-.lds-roller div:nth-child(1) {
-  animation-delay: -0.036s;
-}
-
-.lds-roller div:nth-child(1):after {
-  top: 50px;
-  left: 50px;
-}
-
-.lds-roller div:nth-child(2) {
-  animation-delay: -0.072s;
-}
-
-.lds-roller div:nth-child(2):after {
-  top: 54px;
-  left: 45px;
-}
-
-.lds-roller div:nth-child(3) {
-  animation-delay: -0.108s;
-}
-
-.lds-roller div:nth-child(3):after {
-  top: 57px;
-  left: 39px;
-}
-
-.lds-roller div:nth-child(4) {
-  animation-delay: -0.144s;
-}
-
-.lds-roller div:nth-child(4):after {
-  top: 58px;
-  left: 32px;
-}
-
-.lds-roller div:nth-child(5) {
-  animation-delay: -0.18s;
-}
-
-.lds-roller div:nth-child(5):after {
-  top: 57px;
-  left: 25px;
-}
-
-.lds-roller div:nth-child(6) {
-  animation-delay: -0.216s;
-}
-
-.lds-roller div:nth-child(6):after {
-  top: 54px;
-  left: 19px;
-}
-
-.lds-roller div:nth-child(7) {
-  animation-delay: -0.252s;
-}
-
-.lds-roller div:nth-child(7):after {
-  top: 50px;
-  left: 14px;
-}
-
-.lds-roller div:nth-child(8) {
-  animation-delay: -0.288s;
-}
-
-.lds-roller div:nth-child(8):after {
-  top: 45px;
-  left: 10px;
-}
-
-@keyframes lds-roller {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.loading-modal {
-  position: fixed;
-  background: #00000063;
-  width: 100%;
-  height: 100%;
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  top: 0;
-  bottom: 0;
-}
-
-/* line 150, src/assets/scss/components/_components-forms.scss */
-textarea.textarea {
-  color: #878787;
-  -webkit-box-shadow: none;
-  box-shadow: none;
-  -webkit-transition: all 0.8s;
-  transition: all 0.8s;
-}
-
-/* line 155, src/assets/scss/components/_components-forms.scss */
-textarea.textarea:focus {
-  border: 1px solid #ededed;
-}
-
-/* line 160, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-primary-focus:focus {
-  border-color: #4fc1ea;
-}
-
-/* line 163, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-primary-focus:focus ~ span.icon i {
-  color: #4fc1ea;
-}
-
-/* line 170, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-secondary-focus:focus {
-  border-color: #7f00ff;
-}
-
-/* line 173, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-secondary-focus:focus ~ span.icon i {
-  color: #7f00ff;
-}
-
-/* line 180, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-accent-focus:focus {
-  border-color: #ad5cff;
-}
-
-/* line 183, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-accent-focus:focus ~ span.icon i {
-  color: #ad5cff;
-}
-
-/* line 190, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-grey-focus:focus {
-  border-color: #a9abac;
-}
-
-/* line 193, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-grey-focus:focus ~ span.icon i {
-  color: #a9abac;
-}
-
-/* line 200, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-default-focus:focus {
-  border-color: #ccc;
-}
-
-/* line 203, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-default-focus:focus ~ span.icon i {
-  color: #ccc;
-}
-
-/* line 210, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-grow {
-  min-height: 40px !important;
-  height: 40px;
-  resize: none;
-  -webkit-transition: all 0.5s;
-  transition: all 0.5s;
-  overflow: hidden;
-}
-
-/* line 217, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-grow:focus {
-  height: 130px !important;
-  border-color: #999;
-}
-
-/* line 224, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-button {
-  min-height: 50px !important;
-  height: 50px !important;
-  resize: none;
-  border-top-left-radius: 4px;
-  border-top-right-radius: 4px;
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
-  border-bottom: none !important;
-  -webkit-transition: all 0.6s;
-  transition: all 0.6s;
-}
-
-/* line 239, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-button:focus {
-  height: 130px !important;
-  padding-bottom: 40px !important;
-  border-color: #ccc;
-}
-
-/* line 245, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-button + .textarea-button {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-pack: end;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  position: relative;
-  border: 1px solid #ccc;
-  border-top: none !important;
-  border-bottom-left-radius: 4px;
-  border-bottom-right-radius: 4px;
-}
-
-/* line 254, src/assets/scss/components/_components-forms.scss */
-textarea.textarea.is-button + .textarea-button button {
-  margin: 10px 7px 7px 7px;
-}
 
 //Uploaders
 #uploader .placeholder {
@@ -364,13 +130,10 @@ textarea.textarea.is-button + .textarea-button button {
   display: flex;
   align-items: center;
   justify-content: space-around;
-}
-
-#uploaderPick a,
-.start-uploader a,
-.add-btn a {
-  color: #fff;
-  text-decoration: none;
+ 
+  a, button {
+     border-radius: 6px;
+  }
 }
 
 #uploader .filelist {
