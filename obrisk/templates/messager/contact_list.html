@@ -61,7 +61,7 @@
                       class="rounded-circle contact-profile-avatar img-fluid">
                 {% else %}
                     <img src="{% static 'img/user.png' %}" 
-                      alt="No Profile Picture" class="contact-profile-avatar img-fluid" />
+                      alt="pic" class="contact-profile-avatar img-fluid" />
                 {% endif %}
 
                 <div class="contact-card-meta">
@@ -107,11 +107,10 @@
             href="{% url 'messager:conversation_detail' super_users.first.username %}"
             id="{{super_users.first.id}}.{{request.user.id}}" class="card contact-card open-chat">
             {% if super_users.first.thumbnail %}
-                <img src="{{oss}}/{{super_users.first.thumbnail}}" alt="Picture Profile"
-                  style="width:40px;height:40px;border-radius: 50%;"
+                <img src="{{oss}}/{{super_users.first.thumbnail}}" alt="pic"
                   class="rounded-circle contact-profile-avatar img-fluid" id="pic">
             {% else %}
-                <img src="{% static 'img/user.png' %}" width="40px" alt="No Profile Picture"
+                <img src="{% static 'img/user.png' %}" width="40px" alt="pic"
                   class="profile-header-avatar img-fluid" />
             {% endif %}
 
