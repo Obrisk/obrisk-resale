@@ -6,6 +6,11 @@
 <link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
 <link rel="stylesheet" href="{% static 'css/vendor/splide.min.css' %}">
 
+<script src="{% static 'js/vendor/vconsole.min.js' %}"></script>
+<script>
+var vConsole = new VConsole();
+</script>
+
 <title>{{ classified.title|title }}</title>
 
 {% endblock head %}
@@ -276,10 +281,18 @@
   }
 
   window.onload = (event) => {
-       const height = Math.min(
-           document.querySelector('.is-active .classified-image').offsetHeight,
-           window.innerHeight * 0.7
-       )
+	 let height = 0;
+	  if (iPhone) {
+	      height = Math.max(
+		   document.querySelector('.is-active .classified-image').offsetHeight,
+		   window.innerHeight * 0.7
+	       )
+	  } else {
+	      height = Math.min(
+		   document.querySelector('.is-active .classified-image').offsetHeight,
+		   window.innerHeight * 0.7
+	       )
+	  }
       document.getElementById('image-overlay').style.top =  height - 34 + 'px';
 
       if (document.querySelector('article').clientHeight - 50 < window.innerHeight) {
