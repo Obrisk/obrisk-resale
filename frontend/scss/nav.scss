@@ -79,6 +79,13 @@ a {
   display: none;
 }
 
+.nav-back-btn {
+  margin-top: 0.9rem;
+  margin-left: 0.5rem;
+  position: fixed;
+  z-index: 5;
+}
+
 .bt-nav-ul {
     display: flex;
     justify-content: space-around;
@@ -106,11 +113,6 @@ a {
 
 .nav-icons {
   margin-bottom: -6px;
-}
-
-.nav-back-btn {
-  margin-top: 0.9rem;
-  margin-left: 0.5rem;
 }
 
 #navbarBottom .navbar .navbar-item .nav-drop:before {
