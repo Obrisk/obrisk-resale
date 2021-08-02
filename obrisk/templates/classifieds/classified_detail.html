@@ -4,7 +4,6 @@
 
 {% block head %}
 <link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/vendor/splide.min.css' %}">
 <title>{{ classified.title|title }}</title>
 
 {% endblock head %}
@@ -42,20 +41,20 @@
     </a>
   {% endif  %}
 
+
+<!--a href="{{oss}}/{{ image.image }}"
+  data-fslightbox="gallery"> 
+    <div class="classified-image" style="background-image: url('{{oss}}/{{ image.image }}')">
+    </div>
+  </a-->
   <article>
-     <section id="image-section" class="splide">
-        <div class="splide__track">
-            <ul class="splide__list">
-                {% for image in images %}
-                      <div class="splide__slide">
-                        <a href="{{oss}}/{{ image.image }}"
-                          data-fslightbox="gallery">
-                          <img class="classified-image" src="{{oss}}/{{ image.image }}"/>
-                        </a>
-                     </div>
-                {% endfor %}
-            </ul>
-        </div>
+     <section id="image-section" class="slides">
+       {% for image in images %}
+            <a href="{{oss}}/{{ image.image }}"
+              data-fslightbox="gallery"> 
+                <img class="classified-image" src="{{oss}}/{{ image.image }}">
+            </a>
+       {% endfor %}
     </section>
 
     <section id="image-overlay">
@@ -220,7 +219,6 @@
 
 {% block extra_js %}
 
-<script src="{% static 'js/vendor/splide.min.js' %}"></script>
 <script src="{% static 'js/share.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
 <script type="text/javascript">
@@ -316,26 +314,6 @@
         yDown = firstTouch.clientY;                                      
   };
 
-  window.onload = (event) => {
-      const height = Math.min(
-         document.querySelector('.is-active .classified-image').offsetHeight,
-         visualViewport.height * 0.7
-      );
-
-      //height = Math.min(
-      //document.querySelector('.is-active .classified-image').offsetHeight,
-      //window.innerHeight * 0.7)
-
-	  if (height > 250) {
-	     document.getElementById('image-overlay').style.top =  height - 34 + 'px';
-         document.getElementById('image-section').style.maxHeight = height + 'px';
-      } 
-
-      if (document.querySelector('article').clientHeight - 50 < window.innerHeight) {
-        document.getElementById('off-ac').style.display = 'flex';
-      }
-  };
-
   document.addEventListener('DOMContentLoaded', function () {
 
     //const imgSection = document.getElementById('image-section');
@@ -355,12 +333,6 @@
 	      }
 	  });
     }
-
-    const image_count = {{ images| length}}
-
-    new Splide('.splide', {
-            type: 'loop'
-    }).mount();
 
     wx.ready(function(){
       try {
