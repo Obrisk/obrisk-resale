@@ -189,17 +189,6 @@
     var iPhone = false;
     var wechat_browser = false;
 
-    function registerServiceWorker() {
-      // register sw script in supporting browsers
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
-          console.log('Service Worker registered successfully.');
-        }).catch(error => {
-          console.log('Service Worker registration failed:', error);
-        });
-      }
-    }
-
     //fix navbar bottom on iphone X families
     iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
     let aspect = window.screen.width / window.screen.height;
@@ -209,6 +198,17 @@
         aspect.toFixed(3) === "0.591")
     ) {
       document.getElementById("navbarBottom").classList.add("iphone-nav-bt");
+    }
+
+    function registerServiceWorker() {
+      // register sw script in supporting browsers
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
+          console.log('Service Worker registered successfully.');
+        }).catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
+      }
     }
 
     var setCookie = function (name, value, seconds) {

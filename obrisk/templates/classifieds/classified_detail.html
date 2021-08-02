@@ -221,155 +221,25 @@
 
 {% block extra_js %}
 
-<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
-<script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
 <script type="text/javascript">
   {% if classified.price == 0.00 %}
-      const price = "FREE ";
+      const price = "FREE";
+      const str_price = price;
   {% elif classified.price is None %}
       const price = "BID PRICE ";
+      const str_price = price;
   {% else %}
-      const price ="CNY {{classified.price }} ";
+      const price ="{{ classified.price }}";
+      const str_price = "CYN {{ classified.price }}";
   {% endif %}
 
-  var xDown = null;                                                        
-  var yDown = null;
-
-  function shareMe(title, text) {
-        navigator.share({
-          title: title,
-          text: text,
-          url: location.href,
-        });
-  }
-
-  function gotochat(url) {
-      if (typeof currentUser === 'undefined') {
-        setCookie(
-            "active-chat",
-            "chat/{{classified.user}}",
-            120);
-        location.href = "/ws/messages/";
-      }else {
-        setCookie("active-chat", url, 120);
-        location.href = "/ws/messages/";
-      }
-  }
-
-  function callpay() {
-    if (isNaN("{{classified.price}}") || "{{classified.price}}" === "0.00") {
-        document.getElementById('payError').innerHTML = "Only priced items can accept payments";        
-
-      setTimeout(() => {  
-         document.getElementById('payError').innerHTML = "";
-      }, 7000);
-      return;
-    }
-
-    if (currentUser !== undefined) {
-	    const sg = encodeURIComponent("{{classified.slug}}");
-	    window.location.href = "{% url 'classifieds:create_order' %}?sg=" + sg;
-        return;
-    }
-
-    if (wechat_browser) {
-        window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
-        return;
-    }
-
-    document.getElementById('payError').innerHTML = "Sorry the payment feature is currently unavailable";        
-    setTimeout(() => {  
-         document.getElementById('payError').innerHTML = "";
-    }, 7000);
-      
-  }
-
-  function handleTouchMove(evt) {
-    if ( ! xDown || ! yDown ) {
-        return;
-    }
-
-    var xUp = evt.touches[0].clientX;                                    
-    var yUp = evt.touches[0].clientY;
-
-    var xDiff = xDown - xUp;
-    var yDiff = yDown - yUp;
-                                                                         
-    if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
-        new Promise(resolve => setTimeout(resolve, 700)).then(() => {
-              const height = Math.min(
-                 document.querySelector('.is-active.is-visible .classified-image').offsetHeight,
-                 visualViewport.height * 0.7
-              );
-
-             document.getElementById('image-overlay').style.top =  height - 34 + 'px';
-             document.getElementById('image-section').style.maxHeight = height + 'px';
-        });
-     }
-     xDown = null;
-     yDown = null;                                             
-  };
-
-  function handleTouchStart(evt) {
-        const firstTouch = evt.touches[0];                                      
-        xDown = firstTouch.clientX;                                      
-        yDown = firstTouch.clientY;                                      
-  };
-
-  document.addEventListener('DOMContentLoaded', function () {
-
-    //const imgSection = document.getElementById('image-section');
-    //imgSection.addEventListener('touchstart', handleTouchStart, false);        
-    //imgSection.addEventListener('touchmove', handleTouchMove, false);
-
-
-    const chatBtn = document.getElementById('chat-button-id');
-
-    wx.ready(function(){
-      try {
-          const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
-          const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
-
-          wx.onMenuShareAppMessage({ 
-                title: title, 
-                desc: price + descr, 
-                link: location.href, 
-                imgUrl: "{{oss}}/{{ classified.thumbnail }}", 
-                trigger: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                success: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                fail: function (res) {
-                    console.log(JSON.stringify(res));
-                }
-            })
-
-          wx.onMenuShareTimeline({ 
-                title: title, 
-                desc: price + descr, 
-                link: location.href, 
-                imgUrl: "{{oss}}/{{ classified.thumbnail }}", 
-                trigger: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                success: function (res) {
-                    console.log(JSON.stringify(res));
-                },
-                fail: function (res) {
-                    console.log(JSON.stringify(res));
-                }
-            })
-        }catch (e) {
-            console.log(e);
-        }
-      });
-
-      wx.error(function(res){
-        console.log(res);
-      });
-  });
+  const thumbnail = "{{oss}}/{{ classified.thumbnail }}"
+  const slug = "{{classified.slug}}";
+  const orderUrl = "{% url 'classifieds:create_order' %}?sg=";
+  const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+  const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
 </script>
 
+<script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
+<script defer src="{% static 'js/classifieds-details.js' %}"></script>
 {% endblock extra_js %}
