@@ -2,8 +2,6 @@
 @import "partials/layout-extra-colors";
 @import "partials/components-cards";
 
-
-//.......................................................................
 .is-fixed-top-cls {
     height: 4.5em;
     padding-top: 1em;
@@ -39,19 +37,6 @@ body {
   height: 100% !important;
   width: 100% !important;
   overflow: hidden;
-}
-
-.tb
-{
-    display: table;
-    width: 100%;
-    margin-left: 8px;
-}
-
-.td
-{
-    display: table-cell;
-    vertical-align: middle;
 }
 
 #search-input, #search-btn
@@ -156,10 +141,10 @@ body {
    padding-bottom: 2;
 }
 
- .end-classifieds {
+.end-classifieds {
      text-align: center;
      font-size: 13px;
- }
+}
 
 .classified-card {
   width: 45%;
@@ -175,6 +160,9 @@ body {
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
 }
+
+
+//Classifieds details.......
 
 article {
   margin: auto auto 4rem;
@@ -211,28 +199,19 @@ article {
       transform-origin: center center;
       transform: scale(1);
       transition: transform 0.5s;
+      width: 100%;
   }
 }
 
 .slides::-webkit-scrollbar {
-  width: 2px;
-  height: 10px;
-}
-
-.slides::-webkit-scrollbar-thumb {
-  background: black;
-  border-radius: 10px;
-}
-
-.slides::-webkit-scrollbar-track {
-  background: transparent;
+    display: none;
 }
 
 .classified-meta {
     border-radius: 0;
     position: relative;
 
-    &:before {
+   .paging-wrapper {
         content: '';
         border-radius: 50px 50px 0 0;
         position: absolute;
@@ -241,19 +220,49 @@ article {
         right: 0;
         height: 35px;
         background: #fff;
+
+        .slide__paging {
+            position: absolute;
+            z-index: 1;
+            bottom: .5em;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            width: 95%;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 0;
+
+            li {
+                list-style-type: none;
+                display: inline-block;
+                line-height: 1;
+                margin: 0;
+            }
+        }
+
+        .slide__paging__page {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin: 3px;
+            padding: 0;
+            transition: transform .2s linear;
+            border: none;
+            opacity: .7;
+            background: #3ec4e2;
+        }
+
+        .slide__paging__page.is-active {
+            transform: scale(1.6);
+            background: #1FAECE;
+        }
     }
 }
 
-.classified-image {
-    width: 100%;
-}
-
-.splide__pagination__page {
-    background: #3ec4e2 !important;
-}
-.splide__pagination__page.is-active {
-    background: #1FAECE !important;
-}
 
 .cls-title {
     margin-top: 4px;

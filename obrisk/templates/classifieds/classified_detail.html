@@ -56,12 +56,23 @@
          {% for image in images %}
             <a href="{{oss}}/{{ image.image }}"
               data-fslightbox="gallery"> 
-                <img class="classified-image" src="{{oss}}/{{ image.image }}">
+                <img class="classified-image" src="{{oss}}/{{ image.image }}" id="{{ image.id }}">
             </a>
          {% endfor %}
     </section>
 
     <section class="box classified-meta">
+        <div class="paging-wrapper">
+            <ul class="slide__paging">
+                 {% for image in images %}
+                    <li>
+                        <button class="slide__paging__page" type="button" id="page-btn-{{ image.id }}"
+                            aria-controls="image-section-slide{{ image.id }}"> </button>
+                    </li>
+                 {% endfor %}
+            </ul>
+       </div>
+
         <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
         <div class="meta-info">
           <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
