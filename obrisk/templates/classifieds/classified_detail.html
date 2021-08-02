@@ -41,23 +41,24 @@
     </a>
   {% endif  %}
 
-
-<!--a href="{{oss}}/{{ image.image }}"
-  data-fslightbox="gallery"> 
-    <div class="classified-image" style="background-image: url('{{oss}}/{{ image.image }}')">
-    </div>
-  </a-->
   <article>
      <section id="image-section" class="slides">
-       {% for image in images %}
+        {% if classified.video %}
+          <video id="classified-video" class="vd-container classified-image" height="400vh" preload="metadata" 
+              x5-video-player-type="h5-page" controls controlsList="nodownload"
+              crossorigin webkit-playsinline playsinline preload control
+              poster="{{oss}}/{{ classified.thumbnail }}" style="background-color: #def0fd;" >
+              <source src="{{oss}}/{{classified.video}}#t=0.5" type="video/mp4">
+              Your browser doesn' t support HTML5 video tag. 
+          </video>
+        {% endif %}
+
+         {% for image in images %}
             <a href="{{oss}}/{{ image.image }}"
               data-fslightbox="gallery"> 
                 <img class="classified-image" src="{{oss}}/{{ image.image }}">
             </a>
-       {% endfor %}
-    </section>
-
-    <section id="image-overlay">
+         {% endfor %}
     </section>
 
     <section class="box classified-meta">
@@ -154,16 +155,6 @@
     {% endif %}
     <br/>
 
-    {% if classified.video %}
-          <video id="classified-video" class="vd-container" height="400vh" preload="metadata" 
-              x5-video-player-type="h5-page" controls controlsList="nodownload"
-              crossorigin webkit-playsinline playsinline preload control
-      poster="{{oss}}/{{ classified.thumbnail }}" style="background-color: #000;" >
-              <source src="{{oss}}/{{classified.video}}#t=0.5" type="video/mp4">
-              Your browser doesn' t support HTML5 video tag. 
-          </video>
-<br/> <br/><br/>
-    {% endif %}
 
     <!-- Similar lassified -->
     {% if similar_classifieds %}
@@ -322,17 +313,6 @@
 
 
     const chatBtn = document.getElementById('chat-button-id');
-    if( chatBtn !== null) {
-	  chatBtn.addEventListener('click', () => {
-	      if (currentUser !== undefined) {
-              window.location.href = "{% url 'messager:classified_chat' classified.user classified.id %}";
-	      }else {
-		      if (wechat_browser) 
-                  location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
-			  location.href = "{% url 'account_login' %}";
-	      }
-	  });
-    }
 
     wx.ready(function(){
       try {

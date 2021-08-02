@@ -3,54 +3,6 @@
 @import "partials/components-cards";
 
 
-.slides {
-  display: flex;
-  
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scroll-behavior: smooth;
-  
-  /*
-  scroll-snap-points-x: repeat(300px);
-  scroll-snap-type: mandatory;
-  */
-
-  a {
-      width: 100%;
-      object-fit: contain;
-      position: relative;
-      scroll-snap-align: start;
-      flex-shrink: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-  }
-
-  .classified-image {
-      border-radius: 10px;
-      background: #eee;
-      transform-origin: center center;
-      transform: scale(1);
-      transition: transform 0.5s;
-  }
-}
-
-.slides::-webkit-scrollbar {
-  width: 2px;
-  height: 10px;
-}
-.slides::-webkit-scrollbar-thumb {
-  background: black;
-  border-radius: 10px;
-}
-.slides::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-
-
-
-
 //.......................................................................
 .is-fixed-top-cls {
     height: 4.5em;
@@ -209,7 +161,6 @@ body {
      font-size: 13px;
  }
 
-
 .classified-card {
   width: 45%;
   box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
@@ -232,39 +183,69 @@ article {
   flex-direction: column;
 }
 
-section:nth-child(1) {
+.image-section {
     max-height: 70vh;
+    overflow-y: hidden;
+}
 
-    .splide__pagination {
-        z-index: 5;
+.slides {
+  display: flex;
+  
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  
+  a {
+      width: 100%;
+      object-fit: contain;
+      position: relative;
+      scroll-snap-align: start;
+      flex-shrink: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: rgba(0, 0, 0, .88);
     }
+
+  .classified-image {
+      transform-origin: center center;
+      transform: scale(1);
+      transition: transform 0.5s;
+  }
 }
 
-section:nth-child(2) {
-    border-radius: 50px 50px 0 0;
-    position: absolute;
-    top: 900px;
-    left: 0;
-    right: 0;
-    height: 35px;
-    background: #fff;
+.slides::-webkit-scrollbar {
+  width: 2px;
+  height: 10px;
 }
 
-section:nth-child(3) {
-    z-index: 5;
+.slides::-webkit-scrollbar-thumb {
+  background: black;
+  border-radius: 10px;
+}
+
+.slides::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.classified-meta {
     border-radius: 0;
+    position: relative;
+
+    &:before {
+        content: '';
+        border-radius: 50px 50px 0 0;
+        position: absolute;
+        top: -34px;
+        left: 0;
+        right: 0;
+        height: 35px;
+        background: #fff;
+    }
 }
 
 .classified-image {
     width: 100%;
-}
-
-.splide__arrows {
-    display: none;
-}
-
-.splide__list {
-    background: rgba(0,0,0,.8);
 }
 
 .splide__pagination__page {
