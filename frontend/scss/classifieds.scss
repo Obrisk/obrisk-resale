@@ -38,12 +38,6 @@ body {
   overflow: hidden;
 }
 
-#search-input, #search-btn
-{
-    font-family: Nunito;
-    border: 0;
-    background-color: transparent;
-}
 
 #search-form{
     background-color: #def0fd;
@@ -53,19 +47,21 @@ body {
 }
 
 #search-input{
-    width: 100%;
+    width: 90%;
     height: 100%;
     margin-left: 6px;
     line-height: 1;
     border: none;
     border-width: 0;
     box-shadow: none;
+    font-size: 1em;
+    background-color: inherit;
 
     &:focus{
       background-color: #def0fd;
       margin-left: 6px;
-      border: none;
       border-radius: 10px;
+      outline: none;
     }
 
 }
@@ -87,6 +83,7 @@ body {
 .small-cards-listing {
    display: flex;
    flex-wrap: wrap;
+   justify-content: center;
 }
 
 .pagination {
@@ -101,8 +98,6 @@ body {
 .card-title {
   width: auto;
   overflow: hidden;
-  font-family: Nunito;
-  font-size: 15px;
   height: 2em;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -110,14 +105,13 @@ body {
 }
 
 .card-subtitle {
-  font-size: 13.5px;
-  font-weight: 600;
+  font-weight: 500;
   margin-bottom: 2px;
 }
 
 .card-body small,
 .small {
-    font-size: 70%;
+    font-size: 75%;
 }
 
 .classifieds-list-wrapper {
@@ -268,17 +262,10 @@ article {
 .cls-title {
     text-align: left;
     color: #363636;
-    font-size: 1rem;
-    font-weight: 500;
     line-height: 1.125;
     margin-bottom: 0.6em;
 }
 
-.price {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-}
 
 .meta-info {
    display: flex;
@@ -301,9 +288,7 @@ article {
 }
 
 .location {
-  font-size: 13px;
-  font-family: "Montserrat", sans-serif;
-  font-weight: 400;
+  font-size: 14px;
 }
 
 #pic {
@@ -332,14 +317,13 @@ article {
 
 .card-text {
     margin: 8px auto;
-    font-size: 12px;
     text-align: justify;
-    font-weight: 400;
 }
 
 .pay-button {
     background-color: #1FAECE;
     margin: auto auto auto 6%;
+    padding: 0;
 }
     
 .chat-button {
@@ -353,6 +337,10 @@ article {
     color: red;
     text-align: center;
     margin-top: 6px;
+}
+
+.classified-details {
+    margin: 1em auto;
 }
 
 .classified-tags {
@@ -394,19 +382,18 @@ article {
 
 @media screen and (max-width: 570px) {
   .meta-right a {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .meta-left span,
   small {
-    font-size: 12px;
+    font-size: 13px;
   }
 }
 
 
 a {
   color: rgba(13, 157, 219, 0.55);
-  font-weight: 500;
   text-decoration: none;
 }
 

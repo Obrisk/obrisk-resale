@@ -76,7 +76,7 @@
        <div id="sticky-bg">
        </div>
 
-        <h3 class="cls-title">{{ classified.title|title }}</h3>
+        <h3 class="title is-6 cls-title">{{ classified.title|title }}</h3>
         <div class="meta-info">
           <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
             {% if classified.user.thumbnail %}
@@ -118,14 +118,14 @@
       {% if classified.status == 'A' %}
         <div class="action-wrapper">
             {% if classified.user != request.user %}
-                <a class="button chat-button" id="chat-button-id">
+                <button class="button chat-button" id="chat-button-id">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-message-square">
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
                     Chat
-                 </a>
+                 </button>
 
                 <button class="button pay-button" onclick="javascript:callpay();return false;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
@@ -155,7 +155,7 @@
       {% endif %}
       <p id="payError"> </p>
 
-    <div class="card-text classified-details">{{ classified.details }}</div>
+    <div class="classified-details">{{ classified.details }}</div>
 
 
     <!-- Cloud Tag Widget -->
