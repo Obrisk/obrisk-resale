@@ -73,7 +73,10 @@
             </ul>
        </div>
 
-        <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
+       <div id="sticky-bg">
+       </div>
+
+        <h3 class="cls-title">{{ classified.title|title }}</h3>
         <div class="meta-info">
           <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
             {% if classified.user.thumbnail %}
@@ -152,7 +155,7 @@
       {% endif %}
       <p id="payError"> </p>
 
-    <div class="card-text">{{ classified.details }}</div>
+    <div class="card-text classified-details">{{ classified.details }}</div>
 
 
     <!-- Cloud Tag Widget -->
@@ -168,7 +171,7 @@
 
     <!-- Similar lassified -->
     {% if similar_classifieds %}
-        <h5 class="title related-title">Related Items
+        <h5 class="related-title">Related Items
             {% if similar_classifieds|length > 2 %}
             <small>(Swipe left)</small> {% endif %}
         </h5>
@@ -188,8 +191,6 @@
                       {% endif %}
                     </div>
 
-                    <div class="divider"></div>
-
                     <div class="card-body">
                       <h6 class="card-title"> {{ classified.title}} </h6>
 
@@ -200,8 +201,6 @@
                       {% else %}
                           <p class="card-subtitle"> ¥{{ classified.price }} </p>
                       {% endif %}
-                      <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
-
                     </div>
                   </a>
                 </div>

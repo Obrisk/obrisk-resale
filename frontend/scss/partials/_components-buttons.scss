@@ -30,25 +30,6 @@ button.button {
         padding-right: 1.5em;
     }
 
-    //Squared icon button
-    &.icon-button {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-
-        svg {
-            height: 16px !important;
-            width: 16px !important;
-            stroke: $sidebar;
-        }
-
-        &.is-solid {
-            svg {
-                stroke: $white !important;
-            }
-        }
-    }
-
     &.has-icon {
         svg {
             height: 16px;
@@ -59,36 +40,6 @@ button.button {
         }
     }
 
-    //Phantom buttons
-    &.is-phantom {
-        background: transparent;
-        border: 2px solid transparent;
-
-        &.primary-button {
-            color: $primary;
-
-        }
-
-        &.accent-button {
-            color: $accent;
-
-        }
-    }
-
-    //Reversed phantom buttons
-    &.is-reversed-phantom {
-        background: transparent;
-        border: 1px solid transparent;
-
-        &.primary-button {
-            color: $primary;
-        }
-
-        &.accent-button {
-            color: $accent;
-        }
-    }
-
     //Solid buttons
     &.is-solid {
         //Primary button
@@ -96,12 +47,6 @@ button.button {
             background: $primary;
             border-color: $primary;
 
-        }
-
-        //Secondary button
-        &.secondary-button {
-            background: $secondary;
-            border-color: $secondary;
         }
 
         //Accent button
@@ -115,42 +60,6 @@ button.button {
         &.opt-accent-button {
             background: $opt-accent;
             border-color: $opt-accent;
-        }
-
-        //Red button
-        &.red-button {
-            background: $red;
-            border-color: $red;
-            color: $white;
-        }
-
-
-        //Blue button
-        &.blue-button {
-            background: $blue;
-            border-color: $blue;
-            color: $white;
-
-        }
-
-        //Grey button
-        &.grey-button {
-            background: lighten($fade-grey, 6%);
-            border-color: lighten($fade-grey, 6%);
-
-            svg {
-                stroke: $sidebar !important;
-            }
-        }
-
-        //Dark grey button
-        &.dark-grey-button {
-            background: lighten($fade-grey, 2%);
-            border-color: lighten($fade-grey, 2%);
-
-            svg {
-                stroke: $sidebar !important;
-            }
         }
     }
 

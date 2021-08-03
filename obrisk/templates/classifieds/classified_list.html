@@ -17,7 +17,7 @@
     <ul class="tp-nav-ul">
     <li id="search-item">
       <form id="search-form" method="get" action="#" >
-          <input id="search-input" type="search" />
+          <input id="search-input" type="search" placeholder="⚲ Search"/>
       </form>
     </li>
 
@@ -212,10 +212,8 @@
                   {% endif %}
                 </div>
 
-                <div class="divider"></div>
-
                 <div class="card-body">
-                  <h6 class="card-title"> {{ classified.title}} </h6>
+                  <h6 class="card-title"> {{ classified.title | title}} </h6>
 
                   {% if classified.price == 0.00 %}
                       <p class="card-subtitle"> {% trans 'FREE' %} </p>
@@ -227,14 +225,7 @@
 
                 <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
 
-
                 </div>
-                {% if classified.priority > 0 %}
-                <div class="priority">
-                  Featured
-                </div>
-                {% endif %}
-
               </a>
               <script type="application/ld+json">
               {
@@ -314,13 +305,13 @@
 
           template = `
             <div class="card classified-card">
-	      <a href="${window.location.origin}/classifieds/${cls.slug}"
-                style="color:black; text-decoration:none; background-color:none">
+              <a href="${window.location.origin}/classifieds/${cls.slug}"
+                    style="color:black; text-decoration:none; background-color:none">
 
                 <div class="card-img-top img-responsive">
                     ${img}
                 </div>
-                <div class="divider"></div>
+
                 <div class="card-body">
                   <h6 class="card-title"> ${cls.title} </h6>
                    ${price}
