@@ -2,7 +2,7 @@ function wxpayFail() {
       document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
       document.getElementById(
               'notf-msg'
-          ).innerHTML = "Sorry payments feature is currently unavailable, contact the seller directly";
+          ).innerHTML = "Sorry payments feature is now unavailable, contact the seller directly";
 
       setTimeout(() => {  
           window.location.href=slugURL;

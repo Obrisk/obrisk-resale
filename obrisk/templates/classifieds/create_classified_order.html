@@ -16,7 +16,7 @@
 </div>
 
 <div class="order-box">
-  <div class="box order-summary">
+  <div class="order-summary">
       {% if classified.thumbnail %}
       <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
             width="200px" height="200px">
@@ -27,28 +27,14 @@
 
       <div id="order-summary-meta"> 
           <strong> {{ classified.title | title }} </strong>
-          <h1> {{ classified.city }}, {{ classified.province_region }} </h1>
-          <h1 class="mt-0"> Price: {{ classified.price }} CNY</h1>
+          <h1> {{ classified.city }}</h1>
+          <h1> Price: CNY {{ classified.price }}</h1>
       </div>
   </div>
 
   <div class="radio-tile-group">
         <div class="input-container">
-          <input id="offline" class="radio-button" type="radio" name="radio" checked/>
-          <div class="radio-tile">
-            <div class="icon walk-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
-            <label for="walk" class="radio-tile-label">Offline pickup</label>
-          </div>
-        </div>
-
-        <div class="input-container">
-          <input id="delivery" class="radio-button"  type="radio" name="radio" />
+          <input id="delivery" class="radio-button"  type="radio" name="radio" checked />
           <div class="radio-tile">
             <div class="icon bike-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -61,21 +47,36 @@
             <label for="bike" class="radio-tile-label">Express Delivery</label>
           </div>
         </div>
+
+        <div class="input-container">
+          <input id="offline" class="radio-button" type="radio" name="radio"/>
+          <div class="radio-tile">
+            <div class="icon walk-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <label for="walk" class="radio-tile-label">Offline pickup</label>
+          </div>
+        </div>
+
   </div>
 
-  <small id="note" style="font-weight:bold;"> Obrisk will hold the money until you receive the item </small>
+  <small id="note" style="font-weight:bold;"> We will hold the money until you receive the item </small>
   <div id="order-address">
         <label>
             {% trans 'Address' %} <small> {% trans '(Chinese)' %} </small>
         </label>
-        <textarea id="id_chinese_address" value="{{request.user.chinese_address | default_if_none:''}}"
+        <textarea id="id_chinese_address" value="{{ request.user.chinese_address | default_if_none:''}}"
                name="address" rows="2" class="input" placeholder="Address in chinese including city">
         </textarea>
         <label>
             {% trans 'Phone number' %}
         </label>
         <input type="tel" id="id_phone_number" minlength="11", maxlength= "11",
-            value="{{request.user.phone_number.national_number | default_if_none:'' }}"
+            value="{{ request.user.phone_number.national_number | default_if_none:'' }}"
             pattern="[0-9]{11}" name="phone_number" class="input" placeholder="Eg 13291863081">
   </div>
 
@@ -104,11 +105,18 @@
 <script>
 
 function callpay() {
-    const sg = encodeURIComponent("{{classified.slug}}");
+
     const note = document.getElementById('note');
+
+    if (!wechat_browser) {
+        note.textContent = 'Open Obrisk in Wechat to complete payments';
+        return;
+    }
+
     if (document.getElementById('delivery').checked){
         const address = document.getElementById('id_chinese_address').value;
         const phone_no = document.getElementById('id_phone_number').value;
+
         if (address === '' || phone_no === '') {
             note.textContent = "Please fill in the address information"
             return false;
@@ -120,7 +128,9 @@ function callpay() {
     else {
         setCookie('classified-order-is-offline', true, 120);
     }
-    window.location.replace("{% url 'classifieds:initiate_wxpy_info' %}?sg=" + sg);
+    window.location.replace(
+        "{% url 'classifieds:initiate_wxpy_info' %}?sg=" + encodeURIComponent("{{classified.slug}}")
+    );
 }
 
 document.addEventListener('DOMContentLoaded', function () {
