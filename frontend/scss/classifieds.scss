@@ -412,9 +412,11 @@ a {
 #off-ac {
     background-color: $accent;
     color: white;
+    padding: 0.5em;
     display: none;
 
     span {
         margin-left: 14px;
+        text-align: center;
     }
 } 

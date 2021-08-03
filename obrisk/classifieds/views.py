@@ -559,8 +559,6 @@ class DetailClassifiedView(DetailView):
         return context
 
 
-
-@login_required
 @require_http_methods(["GET"])
 def create_classified_order(request, *args, **kwargs):
     """
@@ -577,21 +575,17 @@ def create_classified_order(request, *args, **kwargs):
         ).first()
 
     if classified:
-        openid = request.user.wechat_openid
-        if openid:
-            return render(
-                request,
-                'classifieds/create_classified_order.html',
-                {'classified': classified}
-            )
-        else:
-            messages.success(
-                    request,
-                    "You need to login with wechat to be able to pay"
-                )
-            return redirect('classifieds:classified', classified.slug)
+        return render(
+            request,
+            'classifieds/create_classified_order.html',
+            {'classified': classified}
+        )
 
     else:
+        messages.success(
+            request,
+            "Sorry the payment service can't be accessed now"
+        )
         return redirect('classifieds:list')
 
 

@@ -81,7 +81,7 @@
   </div>
 
   <br/>
-  <button class="button wechat-button" onclick="javascript:callpay();return false;">
+  <button class="button wechat-button" id="wechat-pay-call">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"
         width="16px" height="16px"><path fill="#c2e8ff"
         d="M4.433,22.306l-0.176-0.205C2.453,20.001,1.5,17.546,1.5,15C1.5,8.107,8.453,2.5,17,2.5 S32.5,8.107,32.5,15S25.547,27.5,17,27.5c-2.527,0-5.044-0.508-7.275-1.468L9.55,25.957l-6.809,2.269L4.433,22.306z"/>
@@ -103,13 +103,16 @@
 {% block extra_js %}
 
 <script>
-
 function callpay() {
-
     const note = document.getElementById('note');
 
     if (!wechat_browser) {
         note.textContent = 'Open Obrisk in Wechat to complete payments';
+        return;
+    }
+
+    if (currentUser === undefined || currentUser === "") {
+        window.location.replace(`{% url 'users:wechat_auth' %}?next=${window.location.href}`);
         return;
     }
 
@@ -119,27 +122,30 @@ function callpay() {
 
         if (address === '' || phone_no === '') {
             note.textContent = "Please fill in the address information"
-            return false;
+            return;
         } 
         setCookie('classified-order-phone', phone_no , 120);
         setCookie('classified-order-address', address , 120);
         setCookie('classified-order-is-offline', false , 120);
-    }
-    else {
+    }else {
         setCookie('classified-order-is-offline', true, 120);
     }
+
     window.location.replace(
         "{% url 'classifieds:initiate_wxpy_info' %}?sg=" + encodeURIComponent("{{classified.slug}}")
     );
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('wechat-pay-call').addEventListener('click', function () {
+        callpay();
+    });
     document.getElementById('delivery').addEventListener('click', function () {
         document.getElementById('order-address').style.display = 'block';
-    })
+    });
     document.getElementById('offline').addEventListener('click', function () {
         document.getElementById('order-address').style.display = 'none';
-    })
+    });
 });
 </script>
 

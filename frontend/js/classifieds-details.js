@@ -46,7 +46,29 @@ function handleTouchStart(evt) {
     yDown = firstTouch.clientY;                                      
 };
 
+window.onload = (event) => {
+    if (document.querySelector('article').clientHeight - 50 < window.innerHeight) {
+        document.getElementById('off-ac').style.display = 'flex';
+    }
+};
+
 document.addEventListener('DOMContentLoaded', function () {
+    const chatBtn = document.getElementById('chat-button-id')
+
+    if( chatBtn !== null) {
+	  chatBtn.addEventListener('click', () => {
+	      if (currentUser !== undefined) {
+              window.location.href = "{% url 'messager:classified_chat' classified.user classified.id %}";
+	      }else {
+		      if (wechat_browser) {
+                window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+		      }else {
+                window.location.href = "{% url 'account_login' %}";
+		      }
+	      }
+	  });
+    }
+
     wx.ready(function(){
       try {
           wx.onMenuShareAppMessage({ 

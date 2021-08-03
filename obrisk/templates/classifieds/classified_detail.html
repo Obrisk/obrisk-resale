@@ -114,7 +114,6 @@
 
       {% if classified.status == 'A' %}
         <div class="action-wrapper">
-
             {% if classified.user != request.user %}
                 <a class="button chat-button" id="chat-button-id">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -169,52 +168,54 @@
 
     <!-- Similar lassified -->
     {% if similar_classifieds %}
-<h5 class="title related-title">Related Items
-  {% if similar_classifieds|length > 2 %}<small>(Swipe left)</small>{% endif %} </h5>
-      <div class="related">
-        <!-- Classified Entries Column -->
-        {% for classified in similar_classifieds %}
-            <div class="card classified-card">
-              <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link">
-                <div class="card-img-top img-responsive">
-                  {% if classified.thumbnail %}
-                  <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
-                    width="154px" height="154px">
-                  {% else %}
-                  <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
-                    width="154px" height="154px">
-                  {% endif %}
+        <h5 class="title related-title">Related Items
+            {% if similar_classifieds|length > 2 %}
+            <small>(Swipe left)</small> {% endif %}
+        </h5>
+            <div class="related">
+              <!-- Classified Entries Column -->
+              {% for classified in similar_classifieds %}
+
+                <div class="card classified-card">
+                  <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link">
+                    <div class="card-img-top img-responsive">
+                      {% if classified.thumbnail %}
+                      <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
+                        width="154px" height="154px">
+                      {% else %}
+                      <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
+                        width="154px" height="154px">
+                      {% endif %}
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="card-body">
+                      <h6 class="card-title"> {{ classified.title}} </h6>
+
+                      {% if classified.price == 0.00 %}
+                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                      {% elif classified.price is None %}
+                          <p class="card-subtitle">  {% trans 'BID PRICE' %} </p>
+                      {% else %}
+                          <p class="card-subtitle"> ¥{{ classified.price }} </p>
+                      {% endif %}
+                      <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+
+                    </div>
+                  </a>
                 </div>
+             {% endfor %}
+        </div>
+    {% endif %}
 
-                <div class="divider"></div>
-
-                <div class="card-body">
-                  <h6 class="card-title"> {{ classified.title}} </h6>
-
-                  {% if classified.price == 0.00 %}
-                      <p class="card-subtitle"> {% trans 'FREE' %} </p>
-                  {% elif classified.price is None %}
-                      <p class="card-subtitle">  {% trans 'BID PRICE' %} </p>
-                  {% else %}
-                      <p class="card-subtitle"> ¥{{ classified.price }} </p>
-                  {% endif %}
-                  <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
-
-                </div>
-              </a>
-            </div>
-
-        {% endfor %}
+    <div class="notification" id="off-ac">
+        <img src="{% static 'img/qrcode.jpg' %}"
+           height="100px" width="100px" alt="Obrisk QRcode"/>
+        <span> Long press (scan) the QR code & follow our official account </span>
     </div>
-  {% endif %}
 
-  <div class="notification" id="off-ac">
-    <img src="{% static 'img/qrcode.jpg' %}"
-       height="100px" width="100px" alt="Obrisk QRcode"/>
-    <span> Long press the QR code & follow our official account </span>
- </div>
-
-</section>
+  </section>
 </article>
 
 {% endblock content %}
