@@ -11,8 +11,7 @@
 {% block content %}
 
 {% include 'nav_modal.html' %}
-
-<div class="notification is-danger is-hidden" role="alert">
+<div class="notification is-danger is-hidden is-top-notif" role="alert">
     <button type="button" class="delete close-dj-messages"></button>
     <p id="notf-msg"></p>
 </div>
@@ -29,7 +28,7 @@
       <h1 class="title is-4">{{ classified.title }}</h1>
 
       {% if classified.english_address %}
-          <h1> Address: {{ classified.english_address }}</h1>
+          <h1 class="full-address"> Address: {{ classified.english_address }}</h1>
       {% endif %}
       <h1 class="title is-6"> {{ classified.city }}</h1>
 
@@ -83,5 +82,5 @@
     var paySign = "{{data.sign}}";
     var paySuccessURL = "{% url 'classifieds:wxpyjs_success' %}";
 </script>
-<script src="{% static 'js/pay-order.js' %}" type="text/javascript"></script>
+<script defer src="{% static 'js/pay-order.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}

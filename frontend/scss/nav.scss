@@ -6,6 +6,20 @@
     position: absolute;
 }
 
+.is-top-notif {
+    margin-top: 4em;
+    margin-bottom: 1em;
+}
+
+.notification {
+    margin-top: 8px;
+}
+
+.notif-li {
+    display: flex;
+    justify-content: center;
+}
+
 //standard slim
 .has-slimscroll {
     overflow: hidden !important;
@@ -39,15 +53,6 @@ a {
   font-weight: 600;
   font-size: 15px;
   color: $muted-grey;
-}
-
-.notification {
-    margin-top: 8px;
-}
-
-.notif-li {
-    display: flex;
-    justify-content: center;
 }
 
 .top-nav-user {

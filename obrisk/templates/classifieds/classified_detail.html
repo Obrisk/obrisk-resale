@@ -123,7 +123,7 @@
                       stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-message-square">
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                    </svg>
+                    </svg> &nbsp;
                     Chat
                  </button>
 
@@ -133,7 +133,7 @@
                       stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
                       <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
                       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                    </svg>
+                    </svg> &nbsp;
                     Buy
                 </button>
                    
@@ -195,11 +195,11 @@
                       <h6 class="card-title"> {{ classified.title}} </h6>
 
                       {% if classified.price == 0.00 %}
-                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
+                          <p class="related-price"> {% trans 'FREE' %} </p>
                       {% elif classified.price is None %}
-                          <p class="card-subtitle">  {% trans 'BID PRICE' %} </p>
+                          <p class="related-price">  {% trans 'BID PRICE' %} </p>
                       {% else %}
-                          <p class="card-subtitle"> ¥{{ classified.price }} </p>
+                          <p class="related-price"> ¥{{ classified.price }} </p>
                       {% endif %}
                     </div>
                   </a>

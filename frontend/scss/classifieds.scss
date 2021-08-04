@@ -66,11 +66,6 @@ body {
 
 }
 
-.base-notif {
-    margin-top: 4em;
-    margin-bottom: 1em;
-}
-
 #not-found {
     display: none;
     flex-direction: column;
@@ -153,7 +148,7 @@ body {
 //Classifieds details.......
 
 article {
-  margin: auto auto 4rem;
+  margin: auto auto 4.5em;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -341,6 +336,7 @@ article {
 
 .classified-details {
     margin: 1em auto;
+    text-align: justify;
 }
 
 .classified-tags {
@@ -377,6 +373,10 @@ article {
 .related-title {
     font-size: 1rem;
     margin: auto auto auto 2px !important;
+}
+
+.related-price {
+    font-size: .8em;
 }
 
 

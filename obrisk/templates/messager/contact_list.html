@@ -9,7 +9,7 @@
 {% block content %}
     {% include 'nav_modal.html' %}
 
-    <div class="users-list" style="margin-top: 3.7em">
+    <div class="users-list">
       {% for con in convs %}
           {% if con.first_user.username == request.user.username %}
               <a href="{% url 'messager:conversation_detail' con.second_user.username %}"

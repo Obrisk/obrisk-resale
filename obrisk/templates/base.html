@@ -159,7 +159,7 @@
         upon successful POST request. Chat messages context name is message_list -->
         {% if messages %}
             {% for message in messages %}
-              <div id="base-notif" class="notification 
+              <div class="notification is-top-notif
                  {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
                 <button type="button" class="delete close-dj-messages"></button>
                 {{ message}}
