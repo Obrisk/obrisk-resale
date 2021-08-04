@@ -236,8 +236,14 @@
   const thumbnail = "{{oss}}/{{ classified.thumbnail }}"
   const slug = "{{classified.slug}}";
   const orderUrl = "{% url 'classifieds:create_order' %}?sg=";
-  const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
-  const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+  try {
+      const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+      const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+  } catch {
+      const descr = '{{ classified.details|truncatechars:100 | escapejs }}'.replace(/(\r\n|\n|\r)/gm, ' ');
+      const title = '{{ classified.title|truncatechars:80 | escapejs }}'.replace(/(\r\n|\n|\r)/gm, ' ');
+  }
+
 </script>
 
 <script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
