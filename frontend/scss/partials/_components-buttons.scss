@@ -22,31 +22,12 @@ button.button {
 .button {
     font-size: .8rem;
     font-weight: 500;
-    padding: 18px 22px;
+    padding: 20px 26px;
     transition: all .3s;
 
     &.is-rounded {
         padding-left: 1.5em;
         padding-right: 1.5em;
-    }
-
-    //Squared icon button
-    &.icon-button {
-        width: 32px;
-        height: 32px;
-        padding: 0;
-
-        svg {
-            height: 16px !important;
-            width: 16px !important;
-            stroke: $sidebar;
-        }
-
-        &.is-solid {
-            svg {
-                stroke: $white !important;
-            }
-        }
     }
 
     &.has-icon {
@@ -59,36 +40,6 @@ button.button {
         }
     }
 
-    //Phantom buttons
-    &.is-phantom {
-        background: transparent;
-        border: 2px solid transparent;
-
-        &.primary-button {
-            color: $primary;
-
-        }
-
-        &.accent-button {
-            color: $accent;
-
-        }
-    }
-
-    //Reversed phantom buttons
-    &.is-reversed-phantom {
-        background: transparent;
-        border: 1px solid transparent;
-
-        &.primary-button {
-            color: $primary;
-        }
-
-        &.accent-button {
-            color: $accent;
-        }
-    }
-
     //Solid buttons
     &.is-solid {
         //Primary button
@@ -96,12 +47,6 @@ button.button {
             background: $primary;
             border-color: $primary;
 
-        }
-
-        //Secondary button
-        &.secondary-button {
-            background: $secondary;
-            border-color: $secondary;
         }
 
         //Accent button
@@ -116,42 +61,6 @@ button.button {
             background: $opt-accent;
             border-color: $opt-accent;
         }
-
-        //Red button
-        &.red-button {
-            background: $red;
-            border-color: $red;
-            color: $white;
-        }
-
-
-        //Blue button
-        &.blue-button {
-            background: $blue;
-            border-color: $blue;
-            color: $white;
-
-        }
-
-        //Grey button
-        &.grey-button {
-            background: lighten($fade-grey, 6%);
-            border-color: lighten($fade-grey, 6%);
-
-            svg {
-                stroke: $sidebar !important;
-            }
-        }
-
-        //Dark grey button
-        &.dark-grey-button {
-            background: lighten($fade-grey, 2%);
-            border-color: lighten($fade-grey, 2%);
-
-            svg {
-                stroke: $sidebar !important;
-            }
-        }
     }
 
     //Light button
@@ -161,72 +70,5 @@ button.button {
         color: $white;
         font-weight: 500;
 
-    }
-}
-
-
-/* ==========================================================================
-4. Load more button
-========================================================================== */
-
-//Wrapper
-.load-more-wrap {
-    padding: 40px 0;
-
-    //min-height: 116px;
-
-    &.narrow-top {
-        padding-top: 20px 0;
-    }
-}
-
-//Button
-.load-more-button {
-    box-sizing: border-box;
-    display: inline-block;
-    width: 8em;
-    height: 2.25em;
-    padding: 0.5em 1em;
-    background-color: $white;
-    border: 1px solid $accent-grey;
-    border-radius: 4px;
-    text-align: center;
-    color: $medium-text !important;
-    white-space: nowrap;
-    line-height: 1;
-    font-size: 1em;
-    text-decoration: none;
-    transition: width 0.1s ease, height 0.4s ease, border-width 0.4s ease, border-radius 0.4s ease, border-color 0.4s ease, padding 0.4s ease;
-
-    //Focus state
-    &:focus {
-        outline: none;
-        border-color: $medium-grey;
-    }
-
-    //Loading modifier
-    &.loading {
-        height: 24px;
-        width: 24px;
-        padding: 0;
-        border-width: 2px;
-        border-radius: 17px;
-        border-color: $cream-grey $cream-grey $cream-grey $muted-grey;
-        background: $white;
-        font-size: 0;
-        color: transparent;
-        pointer-events: none;
-        animation: spin 1.2s infinite linear;
-    }
-}
-
-//Keyframes
-@keyframes spin {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
     }
 }

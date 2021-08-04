@@ -4,15 +4,17 @@
 Navbar styles
 ========================================================================== */
 
+#search-item {
+    display: none;
+}
+
 .navbar {
-    position: fixed;
-    left: 0;
     width: 100%;
-    z-index: 99;
     transition: all .3s;
+    //border-radius: 10px;
+    //box-shadow: 0 0.5em 1em -0.125em rgba(black, 0.1), 0 0px 0 1px rgba(black, 0.02);
 
     font-family: "Montserrat", sans-serif;
-    box-shadow: 2px 4px 4px rgba(0, 0, 0, 0.25);
 
     &.is-active {
         transform: translateY(0);
@@ -23,9 +25,31 @@ Navbar styles
         padding-right: 12px !important;
     }
 
-    &.fixed-bottom{
-        bottom: -1px;
+    &.is-fixed-top {
+        //height: 4.5em;
+        //padding-top: 1em;
+
+        .nav-inner {
+            align-items: stretch;
+            display: flex;
+            font-size: 1rem;
+            justify-content: space-between;
+            overflow: hidden;
+            white-space: nowrap;
+
+            .tp-nav-ul {
+                display: flex;
+                justify-content: space-between;
+                width: 100%;
+
+            }
+        }
     }
+
+    &.is-fixed-bottom{
+        height: 4rem; 
+    }
+
     &.no-shadow {
         box-shadow: none !important;
     }
@@ -51,7 +75,6 @@ Navbar styles
             display: flex;
             justify-content: flex-start;
             align-items: center;
-            margin-left: 16px;
             cursor: pointer;
 
             //Avatar

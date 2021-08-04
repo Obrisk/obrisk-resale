@@ -2,8 +2,8 @@
 @import "partials/layout-navbar";
 @import "partials/simple-defaults";
 
-.container {
-    margin: 3.5rem auto;
+.overlay-back-btn {
+    position: absolute;
 }
 
 //standard slim
@@ -24,37 +24,15 @@
     }
 }
 
-.nav-inner {
-    align-items: stretch;
-    display: flex;
-    font-size: 1rem;
-    justify-content: space-between;
-    overflow: hidden;
-    overflow-x: auto;
-    white-space: nowrap;
-}
-
 a {
   color: #202024 !important;
 }
 
-.nav-inner.is-toggle li+li {
-    margin-left: -1px;
-}
-
-.nav-inner.is-fullwidth li {
-    flex-grow: 1;
-    flex-shrink: 0;
-}
-
-.tp-nav-ul {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
 .nav-logo {
-    justify-content: flex-start !important;
+    svg {
+        margin-top: 1em;
+        margin-left: .5em;
+    }
 }
 
 .muted-grey .navbar-nav .nav-link {
@@ -101,8 +79,11 @@ a {
   display: none;
 }
 
-#navbarTop > .nav-inner {
-    overflow-x: hidden;
+.nav-back-btn {
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+  position: fixed;
+  z-index: 5;
 }
 
 .bt-nav-ul {
@@ -113,8 +94,8 @@ a {
     color: $muted-grey !important;
     overflow: auto hidden;
     padding: 1px 0px 0px 0px;
-    margin: 1px 6px 0 6px;
     border: 0px;
+    border-radius: 8px;
     box-shadow: 0px -4px 5px 0px rgba(0, 0, 0, 0.25);
 }
 
@@ -132,11 +113,6 @@ a {
 
 .nav-icons {
   margin-bottom: -6px;
-}
-
-.nav-back-btn {
-  margin-top: 0.9rem;
-  margin-left: 0.5rem;
 }
 
 #navbarBottom .navbar .navbar-item .nav-drop:before {
@@ -170,5 +146,20 @@ a {
 }
 
 .iphone-nav-bt {
+    bottom: -5px; 
     margin-bottom: 4px;
+}
+
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration { display: none; }
+
+input:-webkit-autofill {
+    -webkit-box-shadow:0 0 0 50px #ffffff inset;
+}
+
+.form-control:focus, .form-control:active {
+    background: #def0fd;
+    border-radius: 10px;
 }

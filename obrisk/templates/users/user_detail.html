@@ -4,41 +4,42 @@
 {% block title %}{{ object.username }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/user_profile.css' %}" rel="stylesheet">
-
+    <link href="{% static 'css/user_profile.css' %}" rel="stylesheet">
 {% endblock head %}
 
+
 {% block content %}
+  {% include 'nav_modal.html' %}
 
-<div>
-  <div class="profile-header">
-    {% if object.picture %}
-        <img src="{{oss}}/{{object.picture}}" alt="Pic"
-          class="profile-header-avatar" id="pic">
-    {% else %}
-        <img class="pull-right" src="{% static 'img/user.png' %}" height="180px" alt="pic" />
-        <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
-    {% endif %}
+  <div>
+    <div class="profile-header">
+        {% if object.picture %}
+            <img src="{{oss}}/{{object.picture}}" alt="Pic"
+              class="profile-header-avatar" id="pic">
+        {% else %}
+            <img class="pull-right" src="{% static 'img/user.png' %}" height="180px" alt="pic" />
+            <small class="lazy-img"> {{ object.username }} is too lazy to upload the profile pic.</small>
+        {% endif %}
 
-    <h1 class="media-body">{{ object.username|title }}</h1>
+        <h1 class="media-body">{{ object.username|title }}</h1>
 
-    <div class="profile-points">
-      <div class="point-label">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-            viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round"
-            class="feather feather-gift">
-            <polyline points="20 12 20 22 4 22 4 12"></polyline>
-            <rect x="2" y="7" width="20" height="5"></rect>
-            <line x1="12" y1="22" x2="12" y2="7"></line>
-            <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
-            <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
-        </svg>
-        {% trans 'Points' %} <span class="title is-6"> {{ object.points }} <span>
-      </div>
-    </div>
+        <div class="profile-points">
+          <div class="point-label">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-gift">
+                <polyline points="20 12 20 22 4 22 4 12"></polyline>
+                <rect x="2" y="7" width="20" height="5"></rect>
+                <line x1="12" y1="22" x2="12" y2="7"></line>
+                <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"></path>
+                <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"></path>
+            </svg>
+            {% trans 'Points' %} <span class="title is-6"> {{ object.points }} <span>
+          </div>
+        </div>
 
-    <div class="is-flex">
+        <div class="is-flex">
         {% if request.user.is_authenticated %}
           {% if request.user.username == object.username %}
                 <a class="button accent-button" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>

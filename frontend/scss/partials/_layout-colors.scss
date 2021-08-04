@@ -7,23 +7,17 @@
 $white: #fff;
 $white-smoke: #fcfcfc;
 $white-light: #fafafa;
-$smokey: #f5f5f5;
 $accent-grey: #ccc;
 $grey-text: #888da8;
-$medium-text: #757a91;
 $blueish-grey: #ecf0f7;
 $dark-text: #393a4f;
+$medium-grey: #ddd;
+
+$medium-text: #757a91;
 
 $accent: #3EC4E2; /* Obrisk's azure blue */
 $opt-accent: #1faece;  
 $primary: #ff5f59;
-$secondary: $medium-text;
-
-$sidebar: #344258;
-$lightbox: #181e28;
-$cream-grey: #eee;
-$medium-grey: #ddd;
-$placeholder: #cecece;
 
 $fade-grey: #e8e8e8;
 $muted-grey: #999;
@@ -44,13 +38,6 @@ $primary-box-shadow: 0 14px 26px -12px $primary-shadow-from,
 0 4px 23px 0px $base-shadow,
 0 8px 10px -5px $primary-shadow-to !important;
 
-//Secondary box shadow
-$secondary-shadow-from: rgba($secondary, 0.42);
-$secondary-shadow-to: rgba($secondary, 0.2);
-$secondary-box-shadow: 0 14px 26px -12px $secondary-shadow-from,
-0 4px 23px 0px $base-shadow,
-0 8px 10px -5px $secondary-shadow-to !important;
-
 //Accent box shadow
 $accent-shadow-from: rgba($accent, 0.42);
 $accent-shadow-to: rgba($accent, 0.2);
@@ -58,13 +45,6 @@ $accent-box-shadow: 0 14px 26px -12px $accent-shadow-from,
 0 4px 23px 0px $base-shadow,
 0 8px 10px -5px $accent-shadow-to !important;
 
-
-//Red box shadow
-$red-shadow-from: rgba($red, 0.42);
-$red-shadow-to: rgba($red, 0.2);
-$red-box-shadow: 0 14px 26px -12px $red-shadow-from,
-0 4px 23px 0px $base-shadow,
-0 8px 10px -5px $red-shadow-to !important;
 
 //Blue box shadow
 $blue-shadow-from: rgba($blue, 0.42);
@@ -75,6 +55,3 @@ $blue-box-shadow: 0 14px 26px -12px $blue-shadow-from,
 
 //Light box shadow
 $light-box-shadow: -1px 3px 10px 0 rgba(0, 0, 0, 0.06);
-
-//Heavy box shadow
-$heavy-box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.2);

@@ -20,6 +20,11 @@ Modal styles
 
 //import mixins
 @import "specials-mixins";
+$placeholder: #cecece;
+$smokey: #f5f5f5;
+
+//Heavy box shadow
+$heavy-box-shadow: 0px 5px 25px 0px rgba(0, 0, 0, 0.2);
 
 /* ==========================================================================
 1. Base class

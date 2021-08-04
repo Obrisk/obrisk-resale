@@ -7,16 +7,17 @@
   align-items: center;
   border-radius: 10px;
   box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
-  margin: 4em .5em auto;
+  margin: 4em auto 0;
   padding: 1em;
 }
 
 .profile-wrapper {
-  border-radius: 10px;
+  border-radius: 25px 25px 0 0;
   background: #F6F6F6;
   box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
-  margin: 1em .5em;
+  margin: 1em auto;
   padding: 1em;
+  min-height: 38vh;
 }
 
 .profile-header-avatar {

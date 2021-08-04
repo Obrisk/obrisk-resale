@@ -4,8 +4,6 @@
 
 {% block head %}
 <link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/vendor/splide.min.css' %}">
-
 <title>{{ classified.title|title }}</title>
 
 {% endblock head %}
@@ -31,143 +29,156 @@
 
 
 {% block content %}
-<!-- Page Content -->
-<div class="container view-wrapper">
-   <section class="classified-wrapper">
-        <div class="splide">
-            <div class="splide__track">
-                <ul class="splide__list">
-                    {% for image in images %}
-                      <div class="splide__slide">
-                        <a href="{{oss}}/{{ image.image }}"
-                          data-fslightbox="gallery">
-                          <img class="classified-image" src="{{oss}}/{{ image.image_mid_size }}"/>
-                        </a>
-                     </div>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div>
+  {% if request.META.HTTP_REFERER %}
+    <a  href="javascript:history.back()" class="nav-back-btn">
+        <svg class="feather feather-arrow-left-circle" xmlns="http://www.w3.org/2000/svg"
+             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"></circle>
+            <polyline points="12 8 8 12 12 16"></polyline>
+            <line x1="16" y1="12" x2="8" y2="12"></line>
+        </svg>
+    </a>
+  {% endif  %}
 
-        <div class="classified-meta">
-            <h3 class="cls-title title is-5">{{ classified.title|title }}</h3>
-            <div class="meta-info">
-              <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
-                {% if classified.user.thumbnail %}
-                <img src="{{oss}}/{{classified.user.thumbnail}}"
-                  alt="Picture Profile" id="pic">
-                {% else %}
-                <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
-                {% endif %}
-              </a>
-
-              <div class="meta-right">
-                  <div class="meta-right-top">
-                    <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
-                      href="{% url 'users:detail' classified.user.username %}">
-                      <strong itemprop="name" id="classified-user">
-                        {{ classified.user.get_profile_name|title }} </strong>
-                    </a>
-
-                    <!-- Price -->
-                    {% if classified.price == 0.00 %}
-                      <strong class="price"> {% trans 'FREE' %} </strong>
-                    {% elif classified.price is None %}
-                      <strong class="price">  {% trans 'BID PRICE' %} </strong>
-                    {% else %}
-                      <strong class="price"> ¥{{ classified.price }} </strong>
-                    {% endif %}
-                  </div>
-
-                  <span class="location">
-                    {% if classified.english_address  %}
-                       📍{{ classified.english_address }}, {{ classified.city }}
-                    {% else %}
-                       📍{{ classified.user.city }}
-                    {% endif %}
-                  </span>
-              </div>
-           </div>
-
-          {% if classified.status == 'A' %}
-            <div class="action-wrapper">
-
-                {% if classified.user != request.user %}
-                    <a class="button chat-button" id="chat-button-id">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                          stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-                          class="feather feather-message-square">
-                          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                        Chat
-                     </a>
-
-                    <button class="button pay-button" onclick="javascript:callpay();return false;">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                          viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                          stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
-                          <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
-                          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                        </svg>
-                        Buy
-                    </button>
-                       
-                {% else %}
-                    <a class="button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
-                      title="{% trans 'Edit this classified' %}">
-                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 🗑️{% trans 'Delete/Sold' %}</a>
-
-                    <a class="button pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
-                      title="{% trans 'Edit this classified' %}">
-                      <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
-                {% endif %}
-              </div>
-          {% else %}
-              <div class="notification is-warning">
-                This item is no longer available
-              </div>
-
-          {% endif %}
-          <p id="payError"> </p>
-
-        <div class="card-text">{{ classified.details }}</div>
-
-
-        <!-- Cloud Tag Widget -->
-        {% if classified.tags.all %}
-            <!-- Cloud Tag Widget -->
-              <div class="card classified-tags">
-                  <h5 class="card-heading has-text-weight-medium has-text-white	">{% trans 'Popular tags' %}</h5>
-
-                    <div class="card-body">
-                      <div class="previsions">
-                          {% for tag in classified.tags.all %}
-                              <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag is-white">{{ tag }}</span></a>
-                          {% endfor %}
-                      </div>
-                    </div>
-               </div>
-        {% endif %}
-        <br/>
-
+  <article>
+     <section id="image-section" class="slides">
         {% if classified.video %}
-              <video id="classified-video" class="vd-container" height="400vh" preload="metadata" 
-                  x5-video-player-type="h5-page" controls controlsList="nodownload"
-                  crossorigin webkit-playsinline playsinline preload control
-		  poster="{{oss}}/{{ classified.thumbnail }}" style="background-color: #000;" >
-                  <source src="{{oss}}/{{classified.video}}#t=0.5" type="video/mp4">
-                  Your browser doesn' t support HTML5 video tag. 
-              </video>
-	<br/> <br/><br/>
+          <video id="classified-video" class="vd-container classified-image" height="400vh" preload="metadata" 
+              x5-video-player-type="h5-page" controls controlsList="nodownload"
+              crossorigin webkit-playsinline playsinline preload control
+              poster="{{oss}}/{{ classified.thumbnail }}" style="background-color: #def0fd;" >
+              <source src="{{oss}}/{{classified.video}}#t=0.5" type="video/mp4">
+              Your browser doesn' t support HTML5 video tag. 
+          </video>
         {% endif %}
 
-        <!-- Similar lassified -->
-        {% if similar_classifieds %}
-	<h5 class="title related-title">Related Items
-	  {% if similar_classifieds|length > 2 %}<small>(Swipe left)</small>{% endif %} </h5>
-          <div class="related">
-            <!-- Classified Entries Column -->
-            {% for classified in similar_classifieds %}
+         {% for image in images %}
+            <a href="{{oss}}/{{ image.image }}"
+              data-fslightbox="gallery"> 
+                <img class="classified-image" src="{{oss}}/{{ image.image }}" id="{{ image.id }}">
+            </a>
+         {% endfor %}
+    </section>
+
+    <section class="box classified-meta">
+        <div class="paging-wrapper">
+            <ul class="slide__paging">
+                 {% for image in images %}
+                    <li>
+                        <button class="slide__paging__page" type="button" id="page-btn-{{ image.id }}"
+                            aria-controls="image-section-slide{{ image.id }}"> </button>
+                    </li>
+                 {% endfor %}
+            </ul>
+       </div>
+
+       <div id="sticky-bg">
+       </div>
+
+        <h3 class="title is-6 cls-title">{{ classified.title|title }}</h3>
+        <div class="meta-info">
+          <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
+            {% if classified.user.thumbnail %}
+            <img src="{{oss}}/{{classified.user.thumbnail}}"
+              alt="Picture Profile" id="pic">
+            {% else %}
+            <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
+            {% endif %}
+          </a>
+
+          <div class="meta-right">
+              <div class="meta-right-top">
+                <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                  href="{% url 'users:detail' classified.user.username %}">
+                  <strong itemprop="name" id="classified-user">
+                    {{ classified.user.get_profile_name|title }} </strong>
+                </a>
+
+                <!-- Price -->
+                {% if classified.price == 0.00 %}
+                  <strong class="price"> {% trans 'FREE' %} </strong>
+                {% elif classified.price is None %}
+                  <strong class="price">  {% trans 'BID PRICE' %} </strong>
+                {% else %}
+                  <strong class="price"> ¥{{ classified.price }} </strong>
+                {% endif %}
+              </div>
+
+              <span class="location">
+                {% if classified.english_address  %}
+                   📍{{ classified.english_address }}, {{ classified.city }}
+                {% else %}
+                   📍{{ classified.user.city }}
+                {% endif %}
+              </span>
+          </div>
+       </div>
+
+      {% if classified.status == 'A' %}
+        <div class="action-wrapper">
+            {% if classified.user != request.user %}
+                <button class="button chat-button" id="chat-button-id">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                      stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-message-square">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    Chat
+                 </button>
+
+                <button class="button pay-button" onclick="javascript:callpay();return false;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
+                      <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+                      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                    </svg>
+                    Buy
+                </button>
+                   
+            {% else %}
+                <a class="button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
+                  title="{% trans 'Edit this classified' %}">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 🗑️{% trans 'Delete/Sold' %}</a>
+
+                <a class="button pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
+                  title="{% trans 'Edit this classified' %}">
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+            {% endif %}
+          </div>
+      {% else %}
+          <div class="notification is-warning">
+            This item is no longer available
+          </div>
+
+      {% endif %}
+      <p id="payError"> </p>
+
+    <div class="classified-details">{{ classified.details }}</div>
+
+
+    <!-- Cloud Tag Widget -->
+    {% if classified.tags.all %}
+      <div class="classifieds-tags previsions">
+          {% for tag in classified.tags.all %}
+              <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag-item">{{ tag }}</span></a>
+          {% endfor %}
+      </div>
+    {% endif %}
+    <br/>
+
+
+    <!-- Similar lassified -->
+    {% if similar_classifieds %}
+        <h5 class="related-title">Related Items
+            {% if similar_classifieds|length > 2 %}
+            <small>(Swipe left)</small> {% endif %}
+        </h5>
+            <div class="related">
+              <!-- Classified Entries Column -->
+              {% for classified in similar_classifieds %}
+
                 <div class="card classified-card">
                   <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link">
                     <div class="card-img-top img-responsive">
@@ -180,8 +191,6 @@
                       {% endif %}
                     </div>
 
-                    <div class="divider"></div>
-
                     <div class="card-body">
                       <h6 class="card-title"> {{ classified.title}} </h6>
 
@@ -192,167 +201,45 @@
                       {% else %}
                           <p class="card-subtitle"> ¥{{ classified.price }} </p>
                       {% endif %}
-                      <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
-
                     </div>
                   </a>
                 </div>
-
-            {% endfor %}
+             {% endfor %}
         </div>
+    {% endif %}
 
-      </div>
-      {% endif %}
-
-    <div class="notification off-ac">
+    <div class="notification" id="off-ac">
         <img src="{% static 'img/qrcode.jpg' %}"
            height="100px" width="100px" alt="Obrisk QRcode"/>
-        <span> Long press the QR code & follow our platform </span>
+        <span> Long press (scan) the QR code & follow our official account </span>
     </div>
 
-
-   </section>
-</div>
+  </section>
+</article>
 
 {% endblock content %}
 
 {% block extra_js %}
 
-<script src="{% static 'js/vendor/splide.min.js' %}"></script>
-<script src="{% static 'js/share.js' %}" type="text/javascript"></script>
-<script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
 <script type="text/javascript">
   {% if classified.price == 0.00 %}
-      const price = "FREE ";
+      const price = "FREE";
+      const str_price = price;
   {% elif classified.price is None %}
       const price = "BID PRICE ";
+      const str_price = price;
   {% else %}
-      const price ="CNY {{classified.price }} ";
+      const price ="{{ classified.price }}";
+      const str_price = "CYN {{ classified.price }}";
   {% endif %}
 
-  function shareMe(title, text) {
-        navigator.share({
-          title: title,
-          text: text,
-          url: location.href,
-        });
-  }
-
-  function gotochat(url) {
-      if (typeof currentUser === 'undefined') {
-        setCookie(
-            "active-chat",
-            "chat/{{classified.user}}",
-            120);
-        location.href = "/ws/messages/";
-      }else {
-        setCookie("active-chat", url, 120);
-        location.href = "/ws/messages/";
-      }
-  }
-
-  function goToEdit () {
-        window.location.href=editUrl;
-  }
-
-  function callpay() {
-    if (isNaN("{{classified.price}}") || "{{classified.price}}" === "0.00") {
-        document.getElementById('payError').innerHTML = "Only priced items can accept payments";        
-
-      setTimeout(() => {  
-         document.getElementById('payError').innerHTML = "";
-      }, 7000);
-      return;
-    }
-
-    if (currentUser !== undefined) {
-	    const sg = encodeURIComponent("{{classified.slug}}");
-	    window.location.href = "{% url 'classifieds:create_order' %}?sg=" + sg;
-        return;
-    }
-
-    if (wechat_browser) {
-        window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
-        return;
-    }
-
-    document.getElementById('payError').innerHTML = "Sorry the payment feature is currently unavailable";        
-    setTimeout(() => {  
-         document.getElementById('payError').innerHTML = "";
-    }, 7000);
-      
-  }
-
-  document.addEventListener('DOMContentLoaded', function () {
-
-    const chatBtn = document.getElementById('chat-button-id')
-    if( chatBtn !== null) {
-	  chatBtn.addEventListener('click', () => {
-	      if (currentUser !== undefined) {
-		window.location.href = "{% url 'messager:classified_chat' classified.user classified.id %}";
-	      }else {
-		      if (wechat_browser) {
-			window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
-		      }else {
-			window.location.href = "{% url 'account_login' %}";
-		      }
-	      }
-	  });
-    }
-
-      const image_count = {{ images| length}}
-
-      new Splide('.splide', {
-            type: 'loop'
-      }).mount();
-
-
-        wx.ready(function(){
-          try {
-              const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, '');
-              const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, '');
-              console.log(descr);
-              wx.onMenuShareAppMessage({ 
-                    title: title, 
-                    desc: price + descr, 
-                    link: location.href, 
-                    imgUrl: "{{oss}}/{{ classified.thumbnail }}", 
-                    trigger: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    success: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    fail: function (res) {
-                        console.log(JSON.stringify(res));
-                    }
-                })
-
-              wx.onMenuShareTimeline({ 
-                    title: title, 
-                    desc: price + descr, 
-                    link: location.href, 
-                    imgUrl: "{{oss}}/{{ classified.thumbnail }}", 
-                    trigger: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    success: function (res) {
-                        console.log(JSON.stringify(res));
-                    },
-                    fail: function (res) {
-                        console.log(JSON.stringify(res));
-                    }
-                })
-            }catch (e) {
-                console.log(e);
-            }
-      });
-
-      wx.error(function(res){
-        console.log(res);
-      });
-
-  });
+  const thumbnail = "{{oss}}/{{ classified.thumbnail }}"
+  const slug = "{{classified.slug}}";
+  const orderUrl = "{% url 'classifieds:create_order' %}?sg=";
+  const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+  const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
 </script>
 
+<script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
+<script defer src="{% static 'js/classifieds-details.js' %}"></script>
 {% endblock extra_js %}

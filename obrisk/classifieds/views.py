@@ -73,7 +73,8 @@ API_KEY = env('WECHAT_API_KEY')
 def classified_list(request, city=None):
 
     if request.user.is_authenticated:
-        city = request.user.city
+        city = city or request.user.city
+
     else:
         city = city or cache.get(
                 f'user_city_{request.session.get("visitor_id")}'
@@ -471,7 +472,7 @@ class EditClassifiedView(
         LoginRequiredMixin, AuthorRequiredMixin, UpdateView):
     """Basic EditView implementation to edit existing classifieds."""
     model = Classified
-    message = _("Your classified has been updated.")
+    message = _("Ta-da! Everything is updated, as you wish😉")
     form_class = ClassifiedEditForm
     template_name = 'classifieds/classified_update.html'
 
@@ -558,8 +559,6 @@ class DetailClassifiedView(DetailView):
         return context
 
 
-
-@login_required
 @require_http_methods(["GET"])
 def create_classified_order(request, *args, **kwargs):
     """
@@ -576,21 +575,17 @@ def create_classified_order(request, *args, **kwargs):
         ).first()
 
     if classified:
-        openid = request.user.wechat_openid
-        if openid:
-            return render(
-                request,
-                'classifieds/create_classified_order.html',
-                {'classified': classified}
-            )
-        else:
-            messages.success(
-                    request,
-                    "You need to login with wechat to be able to pay"
-                )
-            return redirect('classifieds:classified', classified.slug)
+        return render(
+            request,
+            'classifieds/create_classified_order.html',
+            {'classified': classified}
+        )
 
     else:
+        messages.success(
+            request,
+            "Sorry the payment service can't be accessed now"
+        )
         return redirect('classifieds:list')
 
 

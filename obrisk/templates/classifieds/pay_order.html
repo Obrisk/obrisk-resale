@@ -9,19 +9,21 @@
 {% endblock head %}
 
 {% block content %}
+
+{% include 'nav_modal.html' %}
+
 <div class="notification is-danger is-hidden" role="alert">
     <button type="button" class="delete close-dj-messages"></button>
     <p id="notf-msg"></p>
 </div>
 
-<div>
-  <div class="order-box">
+<div class="order-box">
       {% if classified.thumbnail %}
-      <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
-            width="250px" height="250px">
+          <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
+                width="250px" height="250px">
       {% else %}
-      <img class="card-img lazyload" src="{{oss}}/classifieds/default.jpg"
-            width="250px" height="250px">
+          <img class="card-img lazyload" src="{{oss}}/classifieds/default.jpg"
+                width="250px" height="250px">
       {% endif %}
 
       <h1 class="title is-4">{{ classified.title }}</h1>
@@ -29,10 +31,10 @@
       {% if classified.english_address %}
           <h1> Address: {{ classified.english_address }}</h1>
       {% endif %}
-      <h1> {{ classified.city }}, {{ classified.province_region }} </h1>
+      <h1 class="title is-6"> {{ classified.city }}</h1>
 
       </br>
-      <h1 class="mt-0"> Price: {{ classified.price }} CNY</h1>
+      <h1 > Price: {{ classified.price }} CNY</h1>
 
       <div class="radio-tile-group">
             <div class="input-container">
@@ -64,11 +66,8 @@
               </div>
             </div>
       </div>
-
   </div>
 
-
-</div>
 {% endblock content %}
 
 {% block extra_js %}

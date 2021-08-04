@@ -15,7 +15,7 @@ from requests_aws4auth import AWS4Auth
 
 
 #This has to be updated manually in cases we want rapid deployment
-STATIC_VERSION = 'ver2506210002' #DDMMYY####
+STATIC_VERSION = 'ver0308210006' #DDMMYY####
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 # ALB health check requests should be allowed, whitelist IP address 

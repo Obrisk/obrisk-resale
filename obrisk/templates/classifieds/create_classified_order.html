@@ -5,17 +5,18 @@
 
 {% block head %}
 <link href="{% static 'css/classified_order.css' %}" rel="stylesheet">
-
 {% endblock head %}
 
 {% block content %}
+
+{% include 'nav_modal.html' %}
 <div class="notification is-danger is-hidden" role="alert">
     <button type="button" class="delete close-dj-messages"></button>
     <p id="notf-msg"></p>
 </div>
 
 <div class="order-box">
-  <div class="box order-summary">
+  <div class="order-summary">
       {% if classified.thumbnail %}
       <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
             width="200px" height="200px">
@@ -26,28 +27,14 @@
 
       <div id="order-summary-meta"> 
           <strong> {{ classified.title | title }} </strong>
-          <h1> {{ classified.city }}, {{ classified.province_region }} </h1>
-          <h1 class="mt-0"> Price: {{ classified.price }} CNY</h1>
+          <h1> {{ classified.city }}</h1>
+          <h1> Price: CNY {{ classified.price }}</h1>
       </div>
   </div>
 
   <div class="radio-tile-group">
         <div class="input-container">
-          <input id="offline" class="radio-button" type="radio" name="radio" checked/>
-          <div class="radio-tile">
-            <div class="icon walk-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                    <polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-            </div>
-            <label for="walk" class="radio-tile-label">Offline pickup</label>
-          </div>
-        </div>
-
-        <div class="input-container">
-          <input id="delivery" class="radio-button"  type="radio" name="radio" />
+          <input id="delivery" class="radio-button"  type="radio" name="radio" checked />
           <div class="radio-tile">
             <div class="icon bike-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -60,26 +47,41 @@
             <label for="bike" class="radio-tile-label">Express Delivery</label>
           </div>
         </div>
+
+        <div class="input-container">
+          <input id="offline" class="radio-button" type="radio" name="radio"/>
+          <div class="radio-tile">
+            <div class="icon walk-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round" class="feather feather-home">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+            </div>
+            <label for="walk" class="radio-tile-label">Offline pickup</label>
+          </div>
+        </div>
+
   </div>
 
-  <small id="note" style="font-weight:bold;"> Obrisk will hold the money until you receive the item </small>
+  <small id="note" style="font-weight:bold;"> We will hold the money until you receive the item </small>
   <div id="order-address">
         <label>
             {% trans 'Address' %} <small> {% trans '(Chinese)' %} </small>
         </label>
-        <textarea id="id_chinese_address" value="{{request.user.chinese_address | default_if_none:''}}"
+        <textarea id="id_chinese_address" value="{{ request.user.chinese_address | default_if_none:''}}"
                name="address" rows="2" class="input" placeholder="Address in chinese including city">
         </textarea>
         <label>
             {% trans 'Phone number' %}
         </label>
         <input type="tel" id="id_phone_number" minlength="11", maxlength= "11",
-            value="{{request.user.phone_number.national_number | default_if_none:'' }}"
+            value="{{ request.user.phone_number.national_number | default_if_none:'' }}"
             pattern="[0-9]{11}" name="phone_number" class="input" placeholder="Eg 13291863081">
   </div>
 
   <br/>
-  <button class="button wechat-button" onclick="javascript:callpay();return false;">
+  <button class="button wechat-button" id="wechat-pay-call">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"
         width="16px" height="16px"><path fill="#c2e8ff"
         d="M4.433,22.306l-0.176-0.205C2.453,20.001,1.5,17.546,1.5,15C1.5,8.107,8.453,2.5,17,2.5 S32.5,8.107,32.5,15S25.547,27.5,17,27.5c-2.527,0-5.044-0.508-7.275-1.468L9.55,25.957l-6.809,2.269L4.433,22.306z"/>
@@ -101,34 +103,49 @@
 {% block extra_js %}
 
 <script>
-
 function callpay() {
-    const sg = encodeURIComponent("{{classified.slug}}");
     const note = document.getElementById('note');
+
+    if (!wechat_browser) {
+        note.textContent = 'Open Obrisk in Wechat to complete payments';
+        return;
+    }
+
+    if (currentUser === undefined || currentUser === "") {
+        window.location.replace(`{% url 'users:wechat_auth' %}?next=${window.location.href}`);
+        return;
+    }
+
     if (document.getElementById('delivery').checked){
         const address = document.getElementById('id_chinese_address').value;
         const phone_no = document.getElementById('id_phone_number').value;
+
         if (address === '' || phone_no === '') {
             note.textContent = "Please fill in the address information"
-            return false;
+            return;
         } 
         setCookie('classified-order-phone', phone_no , 120);
         setCookie('classified-order-address', address , 120);
         setCookie('classified-order-is-offline', false , 120);
-    }
-    else {
+    }else {
         setCookie('classified-order-is-offline', true, 120);
     }
-    window.location.replace("{% url 'classifieds:initiate_wxpy_info' %}?sg=" + sg);
+
+    window.location.replace(
+        "{% url 'classifieds:initiate_wxpy_info' %}?sg=" + encodeURIComponent("{{classified.slug}}")
+    );
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('wechat-pay-call').addEventListener('click', function () {
+        callpay();
+    });
     document.getElementById('delivery').addEventListener('click', function () {
         document.getElementById('order-address').style.display = 'block';
-    })
+    });
     document.getElementById('offline').addEventListener('click', function () {
         document.getElementById('order-address').style.display = 'none';
-    })
+    });
 });
 </script>
 

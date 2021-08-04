@@ -5,46 +5,190 @@
 
 {% block head %}
 <link href="{% static 'css/classifieds.css' %}" rel="stylesheet">
+
+<style> .container { margin-top: 6em; }  </style>
 <title>Items for sale </title>
 {% endblock head %}
 
 {% block content %}
 
-  <div id="cover">
-      <form id="search-form" method="get" role="search">
-        <div class="tb">
-          <div class="td">
-              <input id="search-input" type="search">
-          </div>
-          <div class="td" id="s-cover">
-            <button id="search-btn" type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 36 36" width="36px" height="36px">
-                <defs>
-                <linearGradient id="linear0" gradientUnits="userSpaceOnUse" x1="72.387093" y1="45.909779" x2="72.387093" y2="83.280998" gradientTransform="matrix(0.159292,0,0,0.159292,0,0)">
-                <stop offset="0" style="stop-color:rgb(62.7451%,88.235295%,94.509804%);stop-opacity:1;"/>
-                <stop offset="1" style="stop-color:rgb(45.09804%,83.137256%,91.764706%);stop-opacity:1;"/>
-                </linearGradient>
-                <linearGradient id="linear1" gradientUnits="userSpaceOnUse" x1="86.554466" y1="18.60969" x2="91.851341" y2="211.087524" gradientTransform="matrix(0.159292,0,0,0.159292,0,0)">
-                <stop offset="0" style="stop-color:rgb(24.313726%,76.862746%,88.627452%);stop-opacity:1;"/>
-                <stop offset="1" style="stop-color:rgb(12.156863%,68.235296%,80.784315%);stop-opacity:1;"/>
-                </linearGradient>
-                <linearGradient id="linear2" gradientUnits="userSpaceOnUse" x1="109.853661" y1="17.97053" x2="115.150528" y2="210.444839" gradientTransform="matrix(0.159292,0,0,0.159292,0,0)">
-                <stop offset="0" style="stop-color:rgb(24.313726%,76.862746%,88.627452%);stop-opacity:1;"/>
-                <stop offset="1" style="stop-color:rgb(12.156863%,68.235296%,80.784315%);stop-opacity:1;"/>
-                </linearGradient>
-                </defs>
-                <g id="surface46916421">
-                <path style=" stroke:none;fill-rule:nonzero;fill:url(#linear0);" d="M 14.0625 7.875 C 11.25 7.875 9 10.125 9 12.9375 L 14.0625 12.9375 Z M 14.0625 7.875 "/>
-                <path style=" stroke:none;fill-rule:nonzero;fill:url(#linear1);" d="M 14.0625 5.625 C 10.03125 5.625 6.75 8.90625 6.75 12.9375 C 6.75 16.972656 10.03125 20.253906 14.0625 20.253906 C 18.09375 20.253906 21.375 16.972656 21.375 12.9375 C 21.375 8.90625 18.09375 5.625 14.0625 5.625 Z M 14.0625 19.125 C 10.648438 19.125 7.875 16.351562 7.875 12.9375 C 7.875 9.527344 10.648438 6.75 14.0625 6.75 C 17.472656 6.75 20.25 9.527344 20.25 12.9375 C 20.25 16.351562 17.472656 19.125 14.0625 19.125 Z M 14.0625 19.125 "/>
-                <path style=" stroke:none;fill-rule:nonzero;fill:url(#linear2);" d="M 30.808594 27.3125 L 25.886719 21.765625 C 25.480469 21.308594 24.761719 21.25 24.285156 21.628906 L 22.886719 22.738281 L 20.566406 19.929688 C 22.441406 18.183594 23.625 15.699219 23.625 12.9375 C 23.625 7.664062 19.335938 3.375 14.0625 3.375 C 8.789062 3.375 4.5 7.664062 4.5 12.9375 C 4.5 18.210938 8.789062 22.503906 14.0625 22.503906 C 16.171875 22.503906 18.117188 21.808594 19.699219 20.648438 L 22.003906 23.4375 L 20.671875 24.496094 C 20.429688 24.6875 20.28125 24.960938 20.253906 25.265625 C 20.226562 25.570312 20.324219 25.863281 20.53125 26.09375 L 25.453125 31.644531 C 26.027344 32.289062 26.851562 32.625 27.683594 32.625 C 28.339844 32.625 29 32.414062 29.542969 31.984375 L 30.449219 31.269531 C 31.054688 30.785156 31.425781 30.105469 31.492188 29.351562 C 31.554688 28.609375 31.3125 27.882812 30.808594 27.3125 Z M 5.625 12.9375 C 5.625 8.285156 9.410156 4.5 14.0625 4.5 C 18.714844 4.5 22.5 8.285156 22.5 12.9375 C 22.5 17.589844 18.714844 21.378906 14.0625 21.378906 C 9.410156 21.378906 5.625 17.589844 5.625 12.9375 Z M 27.359375 25.125 L 23.722656 28.011719 L 22.894531 27.082031 L 26.53125 24.191406 Z M 24.984375 22.511719 C 24.992188 22.503906 25.003906 22.503906 25.011719 22.503906 C 25.023438 22.503906 25.039062 22.507812 25.042969 22.511719 L 25.785156 23.347656 L 22.144531 26.238281 L 21.375 25.375 Z M 29.746094 30.386719 L 28.84375 31.105469 C 28.078125 31.710938 26.933594 31.617188 26.292969 30.894531 L 24.472656 28.851562 L 28.109375 25.96875 L 29.964844 28.0625 C 30.265625 28.398438 30.40625 28.820312 30.371094 29.253906 C 30.332031 29.695312 30.109375 30.097656 29.746094 30.386719 Z M 29.746094 30.386719 "/>
-                </g>
-                </svg>
+<nav id="navbarTop" class="navbar is-fixed-top-cls">
+  <div class="nav-inner is-toggle is-fullwidth">
+    <ul class="tp-nav-ul">
+    <li id="search-item">
+      <form id="search-form" method="get" action="#" >
+          <input id="search-input" type="search" placeholder="⚲ Search"/>
+      </form>
+    </li>
 
-            </button>
+    {% if request.user.is_authenticated %}
+      <li class="top-nav-user-li">
+        <a href="#du" class="user-image navbar-item is-account drop-trigger">
+              {% if request.user.thumbnail %}
+                <img   src="{{ oss }}/{{request.user.thumbnail}}" alt="Pic"
+                  style="width:30px;height:30px;border-radius: 20%;"
+                  class="img-drop-trigger rounded-circle  mb-3 mb-md-0 mr-0 md-3 img-fluid" id="thumb-pic" />
+              {% else %}
+                <img src="{% static 'img/user.png' %}" height="30px" width="30px" alt="No pic" />
+              {% endif %}
+        </a>
+
+        <div id="d" class="has-caret">
+          <div class="nav-drop is-navbarTop is-account-dropdown">
+            <div class="inner">
+                  <div class="nav-drop-header is-auth-user">
+                    <span class="username">POPULAR CITIES </span>
+                    <a href="#" id="close">❌ CLOSE</a>
+                  </div>
+
+                  <div class="nav-drop-body account-items">
+                    {% for city in popular_cities %}
+                        <a class="account-item" href="{% url 'classifieds:list_by_city' city %}">
+                          <div class="media">
+                            <div class="icon-wrap">
+                                <img class="user-image" src="{% static 'img/city_icon.png' %}"
+                                    height="20px" width="20px" alt="No Pic" />
+                            </div>
+                            <div>
+                            <h3> {{ city }}</h3>
+                            </div>
+                          </div>
+                        </a>
+                    {% endfor %}
+
+                    </div>
+             <!-- close inner, nav-drop, ac-dropdown -->
+            </div>
           </div>
         </div>
-      </form>
-    </div>
+
+        <div id="du" class="has-caret">
+              <div class="nav-drop is-account-dropdown">
+                <div class="inner">
+                  <div class="nav-drop-header is-auth-user">
+                    <span class="username">{{ request.user.username|truncatechars:12}}</span>
+                    <a href="#" id="close">❌ 
+                        {% trans 'CLOSE' %}
+                    </a>
+                  </div>
+
+                  <div class="nav-drop-body account-items">
+                    <a class="account-item" href="{% url 'users:detail' request.user.username %}">
+                      <div class="media">
+                        <div class="icon-wrap">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-user">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" /></svg>
+                        </div>
+                        <div>
+                            <h3>
+                                {% trans 'My Profile' %}
+                            </h3>
+                            <small>
+                                {% trans 'Access profile & settings' %}
+                            </small>
+                        </div>
+                      </div>
+                    </a>
+
+                    <a class="account-item" href="{% url 'users:user_classifieds' request.user.username %}">
+                      <div class="media">
+                        <div class="icon-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-grid">
+                                <rect x="3" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="3" width="7" height="7"></rect>
+                                <rect x="14" y="14" width="7" height="7"></rect>
+                                <rect x="3" y="14" width="7" height="7"></rect>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>
+                                {% trans 'My items' %}
+                            </h3>
+                            <small>
+                                {% trans 'The items you uploaded' %}
+                            </small>
+                        </div>
+                      </div>
+                    </a>
+
+                    <a class="account-item" href="#d">
+                      <div class="media">
+                        <div class="icon-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-map-pin">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3>
+                                {% trans 'Change City' %}
+                            </h3>
+                            <small>
+                                {% trans 'List items by city' %}
+                            </small>
+                        </div>
+                      </div>
+                    </a>
+                  <!-- close nav-drop-body -->
+                  </div>
+
+               <!-- close inner div-->
+               </div>
+
+           <!-- close inner, nav-drop, ac-dropdown -->
+          </div>
+        </div>
+      </li>
+
+    {% else %}
+        <li class="top-nav-user-li">
+        <a href="#d" class="user-image navbar-item is-account drop-trigger">
+            <img src="{% static 'img/location.png' %}" height="34px" width="34px" alt="No Profile Picture" />
+        </a>
+
+        <div id="d" class="has-caret">
+              <div class="nav-drop is-navbarTop is-account-dropdown">
+                <div class="inner">
+                      <div class="nav-drop-header is-auth-user">
+                        <span class="username">POPULAR CITIES </span>
+                        <a href="#" id="close">❌ CLOSE</a>
+                      </div>
+
+                      <div class="nav-drop-body account-items">
+                        {% for city in popular_cities %}
+                            <a class="account-item" href="{% url 'classifieds:list_by_city' city %}">
+                              <div class="media">
+                                <div class="icon-wrap">
+                                    <img class="user-image" src="{% static 'img/city_icon.png' %}"
+                                        height="20px" width="20px" alt="No Pic" />
+                                </div>
+                                <div>
+                                <h3> {{ city }}</h3>
+                                </div>
+                              </div>
+                            </a>
+                        {% endfor %}
+
+                        </div>
+                 <!-- close inner, nav-drop, ac-dropdown -->
+                </div>
+              </div>
+            </div>
+      </li>
+   {% endif %}
+
+    </ul>
+  </div>
+</nav>
 
   <div class="box" id="not-found">
       <img id="notfound-img" width="160px" height="160px"
@@ -68,10 +212,8 @@
                   {% endif %}
                 </div>
 
-                <div class="divider"></div>
-
                 <div class="card-body">
-                  <h6 class="card-title"> {{ classified.title}} </h6>
+                  <p class="card-title"> {{ classified.title | title}} </p>
 
                   {% if classified.price == 0.00 %}
                       <p class="card-subtitle"> {% trans 'FREE' %} </p>
@@ -83,14 +225,7 @@
 
                 <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
 
-
                 </div>
-                {% if classified.priority > 0 %}
-                <div class="priority">
-                  Featured
-                </div>
-                {% endif %}
-
               </a>
               <script type="application/ld+json">
               {
@@ -135,7 +270,6 @@
 {% block extra_js %}
 
 <script type="text/javascript">
-
     const oss_url = "{% url 'get_oss_auth' %}"; //classifieds/get_oss_auth/
     const user = "{{ request.user.username }}";
     const app = "classifieds";
@@ -171,13 +305,13 @@
 
           template = `
             <div class="card classified-card">
-	      <a href="${window.location.origin}/classifieds/${cls.slug}"
-                style="color:black; text-decoration:none; background-color:none">
+              <a href="${window.location.origin}/classifieds/${cls.slug}"
+                    style="color:black; text-decoration:none; background-color:none">
 
                 <div class="card-img-top img-responsive">
                     ${img}
                 </div>
-                <div class="divider"></div>
+
                 <div class="card-body">
                   <h6 class="card-title"> ${cls.title} </h6>
                    ${price}
@@ -252,20 +386,11 @@
            sessionStorage.setItem("restoreScroll", true);
         });
 
-       const topLeftLi = document.querySelector('.tp-nav-ul > li');
-       const defaultLeftNav = topLeftLi.innerHTML;
 
        window.addEventListener('scroll', function () {
           if (!iPhone && document.getElementById('navbarBottom').style.display === 'none'){
                //if(visualViewport.height + 30 > document.scrollingElement.clientHeight) {
 	       document.getElementById('navbarBottom').style.display = 'block';
-          }
-
-          if(document.body.scrollTop > 60 || document.documentElement.scrollTop > 60) {
-              topLeftLi.innerHTML = scrollBtn.innerHTML; 
-          }
-          else {
-              topLeftLi.innerHTML = defaultLeftNav; 
           }
 
           if (document.getElementById('search-input').value === "" || is_search === false) {
@@ -306,30 +431,6 @@
         const searchForm = document.getElementById('search-form');
         const formInput = document.getElementById("search-input");
 
-        const scrollBtn = document.createElement("button");
-        scrollBtn.classList.add('scroll-top-btn');
-
-        scrollBtn.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-                viewBox="0 0 34 34" width="34px" height="34px" style="margin-top:.5rem;margin-left:.5rem;">
-              <g id="surface55892828">
-                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(33.333334%,33.333334%,37.254903%);fill-opacity:1;"
-                d="M 13.28125 7.4375 C 10.625 7.4375 8.5 9.5625 8.5 12.21875 L 13.28125 12.21875 Z M 13.28125 7.4375 "/>
-                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(12.54902%,12.54902%,14.117648%);fill-opacity:1;"
-                d="M 13.28125 5.3125 C 9.472656 5.3125 6.375 8.410156 6.375 12.21875 C 6.375 16.027344 9.472656 19.128906 13.28125 19.128906 C 17.089844 19.128906 20.1875 16.027344 20.1875 12.21875 C 20.1875 8.410156 17.089844 5.3125 13.28125 5.3125 Z M 13.28125 18.0625 C 10.058594 18.0625 7.4375 15.441406 7.4375 12.21875 C 7.4375 8.996094 10.058594 6.375 13.28125 6.375 C 16.503906 6.375 19.125 8.996094 19.125 12.21875 C 19.125 15.441406 16.503906 18.0625 13.28125 18.0625 Z M 13.28125 18.0625 "/>
-                <path style=" stroke:none;fill-rule:nonzero;fill:rgb(12.54902%,12.54902%,14.117648%);fill-opacity:1;"
-                d="M 29.097656 25.796875 L 24.445312 20.558594 C 24.066406 20.125 23.386719 20.066406 22.9375 20.425781 L 21.613281 21.476562 L 19.421875 18.824219 C 21.195312 17.171875 22.3125 14.828125 22.3125 12.21875 C 22.3125 7.238281 18.261719 3.1875 13.28125 3.1875 C 8.300781 3.1875 4.25 7.238281 4.25 12.21875 C 4.25 17.199219 8.300781 21.253906 13.28125 21.253906 C 15.273438 21.253906 17.109375 20.597656 18.605469 19.5 L 20.78125 22.136719 L 19.523438 23.132812 C 19.292969 23.316406 19.152344 23.574219 19.128906 23.863281 C 19.105469 24.148438 19.195312 24.425781 19.390625 24.644531 L 24.039062 29.886719 C 24.582031 30.496094 25.363281 30.8125 26.144531 30.8125 C 26.765625 30.8125 27.390625 30.613281 27.902344 30.207031 L 28.757812 29.53125 C 29.328125 29.074219 29.679688 28.433594 29.742188 27.722656 C 29.804688 27.019531 29.574219 26.335938 29.097656 25.796875 Z M 5.3125 12.21875 C 5.3125 7.824219 8.886719 4.25 13.28125 4.25 C 17.675781 4.25 21.25 7.824219 21.25 12.21875 C 21.25 16.613281 17.675781 20.191406 13.28125 20.191406 C 8.886719 20.191406 5.3125 16.613281 5.3125 12.21875 Z M 25.839844 23.730469 L 22.40625 26.457031 L 21.621094 25.574219 L 25.058594 22.847656 Z M 23.597656 21.257812 C 23.605469 21.253906 23.613281 21.253906 23.625 21.253906 C 23.636719 21.253906 23.648438 21.253906 23.652344 21.261719 L 24.351562 22.050781 L 20.914062 24.78125 L 20.1875 23.96875 Z M 28.09375 28.699219 L 27.242188 29.375 C 26.519531 29.949219 25.4375 29.863281 24.832031 29.179688 L 23.113281 27.25 L 26.546875 24.523438 L 28.300781 26.503906 C 28.582031 26.820312 28.71875 27.21875 28.683594 27.628906 C 28.648438 28.046875 28.4375 28.425781 28.09375 28.699219 Z M 28.09375 28.699219 "/>
-              </g>
-            </svg>`
-
-      topLeftLi.addEventListener('click', () =>{
-            window.scroll({
-                top: 0,
-                behavior: 'smooth',
-            });
-            formInput.focus();
-      });
-
       window.onbeforeunload = function (event) {
           sessionStorage.setItem(
               "scrollPosition",
@@ -353,11 +454,7 @@
           searchSubmit(e, formInput);
       });
 
-      document.getElementById('search-btn').addEventListener('click', function(e) {
-          searchSubmit(e, formInput);
-      });
-
-        wx.ready(function(){
+      wx.ready(function(){
           try {
               wx.onMenuShareAppMessage({ 
                     title: "Obrisk Secondhand Marketplace", 
@@ -398,7 +495,6 @@
       wx.error(function(res){
         console.log(res);
       });
-
 });
 
 </script>
