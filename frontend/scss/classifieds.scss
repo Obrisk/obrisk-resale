@@ -27,6 +27,13 @@
     }
 }
 
+.cls-back-btn {
+   margin-top: 2px;
+   margin-left: 1em;
+   position: fixed;
+   z-index: 5;
+}
+
 #search-item {
     display: list-item;
     width: 80%;
