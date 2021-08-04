@@ -605,7 +605,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
             slug=request.GET.get('sg', None)
         ).first()
 
-    if classified:
+    if classified and classified.price.isdigit():
         openid = request.user.wechat_openid
         if openid:
             return render(
@@ -616,8 +616,8 @@ def initiate_wxpy_info(request, *args, **kwargs):
                  'data': get_jsapi_params(
                      request,
                      openid,
-                     classified.title,
-                     classified.details,
+                     re.sub('[\W_]+', ' ', classified.title),
+                     re.sub('[\W_]+', ' ', classified.details),
                      classified.price
                   )
                 }
@@ -630,6 +630,10 @@ def initiate_wxpy_info(request, *args, **kwargs):
             return redirect('classifieds:classified', classified.slug)
 
     else:
+        messages.success(
+                request,
+                "Sorry payment service is unavailable now"
+            )
         return redirect('classifieds:list')
 
 
