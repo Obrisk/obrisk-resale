@@ -11,6 +11,13 @@
     margin-bottom: 1em;
 }
 
+.nav-back-btn {
+  margin-top: 2px;
+  margin-left: 1em;
+  position: fixed;
+  z-index: 5;
+}
+
 .notification {
     margin-top: 8px;
 }
@@ -82,13 +89,6 @@ a {
 
 .navbar .navbar-item .is-navbarTop:after {
   display: none;
-}
-
-.nav-back-btn {
-  margin-top: 0.5rem;
-  margin-left: 1rem;
-  position: fixed;
-  z-index: 5;
 }
 
 .bt-nav-ul {

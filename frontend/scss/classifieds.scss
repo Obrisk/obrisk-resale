@@ -35,7 +35,6 @@
 body {
   height: 100% !important;
   width: 100% !important;
-  overflow: hidden;
 }
 
 
@@ -146,7 +145,6 @@ body {
 
 
 //Classifieds details.......
-
 article {
   margin: auto auto 4.5em;
   height: 100%;
@@ -244,12 +242,15 @@ article {
 }
 
 #sticky-bg {
-    height: 1.5em;
+    height: 2em;
     position: -webkit-sticky;
     position: -moz-sticky;
     position: -ms-sticky;
     position: -o-sticky;
     position: sticky;
+    z-index: 4;
+    background: white;
+    margin: auto -2em;
     top: 0;
 }
 
