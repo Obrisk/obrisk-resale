@@ -233,15 +233,15 @@
       const str_price = "CYN {{ classified.price }}";
   {% endif %}
 
-  const thumbnail = "{{oss}}/{{ classified.thumbnail }}"
-  const slug = "{{classified.slug}}";
-  const orderUrl = "{% url 'classifieds:create_order' %}?sg=";
+  var thumbnail = "{{oss}}/{{ classified.thumbnail }}"
+  var slug = "{{classified.slug}}";
+  var orderUrl = "{% url 'classifieds:create_order' %}?sg=";
   try {
-      const descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
-      const title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+      var descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
+      var title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
   } catch {
-      const descr = '{{ classified.details|truncatechars:100 | escapejs }}'.replace(/(\r\n|\n|\r)/gm, ' ');
-      const title = '{{ classified.title|truncatechars:80 | escapejs }}'.replace(/(\r\n|\n|\r)/gm, ' ');
+      var descr = '{{ classified.details|truncatechars:100 | escapejs }}'.replace(/(\r\n|\n|\r)/gm, ' ');
+      var title = '{{ classified.title|truncatechars:80 | escapejs }}'.replace(/(\r\n|\n|\r)/gm, ' ');
   }
 
 </script>

@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
       try {
           wx.onMenuShareAppMessage({ 
                 title: title, 
-                desc: str_price + descr, 
+                desc: str_price + " " + descr, 
                 link: location.href, 
                 imgUrl: thumbnail, 
                 trigger: function (res) {
@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
           wx.onMenuShareTimeline({ 
                 title: title, 
-                desc: str_price + descr, 
+                desc: str_price + " " + descr, 
                 link: location.href, 
                 imgUrl: thumbnail, 
                 trigger: function (res) {
