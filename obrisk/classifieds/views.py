@@ -5,6 +5,7 @@ import json
 import urllib
 import os
 import ast
+import decimal
 
 from django.contrib import messages
 from django.contrib.auth.mixins import (
@@ -605,7 +606,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
             slug=request.GET.get('sg', None)
         ).first()
 
-    if classified and classified.price.isdigit():
+    if classified and isinstance(classified.price, decimal.Decimal):
         openid = request.user.wechat_openid
         if openid:
             return render(
@@ -623,14 +624,14 @@ def initiate_wxpy_info(request, *args, **kwargs):
                 }
             )
         else:
-            messages.success(
+            messages.error(
                     request,
                     "You need to login with wechat to be able to pay"
                 )
             return redirect('classifieds:classified', classified.slug)
 
     else:
-        messages.success(
+        messages.error(
                 request,
                 "Sorry payment service is unavailable now"
             )
