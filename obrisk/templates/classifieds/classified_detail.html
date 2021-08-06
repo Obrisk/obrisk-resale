@@ -236,6 +236,9 @@
   var thumbnail = "{{oss}}/{{ classified.thumbnail }}"
   var slug = "{{classified.slug}}";
   var orderUrl = "{% url 'classifieds:create_order' %}?sg=";
+  var chatUrl = "{% url 'messager:classified_chat' classified.user classified.id %}";
+  var wechatAuth = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+  var loginUrl = "{% url 'account_login' %}";
   try {
       var descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
       var title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');

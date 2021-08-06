@@ -53,17 +53,17 @@ window.onload = (event) => {
 };
 
 document.addEventListener('DOMContentLoaded', function () {
-    const chatBtn = document.getElementById('chat-button-id')
+    const chatBtn = document.getElementById('chat-button-id');
 
     if( chatBtn !== null) {
 	  chatBtn.addEventListener('click', () => {
 	      if (currentUser !== undefined) {
-              window.location.href = "{% url 'messager:classified_chat' classified.user classified.id %}";
+              window.location.href = chatUrl;
 	      }else {
 		      if (wechat_browser) {
-                window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+                window.location.href = wechatAuth;
 		      }else {
-                window.location.href = "{% url 'account_login' %}";
+                window.location.href = loginUrl;
 		      }
 	      }
 	  });
