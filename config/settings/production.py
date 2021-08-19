@@ -15,7 +15,7 @@ from requests_aws4auth import AWS4Auth
 
 
 #This has to be updated manually in cases we want rapid deployment
-STATIC_VERSION = 'ver0608210001' #DDMMYY####
+STATIC_VERSION = 'ver1908210001' #DDMMYY####
 
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
 # ALB health check requests should be allowed, whitelist IP address 
@@ -29,6 +29,7 @@ def get_ec2_instance_ip():
           timeout=5
         ).text
     except requests.exceptions.ConnectionError:
+        logging.error('COULD NOT GET AWS EC2 INSTANCE IP')
         return None
     return ip
 
