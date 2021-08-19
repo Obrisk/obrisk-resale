@@ -56,7 +56,7 @@
          {% for image in images %}
             <a href="{{oss}}/{{ image.image }}"
               data-fslightbox="gallery"> 
-                <img class="classified-image" src="{{oss}}/{{ image.image }}" id="{{ image.id }}">
+                <img class="classified-image" src="{{oss}}/{{ image.image }}?x-oss-process=image/interlace,1" id="{{ image.id }}">
             </a>
          {% endfor %}
     </section>
