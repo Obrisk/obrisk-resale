@@ -215,7 +215,9 @@ Chat window styles
                     transition: all .3s;
 
                     &:focus {
-                        border-color: $fade-grey !important;
+                        box-shadow: none;
+                        outline: none;
+                        border-color: #dbdbdb;
                     }
                 }
 
