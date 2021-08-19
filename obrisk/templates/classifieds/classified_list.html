@@ -204,11 +204,11 @@
               <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link">
                 <div class="card-img-top img-responsive">
                   {% if classified.thumbnail %}
-                  <img decoding="async" loading="lazy" src="{{oss}}/{{ classified.thumbnail }}"
-                      width="154" height="154" class="card-img" alt="{{ classified.title }}">
+                      <img decoding="async" loading="lazy" src="{{oss}}/{{ classified.thumbnail }}"
+                          width="154" height="154" class="card-img" alt="{{ classified.title }}">
                   {% else %}
-                  <img decoding="async" loading="lazy" class="card-img" alt="no img loaded"
-                    width="154" height="154" src="{% static 'img/nophoto.jpg' %}" >
+                      <img decoding="async" loading="lazy" class="card-img" alt="no img loaded"
+                        width="154" height="154" src="{% static 'img/nophoto.jpg' %}" >
                   {% endif %}
                 </div>
 

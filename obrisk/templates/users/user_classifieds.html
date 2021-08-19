@@ -41,11 +41,11 @@
 
                 <div class="card-img-top img-responsive">
                   {% if classified.thumbnail %}
-                  <img class="card-img lazyload" src="{{oss}}/{{ classified.thumbnail }}"
-                    width="154px" height="154px">
+                      <img decoding="async" loading="lazy" src="{{oss}}/{{ classified.thumbnail }}"
+                          width="154" height="154" class="card-img" alt="{{ classified.title }}">
                   {% else %}
-                  <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
-                    width="154px" height="154px">
+                      <img decoding="async" loading="lazy" class="card-img" alt="no img loaded"
+                        width="154" height="154" src="{% static 'img/nophoto.jpg' %}" >
                   {% endif %}
                 </div>
 
@@ -139,9 +139,9 @@
 	      let t = typeof(cls.thumbnail); 
 
 	      if (t != "null" && t != "object" && cls.thumbnail != "" ) {
-	        img = `<img class="card-img lazyload" src="{{oss}}/${cls.thumbnail}" width="154px" height="154px">`;
+	        img = `<img class="card-img" src="{{oss}}/${cls.thumbnail}" width="154px" height="154px">`;
           }else {
-                img = "<img class='card-img lazyload' src='{% static 'img/nophoto.jpg' %}' width='154px' height='154px'>";
+                img = "<img class='card-img' src='{% static 'img/nophoto.jpg' %}' width='154px' height='154px'>";
           }
 
           if (cls.price == 0.00){
