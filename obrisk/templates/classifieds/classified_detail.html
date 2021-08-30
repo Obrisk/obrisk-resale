@@ -107,9 +107,9 @@
 
               <span class="location">
                 {% if classified.english_address  %}
-                   📍{{ classified.english_address }}, {{ classified.city }}
+                   {{ classified.english_address }}, {{ classified.city }}
                 {% else %}
-                   📍{{ classified.user.city }}
+                   {{ classified.user.city }}
                 {% endif %}
               </span>
           </div>
