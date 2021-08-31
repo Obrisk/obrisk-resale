@@ -155,8 +155,9 @@
       {% endif %}
       <p id="payError"> </p>
 
-    <div class="classified-details">{{ classified.details }}</div>
-
+    {% if classified.details %}
+        <div class="classified-details"> {{ classified.details }}</div>
+    {% endif %}
 
     <!-- Cloud Tag Widget -->
     {% if classified.tags.all %}
