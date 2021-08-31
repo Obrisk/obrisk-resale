@@ -134,10 +134,9 @@ class User(AbstractUser):
         return self.username
 
 
-
 class WechatUser(models.Model):
     name = models.CharField(
-            _("Full name"), blank=True, max_length=255
+            _("Wechat name"), blank=True, max_length=255
         )
     org_picture = models.CharField(
             max_length=150, null=True, blank=True
@@ -155,7 +154,6 @@ class WechatUser(models.Model):
     wechat_id = models.CharField (
             max_length=150, null=True, blank=True
         )
-
     wechat_openid = models.CharField(
             max_length=100,blank=True,
             null=True,verbose_name="wechat_openid",

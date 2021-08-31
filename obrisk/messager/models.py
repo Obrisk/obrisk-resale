@@ -10,6 +10,7 @@ from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
 
 from obrisk.classifieds.models import Classified
+from obrisk.users.models import WechatUser
 
 
 class ConversationQuerySet(models.query.QuerySet):
@@ -30,6 +31,7 @@ class ConversationQuerySet(models.query.QuerySet):
     def get_conv_classified(self, user1, user2):
         qs = self.filter(Q (first_user=user1, second_user=user2)) | self.filter(first_user=user2, second_user=user1)
         return qs.values_list('classified', flat=True)
+
 
 class Conversation(models.Model):
     """Conversation information btn 2 users is stored here."""
@@ -82,6 +84,7 @@ class MessageQuerySet(models.query.QuerySet):
             return True
         return False
 
+
 class Message(models.Model):
     """A private message sent between users."""
     uuid_id = models.UUIDField(
@@ -117,6 +120,7 @@ class Message(models.Model):
             max_length=300, blank=True, null=True
         )
     has_link = models.BooleanField(default=False)
+    wx_notified = models.BooleanField(default=False)
     objects = MessageQuerySet.as_manager()
 
     class Meta:
@@ -199,3 +203,51 @@ class Message(models.Model):
             }
         async_to_sync(channel_layer.group_send)(recipient.username, payload)
         return new_message
+
+
+class WechatMessage(models.Model):
+    """A private message sent by wechat user to our chat"""
+
+    TEXT = "T"
+    PICTURE = "P"
+    AUDIO = "A"
+    VIDEO = "V"
+    GEOLOCATION = "G"
+    LINK = "L"
+    SHORT_VID = "S"
+    DOCUMENT = "D"
+
+    FORMATS = (
+        (TEXT, _("Text")),
+        (PICTURE, _("Picture")),
+        (AUDIO, _("Audio")),
+        (VIDEO, _("Video")),
+        (GEOLOCATION, _("Geolocation")),
+        (LINK, _("Link")),
+        (SHORT_VID, _("Short_video")),
+        (DOCUMENT, _("Documents")),
+    )
+
+    uuid_id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey(
+        WechatUser, related_name='sent_wx_msgs',
+        verbose_name=_("Sender"), null=True, on_delete=models.CASCADE
+    )
+    timestamp = models.DateTimeField(auto_now_add=True)
+    message = models.TextField(max_length=10000, blank=True, null=True)
+    type = models.CharField(max_length=1, choices=FORMATS, default=TEXT)
+    media = models.CharField(
+            max_length=500, blank=True, null=True
+        )
+
+    class Meta:
+        verbose_name = _("WechatMessage")
+        verbose_name_plural = _("WechatMessages")
+        ordering = ("timestamp", )
+
+    def __str__(self):
+        if self.message:
+            return self.message
+        else:
+            return "Attachment"

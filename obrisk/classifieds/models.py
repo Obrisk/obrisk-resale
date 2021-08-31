@@ -12,8 +12,9 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 from slugify import slugify
 from taggit.managers import TaggableManager
 from taggit.models import TagBase, GenericTaggedItemBase
-
 from phonenumber_field.modelfields import PhoneNumberField
+
+from obrisk.users.models import WechatUser
 
 
 class ClassifiedTags(TagBase):
@@ -87,7 +88,7 @@ class Classified(models.Model):
             blank=True, unique=True, editable=False
         )
     status = models.CharField(max_length=1, choices=STATUS, default=ACTIVE)
-    details = models.CharField(max_length=2000, null=True, blank=True)
+    details = models.TextField(null=True, blank=True)
     price = models.DecimalField(
             blank=True, null=True,
             max_digits=15, decimal_places=2, default=0.00
@@ -101,6 +102,7 @@ class Classified(models.Model):
     country = models.CharField(max_length= 100, null=True, blank=True)
     thumbnail = models.CharField (max_length=300, null=True, blank=True)
     video = models.CharField (max_length=300, null=True, blank=True)
+    gif = models.CharField (max_length=300, null=True, blank=True)
     edited = models.BooleanField(default=False)
     show_phone = models.BooleanField(default=True)
     tags = TaggableManager(through=TaggedClassifieds, blank=True)
@@ -160,11 +162,64 @@ class Classified(models.Model):
         super().save(*args, **kwargs)
 
 
+class WxClassified(models.Model):
+    user = models.ForeignKey(
+        WechatUser, null=True, related_name="creater",
+        on_delete=models.CASCADE)
+    title = models.CharField(max_length=80)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    slug = models.SlugField(
+            max_length=300, null=True,
+            blank=True, unique=True, editable=False
+        )
+    details = models.CharField(max_length=2000, null=True, blank=True)
+    price = models.DecimalField(
+            blank=True, null=True,
+            max_digits=15, decimal_places=2, default=0.00
+        )
+    thumbnail = models.CharField (max_length=300, null=True, blank=True)
+    video = models.CharField (max_length=300, null=True, blank=True)
+    date = models.DateField(default=datetime.date.today)
+
+
+    class Meta:
+        ordering = ("-timestamp",)
+        verbose_name = _("WxClassified")
+        verbose_name_plural = _("WxClassifieds")
+
+    def __str__(self):
+        return self.title
+
+    def get_absolute_url(self):
+        return reverse('classifieds:classified', args=[self.slug])
+
+    def save(self, *args, **kwargs):
+
+        if not self.slug:
+            self.slug = first_slug = slugify(f"{self.user.wechat_openid}-{self.title}",
+                                to_lower=True, max_length=300)
+
+            for x in itertools.count(1):
+                if not WxClassified.objects.filter(slug=self.slug).exists():
+                    break
+                self.slug = '%s-%d' % (first_slug, x)
+        super().save(*args, **kwargs)
+
+
 class ClassifiedImages(models.Model):
     classified = models.ForeignKey(
             Classified,
             on_delete=models.CASCADE,
-            related_name='images'
+            related_name='images',
+            null=True,
+            blank=True
+        )
+    wx_classified = models.ForeignKey(
+            WxClassified,
+            on_delete=models.CASCADE,
+            related_name='images',
+            null=True,
+            blank=True
         )
     image = models.CharField(max_length=300)
     image_mid_size = models.CharField(max_length=300)
