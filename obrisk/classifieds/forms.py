@@ -1,6 +1,9 @@
 from django import forms
 from dal import autocomplete
-from obrisk.classifieds.models import Classified, OfficialAd, ClassifiedOrder
+from obrisk.classifieds.models import (
+    Classified, OfficialAd,
+    ClassifiedOrder, ClassifiedImages
+)
 from phonenumber_field.formfields import PhoneNumberField
 
 
@@ -97,6 +100,17 @@ class AdminClassifiedForm(forms.ModelForm):
         fields = ["user", "title", "details", "status", "edited","tags",
                  "price", "english_address", "phone_number"]
 
+
+class AdminClassifiedImgForm(forms.ModelForm):
+    images = forms.CharField(
+            max_length=1500, required=False
+        )
+    content_type = forms.CharField(
+            max_length=1000, required=False
+        )
+    class Meta:
+        model = ClassifiedImages
+        fields = ["classified"]
 
 
 class ClassifiedOrderForm(forms.ModelForm):

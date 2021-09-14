@@ -8,6 +8,7 @@ import ast
 import decimal
 
 from django.contrib import messages
+from django.conf import settings
 from django.contrib.auth.mixins import (
         LoginRequiredMixin
     )
@@ -54,7 +55,7 @@ from obrisk.classifieds.models import (
         ClassifiedImages, ClassifiedTags)
 from obrisk.classifieds.forms import (
         ClassifiedForm, AdminClassifiedForm, OfficialAdForm,
-        ClassifiedEditForm)
+        ClassifiedEditForm, AdminClassifiedImgForm)
 from obrisk.utils.images_upload import multipleImagesPersist
 from obrisk.classifieds.tasks import add_tags
 from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
@@ -760,3 +761,43 @@ class ClassifiedOrderView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+@login_required
+def adminAttachImage(request, *args, **kwargs):
+
+    if not request.user.is_superuser:
+        return HttpResponse(
+                "Hey, You are not authorized!",
+                content_type='text/plain')
+
+    if request.method == 'GET':
+        return render(
+                request,
+                'classifieds/admin_img_attach.html',
+                {'form':AdminClassifiedImgForm(
+                    initial={
+                        'images': request.GET.get('ids')
+                    }
+                )}
+            )
+
+    if request.method == 'POST':
+        form = AdminClassifiedImgForm(request.POST)
+        data=None
+
+        if form.is_valid():
+            img_ids = form.cleaned_data['images']
+            classified = form.cleaned_data['classified']
+
+            classified.status = "A"
+            classified.save()
+
+            for pk in img_ids.split(','):
+                obj = ClassifiedImages.objects.get(pk=pk)
+                obj.classified = classified
+                obj.save()
+
+    return redirect(
+        ''.join(['/', settings.ADMIN_URL.strip('^'), 'classifieds/classifiedimages/'])
+    )
