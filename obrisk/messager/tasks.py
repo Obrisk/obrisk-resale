@@ -11,6 +11,7 @@ from celery import shared_task
 from obrisk.notifications.models import Notification, notification_handler
 from obrisk.users.phone_verification import send_sms
 from obrisk.messager.models import Conversation, Message
+from obrisk.messager.send_wxtemplate import unread_msgs_wxtemplate
 
 try:
     from django.contrib.auth import get_user_model
@@ -92,24 +93,32 @@ def messages_list_cleanup(conv_key, user_pk, last_receiver_pk):
             ).messages.all().update(unread=False)
 
 
-def check_unread_msgs():
-    older = Now() - timedelta(seconds=120)
-
-    for msg in Message.objects.filter(timestamp__lt=older, unread=True):
-        if msg.recipient.wechat_openid is None:
-            continue
-
-        if cache.get(f'wxtemplate_notif_{msg.recipient.wechat_openid}') is None:
-            #Never push again in the next 6 hours
-            cache.set(
-                f'wxtemplate_notif_{msg.recipient.wechat_openid}',
-                1,
-                timeout=21600
-            )
-        else:
-            continue
-
-
 @shared_task
 def send_wxtemplate_notif():
-    pass
+    older = Now() - timedelta(seconds=3600)
+
+    notify = {}
+    msgs = Message.objects.select_related().filter(
+        timestamp__lt=older, unread=True, wx_notified=False
+    )
+
+    for msg in msgs:
+        wxid = msg.recipient.wechat_openid
+        if wxid is None:
+            continue
+        try:
+            notify[wxid] = notify[wxid].append(msg)
+        except KeyError:
+            notify[wxid] = [msg]
+        msg.wx_notified = True
+        msg.save()
+
+    for user in notify:
+        last_msg = notify[user][-1].message[:127]
+        senders = len(notify[user])
+        if senders > 1:
+            sender = f'{notify[user][0].sender.username} and {senders} Others'
+        else:
+            sender = f'{notify[user][0].sender.username}'
+        time =  'Several minutes ago'
+        unread_msgs_wxtemplate(user, last_msg, sender, time)

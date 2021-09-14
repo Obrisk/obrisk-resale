@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 from obrisk.users.models import User, WechatUser
+from obrisk.messager.send_wxtemplate import upload_success_wxtemplate
 
 
 class MyUserChangeForm(CustomUserChangeForm):
@@ -31,6 +32,13 @@ class MyUserCreationForm(CustomUserCreationForm):
         raise forms.ValidationError(self.error_messages['duplicate_username'])
 
 
+def send_upload_success(modeladmin, request, queryset):
+    for user in queryset:
+        upload_success_wxtemplate(user)
+
+
+send_upload_success.short_description = 'Send upload success'
+
 @admin.register(User)
 class MyUserAdmin(AuthUserAdmin):
     ordering = ('-date_joined', )
@@ -50,6 +58,7 @@ class MyUserAdmin(AuthUserAdmin):
     list_display = ('username', 'last_login', 'date_joined',
         'city', 'province_region', 'thumbnail', 'points')
     search_fields = ['username', 'phone_number', 'email', 'city']
+    actions = [send_upload_success,]
     #readonly_fields = ('phone_number',)
 
 

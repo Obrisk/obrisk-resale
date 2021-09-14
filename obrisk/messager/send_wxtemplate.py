@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
 
-from urllib.request import urlopen
 import json
 import logging
 import requests
+from urllib.request import urlopen
+from django.db.models import Count
+
 from obrisk.utils.wx_config import get_access_token
+from obrisk.classifieds.models import Classified
+
 
 
 request_url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" #noqa
@@ -68,7 +72,7 @@ def unread_msgs_wxtemplate(userid, last_msg, sender, time):
     url = "https://obrisk.com/ws/messages/?dd=" + userid
 
     color = "#173177"
-    title = "Hi you have received new messages, Open the app to view them"
+    title = "Hi you have received new messages, Click this link to view"
     tail = "Thank you for using Obrisk"
 
     data={
@@ -86,3 +90,44 @@ def unread_msgs_wxtemplate(userid, last_msg, sender, time):
         }
 
     wx_push.do_push(userid,template_id,url,color,data)
+
+
+def upload_success_wxtemplate(user):
+    wx_push = WechatPush()
+    template_id = "fKuBPeGyH5rSF3wd_ECrM_dg2IiC-tDaGVJN_HKnrFo"
+
+    classified = Classified.objects.filter(
+        user=user, status="A",
+        timestamp__lt=Now() - timedelta(seconds=600)
+    )
+    if classified.count() > 1:
+        url = f"https://obrisk.com/users/i/{user.username}/"
+        title = f'{classified.count()} Items are listed'
+    elif classified.count() == 1:
+        url = "https://obrisk.com/classifieds/{classified.slug}/"
+        title = classified.first().title
+    else:
+        return
+
+    color = "#173177"
+    title = "Hi your items have been uploaded. Click this link to view "
+    tail = "Thank you for using Obrisk"
+
+    data={
+            "first": {"value":title},
+            "keyword1":{
+                "value":title,"color":color
+            },
+            "keyword2":{
+                "value":'Two minutes ago',"color":color
+            },
+            "keyword3":{
+                "value":user.username,"color":color
+            },
+            "keyword3":{
+                "value":'Active',"color":color
+            },
+            "remark": {"value":tail}
+        }
+
+    wx_push.do_push(user.wechat_openid,template_id,url,color,data)

@@ -28,14 +28,12 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.messager.tasks import (
-        send_messages_notifications, messages_list_cleanup,
-        check_unread_msgs
+        send_messages_notifications, messages_list_cleanup
     )
 from obrisk.notifications.models import (
         Notification, notification_handler
     )
 from obrisk.users.phone_verification import send_sms
-from obrisk.messager.send_wxtemplate import unread_msgs_wxtemplate
 import uuid
 import ast
 import os
@@ -388,31 +386,3 @@ def make_classifieds_as_messages(request):
                     classified_thumbnail=str(classified_thumbnail)
                 )
     return HttpResponse("Done!")
-
-
-
-@require_http_methods(["GET"])
-def test_unread_messages(request):
-    check_unread_msgs()
-    return HttpResponse("Huuuuuraaaay!")
-
-
-@login_required
-def test_send_wxtemplate(request, user, last_msg, sender, time):
-
-    if not request.user.is_superuser:
-        return HttpResponse(
-                "Hey, You are not authorized!",
-                content_type='text/plain')
-
-    if user == None:
-        return HttpResponse("Invalid!")
-    user = user_model.objects.get(username=user)
-    userid = user.wechat_openid
-    if userid == None:
-        return HttpResponse("This user has no Wechat userid yet")
-    time = time.replace('-', ' ')
-    last_msg = last_msg.replace('-', ' ')
-    sender = sender.replace('-', ' ')
-    unread_msgs_wxtemplate(userid, last_msg, sender, time)
-    return HttpResponse("Huuuuuraaaay!")

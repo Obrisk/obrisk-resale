@@ -443,16 +443,16 @@ CELERY_BROKER_URL = 'redis://localhost:6379'
 CELERY_TIMEZONE = "Asia/Shanghai"
 # Let's make things happen
 CELERY_BEAT_SCHEDULE = {
-    "classified-tags-update-24-hours": {
+    "classified-tags-update-6-hours": {
         "task": "obrisk.classifieds.tasks.update_classified_tags",
-        # Every 24 hours
-        "schedule": 86400.0,
+        # Every 6 hours
+        "schedule": 21600.0,
         # If you're using any arguments
     },
-    "wxtemplate-msg-notif-6-hours": {
+    "wxtemplate-msg-notif-1-hour": {
         "task": "obrisk.messager.tasks.send_wxtemplate_notif",
-        # Every 15 mins = 900
-        "schedule": 900.0,
+        # Every 1 hour = 3600
+        "schedule": 3600,
         # If you're using any arguments
     }
 }
