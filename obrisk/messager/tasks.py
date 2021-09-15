@@ -107,9 +107,13 @@ def send_wxtemplate_notif():
         if wxid is None:
             continue
         try:
-            notify[wxid] = notify[wxid].append(msg)
+            if notify[wxid] is None:
+                notify[wxid] = [msg]
+            else:
+                notify[wxid] = notify[wxid].append(msg)
         except KeyError:
             notify[wxid] = [msg]
+
         msg.wx_notified = True
         msg.save()
 
