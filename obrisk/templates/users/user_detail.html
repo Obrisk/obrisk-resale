@@ -41,13 +41,13 @@
 
         <div class="is-flex">
         {% if request.user.is_authenticated %}
-          {% if request.user.username == object.username %}
+          {% if request.user == object %}
                 <a class="button accent-button" href="{% url 'users:update' %}">{% trans 'Update Profile' %}</a>
 
           {% else %}
                 {% if object in friends %}
                     <a class="button accent-button"
-                      url="{% url 'messager:conversation_detail' classified.user %}">{% trans '💬Chat' %}</a>
+                      url="{% url 'messager:conversation_detail' object.username %}">{% trans '💬Chat' %}</a>
                 {% elif object in pending %}
                     <a class="button accent-button" href="#">{% trans '✨ Pending' %}</a>
                 {% elif object in pended%}

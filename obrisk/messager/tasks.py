@@ -117,12 +117,12 @@ def send_wxtemplate_notif():
         msg.wx_notified = True
         msg.save()
 
-    for user in notify:
-        last_msg = notify[user][-1].message[:127]
-        senders = len(notify[user])
+    for userid in notify:
+        last_msg = notify[userid][-1].message[:127]
+        senders = len(notify[userid])
         if senders > 1:
-            sender = f'{notify[user][0].sender.username} and {senders} Others'
+            sender = f'{notify[userid][0].sender.username} and {senders} Others'
         else:
-            sender = f'{notify[user][0].sender.username}'
+            sender = f'{notify[userid][0].sender.username}'
         time =  'Several minutes ago'
-        unread_msgs_wxtemplate(user, last_msg, sender, time)
+        unread_msgs_wxtemplate(userid, last_msg, sender, time)
