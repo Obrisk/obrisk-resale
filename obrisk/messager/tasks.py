@@ -118,11 +118,18 @@ def send_wxtemplate_notif():
         msg.save()
 
     for userid in notify:
-        last_msg = notify[userid][-1].message[:127]
+        if notify[userid] is None:
+            continue
+
+        if notify[userid][-1].message:
+            last_msg = notify[userid][-1].message[:127]
+        else:
+            last_msg = 'Msg contains attachment'
+
         senders = len(notify[userid])
         if senders > 1:
             sender = f'{notify[userid][0].sender.username} and {senders} Others'
         else:
             sender = f'{notify[userid][0].sender.username}'
-        time =  'Several minutes ago'
+        time =  'Many hours ago'
         unread_msgs_wxtemplate(userid, last_msg, sender, time)
