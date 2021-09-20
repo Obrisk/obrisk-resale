@@ -1,7 +1,8 @@
 from django.contrib import admin
-from obrisk.messager.models import Message, Conversation
+from obrisk.messager.models import Message, WechatMessage, Conversation
 
 admin.site.register(Conversation)
+admin.site.register(WechatMessage)
 
 @admin.register(Message)
 class MessageAdmin(admin.ModelAdmin):
