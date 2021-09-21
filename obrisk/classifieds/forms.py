@@ -4,6 +4,7 @@ from obrisk.classifieds.models import (
     Classified, OfficialAd,
     ClassifiedOrder, ClassifiedImages
 )
+from obrisk.users.models import User
 from phonenumber_field.formfields import PhoneNumberField
 
 
@@ -11,7 +12,7 @@ class ClassifiedForm(forms.ModelForm):
     details = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4}),
         required=False,
-        label=("details (Optional)")
+        label=("Details (Optional)")
     )
     price = forms.DecimalField(
             required=False
@@ -55,10 +56,14 @@ class ClassifiedForm(forms.ModelForm):
 
 
 class AdminClassifiedForm(forms.ModelForm):
+    user=forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=autocomplete.ModelSelect2(url='classifieds:username-autocomplete')
+    )
     details = forms.CharField(
         widget=forms.Textarea(attrs={"rows": 4}),
         required=False,
-        label=("details (Optional)")
+        label=("Detail")
     )
     price = forms.DecimalField(
             required=False
@@ -83,11 +88,11 @@ class AdminClassifiedForm(forms.ModelForm):
         )
 
     english_address = forms.CharField(
-            required=False, label=("Address (English)")
+            required=False, label=("Addr")
         )
 
     phone_number = PhoneNumberField(required=False,
-            label=("Phone number(optional)"),
+            label=("Phone"),
             widget=forms.TextInput(
                 attrs={
                     'placeholder': ('Don\'t enter country code')

@@ -56,6 +56,10 @@ urlpatterns = [
         initiate_wxpy_info,
         name='initiate_wxpy_info'),
     url(
+        r'^username-autocomplete/$',
+        UsernameAutocomplete.as_view(),
+        name='username-autocomplete'),
+    url(
         r'^orders/wsguatpotlfwccdi/wxjs-success/$',
         wxpyjs_success,
         name='wxpyjs_success'),
