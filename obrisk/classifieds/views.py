@@ -491,13 +491,16 @@ def adminAttachImage(request, *args, **kwargs):
             img_ids = form.cleaned_data['images']
             classified = form.cleaned_data['classified']
 
-            classified.status = "A"
-            classified.save()
-
+            thumb = None
             for pk in img_ids.split(','):
                 obj = ClassifiedImages.objects.get(pk=pk)
                 obj.classified = classified
                 obj.save()
+                thumb = obj.image_thumb
+
+            classified.thumbnail = thumb
+            classified.status = "A"
+            classified.save()
 
     return redirect(
         ''.join(
