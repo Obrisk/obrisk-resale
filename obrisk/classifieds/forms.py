@@ -87,23 +87,15 @@ class AdminClassifiedForm(forms.ModelForm):
             max_length=500, required=False
         )
 
-    english_address = forms.CharField(
-            required=False, label=("Addr")
-        )
+    tags= forms.CharField(
+        widget=autocomplete.TaggitSelect2(url='classifieds:tags_autocomplete')
+    )
 
-    phone_number = PhoneNumberField(required=False,
-            label=("Phone"),
-            widget=forms.TextInput(
-                attrs={
-                    'placeholder': ('Don\'t enter country code')
-                }
-            )
-        )
 
     class Meta:
         model = Classified
-        fields = ["user", "title", "details", "status", "edited","tags",
-                 "price", "english_address", "phone_number"]
+        fields = ["user", "title", "details", "status", "edited",
+                 "price"]
 
 
 class AdminClassifiedImgForm(forms.ModelForm):
