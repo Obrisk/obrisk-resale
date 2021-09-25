@@ -4,8 +4,10 @@
 import json
 import logging
 import requests
+from datetime import timedelta
 from urllib.request import urlopen
 from django.db.models import Count
+from django.db.models.functions import Now
 
 from obrisk.utils.wx_config import get_access_token
 from obrisk.classifieds.models import Classified
@@ -96,36 +98,38 @@ def upload_success_wxtemplate(user):
     wx_push = WechatPush()
     template_id = "fKuBPeGyH5rSF3wd_ECrM_dg2IiC-tDaGVJN_HKnrFo"
 
-    classified = Classified.objects.filter(
+    #Get items uploaded 10 minutes ago by this user
+    classifieds = Classified.objects.filter(
         user=user, status="A",
         timestamp__lt=Now() - timedelta(seconds=600)
     )
-    if classified.count() > 1:
+    if classifieds.count() > 1:
         url = f"https://obrisk.com/users/i/{user.username}/"
-        title = f'{classified.count()} Items are listed'
-    elif classified.count() == 1:
-        url = "https://obrisk.com/classifieds/{classified.slug}/"
-        title = classified.first().title
+        title = f'Uploaded {classifieds.count()} items'
+    elif classifieds.count() == 1:
+        url = "https://obrisk.com/classifieds/{classifieds.first().slug}/"
+        title = classifieds.first().title
     else:
-        return
+        return None
 
     color = "#173177"
-    title = "Hi your items have been uploaded. Click this link to view "
+    title = f"Hi {user.username}, all eyes on your stuff selling🤗"
     tail = "Thank you for using Obrisk"
 
+    #Two minutes ago
     data={
             "first": {"value":title},
             "keyword1":{
                 "value":title,"color":color
             },
             "keyword2":{
-                "value":'Two minutes ago',"color":color
+                "value":'Several hours ago', "color":color
             },
             "keyword3":{
-                "value":user.username,"color":color
+                "value":user.city, "color":color
             },
-            "keyword3":{
-                "value":'Active',"color":color
+            "keyword4":{
+                "value":'Active', "color":color
             },
             "remark": {"value":tail}
         }
