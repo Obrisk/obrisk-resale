@@ -20,7 +20,7 @@ body {
   // background-color: #fff;
   //background-image: linear-gradient(120deg, #3ec4e2 0%, #fdfbfb 100%);
   background-image: linear-gradient(180deg, #6ed4f2 10%, #fdfbfb 90%);
-  min-height: 200px;
+  min-height: 225px;
 }
 
 .profile-head {
@@ -63,7 +63,8 @@ body {
 
 .main-title {
   position: absolute;
-  top: 60px;
+  top: 65px;
+  text-align: center;
 }
 
 .title.is-4 {
@@ -139,7 +140,7 @@ body {
 .classifieds-list-wrapper {
     padding-top: 0rem;
     margin-bottom: 4em;
-    margin-top: 13em;
+    margin-top: 14em;
 }
 
 .card-meta {
