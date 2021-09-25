@@ -8,13 +8,24 @@ body {
   overflow: hidden;
 }
 
-.profile-header{
-    margin: 4em 0 auto;
+.cls-back-btn {
+   margin-top: 2px;
+   margin-left: 1em;
+   position: fixed;
+   left: 0;
+   z-index: 5;
 }
 
 .lazy-img {
     text-align: center;
     font-size: 10px;
+}
+
+.address {
+    opacity: 0.6;
+    text-transform: capitalize;
+    transform: translateY(-15px);
+    text-align: center;
 }
 
 .media-body {
@@ -38,6 +49,12 @@ body {
   border-radius: 10px;
   box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
   padding: 1em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background-color: #fff;
 }
 
 .profile-wrapper {
@@ -69,10 +86,12 @@ body {
 }
 
 .card-title {
-  height: 53px;
-  width: auto;
-  white-space: pre-wrap;
-  overflow: hidden;
+    width: auto;
+    overflow: hidden;
+    height: 2em;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: .8em;
 }
 
 .card-subtitle {
@@ -96,6 +115,7 @@ body {
 .classifieds-list-wrapper {
     padding-top: 0rem;
     margin-bottom: 4em;
+    margin-top: 15em;
 }
 
 .card-meta {

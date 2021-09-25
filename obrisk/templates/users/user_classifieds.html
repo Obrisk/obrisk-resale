@@ -11,6 +11,17 @@
 {% block content %}
 
   <div class="profile-header">
+
+  {% if request.META.HTTP_REFERER %}
+    <a  href="javascript:history.back()" class="cls-back-btn">
+       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path d="M10.828 12l4.95 4.95-1.414 1.414L8 12l6.364-6.364 1.414 1.414z" />
+       </svg>
+    </a>
+  {% endif  %}
+
+
     {% if user.picture %}
         <img src="{{oss}}/{{user.picture}}" alt="Pic"
           class="profile-header-avatar" id="pic">
@@ -21,12 +32,9 @@
     <h1 class="title is-4">{{ user.username|title }}</h1>
 
     {% if user.english_address  %}
-        <small>📍{{ user.english_address }}, {{ user.city }} </small>
+        <p class="address">{{ user.english_address }}, {{ user.city }} </p>
     {% else %}
-        <p> 📍{{ user.city }} </p>
-    {% endif %}
-    {% if user.notes %}
-        <small style="text-align: center; margin-top:6px;"> {{ user.notes|title }} </small>
+        <p class="address"> {{ user.city }} </p>
     {% endif %}
   </div>
 
@@ -48,8 +56,6 @@
                   {% endif %}
                 </div>
 
-                <div class="divider"></div>
-
                 <div class="card-body">
                   <h6 class="card-title"> {{ classified.title}} </h6>
 
@@ -60,8 +66,6 @@
                   {% else %}
                       <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
                   {% endif %}
-
-                <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
                 </div>
 
               </a>
@@ -159,13 +163,9 @@
                 <div class="card-img-top img-responsive">
                     ${img}
                 </div>
-                <div class="divider"></div>
                 <div class="card-body">
                   <h6 class="card-title"> ${cls.title} </h6>
                    ${price}
-
-                <span class="card-text small "><small>📍</small> ${ cls.city}</span>
-
                 </div>
               </a>
             </div>
