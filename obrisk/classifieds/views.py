@@ -376,6 +376,7 @@ def adminCreateClassified(request, *args, **kwargs):
         return HttpResponse(
                 "Hey, You are not authorized!",
                 content_type='text/plain')
+
     if request.method == 'GET':
 
         #form = AdminClassifiedForm()
@@ -416,16 +417,19 @@ def adminCreateClassified(request, *args, **kwargs):
             if not classified.chinese_address and user.chinese_address:
                 classified.chinese_address = user.chinese_address
 
+
             classified.save()
-            for tag in form.cleaned_data['tags']:
+            for tag in form.cleaned_data['tags'].split(','):
                 classified.tags.add(tag)
-            classified.save()
 
             if images_json != '':
                 images_list = images_json.split(",")
                 multipleImagesPersist(
                     request, images_list, 'classifieds', classified)
+            else:
+                classified.status="E"
 
+            classified.save()
             messages.success(
                 request,
                 'Your item is ready to go✌️'
