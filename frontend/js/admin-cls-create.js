@@ -90,41 +90,34 @@ document.addEventListener('DOMContentLoaded', function() {
 
   document.getElementById("create-btn").addEventListener('click', function(event) {
 
-      if (uploader.fileStats.totalFilesNum < 1 ||
-            document.getElementById('id_title').value.length < 2 ) {
+      if (document.getElementById('id_title').value.length < 2 ) {
               printError(
-                "Please provide the title & at least 1 image"
+                "Please provide the title"
               );
         } else {
-              if (images != "" && $("#id_images").val() == images) {
-                    $("body").trigger("uploadComplete");
-              } else {
-                  try {
-                    const phn = document.getElementById("id_phone_number");
-                    if (phn !== null) {
-                       if (phn.value !== '') {
-                            if (phn.value.startsWith('+86') == false) {
-                                if (phn.value.length === 11 ) {
-                                    phn.value ="+86" + phn.value;
-                                } else {
-                                      printError(
-                                        "The phone number is incorrect, Please verify"
-                                      );
-                                }
+              $("body").trigger("uploadComplete");
+
+              try {
+                const phn = document.getElementById("id_phone_number");
+                if (phn !== null) {
+                   if (phn.value !== '') {
+                        if (phn.value.startsWith('+86') == false) {
+                            if (phn.value.length === 11 ) {
+                                phn.value ="+86" + phn.value;
+                            } else {
+                                  printError(
+                                    "The phone number is incorrect, Please verify"
+                                  );
                             }
                         }
-                     } 
-                  } catch (error) {
-                    console.error(error);
-                  }
+                    }
+                 } 
+              } catch (error) {
+                console.error(error);
+              }
 
-                  localStorage.removeItem('new-classified');
-                  $("body").trigger("submitClicked");
-            }
+              localStorage.removeItem('new-classified');
+              $("body").trigger("submitClicked");
         }
-  });
-
-  document.getElementById('cancel-classified').addEventListener('click', function () {
-      localStorage.removeItem('new-classified');
   });
 });

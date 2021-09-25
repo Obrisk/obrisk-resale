@@ -372,10 +372,11 @@ class CreateClassifiedView(CreateView):
 @login_required
 def adminCreateClassified(request, *args, **kwargs):
 
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not request.user.is_staff:
         return HttpResponse(
                 "Hey, You are not authorized!",
                 content_type='text/plain')
+
     if request.method == 'GET':
 
         #form = AdminClassifiedForm()
@@ -416,27 +417,30 @@ def adminCreateClassified(request, *args, **kwargs):
             if not classified.chinese_address and user.chinese_address:
                 classified.chinese_address = user.chinese_address
 
+
             classified.save()
-            for tag in form.cleaned_data['tags']:
+            for tag in form.cleaned_data['tags'].split(','):
                 classified.tags.add(tag)
+
+            if images_json != '':
+                images_list = images_json.split(",")
+                multipleImagesPersist(
+                    request, images_list, 'classifieds', classified)
+            else:
+                classified.status="E"
+
             classified.save()
-
-
-            images_list = images_json.split(",")
-            if multipleImagesPersist(
-                    request, images_list,
-                    'classifieds', classified):
-                messages.success(
-                    request,
-                    'Your item is ready to go✌️'
+            messages.success(
+                request,
+                'Your item is ready to go✌️'
+            )
+            data = {
+                'status': '200',
+                'success_message': _(
+                    'Your item is ready to go✌️ '
                 )
-                data = {
-                    'status': '200',
-                    'success_message': _(
-                        'Your item is ready to go✌️ '
-                    )
-                }
-                return JsonResponse(data)
+            }
+            return JsonResponse(data)
 
         if form.errors:
             error_msg = re.sub('<[^<]+?>', ' ', str(form.errors))
@@ -458,6 +462,62 @@ def adminCreateClassified(request, *args, **kwargs):
         return HttpResponse(
                 "Hey, You are not authorized!",
                 content_type='text/plain')
+
+
+@login_required
+def adminAttachImage(request, *args, **kwargs):
+
+    if not request.user.is_superuser:
+        return HttpResponse(
+                "Hey, You are not authorized!",
+                content_type='text/plain')
+
+    if request.method == 'GET':
+        return render(
+                request,
+                'classifieds/admin_img_attach.html',
+                {'form':AdminClassifiedImgForm(
+                    initial={
+                        'images': request.GET.get('ids')
+                    }
+                )}
+            )
+
+    if request.method == 'POST':
+        form = AdminClassifiedImgForm(request.POST)
+        data=None
+
+        if form.is_valid():
+            img_ids = form.cleaned_data['images']
+            classified = form.cleaned_data['classified']
+
+            thumb = None
+            for pk in img_ids.split(','):
+                obj = ClassifiedImages.objects.get(pk=pk)
+                obj.classified = classified
+                obj.save()
+                thumb = obj.image_thumb
+
+            classified.thumbnail = thumb
+            classified.status = "A"
+            classified.save()
+
+    return redirect(
+        ''.join(
+            ['/', settings.ADMIN_URL.strip('^'),
+            'classifieds/classifiedimages/']
+        )
+    )
+
+
+class UsernameAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = user_model.objects.all()
+
+        if self.q:
+            qs = qs.filter(username__icontains=self.q)
+
+        return qs
 
 
 class ClassifiedTagsAutoComplete(autocomplete.Select2QuerySetView):
@@ -761,43 +821,3 @@ class ClassifiedOrderView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
-
-
-@login_required
-def adminAttachImage(request, *args, **kwargs):
-
-    if not request.user.is_superuser:
-        return HttpResponse(
-                "Hey, You are not authorized!",
-                content_type='text/plain')
-
-    if request.method == 'GET':
-        return render(
-                request,
-                'classifieds/admin_img_attach.html',
-                {'form':AdminClassifiedImgForm(
-                    initial={
-                        'images': request.GET.get('ids')
-                    }
-                )}
-            )
-
-    if request.method == 'POST':
-        form = AdminClassifiedImgForm(request.POST)
-        data=None
-
-        if form.is_valid():
-            img_ids = form.cleaned_data['images']
-            classified = form.cleaned_data['classified']
-
-            classified.status = "A"
-            classified.save()
-
-            for pk in img_ids.split(','):
-                obj = ClassifiedImages.objects.get(pk=pk)
-                obj.classified = classified
-                obj.save()
-
-    return redirect(
-        ''.join(['/', settings.ADMIN_URL.strip('^'), 'classifieds/classifiedimages/'])
-    )

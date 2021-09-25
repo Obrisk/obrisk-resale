@@ -3,10 +3,12 @@
 {% load crispy_forms_tags %}
 
 {% block head %}
-<link href="{% static 'css/classified-create.css' %}" rel="stylesheet"/>
+<link href="{% static 'css/admin-classified-create.css' %}" rel="stylesheet"/>
+<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 {% endblock head %}
 
 {% block content %}
+    <h1 class="title is-5"> CREATE ITEM FOR A USER </h1> 
     <form action="{% url 'classifieds:admin_new_classified' %}" name="classifiedForm" enctype="multipart/form-data"
           id="classified-form" method="post" role="form">
           {% csrf_token %}
@@ -50,17 +52,8 @@
                                 </div>
                         </div>
 
-                        <div class="img-pick-wrapper">
-                          <div id="uploaderPick">
-                            <a id="chooseFile" href="javascript:void(0);" class="button is-solid accent-button">
-                                {% trans 'Add images' %}
-                            </a>
-                          </div>
-                        </div>
-
                 <!--close wrapper id -->
                 </div> <br/>
-
 
                 <div class="bs-docs-container">
                   <form id="form">
@@ -70,20 +63,14 @@
                 </div>
 
                 <div class="buttons img-pick-wrapper">
-                  <button id="cancel-classified" type="button" class="button is-solid opt-accent-button raised"
-                    onclick="javascript:history.back()"> 
-                    {% trans 'Cancel' %}
-                  </button>
+                  <div id="uploaderPick">
+                    <a id="chooseFile" href="javascript:void(0);" class="button is-solid accent-button">
+                        {% trans 'Add Images' %}
+                    </a>
+                  </div>
 
-                  {% if request.user.is_authenticated %}
-                      <button id="create-btn" type="button"
-                        class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
-                  {% else %}
-                      <button id="create-btn" type="button"
-                        class="login-to-post button is-solid accent-button raised"> 
-                          {% trans 'Login' %}
-                     </button>
-                  {% endif %}
+                  <button id="create-btn" type="button"
+                    class="button is-solid accent-button raised create submit-button">{% trans 'Submit Item' %}</button>
                </div>
      <!-- close form column -->
      </div>
@@ -136,7 +123,6 @@
 </script>
 
 <link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
-<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/vendor/aliyun-oss.min.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 <script defer src="{% static 'js/vendor/transliteration.min.js' %}" type="text/javascript"></script>
