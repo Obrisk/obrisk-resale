@@ -8,6 +8,24 @@ body {
   overflow: hidden;
 }
 
+.profile-header {
+  border-radius: 10px;
+  box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
+  padding: 1em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background-color: #fff;
+  min-height: 200px;
+  background-size: 100% 120px;
+}
+
+.profile-head {
+  height: 70px;
+}
+
 .cls-back-btn {
    margin-top: 2px;
    margin-left: 1em;
@@ -16,9 +34,30 @@ body {
    z-index: 5;
 }
 
+.main-top {
+  position: relative;
+  background-color: whitesmoke;
+  height: 60px;
+  border-radius: 20px 20px 0 0;
+  box-shadow: -10px -10px 20px -10px rgba(0, 0, 0, 0.2);
+}
+
+
 .lazy-img {
     text-align: center;
     font-size: 10px;
+}
+
+
+.main {
+  background-color: whitesmoke;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.title.is-4 {
+    transform: translateY(15px);
 }
 
 .address {
@@ -33,28 +72,18 @@ body {
 }
 
 .profile-header-avatar {
-  border: 5px solid #fff;
   border-radius: 15%;
   object-fit: cover;
   background-color: #fff;
   height: 120px;
   width: 120px;
-}
 
-.profile-header {
-  display: flex;
-  flex-direction: column;
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  box-shadow: 0px 10px 30px 0px rgba(0, 0, 0, 0.5);
 
-  align-items: center;
-  border-radius: 10px;
-  box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
-  padding: 1em;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  background-color: #fff;
 }
 
 .profile-wrapper {
