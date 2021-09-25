@@ -103,6 +103,8 @@ def upload_success_wxtemplate(user):
         user=user, status="A",
         timestamp__lt=Now() - timedelta(seconds=600)
     )
+    logging.error(f'Found classifieds: {classifieds}')
+
     if classifieds.count() > 1:
         url = f"https://obrisk.com/users/i/{user.username}/"
         title = f'Uploaded {classifieds.count()} items'
@@ -134,4 +136,5 @@ def upload_success_wxtemplate(user):
             "remark": {"value":tail}
         }
 
+    logging.error(f'Pushing data: {data}', extra=data)
     wx_push.do_push(user.wechat_openid,template_id,url,color,data)

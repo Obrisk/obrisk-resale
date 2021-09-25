@@ -34,9 +34,9 @@
         <h1 class="title is-4">{{ user.username|title }}</h1>
 
         {% if user.english_address  %}
-            <p class="address">{{ user.english_address }}, {{ user.city }} </p>
+            <small class="address">{{ user.english_address }}, {{ user.city }} </small>
         {% else %}
-            <p class="address"> {{ user.city }} </p>
+            <small class="address"> {{ user.city }} <small>
         {% endif %}
       </div>
    </section>
