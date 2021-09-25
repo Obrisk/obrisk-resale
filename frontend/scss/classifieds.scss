@@ -161,6 +161,8 @@ article {
 
 .slides {
   display: flex;
+  position: sticky;
+  top: 0;
   max-height: 70vh;
   min-height: 40vh;
   overflow-x: auto;
@@ -318,9 +320,11 @@ article {
   width: 100%;
 }
 
-.button {
-    padding: 1;
+.action-button {
     width: 100%;
+    color: #1FAECE;
+    border-color: #1FAECE;
+    box-shadow: 2px 4px 4px rgba(0, 0, 0, .25);
 }
 
 .card-text {
@@ -329,13 +333,11 @@ article {
 }
 
 .pay-button {
-    background-color: #1FAECE;
     margin: auto auto auto 6%;
     padding: 0;
 }
     
 .chat-button {
-   background-color: #3ec4e2;
    margin: auto 6% auto auto;
    padding: 0;
  }
@@ -350,6 +352,7 @@ article {
 .classified-details {
     margin: 1em auto;
     text-align: justify;
+    text-transform: capitalize;
 }
 
 .classified-tags {

@@ -118,18 +118,18 @@
       {% if classified.status == 'A' %}
         <div class="action-wrapper">
             {% if classified.user != request.user %}
-                <button class="button chat-button" id="chat-button-id">
+                <button class="button action-button chat-button" id="chat-button-id">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                      stroke="#363636" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+                      stroke="#1FAECE" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
                       class="feather feather-message-square">
                       <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg> &nbsp;
                     Chat
                  </button>
 
-                <button class="button pay-button" onclick="javascript:callpay();return false;">
+                <button class="button action-button pay-button" onclick="javascript:callpay();return false;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
-                      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                      viewBox="0 0 24 24" fill="none" stroke="#1FAECE" stroke-width="2"
                       stroke-linecap="round" stroke-linejoin="round" class="feather feather-shopping-cart">
                       <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
                       <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
@@ -138,11 +138,11 @@
                 </button>
                    
             {% else %}
-                <a class="button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
+                <a class="button action-button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
                   title="{% trans 'Edit this classified' %}">
                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 🗑️{% trans 'Delete/Sold' %}</a>
 
-                <a class="button pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
+                <a class="button action-button  pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
                   title="{% trans 'Edit this classified' %}">
                   <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
             {% endif %}
@@ -156,7 +156,9 @@
       <p id="payError"> </p>
 
     {% if classified.details %}
-        <div class="classified-details"> {{ classified.details }}</div>
+        <div class="classified-details"> {{ classified.details | linebreaks }}</div>
+    {% else %}
+        <br/>
     {% endif %}
 
     <!-- Cloud Tag Widget -->
