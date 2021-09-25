@@ -1,3 +1,5 @@
+import itertools
+from slugify import slugify
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
@@ -37,7 +39,30 @@ def send_upload_success(modeladmin, request, queryset):
         upload_success_wxtemplate(user)
 
 
+def create_obrisk_user(modeladmin, request, queryset):
+    for user in queryset:
+        user = User.objects.create(
+            wechat_openid=user.wechat_openid,
+            thumbnail = user.thumbnail,
+            picture = user.mid,
+            org_picture = user.full,
+            gender=user.gender,
+            city=user.city,
+            province_region=user.province_region,
+            country=user.country
+        )
+
+        username = first_name = slugify(user.username)
+        for x in itertools.count(1):
+            if not User.objects.filter(username=username).exists():
+                break
+            username = '%s-%d' % (first_name, x)
+
+
+
 send_upload_success.short_description = 'Send upload success'
+create_obrisk_user.short_description = 'Create Obrisk user'
+
 
 @admin.register(User)
 class MyUserAdmin(AuthUserAdmin):
@@ -59,7 +84,10 @@ class MyUserAdmin(AuthUserAdmin):
         'city', 'province_region', 'thumbnail', 'points')
     search_fields = ['username', 'phone_number', 'email', 'city']
     actions = [send_upload_success,]
-    #readonly_fields = ('phone_number',)
 
 
-admin.site.register(WechatUser)
+@admin.register(WechatUser)
+class MyUserAdmin(admin.ModelAdmin):
+    list_display = ('name', 'city', 'province_region')
+    search_fields = ['name', 'wechat_openid']
+    actions = [create_obrisk_user,]
