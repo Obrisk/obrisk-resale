@@ -27,11 +27,10 @@
             <img src="{{oss}}/{{user.picture}}" alt="Pic"
               class="profile-header-avatar" id="pic">
         {% else %}
-            <img class="pull-right" src="{% static 'img/user.png' %}" height="120px" alt="Pic" />
+            <img class="profile-header-avatar" src="{% static 'img/user.png' %}" height="120px" alt="Pic" />
         {% endif %}
-   </section>
 
-    <section class="main">
+     <div class ="main-title">
         <h1 class="title is-4">{{ user.username|title }}</h1>
 
         {% if user.english_address  %}
@@ -39,6 +38,7 @@
         {% else %}
             <p class="address"> {{ user.city }} </p>
         {% endif %}
+      </div>
    </section>
   </div>
 
