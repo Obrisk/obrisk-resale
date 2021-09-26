@@ -467,7 +467,7 @@ def adminCreateClassified(request, *args, **kwargs):
 @login_required
 def adminAttachImage(request, *args, **kwargs):
 
-    if not request.user.is_superuser:
+    if not request.user.is_superuser and not request.user.is_staff:
         return HttpResponse(
                 "Hey, You are not authorized!",
                 content_type='text/plain')

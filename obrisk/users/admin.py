@@ -1,8 +1,10 @@
+import logging
 import itertools
 from slugify import slugify
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
+from django.db import IntegrityError
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 from obrisk.users.models import User, WechatUser
@@ -41,23 +43,37 @@ def send_upload_success(modeladmin, request, queryset):
 
 def create_obrisk_user(modeladmin, request, queryset):
     for user in queryset:
-        user = User.objects.create(
-            wechat_openid=user.wechat_openid,
-            thumbnail = user.thumbnail,
-            picture = user.mid,
-            org_picture = user.full,
-            gender=user.gender,
-            city=user.city,
-            province_region=user.province_region,
-            country=user.country
-        )
+        try:
+            user = User.objects.create(
+                wechat_openid=user.wechat_openid,
+                thumbnail = user.thumbnail,
+                picture = user.mid,
+                org_picture = user.full,
+                gender=user.gender,
+                city=user.city,
+                province_region=user.province_region,
+                country=user.country
+            )
+
+        except IntegrityError:
+            return
+        except Exception:
+            logging.error('Creating the Obrisk user failed')
+            return
 
         username = first_name = slugify(user.username)
         for x in itertools.count(1):
             if not User.objects.filter(username=username).exists():
                 break
             username = '%s-%d' % (first_name, x)
+        user.username = username
+        user.save()
 
+        return HttpResponseRedirect(
+            '/users/wsguatpotlfwccdi/admin-create-user/?ids=%s' % (
+                ','.join(str(pk) for pk in selected),
+            )
+        )
 
 
 send_upload_success.short_description = 'Send upload success'

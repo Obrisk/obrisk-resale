@@ -396,6 +396,14 @@ class CusSocialSignupForm(forms.Form):
         return user
 
 
+
+class AdminCreateUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = [ "username", "english_address", "chinese_address",
+            "city", "province_region","phone_number" ]
+
+
 class CustomSocialSignupForm(SocialSignupForm):
     phone_number = forms.IntegerField(
         label=_("Phone number"),

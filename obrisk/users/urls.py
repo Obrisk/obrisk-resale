@@ -64,6 +64,10 @@ urlpatterns = [
         view=views.update_profile_pic,
         name='update_profile_pic'),
 
+    url(regex=r'^wsguatpotlfwccdi/admin-create-user/$',
+        view=views.admin_create_user,
+        name='update_profile_pic'),
+
     url(regex=r'^~redirect/$',
         view=views.UserRedirectView.as_view(),
         name='redirect'),

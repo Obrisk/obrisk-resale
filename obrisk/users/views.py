@@ -67,7 +67,8 @@ from obrisk.users.tasks import update_prof_pic_async
 from .forms import (
         UserForm, EmailSignupForm, CusSocialSignupForm,
         PhoneRequestPasswordForm, PhoneResetPasswordForm,
-        SocialSignupCompleteForm, VerifyAddressForm)
+        SocialSignupCompleteForm, VerifyAddressForm,
+        AdminCreateUserForm)
 from .models import User
 from .phone_verification import send_sms
 from obrisk.classifieds.models import Classified
@@ -1009,6 +1010,51 @@ class VerifyAddressView(LoginRequiredMixin, UpdateView):
         return User.objects.get(username=self.request.user.username)
 
 
+
+
+@login_required
+def admin_create_user(request, *args, **kwargs):
+    if not request.user.is_superuser and not request.user.is_staff:
+        return HttpResponse(
+                "Hey, You are not authorized!",
+                content_type='text/plain')
+
+    if request.method == 'GET':
+        return render(
+                request,
+                'users/admin_create_user.html',
+                {'form':AdminCreateUserForm(
+                    initial={
+                        'images': request.GET.get('ids')
+                    }
+                )}
+            )
+
+    if request.method == 'POST':
+        form = AdminClassifiedImgForm(request.POST)
+        data=None
+
+        if form.is_valid():
+            img_ids = form.cleaned_data['images']
+            classified = form.cleaned_data['classified']
+
+            thumb = None
+            for pk in img_ids.split(','):
+                obj = ClassifiedImages.objects.get(pk=pk)
+                obj.classified = classified
+                obj.save()
+                thumb = obj.image_thumb
+
+            classified.thumbnail = thumb
+            classified.status = "A"
+            classified.save()
+
+    return redirect(
+        ''.join(
+            ['/', settings.ADMIN_URL.strip('^'),
+            'classifieds/classifiedimages/']
+        )
+    )
 
 @ajax_required
 @require_http_methods(["GET"])

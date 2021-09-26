@@ -1,0 +1,66 @@
+{% load static i18n %}
+{% load crispy_forms_tags %}
+
+{% block head %}
+<link href="{% static 'css/classified-create.css' %}" rel="stylesheet"/>
+{% endblock head %}
+
+{% block content %}
+    <form action="{% url 'classifieds:admin_attach_img' %}" name="classifiedForm" enctype="multipart/form-data"
+          id="classified-form" method="post" role="form">
+          {% csrf_token %}
+
+          <div class="notification is-danger is-hidden" role="alert">
+            <button type="button" class="delete close-dj-messages"></button>
+            <p id="notf-msg"></p>
+          </div>
+
+          <div class="column">
+          {{ form|crispy }}
+
+            <div class="buttons img-pick-wrapper">
+              <button id="cancel-classified" type="button" class="button is-solid opt-accent-button raised"
+                onclick="javascript:history.back()"> 
+                {% trans 'Cancel' %}
+              </button>
+
+              {% if request.user.is_authenticated %}
+                  <button type="submit"
+                    class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
+              {% else %}
+                  <button id="create-btn" type="button"
+                    class="login-to-post button is-solid accent-button raised"> 
+                      {% trans 'Login' %}
+                 </button>
+              {% endif %}
+           </div>
+     <!-- close form column -->
+     </div>
+
+  </form>
+  {{ form.media }}
+
+   <div id="error-modal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <!-- dialog body -->
+          <div class="modal-body">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+          </div>
+
+          <!-- dialog buttons -->
+          <div class="modal-footer">
+              <button type="button" class="btn btn-primary">OK</button>
+          </div>
+        </div>
+      </div>
+  </div>
+{% endblock content %}
+
+{% block extra_js %}
+
+<script type="text/javascript">
+
+</script>
+
+{% endblock extra_js %}
