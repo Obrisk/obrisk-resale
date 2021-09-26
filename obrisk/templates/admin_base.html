@@ -1,0 +1,320 @@
+{% load static i18n humanize %}
+{% load pwa_webpush %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <!--Please ensure sipts are loaded from my site only!-->
+  <!-- <meta http-equiv="x-ua-compatible" content="ie=edge"> -->
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="google-site-verification" content="NVNmEgtDfFzJD89nlq7dQDSCMAGj-q_d3JI0buqyxJ4" />
+  <meta name="description"
+      content="secondhand website app for foreigners in China to buy and sell used stuff, find apartments for rent and local services">
+  <meta name="keywords"
+    content="secondhand China, secondhand, Hangzhou, Beijing, Shanghai, Guangzhou China Classifieds, secondhand, classifieds, China expats, foreigners in China">
+  <meta name="author" content="Obrisk team">
+  <meta name="apple-mobile-web-app-title" content="Obrisk">
+  <meta name="locale" content="en">
+  <meta name="theme-color" content="#3EC4E2">
+  <meta name="vapid-key" content="{{ vapid_key }}">
+
+  <!-- Icon can be replace to show icon on share -->
+  {% block icon %}
+  <link rel="icon" type="image/png" href="{% static 'img/favicon.png' %}">
+  <link rel="shortcut icon" href="{% static 'img/favicon.ico' %}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'img/apple-touch-icon.png' %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'img/favicon-32x32.png' %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static 'img/favicon-16x16.png' %}">
+  {% endblock icon%}
+
+  {% if request.user.is_authenticated %}
+      {% webpush_header %}
+      <meta name="user_id" content="{{ request.user.id }}">
+  {% endif %}
+
+  <!-- PWA settings -->
+  {% progressive_web_app_meta %}
+  <meta name="apple-mobile-web-app-capable" content="yes">
+
+  {% block cdn %}
+      <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
+      <link rel="stylesheet" type="text/css" href="{% static 'css/nav.css' %}">
+
+      {% if env == 'prod' %}
+          <script src="{% static 'js/vendor/sentrysdk.min.js' %}"></script>
+          <script>
+            Sentry.init({
+              dsn: "https://556a74cc3c4244d382e196b2cd9339b4@o231693.ingest.sentry.io/1392035"
+
+              //integrations: [new Integrations.BrowserTracing()],
+              //release: "my-project-name@2.3.12",
+
+              // Set tracesSampleRate to 1.0 to capture 100% bugs details
+              //tracesSampleRate: 1.0,
+            });
+        </script>
+      {% endif %}
+  {% endblock cdn %}
+
+  {% block head %}
+  {% endblock head %}
+</head>
+
+<body>
+  <!-- Pageloader -->
+  {% block body %}
+
+    <nav id="navbarBottom" class="navbar is-fixed-bottom">
+        <ul class="bt-nav-ul is-toggle is-fullwidth">
+
+         <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">
+            <a class="bt-nav-link" href="{% url 'classifieds:list' %}">
+                <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                  class="feather feather-shopping-bag">
+                  <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                  <line x1="3" y1="6" x2="21" y2="6"></line>
+                  <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+              </span>
+              <span class="nav-label">
+                  {% trans 'Items' %}
+              </span>
+            </a>
+          </li>
+
+          <li class="bt-nav-item">
+            <a class="bt-nav-link" href="{% url 'classifieds:write_new' %}"
+            id="addNewItem">
+                <span class="nav-icons">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-plus-square">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                <line x1="12" y1="8" x2="12" y2="16"></line>
+                <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+              </span>
+              <span class="nav-label">
+                  {% trans 'Add' %}
+              </span>
+            </a>
+          </li>
+
+          <li class="bt-nav-item {% if base_active == 'chat' %} is-active {% endif %}">
+          {% if request.user.is_authenticated %}
+                <a class="bt-nav-link" href="{% url 'messager:contacts_list' %}">
+                  <span class="nav-icons">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                      class="feather feather-message-square">
+                      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </span>
+                  <span class="nav-label">
+                    {% trans 'Chat' %}
+                  </span>
+
+                  <span class="msg-notification ">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
+                        viewBox="0 0 24 24" fill="#EB5757" stroke="#EB5757"
+                        stroke-width="1" stroke-linecap="round" stroke-linejoin="round"
+                        class="feather feather-circle"><circle cx="12" cy="12" r="10"></circle>
+                    </svg>
+                  </span>
+                </a>
+           {% else %}
+                <a class="bt-nav-link" id="auth-button">
+                  <span class="nav-icons">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                        viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                  </span>
+                  <span class="nav-label">
+                    {% trans 'Login' %}
+                  </span>
+                </a>
+          {% endif %}
+          </li>
+
+        </ul>
+    </nav>
+
+    <div class='container'>
+        <!-- These messages are not from chat, they are the notifications msgs
+        upon successful POST request. Chat messages context name is message_list -->
+        {% if messages %}
+            {% for message in messages %}
+              <div class="notification is-top-notif
+                 {% if message.tags == 'error' %}is-danger{% else %}is-primary{% endif %}">
+                <button type="button" class="delete close-dj-messages"></button>
+                {{ message}}
+              </div>
+            {% endfor %}
+
+           <script type="text/javascript">
+                document.querySelectorAll('.close-dj-messages').forEach(item => {
+                  item.addEventListener('click', e => {
+                    e.currentTarget.parentElement.remove();
+                    e.stopPropagation();
+                  });
+                });
+          </script>
+        {% endif %}
+
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+
+  {% block javascript %}
+  <script defer src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    var currentUser;
+    var new_messages;
+    var iPhone = false;
+    var wechat_browser = false;
+
+    //fix navbar bottom on iphone X families
+    iPhone = /iPhone/.test(navigator.userAgent) && !window.MSStream;
+    let aspect = window.screen.width / window.screen.height;
+    if (
+      iPhone && (aspect.toFixed(3) === "0.462" ||
+        aspect.toFixed(3) === "0.576" ||
+        aspect.toFixed(3) === "0.591")
+    ) {
+      document.getElementById("navbarBottom").classList.add("iphone-nav-bt");
+    }
+
+    function registerServiceWorker() {
+      // register sw script in supporting browsers
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js', { scope: '/' }).then(() => {
+          console.log('Service Worker registered successfully.');
+        }).catch(error => {
+          console.log('Service Worker registration failed:', error);
+        });
+      }
+    }
+
+    var setCookie = function (name, value, seconds) {
+        if (!name && !value) {
+          return false;
+        } else if (seconds) {
+          var date = new Date();
+          date.setTime(date.getTime() + (seconds * 1000));
+          var expires = "; expires=" + date.toGMTString();
+        }
+        else var expires = "";
+        document.cookie = name + "=" + value + expires + "; path=/";
+        return true;
+    }
+
+    var getCookie = function(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(";");
+        for (var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) === " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+    }
+
+    var deleteCookie = function(name) {
+        if (name) {
+          setCookie(name, "", -1);
+          return true;
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      if ( !iPhone) {
+            if('visualViewport' in window) {
+              window.visualViewport.addEventListener('resize', function(event) {
+	     	    if(event.target.height + 30 < document.scrollingElement.clientHeight) {
+                    document.getElementById('navbarBottom').style.display = 'none';
+                } else {
+                    document.getElementById('navbarBottom').style.display = 'block';
+                }
+	         });
+
+ 	       const pageForm = document.querySelector('form');
+	       if ( pageForm !== null ){
+		    pageForm.addEventListener('blur', e => {
+			document.getElementById('navbarBottom').style.display = 'block';
+		    }, true);
+	       }
+	   }
+      }
+
+       fetch('{% url 'wx_req_cred' %}', {
+	      headers: {
+		"X-Requested-With": "XMLHttpRequest"
+	      },
+	      credentials: 'same-origin',
+	      redirect: 'follow'
+	    }).then (resp => resp.json())
+	      .then (strData => {
+          try {
+              let data = JSON.parse(strData);
+              if (data.success === true) {
+                wx.config({
+                    debug: false, 
+                    appId: data.id,
+                    timestamp: data.timestamp,
+                    nonceStr: data.noncestr,
+                    signature: data.signature,
+                    jsApiList: [
+                       'updateAppMessageShareData',
+                       'updateTimelineShareData',
+                       'onMenuShareAppMessage',
+                       'onMenuShareTimeline',
+                       'chooseWXPay'
+                    ] 
+                });
+                wechat_browser = true;
+
+              } else {
+                  console.log('failure to init wx');
+              }
+          } catch {
+	      console.log('failure to init wx');
+          }
+       });
+
+      const authButton = document.getElementById('auth-button');
+      if ( authButton !== null ) {
+          authButton.addEventListener('click', () => {
+              if (wechat_browser) {
+                window.location.href = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
+              }else {
+                window.location.href = "{% url 'account_login' %}";
+              }
+          });
+       }
+   });
+  </script>
+
+  {% if request.user.is_authenticated %}
+      <script type="text/javascript">
+        currentUser = "{{ request.user.username}}";
+        new_messages = "{{ new_msgs }}";
+      </script>
+      <script defer src="{% static 'js/obrisk.js' %}" type="text/javascript"></script>
+  {% endif %}
+
+  {% endblock javascript %}
+
+  {% block extra_js %}{% endblock extra_js %}
+
+</body>
+{% endblock body %}
+
+</html>

@@ -66,7 +66,7 @@ urlpatterns = [
 
     url(regex=r'^wsguatpotlfwccdi/admin-create-user/$',
         view=views.admin_create_user,
-        name='update_profile_pic'),
+        name='admin_create_user'),
 
     url(regex=r'^~redirect/$',
         view=views.UserRedirectView.as_view(),

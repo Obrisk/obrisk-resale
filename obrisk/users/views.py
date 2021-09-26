@@ -1011,7 +1011,6 @@ class VerifyAddressView(LoginRequiredMixin, UpdateView):
 
 
 
-
 @login_required
 def admin_create_user(request, *args, **kwargs):
     if not request.user.is_superuser and not request.user.is_staff:
@@ -1025,34 +1024,27 @@ def admin_create_user(request, *args, **kwargs):
                 'users/admin_create_user.html',
                 {'form':AdminCreateUserForm(
                     initial={
-                        'images': request.GET.get('ids')
+                        'username': request.GET.get('nm'),
+                        'city': request.GET.get('ct'),
+                        'province_region': request.GET.get('pr'),
+                        'country': request.GET.get('cn'),
+                        'id': request.GET.get('pk')
                     }
                 )}
             )
 
     if request.method == 'POST':
-        form = AdminClassifiedImgForm(request.POST)
-        data=None
+        form = AdminCreateUserForm(request.POST)
 
         if form.is_valid():
-            img_ids = form.cleaned_data['images']
-            classified = form.cleaned_data['classified']
-
-            thumb = None
-            for pk in img_ids.split(','):
-                obj = ClassifiedImages.objects.get(pk=pk)
-                obj.classified = classified
-                obj.save()
-                thumb = obj.image_thumb
-
-            classified.thumbnail = thumb
-            classified.status = "A"
-            classified.save()
+            #obj = User.objects.get(pk=form.cleaned_data['pk'])
+            user = form.save(request, commit=True)
+            #user.save()
 
     return redirect(
         ''.join(
             ['/', settings.ADMIN_URL.strip('^'),
-            'classifieds/classifiedimages/']
+            'users/wechatuser/']
         )
     )
 

@@ -1,12 +1,13 @@
+{% extends 'admin_base.html' %}
 {% load static i18n %}
 {% load crispy_forms_tags %}
 
 {% block head %}
-<link href="{% static 'css/classified-create.css' %}" rel="stylesheet"/>
+<link href="{% static 'css/login.css' %}" rel="stylesheet"/>
 {% endblock head %}
 
 {% block content %}
-    <form action="{% url 'classifieds:admin_attach_img' %}" name="classifiedForm" enctype="multipart/form-data"
+    <form action="{% url 'users:admin_create_user' %}" name="classifiedForm" enctype="multipart/form-data"
           id="classified-form" method="post" role="form">
           {% csrf_token %}
 

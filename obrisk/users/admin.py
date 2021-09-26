@@ -1,10 +1,10 @@
 import logging
 import itertools
-from slugify import slugify
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.db import IntegrityError
+from django.utils.text import slugify as dj_slugify
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 from obrisk.users.models import User, WechatUser
@@ -57,11 +57,15 @@ def create_obrisk_user(modeladmin, request, queryset):
 
         except IntegrityError:
             return
-        except Exception:
-            logging.error('Creating the Obrisk user failed')
+        except Exception as e:
+            logging.error('Creating the Obrisk user failed', exc_info=e)
             return
 
-        username = first_name = slugify(user.username)
+        username = first_name = dj_slugify(
+                user.username,
+                allow_unicode=True
+            )
+
         for x in itertools.count(1):
             if not User.objects.filter(username=username).exists():
                 break
@@ -70,8 +74,9 @@ def create_obrisk_user(modeladmin, request, queryset):
         user.save()
 
         return HttpResponseRedirect(
-            '/users/wsguatpotlfwccdi/admin-create-user/?ids=%s' % (
-                ','.join(str(pk) for pk in selected),
+            '/users/wsguatpotlfwccdi/admin-create-user/?pk=%s&nm=%s&ct=%s&pr=%s&cn=%s' % (
+                str(user.id), username,
+                user.city, user.province_region, user.country
             )
         )
 
