@@ -34,7 +34,7 @@ from django.core.paginator import (
 from django.db.models import (
         OuterRef, Subquery, Case,
         When, Value, IntegerField, Count)
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 
 import xmltodict
 from dal import autocomplete
@@ -699,6 +699,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
         return redirect('classifieds:list')
 
 
+@csrf_exempt
 @login_required
 @require_http_methods(["POST"])
 def wxpyjs_success(request, *args, **kwargs):
