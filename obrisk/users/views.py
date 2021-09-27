@@ -1026,9 +1026,7 @@ def admin_create_user(request, *args, **kwargs):
                     initial={
                         'username': request.GET.get('nm'),
                         'city': request.GET.get('ct'),
-                        'province_region': request.GET.get('pr'),
-                        'country': request.GET.get('cn'),
-                        'id': request.GET.get('pk')
+                        'province_region': request.GET.get('pr')
                     }
                 )}
             )

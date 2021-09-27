@@ -53,7 +53,7 @@ def create_obrisk_user(modeladmin, request, queryset):
                 gender=user.gender,
                 city=user.city,
                 province_region=user.province_region,
-                country=user.country
+                country='China'
             )
 
         except IntegrityError:
@@ -75,9 +75,8 @@ def create_obrisk_user(modeladmin, request, queryset):
         user.save()
 
         return HttpResponseRedirect(
-            '/users/wsguatpotlfwccdi/admin-create-user/?pk=%s&nm=%s&ct=%s&pr=%s&cn=%s' % ( #noqa
-                str(user.id), username,
-                user.city, user.province_region, user.country
+            '/users/wsguatpotlfwccdi/admin-create-user/?pk=%s&nm=%s&ct=%s&pr=%s' % ( #noqa
+                 username, user.city, user.province_region
             )
         )
 
