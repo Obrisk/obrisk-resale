@@ -700,9 +700,10 @@ def initiate_wxpy_info(request, *args, **kwargs):
 
 
 @csrf_exempt
-@login_required
+#@login_required
 @require_http_methods(["POST"])
 def wxpyjs_success(request, *args, **kwargs):
+    logging.error(request.POST, extra=request.POST)
     classified = Classified.objects.filter(
             slug=request.POST.get('sg', None)
         ).first()

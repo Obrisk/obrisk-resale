@@ -1,12 +1,19 @@
-function wxpayFail() {
-      document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
-      document.getElementById(
-              'notf-msg'
-          ).innerHTML = "Sorry payments feature is now unavailable, contact the seller directly";
+function wxpayFail(pay_complete=false) {
+    document.getElementsByClassName('notification')[0].classList.remove('is-hidden'); 
 
-      setTimeout(() => {  
-          window.location.href=slugURL;
-      }, 7000);
+    if (pay_complete === true) {
+        document.getElementById(
+              'notf-msg'
+          ).innerHTML = "Payment done✌️. We'll get in touch soon to confirm the logistics😊";
+    } else {
+        document.getElementById(
+              'notf-msg'
+          ).innerHTML = "Sorry payments feature is now unavailable, contact the seller directly🙇";
+    }
+
+    setTimeout(() => {  
+      window.location.href=slugURL;
+    }, 9000);
 }
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -48,12 +55,14 @@ document.addEventListener('DOMContentLoaded', function () {
                       credentials: 'same-origin',
                       redirect: 'follow'
                     }).then (resp => resp.json())
-                      .then (strData => {
-                      let data = JSON.parse(strData);
-                      if (data.success === true) {
-                          window.location.replace= 'classifieds/orders/wsguatpotlfwccdi/' + data.order_slug;
-                      }
-                  })
+                      .then (data => {
+                          if (data.success === true) {
+                              window.location.replace= 'classifieds/orders/wsguatpotlfwccdi/' + data.order_slug;
+                          } else {
+                              wxpayFail(pay_complete=true);
+                              window.location.replace=slugURL;
+                          }
+                    })
                 },
                 fail: function (res) {
                     wxpayFail();
