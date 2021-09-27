@@ -1,7 +1,7 @@
-from allauth.account.adapter import DefaultAccountAdapter
-from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from django.forms import ValidationError
 from django.conf import settings
+from allauth.account.adapter import DefaultAccountAdapter
+from allauth.socialaccount.adapter import DefaultSocialAccountAdapter
 from allauth.account.utils import user_field
 
 

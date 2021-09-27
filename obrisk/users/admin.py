@@ -4,6 +4,7 @@ from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.db import IntegrityError
+from django.http import HttpResponseRedirect
 from django.utils.text import slugify as dj_slugify
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
@@ -47,8 +48,8 @@ def create_obrisk_user(modeladmin, request, queryset):
             user = User.objects.create(
                 wechat_openid=user.wechat_openid,
                 thumbnail = user.thumbnail,
-                picture = user.mid,
-                org_picture = user.full,
+                picture = user.picture,
+                org_picture = user.org_picture,
                 gender=user.gender,
                 city=user.city,
                 province_region=user.province_region,
@@ -74,7 +75,7 @@ def create_obrisk_user(modeladmin, request, queryset):
         user.save()
 
         return HttpResponseRedirect(
-            '/users/wsguatpotlfwccdi/admin-create-user/?pk=%s&nm=%s&ct=%s&pr=%s&cn=%s' % (
+            '/users/wsguatpotlfwccdi/admin-create-user/?pk=%s&nm=%s&ct=%s&pr=%s&cn=%s' % ( #noqa
                 str(user.id), username,
                 user.city, user.province_region, user.country
             )
@@ -109,6 +110,12 @@ class MyUserAdmin(AuthUserAdmin):
 
 @admin.register(WechatUser)
 class MyUserAdmin(admin.ModelAdmin):
-    list_display = ('name', 'city', 'province_region')
+    def obrisk_user(self, obj):
+        if obj.wechat_openid is not None:
+            if User.objects.filter(wechat_openid=obj.wechat_openid).exists():
+                return 'YES'
+        return 'NO'
+
+    list_display = ('name', 'obrisk_user', 'city', 'province_region')
     search_fields = ['name', 'wechat_openid']
     actions = [create_obrisk_user,]

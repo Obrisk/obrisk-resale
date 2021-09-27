@@ -7,9 +7,9 @@
 {% endblock head %}
 
 {% block content %}
-    <form action="{% url 'users:admin_create_user' %}" name="classifiedForm" enctype="multipart/form-data"
-          id="classified-form" method="post" role="form">
-          {% csrf_token %}
+    <form action="{% url 'users:admin_create_user' %}" id="signup_form"
+      method="post" role="form" class="signup">
+      {% csrf_token %}
 
           <div class="notification is-danger is-hidden" role="alert">
             <button type="button" class="delete close-dj-messages"></button>
@@ -18,23 +18,10 @@
 
           <div class="column">
           {{ form|crispy }}
+            <br/>
 
-            <div class="buttons img-pick-wrapper">
-              <button id="cancel-classified" type="button" class="button is-solid opt-accent-button raised"
-                onclick="javascript:history.back()"> 
-                {% trans 'Cancel' %}
-              </button>
-
-              {% if request.user.is_authenticated %}
-                  <button type="submit"
-                    class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
-              {% else %}
-                  <button id="create-btn" type="button"
-                    class="login-to-post button is-solid accent-button raised"> 
-                      {% trans 'Login' %}
-                 </button>
-              {% endif %}
-           </div>
+              <button type="submit"
+                class="button is-solid accent-button raised create submit-button">{% trans 'Submit' %}</button>
      <!-- close form column -->
      </div>
 
