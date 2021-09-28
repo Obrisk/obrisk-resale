@@ -58,10 +58,9 @@ document.addEventListener('DOMContentLoaded', function () {
                     }).then (resp => resp.json())
                       .then (data => {
                           if (data.success === true) {
-                              window.location.replace= 'classifieds/orders/wsguatpotlfwccdi/' + data.order_slug;
+                              window.location.replace('https://obrisk.com/classifieds/orders/wsguatpotlfwccdi/' + data.order_slug);
                           } else {
                               wxpayFail(pay_complete=true);
-                              window.location.replace=slugURL;
                           }
                     })
                 },
@@ -70,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     console.log(JSON.stringify(res));
                 },
                 cancel: function (res) {
-                  window.location.replace=slugURL;
+                  window.location.replace(slugURL);
                 }
 		    });
 	      } catch {

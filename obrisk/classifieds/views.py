@@ -726,14 +726,12 @@ def wxpyjs_success(request, *args, **kwargs):
         except Exception as e:
             logging.error('Could not create classified Order', exc_info=e)
 
-        return JsonResponse({
-            'success': True,
-            'order_slug': order.slug
-        })
-    else:
-        return JsonResponse({
-            'success': False
-        })
+        else:
+            return redirect('classifieds:order_detail', order.slug)
+
+    return JsonResponse({
+        'success': False
+    })
 
 
 class Wxpay_Result(View):
