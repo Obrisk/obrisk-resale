@@ -700,12 +700,12 @@ def initiate_wxpy_info(request, *args, **kwargs):
 
 
 @csrf_exempt
-#@login_required
+@login_required
 @require_http_methods(["POST"])
 def wxpyjs_success(request, *args, **kwargs):
-    logging.error(request.POST, extra=request.POST)
+    body = json.loads(request.body)
     classified = Classified.objects.filter(
-            slug=request.POST.get('sg', None)
+            slug=body.get('sg', None)
         ).first()
 
     if classified:
@@ -715,14 +715,17 @@ def wxpyjs_success(request, *args, **kwargs):
         is_offline = False
         if request.POST.get('addr', None) is None:
             is_offline = True
+        try:
+            order = ClassifiedOrder.objects.create(
+               buyer=request.user,
+               classified=classified,
+               is_offline=is_offline,
+               recipient_chinese_address=request.POST.get('addr', None),
+               recipient_phone_number=request.POST.get('phone', None)
+            )
+        except Exception as e:
+            logging.error('Could not create classified Order', exc_info=e)
 
-        order = ClassifiedOrder.objects.create(
-           buyer=request.user,
-           classified=classified,
-           is_offline=is_offline,
-           recipient_chinese_address=request.POST.get('addr', None),
-           recipient_phone_number=request.POST.get('phone', None)
-        )
         return JsonResponse({
             'success': True,
             'order_slug': order.slug

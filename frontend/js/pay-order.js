@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', function () {
                           sg:slug
                       }),
                       headers: {
-                         "X-Requested-With": "XMLHttpRequest"
+                         "X-Requested-With": "XMLHttpRequest",
+                         "Content-Type": "application/json"
                       },
                       credentials: 'same-origin',
                       redirect: 'follow'
