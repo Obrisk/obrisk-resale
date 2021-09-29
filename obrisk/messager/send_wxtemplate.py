@@ -118,14 +118,13 @@ def upload_success_wxtemplate(user):
     title = f"Hi {user.username}, all eyes on your stuff selling🤗"
     tail = "Thank you for using Obrisk"
 
-    #Two minutes ago
     data={
             "first": {"value":title},
             "keyword1":{
                 "value":title,"color":color
             },
             "keyword2":{
-                "value":'Several hours ago', "color":color
+                "value":'Few minutes ago', "color":color
             },
             "keyword3":{
                 "value":user.city, "color":color

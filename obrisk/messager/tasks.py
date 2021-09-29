@@ -131,5 +131,5 @@ def send_wxtemplate_notif():
             sender = f'{notify[userid][0].sender.username} and {senders} Others'
         else:
             sender = f'{notify[userid][0].sender.username}'
-        time =  'Recent'
+        time =  'Few Minutes ago'
         unread_msgs_wxtemplate(userid, last_msg, sender, time)
