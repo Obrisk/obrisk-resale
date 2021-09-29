@@ -4,7 +4,7 @@
 {% block title %}{{ classified.title }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/classified_order.css' %}" rel="stylesheet">
+<link href="{% static 'css/create_cls_order.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
@@ -81,7 +81,7 @@
   </div>
 
   <br/>
-  <button class="button" style="background-color: #2f8819;" id="wechat-pay-call">
+  <button class="button wechat-button" id="wechat-pay-call">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"
         width="16px" height="16px"><path fill="#c2e8ff"
         d="M4.433,22.306l-0.176-0.205C2.453,20.001,1.5,17.546,1.5,15C1.5,8.107,8.453,2.5,17,2.5 S32.5,8.107,32.5,15S25.547,27.5,17,27.5c-2.527,0-5.044-0.508-7.275-1.468L9.55,25.957l-6.809,2.269L4.433,22.306z"/>

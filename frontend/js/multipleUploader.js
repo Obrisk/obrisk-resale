@@ -308,39 +308,25 @@ OssUpload.prototype = {
                     timeout: 120000 // 2 minutes timeout
                   })
                   .then(function(res) {
-                    //Try to get the dominat color from the uploaded image, if it fails it means the image
-                    //was corrupted during upload
+                    //Here need to add the code to check if the image upload succeeeded.
+                    //There has to be a fetch to get the meta of the images from Aliyun
                     if (/^video/.test(type)) {
                       url = obrisk_oss_url + res.name;
-                    } else {
-                      url =
-                        obrisk_oss_url +
-                        res.name +
-                        "?x-oss-process=image/average-hue";
-                    }
-                    $.ajax({
-                      url: url,
-                      success: function() {
-                        $("#" + file.id)
-                          .children(".success-span")
-                          .addClass("success");
-                        $("#" + file.id)
-                          .children(".file-panel")
-                          .hide();
+                    } 
+
+                        $("#" + file.id).children(".success-span").addClass("success");
+                        $("#" + file.id).children(".file-panel").hide();
                         uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
                         uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                        progressBarNum =
-                          (
+                        progressBarNum = (
                             uploader.fileStats.curFileSize /
                             uploader.fileStats.totalFilesSize
-                          ).toFixed(2) * 100;
-                        progressBar =
-                          (
+                        ).toFixed(2) * 100;
+
+                        progressBar = (
                             uploader.fileStats.curFileSize /
                             uploader.fileStats.totalFilesSize
-                          ).toFixed(2) *
-                            100 +
-                          "%";
+                          ).toFixed(2) * 100 + "%";
 
                         if (/^image/.test(type)) {
                           if (images == "") {
@@ -357,10 +343,7 @@ OssUpload.prototype = {
                         }
 
                         if (progressBarNum == 100) {
-                          $totalProgressbar
-                            .css("width", progressBar)
-                            .html("Upload complete");
-
+                          $totalProgressbar.css("width", progressBar).html("Upload complete");
                           $("body").trigger("uploadComplete");
                         } else {
                           progressBar = parseFloat(progressBar);
@@ -369,79 +352,8 @@ OssUpload.prototype = {
                             .css("width", progressBar.toFixed(0))
                             .html(progressBar);
                         }
-                      },
-                      error: function(e) {
-                        // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
-                        if (retryCount < retryCountMax) {
-                          retryCount++;
-                          console.error(`retryCount : ${retryCount}`);
-                          upload();
-                        } else {
-                          //We have retried to the max and there is nothing we can do
-                          //Allow the users to submit the form atleast with default image.
 
-                          $("#" + file.id)
-                            .children(".success-span")
-                            .addClass("fail");
-                          $("#" + file.id)
-                            .children(".file-panel")
-                            .hide();
-                          uploader.fileStats.uploadFinishedFilesNum++; //Successfully uploaded + 1
-                          uploader.fileStats.curFileSize += file.size; //Currently uploaded file size
-                          progressBarNum =
-                            (
-                              uploader.fileStats.curFileSize /
-                              uploader.fileStats.totalFilesSize
-                            ).toFixed(2) * 100;
-                          progressBar =
-                            (
-                              uploader.fileStats.curFileSize /
-                              uploader.fileStats.totalFilesSize
-                            ).toFixed(2) *
-                              100 +
-                            "%";
-
-                          if (progressBarNum == 100) {
-                            $totalProgressbar
-                              .css("width", progressBar)
-                              .html("Upload complete");
-                          } else {
-                            $totalProgressbar
-                              .css("width", progressBar)
-                              .html(progressBar);
-                          }
-                          img_error =
-                            res.name +
-                            ", Message: " +
-                            "Corrupted image" +
-                            ", RequestID: " +
-                            res.name;
-                          $("#retry-button").removeClass("is-hidden");
-
-                          if (!images) {
-                            if (app == "classifieds") {
-                              images = "classifieds/error-img.jpg";
-                              $.wnoty({
-                                type: "error",
-                                autohide: false,
-                                message:
-                                  "Sorry an error occured when uploading your image(s). \
-                                                    You can submit this post without images ."
-                              });
-                            } else {
-                              $.wnoty({
-                                type: "error",
-                                autohide: false,
-                                message:
-                                  "Sorry! an error occured. You can still post without images"
-                              });
-                            }
-                          }
-                        }
-                      }
-                    }); //End of ajax function
-                  })
-                  .catch(err => {
+                  }).catch(err => {
                     console.error(err);
                     console.log(`err.name : ${err.name}`);
                     console.log(`err.message : ${err.message}`);
@@ -459,20 +371,16 @@ OssUpload.prototype = {
                       } else {
                         //We have retried to the max and there is nothing we can do
                         //Allow the users to submit the form atleast with default image.
-                        $totalProgressbar
-                          .css("width", "94%")
+                        $totalProgressbar.css("width", "94%")
                           .html("Completed with minor errors!");
-                        $("ul.filelist li")
-                          .children(".success-span")
-                          .addClass("fail");
+
+                        $("ul.filelist li").children(".success-span").addClass("fail");
                         $("#addBtn").hide();
-                        img_error =
-                          err.name +
-                          ", Message: " +
-                          err.message +
-                          ", RequestID: " +
-                          err.requestId;
+
+                        img_error = err.name + ", Message: " + err.message +
+                          ", RequestID: " + err.requestId;
                         $("#retry-button").removeClass("is-hidden");
+
                         if (!images) {
                           if (app == "classifieds") {
                             images = "classifieds/error-img.jpg";
@@ -484,8 +392,8 @@ OssUpload.prototype = {
                             type: "error",
                             autohide: false,
                             message:
-                              "Oops! an error occured when uploading your image(s). \
-                                            But you can submit this post without images ."
+                              "Oops! an error occured on image(s). \
+                                But you can submit the post without images ."
                           });
                         }
                       }
@@ -513,9 +421,8 @@ OssUpload.prototype = {
                           $.wnoty({
                             type: "error",
                             autohide: false,
-                            message:
-                              "Oops! an error occured when uploading your image(s). \
-                                            But you can submit this post without images ."
+                            message: "Oops! an error occured on image(s). \
+                                            But you can submit the post without images ."
                           });
                           hasErrors = true;
                         }
@@ -529,7 +436,7 @@ OssUpload.prototype = {
                   autohide: false,
                   message:
                     "Oops! an error occured when uploading your image(s), \
-                    Please try again later or contact us via support@obrisk.com. "
+                    Please try again or contact us via WechatID: Obrisk. "
                 });
                 $(".start-uploader").css("display", "block");
                 console.log(e);
@@ -542,7 +449,7 @@ OssUpload.prototype = {
               autohide: false,
               message:
                 "Oops!, it looks like there is a network problem, \
-                try again later or contact us at support@obrisk.com"
+                try again later or contact us via wechatID: Obrisk"
             });
             $(".start-uploader").css("display", "block");
           }
@@ -552,7 +459,7 @@ OssUpload.prototype = {
             type: "error",
             autohide: false,
             message:
-              "Oops! an error occured. Try again later or contact us via support@obrisk.com"
+              "Oops! an error occured. Try again later or contact us via wechatID: Obrisk"
           });
           console.log(e);
         });

@@ -130,12 +130,6 @@ OssUpload.prototype = {
                   if (progressBarNum == 100) {
                     //Try to edit the uploaded image, if it fails it means the image
                     //was corrupted during upload
-                    $.ajax({
-                      url:
-                        obrisk_oss_url +
-                        res.name +
-                        "?x-oss-process=image/average-hue",
-                      success: function() {
                         $.ajax({
                           url: "/users/update-profile-pic/",
                           data: {
@@ -157,28 +151,6 @@ OssUpload.prototype = {
                             $("#startUpload").show();
                           }
                         });
-                      },
-                      error: function(e) {
-                        // if a file is corrupted during upload retry 5 times to upload it then skip it and return an error message
-                        if (uploadRetryCount < uploadRetryCountMax) {
-                          uploadRetryCount++;
-                          console.error(
-                            `uploadRetryCount : ${uploadRetryCount}`
-                          );
-                          upload();
-                        } else {
-                          //We have retried to the max and there is nothing we can do
-                          //Allow the users to submit the form atleast with default image.
-                          $.wnoty({
-                            type: "error",
-                            autohide: false,
-                            message:
-                              "Oops! an error occured when uploading your image, please try again later!"
-                          });
-                          $("#startUpload").show();
-                        }
-                      }
-                    }); //End of outer ajax call
                   } //End of the if progress bar == 100
                 })
                 .catch(err => {

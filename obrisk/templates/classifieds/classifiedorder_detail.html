@@ -1,188 +1,212 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static i18n %}
-{% load crispy_forms_tags thumbnail humanize %}
+
+{% block title %}{{ classified.title }}{% endblock %}
 
 {% block head %}
-<link href="{% static 'css/classifieds.css' %} " rel="stylesheet">
-<link rel="stylesheet" href="{% static 'css/vendor/slider-pro.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/vendor/fancybox.min.css' %}">
-
-<title>{{ classifiedorder.classified.title|title }}</title>
+<link href="{% static 'css/classified_order.css' %}" rel="stylesheet">
 {% endblock head %}
 
 {% block content %}
 
-{% include 'nav_modal.html' %}
-<!-- Page Content -->
-<div class="container view-wrapper">
-   <section class="classified-wrapper">
+<div class="page-wrapper">
+    <div class="page-head">
+      {% if request.META.HTTP_REFERER %}
+        <a  href="javascript:history.back()" class="cls-back-btn">
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path d="M10.828 12l4.95 4.95-1.414 1.414L8 12l6.364-6.364 1.414 1.414z" />
+           </svg>
+        </a>
+      {% endif  %}
+    </div>
 
-       <div class="slider-wrapper">
-          <div class="slider-pro" id="image-slider">
-            <div class="sp-slides">
-              {% for image in images %}
-              <div class="sp-slide">
-                  <a href="{{oss}}/{{ image.image }}"
-                  data-fancybox="classified-gallery">
-                  <img class="sp-image" src=""
-                    data-src="{{oss}}/{{ image.image_mid_size }}" />
-                </a>
-              </div>
-              {% endfor %}
-            </div>
+    <a class="main-top" href="{% url 'classifieds:classified' classifiedorder.classified.slug %}">
+          {% if classifiedorder.classified.thumbnail %}
+              <img class="card-img lazyload" src="{{oss}}/{{ classifiedorder.classified.thumbnail }}"
+                    width="200px" height="200px">
+          {% else %}
+              <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
+                    width="200px" height="200px">
+          {% endif %}
+
+          <div id="order-summary-meta"> 
+              <strong> {{ classifiedorder.classified.title|title }}</strong>
+              <h1> {{ classifiedorder.classified.city }}</h1>
+              <h1> Price: CNY {{ classifiedorder.classified.price }}</h1>
           </div>
+   </a>
+
+  <div class="order-details">
+    {% if classifiedorder.is_offline %}
+        <p id="note" > Offline Pickup </p>
+
+        <div class="details-group">
+            <svg id="Layer_1" width="36" height="36"
+                version="1.1" viewBox="0 0 100 100" fill="#1FAECE">
+                <g><path d="M71.1,90.6H28.9c-2.7,0-4.9-2.2-4.9-4.9V23.5c0-2.7,2.2-4.9,4.9-4.9h15v7c0,1.2,1,2.1,2.1,2.1H54c1.2,0,2.1-1,2.1-2.1v-7   h15c2.7,0,4.9,2.2,4.9,4.9v62.2C76,88.4,73.8,90.6,71.1,90.6z M28.9,20.6c-1.6,0-2.9,1.3-2.9,2.9v62.2c0,1.6,1.3,2.9,2.9,2.9h42.2   c1.6,0,2.9-1.3,2.9-2.9V23.5c0-1.6-1.3-2.9-2.9-2.9h-13v5c0,2.3-1.8,4.1-4.1,4.1H46c-2.3,0-4.1-1.9-4.1-4.1v-5H28.9z"/></g>
+                <g><path d="M50,56.3c-1.3,0-2.5-0.3-3.6-0.8c-3-1.4-4.9-4.4-4.9-7.7c0-4.7,3.8-8.5,8.5-8.5s8.5,3.8,8.5,8.5c0,3.3-1.9,6.3-4.9,7.7   C52.5,56,51.3,56.3,50,56.3z M50,41.3c-3.6,0-6.5,2.9-6.5,6.5c0,2.5,1.5,4.8,3.7,5.9c1.7,0.8,3.8,0.8,5.5,0   c2.3-1.1,3.7-3.4,3.7-5.9C56.5,44.2,53.6,41.3,50,41.3z"/></g>
+                <g><path d="M50.7,71.8c-0.1,0-0.2,0-0.3,0h-0.7c-3.3,0-6.2,0-8.4-0.8c-2.7-1-4-2.9-4-6.1c0-5.3,3.8-9.9,9.3-11.4l0.4-0.1l0.3,0.2   c1.7,0.8,3.8,0.8,5.5,0l0.3-0.2l0.4,0.1c5.5,1.4,9.3,6.1,9.3,11.4c0,3.1-1.3,5.1-4,6.1C56.6,71.8,53.9,71.8,50.7,71.8z M50,69.8   h0.3c3,0,5.8,0,7.7-0.7c1.9-0.7,2.7-1.9,2.7-4.2c0-4.3-3-8.1-7.4-9.3c-2.1,0.9-4.5,0.9-6.5,0c-4.4,1.3-7.4,5.1-7.4,9.3   c0,2.3,0.8,3.5,2.7,4.2c1.9,0.7,4.7,0.7,7.7,0.7H50z"/></g>
+                <g><path d="M64.3,82.6H35.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h28.5c0.6,0,1,0.4,1,1S64.8,82.6,64.3,82.6z"/></g>
+                <g><path d="M61.5,77.6h-23c-0.6,0-1-0.4-1-1s0.4-1,1-1h23c0.6,0,1,0.4,1,1S62.1,77.6,61.5,77.6z"/></g>
+                <g><path d="M54,29.8H46c-2.3,0-4.1-1.9-4.1-4.1V13.5c0-2.3,1.8-4.1,4.1-4.1H54c2.3,0,4.1,1.9,4.1,4.1v12.1   C58.1,27.9,56.2,29.8,54,29.8z M46,11.4c-1.2,0-2.1,1-2.1,2.1v12.1c0,1.2,1,2.1,2.1,2.1H54c1.2,0,2.1-1,2.1-2.1V13.5   c0-1.2-1-2.1-2.1-2.1H46z"/></g>
+            </svg>
+            {% if classifiedorder.classified.user.username %}
+                <p>{{ classifiedorder.classified.user.username }} </p>
+            {% endif %}
         </div>
 
-        <div class="classified-meta">
-              <!-- Title -->
-              <h3 class="cls-title title is-5">{{ classifiedorder.classified.title|title }}</h3>
+        <a class="details-group" href="tel:{{ classifiedorder.classified.user.phone_number }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                viewBox="0 0 24 24" fill="3EC4E2" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-call">
+                <path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+            </svg> &nbsp; &nbsp;
+            {% if classifiedorder.classified.user.phone_number %}
+                <p> {{ classifiedorder.classified.user.phone_number }} </p>
+            {% endif %}
+        </a>
+        
+        <div class="details-group">
+            <svg style="enable-background:new 0 0 48 48;" version="1.1"
+                viewBox="0 0 48 48" width="34" height="34">
+                <g id="Icons"><ellipse cx="24" cy="38.97918" rx="2.97" ry="0.85673" style="fill:#3EC4E2;"/><g>
+                <path d="M23.99965,8.16195c-5.37,0-9.71002,4.35004-9.71002,9.71002c0,1.71002,0.44,3.31,1.23004,4.70001    l-0.01001,0.01001l7.76996,11.63c0.34003,0.51001,1.10004,0.51001,1.44,0l7.76001-11.63v-0.01001    c0.79004-1.39001,1.23004-2.98999,1.23004-4.70001C33.70967,12.51198,29.34962,8.16195,23.99965,8.16195z M24.32966,24.05196    c-2.84003,0.17999-5.29004-1.96997-5.47003-4.81c-0.17999-2.83002,1.98004-5.27997,4.82001-5.45996    c2.83002-0.18005,5.28003,1.97998,5.46002,4.81C29.31965,21.43197,27.15962,23.87197,24.32966,24.05196z" style="fill:#3EC4E2;"/>
+                <line style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" x1="16.48186" x2="16.50631" y1="24.03164" y2="24.05609"/>
+                <path d="    M32.48301,22.58122l-7.76333,11.63006c-0.34316,0.51408-1.09871,0.51408-1.44187,0l-7.76333-11.63006l0.00163-0.0043    c-0.78238-1.39361-1.22246-2.99503-1.22246-4.70648c0-5.35438,4.33974-9.70635,9.70635-9.70635    c5.35439,0,9.70635,4.35197,9.70635,9.70635c0,1.71145-0.44009,3.31287-1.22247,4.70648L32.48301,22.58122z" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                <path d="    M30.97119,15.14711c0.17787,0.62385,0.26063,1.28602,0.23215,1.96898" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                <path d="    M25.22595,10.61856c2.09651,0.08741,3.91058,1.20312,4.9756,2.83991" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                <ellipse cx="24" cy="18.91938" rx="5.14617" ry="5.14617" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" transform="matrix(0.998 -0.06316 0.06316 0.998 -1.14698 1.55354)"/>
+                </g>
+                <ellipse cx="24" cy="38.97918" rx="2.97" ry="0.85673" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                </g>
+          </svg>
 
-              <!-- Price -->
-              {% if classifiedorder.price != 0.00 %}
-                  <strong class="price"> ¥{{ classifiedorder.classified.price }} </strong>
-              {% else %}
-                  <strong class="price"> FREE </strong>
-              {% endif %}
+            {% if classifiedorder.classified.english_address %}
+            <p>{{ classifiedorder.classified.english_address }}</p>
+            {% else %}
+                <p>Contact Seller for address info </p> 
+            {% endif %}
+        </div>
 
-              <div class="meta-details">
 
-                <div class="meta-right">
-                  <a class="user-link" href="{% url 'users:detail' classifiedorder.classified.user.username %}">
-                    {% if classifiedorder.classified.user.thumbnail %}
-                    <img src="{{oss}}/{{classifiedorder.classified.user.thumbnail}}"
-                      alt="Picture Profile" id="pic">
-                    {% else %}
-                    <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
-                    {% endif %}
-                  </a>
+    {% else  %}
+        <p class="title is-4" > Express Delivery  </p>
 
-                  <div class="meta-left">
-                    <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
-                      href="{% url 'users:detail' classifiedorder.classified.user.username %}">
-                      <strong itemprop="name" id="classified-user">
-                        {{ classifiedorder.classified.user.get_profile_name|title }} </strong>
-                    </a>
+        <div class="details-group">
+            <svg id="Layer_1" width="32" height="32"
+                version="1.1" viewBox="0 0 100 100" fill="#1FAECE">
+                <g><path  d="M71.1,90.6H28.9c-2.7,0-4.9-2.2-4.9-4.9V23.5c0-2.7,2.2-4.9,4.9-4.9h15v7c0,1.2,1,2.1,2.1,2.1H54c1.2,0,2.1-1,2.1-2.1v-7   h15c2.7,0,4.9,2.2,4.9,4.9v62.2C76,88.4,73.8,90.6,71.1,90.6z M28.9,20.6c-1.6,0-2.9,1.3-2.9,2.9v62.2c0,1.6,1.3,2.9,2.9,2.9h42.2   c1.6,0,2.9-1.3,2.9-2.9V23.5c0-1.6-1.3-2.9-2.9-2.9h-13v5c0,2.3-1.8,4.1-4.1,4.1H46c-2.3,0-4.1-1.9-4.1-4.1v-5H28.9z"/></g>
+                <g><path d="M50,56.3c-1.3,0-2.5-0.3-3.6-0.8c-3-1.4-4.9-4.4-4.9-7.7c0-4.7,3.8-8.5,8.5-8.5s8.5,3.8,8.5,8.5c0,3.3-1.9,6.3-4.9,7.7   C52.5,56,51.3,56.3,50,56.3z M50,41.3c-3.6,0-6.5,2.9-6.5,6.5c0,2.5,1.5,4.8,3.7,5.9c1.7,0.8,3.8,0.8,5.5,0   c2.3-1.1,3.7-3.4,3.7-5.9C56.5,44.2,53.6,41.3,50,41.3z"/></g>
+                <g><path d="M50.7,71.8c-0.1,0-0.2,0-0.3,0h-0.7c-3.3,0-6.2,0-8.4-0.8c-2.7-1-4-2.9-4-6.1c0-5.3,3.8-9.9,9.3-11.4l0.4-0.1l0.3,0.2   c1.7,0.8,3.8,0.8,5.5,0l0.3-0.2l0.4,0.1c5.5,1.4,9.3,6.1,9.3,11.4c0,3.1-1.3,5.1-4,6.1C56.6,71.8,53.9,71.8,50.7,71.8z M50,69.8   h0.3c3,0,5.8,0,7.7-0.7c1.9-0.7,2.7-1.9,2.7-4.2c0-4.3-3-8.1-7.4-9.3c-2.1,0.9-4.5,0.9-6.5,0c-4.4,1.3-7.4,5.1-7.4,9.3   c0,2.3,0.8,3.5,2.7,4.2c1.9,0.7,4.7,0.7,7.7,0.7H50z"/></g>
+                <g><path d="M64.3,82.6H35.8c-0.6,0-1-0.4-1-1s0.4-1,1-1h28.5c0.6,0,1,0.4,1,1S64.8,82.6,64.3,82.6z"/></g>
+                <g><path d="M61.5,77.6h-23c-0.6,0-1-0.4-1-1s0.4-1,1-1h23c0.6,0,1,0.4,1,1S62.1,77.6,61.5,77.6z"/></g>
+                <g><path d="M54,29.8H46c-2.3,0-4.1-1.9-4.1-4.1V13.5c0-2.3,1.8-4.1,4.1-4.1H54c2.3,0,4.1,1.9,4.1,4.1v12.1   C58.1,27.9,56.2,29.8,54,29.8z M46,11.4c-1.2,0-2.1,1-2.1,2.1v12.1c0,1.2,1,2.1,2.1,2.1H54c1.2,0,2.1-1,2.1-2.1V13.5   c0-1.2-1-2.1-2.1-2.1H46z"/></g>
+            </svg>
 
-                    <div class="location">
-                      <span class="card-subtitle">
-                        {% if classifiedorder.classified.english_address  %}
-                           📍{{ classifiedorder.classified.english_address }}, {{ classifiedorder.classified.city }}
-                        {% else %}
-                           📍{{ classifiedorder.classified.user.city }}
-                        {% endif %} </span>
-                    </div>
-                  </div>
-                </div>
+            {% if classifiedorder.full_name %}
+                <p> {{ classifiedorder.full_name | title }} </p>
+            {% else %}
+                <p> {{ request.user.username | title }} </p>
+            {% endif %}
+        </div>
 
-              <div class="notification is-warning">
-                  <p>You've purchased this item <p>
-                  <p>The delivery confirmation is pending, we will update you on next step </p>
-              </div>
-
-          </div>
-
-        <div class="card-text">{{ classifiedorder.classified.details }}</div>
-
-        <br/>
-        {% if classifiedorder.video %}
-              <video id="classified-video" class="vd-container" height="400vh" preload="metadata" 
-                  x5-video-player-type="h5-page" controls controlsList="nodownload"
-                  crossorigin webkit-playsinline playsinline preload control
-		  poster="{{oss}}/{{ classified.thumbnail }}" style="background-color: #000;" >
-                  <source src="{{oss}}/{{classifiedorder.video}}#t=0.5" type="video/mp4">
-                  Your browser doesn' t support HTML5 video tag. 
-              </video>
-        <br/> <br/><br/>
+        <div class="details-group">
+            <svg style="enable-background:new 0 0 48 48;" version="1.1"
+                viewBox="0 0 48 48" width="34" height="34">
+                <g id="Icons"><ellipse cx="24" cy="38.97918" rx="2.97" ry="0.85673" style="fill:#3EC4E2;"/><g>
+                <path d="M23.99965,8.16195c-5.37,0-9.71002,4.35004-9.71002,9.71002c0,1.71002,0.44,3.31,1.23004,4.70001    l-0.01001,0.01001l7.76996,11.63c0.34003,0.51001,1.10004,0.51001,1.44,0l7.76001-11.63v-0.01001    c0.79004-1.39001,1.23004-2.98999,1.23004-4.70001C33.70967,12.51198,29.34962,8.16195,23.99965,8.16195z M24.32966,24.05196    c-2.84003,0.17999-5.29004-1.96997-5.47003-4.81c-0.17999-2.83002,1.98004-5.27997,4.82001-5.45996    c2.83002-0.18005,5.28003,1.97998,5.46002,4.81C29.31965,21.43197,27.15962,23.87197,24.32966,24.05196z" style="fill:#3EC4E2;"/>
+                <line style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" x1="16.48186" x2="16.50631" y1="24.03164" y2="24.05609"/>
+                <path d="    M32.48301,22.58122l-7.76333,11.63006c-0.34316,0.51408-1.09871,0.51408-1.44187,0l-7.76333-11.63006l0.00163-0.0043    c-0.78238-1.39361-1.22246-2.99503-1.22246-4.70648c0-5.35438,4.33974-9.70635,9.70635-9.70635    c5.35439,0,9.70635,4.35197,9.70635,9.70635c0,1.71145-0.44009,3.31287-1.22247,4.70648L32.48301,22.58122z" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                <path d="    M30.97119,15.14711c0.17787,0.62385,0.26063,1.28602,0.23215,1.96898" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                <path d="    M25.22595,10.61856c2.09651,0.08741,3.91058,1.20312,4.9756,2.83991" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                <ellipse cx="24" cy="18.91938" rx="5.14617" ry="5.14617" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" transform="matrix(0.998 -0.06316 0.06316 0.998 -1.14698 1.55354)"/>
+                </g>
+                <ellipse cx="24" cy="38.97918" rx="2.97" ry="0.85673" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
+                </g>
+          </svg>
+        {% if classifiedorder.recipient_chinese_address %}
+            <p> {{ classifiedorder.recipient_chinese_address | title }} </p>
+        {% else %}
+            <p>Please provide your address to the seller</p> 
         {% endif %}
+    </div>
 
-        <!-- Similar lassified -->
-        {% if similar_classifieds %}
-          <h5 class="title related-title">Related Classifieds</h5>
-          <div class="related">
-            <!-- Classified Entries Column -->
-            {% for classified in similar_classifieds %}
-                <div class="card classified-card">
-                  <!--Display image-->
-                  <a href="{% url 'classifieds:classified' classified.slug %}"
-                    style="color:black; text-decoration:none; background-color:none">
-                    <div class="card-img-top img-responsive">
+    <div class="details-group">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+            viewBox="0 0 24 24" fill="#3EC4E2" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-call">
+            <path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+            </path>
+        </svg> &nbsp; &nbsp;
 
-                      {% if classified.thumbnail %}
-                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/{{ classified.thumbnail }}"
-                        width="154px" height="154px">
-                      {% else %}
-                      <img class="card-img lazyload" src="https://obrisk.oss-cn-hangzhou.aliyuncs.com/classifieds/default.jpg"
-                        width="154px" height="154px">
-                      {% endif %}
-                    </div>
+        {% if classifiedorder.phone_number %}
+            <p> {{ classifiedorder.phone_number }} </p>
+        {% else %}
+            <p> {{ request.user.phone_number }} </p>
+        {% endif %}
+    </div>
 
-                    <div class="divider"></div>
+    {% endif %}
+  </div>
 
-                    <div class="card-body">
-                      <h6 class="card-title"> {{ classified.title}} </h6>
+  <br/>
+  <div class="action-wrapper">
+    <button class="button chat-button accent-button" id="chat-button-id"
+        href="{% url 'messager:conversation_detail' classifiedorder.classified.user.username %}">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+          class="feather feather-message-square">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+        </svg> &nbsp;
+        Talk to Seller
+    </button>
 
-                      {% if classified.price != 0.00 %}
-                          <p class="card-subtitle"> ¥{{ classified.price|title }} </p>
-                      {% else %}
-                          <p class="card-subtitle"> {% trans 'FREE' %} </p>
-                      {% endif %}
-                      <span class="card-text small "><small>📍</small> {{ classified.city|safe }}</span>
+    <button class="button accent-button" id="wechat-refund-call">
+        <svg enable-background="new 0 0 300 300" height="26" width="26"
+            id="Layer_1" version="1.1" viewBox="0 0 300 300">
+            <g> <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"
+             stroke-miterlimit="10" stroke-width="6"
+              d="   M231,188v13c0,5.523-4.727,10-10.25,10h-171c-5.523,0-9.75-4.477-9.75-10V100c0-5.523,4.227-10,9.75-10h171   c5.523,0,10.25,4.477,10.25,10v60"/>
+            <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"
+            d="   M231,122.627c0-2.003-1.624-3.627-3.627-3.627H43.627c-2.003,0-3.627,1.624-3.627,3.627v23.746c0,2.003,1.624,3.627,3.627,3.627   h183.746c2.003,0,3.627-1.624,3.627-3.627V122.627z"/>
+            <line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
+                stroke-miterlimit="10" stroke-width="6" x1="54" x2="80" y1="189" y2="189"/>
+            <polyline fill="none" points="   198.307,163.167 187.231,174.243 198.307,185.319  " stroke="#FFFFFF"
+            stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"/>
+            <path d="   M188.356,174.625c0,0,56.593-0.067,56.816-0.076c8.512-0.34,14.828-7.188,14.828-15.799v-2c0-8.836-6.414-15.75-15.25-15.75H243"
+            fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"/> </g>
+        </svg>
 
-                    </div>
-                    {% if classified.priority > 0 %}
-                    <div class="priority">
-                      Featured
-                    </div>
-                    {% endif %}
+        Request Refund
+    </button>
 
-                  </a>
-                </div>
+  </div>
 
-            {% endfor %}
-        </div>
-
-      </div>
-      {% endif %}
-
-   </section>
 </div>
-
 {% endblock content %}
 
 {% block extra_js %}
 
-<script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
-<script defer src="{% static 'js/vendor/fancybox.min.js' %}"></script>
-<script defer src="{% static 'js/vendor/jquery.sliderPro.min.js' %}"></script>
-<script type="text/javascript">
+<script>
 
 document.addEventListener('DOMContentLoaded', function () {
+    const chatBtn = document.getElementById('chat-button-id');
 
-  const image_count = {{ images| length}}
-
-  if (image_count > 1) {
-    $(".slider-pro").sliderPro({
-      arrows: true,
-      width: 960,
-      fade: true,
-      autoplay: false,
-      autoScaleLayers: false,
-          autoHeight: true,
-
-        });
-      } else {
-        $(".slider-pro").sliderPro({
-          arrows: true,
-          width: 960,
-          fade: true,
-          autoplay: false,
-          autoScaleLayers: false,
-          autoHeight: true,
-          touchSwipe: false,//disable touch swipe if we have only one image
-        });
-      }
-  });
-
+    if( chatBtn !== null) {
+	  chatBtn.addEventListener('click', () => {
+	      if (currentUser !== undefined) {
+              window.location.href = chatUrl;
+	      }else {
+		      if (wechat_browser) {
+                window.location.href = wechatAuth;
+		      }else {
+                window.location.href = loginUrl;
+		      }
+	      }
+	  });
+    }
+});
 </script>
-
 {% endblock extra_js %}
