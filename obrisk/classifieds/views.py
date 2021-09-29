@@ -671,7 +671,7 @@ def initiate_wxpy_info(request, *args, **kwargs):
         openid = request.user.wechat_openid
         if openid:
             if classified.details is None:
-                clasified.details = classified.title
+                classified.details = classified.title
 
             return render(
                 request,
