@@ -670,6 +670,9 @@ def initiate_wxpy_info(request, *args, **kwargs):
     if classified and isinstance(classified.price, decimal.Decimal):
         openid = request.user.wechat_openid
         if openid:
+            if classified.details is None:
+                clasified.details = classified.title
+
             return render(
                 request,
                 'classifieds/pay_order.html',
