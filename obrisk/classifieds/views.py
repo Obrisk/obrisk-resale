@@ -91,21 +91,20 @@ def classified_list(request, city=None):
                     response = ipd.lookup(client_ip, fields=['country_code', 'city'])
 
                     city = response['city']
-                    logging.error(f'IPdata response {response}', extra=response)
                     if response['country_code'] != 'CN':
                         messages.error(
                             request,
                             "This platform is for China users, if you're, pls switch off the vpn🙄"
                         )
+
+                    cache.set(
+                        f'user_city_{request.session.get("visitor_id")}',
+                        city,
+                        60 * 60 * 2
+                    )
                 except Exception as e:
                     logging.error(f'Ipdata Geoip Request failed', exc_info=e)
                     city = ''
-
-            cache.set(
-                f'user_city_{request.session.get("visitor_id")}',
-                city,
-                60 * 60 * 2
-            )
 
     classifieds_list = Classified.objects.get_active().values(
                     'title','price','city','slug', 'thumbnail'
