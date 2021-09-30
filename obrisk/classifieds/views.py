@@ -18,7 +18,6 @@ from django.views.generic import (
         CreateView, UpdateView,
         DetailView, DeleteView)
 from django.urls import reverse, reverse_lazy
-
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.translation import ugettext_lazy as _
 from django.utils.decorators import method_decorator
@@ -39,13 +38,8 @@ from django.views.decorators.csrf import ensure_csrf_cookie, csrf_exempt
 import xmltodict
 from dal import autocomplete
 from ipware import get_client_ip
+from ipdata import ipdata
 
-from aliyunsdkcore.client import AcsClient
-from aliyunsdkcore.acs_exception.exceptions import ClientException
-from aliyunsdkcore.acs_exception.exceptions import ServerException
-from aliyunsdkgeoip.request.v20200101.DescribeIpv4LocationRequest import (
-        DescribeIpv4LocationRequest
-    )
 from obrisk.utils.helpers import (
         ajax_required, AuthorRequiredMixin,
         OfficialUserRequiredMixin
@@ -92,29 +86,19 @@ def classified_list(request, city=None):
                     )
             else:
                 try:
-                    access_key_id = os.getenv('RAM_USER_ID')
-                    access_key_secret = os.getenv('RAM_USER_S3KT_KEY')
-                    #Default timeout is 5 secs, but the server is far from aliyun
-                    #This is north China, there are 3 more data centers. try others
-                    client = AcsClient(
-                            access_key_id, access_key_secret,
-                            'cn-hangzhou',timeout=30, max_retry_time=3)
+                    ipd = ipdata.IPData(os.getenv('IPDATA_KEY'))
 
-                    req = DescribeIpv4LocationRequest()
-                    req.set_accept_format('json')
-                    req.set_Ip(client_ip)
+                    response = ipd.lookup(client_ip, fields=['country_code', 'city'])
 
-                    response = client.do_action_with_exception(req)
-                    info = ast.literal_eval(str(response, encoding='utf-8'))
-
-                    city = info['CityEn']
-                    if info['CountryEn'] != 'China' and len(info['CountryEn']) > 1:
+                    city = response['city']
+                    logging.error(f'IPdata response {response}', extra=response)
+                    if response['country_code'] != 'CN':
                         messages.error(
                             request,
                             "This platform is for China users, if you're, pls switch off the vpn🙄"
                         )
                 except Exception as e:
-                    logging.error(f'Aliyun Geoip failed', exc_info=e)
+                    logging.error(f'Ipdata Geoip Request failed', exc_info=e)
                     city = ''
 
             cache.set(
