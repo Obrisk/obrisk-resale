@@ -1,3 +1,4 @@
+import logging
 import time
 from django.core.cache import cache
 from django.conf import settings
@@ -5,6 +6,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import HttpResponse
 from celery import shared_task
 from obrisk.classifieds.models import Classified, ClassifiedTags
+from obrisk.messager.send_wxtemplate import notify_seller_wxtemplate
 
 
 TAGS_TIMEOUT = getattr(
@@ -59,3 +61,16 @@ def add_tags(item_id):
             classified.tags.add(det)
 
     classified.save()
+
+
+@shared_task
+def order_notify_seller(order_id):
+    try:
+        notify_seller_wxtemplate(
+            ClassifiedOrder.objects.get(id=order_id)
+        )
+    except Exception as e:
+        logging.error(
+            f'Failed to notify seller on Classified Order',
+            exc_info=e
+        )

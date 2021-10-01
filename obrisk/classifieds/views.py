@@ -51,7 +51,7 @@ from obrisk.classifieds.forms import (
         ClassifiedForm, AdminClassifiedForm, OfficialAdForm,
         ClassifiedEditForm, AdminClassifiedImgForm)
 from obrisk.utils.images_upload import multipleImagesPersist
-from obrisk.classifieds.tasks import add_tags
+from obrisk.classifieds.tasks import add_tags, order_notify_seller
 from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
 from config.settings.base import env
 try:
@@ -713,11 +713,11 @@ def wxpyjs_success(request, *args, **kwargs):
             logging.error('Could not create classified Order', exc_info=e)
 
         else:
+            order_notify_seller.delay(order.id)
             return JsonResponse({
                 'success': True,
                 'order_slug': order.slug
             })
-            #return redirect('classifieds:order_detail', order.slug)
 
     return JsonResponse({
         'success': False

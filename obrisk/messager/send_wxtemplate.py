@@ -137,3 +137,40 @@ def upload_success_wxtemplate(user):
 
     logging.error(f'Pushing data: {data}', extra=data)
     wx_push.do_push(user.wechat_openid,template_id,url,color,data)
+
+
+def notify_seller_wxtemplate(order):
+    wx_push = WechatPush()
+    template_id = "2DWnQShB7yDden_QxWevK_2F8f7RpexrI_WCXuvwDXo" #noqa
+    url = "https://obrisk.com/classifieds/orders/wsguatpotlfwccdi/seller-confirm?item=" + classified.id #noqa
+
+    color = "#173177"
+    title = "Hi your item has been purchased!"
+    tail = "Thank you for using Obrisk"
+
+    if order.is_offline:
+        recipient = 'Offline Pickup'
+    else:
+        recipient = 'Express Delivery'
+
+    data={
+            "first": {"value":title},
+            "keyword1":{
+                "value":order.classified.title,"color":color
+            },
+            "keyword2":{
+                "value":order.classified.price,"color":color
+            },
+            "keyword3":{
+                "value":recipient,"color":color
+            },
+            "keyword4":{
+                "value":order.buyer.username,"color":color
+            },
+            "keyword5":{
+                "value":order.buyer.city,"color":color
+            },
+            "remark": {"value":tail}
+        }
+
+    wx_push.do_push(classified.user.userid, template_id, url, color, data)
