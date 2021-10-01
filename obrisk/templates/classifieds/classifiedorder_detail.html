@@ -39,7 +39,7 @@
 
   <div class="order-details">
     {% if classifiedorder.is_offline %}
-        <p id="note" > Offline Pickup </p>
+        <p id="title is-4" > Offline Pickup </p>
 
         <div class="details-group">
             <svg id="Layer_1" width="36" height="36"
@@ -56,17 +56,6 @@
             {% endif %}
         </div>
 
-        <a class="details-group" href="tel:{{ classifiedorder.classified.user.phone_number }}">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-                viewBox="0 0 24 24" fill="3EC4E2" stroke="currentColor" stroke-width="2"
-                stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-call">
-                <path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
-                </path>
-            </svg> &nbsp; &nbsp;
-            {% if classifiedorder.classified.user.phone_number %}
-                <p> {{ classifiedorder.classified.user.phone_number }} </p>
-            {% endif %}
-        </a>
         
         <div class="details-group">
             <svg style="enable-background:new 0 0 48 48;" version="1.1"
@@ -91,6 +80,18 @@
         </div>
 
 
+        <a class="details-group offline-phone" href="tel:{{ classifiedorder.classified.user.phone_number }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+                viewBox="0 0 24 24" fill="#3EC4E2" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-call">
+                <path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
+                </path>
+            </svg> &nbsp; &nbsp;
+            {% if classifiedorder.classified.user.phone_number %}
+                <p> {{ classifiedorder.classified.user.phone_number }} </p>
+            {% endif %}
+        </a>
+
     {% else  %}
         <p class="title is-4" > Express Delivery  </p>
 
@@ -114,7 +115,7 @@
 
         <div class="details-group">
             <svg style="enable-background:new 0 0 48 48;" version="1.1"
-                viewBox="0 0 48 48" width="34" height="34">
+                viewBox="0 0 48 48" width="48" height="48">
                 <g id="Icons"><ellipse cx="24" cy="38.97918" rx="2.97" ry="0.85673" style="fill:#3EC4E2;"/><g>
                 <path d="M23.99965,8.16195c-5.37,0-9.71002,4.35004-9.71002,9.71002c0,1.71002,0.44,3.31,1.23004,4.70001    l-0.01001,0.01001l7.76996,11.63c0.34003,0.51001,1.10004,0.51001,1.44,0l7.76001-11.63v-0.01001    c0.79004-1.39001,1.23004-2.98999,1.23004-4.70001C33.70967,12.51198,29.34962,8.16195,23.99965,8.16195z M24.32966,24.05196    c-2.84003,0.17999-5.29004-1.96997-5.47003-4.81c-0.17999-2.83002,1.98004-5.27997,4.82001-5.45996    c2.83002-0.18005,5.28003,1.97998,5.46002,4.81C29.31965,21.43197,27.15962,23.87197,24.32966,24.05196z" style="fill:#3EC4E2;"/>
                 <line style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;" x1="16.48186" x2="16.50631" y1="24.03164" y2="24.05609"/>
@@ -134,7 +135,7 @@
     </div>
 
     <div class="details-group">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
             viewBox="0 0 24 24" fill="#3EC4E2" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round" class="feather feather-phone-call">
             <path d="M15.05 5A5 5 0 0 1 19 8.95M15.05 1A9 9 0 0 1 23 8.94m-1 7.98v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z">
