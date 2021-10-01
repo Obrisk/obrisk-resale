@@ -318,13 +318,13 @@ article {
   margin-top: 4px;
   justify-content: space-evenly;
   width: 100%;
-}
 
-.action-button {
+  .action-button, .action-button:active, .action-button:hover{
     width: 100%;
     color: #1FAECE;
     border-color: #1FAECE;
     box-shadow: 2px 4px 4px rgba(0, 0, 0, .25);
+  }
 }
 
 .card-text {

@@ -70,7 +70,7 @@
         <ul class="bt-nav-ul is-toggle is-fullwidth">
 
          <li class="bt-nav-item {% if base_active == 'classifieds' %} is-active {% endif %}">
-            <a class="bt-nav-link" href="{% url 'classifieds:list' %}">
+            <a class="bt-nav-link black-link" href="{% url 'classifieds:list' %}">
                 <span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                   stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -87,7 +87,7 @@
           </li>
 
           <li class="bt-nav-item">
-            <a class="bt-nav-link" href="{% url 'classifieds:write_new' %}"
+            <a class="bt-nav-link black-link" href="{% url 'classifieds:write_new' %}"
             id="addNewItem">
                 <span class="nav-icons">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
@@ -106,7 +106,7 @@
 
           <li class="bt-nav-item {% if base_active == 'chat' %} is-active {% endif %}">
           {% if request.user.is_authenticated %}
-                <a class="bt-nav-link" href="{% url 'messager:contacts_list' %}">
+                <a class="bt-nav-link black-link" href="{% url 'messager:contacts_list' %}">
                   <span class="nav-icons">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
                       stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -127,7 +127,7 @@
                   </span>
                 </a>
            {% else %}
-                <a class="bt-nav-link" id="auth-button">
+                <a class="bt-nav-link black-link" id="auth-button">
                   <span class="nav-icons">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                         viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"

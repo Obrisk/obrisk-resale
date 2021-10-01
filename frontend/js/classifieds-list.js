@@ -28,7 +28,7 @@ function renderClassifieds(classifieds) {
       template = `
         <div class="card classified-card">
           <a href="${window.location.origin}/classifieds/${cls.slug}"
-                style="color:black; text-decoration:none; background-color:none">
+              class="black-link">
 
             <div class="card-img-top img-responsive">
                 ${img}

@@ -5,8 +5,8 @@
     <ul class="tp-nav-ul">
       <li>
         {% if request.META.HTTP_REFERER and request.path != '/classifieds/' %}
-            <a  href="javascript:history.back()">
-                <svg  class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
+            <a class="black-link" href="javascript:history.back()">
+                <svg class="feather feather-arrow-left-circle nav-back-btn" xmlns="http://www.w3.org/2000/svg"
                      width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                     stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="10"></circle>
@@ -15,7 +15,7 @@
                 </svg>
             </a>
         {% else  %}
-            <a class="nav-logo" href="{% url 'classifieds:list' %}">
+            <a class="nav-logo black-link" href="{% url 'classifieds:list' %}">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <g filter="url(#filter0_d)">
                         <path fill-rule="evenodd" clip-rule="evenodd" fill="url(#paint0_radial)"
@@ -76,7 +76,7 @@
 
     {% if request.user.is_authenticated %}
       <li class="top-nav-user-li">
-        <a href="#du" class="user-image navbar-item is-account drop-trigger">
+        <a href="#du" class="black-link user-image navbar-item is-account drop-trigger">
               {% if request.user.thumbnail %}
                 <img   src="{{ oss }}/{{request.user.thumbnail}}" alt="Pic"
                   style="width:30px;height:30px;border-radius: 20%;"
@@ -91,13 +91,13 @@
                 <div class="inner">
                   <div class="nav-drop-header is-auth-user">
                     <span class="username">{{ request.user.username|truncatechars:12}}</span>
-                    <a href="#" id="close">❌ 
+                    <a link="black-link" href="#" id="close">❌ 
                         {% trans 'CLOSE' %}
                     </a>
                   </div>
 
                   <div class="nav-drop-body account-items">
-                    <a class="account-item" href="{% url 'users:detail' request.user.username %}">
+                    <a class="account-item black-link" href="{% url 'users:detail' request.user.username %}">
                       <div class="media">
                         <div class="icon-wrap">
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -117,7 +117,7 @@
                       </div>
                     </a>
 
-                    <a class="account-item" href="{% url 'users:user_classifieds' request.user.username %}">
+                    <a class="account-item black-link" href="{% url 'users:user_classifieds' request.user.username %}">
                       <div class="media">
                         <div class="icon-wrap">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -141,7 +141,7 @@
                       </div>
                     </a>
 
-                    <a class="account-item" href="#d">
+                    <a class="account-item black-link" href="#d">
                       <div class="media">
                         <div class="icon-wrap">
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -175,8 +175,8 @@
 
     {% else %}
         <li class="top-nav-user-li">
-        <a href="#d" class="user-image navbar-item is-account drop-trigger">
-            <img src="{% static 'img/location.png' %}" height="34px" width="34px" alt="No Profile Picture" />
+        <a href="#d" class="user-image navbar-item is-account drop-trigger black-link">
+            <img src="{% static 'img/location.png' %}" height="34" width="34" alt="No Profile Picture" />
         </a>
 
         <div id="d" class="has-caret">
@@ -184,16 +184,16 @@
                 <div class="inner">
                       <div class="nav-drop-header is-auth-user">
                         <span class="username">POPULAR CITIES </span>
-                        <a href="#" id="close">❌ CLOSE</a>
+                        <a class="black-link" href="#" id="close">❌ CLOSE</a>
                       </div>
 
                       <div class="nav-drop-body account-items">
                         {% for city in popular_cities %}
-                            <a class="account-item" href="{% url 'classifieds:list_by_city' city %}">
+                            <a class="account-item black-link" href="{% url 'classifieds:list_by_city' city %}">
                               <div class="media">
                                 <div class="icon-wrap">
                                     <img class="user-image" src="{% static 'img/city_icon.png' %}"
-                                        height="20px" width="20px" alt="No Pic" />
+                                        height="20" width="20" alt="No Pic" />
                                 </div>
                                 <div>
                                 <h3> {{ city }}</h3>

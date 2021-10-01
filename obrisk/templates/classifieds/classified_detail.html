@@ -30,7 +30,7 @@
 
 {% block content %}
   {% if request.META.HTTP_REFERER %}
-    <a  href="javascript:history.back()" class="cls-back-btn">
+    <a href="javascript:history.back()" class="cls-back-btn black-link">
         <svg class="feather feather-arrow-left-circle" xmlns="http://www.w3.org/2000/svg"
              width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
             stroke-linecap="round" stroke-linejoin="round">
@@ -78,7 +78,7 @@
 
         <h3 class="title is-6 cls-title">{{ classified.title|title }}</h3>
         <div class="meta-info">
-          <a class="user-link" href="{% url 'users:detail' classified.user.username %}">
+          <a class="user-link black-link" href="{% url 'users:detail' classified.user.username %}">
             {% if classified.user.thumbnail %}
             <img src="{{oss}}/{{classified.user.thumbnail}}"
               alt="Picture Profile" id="pic">
@@ -89,7 +89,7 @@
 
           <div class="meta-right">
               <div class="meta-right-top">
-                <a itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                <a class="black-link" itemprop="author" itemscope="" itemtype="http://schema.org/Person"
                   href="{% url 'users:detail' classified.user.username %}">
                   <strong itemprop="name" id="classified-user">
                     {{ classified.user.get_profile_name|title }} </strong>
@@ -140,11 +140,11 @@
             {% else %}
                 <a class="button action-button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
                   title="{% trans 'Edit this classified' %}">
-                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> 🗑️{% trans 'Delete/Sold' %}</a>
+                  🗑️{% trans 'Delete/Sold' %}</a>
 
                 <a class="button action-button  pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
                   title="{% trans 'Edit this classified' %}">
-                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i> {% trans 'Edit' %}</a>
+                  ✎{% trans 'Edit' %}</a>
             {% endif %}
           </div>
       {% else %}
@@ -165,7 +165,7 @@
     {% if classified.tags.all %}
       <div class="classifieds-tags previsions">
           {% for tag in classified.tags.all %}
-              <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag-item">{{ tag }}</span></a>
+              <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag-item black-link">{{ tag }}</span></a>
           {% endfor %}
       </div>
     {% endif %}
@@ -183,7 +183,7 @@
               {% for classified in similar_classifieds %}
 
                 <div class="card classified-card">
-                  <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link">
+                  <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link black-link">
                     <div class="card-img-top img-responsive">
                       {% if classified.thumbnail %}
                           <img decoding="async" loading="lazy" src="{{oss}}/{{ classified.thumbnail }}"

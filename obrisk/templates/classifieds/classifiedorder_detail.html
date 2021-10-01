@@ -21,7 +21,7 @@
       {% endif  %}
     </div>
 
-    <a class="main-top" href="{% url 'classifieds:classified' classifiedorder.classified.slug %}">
+    <a class="main-top black-link" href="{% url 'classifieds:classified' classifiedorder.classified.slug %}">
           {% if classifiedorder.classified.thumbnail %}
               <img class="card-img lazyload" src="{{oss}}/{{ classifiedorder.classified.thumbnail }}"
                     width="200px" height="200px">
@@ -153,7 +153,7 @@
 
   <br/>
   <div class="action-wrapper">
-    <button class="button chat-button accent-button" id="chat-button-id"
+    <a class="button chat-button accent-button"
         href="{% url 'messager:conversation_detail' classifiedorder.classified.user.username %}">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
           stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
@@ -161,7 +161,7 @@
           <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
         </svg> &nbsp;
         Talk to Seller
-    </button>
+    </a>
 
     <button class="button accent-button" id="wechat-refund-call">
         <svg enable-background="new 0 0 300 300" height="26" width="26"
@@ -190,21 +190,12 @@
 {% block extra_js %}
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function () {
-    const chatBtn = document.getElementById('chat-button-id');
+    const refundBtn = document.getElementById('wechat-refund-call');
 
-    if( chatBtn !== null) {
-	  chatBtn.addEventListener('click', () => {
-	      if (currentUser !== undefined) {
-              window.location.href = chatUrl;
-	      }else {
-		      if (wechat_browser) {
-                window.location.href = wechatAuth;
-		      }else {
-                window.location.href = loginUrl;
-		      }
-	      }
+    if( refundBtn !== null) {
+	  refundBtn.addEventListener('click', () => {
+          //window.location.href = chatUrl;
 	  });
     }
 });
