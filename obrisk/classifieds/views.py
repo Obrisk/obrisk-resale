@@ -823,7 +823,11 @@ class SellerConfirmOrder(View):
             return render(request, 'classifieds/seller_confirm_order.html',
                 {'order': order}
             )
-        except:
+        except Exception as e:
+            logging.error(
+                'FAILED TO LOAD ORDER FOR SELLER TO CONFIRM',
+                exc_info=e
+            )
             return HttpResponseBadRequest(
                   content=_('Sorry, we could not handle this request')
               )

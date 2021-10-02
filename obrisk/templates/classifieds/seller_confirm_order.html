@@ -22,15 +22,30 @@
     <div class="snow"></div>
     <div class="snow"></div>
 
-
-    <div class="content">
-
+    <div class="face-wrapper">
         <div class="face">
           <div class="eye"></div>
           <div class="eye right"></div>
           <div class="mouth happy"></div>
         </div>
         <div class="shadow scale"></div>
-
     </div>
+
+    <a class="order-item black-link" href="{% url 'classifieds:classified' order.classified.slug %}">
+          {% if order.classified.thumbnail %}
+              <img class="card-img lazyload" src="{{oss}}/{{ order.classified.thumbnail }}"
+                    width="200px" height="200px">
+          {% else %}
+              <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
+                    width="200px" height="200px">
+          {% endif %}
+
+          <div id="order-summary-meta"> 
+              <h1> {{ order.classified.title|title }}</h1>
+              <h3> {{ order.classified.city }}</h3>
+              <h3> Price: CNY {{ order.classified.price }}</h3>
+          </div>
+   </a>
+
+
 </body>

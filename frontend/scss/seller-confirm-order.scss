@@ -1,3 +1,9 @@
+@import "partials/bulma-base";
+@import "bulma_partials/elements/image";
+@import "bulma_partials/elements/title";
+@import "partials/layout-colors";
+@import "partials/components-cards";
+
 html { 
   background:  linear-gradient(to bottom right, #20a9e6 40%, #3ec4e2 100%);
   //background-size: cover;
@@ -48,10 +54,38 @@ html {
 }
 
 
-.content {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+
+.order-item {
+  position: relative;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  box-shadow: -10px -10px 20px -10px rgba(0, 0, 0, 0.2);
+  margin: 2rem;
+  padding: 1em;
+
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  .card-img {
+      border: 5px solid #fff;
+      border-radius: 10%;
+      object-fit: cover;
+      background-color: #fff;
+      width:100px;
+      height:100px;
+  }
+
+  #order-summary-meta {
+    font-size: 100%;
+    font-weight: 400;
+      margin-left: 1em;
+  }
+}
+
+.black-link {
+    color: #202024!important;
+    text-decoration: none;
 }
 
 
@@ -74,8 +108,15 @@ $secondary: #99DBB4;
   perspective: 40px;
 }
 
+
+.face-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40vh;
+}
+
 .face {
-  position: absolute;
   width: 14rem;
   height: 14rem;
   background: $white;
@@ -130,7 +171,7 @@ $secondary: #99DBB4;
   opacity: .5;
   background: $dark;
   left: 40%;
-  top: 38%;
+  top: 28%;
   border-radius: 50%;
   z-index: 1;
 }
