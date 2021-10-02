@@ -21,6 +21,9 @@
     <div class="snow"></div>
     <div class="snow"></div>
     <div class="snow"></div>
+    <div class="snow"></div>
+    <div class="snow"></div>
+    <div class="snow"></div>
 
     <div class="face-wrapper">
         <div class="face">
@@ -34,18 +37,47 @@
     <a class="order-item black-link" href="{% url 'classifieds:classified' order.classified.slug %}">
           {% if order.classified.thumbnail %}
               <img class="card-img lazyload" src="{{oss}}/{{ order.classified.thumbnail }}"
-                    width="200px" height="200px">
+                    width="350" height="350">
           {% else %}
               <img class="card-img lazyload" src="{% static 'img/nophoto.jpg' %}"
-                    width="200px" height="200px">
+                    width="350" height="350">
           {% endif %}
 
           <div id="order-summary-meta"> 
-              <h1> {{ order.classified.title|title }}</h1>
-              <h3> {{ order.classified.city }}</h3>
-              <h3> Price: CNY {{ order.classified.price }}</h3>
+              <h1 class="title is-2"> {{ order.classified.title|title }}</h1>
+              <h3 class="item-details"> Price: CNY {{ order.classified.price }}</h3>
+
+              {% if order.is_offfline %}
+                  <h3 class="item-details"> Type: Offline Pickup </h3>
+              {% else %}
+                  <h3 class="item-details"> Type: Express Delivery </h3>
+              {% endif %}
+              <h3 class="item-details"> Destination: {{ order.buyer.city }} </h3>
+              {% if order.phone_number %}
+                  <h3 class="item-details"> Buyer's contact: {{ order.phone_number }} </h3>
+              {% endif %}
+              {% if order.recipient_chinese_address %}
+                  <h3 class="item-details"> Full Address: {{ order.recipient_chinese_address }}</h3>
+              {% endif %}
           </div>
    </a>
 
+  <div class="action-wrapper">
+    <button class="button white-button">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+            <path d="M464 32H48C21.5 32 0 53.5 0 80v352c0 26.5 21.5 48 48 48h416c26.5 0 48-21.5 48-48V80c0-26.5-21.5-48-48-48zm0 394c0 3.3-2.7 6-6 6H54c-3.3 0-6-2.7-6-6V86c0-3.3 2.7-6 6-6h404c3.3 0 6 2.7 6 6v340zM356.5 194.6L295.1 256l61.4 61.4c4.6 4.6 4.6 12.1 0 16.8l-22.3 22.3c-4.6 4.6-12.1 4.6-16.8 0L256 295.1l-61.4 61.4c-4.6 4.6-12.1 4.6-16.8 0l-22.3-22.3c-4.6-4.6-4.6-12.1 0-16.8l61.4-61.4-61.4-61.4c-4.6-4.6-4.6-12.1 0-16.8l22.3-22.3c4.6-4.6 12.1-4.6 16.8 0l61.4 61.4 61.4-61.4c4.6-4.6 12.1-4.6 16.8 0l22.3 22.3c4.7 4.6 4.7 12.1 0 16.8z"/>
+        </svg>
+        <p> Reject Order</p>
+    </button>
+
+    <button class="button accent-button" id="wechat-refund-call">
+        <svg enable-background="new 0 0 24 24" id="Layer_1" version="1.0" viewBox="0 0 24 24">
+            <path d="M21,11v8c0,1.1-0.9,2-2,2H5c-1.1,0-2-0.9-2-2V5  c0-1.1,0.9-2,2-2h9" fill="none" stroke="#000000" stroke-miterlimit="10" stroke-width="2"/>
+            <polyline clip-rule="evenodd" fill="none" fill-rule="evenodd"
+            id="Done__x2014__Displayed_on_the_left_side_of_a_contextual_action_bar__x28_CAB_x29__to_allow_the_user_to_dismiss_it._3_"
+            points="  21.2,4.6 11.2,15.2 6.8,10.8 " stroke="#000000" stroke-miterlimit="10" stroke-width="2"/>
+        </svg>
+        <p> Accept Order </p>
+    </button>
 
 </body>
