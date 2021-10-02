@@ -13,7 +13,6 @@ from obrisk.utils.wx_config import get_access_token
 from obrisk.classifieds.models import Classified
 
 
-
 request_url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token=" #noqa
 
 
@@ -142,7 +141,7 @@ def upload_success_wxtemplate(user):
 def notify_seller_wxtemplate(order):
     wx_push = WechatPush()
     template_id = "2DWnQShB7yDden_QxWevK_2F8f7RpexrI_WCXuvwDXo" #noqa
-    url = "https://obrisk.com/classifieds/orders/wsguatpotlfwccdi/seller-confirm?item=" + classified.id #noqa
+    url = "https://obrisk.com/classifieds/orders/wsguatpotlfwccdi/seller-confirm?or=" + order.slug #noqa
 
     color = "#173177"
     title = "Hi your item has been purchased!"
@@ -159,7 +158,7 @@ def notify_seller_wxtemplate(order):
                 "value":order.classified.title,"color":color
             },
             "keyword2":{
-                "value":order.classified.price,"color":color
+                "value":f'{order.classified.price} RMB',"color":color
             },
             "keyword3":{
                 "value":recipient,"color":color

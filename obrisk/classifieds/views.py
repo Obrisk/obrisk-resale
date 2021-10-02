@@ -814,3 +814,29 @@ class ClassifiedOrderView(DetailView):
             .order_by('-same_tags', '-timestamp')[:6]
 
         return context
+
+
+class SellerConfirmOrder(View):
+    def get(self, request, *args, **kwargs):
+        try:
+            order = ClassifiedOrder.objects.get(slug=request.GET.get('or'))
+            return render(request, 'classifieds/seller_confirm_order.html',
+                {'order': order}
+            )
+        except:
+            return HttpResponseBadRequest(
+                  content=_('Sorry, we could not handle this request')
+              )
+
+    def post(self, request, *args, **kwargs):
+        body = json.loads(request.body)
+        res=body.get('res', None)
+        item=body.get('or', None)
+
+        if res is True:
+            classified.status='E'
+            classified.save()
+
+            is_offline = False
+        else:
+            pass

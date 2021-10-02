@@ -68,6 +68,10 @@ urlpatterns = [
         Wxpay_Result.as_view(),
         name='inwxpy_res'),
     url(
+        r'^orders/wsguatpotlfwccdi/seller-confirm/$',
+        SellerConfirmOrder.as_view(),
+        name='seller_confirm_order'),
+    url(
         r'^report/(?P<pk>\d+)/$',
         ReportClassifiedView.as_view(),
         name='report_classified'),
