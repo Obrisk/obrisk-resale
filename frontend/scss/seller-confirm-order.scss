@@ -27,67 +27,70 @@ html {
     align-items: center;
     justify-content: center;
     height: 40vh;
+
+    .face {
+      width: 14rem;
+      height: 14rem;
+      background: $white;
+      border-radius: 50%;
+      border: 1px solid $dark;
+      position: absolute;
+      top: 14%;
+      left: 39%;
+      z-index: 2;
+      animation: bounce 1s ease-in infinite;
+
+      .eye {
+          position: absolute;
+          width: 12px;
+          height: 8px;
+          background: $dark;
+          border-radius: 50%;
+          top: 40%;
+          left: 20%;
+        }
+
+        .right {
+          left: 68%;
+        }
+
+        .mouth {
+          position:absolute;
+          top: 58%;
+          left: 39%;
+          width: 34px;
+          height: 34px;
+          border-radius: 50%;
+        }
+
+        .happy {
+          border: 4px solid;
+          border-color: transparent $dark $dark transparent;
+          transform: rotate(45deg);
+        }
+
+        .sad {
+          top: 49%;
+          border: 2px solid;
+          border-color: $dark transparent transparent $dark;
+          transform: rotate(45deg);
+        }
+
+    }
+
+    .shadow {
+      position: absolute;
+      width: 21%;
+      height: 3%;
+      opacity: .5;
+      background: $dark;
+      left: 40%;
+      top: 28%;
+      border-radius: 50%;
+      z-index: 1;
+    }
 }
 
-.face {
-  width: 14rem;
-  height: 14rem;
-  background: $white;
-  border-radius: 50%;
-  border: 1px solid $dark;
-  top: 24%;
-  left: 39%;
-  z-index: 2;
-  animation: bounce 1s ease-in infinite;
-}
-
-.eye {
-  position: absolute;
-  width: 12px;
-  height: 8px;
-  background: $dark;
-  border-radius: 50%;
-  top: 40%;
-  left: 20%;
-}
-
-.right {
-  left: 68%;
-}
-
-.mouth {
-  position:absolute;
-  top: 58%;
-  left: 39%;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-}
-
-.happy {
-  border: 4px solid;
-  border-color: transparent $dark $dark transparent;
-  transform: rotate(45deg);
-}
-
-.sad {
-  top: 49%;
-  border: 2px solid;
-  border-color: $dark transparent transparent $dark;
-  transform: rotate(45deg);
-}
-
-.shadow {
-  position: absolute;
-  width: 21%;
-  height: 3%;
-  opacity: .5;
-  background: $dark;
-  left: 40%;
-  top: 28%;
-  border-radius: 50%;
-  z-index: 1;
-}
 
 .scale {
   animation: scale 1s ease-in infinite;
@@ -205,5 +208,3 @@ html {
     }
   }
 }
-
-
