@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', function () {
                           } else {
                               wxpayFail(pay_complete=true);
                           }
+                    }).catch ((e) => {
+                        wxpayFail(pay_complete=true);
+                        console.error('failure to init payments, exception happened', e);
                     })
                 },
                 fail: function (res) {

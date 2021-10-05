@@ -816,8 +816,10 @@ class ClassifiedOrderView(DetailView):
         return context
 
 
-class SellerConfirmOrder(View):
-    def get(self, request, *args, **kwargs):
+
+@csrf_exempt
+def seller_confirm_order(request, *args, **kwargs):
+    if request.method == 'GET':
         try:
             order = ClassifiedOrder.objects.get(slug=request.GET.get('or'))
             return render(request, 'classifieds/seller_confirm_order.html',
@@ -828,19 +830,27 @@ class SellerConfirmOrder(View):
                 'FAILED TO LOAD ORDER FOR SELLER TO CONFIRM',
                 exc_info=e
             )
-            return HttpResponseBadRequest(
-                  content=_('Sorry, we could not handle this request')
-              )
 
-    def post(self, request, *args, **kwargs):
+    if request.method == 'POST':
         body = json.loads(request.body)
-        res=body.get('res', None)
-        item=body.get('or', None)
+        res = body.get('rs', None)
+        print(res)
+        if res is None:
+            return JsonResponse({
+                'success': False
+            })
 
+        order = ClassifiedOrder.objects.get(slug=body.get('or'))
         if res is True:
-            classified.status='E'
-            classified.save()
-
-            is_offline = False
+            order.status='C'
         else:
-            pass
+            order.status='X'
+        order.save()
+        return JsonResponse({
+            'success': True
+        })
+
+
+    return HttpResponseBadRequest(
+          content=_('Sorry, we could not handle this request')
+      )

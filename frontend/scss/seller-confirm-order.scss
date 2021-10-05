@@ -4,78 +4,21 @@
 @import "partials/layout-colors";
 @import "partials/components-cards";
 
+
+$white: #FCFCFC;
+$dark: #777777;
+
 html { 
   background:  linear-gradient(to bottom right, #20a9e6 40%, #3ec4e2 100%);
-  //background-size: cover;
   height: 100vh;
 }
 
-.order-item {
-  position: relative;
-  background-color: whitesmoke;
-  border-radius: 10px;
-  box-shadow: -10px -10px 20px -10px rgba(0, 0, 0, 0.2);
-  margin: 2rem;
-
-  display: flex;
-  align-items: center;
-  flex-direction: row;
-
-  .card-img {
-      border: 5px solid #fff;
-      border-radius: 10%;
-      object-fit: cover;
-      background-color: #fff;
-  }
-
-  #order-summary-meta {
-    font-size: 100%;
-    font-weight: 400;
-    margin-left: 1em;
-
-    .item-details {
-      font-size: 2em;
-    }
-  }
-
+.cls-back-btn {
+    margin: 1.5em;
 }
 
-.action-wrapper {
-    display: flex;
-    align-items: flex-end;
-    margin: 0;
-    margin-top: 6rem;
-    justify-content: space-evenly;
-    width: 100%;
-
-    .button {
-        padding: 1.4em;
-        border-radius: 1rem;
-    }
-}
-
-.black-link {
-    color: #202024!important;
-}
-
-
-$white: #FCFCFC;
-$gray: #CBCDD3;
-$dark: #777777;
-$error: #EF8D9C;
-$orange: #FFC39E;
-$success: #B0DB7D;
-$secondary: #99DBB4;
-
-#success-box {
-  position: absolute;
-  width: 35%;
-  height: 100%;
-  left: 12%;
-  background: linear-gradient(to bottom right, $success 40%, $secondary 100%);
-  border-radius: 20px;
-  box-shadow: 5px 5px 20px rgba($gray, 10%);
-  perspective: 40px;
+.home-svg {
+    margin-top: 2em;
 }
 
 
@@ -161,6 +104,62 @@ $secondary: #99DBB4;
      transform: translateY(-10px);
   }
 }
+
+
+.order-item {
+  position: relative;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  box-shadow: -10px -10px 20px -10px rgba(0, 0, 0, 0.2);
+  margin: 2rem;
+
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+
+  .card-img {
+      border: 5px solid #fff;
+      border-radius: 10%;
+      object-fit: cover;
+      background-color: #fff;
+  }
+
+  #order-summary-meta {
+    font-size: 100%;
+    font-weight: 400;
+    margin-left: 1em;
+
+    .item-details {
+      font-size: 2em;
+    }
+  }
+
+}
+
+.action-wrapper {
+    display: flex;
+    align-items: flex-end;
+    margin: 0;
+    margin-top: 6rem;
+    justify-content: space-evenly;
+    width: 100%;
+
+    .button {
+        padding: 1.4em;
+        border-radius: 1rem;
+    }
+}
+
+.black-link {
+    color: #202024!important;
+}
+
+#notes {
+  font-size: 2.5em;
+  margin: 1em;
+  color: white;
+}
+
 
 
 //Snow

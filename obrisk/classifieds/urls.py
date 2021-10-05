@@ -69,7 +69,7 @@ urlpatterns = [
         name='inwxpy_res'),
     url(
         r'^orders/wsguatpotlfwccdi/seller-confirm/$',
-        SellerConfirmOrder.as_view(),
+        seller_confirm_order,
         name='seller_confirm_order'),
     url(
         r'^report/(?P<pk>\d+)/$',
