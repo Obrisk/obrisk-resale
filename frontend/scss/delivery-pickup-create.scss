@@ -1,0 +1,132 @@
+@import "partials/layout-colors";
+@import "partials/components-buttons";
+
+.page-wrapper {
+  border-radius: 0 0 10px 10px;
+  box-shadow: 4px 4px 70px rgba(0, 0, 0, 0.2);
+  padding: 1em;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  background-image: linear-gradient(180deg, #6ed4f2 10%, #fdfbfb 30%);
+  height: 100vh;
+  overflow-y: scroll;
+  margin-bottom: 4.2em;
+}
+
+.page-head {
+  height: 38px;
+}
+
+.cls-back-btn {
+   margin-top: 2px;
+   margin-left: 1em;
+   position: fixed;
+   left: 0;
+   z-index: 5;
+}
+
+.main-top {
+  position: relative;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  box-shadow: -10px -10px 20px -10px rgba(0, 0, 0, 0.2);
+
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.login-to-post {
+    padding: 21px 31px;
+}
+
+.page-top {
+    margin: 0.4em auto;
+    display: flex;
+    align-items: center;
+}    
+
+.top-title {
+    margin: 0.8em 0 0.8em 40%;
+}
+
+form {
+    margin-bottom: 4em;
+
+    .form-field {
+        align-items: center;
+        border: 1px none #dbdbdb;
+        box-shadow: none;
+        display: inline-flex;
+        font-size: 1rem;
+        justify-content: flex-start;
+        line-height: 1.5;
+        padding: calc(.5em - 1px) calc(.75em - 1px);
+        position: relative;
+        vertical-align: top;       
+        width: 100%;
+    }
+
+    textarea.textarea {
+      transition: all 0.8s;
+    }
+
+    .input-group {
+        display: flex;
+        flex-direction: row;
+        align-items: space-between;
+    }
+
+    .receiver-address {
+        margin-top: 1em;
+    }
+}
+
+.col-form-label {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+.weight {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.2em;
+
+    span {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+    }
+}
+
+#id_price {
+    width:70%;
+}
+
+.price-manual {
+    margin-top: 6px;
+}
+
+.city {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 600;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#submit {
+    margin: 2em 3em;
+    width: 70%;
+}

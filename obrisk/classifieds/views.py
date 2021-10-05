@@ -854,3 +854,42 @@ def seller_confirm_order(request, *args, **kwargs):
     return HttpResponseBadRequest(
           content=_('Sorry, we could not handle this request')
       )
+
+
+@csrf_exempt
+def set_delivery_pickup(request, *args, **kwargs):
+    if request.method == 'GET':
+        try:
+            order = ClassifiedOrder.objects.get(slug=request.GET.get('or'))
+            return render(request, 'classifieds/set_delivery_pickup.html',
+                {'order': order}
+            )
+        except Exception as e:
+            logging.error(
+                'FAILED TO LOAD ORDER FOR SELLER TO CONFIRM',
+                exc_info=e
+            )
+
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        res = body.get('rs', None)
+        print(res)
+        if res is None:
+            return JsonResponse({
+                'success': False
+            })
+
+        order = ClassifiedOrder.objects.get(slug=body.get('or'))
+        if res is True:
+            order.status='C'
+        else:
+            order.status='X'
+        order.save()
+        return JsonResponse({
+            'success': True
+        })
+
+
+    return HttpResponseBadRequest(
+          content=_('Sorry, we could not handle this request')
+      )

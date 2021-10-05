@@ -72,6 +72,10 @@ urlpatterns = [
         seller_confirm_order,
         name='seller_confirm_order'),
     url(
+        r'orders/wsguatpotlfwccdi/set-delivery-pickup/$',
+        set_delivery_pickup,
+        name='set_delivery_pickup'),
+    url(
         r'^report/(?P<pk>\d+)/$',
         ReportClassifiedView.as_view(),
         name='report_classified'),

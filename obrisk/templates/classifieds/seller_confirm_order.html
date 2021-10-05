@@ -101,6 +101,7 @@
 
 <script type="text/javascript">
     var initPg = true;
+    var order_slug = "{{ order.slug }}";
     document.querySelector('.action-wrapper').addEventListener('click',  e => {
       if (!e.target.matches('.button'))
         return;
@@ -137,33 +138,11 @@
                 console.error('Error when seller confirmed the order', e);
             })
         } else {
-          const accept = e.target.dataset.value;
-          if ( accept === true ) {
-              fetch('/classifieds/orders/wsguatpotlfwccdi/set-delivery-pickup/', {
-                      method: "POST",
-                      body: JSON.stringify ({
-                          rs: accept,
-                          or: window.location.search.split('=')[1]
-                      }),
-                      headers: {
-                          "X-Requested-With": "XMLHttpRequest",
-                          "Content-Type": "application/json"
-                      },
-                      credentials: 'same-origin',
-                      redirect: 'follow'
-                }).then (resp => resp.json())
-                  .then (data => {
-                      initPg = false;
-                      if (data.success === true && accept === true) {
-                      } else {
-                           document.getElementById('notes').textContent = '';
-                      }
-                }).catch ((e) => {
-                    console.error('Error when seller confirmed the order', e);
-                })
+          if ( e.target.dataset.value === "accept" ) {
+              window.location.href = `/classifieds/orders/wsguatpotlfwccdi/set-delivery-pickup/?or=${order_slug}`;
         } else {
               document.querySelector('.action-wrapper').style.display = 'none';
-              document.getElementById('notes').textContent = 'Please arrange the delivery sooner. Also add our support Wechat ID: "Obrisk" for inquiries😊';
+              document.getElementById('notes').textContent = 'Please arrange the delivery sooner. Add our support Wechat ID: "Obrisk" for inquiries😊';
         }
       }
     }, true);
