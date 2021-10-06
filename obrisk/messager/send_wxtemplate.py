@@ -58,13 +58,17 @@ class WechatPush():
 
         #j = json.loads(content)
         j = response.json()
+        logging.error(
+            f'Failed to notify seller on Classified Order',
+            extra=j
+        )
         j.keys()
 
-        if j['errcode'] != 0:
-            logging.error(
-                    'Pushing Wx Template failed',
-                    extra={'response': j}
-                )
+        #if j['errcode'] != 0:
+        logging.error(
+                'Pushing Wx Template failed',
+                extra=j
+            )
 
 
 def unread_msgs_wxtemplate(userid, last_msg, sender, time):
@@ -171,5 +175,10 @@ def notify_seller_wxtemplate(order):
             },
             "remark": {"value":tail}
         }
+
+    logging.error(
+        f'Failed to notify seller on Classified Order',
+        extra=data
+    )
 
     wx_push.do_push(classified.user.userid, template_id, url, color, data)
