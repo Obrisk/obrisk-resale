@@ -701,19 +701,27 @@ def wxpyjs_success(request, *args, **kwargs):
         is_offline = False
         if request.POST.get('addr', None) is None:
             is_offline = True
+
+        addr = request.POST.get('addr', None) or request.user.chinese_address
+        phone = request.POST.get('phone', None) or request.user.phone_number
+
+        if phone is not None and len(phone) == 11:
+            phone= '+86' + phone
+        
         try:
             order = ClassifiedOrder.objects.create(
                buyer=request.user,
                classified=classified,
                is_offline=is_offline,
-               recipient_chinese_address=request.POST.get('addr', None),
-               recipient_phone_number=request.POST.get('phone', None)
+               recipient_name=request.user.username,
+               recipient_chinese_address=addr,
+               recipient_phone_number=phone
             )
         except Exception as e:
             logging.error('Could not create classified Order', exc_info=e)
 
         else:
-            order_notify_seller.delay(order.id)
+            order_notify_seller.delay(order.pk)
             return JsonResponse({
                 'success': True,
                 'order_slug': order.slug

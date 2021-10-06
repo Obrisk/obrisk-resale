@@ -144,7 +144,7 @@ def notify_seller_wxtemplate(order):
     url = "https://obrisk.com/classifieds/orders/wsguatpotlfwccdi/seller-confirm?or=" + order.slug #noqa
 
     color = "#173177"
-    title = "Hi your item has been purchased!"
+    title = "Hi your item has been purchased😊"
     tail = "Thank you for using Obrisk"
 
     if order.is_offline:

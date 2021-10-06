@@ -67,7 +67,7 @@ def add_tags(item_id):
 def order_notify_seller(order_id):
     try:
         notify_seller_wxtemplate(
-            ClassifiedOrder.objects.get(id=order_id)
+            ClassifiedOrder.objects.get(pk=order_id)
         )
     except Exception as e:
         logging.error(
