@@ -699,15 +699,20 @@ def wxpyjs_success(request, *args, **kwargs):
         classified.save()
 
         is_offline = False
-        if request.POST.get('addr', None) is None:
+        if body.get('addr', None) is None:
             is_offline = True
 
-        addr = request.POST.get('addr', None) or request.user.chinese_address
-        phone = request.POST.get('phone', None) or request.user.phone_number
+
+        addr = body.get('addr', None) or request.user.chinese_address
+        phone = body.get('phone', None) or request.user.phone_number
 
         if phone is not None and len(phone) == 11:
             phone= '+86' + phone
-        
+
+        if request.user.chinese_address is None and addr is not None:
+            request.user.chinese_address = addr
+            request.user.save()
+
         try:
             order = ClassifiedOrder.objects.create(
                buyer=request.user,
@@ -896,7 +901,6 @@ def set_delivery_pickup(request, *args, **kwargs):
         return JsonResponse({
             'success': True
         })
-
 
     return HttpResponseBadRequest(
           content=_('Sorry, we could not handle this request')
