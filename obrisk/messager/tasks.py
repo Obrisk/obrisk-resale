@@ -1,12 +1,11 @@
 import os
 import ast
 import uuid
-from datetime import timedelta
 
+from django.utils import timezone
 from django.core.cache import cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
-from django.db.models.functions import Now
 from celery import shared_task
 from obrisk.notifications.models import Notification, notification_handler
 from obrisk.users.phone_verification import send_sms
@@ -95,11 +94,16 @@ def messages_list_cleanup(conv_key, user_pk, last_receiver_pk):
 
 @shared_task
 def send_wxtemplate_notif():
-    older = Now() - timedelta(seconds=3600)
+    ''' The messages timeline for notifications
+    in this function should reflect the timeline specified
+    in the config.settings.base file, the tasks definition section
+    in this case it is 3600 seconds == 60 minutes'''
+
+    older = timezone.now() - timezone.timedelta(minutes=60)
 
     notify = {}
     msgs = Message.objects.select_related().filter(
-        timestamp__lt=older, unread=True, wx_notified=False
+        timestamp__gt=older, unread=True, wx_notified=False
     )
 
     for msg in msgs:
