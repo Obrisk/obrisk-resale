@@ -41,6 +41,12 @@ class WechatPush():
                 'topcolor':topcolor,
                 'data':data
             }
+
+        logging.error(
+            f'Push wechat notifications, dict arr',
+            extra=dict_arr
+        )
+
         json_template = json.dumps(dict_arr)
         #transfer to requests.
 
