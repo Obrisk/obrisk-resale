@@ -44,6 +44,17 @@ def send_upload_success(modeladmin, request, queryset):
 
 def create_obrisk_user(modeladmin, request, queryset):
     for user in queryset:
+        username = user.name = dj_slugify(
+                user.name,
+                allow_unicode=True
+            )
+        if User.objects.filter(username=username).exists():
+            for x in itertools.count(1):
+                if not User.objects.filter(username=username).exists():
+                    break
+                username = '%s-%d' % (user.name, x)
+            user.name = username
+
         try:
             user = User.objects.create(
                 username=user.name,
@@ -59,28 +70,14 @@ def create_obrisk_user(modeladmin, request, queryset):
 
         except IntegrityError:
             return
+
         except Exception as e:
             logging.error('Creating the Obrisk user failed', exc_info=e)
             return
 
-        username = first_name = dj_slugify(
-                user.username,
-                allow_unicode=True
-            )
-
-        for x in itertools.count(1):
-            if not User.objects.filter(username=username).exists():
-                break
-            username = '%s-%d' % (first_name, x)
-        user.username = username
-        user.save()
-
-        city = user.city or ''
-        province = user.province_region or ''
-
         return HttpResponseRedirect(
-            '/users/wsguatpotlfwccdi/admin-create-user/?pk=%s&nm=%s&ct=%s&pr=%s' % ( #noqa
-                 username, city, province
+            '/users/wsguatpotlfwccdi/admin-create-user/?nm=%s&ct=%s&pr=%s' % ( #noqa
+                 user.username, user.city or '', user.province_region or ''
             )
         )
 
