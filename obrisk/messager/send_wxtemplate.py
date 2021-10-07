@@ -4,10 +4,9 @@
 import json
 import logging
 import requests
-from datetime import timedelta
 from urllib.request import urlopen
+from django.utils import timezone
 from django.db.models import Count
-from django.db.models.functions import Now
 
 from obrisk.utils.wx_config import get_access_token
 from obrisk.classifieds.models import Classified
@@ -110,7 +109,7 @@ def upload_success_wxtemplate(user):
     #Get items uploaded 10 minutes ago by this user
     classifieds = Classified.objects.filter(
         user=user, status="A",
-        timestamp__lt=Now() - timedelta(seconds=600)
+        timestamp__gt=timezone.now() - timezone.timedelta(minutes=30)
     )
     logging.error(f'Found classifieds: {classifieds}')
 
