@@ -46,6 +46,7 @@ def create_obrisk_user(modeladmin, request, queryset):
     for user in queryset:
         try:
             user = User.objects.create(
+                username=user.name,
                 wechat_openid=user.wechat_openid,
                 thumbnail = user.thumbnail,
                 picture = user.picture,
@@ -74,9 +75,12 @@ def create_obrisk_user(modeladmin, request, queryset):
         user.username = username
         user.save()
 
+        city = user.city or ''
+        province = user.province_region or ''
+
         return HttpResponseRedirect(
             '/users/wsguatpotlfwccdi/admin-create-user/?pk=%s&nm=%s&ct=%s&pr=%s' % ( #noqa
-                 username, user.city, user.province_region
+                 username, city, province
             )
         )
 
