@@ -42,7 +42,7 @@ class WechatPush():
             }
 
         logging.error(
-            f'Push wechat notifications, dict arr',
+            f'Pushing wechat notifications, dict arr',
             extra=dict_arr
         )
 
