@@ -41,7 +41,7 @@ admin.site.register(ClassifiedOrder)
 class ClassifiedAdmin(admin.ModelAdmin):
     list_display = ('title', 'user', 'status')
     list_filter = ('status', 'timestamp', 'city')
-    search_fields = ['title', 'user', 'details', 'address']
+    search_fields = ['title', 'details', 'address']
     actions = [classified_action,]
 
 
