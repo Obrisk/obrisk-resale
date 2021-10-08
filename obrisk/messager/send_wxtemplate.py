@@ -41,11 +41,6 @@ class WechatPush():
                 'data':data
             }
 
-        logging.error(
-            f'Pushing wechat notifications, dict arr',
-            extra=dict_arr
-        )
-
         json_template = json.dumps(dict_arr)
         #transfer to requests.
 
@@ -56,24 +51,16 @@ class WechatPush():
                 headers={'Content-Type': 'application/json'}
             )
         #response.encoding = 'utf8'
-        #msg = response.text
-        #xmlmsg = xmltodict.parse(msg)
-        #return trans_xml_to_dict(response.text)
-        #读取json数据
 
         #j = json.loads(content)
         j = response.json()
-        logging.error(
-            f'Failed to notify seller on Classified Order',
-            extra=j
-        )
         j.keys()
 
-        #if j['errcode'] != 0:
-        logging.error(
-                'Pushing Wx Template failed',
-                extra=j
-            )
+        if j['errcode'] != 0:
+            logging.error(
+                    'Pushing Wx Template failed',
+                    extra=j
+                )
 
 
 def unread_msgs_wxtemplate(userid, last_msg, sender, time):
@@ -111,14 +98,13 @@ def upload_success_wxtemplate(user):
         user=user, status="A",
         timestamp__gt=timezone.now() - timezone.timedelta(minutes=30)
     )
-    logging.error(f'Found classifieds: {classifieds}')
 
     if classifieds.count() > 1:
-        url = f"https://obrisk.com/users/i/{user.username}/"
-        title = f'Uploaded {classifieds.count()} items'
+        url = f'https://obrisk.com/users/i/{user.username}/'
+        items_title = f'Uploaded {classifieds.count()} new items'
     elif classifieds.count() == 1:
-        url = "https://obrisk.com/classifieds/{classifieds.first().slug}/"
-        title = classifieds.first().title
+        url = f'https://obrisk.com/classifieds/{classifieds.first().slug}/'
+        items_title = classifieds.first().title
     else:
         return None
 
@@ -129,7 +115,7 @@ def upload_success_wxtemplate(user):
     data={
             "first": {"value":title},
             "keyword1":{
-                "value":title,"color":color
+                "value":items_title,"color":color
             },
             "keyword2":{
                 "value":'Few minutes ago', "color":color
@@ -143,7 +129,6 @@ def upload_success_wxtemplate(user):
             "remark": {"value":tail}
         }
 
-    logging.error(f'Pushing data: {data}', extra=data)
     wx_push.do_push(user.wechat_openid,template_id,url,color,data)
 
 
@@ -181,9 +166,4 @@ def notify_seller_wxtemplate(order):
             "remark": {"value":tail}
         }
 
-    logging.error(
-        f'Failed to notify seller on Classified Order',
-        extra=data
-    )
-
-    wx_push.do_push(classified.user.userid, template_id, url, color, data)
+    wx_push.do_push(order.classified.user.wechat_openid, template_id, url, color, data)
