@@ -1033,11 +1033,9 @@ def admin_create_user(request, *args, **kwargs):
 
     if request.method == 'POST':
         form = AdminCreateUserForm(request.POST)
-
         if form.is_valid():
-            #obj = User.objects.get(pk=form.cleaned_data['pk'])
-            user = form.save(request, commit=True)
-            #user.save()
+            user = form.save(request)
+            user.save()
 
     return redirect(
         ''.join(

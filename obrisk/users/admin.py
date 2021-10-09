@@ -63,12 +63,11 @@ def create_obrisk_user(modeladmin, request, queryset):
                 picture = user.picture,
                 org_picture = user.org_picture,
                 gender=user.gender,
-                city=user.city,
-                province_region=user.province_region,
                 country='China'
             )
 
-        except IntegrityError:
+        except IntegrityError as e:
+            logging.error('Creating the Obrisk user failed', exc_info=e)
             return
 
         except Exception as e:
