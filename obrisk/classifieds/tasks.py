@@ -1,3 +1,5 @@
+import os
+import uuid
 import logging
 import time
 from django.core.cache import cache
@@ -5,6 +7,7 @@ from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import HttpResponse
 from celery import shared_task
+from obrisk.users.phone_verification import send_sms
 from obrisk.classifieds.models import Classified, ClassifiedTags
 from obrisk.messager.send_wxtemplate import notify_seller_wxtemplate
 
@@ -65,12 +68,34 @@ def add_tags(item_id):
 
 @shared_task
 def order_notify_seller(order_id):
-    try:
-        notify_seller_wxtemplate(
-            ClassifiedOrder.objects.get(pk=order_id)
-        )
-    except Exception as e:
+    time.sleep(5)
+    order = ClassifiedOrder.objects.get(pk=order_id)
+
+    if order.classified.user.wechat_openid is not None:
+        try:
+            logging.error(f'Dispatching notify seller task {order}')
+            notify_seller_wxtemplate(order)
+        except Exception as e:
+            logging.error(
+                f'Failed to notify seller on Classified Order',
+                exc_info=e
+            )
+
+    params = " {\"item\":\""+ order.classified.title + "\"} "
+    __business_id = uuid.uuid1()
+
+    ret = send_sms(
+        __business_id,
+        order.classified.user.phone_number.national_number,
+        os.getenv('SMS_SIGNATURE'),
+        os.getenv('ALI_ORDER_SMS_TEMPLATE'), params
+    )
+
+    ret = ret.decode("utf-8")
+    response = ast.literal_eval(ret)
+
+    if response['Code'] != 'OK':
         logging.error(
-            f'Failed to notify seller on Classified Order',
-            exc_info=e
+            f'Failed to notify seller via SMS on Classified Order',
+            extra=response
         )

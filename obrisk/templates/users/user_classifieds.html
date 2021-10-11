@@ -4,8 +4,7 @@
 {% block title %} {% trans 'Classifieds' %} {% endblock %}
 
 {% block head %}
-<link href="{% static 'css/user_classifieds.css' %}" rel="stylesheet">
-<title>Items for sale </title>
+<link href="{% static 'css/user_classifieds.css' %}" rel="stylesheet"> <title>Items for sale </title>
 {% endblock head %}
 
 {% block content %}
@@ -22,7 +21,7 @@
       {% endif  %}
     </div>
 
-    <section class="main-top">
+    <nav class="main-top">
         {% if user.picture %}
             <img src="{{oss}}/{{user.picture}}" alt="Pic"
               class="profile-header-avatar" id="pic">
@@ -36,10 +35,10 @@
         {% if user.english_address  %}
             <small class="address">{{ user.english_address }}, {{ user.city }} </small>
         {% else %}
-            <small class="address"> {{ user.city }} <small>
+            <small class="address"> {{ user.city }} </small>
         {% endif %}
       </div>
-   </section>
+   </nav>
   </div>
 
   <div class="is-9-fullhd classifieds-list-wrapper">
@@ -139,6 +138,7 @@
   var block_request = false;
   var lastScrollTop = 0;
   var is_search = false;
+  var top_card_anime = false;
 
   function renderClassifieds(classifieds) {
       for (const cls of classifieds) {
@@ -181,43 +181,54 @@
    window.addEventListener('scroll', function () {
       let st = window.pageYOffset || document.documentElement.scrollTop;
 
+      if (top_card_anime === false) {
+           document.querySelector('.main-top').classList.add("anime");
+           top_card_anime = true;
+      } else {
+            if (st === 0) {
+               document.querySelector('.main-top').classList.remove("anime");
+               top_card_anime = false;
+            }
+      }
+
       if (empty_page == false && block_request == false && st > lastScrollTop) {
-		block_request = true;
-		page += 1;
-		document.querySelector('.loading').classList.remove('is-hidden')
 
-		window.requestAnimationFrame(function() {
-		    fetch(`${window.location.href.split('#')[0]}?page=${page}`,
-		    {
-		      headers: {
-			"X-Requested-With": "XMLHttpRequest"
-		      }
-		    }).then (resp => resp.json())
-		    .then (data => {
+        block_request = true;
+        page += 1;
+        document.querySelector('.loading').classList.remove('is-hidden')
 
-			document.querySelector('.loading').classList.add('is-hidden');
-			block_request = false;
+        window.requestAnimationFrame(function() {
+            fetch(`${window.location.href.split('#')[0]}?page=${page}`,
+            {
+              headers: {
+            "X-Requested-With": "XMLHttpRequest"
+              }
+            }).then (resp => resp.json())
+            .then (data => {
 
-			  if (data.end === "end") {
-			    empty_page = true;
-			    document.querySelector('.loading').classList.add('is-hidden');
-			    document.querySelector(
-				    '.classifieds-list-wrapper'
-				).insertAdjacentHTML(
-				    'beforeend',
-				    '<div class="end-classifieds">--Best things in life are actually really expensive😜--</div>'
-				)
-			  } 
+            document.querySelector('.loading').classList.add('is-hidden');
+            block_request = false;
+
+              if (data.end === "end") {
+                empty_page = true;
+                document.querySelector('.loading').classList.add('is-hidden');
+                document.querySelector(
+                    '.classifieds-list-wrapper'
+                ).insertAdjacentHTML(
+                    'beforeend',
+                    '<div class="end-classifieds">--Best things in life are actually really expensive😜--</div>'
+                )
+              } 
               else {
                 renderClassifieds(data.classifieds) 
               }
 
-		    }).catch (err => {
-			console.log(err);
-		    });
-		});
-	      }
-	      lastScrollTop = st <= 0 ? 0 : st;
+            }).catch (err => {
+            console.log(err);
+            });
+        });
+      }
+      lastScrollTop = st <= 0 ? 0 : st;
     });
 
 

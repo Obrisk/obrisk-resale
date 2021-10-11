@@ -702,7 +702,6 @@ def wxpyjs_success(request, *args, **kwargs):
         if body.get('addr', None) is None:
             is_offline = True
 
-
         addr = body.get('addr', None) or request.user.chinese_address
         phone = body.get('phone', None) or request.user.phone_number
 

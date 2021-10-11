@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
                       phone = getCookie('classified-order-phone');
                       addr = getCookie('classified-order-address');
                   }
+                  console.error(`Address Value: ${addr}`);
 
                   fetch(paySuccessURL, {
                       method : "POST",

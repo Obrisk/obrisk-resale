@@ -25,6 +25,16 @@ CACHES = {
 }
 
 
+ELASTICSEARCH_URL={
+    'hosts': env(
+        "ELASTICSEARCH_URL",
+        default='localhost:9200'
+     ),
+    'timeout': 60,
+    'sniff_on_start': False
+}
+
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-root
 STATIC_ROOT = str(ROOT_DIR('staticfiles'))
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
