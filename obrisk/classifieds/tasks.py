@@ -8,7 +8,7 @@ from django.core.cache.backends.base import DEFAULT_TIMEOUT
 from django.http import HttpResponse
 from celery import shared_task
 from obrisk.users.phone_verification import send_sms
-from obrisk.classifieds.models import Classified, ClassifiedTags
+from obrisk.classifieds.models import Classified, ClassifiedTags, ClassifiedOrder
 from obrisk.messager.send_wxtemplate import notify_seller_wxtemplate
 
 
