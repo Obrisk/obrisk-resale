@@ -59,7 +59,7 @@ from friendship.models import Friend, Follow
 from rest_framework.decorators import api_view
 
 from obrisk.users.serializers import UserSerializer
-from obrisk.utils.helpers import ajax_required
+from obrisk.utils.helpers import ajax_required, AdminRequiredMixin
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.users.wechat_authentication import WechatLogin
 from obrisk.users.wechat_config import CHINA_PROVINCES
@@ -1010,39 +1010,15 @@ class VerifyAddressView(LoginRequiredMixin, UpdateView):
         return User.objects.get(username=self.request.user.username)
 
 
-
-@login_required
-def admin_create_user(request, *args, **kwargs):
-    if not request.user.is_superuser and not request.user.is_staff:
-        return HttpResponse(
-                "Hey, You are not authorized!",
-                content_type='text/plain')
-
-    if request.method == 'GET':
-        return render(
-                request,
-                'users/admin_create_user.html',
-                {'form':AdminCreateUserForm(
-                    initial={
-                        'username': request.GET.get('nm'),
-                        'city': request.GET.get('ct'),
-                        'province_region': request.GET.get('pr')
-                    }
-                )}
-            )
-
-    if request.method == 'POST':
-        form = AdminCreateUserForm(request.POST)
-        if form.is_valid():
-            user = form.save(request)
-            user.save()
-
-    return redirect(
-        ''.join(
+class AdminUpdateUserView(UpdateView, AdminRequiredMixin):
+    form_class = AdminCreateUserForm
+    template_name = 'users/admin_create_user.html'
+    model = User
+    success_url = ''.join(
             ['/', settings.ADMIN_URL.strip('^'),
             'users/wechatuser/']
         )
-    )
+
 
 @ajax_required
 @require_http_methods(["GET"])

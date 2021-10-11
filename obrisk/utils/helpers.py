@@ -46,6 +46,16 @@ def ajax_required(f):
     return wrap
 
 
+class AdminRequiredMixin(View):
+    """Mixin to validate that
+    the loggedin user is the creator of the object
+    to be edited or updated."""
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_superuser and not request.user.is_staff:
+            raise PermissionDenied
+        return super().dispatch(request, *args, **kwargs)
+
+
 class AuthorRequiredMixin(View):
     """Mixin to validate that
     the loggedin user is the creator of the object

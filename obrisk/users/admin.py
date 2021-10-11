@@ -1,5 +1,6 @@
 import logging
 import itertools
+from django.urls import reverse
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
@@ -66,19 +67,16 @@ def create_obrisk_user(modeladmin, request, queryset):
                 country='China'
             )
 
-        except IntegrityError as e:
-            logging.error('Creating the Obrisk user failed', exc_info=e)
-            return
-
         except Exception as e:
-            logging.error('Creating the Obrisk user failed', exc_info=e)
+            logging.error(
+                'Creating the Obrisk user failed',
+                exc_info=e
+            )
             return
 
         return HttpResponseRedirect(
-            '/users/wsguatpotlfwccdi/admin-create-user/?nm=%s&ct=%s&pr=%s' % ( #noqa
-                 user.username, user.city or '', user.province_region or ''
-            )
-        )
+                   f'/users/wsguatpotlfwccdi/admin-create-user/{user.pk}/'
+                )
 
 
 send_upload_success.short_description = 'Send upload success'

@@ -7,7 +7,7 @@
 {% endblock head %}
 
 {% block content %}
-    <form action="{% url 'users:admin_create_user' %}" id="signup_form"
+    <form id="signup_form"
       method="post" role="form" class="signup">
       {% csrf_token %}
 
