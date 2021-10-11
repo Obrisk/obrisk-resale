@@ -153,6 +153,9 @@
   </div>
 
   <br/>
+  <div id="notes"> </div>
+  <br/>
+
   <div class="action-wrapper">
     <a class="button chat-button accent-button"
         href="{% url 'messager:conversation_detail' classifiedorder.classified.user.username %}">
@@ -196,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if( refundBtn !== null) {
 	  refundBtn.addEventListener('click', () => {
-          //window.location.href = chatUrl;
+          document.getElementById('notes').innerHTML = '<p>Please Add our Support Wechat ID: "Obrisk"</p> <p> We will help you process refund ASAP</p>';
 	  });
     }
 });
