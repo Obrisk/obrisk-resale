@@ -1,6 +1,4 @@
-var xDown = null;                                                        
-var yDown = null;
-
+//This function is called inside HTML File, inlined onclick event
 function callpay() {
     if (isNaN(price) || price  === "0.00") {
         document.getElementById('payError').innerHTML = "Only priced items can accept payments";        
@@ -14,43 +12,6 @@ function callpay() {
     window.location.href = orderUrl + sg;
 }
 
-function handleTouchMove(evt) {
-if ( ! xDown || ! yDown ) {
-    return;
-}
-
-var xUp = evt.touches[0].clientX;                                    
-var yUp = evt.touches[0].clientY;
-
-var xDiff = xDown - xUp;
-var yDiff = yDown - yUp;
-                                                                     
-if ( Math.abs( xDiff ) > Math.abs( yDiff ) ) {
-    new Promise(resolve => setTimeout(resolve, 700)).then(() => {
-          const height = Math.min(
-             document.querySelector('.is-active.is-visible .classified-image').offsetHeight,
-             visualViewport.height * 0.7
-          );
-
-         document.getElementById('image-overlay').style.top =  height - 34 + 'px';
-         document.getElementById('image-section').style.maxHeight = height + 'px';
-    });
- }
- xDown = null;
- yDown = null;                                             
-};
-
-function handleTouchStart(evt) {
-    const firstTouch = evt.touches[0];                                      
-    xDown = firstTouch.clientX;                                      
-    yDown = firstTouch.clientY;                                      
-};
-
-window.onload = (event) => {
-    if (document.querySelector('article').clientHeight - 50 < window.innerHeight) {
-        document.getElementById('off-ac').style.display = 'flex';
-    }
-};
 
 document.addEventListener('DOMContentLoaded', function () {
     const chatBtn = document.getElementById('chat-button-id');
