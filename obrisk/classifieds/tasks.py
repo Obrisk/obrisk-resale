@@ -2,6 +2,7 @@ import os
 import uuid
 import logging
 import time
+import ast
 from django.core.cache import cache
 from django.conf import settings
 from django.core.cache.backends.base import DEFAULT_TIMEOUT

@@ -694,7 +694,6 @@ def wxpyjs_success(request, *args, **kwargs):
             slug=body.get('sg', None)
         ).first()
 
-    logging.error(f'Address body for payment is {body}', extra=body)
     if classified:
         classified.status='E'
         classified.save()
