@@ -37,11 +37,10 @@ document.addEventListener('DOMContentLoaded', function () {
                   let phone = null;
                   let addr = null; 
 
-                  if (!getCookie('classified-order-is-offline')) {
+                  if (getCookie('classified-order-is-offline') === "false") {
                       phone = getCookie('classified-order-phone');
                       addr = getCookie('classified-order-address');
                   }
-                  console.error(`Address Value: ${addr}`);
 
                   fetch(paySuccessURL, {
                       method : "POST",
