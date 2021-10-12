@@ -847,7 +847,6 @@ def seller_confirm_order(request, *args, **kwargs):
     if request.method == 'POST':
         body = json.loads(request.body)
         res = body.get('rs', None)
-        print(res)
         if res is None:
             return JsonResponse({
                 'success': False
@@ -886,7 +885,6 @@ def set_delivery_pickup(request, *args, **kwargs):
     if request.method == 'POST':
         body = json.loads(request.body)
         res = body.get('rs', None)
-        print(res)
         if res is None:
             return JsonResponse({
                 'success': False

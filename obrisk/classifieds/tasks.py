@@ -73,7 +73,6 @@ def order_notify_seller(order_id):
 
     if order.classified.user.wechat_openid is not None:
         try:
-            logging.error(f'Dispatching notify seller task {order}')
             notify_seller_wxtemplate(order)
         except Exception as e:
             logging.error(
