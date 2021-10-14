@@ -32,13 +32,9 @@
                </div>
 
                <textarea name="sender_address" id="sender_address" cols="40" rows="2" maxlength="2000"
-                class="form-field" placeholder="{% trans 'Full Address' %}">
-                  {% if request.user.chinese_address %}
-                      {{ request.user.chinese_address }}
-                  {% else  %}
-                        Your full address
-                  {% endif  %}
-              </textarea>
+                class="form-field" placeholder="{% trans 'Full Address' %}"
+                >{{ request.user.chinese_address | default_if_none:'Your address in Chinese' }}
+               </textarea>
 
               <div class="input-group receiver-divider">
                   <input type="text" id="receiver_name" name="receiver_name" maxlength="80" class="form-field" required
@@ -48,12 +44,8 @@
                </div>
 
                <textarea name="receiver_address" id="receiver_address" cols="40" rows="2" maxlength="2000"
-                    class="form-field" placeholder="{% trans 'Full Address' %}">
-                      {% if order.recipient_chinese_address %}
-                          {{ order.recipient_chinese_address }}
-                  {% else  %}
-                        Contact us to get buyer's Address
-                  {% endif  %}
+                    class="form-field" placeholder="{% trans 'Full Address' %}"
+                    >{{ order.recipient_chinese_address | default_if_none:"Contact us to get buyer's Address" }}
                </textarea>
 
                   <div class="weight">

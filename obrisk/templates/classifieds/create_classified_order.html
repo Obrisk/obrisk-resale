@@ -69,9 +69,10 @@
         <label>
             {% trans 'Address' %} <small> {% trans '(Chinese)' %} </small>
         </label>
-        <textarea id="id_chinese_address" value="{{ request.user.chinese_address | default_if_none:''}}"
-               name="address" rows="2" class="input" placeholder="Address in chinese including city">
-        </textarea>
+        <textarea id="id_chinese_address" value=""
+           name="address" rows="2" class="input" placeholder="Full Address in Chinese"
+           >{{ request.user.chinese_address | default_if_none:''}}</textarea>
+
         <label>
             {% trans 'Phone number' %}
         </label>
