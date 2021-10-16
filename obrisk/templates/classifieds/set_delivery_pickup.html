@@ -23,18 +23,61 @@
            enctype="multipart/form-data" id="delivery-form" method="post" role="form">
           {% csrf_token %}
 
-          <div class="column">
+          <div class="column form-inner">
               <div class="input-group">
                   <input type="text" id="sender_name" name="sender_name" maxlength="80"
                    class="form-field" required placeholder="{% trans 'Name' %}" value="{{request.user.username | title}}">
                   <input type="text" id="sender_phone" name="sender_phone" maxlength="11" class="form-field" required
-                    placeholder="{% trans 'Name' %}" value="{{request.user.phone_number.national_number}}">
+                    placeholder="{% trans 'Your Phone no.' %}" value="{{request.user.phone_number.national_number}}">
                </div>
 
                <textarea name="sender_address" id="sender_address" cols="40" rows="2" maxlength="2000"
-                class="form-field" placeholder="{% trans 'Full Address' %}"
-                >{{ request.user.chinese_address | default_if_none:'Your address in Chinese' }}
-               </textarea>
+                class="form-field" placeholder="{% trans 'Your Full Address' %}"
+                >{{ request.user.chinese_address | default_if_none:'' }}</textarea>
+
+                <div id="province_city" class="form-group">
+                    <select name="province_region" id="province"
+                        class="custom-select selectwidget form-control" autocomplete="on">
+                            <option value="">Change</option>
+                            <option value="Anhui">Anhui</option>
+                            <option value="Beijing">Beijing</option>
+                            <option value="Chongqing">Chongqing</option>
+                            <option value="Fujian">Fujian</option>
+                            <option value="Gansu">Gansu</option>
+                            <option value="Guangdong">Guangdong</option>
+                            <option value="Guangxi">Guangxi</option>
+                            <option value="Guizhou">Guizhou</option>
+                            <option value="Hainan">Hainan</option>
+                            <option value="Hebei">Hebei</option>
+                            <option value="Heilongjiang">Heilongjiang</option>
+                            <option value="Henan">Henan</option>
+                            <option value="Hubei">Hubei</option>
+                            <option value="Hunan">Hunan</option>
+                            <option value="Inner Mongolia">Inner Mongolia</option>
+                            <option value="Jiangsu">Jiangsu</option>
+                            <option value="Jiangxi">Jiangxi</option>
+                            <option value="Jilin">Jilin</option>
+                            <option value="Liaoning">Liaoning</option>
+                            <option value="Ningxia">Ningxia</option>
+                            <option value="Qinghai">Qinghai</option>
+                            <option value="Shaanxi">Shaanxi</option>
+                            <option value="Shandong">Shandong</option>
+                            <option value="Shanghai">Shanghai</option>
+                            <option value="Shanxi">Shanxi</option>
+                            <option value="Sichuan">Sichuan</option>
+                            <option value="Tianjin">Tianjin</option>
+                            <option value="Tibet">Tibet</option>
+                            <option value="Xinjiang">Xinjiang</option>
+                            <option value="Yunnan">Yunnan</option>
+                            <option value="Zhejiang">Zhejiang</option>
+                    </select>
+
+
+                    <select name="city" id="city" class="custom-select selectwidget form-control" autocomplete="on">
+                        <option value="">Change</option>
+                    </select>
+                </div>
+
 
               <div class="input-group receiver-divider">
                   <input type="text" id="receiver_name" name="receiver_name" maxlength="80" class="form-field" required
@@ -44,23 +87,70 @@
                </div>
 
                <textarea name="receiver_address" id="receiver_address" cols="40" rows="2" maxlength="2000"
-                    class="form-field" placeholder="{% trans 'Full Address' %}"
-                    >{{ order.recipient_chinese_address | default_if_none:"Contact us to get buyer's Address" }}
-               </textarea>
+                    class="form-field" placeholder="{% trans 'Contact us for recipient address' %}"
+                    >{{ order.recipient_chinese_address | default_if_none:'' }}</textarea>
 
-                  <div class="weight">
-                      <label>
-                          {% trans 'Weight' %}
-                      </label> <span> KG &nbsp;
-                          <input type="number" id="id_price" name="weight" id="weight"
-                          required step="1" value="1"  class="numberinput input">
-                      <span>
-                  </div>
+                <div id="province_city" class="form-group">
+                    <select name="province_region" id="province"
+                        class="custom-select selectwidget form-control" autocomplete="on">
+                            <option value="">Change</option>
+                            <option value="Anhui">Anhui</option>
+                            <option value="Beijing">Beijing</option>
+                            <option value="Chongqing">Chongqing</option>
+                            <option value="Fujian">Fujian</option>
+                            <option value="Gansu">Gansu</option>
+                            <option value="Guangdong">Guangdong</option>
+                            <option value="Guangxi">Guangxi</option>
+                            <option value="Guizhou">Guizhou</option>
+                            <option value="Hainan">Hainan</option>
+                            <option value="Hebei">Hebei</option>
+                            <option value="Heilongjiang">Heilongjiang</option>
+                            <option value="Henan">Henan</option>
+                            <option value="Hubei">Hubei</option>
+                            <option value="Hunan">Hunan</option>
+                            <option value="Inner Mongolia">Inner Mongolia</option>
+                            <option value="Jiangsu">Jiangsu</option>
+                            <option value="Jiangxi">Jiangxi</option>
+                            <option value="Jilin">Jilin</option>
+                            <option value="Liaoning">Liaoning</option>
+                            <option value="Ningxia">Ningxia</option>
+                            <option value="Qinghai">Qinghai</option>
+                            <option value="Shaanxi">Shaanxi</option>
+                            <option value="Shandong">Shandong</option>
+                            <option value="Shanghai">Shanghai</option>
+                            <option value="Shanxi">Shanxi</option>
+                            <option value="Sichuan">Sichuan</option>
+                            <option value="Tianjin">Tianjin</option>
+                            <option value="Tibet">Tibet</option>
+                            <option value="Xinjiang">Xinjiang</option>
+                            <option value="Yunnan">Yunnan</option>
+                            <option value="Zhejiang">Zhejiang</option>
+                    </select>
 
-                  <small class="price-manual"> {% trans 'Weight is optional, approximation is okay' %}
-                  </small>
 
-                <br/>
+                    <select name="city" id="city" class="custom-select selectwidget form-control" autocomplete="on">
+                        <option value="">Change</option>
+                    </select>
+                </div>
+
+                
+                <div class="content">
+                      <div class="input-group date" id="datepicker">
+                        <input class="form-control" placeholder="MM/DD/YYYY"/>
+                        <span class="input-group-append input-group-addon">
+                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                        </span>
+                      </div>
+
+                      <div class="input-group time" id="timepicker">
+                        <input class="form-control" placeholder="HH:MM AM/PM"/>
+                        <span class="input-group-append input-group-addon">
+                            <span class="input-group-text"><i class="fa fa-clock"></i></span>
+                        </span>
+                      </div>
+                </div>
+
+
                 <a id="submit"
                     class="button is-rounded is-solid accent-button raised is-fullwidth"
                     data-step="step-dot-4">{% trans 'Confirm' %}
@@ -74,12 +164,15 @@
 
 {% block extra_js %}
 
-<script type="text/javascript">
-  const phone_no_url = "{% url 'account_login' %}";
-</script>
-
 <link href="{% static 'css/wnoty.css' %}" rel="stylesheet"/>
 <script src="{% static 'js/vendor/jquery.min.js' %}" type="text/javascript"></script>
+<script type="text/javascript">
+  const phone_no_url = "{% url 'account_login' %}";
+
+  $(".date input").attr("type", "date");
+  $(".time input").attr("type", "time");
+</script>
+
 <script src="{% static 'js/location.js' %}" type="text/javascript"> </script>
 <script defer src="{% static 'js/wnoty.js' %}" type="text/javascript"></script>
 {% endblock extra_js %}
