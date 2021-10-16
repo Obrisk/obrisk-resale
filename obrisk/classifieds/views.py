@@ -49,7 +49,8 @@ from obrisk.classifieds.models import (
         ClassifiedImages, ClassifiedTags)
 from obrisk.classifieds.forms import (
         ClassifiedForm, AdminClassifiedForm, OfficialAdForm,
-        ClassifiedEditForm, AdminClassifiedImgForm)
+        ClassifiedEditForm, AdminClassifiedImgForm,
+        SetDeliveryForm )
 from obrisk.utils.images_upload import multipleImagesPersist
 from obrisk.classifieds.tasks import add_tags, order_notify_seller
 from obrisk.classifieds.wxpayments import get_jsapi_params, get_sign
@@ -830,6 +831,7 @@ class ClassifiedOrderView(DetailView):
 
 
 @csrf_exempt
+@login_required
 def seller_confirm_order(request, *args, **kwargs):
     if request.method == 'GET':
         try:
@@ -868,6 +870,7 @@ def seller_confirm_order(request, *args, **kwargs):
 
 
 @csrf_exempt
+@login_required
 def set_delivery_pickup(request, *args, **kwargs):
     if request.method == 'GET':
         try:
@@ -882,22 +885,14 @@ def set_delivery_pickup(request, *args, **kwargs):
             )
 
     if request.method == 'POST':
-        body = json.loads(request.body)
-        res = body.get('rs', None)
-        if res is None:
-            return JsonResponse({
-                'success': False
-            })
+        #sender_phone = request.POST.get('sender_phone', None)
 
-        order = ClassifiedOrder.objects.get(slug=body.get('or'))
-        if res is True:
-            order.status='C'
-        else:
-            order.status='X'
-        order.save()
-        return JsonResponse({
-            'success': True
-        })
+        form = SetDeliveryForm(request.POST)
+
+        if form.is_valid():
+            return JsonResponse({
+                'success': True
+            })
 
     return HttpResponseBadRequest(
           content=_('Sorry, we could not handle this request')

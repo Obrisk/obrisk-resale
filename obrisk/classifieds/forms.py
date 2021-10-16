@@ -163,6 +163,22 @@ class ClassifiedEditForm(forms.ModelForm):
         }
 
 
+
+class SetDeliveryForm(forms.Form):
+    sender_name = forms.CharField()
+    sender_phone = forms.CharField()
+    sender_address = forms.CharField()
+    sender_province = forms.CharField()
+    sender_city = forms.CharField()
+    recipient_name = forms.CharField()
+    recipient_phone = forms.CharField()
+    recipient_address = forms.CharField()
+    recipient_province = forms.CharField()
+    recipient_city = forms.CharField()
+    pickup_time = forms.CharField()
+    pickup_date = forms.CharField()
+
+
 class OfficialAdForm(forms.ModelForm):
     details = forms.CharField(widget=forms.Textarea)
     images = forms.CharField(max_length=6000, widget=forms.HiddenInput()) #This is not related with any model
