@@ -39,7 +39,7 @@
 
   <div class="order-details">
     {% if classifiedorder.is_offline %}
-        <p id="title is-4" > Offline Pickup </p>
+        <p class="title is-5" > Offline Pickup </p>
 
         <div class="details-group">
             <svg id="Layer_1" width="36" height="36"
@@ -51,8 +51,11 @@
                 <g><path d="M61.5,77.6h-23c-0.6,0-1-0.4-1-1s0.4-1,1-1h23c0.6,0,1,0.4,1,1S62.1,77.6,61.5,77.6z"/></g>
                 <g><path d="M54,29.8H46c-2.3,0-4.1-1.9-4.1-4.1V13.5c0-2.3,1.8-4.1,4.1-4.1H54c2.3,0,4.1,1.9,4.1,4.1v12.1   C58.1,27.9,56.2,29.8,54,29.8z M46,11.4c-1.2,0-2.1,1-2.1,2.1v12.1c0,1.2,1,2.1,2.1,2.1H54c1.2,0,2.1-1,2.1-2.1V13.5   c0-1.2-1-2.1-2.1-2.1H46z"/></g>
             </svg>
+
             {% if classifiedorder.classified.user.username %}
                 <p>{{ classifiedorder.classified.user.username }} </p>
+            {% else %}
+                <p> Name not Provided</p>
             {% endif %}
         </div>
 
@@ -73,9 +76,13 @@
           </svg>
 
             {% if classifiedorder.classified.english_address %}
-            <p>{{ classifiedorder.classified.english_address }}</p>
+                <p>{{ classifiedorder.classified.english_address }}</p>
             {% else %}
-                <p>Contact Seller for address info </p> 
+                {% if classifiedorder.classified.user == request.user %}
+                    <p>Please provide your address to the buyer </p> 
+                {% else %}
+                    <p>Contact Seller for address info </p> 
+                {% endif %}
             {% endif %}
         </div>
 
@@ -93,7 +100,7 @@
         </a>
 
     {% else  %}
-        <p class="title is-4" > Express Delivery  </p>
+        <p class="title is-5" > Express Delivery  </p>
 
         <div class="details-group">
             <svg id="Layer_1" width="32" height="32"
@@ -109,7 +116,7 @@
             {% if classifiedorder.full_name %}
                 <p> {{ classifiedorder.full_name | title }} </p>
             {% else %}
-                <p> {{ request.user.username | title }} </p>
+                <p> {{ classifiedorder.buyer.username | title }} </p>
             {% endif %}
         </div>
 
@@ -127,10 +134,17 @@
                 <ellipse cx="24" cy="38.97918" rx="2.97" ry="0.85673" style="fill:none;stroke:#303030;stroke-width:0.7;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:10;"/>
                 </g>
           </svg>
+
         {% if classifiedorder.recipient_chinese_address %}
             <p> {{ classifiedorder.recipient_chinese_address | title }} </p>
         {% else %}
-            <p>Please provide your address to the seller</p> 
+
+            {% if classifiedorder.classified.user == request.user %}
+                <p>Contact Obrisk or the buyer to get the address </p> 
+            {% else %}
+                <p>Please provide your address to the seller</p> 
+            {% endif %}
+
         {% endif %}
     </div>
 
@@ -145,7 +159,12 @@
         {% if classifiedorder.phone_number %}
             <p> {{ classifiedorder.phone_number }} </p>
         {% else %}
-            <p> {{ request.user.phone_number }} </p>
+
+            {% if classifiedorder.classified.user == request.user %}
+                <p>Contact Obrisk or the buyer to get the phone </p> 
+            {% else %}
+                <p>Provide your phone number</p> 
+            {% endif %}
         {% endif %}
     </div>
 
@@ -154,37 +173,68 @@
 
   <br/>
   <div id="notes"> </div>
-  <br/>
 
   <div class="action-wrapper">
-    <a class="button chat-button accent-button"
-        href="{% url 'messager:conversation_detail' classifiedorder.classified.user.username %}">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
-          stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
-          class="feather feather-message-square">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-        </svg> &nbsp;
-        Talk to Seller
-    </a>
 
-    <div class="button accent-button" id="wechat-refund-call">
-        <svg enable-background="new 0 0 300 300" height="26" width="26"
-            id="Layer_1" version="1.1" viewBox="0 0 300 300">
-            <g> <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"
-             stroke-miterlimit="10" stroke-width="6"
-              d="   M231,188v13c0,5.523-4.727,10-10.25,10h-171c-5.523,0-9.75-4.477-9.75-10V100c0-5.523,4.227-10,9.75-10h171   c5.523,0,10.25,4.477,10.25,10v60"/>
-            <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"
-            d="   M231,122.627c0-2.003-1.624-3.627-3.627-3.627H43.627c-2.003,0-3.627,1.624-3.627,3.627v23.746c0,2.003,1.624,3.627,3.627,3.627   h183.746c2.003,0,3.627-1.624,3.627-3.627V122.627z"/>
-            <line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
-                stroke-miterlimit="10" stroke-width="6" x1="54" x2="80" y1="189" y2="189"/>
-            <polyline fill="none" points="   198.307,163.167 187.231,174.243 198.307,185.319  " stroke="#FFFFFF"
-            stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"/>
-            <path d="   M188.356,174.625c0,0,56.593-0.067,56.816-0.076c8.512-0.34,14.828-7.188,14.828-15.799v-2c0-8.836-6.414-15.75-15.25-15.75H243"
-            fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"/> </g>
-        </svg>
+    {% if classifiedorder.classified.user == request.user %}
 
-        Request Refund
-    </div>
+        <a class="button chat-button accent-button"
+            href="{% url 'messager:conversation_detail' classifiedorder.buyer.username %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-message-square">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg> &nbsp;
+            <p class="action-text"> Talk to Buyer </p>
+            
+        </a>
+
+        <div class="button accent-button" id="action-call" data-user="seller">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                class="feather feather-truck">
+                <rect x="1" y="3" width="15" height="13"></rect>
+                <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon>
+                <circle cx="5.5" cy="18.5" r="2.5"></circle>
+                <circle cx="18.5" cy="18.5" r="2.5"></circle>
+            </svg>&nbsp;
+            <p class="action-text"> Process Delivery </p>
+            
+        </div>
+
+    {% else %}
+        
+        <a class="button chat-button accent-button"
+            href="{% url 'messager:conversation_detail' classifiedorder.classified.user.username %}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+              stroke="#FFFFFF" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"
+              class="feather feather-message-square">
+              <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg> &nbsp;
+            <p class="action-text"> Talk to Seller </p>
+            
+        </a>
+
+        <div class="button accent-button" id="action-call" data-user="buyer">
+            <svg enable-background="new 0 0 300 300" height="26" width="26"
+                id="Layer_1" version="1.1" viewBox="0 0 300 300">
+                <g> <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"
+                 stroke-miterlimit="10" stroke-width="6"
+                  d="   M231,188v13c0,5.523-4.727,10-10.25,10h-171c-5.523,0-9.75-4.477-9.75-10V100c0-5.523,4.227-10,9.75-10h171   c5.523,0,10.25,4.477,10.25,10v60"/>
+                <path fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"
+                d="   M231,122.627c0-2.003-1.624-3.627-3.627-3.627H43.627c-2.003,0-3.627,1.624-3.627,3.627v23.746c0,2.003,1.624,3.627,3.627,3.627   h183.746c2.003,0,3.627-1.624,3.627-3.627V122.627z"/>
+                <line fill="none" stroke="#000000" stroke-linecap="round" stroke-linejoin="round"
+                    stroke-miterlimit="10" stroke-width="6" x1="54" x2="80" y1="189" y2="189"/>
+                <polyline fill="none" points="   198.307,163.167 187.231,174.243 198.307,185.319  " stroke="#FFFFFF"
+                stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"/>
+                <path d="   M188.356,174.625c0,0,56.593-0.067,56.816-0.076c8.512-0.34,14.828-7.188,14.828-15.799v-2c0-8.836-6.414-15.75-15.25-15.75H243"
+                fill="none" stroke="#FFFFFF" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="6"/> </g>
+            </svg>
+            <p class="action-text"> Request Refund </p>
+        </div>
+    {% endif %}
+
 
   </div>
 
@@ -194,13 +244,19 @@
 {% block extra_js %}
 
 <script>
+
+var order_slug = "{{ classifiedorder.slug }}";
 document.addEventListener('DOMContentLoaded', function () {
-    const refundBtn = document.getElementById('wechat-refund-call');
+    const refundBtn = document.getElementById('action-call');
 
     if( refundBtn !== null) {
-	  refundBtn.addEventListener('click', () => {
-          document.getElementById('notes').innerHTML = '<p>Please Add our Support Wechat ID: "Obrisk"</p> <p> We will help you process refund ASAP</p>';
-	  });
+      refundBtn.addEventListener('click', () => {
+            if( refundBtn.dataset.user === 'seller') {
+                window.location.href = `/classifieds/orders/wsguatpotlfwccdi/set-delivery-pickup/?or=${order_slug}`;
+            } else{
+                document.getElementById('notes').innerHTML = '<p>Please Add our Support Wechat ID: "Obrisk"</p> <p> We will help you process the refund ASAP</p>';
+            }
+      });
     }
 });
 </script>
