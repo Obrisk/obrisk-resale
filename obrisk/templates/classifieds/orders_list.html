@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+<title>{% trans 'Messages' %}</title>
+{% endblock head %}
+
+{% block content %}
+    {% include 'nav_modal.html' %}
+
+    <div class="users-list">
+      {% for order in classifiedorderobject.bought %}
+              <a href="{% url 'classifieds:order_detail' order.slug %}"
+                id="{{ order.slug }}" class="card contact-card open-chat">
+                {% if order.classified.thumbnail %}
+                    <img src="{{oss}}/{{order.second_user.thumbnail}}"
+                      class="rounded-circle contact-profile-avatar img-fluid">
+                {% else %}
+                    <img src="{% static 'img/nophoto.jpg' %}"
+                      alt="pic" class="contact-profile-avatar img-fluid" />
+                {% endif %}
+
+                <div class="contact-card-meta">
+                  <div class="name-time-section">
+                        <strong> {{ order.classified.title|title }} </strong>
+                        <small class="timestamp" id="last-timestamp">
+                            {{ order.timestamp |date:'N d G:i' }}
+                        </small>
+                  </div>
+
+                  <small class="msg" id="last-msg"> 
+                          {{ order.classified.price }}
+                   </small>
+                </div>
+              </a>
+
+      {% empty %}
+          <div class="card">
+              <div class="card-body">
+                  <strong> {% trans "No Orders" %} </strong>
+                  <p> {% trans "Start buying and selling" %}</p>
+              </div>
+          </div>
+      {% endfor %}
+
+          {% for order in classifiedorderobject.sold %}
+              <a href="{% url 'classifieds:order_detail' order.slug %}"
+                id="{{ order.slug }}" class="card contact-card open-chat">
+                {% if order.classified.thumbnail %}
+                    <img src="{{oss}}/{{order.second_user.thumbnail}}"
+                      class="rounded-circle contact-profile-avatar img-fluid">
+                {% else %}
+                    <img src="{% static 'img/nophoto.jpg' %}"
+                      alt="pic" class="contact-profile-avatar img-fluid" />
+                {% endif %}
+
+                <div class="contact-card-meta">
+                  <div class="name-time-section">
+                        <strong> {{ order.classified.title|title }} </strong>
+                        <small class="timestamp" id="last-timestamp">
+                            {{ order.timestamp |date:'N d G:i' }}
+                        </small>
+                  </div>
+
+                  <small class="msg" id="last-msg"> 
+                          {{ order.classified.price }}
+                   </small>
+                </div>
+              </a>
+
+
+      {% empty %}
+          <div class="card">
+              <div class="card-body">
+                  <strong> {% trans "No Orders" %} </strong>
+                  <p> {% trans "Start buying and selling" %}</p>
+              </div>
+          </div>
+      {% endfor %}
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
+
+{% block extra_js %}
+    <link rel="stylesheet" href="{% static 'css/share.css' %}">
+    <script src="{% static 'js/contact-list.js' %}" type="text/javascript"></script>
+{% endblock extra_js %}

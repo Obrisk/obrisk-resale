@@ -87,9 +87,14 @@ urlpatterns = [
         r'^delete/(?P<pk>[-\w]+)/$',
         ClassifiedDeleteView.as_view(),
         name='delete_classified'),
+
+    url(regex=r'^orders-list/(?P<username>[\w.@+-]+)/$',
+        view=ClassifiedOrderListView.as_view(),
+        name='user_orders'),
+
     url(
         r'^orders/wsguatpotlfwccdi/(?P<slug>[-\w]+)/$',
-        ClassifiedOrderView.as_view(),
+        ClassifiedOrderDetailView.as_view(),
         name='order_detail'),
     url(
         r'^(?P<slug>[-\w]+)/$',

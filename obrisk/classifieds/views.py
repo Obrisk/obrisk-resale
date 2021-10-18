@@ -15,7 +15,7 @@ from django.contrib.auth.mixins import (
 from django.contrib.auth.decorators import login_required
 from django.views import View
 from django.views.generic import (
-        CreateView, UpdateView,
+        CreateView, UpdateView, ListView,
         DetailView, DeleteView)
 from django.urls import reverse, reverse_lazy
 from django.shortcuts import render, get_object_or_404, redirect
@@ -802,31 +802,28 @@ class Wxpay_Result(View):
         )
 
 
-class ClassifiedOrderView(DetailView):
+class ClassifiedOrderListView(LoginRequiredMixin, ListView):
     model = ClassifiedOrder
+    # These next two lines tell the view to index lookups by username
+    slug_field = 'username'
+    slug_url_kwarg = 'username'
+    template_name = 'classifieds/orders_list.html'
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(
-                ClassifiedOrderView, self
-            ).get_context_data(**kwargs)
+    def get_queryset(self):
+        bought = ClassifiedOrder.objects.filter(
+                    buyer=self.request.user
+                ).order_by('-timestamp')
 
-        classified_tags_ids = self.object.classified.tags.values_list('id', flat=True)
-        similar_classifieds = Classified.objects.get_active().filter(
-                tags__in=classified_tags_ids)\
-            .exclude(id=self.object.classified.id)
+        sold = ClassifiedOrder.objects.filter(
+                    classified__user=self.request.user
+                ).order_by('-timestamp')
 
-        # Add in a QuerySet of all the images
-        context['images'] = ClassifiedImages.objects.filter(
-                classified=self.object.classified.id
-            )
+        return {'items_bought': bought, 'items_sold': sold}
 
-        context['images_no'] = len(context['images'])
-        context['similar_classifieds'] = similar_classifieds.annotate(
-                same_tags=Count('tags'))\
-            .order_by('-same_tags', '-timestamp')[:6]
 
-        return context
+
+class ClassifiedOrderDetailView(DetailView):
+    model = ClassifiedOrder
 
 
 

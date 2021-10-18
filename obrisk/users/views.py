@@ -1020,6 +1020,7 @@ class AdminUpdateUserView(UpdateView, AdminRequiredMixin):
         )
 
 
+
 @ajax_required
 @require_http_methods(["GET"])
 def wechat_auto_login(request, **kwargs):
