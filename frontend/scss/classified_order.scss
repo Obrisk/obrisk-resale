@@ -64,7 +64,10 @@
   padding: 2em 0.8em;
   margin: 1em auto;
   background: white;
-  text-align: center;
+
+  .title {
+      text-align: center;
+  }
 
   .details-group {
       display: flex;
