@@ -807,6 +807,7 @@ class ClassifiedOrderListView(LoginRequiredMixin, ListView):
     # These next two lines tell the view to index lookups by username
     slug_field = 'username'
     slug_url_kwarg = 'username'
+    context_object_name = 'orders'
     template_name = 'classifieds/orders_list.html'
 
     def get_queryset(self):
