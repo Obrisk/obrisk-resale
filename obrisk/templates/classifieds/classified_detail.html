@@ -233,7 +233,7 @@
       const str_price = price;
   {% else %}
       const price ="{{ classified.price }}";
-      const str_price = "CYN {{ classified.price }}";
+      const str_price = "CNY {{ classified.price }}";
   {% endif %}
 
   var thumbnail = "{{oss}}/{{ classified.thumbnail }}"

@@ -32,11 +32,16 @@
      <div class ="main-title">
         <h1 class="title is-6">{{ user.username|title }}</h1>
 
-        {% if user.english_address  %}
-            <small class="address">{{ user.english_address }}, {{ user.city }} </small>
-        {% else %}
-            <small class="address"> {{ user.city }} </small>
-        {% endif %}
+          {% if user.notes %}
+                <small class="address">{{ user.notes | truncatechars:20 }} </small>
+          {% else %}
+                {% if user.english_address  %}
+                    <small class="address">{{ user.english_address }}, {{ user.city }} </small>
+                {% else %}
+                    <small class="address"> {{ user.city }} </small>
+                {% endif %}
+          {% endif %}
+
       </div>
    </nav>
   </div>
@@ -233,10 +238,16 @@
 
 
 document.addEventListener('DOMContentLoaded', function() {
+      {% if user.notes %}
+        var title =  "{{ user.notes | title }}";
+      {% else %}
+          var title = "Secondhand items selling now in {{ user.city| title }}"
+      {% endif %}
+
         wx.ready(function(){
           try {
               wx.onMenuShareAppMessage({ 
-	      title: "Secondhand items selling now in {{ user.city| title }}", 
+	      title: title , 
 	      desc: "Check out several items {{ user.username|title }} has posted", 
                     link: location.href, 
 	            imgUrl: '{{oss}}/{{share_img}}', 
