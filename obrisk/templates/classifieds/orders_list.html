@@ -10,6 +10,12 @@
     {% include 'nav_modal.html' %}
 
     <div class="items-list">
+
+        <div class="order-toggle">  
+            <p> Bought </p>
+            <p> Sold </p>
+        </div>
+
         <div id="bought-items">
           {% for order in orders.items_bought %}
                   <a href="{% url 'classifieds:order_detail' order.slug %}"

@@ -12,6 +12,13 @@ body,
   width: 100% !important;
 }
 
+.order-toggle {
+    display: flex;
+    margin: 3%;
+    justify-content: space-around;
+    font-size: 1.2em;
+}
+
 .items-list {
   margin: 3.7em auto 4.5em auto;
 }
