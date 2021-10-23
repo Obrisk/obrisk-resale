@@ -33,7 +33,7 @@
         <h1 class="title is-6">{{ user.username|title }}</h1>
 
           {% if user.notes %}
-                <small class="address">{{ user.notes | truncatechars:20 }} </small>
+                <small class="address">{{ user.notes | truncatechars:32 }} </small>
           {% else %}
                 {% if user.english_address  %}
                     <small class="address">{{ user.english_address }}, {{ user.city }} </small>
@@ -65,7 +65,7 @@
                 </div>
 
                 <div class="card-body">
-                  <h6 class="card-title"> {{ classified.title}} </h6>
+                  <h6 class="card-title"> {{ classified.title | title }} </h6>
 
                   {% if classified.price == 0.00 %}
                       <p class="card-subtitle"> {% trans 'FREE' %} </p>
