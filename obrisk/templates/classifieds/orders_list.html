@@ -3,7 +3,7 @@
 
 {% block head %}
 <link rel="stylesheet" href="{% static 'css/orders-list.css' %}">
-<title>{% trans 'Messages' %}</title>
+<title>{% trans 'Orders' %}</title>
 {% endblock head %}
 
 {% block content %}
@@ -14,26 +14,26 @@
           {% for order in orders.items_bought %}
                   <a href="{% url 'classifieds:order_detail' order.slug %}"
                     id="{{ order.slug }}" class="card contact-card open-chat">
-                    {% if order.classified.thumbnail %}
-                        <img src="{{oss}}/{{order.classified.thumbnail}}"
-                          class="rounded-circle contact-profile-avatar img-fluid">
-                    {% else %}
-                        <img src="{% static 'img/nophoto.jpg' %}"
-                          alt="pic" class="contact-profile-avatar img-fluid" />
-                    {% endif %}
+                        {% if order.classified.thumbnail %}
+                            <img src="{{oss}}/{{order.classified.thumbnail}}"
+                              class="rounded-circle contact-profile-avatar img-fluid">
+                        {% else %}
+                            <img src="{% static 'img/nophoto.jpg' %}"
+                              alt="pic" class="contact-profile-avatar img-fluid" />
+                        {% endif %}
 
-                    <div class="contact-card-meta">
-                      <div class="name-time-section">
-                            <strong> {{ order.classified.title|title }} </strong>
-                            <small class="timestamp" id="last-timestamp">
+                        <div class="contact-card-meta">
+                            <p class="subtitle is-6"> {{ order.classified.title|title }} </p>
+
+                            <div class="name-time-section">
+                              <small class="timestamp" id="last-timestamp">
                                 {{ order.timestamp |date:'N d G:i' }}
-                            </small>
-                      </div>
-
-                      <small class="msg" id="last-msg"> 
-                              {{ order.classified.price }}
-                       </small>
-                    </div>
+                              </small>
+                              <small class="msg" id="last-msg"> 
+                                      {{ order.classified.price }}
+                              </small>
+                           </div>
+                        </div>
                   </a>
 
           {% empty %}
@@ -50,26 +50,26 @@
           {% for order in orders.items_sold %}
               <a href="{% url 'classifieds:order_detail' order.slug %}"
                 id="{{ order.slug }}" class="card contact-card open-chat">
-                {% if order.classified.thumbnail %}
-                    <img src="{{oss}}/{{order.classified.thumbnail}}"
-                      class="rounded-circle contact-profile-avatar img-fluid">
-                {% else %}
-                    <img src="{% static 'img/nophoto.jpg' %}"
-                      alt="pic" class="contact-profile-avatar img-fluid" />
-                {% endif %}
+                    {% if order.classified.thumbnail %}
+                        <img src="{{oss}}/{{order.classified.thumbnail}}"
+                          class="rounded-circle contact-profile-avatar img-fluid">
+                    {% else %}
+                        <img src="{% static 'img/nophoto.jpg' %}"
+                          alt="pic" class="contact-profile-avatar img-fluid" />
+                    {% endif %}
 
-                <div class="contact-card-meta">
-                  <div class="name-time-section">
-                        <strong> {{ order.classified.title|title }} </strong>
-                        <small class="timestamp" id="last-timestamp">
+                    <div class="contact-card-meta">
+                        <p class="subtitle is-6"> {{ order.classified.title|title }} </p>
+
+                        <div class="name-time-section">
+                          <small class="timestamp" id="last-timestamp">
                             {{ order.timestamp |date:'N d G:i' }}
-                        </small>
-                  </div>
-
-                  <small class="msg" id="last-msg"> 
-                          {{ order.classified.price }}
-                   </small>
-                </div>
+                          </small>
+                          <small class="msg" id="last-msg"> 
+                                  {{ order.classified.price }}
+                          </small>
+                       </div>
+                    </div>
               </a>
 
           {% empty %}
