@@ -10,13 +10,12 @@
     {% include 'nav_modal.html' %}
 
     <div class="items-list">
-
-        <div class="order-toggle">  
-            <p> Bought </p>
-            <p> Sold </p>
+        <div class="order-toggle">
+            <a class="toggle-link" href="#" id="b"> Bought </a>
+            <a class="toggle-link" href="#" id="s"> Sold </a>
         </div>
 
-        <div id="bought-items">
+        <div id="bought">
           {% for order in orders.items_bought %}
                   <a href="{% url 'classifieds:order_detail' order.slug %}"
                     id="{{ order.slug }}" class="card contact-card open-chat">
@@ -46,13 +45,13 @@
               <div class="card">
                   <div class="card-body">
                       <strong> {% trans "No Bought Items" %} </strong>
-                      <p> {% trans "Hey Start Buying...😊" %}</p>
+                      <p> {% trans "Hey, buy youself something...😊" %}</p>
                   </div>
               </div>
           {% endfor %}
       </div>
 
-      <div id="sold-items">
+      <div id="sold">
           {% for order in orders.items_sold %}
               <a href="{% url 'classifieds:order_detail' order.slug %}"
                 id="{{ order.slug }}" class="card contact-card open-chat">
@@ -95,6 +94,19 @@
 {% endblock content %}
 
 {% block extra_js %}
-    <link rel="stylesheet" href="{% static 'css/share.css' %}">
-    <script src="{% static 'js/contact-list.js' %}" type="text/javascript"></script>
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function () {
+              const bought = document.getElementById('bought');
+              const sold = document.getElementById('sold');
+
+              document.getElementById('b').addEventListener('click', () => {
+                  sold.style.display = 'none';
+                  bought.style.display = 'block';
+              });
+              document.getElementById('s').addEventListener('click', () => {
+                  bought.style.display = 'none';
+                  sold.style.display = 'block';
+              });
+        });
+    </script>
 {% endblock extra_js %}
