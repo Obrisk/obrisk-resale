@@ -225,8 +225,8 @@
   <div class="is-9-fullhd classifieds-list-wrapper">
       <div id="classifieds" class="small-cards-listing">
          {% for classified in classifieds %}
-            <div class="card classified-card">
-              <!--Display image-->
+           <div class="card classified-card {% if classified.status == "E" %} expired {%endif%}">
+
               <a href="{% url 'classifieds:classified' classified.slug %}" class="item-link black-link">
                 <div class="card-img-top img-responsive">
                   {% if classified.thumbnail %}

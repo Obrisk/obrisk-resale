@@ -334,7 +334,7 @@ def user_classifieds_list(request, rq_user=None):
     user = User.objects.filter(username=rq_user)
     if user is None:
         classifieds_list = Classified.objects.get_active().values(
-                        'title','price','city','slug', 'thumbnail'
+                        'title','price','city','slug', 'thumbnail', 'status'
                     ).order_by('-priority', '-timestamp')
     else:
         classifieds_list = Classified.objects.filter(

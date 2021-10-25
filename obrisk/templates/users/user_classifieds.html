@@ -49,8 +49,8 @@
   <div class="is-9-fullhd classifieds-list-wrapper">
       <div id="classifieds" class="small-cards-listing">
          {% for classified in classifieds %}
-            <div class="card classified-card">
-              <!--Display image-->
+         <div class="card classified-card {% if classified.status == "E" %} expired {% endif %}">
+
               <a href="{% url 'classifieds:classified' classified.slug %}"
                 style="color:black; text-decoration:none; background-color:none">
 
@@ -101,7 +101,7 @@
             </div>
 
         {% empty %}
-              <div class="box" id="not-found" style="margin-top:8px;">
+              <div class="box" id="not-found">
                   <img id="notfound-img" width="160px" height="160px"
                       src="{% static 'img/query-not-found.gif' %}">
                   {% if user == request.user %} 
@@ -147,7 +147,7 @@
 
   function renderClassifieds(classifieds) {
       for (const cls of classifieds) {
-          let img, price; 
+          let img, price, template; 
 	      let t = typeof(cls.thumbnail); 
 
 	      if (t != "null" && t != "object" && cls.thumbnail != "" ) {
@@ -163,22 +163,40 @@
           } else {
               price = `<p class="card-subtitle"> ¥${cls.price} </p>`;
           }
+          
+          if (cls.status === "E") {
+              template = `
+                <div class="card classified-card expired">
+              <a href="${window.location.origin}/classifieds/${cls.slug}"
+                    style="color:black; text-decoration:none; background-color:none">
 
-          template = `
-            <div class="card classified-card">
-	      <a href="${window.location.origin}/classifieds/${cls.slug}"
-                style="color:black; text-decoration:none; background-color:none">
+                    <div class="card-img-top img-responsive">
+                        ${img}
+                    </div>
+                    <div class="card-body">
+                      <h6 class="card-title"> ${cls.title} </h6>
+                       ${price}
+                    </div>
+                  </a>
+                </div>
+                    `;
+          } else {
+              template = `
+                <div class="card classified-card">
+              <a href="${window.location.origin}/classifieds/${cls.slug}"
+                    style="color:black; text-decoration:none; background-color:none">
 
-                <div class="card-img-top img-responsive">
-                    ${img}
+                    <div class="card-img-top img-responsive">
+                        ${img}
+                    </div>
+                    <div class="card-body">
+                      <h6 class="card-title"> ${cls.title} </h6>
+                       ${price}
+                    </div>
+                  </a>
                 </div>
-                <div class="card-body">
-                  <h6 class="card-title"> ${cls.title} </h6>
-                   ${price}
-                </div>
-              </a>
-            </div>
-                `;
+                    `;
+          }
           document.getElementById('classifieds').insertAdjacentHTML('beforeend', template);
       }
    }

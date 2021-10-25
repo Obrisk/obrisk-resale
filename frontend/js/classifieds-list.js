@@ -6,7 +6,7 @@ let is_search = false;
 
 function renderClassifieds(classifieds) {
   for (const cls of classifieds) {
-      let img, price; 
+      let img, price, template; 
       let t = typeof(cls.thumbnail); 
 
       if (t != "null" && t != "object" && cls.thumbnail != "" ) {
@@ -25,25 +25,48 @@ function renderClassifieds(classifieds) {
           price = `<p class="card-subtitle"> ¥${cls.price} </p>`;
       }
 
-      template = `
-        <div class="card classified-card">
-          <a href="${window.location.origin}/classifieds/${cls.slug}"
-              class="black-link">
+      if (cls.status === "E" ) {
+          template = `
+            <div class="card classified-card expired">
+              <a href="${window.location.origin}/classifieds/${cls.slug}"
+                  class="black-link">
 
-            <div class="card-img-top img-responsive">
-                ${img}
+                <div class="card-img-top img-responsive">
+                    ${img}
+                </div>
+
+                <div class="card-body">
+                  <h6 class="card-title"> ${cls.title} </h6>
+                   ${price}
+
+                <span class="card-text small "><small>📍</small> ${ cls.city}</span>
+
+                </div>
+              </a>
             </div>
+                `;
+      } else {
+          template = `
+            <div class="card classified-card">
+              <a href="${window.location.origin}/classifieds/${cls.slug}"
+                  class="black-link">
 
-            <div class="card-body">
-              <h6 class="card-title"> ${cls.title} </h6>
-               ${price}
+                <div class="card-img-top img-responsive">
+                    ${img}
+                </div>
 
-            <span class="card-text small "><small>📍</small> ${ cls.city}</span>
+                <div class="card-body">
+                  <h6 class="card-title"> ${cls.title} </h6>
+                   ${price}
 
+                <span class="card-text small "><small>📍</small> ${ cls.city}</span>
+
+                </div>
+              </a>
             </div>
-          </a>
-        </div>
-            `;
+                `;
+      }
+
       document.getElementById('classifieds').insertAdjacentHTML('beforeend', template);
    }
  }

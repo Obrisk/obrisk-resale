@@ -108,7 +108,7 @@ def classified_list(request, city=None):
                     city = ''
 
     classifieds_list = Classified.objects.get_active().values(
-                    'title','price','city','slug', 'thumbnail'
+                    'title','price','city','slug', 'thumbnail', 'status'
                 ).annotate(
                     order = Case (
                         When(city=city, then=Value(1)),
@@ -128,7 +128,7 @@ def classified_list(request, city=None):
     except EmptyPage:
         if request.is_ajax():
             classifieds = Classified.objects.get_expired().values(
-                            'title','price','city','slug', 'thumbnail'
+                            'title','price','city','slug', 'thumbnail', 'status'
                         ).order_by('-timestamp')
 
             return JsonResponse({
