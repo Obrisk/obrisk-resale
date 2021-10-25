@@ -96,10 +96,13 @@
 {% block extra_js %}
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function () {
+              const bToggle = document.getElementById('b');
+              bToggle.focus();
+
               const bought = document.getElementById('bought');
               const sold = document.getElementById('sold');
 
-              document.getElementById('b').addEventListener('click', () => {
+              bToggle.addEventListener('click', () => {
                   sold.style.display = 'none';
                   bought.style.display = 'block';
               });

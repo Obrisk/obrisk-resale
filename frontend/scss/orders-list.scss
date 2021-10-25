@@ -37,6 +37,10 @@ body,
       text-decoration: none;
       padding-bottom: 8px;
 
+      &:focus {
+          outline: none;
+      }
+
        &:before,
         &:after {
             content: '';
