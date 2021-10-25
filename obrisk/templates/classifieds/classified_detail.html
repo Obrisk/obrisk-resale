@@ -165,7 +165,9 @@
     {% if classified.tags.all %}
       <div class="classifieds-tags previsions">
           {% for tag in classified.tags.all %}
-              <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag-item black-link">{{ tag }}</span></a>
+             {% if tag.slug %}
+                  <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag-item black-link">{{ tag }}</span></a>
+             {% endif %}
           {% endfor %}
       </div>
     {% endif %}

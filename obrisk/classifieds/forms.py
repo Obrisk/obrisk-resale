@@ -141,6 +141,12 @@ class ClassifiedEditForm(forms.ModelForm):
     english_address = forms.CharField(
             required=False, label=("Address (English)")
         )
+    tags= forms.CharField(
+        widget=autocomplete.TaggitSelect2(
+            url='classifieds:tags_autocomplete'
+        ),
+        required=False
+    )
 
     class Meta:
         model = Classified
@@ -149,9 +155,6 @@ class ClassifiedEditForm(forms.ModelForm):
 
         widgets = {
             'user': forms.HiddenInput(),
-            'tags': autocomplete.TaggitSelect2(
-                'tags_autocomplete'
-            )
         }
 
         help_texts = {

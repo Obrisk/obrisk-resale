@@ -157,7 +157,7 @@ def classified_list_by_tags(request, tag_slug=None):
             tag = get_object_or_404(ClassifiedTags, slug=tag_slug)
             classifieds = Classified.objects.get_active().filter(
                     tags__in=[tag]).values(
-                            'title','price','city','slug', 'thumbnail'
+                            'title','price','city','slug', 'thumbnail', 'status'
                         ).order_by('-timestamp')
         except:
             pass
@@ -173,7 +173,7 @@ def classified_list_by_tags(request, tag_slug=None):
         if request.is_ajax():
             classifieds = Classified.objects.get_expired().filter(
                     tags__in=[tag]).values(
-                            'title','price','city','slug', 'thumbnail'
+                            'title','price','city','slug', 'thumbnail', 'status'
                         ).order_by('-timestamp')
             return JsonResponse({
                 'classifieds': list(classifieds), 'end':'end'
@@ -406,7 +406,7 @@ def adminCreateClassified(request, *args, **kwargs):
             for tag in form.cleaned_data['tags'].split(','):
                 classified.tags.add(tag)
 
-            if images_json != '':
+            if images_json is not None and len(images_json) > 10 :
                 images_list = images_json.split(",")
                 multipleImagesPersist(
                     request, images_list, 'classifieds', classified)
@@ -528,7 +528,16 @@ class EditClassifiedView(
         form.instance.user = self.request.user
 
         classified = form.save(commit=False)
-        #Can do custom updates here
+        classified.save()
+        form_tags = form.cleaned_data['tags'].split(',')
+
+        if len(form_tags) > 0:
+            registered_tags = ClassifiedTags.objects.values_list('slug', flat=True)
+
+            for tag in form_tags:
+                if len(tag) > 1:
+                    classified.tags.add(tag)
+
         classified.save()
         return super().form_valid(form)
 
