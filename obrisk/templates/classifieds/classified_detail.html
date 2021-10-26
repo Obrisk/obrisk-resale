@@ -31,13 +31,10 @@
 {% block content %}
   {% if request.META.HTTP_REFERER %}
     <a href="javascript:history.back()" class="cls-back-btn black-link">
-        <svg class="feather feather-arrow-left-circle" xmlns="http://www.w3.org/2000/svg"
-             width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-            stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="10"></circle>
-            <polyline points="12 8 8 12 12 16"></polyline>
-            <line x1="16" y1="12" x2="8" y2="12"></line>
-        </svg>
+       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24">
+          <path fill="none" d="M0 0h24v24H0z" />
+          <path d="M10.828 12l4.95 4.95-1.414 1.414L8 12l6.364-6.364 1.414 1.414z" />
+       </svg>
     </a>
   {% endif  %}
 
@@ -76,7 +73,15 @@
        <div id="sticky-bg">
        </div>
 
-        <h3 class="title is-6 cls-title">{{ classified.title|title }}</h3>
+       <div class="title-row">
+            <h3 class="cls-title">{{ classified.title|title }}</h3>
+
+            {% if classified.user == request.user %}
+                <input type="checkbox" id="switch" />
+                <label for="switch"></label>
+            {% endif %}
+       </div>
+
         <div class="meta-info">
           <a class="user-link black-link" href="{% url 'users:detail' classified.user.username %}">
             {% if classified.user.thumbnail %}

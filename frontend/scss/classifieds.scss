@@ -28,11 +28,15 @@
 }
 
 .cls-back-btn {
-   margin-top: 2px;
-   margin-left: 1em;
-   position: fixed;
-   left: 0;
-   z-index: 5;
+    margin-top: 2px;
+    margin-left: 1em;
+    position: fixed;
+    left: 0;
+    z-index: 5;
+    background-color: rgba(255, 255, 255, 0.6);
+    width: 28px;
+    height: 28px;
+    border-radius: 35%;
 }
 
 #search-item {
@@ -214,6 +218,9 @@ article {
     display: none;
 }
 
+
+
+
 .classified-meta {
     border-radius: 0;
     position: relative;
@@ -285,11 +292,59 @@ article {
 }
 
 
-.cls-title {
-    text-align: left;
-    color: #363636;
-    line-height: 1.125;
-    margin-bottom: 0.6em;
+.title-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px auto;
+
+    .cls-title {
+        text-align: left;
+        color: #363636;
+        font-size: 1.1em;
+        margin-top: 6px;
+        line-height: 1.125;
+    }
+
+    input[type=checkbox]{
+        height: 0;
+        width: 0;
+        visibility: hidden;
+    }
+
+    label {
+        cursor: pointer;
+        width: 60px;
+        height: 30px;
+        background: grey;
+        display: block;
+        border-radius: 100px;
+        position: relative;
+    }
+
+    label:after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 3px;
+        width: 26px;
+        height: 26px;
+        background: #fff;
+        border-radius: 90px;
+        transition: 0.3s;
+    }
+
+    input:checked + label {
+        background: $accent;
+    }
+
+    input:checked + label:after {
+        left: calc(100% - 3px);
+        transform: translateX(-100%);
+    }
+
+    label:active:after {
+        width: 40px;
+    }
 }
 
 
