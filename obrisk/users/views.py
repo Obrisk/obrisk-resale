@@ -337,16 +337,22 @@ def user_classifieds_list(request, rq_user=None):
                         'title','price','city','slug', 'thumbnail', 'status'
                     ).order_by('-priority', '-timestamp')
     else:
-        classifieds_list = Classified.objects.filter(
-                user=user.first()).values(
-                        'title','price','city','slug', 'thumbnail', 'status'
-                    ).annotate(
-                    order = Case (
-                        When(status='A', then=Value(1)),
-                        default=Value(2),
-                        output_field=IntegerField(),
-                    )
-                ).order_by('order', '-priority', '-timestamp')
+        if user.first() == request.user:
+            classifieds_list = Classified.objects.filter(
+                    user=user.first()).values(
+                            'title','price','city','slug', 'thumbnail', 'status'
+                        ).annotate(
+                        order = Case (
+                            When(status='A', then=Value(1)),
+                            default=Value(2),
+                            output_field=IntegerField(),
+                        )
+                    ).order_by('order', '-priority', '-timestamp')
+        else:
+            classifieds_list = Classified.objects.get_active().filter(
+                    user=user.first()).values(
+                            'title','price','city','slug', 'thumbnail', 'status'
+                        ).order_by('-priority', '-timestamp')
 
     if classifieds_list.exists():
         share_img = classifieds_list.first()['thumbnail']
