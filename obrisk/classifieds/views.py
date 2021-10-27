@@ -352,6 +352,28 @@ class CreateClassifiedView(CreateView):
             return self.form_invalid(form,data=failure_data)
 
 
+@csrf_exempt
+@login_required
+def item_available(request, *args, **kwargs):
+    data = {
+        'status': '301'
+    }
+
+    if request.method == 'POST':
+        body = json.loads(request.body)
+        classified = Classified.objects.filter(
+                slug=body.get('sg', None)
+            ).first()
+
+        if classified:
+            if request.user != classified.user:
+                return JsonResponse(data)
+
+            classified.status = body.get('st', 'E')
+            classified.save()
+
+    return JsonResponse(data)
+
 
 @login_required
 def adminCreateClassified(request, *args, **kwargs):

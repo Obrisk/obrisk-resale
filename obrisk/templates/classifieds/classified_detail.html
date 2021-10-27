@@ -86,10 +86,11 @@
         <div class="meta-info" id="meta-info">
           <a class="user-link black-link" href="{% url 'users:detail' classified.user.username %}">
             {% if classified.user.thumbnail %}
-            <img src="{{oss}}/{{classified.user.thumbnail}}"
-              alt="Picture Profile" id="pic">
+                <img src="{{oss}}/{{classified.user.thumbnail}}"
+                  alt="Picture Profile" id="pic">
             {% else %}
-            <img src="{% static 'img/user.png' %}" height="35px" width="35px" alt="No Profile Picture" />
+                <img src="{% static 'img/user.png' %}"
+                    height="35px" width="35px" alt="pic" />
             {% endif %}
           </a>
 
@@ -146,13 +147,15 @@
                 </button>
                    
             {% else %}
-                <a class="button action-button chat-button" href="{% url 'classifieds:delete_classified' classified.pk %}"
+                <a class="button action-button chat-button" href="{% url 'classifieds:edit_classified' classified.id %}"
                   title="{% trans 'Edit this classified' %}">
-                  🗑️{% trans 'Delete/Sold' %}</a>
+                  ✎{% trans 'Edit' %}
+                </a>
 
-                <a class="button action-button  pay-button" href="{% url 'classifieds:edit_classified' classified.id %}"
+                <a class="button action-button pay-button" href="#" id="share"
                   title="{% trans 'Edit this classified' %}">
-                  ✎{% trans 'Edit' %}</a>
+                  📤{% trans 'Share' %}
+                </a>
             {% endif %}
           </div>
       {% else %}
@@ -171,7 +174,7 @@
 
     <!-- Cloud Tag Widget -->
     {% if classified.tags.all %}
-      <div class="classifieds-tags previsions">
+      <div class="classifieds-tags previsions" id="tags">
           {% for tag in classified.tags.all %}
              {% if tag.slug %}
                   <a href="{% url 'classifieds:list_by_tag' tag.slug %}"><span class="tag-item black-link">{{ tag }}</span></a>
@@ -182,7 +185,6 @@
     <br/>
 
 
-    <!-- Similar lassified -->
     {% if similar_classifieds %}
         <h5 class="related-title">Related Items
             {% if similar_classifieds|length > 2 %}
@@ -250,6 +252,7 @@
   var slug = "{{classified.slug}}";
   var orderUrl = "{% url 'classifieds:create_order' %}?sg=";
   var chatUrl = "{% url 'messager:classified_chat' classified.user classified.id %}";
+  var removeUrl = "{% url 'classifieds:toggle_item_available' %}"
   var wechatAuth = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
   var loginUrl = "{% url 'account_login' %}";
   var deleteItem = "{% url 'classifieds:delete_classified' classified.pk %}";
@@ -263,6 +266,10 @@
       var title = '{{ classified.title|truncatechars:80 | escapejs }}'.replace(/(\r\n|\n|\r)/gm, ' ');
   }
 
+  {% if classified.user == request.user %}
+      var toggler = document.getElementById('switch');
+      var switch_value = document.getElementById('switch').checked;
+  {% endif %}
 </script>
 
 <script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>

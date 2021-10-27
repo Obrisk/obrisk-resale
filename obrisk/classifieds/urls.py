@@ -44,6 +44,10 @@ urlpatterns = [
         name='bulk-update'
         ),
     url(
+        r'^toggle-item-is-available/$',
+        item_available,
+        name='toggle_item_available'),
+    url(
         r'^classifieds-suggestions/$',
         get_suggestions,
         name='classifieds_suggestions'),
