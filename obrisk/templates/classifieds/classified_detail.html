@@ -77,12 +77,13 @@
             <h3 class="cls-title">{{ classified.title|title }}</h3>
 
             {% if classified.user == request.user %}
-                <input type="checkbox" id="switch" />
+                <input type="checkbox" id="switch" onchange="onSale(this)"
+                    {% if classified.status == 'A' %} checked {% endif %}/>
                 <label for="switch"></label>
             {% endif %}
        </div>
 
-        <div class="meta-info">
+        <div class="meta-info" id="meta-info">
           <a class="user-link black-link" href="{% url 'users:detail' classified.user.username %}">
             {% if classified.user.thumbnail %}
             <img src="{{oss}}/{{classified.user.thumbnail}}"
@@ -94,20 +95,20 @@
 
           <div class="meta-right">
               <div class="meta-right-top">
-                <a class="black-link" itemprop="author" itemscope="" itemtype="http://schema.org/Person"
-                  href="{% url 'users:detail' classified.user.username %}">
-                  <strong itemprop="name" id="classified-user">
-                    {{ classified.user.get_profile_name|title }} </strong>
-                </a>
+                    <a class="black-link" itemprop="author" itemscope="" itemtype="http://schema.org/Person"
+                      href="{% url 'users:detail' classified.user.username %}">
+                      <strong itemprop="name" id="classified-user">
+                        {{ classified.user.get_profile_name|title }} </strong>
+                    </a>
 
-                <!-- Price -->
-                {% if classified.price == 0.00 %}
-                  <strong class="price"> {% trans 'FREE' %} </strong>
-                {% elif classified.price is None %}
-                  <strong class="price">  {% trans 'BID PRICE' %} </strong>
-                {% else %}
-                  <strong class="price"> ¥{{ classified.price }} </strong>
-                {% endif %}
+                    <!-- Price -->
+                    {% if classified.price == 0.00 %}
+                      <strong class="price"> {% trans 'FREE' %} </strong>
+                    {% elif classified.price is None %}
+                      <strong class="price">  {% trans 'BID PRICE' %} </strong>
+                    {% else %}
+                      <strong class="price"> ¥{{ classified.price }} </strong>
+                    {% endif %}
               </div>
 
               <span class="location">
@@ -118,10 +119,12 @@
                 {% endif %}
               </span>
           </div>
+
+       <!-- Close meta-info div -->
        </div>
 
       {% if classified.status == 'A' %}
-        <div class="action-wrapper">
+        <div class="action-wrapper" id="actions">
             {% if classified.user != request.user %}
                 <button class="button action-button chat-button" id="chat-button-id">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -153,7 +156,7 @@
             {% endif %}
           </div>
       {% else %}
-          <div class="notification is-warning">
+          <div class="notification is-warning" id="unavailable">
             This item is no longer available
           </div>
 
@@ -249,6 +252,9 @@
   var chatUrl = "{% url 'messager:classified_chat' classified.user classified.id %}";
   var wechatAuth = "{% url 'users:wechat_auth' %}?next={{ redirect_field_value }}";
   var loginUrl = "{% url 'account_login' %}";
+  var deleteItem = "{% url 'classifieds:delete_classified' classified.pk %}";
+  var editItem = "{% url 'classifieds:edit_classified' classified.id %}";
+
   try {
       var descr = decodeURIComponent('{{ classified.details|truncatechars:100 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');
       var title = decodeURIComponent('{{ classified.title|truncatechars:80 | escapejs }}').replace(/(\r\n|\n|\r)/gm, ' ');

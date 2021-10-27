@@ -12,6 +12,32 @@ function callpay() {
     window.location.href = orderUrl + sg;
 }
 
+function onSale(element) {
+      const sibling = document.getElementById('meta-info');
+      if (element.checked) {
+          const template = `
+              <div class="action-wrapper" id=actions">
+                  <a class="button action-button chat-button" href="${deleteItem}"
+                      title="Edit this classified">
+                      🗑️Delete/Sold</a>
+
+                  <a class="button action-button  pay-button" href="${editItem}"
+                      title="Edit this classified">
+                      ✎Edit
+                  </a>
+              </div>`
+          document.getElementById('unavailable').remove();
+          sibling.insertAdjacentHTML('afterend', template);
+  
+      } else {
+          const template = `
+              <div class="notification is-warning" id="unavailable">
+                This item is no longer available
+              </div>`
+          document.getElementById('actions').remove();
+          sibling.insertAdjacentHTML('afterend', template);
+      }
+}
 
 document.addEventListener('DOMContentLoaded', function () {
     const chatBtn = document.getElementById('chat-button-id');
