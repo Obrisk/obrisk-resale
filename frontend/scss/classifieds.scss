@@ -94,12 +94,16 @@ body {
         content: "Unavailable";
         z-index: 3;
         /* transform: rotate(40deg) translate(42px, 40px); */
-        font-size: 1.5em;
+        font-size: 1em;
         font-weight: 700;
         color: hsla(0,0%,99.6%,.9);
+        width: 120px;
         position: absolute;
-        transform: translate(15%, 90%);
-        background-color: rgba(0,0,0, 0.5);
+        top: 15%;
+        left: 50%;
+        margin-left: -60px; //Half of the width to center it
+        text-align: center;
+        background-color: rgba(0,0,0, 0.9);
         border-radius: 8px;
         padding: 6px;
     }

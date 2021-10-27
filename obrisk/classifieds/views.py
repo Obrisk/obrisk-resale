@@ -566,7 +566,7 @@ class EditClassifiedView(
 
     def get_success_url(self):
         messages.success(self.request, self.message)
-        return reverse('classifieds:list')
+        return reverse('classifieds:classified', args=[self.object.slug])
 
 
 class ReportClassifiedView(LoginRequiredMixin, View):

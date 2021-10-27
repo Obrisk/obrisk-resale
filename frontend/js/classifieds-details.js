@@ -130,8 +130,7 @@ if (typeof toggler !== 'undefined') {
               },
               credentials: 'same-origin',
               redirect: 'follow'
-            }).then (resp => resp.json())
-              .then (data => {
+            }).then (resp => {
                  ;
             }).catch ((e) => {
                 console.error('failure to toggle item availability', e);

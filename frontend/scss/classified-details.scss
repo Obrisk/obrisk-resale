@@ -1,11 +1,5 @@
-@import "partials/layout-colors";
-@import "partials/layout-extra-colors";
-@import "partials/components-cards";
-
-body {
-  background: #fff;
-  height: 100% !important;
-  width: 100% !important;
-  overflow: hidden;
-}
-
+.is-top-notif {
+    position: absolute;
+    z-index: 10;
+    top: 2px;
+} 
