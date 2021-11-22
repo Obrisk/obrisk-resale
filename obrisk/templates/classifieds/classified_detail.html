@@ -88,10 +88,10 @@
           <a class="user-link black-link" href="{% url 'users:detail' classified.user.username %}">
             {% if classified.user.thumbnail %}
                 <img src="{{oss}}/{{classified.user.thumbnail}}"
-                  alt="Picture Profile" id="pic">
+                  alt="Pic" id="pic" width="35" height="35">
             {% else %}
                 <img src="{% static 'img/user.png' %}"
-                    height="35px" width="35px" alt="pic" />
+                    height="35" width="35" alt="pic" />
             {% endif %}
           </a>
 
@@ -226,7 +226,7 @@
 
     <div class="notification" id="off-ac">
         <img src="{% static 'img/qrcode.jpg' %}"
-           height="100px" width="100px" alt="Obrisk QRcode"/>
+           height="100" width="100" alt="Obrisk QRcode"/>
         <span> Long press (scan) the QR code & follow our official account </span>
     </div>
 
