@@ -28,7 +28,7 @@ function renderClassifieds(classifieds) {
       if (cls.status === "E" ) {
           template = `
             <div class="card classified-card expired">
-              <a href="${window.location.origin}/classifieds/${cls.slug}"
+              <a href="${window.location.origin}/i/${cls.slug}"
                   class="black-link">
 
                 <div class="card-img-top img-responsive">
@@ -48,7 +48,7 @@ function renderClassifieds(classifieds) {
       } else {
           template = `
             <div class="card classified-card">
-              <a href="${window.location.origin}/classifieds/${cls.slug}"
+              <a href="${window.location.origin}/i/${cls.slug}"
                   class="black-link">
 
                 <div class="card-img-top img-responsive">
@@ -240,4 +240,3 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log(res);
   });
 });
-

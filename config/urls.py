@@ -47,8 +47,7 @@ urlpatterns = [
         include("obrisk.classifieds.urls",
             namespace="classifieds")
     ),
-    url(
-        r'^classifieds/',
+    url(r"^classifieds/",
         include("obrisk.classifieds.urls",
             namespace="old_classifieds_url")
     ),

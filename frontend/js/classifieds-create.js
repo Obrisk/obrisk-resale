@@ -47,13 +47,13 @@ document.addEventListener('DOMContentLoaded', function() {
     $("#id_img_error").val(img_error);
 
     $.ajax({
-      url: "/classifieds/write-new-classified/",
+      url: "/i/write-new-classified/",
       data: $("form").serialize(),
       type: "POST",
       cache: false,
       success: function(data) {
         if (data.status == "200") {
-            window.location.replace("/classifieds/");
+            window.location.replace("/i/");
         } else {
           //At this point check if the images variable exists and
           //update the thumbnail holder to show the uploaded images.
@@ -84,9 +84,9 @@ document.addEventListener('DOMContentLoaded', function() {
           let draft_post = Object.fromEntries(new FormData(document.querySelector("form")));
           localStorage.setItem('new-classified', JSON.stringify(draft_post));
           if (wechat_browser){
-              window.location.replace('/users/wechat-auth/?next=/classifieds/write-new-classified/');
+              window.location.replace('/users/wechat-auth/?next=/i/write-new-classified/');
           }else {
-              window.location.replace('/auth/login/?next=/classifieds/write-new-classified/');
+              window.location.replace('/auth/login/?next=/i/write-new-classified/');
           }
         }
       });

@@ -554,10 +554,9 @@ class EditClassifiedView(
         form_tags = form.cleaned_data['tags'].split(',')
 
         if len(form_tags) > 0:
-            registered_tags = ClassifiedTags.objects.values_list('slug', flat=True)
-
             for tag in form_tags:
                 if len(tag) > 1:
+                    tag = tag.replace('#', '')
                     classified.tags.add(tag)
 
         classified.save()
