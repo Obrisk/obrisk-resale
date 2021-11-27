@@ -42,6 +42,16 @@ urlpatterns = [
     url(r'^i18n/',
         include('django.conf.urls.i18n')
     ),
+    # Redirect all classifieds to i/ url pattern
+    url(r"^i/",
+        include("obrisk.classifieds.urls",
+            namespace="classifieds")
+    ),
+    url(
+        r'^classifieds/',
+        include("obrisk.classifieds.urls",
+            namespace="old_classifieds_url")
+    ),
     url(r'^MP_verify_HTQQQmxtxv6VNTtN.txt$',
         TemplateView.as_view(template_name="MP_verify_HTQQQmxtxv6VNTtN.txt",
         content_type="text/plain"), name="MP_verify_HTQQQmxtxv6VNTtN.txt"
@@ -97,17 +107,6 @@ urlpatterns = [
         PasswordResetFromKeyView.as_view(),
         name="account_reset_password_from_key",
     ),
-    # User management
-    url(
-        r'^accounts-authorization/signup/',
-        RedirectView.as_view(
-            pattern_name='account_signup', permanent=False)
-    ),
-    url(
-        r'^accounts-authorization/login/',
-        RedirectView.as_view(
-            pattern_name='account_login', permanent=False)
-    ),
     url(r"^users/", include("obrisk.users.urls", namespace="users")),
     url(r"^auth/", include("allauth.urls")),
 
@@ -123,10 +122,6 @@ urlpatterns = [
         r"^ws/notifications/",
         include("obrisk.notifications.urls", namespace="notifications"),
     ),
-    url(r"^classifieds/",
-        include("obrisk.classifieds.urls",
-        namespace="classifieds")
-        ),
     url(r"^ws/messages/",
         include("obrisk.messager.urls",
         namespace="messager")),
@@ -180,7 +175,7 @@ if settings.DEBUG:
 
         urlpatterns = [url
             (
-                r"^__debug__/", 
+                r"^__debug__/",
                 include(debug_toolbar.urls)
             ),] + urlpatterns
 
