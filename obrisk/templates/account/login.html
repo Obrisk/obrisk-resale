@@ -141,7 +141,7 @@
     (window.matchMedia('(display-mode: standalone)').matches) || (window.navigator.standalone);
 
   //Auto-login is a quick hack to solve the problem of iOS and weixin browser
-  //Variables with /classifieds URL are login url
+  //Variables with /i URL are login url
   if (mobileUtil.isWeixin || mobileUtil.isIOS) {
 
     if (!localStorage.getItem('auth')) {
@@ -156,7 +156,7 @@
             ajax.onreadystatechange = function () {
               if (this.readyState == 4 && this.status == 200) {
                   //This condition marks false while things are true
-                  if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
+                  if (this.responseURL && /i/gi.test(this.responseURL)) {
                       const auth = {
                         username: username,
                         password: pass
@@ -169,7 +169,7 @@
                         navigator.storage.persisted();
                         navigator.storage.persist();
                     }
-                    location.replace('/classifieds');
+                    location.replace('/i');
 
                   } else {
                     login_errors.innerHTML =
@@ -216,8 +216,8 @@
 
         ajax.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
-              if (this.responseURL && /classifieds/gi.test(this.responseURL)) {
-                  location.replace('/classifieds')
+              if (this.responseURL && /i/gi.test(this.responseURL)) {
+                  location.replace('/i')
 
               } else {
                 localStorage.setItem('autologintry', true);
