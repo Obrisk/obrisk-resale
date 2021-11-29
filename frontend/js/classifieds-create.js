@@ -16,6 +16,13 @@ function printError(msg) {
 
 document.addEventListener('DOMContentLoaded', function() {
 
+  document.querySelectorAll('.close-dj-messages').forEach(item => {
+        item.addEventListener('click', e => {
+            e.currentTarget.parentElement.classList.add('is-hidden');
+            e.stopPropagation();
+        });
+  });
+
   if (getCookie("classified")) {
      //cookie.replace(/["']/g, '')
      const classifiedArray = getCookie("classified")
@@ -25,13 +32,6 @@ document.addEventListener('DOMContentLoaded', function() {
      document.getElementById('id_price').value = classifiedArray[2]
   }
 
-  document.querySelectorAll('.close-dj-messages').forEach(item => {
-        item.addEventListener('click', e => {
-            e.currentTarget.parentElement.classList.add('is-hidden');
-            e.stopPropagation();
-        });
-  });
-
   const new_classified = JSON.parse(localStorage.getItem('new-classified'));
 
   if (new_classified) {
@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('id_details').value = new_classified.details;
       document.getElementById('id_price').value = new_classified.price;
   }
+
 
   $("body").on("uploadComplete", function(event) {
     //Todo check if images where uploaded or empty
@@ -139,8 +140,9 @@ document.addEventListener('DOMContentLoaded', function() {
             );
             if (wechat_browser) {
                 location.href = wechat_url;
+            } else {
+                location.href = phone_no_url;
             }
-            location.href = phone_no_url;
       });
   }
 

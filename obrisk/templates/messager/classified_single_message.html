@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <a class="card classified-card" href="{% url 'classifieds:classified' classified.slug %}">
     {% if classified.thumbnail %}
         <img class="card-img" src="{{oss}}/{{ classified.thumbnail }}">
@@ -7,7 +9,15 @@
 
   <div class="cls-details">
     <h6> {{ classified.title|title|truncatechars:60 }} </h6>
-    <p> CNY {{ classified.price|title }} </p>
+
+    {% if classified.price == 0.00 %}
+        <p> {% trans 'FREE' %} </p>
+    {% elif classified.price is None %}
+        <p>  {% trans 'BID PRICE' %} </strong>
+    {% else %}
+        <p> CNY {{ classified.price|title }} </p>
+    {% endif %}
+
     <span> 📍 {{ classified.city|safe }}</span>
   </div>
 </a>
