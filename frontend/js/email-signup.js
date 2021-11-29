@@ -281,7 +281,7 @@ $(function() {
 
   $("#signup-finish").on("click", function() {
     var $this = $(this);
-    var url = "/classifieds";
+    var url = "/i/";
     $this.addClass("is-loading");
     setTimeout(function() {
       window.location = url;

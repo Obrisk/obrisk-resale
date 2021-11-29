@@ -205,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
           type: "POST",
           success: function(data) {
             if (data.success == true) {
-                window.location.replace('/classifieds/');
+                window.location.replace('/i/');
             } else {
                   results.innerHTML="<p class='error-text'>" + data.error_message + "</p>" ;
                   signup_loading.style.display = 'none';
