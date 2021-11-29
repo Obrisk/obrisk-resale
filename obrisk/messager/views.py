@@ -7,7 +7,10 @@ import oss2
 import logging
 
 from django.contrib.auth import login
-from django.http import HttpResponse, HttpResponseNotFound, JsonResponse
+from django.http import (
+    HttpResponse, HttpResponseNotFound,
+    JsonResponse
+)
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
@@ -28,11 +31,11 @@ from obrisk.messager.models import Message, Conversation
 from obrisk.utils.helpers import ajax_required
 from obrisk.utils.images_upload import bucket, bucket_name
 from obrisk.messager.tasks import (
-        send_messages_notifications, messages_list_cleanup
-    )
+    send_messages_notifications, messages_list_cleanup
+)
 from obrisk.notifications.models import (
-        Notification, notification_handler
-    )
+    Notification, notification_handler
+)
 from obrisk.users.phone_verification import send_sms
 import uuid
 import ast
@@ -290,42 +293,60 @@ def classified_chat(request, to, classified):
 
     except get_user_model().DoesNotExist:
         messages.error(request, f"Sorry, The account {to} is unavailable!")
-        return redirect('messager:contacts_list')
+        return redirect(request.META['HTTP_REFERER'])
 
     except Classified.DoesNotExist:
-        #This error message assumes that the classifieds items
-        #are never deleted completely.
         messages.error(
                 request,
-                f"Invalid request or the classified is unavailable!"
+                "Invalid request or the classified is unavailable!"
             )
-        return redirect('messager:contacts_list')
+        return redirect(request.META['HTTP_REFERER'])
 
-    else:
+    except Exception as e:
+        logging.error('Could not fetch classified object for chat', exc_info=e)
+        messages.error(
+                request,
+                "Sorry, we failed to start the chat, try again later"
+            )
+        return redirect(request.META['HTTP_REFERER'])
+
+    if not Conversation.objects.conversation_exists(from_user, to_user):
+
+        key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
+        conv = Conversation(first_user=from_user,
+                        second_user=to_user,
+                        key=key)
+        conv.save()
+
+    if not Message.objects.msg_clsf_exists(
+            from_user, to_user, classified
+        ):
         classified_thumbnail = ClassifiedImages.objects.values_list(
             'image_thumb', flat=True).filter(
                 classified=classified
             )[:1]
 
-        if not Conversation.objects.conversation_exists(from_user, to_user):
+        if classified_thumbnail.exists():
+            classified_thumbnail = str(classified_thumbnail[0])
+        else:
+            classified_thumbnail = 'static/img/nophoto.jpg'
 
-            key = "{}.{}".format(*sorted([from_user.pk, to_user.pk]))
-            conv = Conversation(first_user=from_user,
-                            second_user=to_user,
-                            key=key)
-            conv.save()
-
-        if not Message.objects.msg_clsf_exists(
-                from_user, to_user, classified
-            ):
+        try:
             Message.objects.create(
                 sender=from_user,
                 recipient=to_user,
                 classified=classified,
-                classified_thumbnail=str(classified_thumbnail[0])
+                classified_thumbnail=classified_thumbnail
             )
-        return redirect("messager:conversation_detail" , to)
+        except Exception as e:
+            logging.error('Could not create new Message object', exc_info=e)
+            messages.error(
+                    request,
+                    "Sorry, we failed to start the chat, try again later"
+                )
+            return redirect(request.META['HTTP_REFERER'])
 
+    return redirect("messager:conversation_detail" , to)
 
 
 @login_required

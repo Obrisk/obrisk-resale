@@ -505,3 +505,8 @@ gulp.task("compile-js", function() {
 <link href="{% static 'frontend/assets/css/webfont.css' %}" rel="stylesheet">
 
 <link rel="stylesheet" type="text/css" href="{% static 'fonts/font-awesome-4.7.0/css/font-awesome.min.css' %}">
+
+
+
+//obrisk.messager.views
+
