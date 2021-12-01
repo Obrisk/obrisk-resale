@@ -103,7 +103,7 @@ def upload_success_wxtemplate(user):
         url = f'https://obrisk.com/users/i/{user.username}/'
         items_title = f'Uploaded {classifieds.count()} new items'
     elif classifieds.count() == 1:
-        url = f'https://obrisk.com/classifieds/{classifieds.first().slug}/'
+        url = f'https://obrisk.com/i/{classifieds.first().slug}/'
         items_title = classifieds.first().title
     else:
         return None
@@ -135,7 +135,7 @@ def upload_success_wxtemplate(user):
 def notify_seller_wxtemplate(order):
     wx_push = WechatPush()
     template_id = "2DWnQShB7yDden_QxWevK_2F8f7RpexrI_WCXuvwDXo" #noqa
-    url = "https://obrisk.com/classifieds/orders/wsguatpotlfwccdi/seller-confirm?or=" + order.slug #noqa
+    url = "https://obrisk.com/i/orders/wsguatpotlfwccdi/seller-confirm?or=" + order.slug #noqa
 
     color = "#173177"
     title = "Hi your item has been purchased😊"

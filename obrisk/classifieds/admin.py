@@ -25,7 +25,7 @@ def img_attach_action(modeladmin, request, queryset):
     selected = queryset.values_list('pk', flat=True)
     ct = ContentType.objects.get_for_model(queryset.model)
     return HttpResponseRedirect(
-        '/classifieds/wsguatpotlfwccdi/admin-attach-img/?ct=%s&ids=%s' % (
+        '/i/wsguatpotlfwccdi/admin-attach-img/?ct=%s&ids=%s' % (
             ct.pk,
             ','.join(str(pk) for pk in selected),
         )
