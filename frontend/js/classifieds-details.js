@@ -83,7 +83,7 @@ const ui = {
     window.setTimeout(() => {
       this.hideMask();
       this.hideRightTips();
-    }, 1400);
+    }, 4400);
   },
   hideRightTips() {
     const domList = document.querySelectorAll('.m-share-tips');
