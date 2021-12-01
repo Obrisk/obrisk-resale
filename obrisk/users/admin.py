@@ -3,6 +3,7 @@ import itertools
 from django.urls import reverse
 from django import forms
 from django.contrib import admin
+from django.contrib.auth import login
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
 from django.db import IntegrityError
 from django.http import HttpResponseRedirect
@@ -40,6 +41,12 @@ class MyUserCreationForm(CustomUserCreationForm):
 
 def send_upload_success(modeladmin, request, queryset):
     for user in queryset:
+        if not user.is_authenticated:
+            login(
+                request, user,
+                backend='django.contrib.auth.backends.ModelBackend'
+            )
+
         upload_success_wxtemplate(user)
 
 
