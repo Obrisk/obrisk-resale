@@ -41,12 +41,6 @@ class MyUserCreationForm(CustomUserCreationForm):
 
 def send_upload_success(modeladmin, request, queryset):
     for user in queryset:
-        if not user.is_authenticated:
-            login(
-                request, user,
-                backend='django.contrib.auth.backends.ModelBackend'
-            )
-
         upload_success_wxtemplate(user)
 
 
