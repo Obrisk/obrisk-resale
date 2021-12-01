@@ -154,7 +154,7 @@
                 </a>
 
                 <a class="button action-button pay-button" href="#" id="share"
-                  title="{% trans 'Edit this classified' %}">
+                  title="{% trans 'Share this classified' %}">
                   📤{% trans 'Share' %}
                 </a>
             {% endif %}
@@ -273,6 +273,8 @@
   {% endif %}
 </script>
 
+<link href="{% static 'css/share.css' %}" rel="stylesheet">
 <script defer src="{% static 'js/vendor/fslightbox.min.js' %}"></script>
 <script defer src="{% static 'js/classifieds-details.js' %}"></script>
+<script defer src="{% static 'js/share.js' %}"></script>
 {% endblock extra_js %}

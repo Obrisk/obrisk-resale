@@ -22,7 +22,7 @@ function onSale(element) {
                       ✎Edit
                   </a>
                   <a class="button action-button pay-button" href="#"
-                      title="Edit this classified">
+                      title="Share this classified" id="share">
                       📤Share
                   </a>
               </div>`
@@ -38,6 +38,62 @@ function onSale(element) {
           sibling.insertAdjacentHTML('afterend', template);
       }
 }
+
+
+const ui = {
+  showMask() {
+    if (document.querySelector('.m-share-mask')) {
+      return;
+    }
+    const $div = document.createElement('div');
+    $div.className = 'm-share-mask';
+    $div.addEventListener('click', () => {
+      this.hideRightTips();
+      this.hideMask();
+    });
+    document.body.appendChild($div);
+    window.setTimeout(() => {
+      $div.style.opacity = 0.7;
+    }, 0);
+  },
+  hideMask() {
+    const domList = document.querySelectorAll('.m-share-mask');
+    for (let i = 0; i < domList.length; i++) {
+      const item = domList[i];
+      const removeDom = () => item.remove();
+      // 渐变消失
+      // item.addEventListener('webkitTransitionend', removeDom);
+      // item.addEventListener('transitionend', removeDom);
+      // item.style.cssText = 'opacity: 0';
+      removeDom();
+    }
+  },
+  showRightTopTips() {
+    this.showMask();
+    const $tips = document.createElement('div');
+    $tips.className = 'm-share-tips';
+    $tips.innerHTML = `
+      <div class="m-share-tips-w">
+        <div class="m-share-tips-p">Please tap the 3 dots“<i class="m-share-iconfont m-share-iconfont-dots"></i>”</div>
+        <div class="m-share-tips-p">On the upper right corner</div>
+      </div>
+      <div class="m-share-tips-arrow"></div>
+    `;
+    document.body.appendChild($tips);
+    window.setTimeout(() => {
+      this.hideMask();
+      this.hideRightTips();
+    }, 1400);
+  },
+  hideRightTips() {
+    const domList = document.querySelectorAll('.m-share-tips');
+    for (let i = 0; i < domList.length; i++) {
+      const item = domList[i];
+      item.remove();
+    }
+  }
+};
+
 
 document.addEventListener('DOMContentLoaded', function () {
     wx.ready(function(){
@@ -95,6 +151,22 @@ document.addEventListener('DOMContentLoaded', function () {
                   }else {
                     window.location.href = loginUrl;
                   }
+              }
+          });
+      }
+
+      const shareBtn = document.getElementById('share');
+
+      if( shareBtn !== null) {
+          shareBtn.addEventListener('click', () => {
+              if (wechat_browser) {
+                 ui.showRightTopTips();
+              }else {
+                 navigator.share({
+                  title: title, 
+                  text: str_price + " " + descr,
+                  url: location.href,
+                });
               }
           });
       }
