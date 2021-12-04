@@ -40,38 +40,37 @@
   {% endif  %}
 
   <article>
-     <section id="image-section" class="slides">
-        {% if classified.video %}
-          <video id="classified-video" class="vd-container classified-image" height="400vh" preload="metadata" 
-              x5-video-player-type="h5-page" controls controlsList="nodownload"
-              crossorigin webkit-playsinline playsinline preload control
-              poster="{{oss}}/{{ classified.thumbnail }}" style="background-color: #def0fd;" >
-              <source src="{{oss}}/{{classified.video}}#t=0.5" type="video/mp4">
-              Your browser doesn' t support HTML5 video tag. 
-          </video>
-        {% endif %}
+     <section id="image-section" class="swiper-container">
+        <div class="swiper-wrapper">
+            {% if classified.video %}
+              <video class="vd-container classified-image swiper-slide" height="400vh" preload="metadata" 
+                  x5-video-player-type="h5-page" controls controlsList="nodownload"
+                  crossorigin webkit-playsinline playsinline preload control
+                  poster="{{oss}}/{{ classified.thumbnail }}">
+                  <source src="{{oss}}/{{classified.video}}#t=0.5" type="video/mp4">
+                  Your browser doesn' t support HTML5 video tag. 
+              </video>
+            {% endif %}
 
-         {% for image in images %}
-            <a href="{{oss}}/{{ image.image }}"
-              data-fslightbox="gallery"> 
-                <img class="classified-image" src="{{oss}}/{{ image.image }}?x-oss-process=image/interlace,1" id="{{ image.id }}">
-            </a>
-         {% endfor %}
+             {% for image in images %}
+                <a href="{{oss}}/{{ image.image }}"
+                  data-fslightbox="gallery" class="swiper-slide"> 
+                    <img class="classified-image" id="{{ image.id }}"
+                        src="{{oss}}/{{ image.image }}?x-oss-process=image/interlace,1">
+                </a>
+             {% endfor %}
+         </div>
+
+
     </section>
-
+ 
     <section class="box classified-meta">
-        <div class="paging-wrapper">
-            <ul class="slide__paging">
-                 {% for image in images %}
-                    <li>
-                        <button class="slide__paging__page" type="button" id="page-btn-{{ image.id }}"
-                            aria-controls="image-section-slide{{ image.id }}"> </button>
-                    </li>
-                 {% endfor %}
-            </ul>
-       </div>
+       <div class="paging-wrapper">
 
-       <div id="sticky-bg">
+         <div class="swiper-pagination"></div>
+
+           <div id="sticky-bg">
+           </div>
        </div>
 
        <div class="title-row">
@@ -237,6 +236,8 @@
 
 {% block extra_js %}
 
+<script src="https://unpkg.com/tiny-swiper@latest"></script>
+ <script src="https://unpkg.com/tiny-swiper@latest/lib/modules/pagination.min.js"></script>
 <script type="text/javascript">
   {% if classified.price == 0.00 %}
       const price = "FREE";
@@ -271,6 +272,17 @@
       var toggler = document.getElementById('switch');
       var switch_value = document.getElementById('switch').checked;
   {% endif %}
+
+  var swiper = new Swiper(".swiper-container", {
+     pagination: {
+          el: ".swiper-pagination",
+          bulletClass: "swiper-pagination__item",
+          bulletActiveClass: "is-active"
+        },
+    plugins: [SwiperPluginPagination],
+    loop: true,
+  });
+
 </script>
 
 <link href="{% static 'css/share.css' %}" rel="stylesheet">
