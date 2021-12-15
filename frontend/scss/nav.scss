@@ -27,6 +27,38 @@
     justify-content: center;
 }
 
+#global-wxqr {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+
+    .global-wxqr-inner {
+        width: 500px;
+        height: 500px;
+        border-radius: 5px;
+        box-shadow: 0 2px 30px rgba(black, .2);
+        background: lighten($accent, 10%);
+        position: relative;
+        overflow: hidden;
+        transform: translate3d(0, 0, 0);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        p {
+            align-text: center;
+            color: white;
+        }
+
+        img {
+            border-radius: 8%;
+            margin-bottom: 3%;
+        }
+    }
+}
+
 //standard slim
 .has-slimscroll {
     overflow: hidden !important;
